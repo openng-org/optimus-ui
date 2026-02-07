@@ -708,6 +708,44 @@ describe('DatePicker', () => {
         });
     });
 
+    describe('Time Constraints at minDate', () => {
+        const day = (hours: number, minutes = 0) => new Date(2026, 1, 7, hours, minutes, 0);
+
+        it('should constrain hour to minDate hour 12 instead of 11 (24-hour format)', () => {
+            component.hourFormat = '24';
+            component.minDate = day(12);
+            component.value = day(12);
+
+            expect(component.constrainTime(10, 0, 0, false)).toEqual([12, 0, 0]);
+        });
+
+        it('should constrain hour to minDate hour when one hour before it (24-hour format)', () => {
+            component.hourFormat = '24';
+            component.minDate = day(10);
+            component.value = day(10);
+
+            expect(component.constrainTime(9, 0, 0, false)).toEqual([10, 0, 0]);
+        });
+
+        it('should constrain hour to 12 PM when minDate is at noon (12-hour format)', () => {
+            component.hourFormat = '12';
+            component.minDate = day(12);
+            component.value = day(12);
+
+            expect(component.constrainTime(10, 0, 0, false)).toEqual([12, 0, 0]);
+            expect(component.pm).toBe(true);
+        });
+
+        it('should constrain hour to minDate AM hour when one hour before it (12-hour format)', () => {
+            component.hourFormat = '12';
+            component.minDate = day(10);
+            component.value = day(10);
+
+            expect(component.constrainTime(9, 0, 0, false)).toEqual([10, 0, 0]);
+            expect(component.pm).toBe(false);
+        });
+    });
+
     describe('Navigation', () => {
         it('should handle multiple months display', async () => {
             testComponent.numberOfMonths = 3;
