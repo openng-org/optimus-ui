@@ -1,5 +1,5 @@
 import { DesignerService } from '@/service/designerservice';
-import { ChangeDetectionStrategy, Component, computed, EventEmitter, inject, input, Input, model, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, Input, model, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { $dt } from '@primeuix/themes';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -92,8 +92,6 @@ export class DesignTokenField implements OnInit {
 
     @Input() componentKey: any;
 
-    @Output() modelValueChange = new EventEmitter<any>();
-
     id: string | undefined;
 
     items: any;
@@ -142,13 +140,11 @@ export class DesignTokenField implements OnInit {
 
     onOptionSelect(event) {
         this.modelValue.set(event.value.label);
-        this.modelValueChange.emit(this.modelValue());
         event.originalEvent.stopPropagation();
     }
 
     onInput(event) {
         this.modelValue.set(event.target.value);
-        this.modelValueChange.emit(this.modelValue());
     }
 
     search(event) {
