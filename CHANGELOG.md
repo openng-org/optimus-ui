@@ -1628,7 +1628,7 @@ Enhancements via the PrimeUIX packages that PrimeNG utilizes internally.
 [Full Changelog](https://github.com/primefaces/primeng/compare/17.12.0...17.13.0)
 **Breaking Changes:**
 
-- SplitButton | new input properties [\#14426](https://github.com/primefaces/primeng/issues/14426)
+- SplitButton | new input properties [\#15220](https://github.com/primefaces/primeng/issues/15220)
 
 **Implemented New Features and Enhancements:**
 
