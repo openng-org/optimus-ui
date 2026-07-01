@@ -318,7 +318,7 @@ export class Overlay extends BaseComponent {
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    private documentKeyboardListener: VoidListener;
+    private documentKeyboardListener: VoidListener | null = null;
 
     private parentDragSubscription: Subscription | null = null;
 
@@ -490,7 +490,7 @@ export class Overlay extends BaseComponent {
     }
 
     bindParentDragListener() {
-        if (!this.parentDragSubscription && this.$appendTo() !== 'self' && this.targetEl) {
+        if (!this.parentDragSubscription && this.$appendTo() !== 'self' && this.targetEl()) {
             this.parentDragSubscription = this.overlayService.parentDragObservable.subscribe((container: Element) => {
                 if (container.contains(this.targetEl())) {
                     this.hide(this.overlayEl(), true);
