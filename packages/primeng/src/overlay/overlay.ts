@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
 import { ZIndexUtils } from 'primeng/utils';
 import { OverlayContentTemplateContext } from 'primeng/types/overlay';
 import { OverlayStyle } from './style/overlaystyle';
-import { AppendTo, CSSProperties } from '../types/shared/shared.types';
+import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 
 const OVERLAY_INSTANCE = new InjectionToken<Overlay>('OVERLAY_INSTANCE');
 
