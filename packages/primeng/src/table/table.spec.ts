@@ -351,7 +351,19 @@ describe('Table', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicTableComponent, TestSelectionTableComponent, TestSortingTableComponent, TestFilteringTableComponent, TestVirtualScrollTableComponent, TestLazyLoadTableComponent, TestTemplatesTableComponent],
+            declarations: [
+                Table,
+                TestBasicTableComponent,
+                TestSelectionTableComponent,
+                TestSortingTableComponent,
+                TestFilteringTableComponent,
+                TestVirtualScrollTableComponent,
+                TestVirtualScrollPercentHeightTableComponent,
+                TestScrollableNonVirtualTableComponent,
+                TestVirtualScrollFlexHeightTableComponent,
+                TestLazyLoadTableComponent,
+                TestTemplatesTableComponent
+            ],
             imports: [CommonModule, FormsModule, Table, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
         }).compileComponents();
