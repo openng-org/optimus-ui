@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, signal, Type, viewChild, ViewEncapsulation } from '@angular/core';
+import { Binding, ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, signal, Type, viewChild, ViewEncapsulation } from '@angular/core';
 import { uuid } from '@primeuix/utils';
 import { SharedModule, TranslationKeys } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -136,6 +136,8 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     childComponentType: Nullable<Type<object>>;
 
     inputValues: NonNullable<DynamicDialogConfig['inputValues']> = {};
+
+    bindings: Binding[] = [];
 
     get draggable(): boolean {
         return this.ddconfig.draggable !== false;
@@ -362,7 +364,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         let viewContainerRef = this.insertionPoint()?.viewContainerRef;
         viewContainerRef?.clear();
 
-        this.componentRef = viewContainerRef?.createComponent(componentType);
+        this.componentRef = viewContainerRef?.createComponent(componentType, {bindings: this.bindings});
 
         if (this.inputValues && this.componentRef) {
             Object.entries(this.inputValues).forEach(([key, value]) => {

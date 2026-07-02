@@ -37,6 +37,7 @@ export class DialogService {
         if (componentRefInstance) {
             componentRefInstance.instance.childComponentType = componentType as Type<object>;
             componentRefInstance.instance.inputValues = config.inputValues || {};
+            componentRefInstance.instance.bindings = config.bindings || [];
         }
 
         return dialogRef;
