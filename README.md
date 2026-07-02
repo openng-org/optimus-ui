@@ -25,3 +25,4 @@ To everyone who used PrimeNG, filed an issue, opened a pull request, answered a 
 This archive stays here as a thank you and a milestone. The next chapter is just beginning, and we hope you'll be part of it.
 
 — The PrimeTek Team
+
