@@ -39,12 +39,12 @@ export class BasicDoc {
             message: 'Are you sure you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             rejectButtonProps: {
-                label: 'Cancel11111',
+                label: 'Cancel',
                 severity: 'secondary',
                 outlined: true
             },
             acceptButtonProps: {
-                label: 'Save111111'
+                label: 'Save'
             },
             accept: () => {
                 this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
