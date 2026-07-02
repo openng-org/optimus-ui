@@ -85,11 +85,6 @@ export class InputOtp extends BaseEditableHolder<InputOtpPassThrough> implements
     }
 
     /**
-     * When present, it specifies that an input field is read-only.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
-    /**
      * Index of the element in tabbing order.
      * @group Props
      */

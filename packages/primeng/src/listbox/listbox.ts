@@ -476,11 +476,6 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
      */
     listStyleClass = input<string>();
     /**
-     * When present, it specifies that the element value cannot be changed.
-     * @group Props
-     */
-    readonly = input(undefined, { transform: booleanAttribute });
-    /**
      * When specified, allows selecting items with checkboxes.
      * @group Props
      */

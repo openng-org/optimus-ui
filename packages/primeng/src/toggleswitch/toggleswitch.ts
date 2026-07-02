@@ -105,11 +105,6 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
      */
     inputId = input<string>();
     /**
-     * When present, it specifies that the component cannot be edited.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
-    /**
      * Value in checked state.
      * @group Props
      */

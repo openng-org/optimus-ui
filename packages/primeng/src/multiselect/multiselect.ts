@@ -440,11 +440,6 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
      */
     inputId = input<string>();
     /**
-     * When present, it specifies that the component cannot be edited.
-     * @group Props
-     */
-    readonly = input(undefined, { transform: booleanAttribute });
-    /**
      * Whether to display options as grouped when nested options are provided.
      * @group Props
      */
