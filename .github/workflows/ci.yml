@@ -1,4 +1,4 @@
-name: Pr Checker
+name: CI
 
 on:
     pull_request:
@@ -9,7 +9,7 @@ permissions:
     pull-requests: write
 
 jobs:
-    pr-open-check:
+    ci:
         permissions:
             issues: write
             pull-requests: write
@@ -17,7 +17,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [20.x]
+                node-version: [24.x]
 
         steps:
             - uses: actions/checkout@v3
