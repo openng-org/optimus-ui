@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ToastModule } from 'primeng/toast';
-import { ButtonModule } from 'primeng/button';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { Component } from '@angular/core';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'basic-doc',
@@ -39,12 +39,12 @@ export class BasicDoc {
             message: 'Are you sure you want to proceed?',
             icon: 'pi pi-exclamation-triangle',
             rejectButtonProps: {
-                label: 'Cancel',
+                label: 'Cancel11111',
                 severity: 'secondary',
                 outlined: true
             },
             acceptButtonProps: {
-                label: 'Save'
+                label: 'Save111111'
             },
             accept: () => {
                 this.messageService.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
