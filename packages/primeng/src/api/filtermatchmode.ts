@@ -26,23 +26,4 @@ export class FilterMatchMode {
  * @group Types
  */
 export type FilterMatchModeType =
-    | 'startsWith'
-    | 'contains'
-    | 'notContains'
-    | 'endsWith'
-    | 'equals'
-    | 'notEquals'
-    | 'in'
-    | 'between'
-    | 'lt'
-    | 'lte'
-    | 'gt'
-    | 'gte'
-    | 'is'
-    | 'isNot'
-    | 'before'
-    | 'after'
-    | 'dateIs'
-    | 'dateIsNot'
-    | 'dateBefore'
-    | 'dateAfter';
+    'startsWith' | 'contains' | 'notContains' | 'endsWith' | 'equals' | 'notEquals' | 'in' | 'between' | 'lt' | 'lte' | 'gt' | 'gte' | 'is' | 'isNot' | 'before' | 'after' | 'dateIs' | 'dateIsNot' | 'dateBefore' | 'dateAfter';

@@ -1401,9 +1401,7 @@ describe('TreeTable', () => {
 
         describe('Context Menu Properties', () => {
             it('should handle contextMenu property', async () => {
-                const contextMenu = {
-                    /* mock context menu */
-                };
+                const contextMenu = {/* mock context menu */};
                 component.contextMenu = contextMenu;
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
