@@ -858,6 +858,20 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
      */
     maxDate = input<Date | null>();
     /**
+     * Effective minimum selectable date, merging `minDate` with the `min` constraint bound by signal forms.
+     */
+    $minDate = computed(() => {
+        const min = this.min() as Date | number | null | undefined;
+        return this.minDate() ?? (min instanceof Date ? min : null);
+    });
+    /**
+     * Effective maximum selectable date, merging `maxDate` with the `max` constraint bound by signal forms.
+     */
+    $maxDate = computed(() => {
+        const max = this.max() as Date | number | null | undefined;
+        return this.maxDate() ?? (max instanceof Date ? max : null);
+    });
+    /**
      * Array with dates that should be disabled (not selectable).
      * @group Props
      */
@@ -1265,8 +1279,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
 
         // Effect for minDate/maxDate/disabledDates/disabledDays changes
         effect(() => {
-            this.minDate();
-            this.maxDate();
+            this.$minDate();
+            this.$maxDate();
             this.disabledDates();
             this.disabledDays();
             if (this.currentMonth != undefined && this.currentMonth != null && this.currentYear) {
@@ -1798,15 +1812,15 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             date.setSeconds(<number>this.currentSecond());
         }
 
-        if (this.minDate() && this.minDate()! > date) {
-            date = this.minDate()!;
+        if (this.$minDate() && this.$minDate()! > date) {
+            date = this.$minDate()!;
             this.setCurrentHourPM(date.getHours());
             this.currentMinute.set(date.getMinutes());
             this.currentSecond.set(date.getSeconds());
         }
 
-        if (this.maxDate() && this.maxDate()! < date) {
-            date = this.maxDate()!;
+        if (this.$maxDate() && this.$maxDate()! < date) {
+            date = this.$maxDate()!;
             this.setCurrentHourPM(date.getHours());
             this.currentMinute.set(date.getMinutes());
             this.currentSecond.set(date.getSeconds());
@@ -2025,7 +2039,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             return false;
         }
 
-        const minDate = this.minDate();
+        const minDate = this.$minDate();
         if (minDate) {
             if (minDate.getFullYear() > year) {
                 validMin = false;
@@ -2040,7 +2054,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             }
         }
 
-        const maxDate = this.maxDate();
+        const maxDate = this.$maxDate();
         if (maxDate) {
             if (maxDate.getFullYear() < year) {
                 validMax = false;
@@ -2770,53 +2784,53 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             }
         }
         const valueDateString = value && isDate(value) ? value.toDateString() : null;
-        let isMinDate = this.minDate() && valueDateString && this.minDate()!.toDateString() === valueDateString;
-        let isMaxDate = this.maxDate() && valueDateString && this.maxDate()!.toDateString() === valueDateString;
+        let isMinDate = this.$minDate() && valueDateString && this.$minDate()!.toDateString() === valueDateString;
+        let isMaxDate = this.$maxDate() && valueDateString && this.$maxDate()!.toDateString() === valueDateString;
 
         if (isMinDate) {
-            minHoursExceeds12 = this.minDate()!.getHours() >= 12;
+            minHoursExceeds12 = this.$minDate()!.getHours() >= 12;
         }
 
         switch (
             true // intentional fall through
         ) {
-            case isMinDate && minHoursExceeds12 && this.minDate()!.getHours() === 12 && this.minDate()!.getHours() > convertedHour:
+            case isMinDate && minHoursExceeds12 && this.$minDate()!.getHours() === 12 && this.$minDate()!.getHours() > convertedHour:
                 returnTimeTriple[0] = 11;
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate()!.getMinutes();
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() === minute && this.minDate()!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate()!.getSeconds();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() > minute:
+                returnTimeTriple[1] = this.$minDate()!.getMinutes();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() === minute && this.$minDate()!.getSeconds() > second:
+                returnTimeTriple[2] = this.$minDate()!.getSeconds();
                 break;
-            case isMinDate && !minHoursExceeds12 && this.minDate()!.getHours() - 1 === convertedHour && this.minDate()!.getHours() > convertedHour:
+            case isMinDate && !minHoursExceeds12 && this.$minDate()!.getHours() - 1 === convertedHour && this.$minDate()!.getHours() > convertedHour:
                 returnTimeTriple[0] = 11;
                 this.pm.set(true);
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate()!.getMinutes();
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() === minute && this.minDate()!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate()!.getSeconds();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() > minute:
+                returnTimeTriple[1] = this.$minDate()!.getMinutes();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() === minute && this.$minDate()!.getSeconds() > second:
+                returnTimeTriple[2] = this.$minDate()!.getSeconds();
                 break;
 
-            case isMinDate && minHoursExceeds12 && this.minDate()!.getHours() > convertedHour && convertedHour !== 12:
-                this.setCurrentHourPM(this.minDate()!.getHours());
+            case isMinDate && minHoursExceeds12 && this.$minDate()!.getHours() > convertedHour && convertedHour !== 12:
+                this.setCurrentHourPM(this.$minDate()!.getHours());
                 returnTimeTriple[0] = this.currentHour() || 0;
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate()!.getMinutes();
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() === minute && this.minDate()!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate()!.getSeconds();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() > minute:
+                returnTimeTriple[1] = this.$minDate()!.getMinutes();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() === minute && this.$minDate()!.getSeconds() > second:
+                returnTimeTriple[2] = this.$minDate()!.getSeconds();
                 break;
-            case isMinDate && this.minDate()!.getHours() > convertedHour:
-                returnTimeTriple[0] = this.minDate()!.getHours();
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate()!.getMinutes();
-            case isMinDate && this.minDate()!.getHours() === convertedHour && this.minDate()!.getMinutes() === minute && this.minDate()!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate()!.getSeconds();
+            case isMinDate && this.$minDate()!.getHours() > convertedHour:
+                returnTimeTriple[0] = this.$minDate()!.getHours();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() > minute:
+                returnTimeTriple[1] = this.$minDate()!.getMinutes();
+            case isMinDate && this.$minDate()!.getHours() === convertedHour && this.$minDate()!.getMinutes() === minute && this.$minDate()!.getSeconds() > second:
+                returnTimeTriple[2] = this.$minDate()!.getSeconds();
                 break;
-            case isMaxDate && this.maxDate()!.getHours() < convertedHour:
-                returnTimeTriple[0] = this.maxDate()!.getHours();
-            case isMaxDate && this.maxDate()!.getHours() === convertedHour && this.maxDate()!.getMinutes() < minute:
-                returnTimeTriple[1] = this.maxDate()!.getMinutes();
-            case isMaxDate && this.maxDate()!.getHours() === convertedHour && this.maxDate()!.getMinutes() === minute && this.maxDate()!.getSeconds() < second:
-                returnTimeTriple[2] = this.maxDate()!.getSeconds();
+            case isMaxDate && this.$maxDate()!.getHours() < convertedHour:
+                returnTimeTriple[0] = this.$maxDate()!.getHours();
+            case isMaxDate && this.$maxDate()!.getHours() === convertedHour && this.$maxDate()!.getMinutes() < minute:
+                returnTimeTriple[1] = this.$maxDate()!.getMinutes();
+            case isMaxDate && this.$maxDate()!.getHours() === convertedHour && this.$maxDate()!.getMinutes() === minute && this.$maxDate()!.getSeconds() < second:
+                returnTimeTriple[2] = this.$maxDate()!.getSeconds();
                 break;
         }
 
@@ -2846,8 +2860,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     toggleAMPMIfNotMinDate(newPM: boolean) {
         let value = this.value;
         const valueDateString = value && isDate(value) ? value.toDateString() : null;
-        let isMinDate = this.minDate() && valueDateString && this.minDate()!.toDateString() === valueDateString;
-        if (isMinDate && this.minDate()!.getHours() >= 12) {
+        let isMinDate = this.$minDate() && valueDateString && this.$minDate()!.toDateString() === valueDateString;
+        if (isMinDate && this.$minDate()!.getHours() >= 12) {
             this.pm.set(true);
         } else {
             this.pm.set(newPM);
@@ -3625,7 +3639,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         if (this.keepInvalid()) {
             return true; // If we are keeping invalid dates, we don't need to check for time constraints
         }
-        return (!this.minDate() || selectedDate >= this.minDate()!) && (!this.maxDate() || selectedDate <= this.maxDate()!);
+        return (!this.$minDate() || selectedDate >= this.$minDate()!) && (!this.$maxDate() || selectedDate <= this.$maxDate()!);
     }
 
     onTodayButtonClick(event: any) {
