@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Directive, Input, NgModule, TemplateRef } from '@angular/core';
+import { Component, Directive, inject, input, NgModule, TemplateRef } from '@angular/core';
 
 /**
  * @deprecated Use ng-template #header instead.
@@ -29,14 +29,14 @@ export class Footer {}
     standalone: true
 })
 export class PrimeTemplate {
-    @Input() type: string | undefined;
+    type = input<string | undefined>();
 
-    @Input('pTemplate') name: string | undefined;
+    name = input<string | undefined>(undefined, { alias: 'pTemplate' });
 
-    constructor(public template: TemplateRef<any>) {}
+    template = inject<TemplateRef<any>>(TemplateRef);
 
     getType(): string {
-        return this.name!;
+        return this.name()!;
     }
 }
 
