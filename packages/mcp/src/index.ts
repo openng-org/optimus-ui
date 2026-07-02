@@ -24,6 +24,27 @@ const migrationGuides = {
         breaking: ['PrimeNG v21 requires Angular 19+', 'Standalone components are now the default', 'Updated module structure'],
         deprecations: ['NgModule-based imports deprecated in favor of standalone'],
         whatsnew: ['Full Angular 19 compatibility', 'Standalone components by default', 'Improved performance with zoneless support', 'New animation system']
+    },
+    v21_to_v22: {
+        version: 'v22',
+        from: 'v21',
+        breaking: [
+            'PrimeNG v22 requires Angular 22+',
+            'Form components now expose the signal-forms state contract; the `minlength`/`maxlength` inputs are deprecated in favor of `minLength`/`maxLength`',
+            'The `pattern` input now accepts a string, a RegExp or an array of patterns and is normalized to `readonly RegExp[]` to match the Angular signal-forms FormValueControl contract',
+            'Legacy `@angular/animations` triggers removed in favor of the built-in motion system'
+        ],
+        deprecations: [
+            'Lowercase `minlength`/`maxlength` inputs deprecated in favor of `minLength`/`maxLength`',
+            'Decorator-based `@Input`/`@Output`/`@ViewChild` and `*ngIf`/`*ngFor` replaced by `input()`/`output()`/`viewChild()` and `@if`/`@for` in modernized components'
+        ],
+        whatsnew: [
+            'Full Angular 22 compatibility',
+            'Native Angular Signal Forms support: form components integrate with the `[formField]` directive while remaining fully compatible with template-driven (`ngModel`) and reactive (`formControl`) forms through the same ControlValueAccessor',
+            'Form components automatically bind `readonly`, `touched`, `errors`, `required`, `invalid`, `minLength`, `maxLength` and `pattern` from the signal-forms field state',
+            'DatePicker honors the signal-forms `min`/`max` constraints as its selectable date range',
+            'Continued migration to modern signal-based APIs and built-in control flow'
+        ]
     }
 };
 
@@ -67,17 +88,17 @@ runPrimeMcpServer({
     frameworkName: 'PrimeNG',
     slotKey: 'templates',
     codeLanguage: 'typescript',
-    compatibility: 'Angular 17+',
+    compatibility: 'Angular 22+',
     loadComponentsData: async () => ComponentJson as ComponentsData,
     customTools: [
         // Angular-specific: get_migration_guide
         {
             name: 'get_migration_guide',
-            description: 'Get migration guide for upgrading PrimeNG versions (v19, v20, v21)',
+            description: 'Get migration guide for upgrading PrimeNG versions (v19, v20, v21, v22)',
             parameters: {
                 version: {
                     type: 'string',
-                    description: "Target version: 'v19', 'v20', or 'v21'. If not specified, returns a summary of all migrations."
+                    description: "Target version: 'v19', 'v20', 'v21', or 'v22'. If not specified, returns a summary of all migrations."
                 },
                 section: {
                     type: 'string',
@@ -114,7 +135,7 @@ runPrimeMcpServer({
                         content: [
                             {
                                 type: 'text' as const,
-                                text: `Migration guide for ${version} not found. Available: v19, v20, v21`
+                                text: `Migration guide for ${version} not found. Available: v19, v20, v21, v22`
                             }
                         ]
                     };
@@ -188,6 +209,27 @@ runPrimeMcpServer({
                         {
                             type: 'text' as const,
                             text: formatMigrationContent(migrationGuides.v20_to_v21, args.section as string | undefined)
+                        }
+                    ]
+                };
+            }
+        },
+        // Angular-specific: migrate_v21_to_v22
+        {
+            name: 'migrate_v21_to_v22',
+            description: 'Migration guide for upgrading PrimeNG from v21 to v22. Covers Angular 22 support, native Signal Forms integration, form input type changes and modern signal-based APIs.',
+            parameters: {
+                section: {
+                    type: 'string',
+                    description: "Optional section: 'breaking', 'deprecations', 'whatsnew'"
+                }
+            },
+            handler: async (_data: ComponentsData, args: Record<string, unknown>) => {
+                return {
+                    content: [
+                        {
+                            type: 'text' as const,
+                            text: formatMigrationContent(migrationGuides.v21_to_v22, args.section as string | undefined)
                         }
                     ]
                 };
