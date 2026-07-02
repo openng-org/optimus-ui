@@ -91,13 +91,13 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR = {
                 role="combobox"
                 [attr.placeholder]="placeholder()"
                 [attr.name]="name()"
-                [attr.minlength]="minlength()"
+                [attr.minlength]="$minLength()"
                 [pSize]="size()"
                 [attr.min]="min()"
                 [attr.max]="max()"
-                [attr.pattern]="pattern()"
+                [attr.pattern]="$patternAttr()"
                 [attr.size]="inputSize()"
-                [attr.maxlength]="maxlength()"
+                [attr.maxlength]="$maxLength()"
                 [attr.tabindex]="$tabindex()"
                 [attr.required]="requiredAttr()"
                 [attr.readonly]="readonlyAttr()"
@@ -185,12 +185,12 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR = {
                         [attr.id]="inputId()"
                         [attr.autocomplete]="autocomplete()"
                         [attr.name]="name()"
-                        [attr.minlength]="minlength()"
-                        [attr.maxlength]="maxlength()"
+                        [attr.minlength]="$minLength()"
+                        [attr.maxlength]="$maxLength()"
                         [attr.size]="size()"
                         [attr.min]="min()"
                         [attr.max]="max()"
-                        [attr.pattern]="pattern()"
+                        [attr.pattern]="$patternAttr()"
                         role="combobox"
                         [attr.placeholder]="getMultiplePlaceholder()"
                         aria-autocomplete="list"
@@ -401,11 +401,6 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * @group Props
      */
     placeholder = input<string>();
-    /**
-     * When present, it specifies that the input cannot be typed.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
     /**
      * Maximum height of the suggestions panel.
      * @group Props
@@ -1100,7 +1095,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
             }
 
             let query = (event.target as HTMLInputElement).value;
-            const maxLen = this.maxlength();
+            const maxLen = this.$maxLength();
             if (maxLen != null) {
                 query = query.split('').slice(0, maxLen).join('');
             }

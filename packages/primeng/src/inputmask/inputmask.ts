@@ -708,8 +708,8 @@ export const INPUTMASK_VALUE_ACCESSOR: Provider = {
             [pSize]="size()"
             [attr.size]="inputSize()"
             [attr.autocomplete]="autocomplete()"
-            [attr.maxlength]="maxlength()"
-            [attr.minlength]="minlength()"
+            [attr.maxlength]="$maxLength()"
+            [attr.minlength]="$minLength()"
             [attr.tabindex]="tabindex()"
             [attr.aria-label]="ariaLabel()"
             [attr.aria-labelledBy]="ariaLabelledBy()"
@@ -833,11 +833,6 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
      * @group Props
      */
     ariaRequired = input(undefined, { transform: booleanAttribute });
-    /**
-     * When present, it specifies that an input field is read-only.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
     /**
      * Defines if ngModel sets the raw unmasked value to bound value or the formatted mask value.
      * @group Props
