@@ -1,5 +1,6 @@
 import { booleanAttribute, computed, Directive, input, signal } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
+import type { ValidationError } from '@angular/forms/signals';
 import { BaseModelHolder } from 'primeng/basemodelholder';
 
 @Directive({ standalone: true })
@@ -28,6 +29,27 @@ export class BaseEditableHolder<PT = any> extends BaseModelHolder<PT> implements
      * @group Props
      */
     name = input<string | undefined>();
+    /**
+     * When present, it specifies that the component cannot be edited.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    readonly = input(undefined, { transform: booleanAttribute });
+    /**
+     * Whether the associated form field has been touched by the user.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    touched = input(undefined, { transform: booleanAttribute });
+    /**
+     * Validation errors of the associated form field.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    errors = input<readonly ValidationError.WithOptionalFieldTree[] | undefined>();
 
     _disabled = signal<boolean>(false);
 
