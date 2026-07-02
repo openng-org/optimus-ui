@@ -17,14 +17,14 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" [style]="{ minWidth: '14rem' }" placeholder="Select a City" />
         </div>
     `,
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectBasicDemo implements OnInit {
+export class CascadeSelectBasicDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -118,14 +118,23 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a City" [style]="{ minWidth: '14rem' }" [showClear]="true" />
+        <div class="flex justify-center">
+            <p-cascadeselect
+                [(ngModel)]="selectedCity"
+                [options]="countries"
+                optionLabel="cname"
+                optionGroupLabel="name"
+                [optionGroupChildren]="['states', 'cities']"
+                placeholder="Select a City"
+                [style]="{ minWidth: '14rem' }"
+                [showClear]="true"
+            />
         </div>
     `,
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectCleariconDemo implements OnInit {
+export class CascadeSelectClearIconDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -218,14 +227,14 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-cascadeselect [disabled]="true" placeholder="Disabled" [style]="{ minWidth: '14rem' }" />
         </div>
     `,
     standalone: true,
     imports: [CascadeSelectModule]
 })
-export class CascadeselectDisabledDemo {}
+export class CascadeSelectDisabledDemo {}
 ```
 
 ## Filled
@@ -239,14 +248,14 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-cascadeselect [(ngModel)]="selectedCity" variant="filled" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" [style]="{ minWidth: '14rem' }" placeholder="Select a City" />
         </div>
     `,
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectFilledDemo implements OnInit {
+export class CascadeSelectFilledDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -341,7 +350,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel class="w-full md:w-56">
                 <p-cascadeselect [(ngModel)]="value1" inputId="over_label" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-full" />
                 <label for="over_label">Over Label</label>
@@ -359,7 +368,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     standalone: true,
     imports: [CascadeSelectModule, FloatLabelModule, FormsModule]
 })
-export class CascadeselectFloatlabelDemo implements OnInit {
+export class CascadeSelectFloatLabelDemo implements OnInit {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -456,14 +465,12 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card">
-            <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a City" fluid />
-        </div>
+        <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" placeholder="Select a City" fluid />
     `,
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectFluidDemo implements OnInit {
+export class CascadeSelectFluidDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -558,7 +565,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel class="w-full md:w-56">
                 <p-cascadeselect [(ngModel)]="selectedCity" inputId="cs_city" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-full" />
                 <label for="cs_city">City</label>
@@ -568,7 +575,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     standalone: true,
     imports: [CascadeSelectModule, IftaLabelModule, FormsModule]
 })
-export class CascadeselectIftalabelDemo implements OnInit {
+export class CascadeSelectIftaLabelDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -662,8 +669,17 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
-            <p-cascadeselect [(ngModel)]="selectedCity1" [invalid]="!selectedCity1" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-full sm:w-56" placeholder="Select a City" />
+        <div class="flex flex-wrap justify-center gap-4">
+            <p-cascadeselect
+                [(ngModel)]="selectedCity1"
+                [invalid]="!selectedCity1"
+                [options]="countries"
+                optionLabel="cname"
+                optionGroupLabel="name"
+                [optionGroupChildren]="['states', 'cities']"
+                class="w-full sm:w-56"
+                placeholder="Select a City"
+            />
             <p-cascadeselect
                 [(ngModel)]="selectedCity2"
                 [invalid]="!selectedCity2"
@@ -680,7 +696,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectInvalidDemo implements OnInit {
+export class CascadeSelectInvalidDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity1: any;
     selectedCity2: any;
@@ -774,14 +790,14 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-cascadeselect [loading]="true" [style]="{ minWidth: '14rem' }" placeholder="Loading..." />
         </div>
     `,
     standalone: true,
     imports: [CascadeSelectModule]
 })
-export class CascadeselectLoadingDemo {}
+export class CascadeSelectLoadingDemo {}
 ```
 
 ## reactiveforms-doc
@@ -793,14 +809,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <p-cascadeselect
@@ -822,9 +836,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [CascadeSelectModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [CascadeSelectModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class CascadeselectReactiveformsDemo {
+export class CascadeSelectReactiveFormsDemo {
     countries: any[] | undefined;
     formGroup: FormGroup | undefined;
     messageService = inject(MessageService);
@@ -938,7 +952,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-cascadeselect [(ngModel)]="value1" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-56" size="small" placeholder="Small" />
             <p-cascadeselect [(ngModel)]="value2" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-56" placeholder="Normal" />
             <p-cascadeselect [(ngModel)]="value3" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" class="w-56" size="large" placeholder="Large" />
@@ -947,7 +961,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
     standalone: true,
     imports: [CascadeSelectModule, FormsModule]
 })
-export class CascadeselectSizesDemo implements OnInit {
+export class CascadeSelectSizesDemo implements OnInit {
     countries: any[] | undefined;
     value1: any;
     value2: any;
@@ -1044,13 +1058,19 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" [style]="{ minWidth: '14rem' }" placeholder="Select a City">
                 <ng-template #option let-option>
                     <div class="flex items-center">
-                        <img *ngIf="option.states" src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px" />
-                        <i class="pi pi-compass mr-2" *ngIf="option.cities"></i>
-                        <i class="pi pi-map-marker mr-2" *ngIf="option.cname"></i>
+                        @if (option.states) {
+                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px" />
+                        }
+                        @if (option.cities) {
+                            <i class="pi pi-compass mr-2"></i>
+                        }
+                        @if (option.cname) {
+                            <i class="pi pi-map-marker mr-2"></i>
+                        }
                         <span>{{ option.cname || option.name }}</span>
                     </div>
                 </ng-template>
@@ -1071,7 +1091,7 @@ import { CascadeSelectModule } from 'primeng/cascadeselect';
     standalone: true,
     imports: [ButtonModule, CascadeSelectModule, FormsModule]
 })
-export class CascadeselectTemplateDemo implements OnInit {
+export class CascadeSelectTemplateDemo implements OnInit {
     countries: any[] | undefined;
     selectedCity: any;
 
@@ -1161,14 +1181,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CascadeSelectModule } from 'primeng/cascadeselect';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex justify-center flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <p-cascadeselect
@@ -1193,9 +1211,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [CascadeSelectModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [CascadeSelectModule, MessageModule, ButtonModule, FormsModule]
 })
-export class CascadeselectTemplatedrivenformsDemo {
+export class CascadeSelectTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     countries: any[] | undefined;
     selectedCity: any = null;
@@ -1361,6 +1379,8 @@ export class CascadeselectTemplatedrivenformsDemo {
 | cascadeselect.lg.font.size | --p-cascadeselect-lg-font-size | Lg font size of root |
 | cascadeselect.lg.padding.x | --p-cascadeselect-lg-padding-x | Lg padding x of root |
 | cascadeselect.lg.padding.y | --p-cascadeselect-lg-padding-y | Lg padding y of root |
+| cascadeselect.font.weight | --p-cascadeselect-font-weight | Font weight of current value |
+| cascadeselect.font.size | --p-cascadeselect-font-size | Font size of current value |
 | cascadeselect.dropdown.width | --p-cascadeselect-dropdown-width | Width of dropdown |
 | cascadeselect.dropdown.color | --p-cascadeselect-dropdown-color | Color of dropdown |
 | cascadeselect.overlay.background | --p-cascadeselect-overlay-background | Background of overlay |
@@ -1378,10 +1398,13 @@ export class CascadeselectTemplatedrivenformsDemo {
 | cascadeselect.option.focus.color | --p-cascadeselect-option-focus-color | Focus color of option |
 | cascadeselect.option.selected.color | --p-cascadeselect-option-selected-color | Selected color of option |
 | cascadeselect.option.selected.focus.color | --p-cascadeselect-option-selected-focus-color | Selected focus color of option |
+| cascadeselect.option.selected.font.weight | --p-cascadeselect-option-selected-font-weight | Font weight of a selected option |
 | cascadeselect.option.padding | --p-cascadeselect-option-padding | Padding of option |
 | cascadeselect.option.border.radius | --p-cascadeselect-option-border-radius | Border radius of option |
 | cascadeselect.option.icon.color | --p-cascadeselect-option-icon-color | Icon color of option |
 | cascadeselect.option.icon.focus.color | --p-cascadeselect-option-icon-focus-color | Icon focus color of option |
 | cascadeselect.option.icon.size | --p-cascadeselect-option-icon-size | Icon size of option |
+| cascadeselect.option.font.weight | --p-cascadeselect-option-font-weight | Font weight of option |
+| cascadeselect.option.font.size | --p-cascadeselect-option-font-size | Font size of option |
 | cascadeselect.clear.icon.color | --p-cascadeselect-clear-icon-color | Color of clear icon |
 

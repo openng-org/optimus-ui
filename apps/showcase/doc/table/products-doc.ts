@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -57,6 +58,7 @@ interface ExportColumn {
         TagModule,
         AppDocSectionText,
         AppCode,
+        AppDemoWrapper,
         DeferredDemo,
         ConfirmDialogModule,
         TextareaModule
@@ -64,17 +66,17 @@ interface ExportColumn {
     template: ` <app-docsectiontext>
             <p>CRUD implementation example with a Dialog.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
-                <p-toast />
-                <p-toolbar class="mb-6">
+        <p-toast />
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
+                <p-toolbar class="mb-5">
                     <ng-template #start>
                         <p-button label="New" icon="pi pi-plus" class="mr-2" (onClick)="openNew()" />
                         <p-button severity="danger" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedProducts()" [disabled]="!selectedProducts || !selectedProducts.length" />
                     </ng-template>
 
                     <ng-template #end>
-                        <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block" [chooseButtonProps]="{ severity: 'secondary' }" />
+                        <p-fileupload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" auto customUpload class="mr-2 inline-block" [chooseButtonProps]="{ severity: 'secondary' }" />
                         <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV($event)" />
                     </ng-template>
                 </p-toolbar>
@@ -105,38 +107,38 @@ interface ExportColumn {
                     <ng-template #header>
                         <tr>
                             <th style="width: 3rem">
-                                <p-tableHeaderCheckbox />
+                                <p-table-header-checkbox />
                             </th>
                             <th style="min-width: 16rem">Code</th>
                             <th pSortableColumn="name" style="min-width:16rem">
                                 <div class="flex items-center gap-2">
                                     Name
-                                    <p-sortIcon field="name" />
+                                    <p-sort-icon field="name" />
                                 </div>
                             </th>
                             <th>Image</th>
                             <th pSortableColumn="price" style="min-width: 8rem">
                                 <div class="flex items-center gap-2">
                                     Price
-                                    <p-sortIcon field="price" />
+                                    <p-sort-icon field="price" />
                                 </div>
                             </th>
                             <th pSortableColumn="category" style="min-width:10rem">
                                 <div class="flex items-center gap-2">
                                     Category
-                                    <p-sortIcon field="category" />
+                                    <p-sort-icon field="category" />
                                 </div>
                             </th>
                             <th pSortableColumn="rating" style="min-width: 12rem">
                                 <div class="flex items-center gap-2">
                                     Reviews
-                                    <p-sortIcon field="rating" />
+                                    <p-sort-icon field="rating" />
                                 </div>
                             </th>
                             <th pSortableColumn="inventoryStatus" style="min-width: 12rem">
                                 <div class="flex items-center gap-2">
                                     Status
-                                    <p-sortIcon field="inventoryStatus" />
+                                    <p-sort-icon field="inventoryStatus" />
                                 </div>
                             </th>
                             <th style="min-width: 12rem"></th>
@@ -145,12 +147,12 @@ interface ExportColumn {
                     <ng-template #body let-product>
                         <tr>
                             <td style="width: 3rem">
-                                <p-tableCheckbox [value]="product" />
+                                <p-table-checkbox [value]="product" />
                             </td>
                             <td style="min-width: 12rem">{{ product.code }}</td>
                             <td style="min-width: 16rem">{{ product.name }}</td>
                             <td>
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded-sm" />
                             </td>
                             <td>{{ product.price | currency: 'USD' }}</td>
                             <td>{{ product.category }}</td>
@@ -170,52 +172,56 @@ interface ExportColumn {
 
                 <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
                     <ng-template #content>
-                        <div class="flex flex-col gap-6">
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
+                        <div class="flex flex-col gap-5">
+                            @if (product.image) {
+                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" />
+                            }
                             <div>
-                                <label for="name" class="block font-bold mb-3">Name</label>
+                                <label for="name" class="text-sm block font-bold mb-3">Name</label>
                                 <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
-                                <small class="text-red-500" *ngIf="submitted && !product.name">Name is required.</small>
+                                @if (submitted && !product.name) {
+                                    <small class="text-red-500">Name is required.</small>
+                                }
                             </div>
                             <div>
-                                <label for="description" class="block font-bold mb-3">Description</label>
+                                <label for="description" class="text-sm block font-bold mb-3">Description</label>
                                 <textarea id="description" pTextarea [(ngModel)]="product.description" required rows="3" cols="20" fluid></textarea>
                             </div>
 
                             <div>
-                                <label for="inventoryStatus" class="block font-bold mb-3">Inventory Status</label>
+                                <label for="inventoryStatus" class="text-sm block font-bold mb-3">Inventory Status</label>
                                 <p-select [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" [options]="statuses" optionLabel="label" optionValue="label" placeholder="Select a Status" fluid />
                             </div>
 
                             <div>
-                                <span class="block font-bold mb-4">Category</span>
+                                <span class="text-sm block font-bold mb-4">Category</span>
                                 <div class="grid grid-cols-12 gap-4">
                                     <div class="flex items-center gap-2 col-span-6">
                                         <p-radiobutton id="category1" name="category" value="Accessories" [(ngModel)]="product.category" />
-                                        <label for="category1">Accessories</label>
+                                        <label for="category1" class="text-sm">Accessories</label>
                                     </div>
                                     <div class="flex items-center gap-2 col-span-6">
                                         <p-radiobutton id="category2" name="category" value="Clothing" [(ngModel)]="product.category" />
-                                        <label for="category2">Clothing</label>
+                                        <label for="category2" class="text-sm">Clothing</label>
                                     </div>
                                     <div class="flex items-center gap-2 col-span-6">
                                         <p-radiobutton id="category3" name="category" value="Electronics" [(ngModel)]="product.category" />
-                                        <label for="category3">Electronics</label>
+                                        <label for="category3" class="text-sm">Electronics</label>
                                     </div>
                                     <div class="flex items-center gap-2 col-span-6">
                                         <p-radiobutton id="category4" name="category" value="Fitness" [(ngModel)]="product.category" />
-                                        <label for="category4">Fitness</label>
+                                        <label for="category4" class="text-sm">Fitness</label>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="grid grid-cols-12 gap-4">
                                 <div class="col-span-6">
-                                    <label for="price" class="block font-bold mb-3">Price</label>
+                                    <label for="price" class="text-sm block font-bold mb-3">Price</label>
                                     <p-inputnumber id="price" [(ngModel)]="product.price" mode="currency" currency="USD" locale="en-US" fluid />
                                 </div>
                                 <div class="col-span-6">
-                                    <label for="quantity" class="block font-bold mb-3">Quantity</label>
+                                    <label for="quantity" class="text-sm block font-bold mb-3">Quantity</label>
                                     <p-inputnumber id="quantity" [(ngModel)]="product.quantity" fluid />
                                 </div>
                             </div>
@@ -229,9 +235,9 @@ interface ExportColumn {
                 </p-dialog>
 
                 <p-confirmdialog [style]="{ width: '450px' }" />
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService, ConfirmationService]
 })

@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { Toast } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'clear-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, Toast, ButtonModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, Toast, ButtonModule],
     template: `
         <app-docsectiontext>
             <p>
@@ -16,17 +17,19 @@ import { ButtonModule } from 'primeng/button';
                 calling it with a key, removes the messages displayed on a toast having the same key.
             </p>
         </app-docsectiontext>
-        <div class="card flex justify-center gap-2">
+        <app-demo-wrapper>
             <p-toast key="myKey" />
-            <p-button (click)="show()" label="Show" />
-            <p-button (click)="clear()" label="Clear" severity="secondary" />
-        </div>
-        <app-code></app-code>
+            <div class="flex justify-center gap-2">
+                <p-button (click)="show()" label="Show" />
+                <p-button (click)="clear()" label="Clear" severity="secondary" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class ClearDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     show() {
         this.messageService.add({ key: 'myKey', severity: 'success', summary: 'Message 1', detail: 'Message Content' });

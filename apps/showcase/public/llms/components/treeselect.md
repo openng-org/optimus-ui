@@ -19,7 +19,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="md:w-80 w-full" [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item" />
         </div>
     `,
@@ -27,7 +27,7 @@ import { TreeNode } from 'primeng/api';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectBasicDemo implements OnInit {
+export class TreeSelectBasicDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -53,7 +53,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="w-full md:w-80" [(ngModel)]="selectedNodes" [options]="nodes" display="chip" [metaKeySelection]="false" selectionMode="checkbox" placeholder="Select Item" />
         </div>
     `,
@@ -61,7 +61,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectCheckboxDemo implements OnInit {
+export class TreeSelectCheckboxDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -87,7 +87,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item" class="md:w-80 w-full" [showClear]="true" />
         </div>
     `,
@@ -95,7 +95,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectCleariconDemo implements OnInit {
+export class TreeSelectClearIconDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -121,7 +121,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="md:w-80 w-full" [(ngModel)]="selectedNodes" [options]="nodes" [disabled]="true" placeholder="TreeSelect" />
         </div>
     `,
@@ -129,7 +129,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectDisabledDemo implements OnInit {
+export class TreeSelectDisabledDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -155,7 +155,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="md:w-80 w-full" [(ngModel)]="selectedNodes" variant="filled" [options]="nodes" placeholder="Select Item" />
         </div>
     `,
@@ -163,7 +163,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectFilledDemo implements OnInit {
+export class TreeSelectFilledDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -189,7 +189,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="md:w-80 w-full" [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item" [filter]="true" [filterInputAutoFocus]="true" />
         </div>
     `,
@@ -197,7 +197,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectFilterDemo implements OnInit {
+export class TreeSelectFilterDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -224,7 +224,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel class="w-full md:w-80">
                 <p-treeselect [(ngModel)]="value1" inputId="over_label" [options]="nodes" class="w-full" />
                 <label for="over_label">Over Label</label>
@@ -243,7 +243,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [FloatLabelModule, TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectFloatlabelDemo implements OnInit {
+export class TreeSelectFloatLabelDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     value1: any;
@@ -271,15 +271,13 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card">
-            <p-treeselect [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item" fluid />
-        </div>
+        <p-treeselect [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item" fluid />
     `,
     standalone: true,
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectFluidDemo implements OnInit {
+export class TreeSelectFluidDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -306,7 +304,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel class="w-full md:w-80">
                 <p-treeselect [(ngModel)]="selectedValue" inputId="t_file" [options]="nodes" class="w-full" />
                 <label for="t_file">File</label>
@@ -317,7 +315,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [IftaLabelModule, TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectIftalabelDemo implements OnInit {
+export class TreeSelectIftaLabelDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedValue: any;
@@ -343,7 +341,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <p-treeselect [invalid]="selectedValue1 === undefined" [(ngModel)]="selectedValue1" [options]="nodes" placeholder="TreeSelect" class="md:w-80 w-full" />
             <p-treeselect [invalid]="selectedValue2 === undefined" [(ngModel)]="selectedValue2" [options]="nodes" placeholder="TreeSelect" class="md:w-80 w-full" />
         </div>
@@ -352,7 +350,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectInvalidDemo implements OnInit {
+export class TreeSelectInvalidDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedValue1: any;
@@ -379,7 +377,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect
                 class="w-full md:w-80"
                 [(ngModel)]="selectedNodes"
@@ -397,7 +395,7 @@ import { TreeNode } from 'primeng/api';
     standalone: true,
     imports: [TreeSelectModule, FormsModule]
 })
-export class TreeselectLazyDemo implements OnInit {
+export class TreeSelectLazyDemo implements OnInit {
     selectedNodes: TreeNode[] = [];
     nodes = signal<TreeNode[]>(undefined);
     loading = signal<boolean>(false);
@@ -467,7 +465,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="w-full md:w-80" [(ngModel)]="selectedNodes" [options]="nodes" [metaKeySelection]="false" selectionMode="multiple" placeholder="Select Item" />
         </div>
     `,
@@ -475,7 +473,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectMultipleDemo implements OnInit {
+export class TreeSelectMultipleDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -497,7 +495,6 @@ TreeSelect can also be used with reactive forms. In this case, the formControlNa
 import { Component, OnInit, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { ButtonModule } from 'primeng/button';
 import { NodeService } from '@/service/nodeservice';
@@ -505,8 +502,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full md:w-80">
                 <div class="flex flex-col gap-1">
                     <p-treeselect class="md:w-80 w-full" formControlName="selectedNodes" [options]="nodes" placeholder="Select Item" [invalid]="isInvalid('selectedNodes')" />
@@ -519,10 +515,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, TreeSelectModule, ButtonModule, ReactiveFormsModule],
+    imports: [MessageModule, TreeSelectModule, ButtonModule, ReactiveFormsModule],
     providers: [NodeService]
 })
-export class TreeselectReactiveformsDemo implements OnInit {
+export class TreeSelectReactiveFormsDemo implements OnInit {
     private nodeService = inject(NodeService);
     messageService = inject(MessageService);
     nodes!: any[];
@@ -567,7 +563,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-treeselect [(ngModel)]="value1" [options]="nodes" size="small" placeholder="Small" class="md:w-80 w-full" />
             <p-treeselect [(ngModel)]="value2" [options]="nodes" placeholder="Normal" class="md:w-80 w-full" />
             <p-treeselect [(ngModel)]="value3" [options]="nodes" size="large" placeholder="Large" class="md:w-80 w-full" />
@@ -577,7 +573,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectSizesDemo implements OnInit {
+export class TreeSelectSizesDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     value1: any;
@@ -606,7 +602,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect class="md:w-80 w-full" [(ngModel)]="selectedNodes" [options]="nodes" placeholder="Select Item">
                 <ng-template #dropdownicon>
                     <i class="pi pi-search"></i>
@@ -627,7 +623,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [ButtonModule, TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectTemplateDemo implements OnInit {
+export class TreeSelectTemplateDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -647,7 +643,6 @@ export class TreeselectTemplateDemo implements OnInit {
 import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { ButtonModule } from 'primeng/button';
 import { NodeService } from '@/service/nodeservice';
@@ -655,8 +650,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4 w-full md:w-80">
                 <div class="flex flex-col gap-1">
                     <p-treeselect #node="ngModel" [(ngModel)]="selectedNodes" [invalid]="node.invalid && exampleForm.submitted" name="node" class="md:w-80 w-full" [options]="nodes" placeholder="Select Item" required />
@@ -669,10 +663,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, TreeSelectModule, ButtonModule, FormsModule],
+    imports: [MessageModule, TreeSelectModule, ButtonModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectTemplatedrivenformsDemo implements OnInit {
+export class TreeSelectTemplateDrivenFormsDemo implements OnInit {
     private nodeService = inject(NodeService);
     messageService = inject(MessageService);
     selectedNodes: any;
@@ -706,7 +700,7 @@ import { NodeService } from '@/service/nodeservice';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-treeselect
                 class="w-full md:w-80"
                 [(ngModel)]="selectedNodes"
@@ -725,7 +719,7 @@ import { NodeService } from '@/service/nodeservice';
     imports: [TreeSelectModule, FormsModule],
     providers: [NodeService]
 })
-export class TreeselectVirtualscrollDemo implements OnInit {
+export class TreeSelectVirtualScrollDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes!: any[];
     selectedNodes: any;
@@ -747,54 +741,52 @@ TreeSelect is a form component to choose from hierarchical data.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TreeSelectPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TreeSelectPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
 | inputId | string | - | Identifier of the underlying input element. |
-| scrollHeight | string | 400px | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
-| metaKeySelection | boolean | false | Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
-| display | "chip" \| "comma" | comma | Defines how the selected items are displayed. |
-| selectionMode | "multiple" \| "single" \| "checkbox" | single | Defines the selection mode. |
-| tabindex | string | 0 | Index of the element in tabbing order. |
+| scrollHeight | string | - | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
+| metaKeySelection | boolean | - | Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
+| display | "comma" \| "chip" | - | Defines how the selected items are displayed. |
+| selectionMode | "single" \| "multiple" \| "checkbox" | - | Defines the selection mode. |
+| tabindex | string | - | Index of the element in tabbing order. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
 | placeholder | string | - | Label to display when there are no selections. |
 | panelClass | string \| string[] \| Set<string> \| { [klass: string]: any } | - | Style class of the overlay panel. |
-| panelStyle | { [klass: string]: any } | - | Inline style of the panel element. |
+| panelStyle | Partial<CSSStyleDeclaration> | - | Inline style of the panel element. |
 | panelStyleClass | string | - | Style class of the panel element. |
-| containerStyle | { [klass: string]: any } | - | Inline style of the container element. **(Deprecated)** |
-| containerStyleClass | string | - | Style class of the container element. **(Deprecated)** |
-| labelStyle | { [klass: string]: any } | - | Inline style of the label element. |
+| labelStyle | Partial<CSSStyleDeclaration> | - | Inline style of the label element. |
 | labelStyleClass | string | - | Style class of the label element. |
 | overlayOptions | OverlayOptions | - | Specifies the options for the overlay. |
 | emptyMessage | string | - | Text to display when there are no options available. Defaults to value from PrimeNG locale configuration. |
-| filter | boolean | false | When specified, displays an input field to filter the items. |
-| filterBy | string | label | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
-| filterMode | string | lenient | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
+| filter | boolean | - | When specified, displays an input field to filter the items. |
+| filterBy | string | - | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
+| filterMode | string | - | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
 | filterPlaceholder | string | - | Placeholder text to show when filter input is empty. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
-| filterInputAutoFocus | boolean | true | Determines whether the filter input should be automatically focused when the component is rendered. |
-| propagateSelectionDown | boolean | true | Whether checkbox selections propagate to descendant nodes. |
-| propagateSelectionUp | boolean | true | Whether checkbox selections propagate to ancestor nodes. |
-| showClear | boolean | false | When enabled, a clear icon is displayed to clear the value. |
-| resetFilterOnHide | boolean | true | Clears the filter value when hiding the dropdown. |
-| virtualScroll | boolean | false | Whether the data should be loaded on demand during scroll. |
+| filterInputAutoFocus | boolean | - | Determines whether the filter input should be automatically focused when the component is rendered. |
+| propagateSelectionDown | boolean | - | Whether checkbox selections propagate to descendant nodes. |
+| propagateSelectionUp | boolean | - | Whether checkbox selections propagate to ancestor nodes. |
+| showClear | boolean | - | When enabled, a clear icon is displayed to clear the value. |
+| resetFilterOnHide | boolean | - | Clears the filter value when hiding the dropdown. |
+| virtualScroll | boolean | - | Whether the data should be loaded on demand during scroll. |
 | virtualScrollItemSize | number | - | Height of an item in the list for VirtualScrolling. |
 | virtualScrollOptions | ScrollerOptions | - | Whether to use the scroller feature. The properties of scroller component can be used like an object in it. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| options | TreeNode<any>[] | - | An array of treenodes. |
-| loading | boolean | false | Displays a loader to indicate data load is in progress. |
-| loadingMode | "icon" \| "mask" | mask | Loading mode display. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| options | TreeNode<any>[] | undefined | An array of treenodes. |
+| loading | boolean | - | Displays a loader to indicate data load is in progress. |
+| loadingMode | "mask" \| "icon" | - | Loading mode display. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
@@ -901,6 +893,8 @@ TreeSelect is a form component to choose from hierarchical data.
 | treeselect.lg.font.size | --p-treeselect-lg-font-size | Lg font size of root |
 | treeselect.lg.padding.x | --p-treeselect-lg-padding-x | Lg padding x of root |
 | treeselect.lg.padding.y | --p-treeselect-lg-padding-y | Lg padding y of root |
+| treeselect.font.weight | --p-treeselect-font-weight | Font weight of root |
+| treeselect.font.size | --p-treeselect-font-size | Font size of root |
 | treeselect.dropdown.width | --p-treeselect-dropdown-width | Width of dropdown |
 | treeselect.dropdown.color | --p-treeselect-dropdown-color | Color of dropdown |
 | treeselect.overlay.background | --p-treeselect-overlay-background | Background of overlay |

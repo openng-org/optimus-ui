@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -9,7 +10,7 @@ import { Ripple } from 'primeng/ripple';
 @Component({
     selector: 'severity-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ToastModule, ButtonModule, Ripple],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToastModule, ButtonModule, Ripple],
     template: `
         <app-docsectiontext>
             <p>
@@ -17,21 +18,23 @@ import { Ripple } from 'primeng/ripple';
                 toast.
             </p>
         </app-docsectiontext>
-        <div class="card flex justify-center gap-2">
+        <app-demo-wrapper>
             <p-toast />
-            <p-button type="button" pRipple (click)="showSuccess()" label="Success" severity="success" />
-            <p-button type="button" pRipple (click)="showInfo()" label="Info" severity="info" />
-            <p-button type="button" pRipple (click)="showWarn()" label="Warn" severity="warn" />
-            <p-button type="button" pRipple (click)="showError()" label="Error" severity="danger" />
-            <p-button type="button" pRipple (click)="showSecondary()" label="Secondary" severity="secondary" />
-            <p-button type="button" pRipple (click)="showContrast()" label="Contrast" severity="contrast" />
-        </div>
-        <app-code></app-code>
+            <div class="flex justify-center gap-2">
+                <p-button type="button" pRipple (click)="showSuccess()" label="Success" severity="success" />
+                <p-button type="button" pRipple (click)="showInfo()" label="Info" severity="info" />
+                <p-button type="button" pRipple (click)="showWarn()" label="Warn" severity="warn" />
+                <p-button type="button" pRipple (click)="showError()" label="Error" severity="danger" />
+                <p-button type="button" pRipple (click)="showSecondary()" label="Secondary" severity="secondary" />
+                <p-button type="button" pRipple (click)="showContrast()" label="Contrast" severity="contrast" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class SeverityDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     showSuccess() {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });

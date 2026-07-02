@@ -18,8 +18,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <p-toast />
+        <div class="flex justify-center">
             <p-button (onClick)="show()" label="Show" />
         </div>
     `,
@@ -29,6 +29,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastBasicDemo {
     private messageService = inject(MessageService);
+
+    show() {
+        this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Message Content', life: 3000 });
+    }
 }
 ```
 
@@ -44,8 +48,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
-            <p-toast key="myKey" />
+        <p-toast key="myKey" />
+        <div class="flex justify-center gap-2">
             <p-button (click)="show()" label="Show" />
             <p-button (click)="clear()" label="Clear" severity="secondary" />
         </div>
@@ -56,6 +60,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastClearDemo {
     private messageService = inject(MessageService);
+
+    show() {
+        this.messageService.add({ key: 'myKey', severity: 'success', summary: 'Message 1', detail: 'Message Content' });
+    }
 
     clear() {
         this.messageService.clear();
@@ -76,25 +84,25 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast position="top-center" key="confirm" (onClose)="onClose()" [baseZIndex]="5000">
-                <ng-template let-message #headless let-closeFn="closeFn">
-                    <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl">
-                        <div class="flex items-center gap-5">
-                            <i class="pi pi-cloud-upload text-white dark:text-black text-2xl"></i>
-                            <span class="font-bold text-base text-white dark:text-black">{{ message.summary }}</span>
-                        </div>
-                        <div class="flex flex-col gap-2">
-                            <p-progressbar [value]="progress()" [showValue]="false" [style]="{ height: '4px' }" class="!bg-primary/80" />
-                            <label class="text-sm font-bold text-white dark:text-black">{{ progress() }}% uploaded</label>
-                        </div>
-                        <div class="flex gap-4 mb-4 justify-end">
-                            <p-button label="Another Upload?" (click)="closeFn($event)" size="small" />
-                            <p-button label="Cancel" (click)="closeFn($event)" size="small" />
-                        </div>
-                    </section>
-                </ng-template>
-            </p-toast>
+        <p-toast position="top-center" key="confirm" (onClose)="onClose()" [baseZIndex]="5000">
+            <ng-template let-message #headless let-closeFn="closeFn">
+                <section class="flex flex-col p-4 gap-4 w-full bg-primary/70 rounded-xl">
+                    <div class="flex items-center gap-5">
+                        <i class="pi pi-cloud-upload text-white dark:text-black text-2xl"></i>
+                        <span class="font-bold text-base text-white dark:text-black">{{ message.summary }}</span>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p-progressbar [value]="progress()" [showValue]="false" [style]="{ height: '4px' }" class="bg-primary/80!" />
+                        <label class="text-sm font-bold text-white dark:text-black">{{ progress() }}% uploaded</label>
+                    </div>
+                    <div class="flex gap-4 mb-4 justify-end">
+                        <p-button label="Another Upload?" (click)="closeFn($event)" size="small" />
+                        <p-button label="Cancel" (click)="closeFn($event)" size="small" />
+                    </div>
+                </section>
+            </ng-template>
+        </p-toast>
+        <div class="flex justify-center">
             <p-button (click)="showConfirm()" label="Confirm" />
         </div>
     `,
@@ -155,8 +163,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
-            <p-toast [life]="10000" />
+        <p-toast [life]="10000" />
+        <div class="flex justify-center gap-2">
             <p-button (click)="showLife()" label="Show Life" />
             <p-button (click)="showLifeLong()" label="Show Life Long" />
         </div>
@@ -167,6 +175,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastLifeDemo {
     private messageService = inject(MessageService);
+
+    showLife() {
+        this.messageService.add({ severity: 'info', summary: 'Life', detail: 'I show for 10000ms' });
+    }
 
     showLifeLong() {
         this.messageService.add({ severity: 'info', summary: 'Life', detail: 'I show for 20000ms', life: 20000 });
@@ -187,8 +199,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <p-toast />
+        <div class="flex justify-center">
             <p-button pRipple (click)="show()" label="Multiple" severity="warn" />
         </div>
     `,
@@ -198,6 +210,15 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastMultipleDemo {
     private messageService = inject(MessageService);
+
+    show() {
+        this.messageService.addAll([
+            { severity: 'success', summary: 'Message 1', detail: 'Message Content' },
+            { severity: 'info', summary: 'Message 2', detail: 'Message Content' },
+            { severity: 'warn', summary: 'Message 3', detail: 'Message Content' },
+            { severity: 'error', summary: 'Message 4', detail: 'Message Content' }
+        ]);
+    }
 }
 ```
 
@@ -214,10 +235,10 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast position="top-left" key="tl" />
-            <p-toast position="bottom-left" key="bl" />
-            <p-toast position="bottom-right" key="br" />
+        <p-toast position="top-left" key="tl" />
+        <p-toast position="bottom-left" key="bl" />
+        <p-toast position="bottom-right" key="br" />
+        <div class="flex justify-center">
             <div class="flex flex-wrap gap-2">
                 <p-button pRipple (click)="showTopLeft()" label="Top Left" />
                 <p-button pRipple (click)="showBottomLeft()" label="Bottom Left" />
@@ -231,6 +252,16 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastPositionDemo {
     private messageService = inject(MessageService);
+
+    showTopLeft() {
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Info Message',
+            detail: 'Message Content',
+            key: 'tl',
+            life: 3000
+        });
+    }
 
     showBottomLeft() {
         this.messageService.add({
@@ -266,8 +297,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast [breakpoints]="{ '920px': { width: '50%', right: 'auto' } }" />
+        <p-toast [breakpoints]="{ '920px': { width: '50%', right: 'auto' } }" />
+        <div class="flex justify-center">
             <p-button (click)="show()" label="Show" />
         </div>
     `,
@@ -277,6 +308,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastResponsiveDemo {
     private messageService = inject(MessageService);
+
+    show() {
+        this.messageService.add({ severity: 'contrast', summary: 'Success', detail: 'Message Content' });
+    }
 }
 ```
 
@@ -293,8 +328,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
-            <p-toast />
+        <p-toast />
+        <div class="flex justify-center gap-2">
             <p-button type="button" pRipple (click)="showSuccess()" label="Success" severity="success" />
             <p-button type="button" pRipple (click)="showInfo()" label="Info" severity="info" />
             <p-button type="button" pRipple (click)="showWarn()" label="Warn" severity="warn" />
@@ -309,6 +344,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastSeverityDemo {
     private messageService = inject(MessageService);
+
+    showSuccess() {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Message Content' });
+    }
 
     showInfo() {
         this.messageService.add({ severity: 'info', summary: 'Info', detail: 'Message Content' });
@@ -332,6 +371,52 @@ export class ToastSeverityDemo {
 }
 ```
 
+## Stack
+
+Setting mode to stack displays toasts in a stacked layout. Toasts visually overlap with a subtle scale effect and expand on hover to reveal all messages. Use stackGap to control spacing and stackVisibleLimit to set the maximum number of visible toasts.
+
+```typescript
+import { Component, inject } from '@angular/core';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+
+@Component({
+    template: `
+        <p-toast key="stack" mode="stack" />
+        <div class="flex justify-center gap-2">
+            <p-button (onClick)="show()" label="Show" />
+            <p-button (onClick)="showMultiple()" label="Multiple" severity="secondary" />
+        </div>
+    `,
+    standalone: true,
+    imports: [ButtonModule, ToastModule],
+    providers: [MessageService]
+})
+export class ToastStackDemo {
+    private messageService = inject(MessageService);
+
+    show() {
+        const sev = this.severities[this.counter++ % this.severities.length];
+        this.messageService.add({
+            severity: sev,
+            summary: sev.charAt(0).toUpperCase() + sev.slice(1),
+            detail: 'Toast message content',
+            key: 'stack',
+            life: 10000
+        });
+    }
+
+    showMultiple() {
+        this.messageService.addAll([
+            { severity: 'info', summary: 'Info', detail: 'Message 1', key: 'stack', life: 10000 },
+            { severity: 'success', summary: 'Success', detail: 'Message 2', key: 'stack', life: 10000 },
+            { severity: 'warn', summary: 'Warning', detail: 'Message 3', key: 'stack', life: 10000 }
+        ]);
+    }
+}
+```
+
 ## Sticky
 
 A toast disappears after the time defined by the life option, set sticky option true on the message to override this and not hide the toast automatically.
@@ -345,8 +430,8 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <p-toast />
+        <div class="flex justify-center">
             <div class="flex flex-wrap gap-2">
                 <p-button pRipple (click)="show()" label="Sticky" />
                 <p-button pRipple (click)="clear()" severity="secondary" label="Clear" />
@@ -359,6 +444,10 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastStickyDemo {
     private messageService = inject(MessageService);
+
+    show() {
+        this.messageService.add({ severity: 'info', summary: 'Sticky', detail: 'Message Content', sticky: true });
+    }
 
     clear() {
         this.messageService.clear();
@@ -378,9 +467,9 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
-            <p-toast key="toast1" />
-            <p-toast key="toast2" />
+        <p-toast key="toast1" />
+        <p-toast key="toast2" />
+        <div class="flex justify-center gap-2">
             <p-button (click)="showToast1()" label="Show Success" />
             <p-button (click)="showToast2()" label="Show Warning" severity="warn" />
         </div>
@@ -391,6 +480,11 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastTargetDemo {
     private messageService = inject(MessageService);
+
+    showToast1() {
+        this.messageService.clear();
+        this.messageService.add({ key: 'toast1', severity: 'success', summary: 'Success', detail: 'key: toast1' });
+    }
 
     showToast2() {
         this.messageService.clear();
@@ -412,19 +506,19 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast position="bottom-center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
-                <ng-template let-message #message>
-                    <div class="flex flex-col items-start flex-auto">
-                        <div class="flex items-center gap-2">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-                            <span class="font-bold">Amy Elsner</span>
-                        </div>
-                        <div class="font-medium text-lg my-4">{{ message.summary }}</div>
-                        <p-button severity="success" size="small" label="Reply" (click)="onConfirm()" />
+        <p-toast position="bottom-center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
+            <ng-template let-message #message>
+                <div class="flex flex-col items-start flex-auto">
+                    <div class="flex items-center gap-2">
+                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <span class="font-bold">Amy Elsner</span>
                     </div>
-                </ng-template>
-            </p-toast>
+                    <div class="font-medium text-lg my-4">{{ message.summary }}</div>
+                    <p-button severity="success" size="small" label="Reply" (click)="onConfirm()" />
+                </div>
+            </ng-template>
+        </p-toast>
+        <div class="flex justify-center">
             <p-button (click)="showConfirm()" label="View" />
         </div>
     `,
@@ -434,6 +528,12 @@ import { MessageService } from 'primeng/api';
 })
 export class ToastTemplateDemo {
     private messageService = inject(MessageService);
+    visible: boolean = false;
+
+    onConfirm() {
+        this.messageService.clear('confirm');
+        this.visible = false;
+    }
 
     onReject() {
         this.messageService.clear('confirm');
@@ -462,24 +562,22 @@ Toast is used to display messages in an overlay.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ToastPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ToastPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | key | string | - | Key of the message in case message is targeted to a specific toast component. |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
-| life | number | 3000 | The default time to display messages for in milliseconds. |
-| styleClass | string | - | Inline class of the component. **(Deprecated)** |
-| position | ToastPositionType | - | Position of the toast in viewport. |
-| preventOpenDuplicates | boolean | false | It does not add the new message if there is already a toast displayed with the same content |
-| preventDuplicates | boolean | false | Displays only once a message with the same content. |
-| showTransformOptions | string | translateY(100%) | Transform options of the show animation. **(Deprecated)** |
-| hideTransformOptions | string | translateY(-100%) | Transform options of the hide animation. **(Deprecated)** |
-| showTransitionOptions | string | 300ms ease-out | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | 250ms ease-in | Transition options of the hide animation. **(Deprecated)** |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
-| breakpoints | { [key: string]: any } | - | Object literal to define styles per screen size. |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
+| life | number | - | The default time to display messages for in milliseconds. |
+| position | "top-left" \| "top-center" \| "top-right" \| "bottom-left" \| "bottom-center" \| "bottom-right" \| "center" | - | Position of the toast in viewport. |
+| mode | "single" \| "stack" | - | Display mode of the toast. |
+| stackGap | number | - | Gap between stacked toast items in pixels. |
+| stackVisibleLimit | number | - | Maximum number of visible toasts in the stack. |
+| preventOpenDuplicates | boolean | - | It does not add the new message if there is already a toast displayed with the same content |
+| preventDuplicates | boolean | - | Displays only once a message with the same content. |
+| motionOptions | MotionOptions | - | The motion options. |
+| breakpoints | Record<string, Partial<CSSStyleDeclaration>> | - | Object literal to define styles per screen size. |
 
 ### Emits
 
@@ -491,7 +589,7 @@ Toast is used to display messages in an overlay.
 
 | Name | Type | Description |
 |------|------|-------------|
-| template | TemplateRef<ToastMessageTemplateContext> | Custom message template. |
+| message | TemplateRef<ToastMessageTemplateContext> | Custom message template. |
 | headless | TemplateRef<ToastHeadlessTemplateContext> | Custom headless template. |
 
 ## Pass Through Options
@@ -535,7 +633,13 @@ Toast is used to display messages in an overlay.
 | toast.border.width | --p-toast-border-width | Border width of root |
 | toast.transition.duration | --p-toast-transition-duration | Transition duration of root |
 | toast.blur | --p-toast-blur | Used to pass tokens of the blur section |
+| toast.focus.ring.width | --p-toast-focus-ring-width | Focus ring width of root |
+| toast.focus.ring.style | --p-toast-focus-ring-style | Focus ring style of root |
+| toast.focus.ring.color | --p-toast-focus-ring-color | Focus ring color of root |
+| toast.focus.ring.offset | --p-toast-focus-ring-offset | Focus ring offset of root |
+| toast.focus.ring.shadow | --p-toast-focus-ring-shadow | Focus ring shadow of root |
 | toast.icon.size | --p-toast-icon-size | Size of icon |
+| toast.icon.margin | --p-toast-icon-margin | Margin of icon |
 | toast.content.padding | --p-toast-content-padding | Padding of content |
 | toast.content.gap | --p-toast-content-gap | Gap of content |
 | toast.text.gap | --p-toast-text-gap | Gap of text |
@@ -550,6 +654,14 @@ Toast is used to display messages in an overlay.
 | toast.close.button.focus.ring.style | --p-toast-close-button-focus-ring-style | Focus ring style of close button |
 | toast.close.button.focus.ring.offset | --p-toast-close-button-focus-ring-offset | Focus ring offset of close button |
 | toast.close.icon.size | --p-toast-close-icon-size | Size of close icon |
+| toast.normal.background | --p-toast-normal-background | Background of normal |
+| toast.normal.border.color | --p-toast-normal-border-color | Border color of normal |
+| toast.normal.color | --p-toast-normal-color | Color of normal |
+| toast.normal.detail.color | --p-toast-normal-detail-color | Detail color of normal |
+| toast.normal.shadow | --p-toast-normal-shadow | Shadow of normal |
+| toast.normal.close.button.hover.background | --p-toast-normal-close-button-hover-background | Close button hover background of normal |
+| toast.normal.close.button.focus.ring.color | --p-toast-normal-close-button-focus-ring-color | Close button focus ring color of normal |
+| toast.normal.close.button.focus.ring.shadow | --p-toast-normal-close-button-focus-ring-shadow | Close button focus ring shadow of normal |
 | toast.info.background | --p-toast-info-background | Background of info |
 | toast.info.border.color | --p-toast-info-border-color | Border color of info |
 | toast.info.color | --p-toast-info-color | Color of info |

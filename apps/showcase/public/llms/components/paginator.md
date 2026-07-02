@@ -16,7 +16,7 @@ import { Paginator, PaginatorModule } from 'primeng/paginator';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-paginator (onPageChange)="onPageChange($event)" [first]="first" [rows]="rows" [totalRecords]="120" [rowsPerPageOptions]="[10, 20, 30]" />
         </div>
     `,
@@ -44,7 +44,7 @@ import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-paginator
                 (onPageChange)="onPageChange($event)"
                 [first]="first"
@@ -60,7 +60,7 @@ import { PaginatorModule } from 'primeng/paginator';
     standalone: true,
     imports: [PaginatorModule]
 })
-export class PaginatorCurrentpagereportDemo {
+export class PaginatorCurrentPageReportDemo {
     first: number = 0;
     rows: number = 10;
 
@@ -81,7 +81,7 @@ import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
     template: `
-        <div class="card flex flex-col gap-4 justify-center items-center">
+        <div class="flex flex-col gap-4 justify-center items-center">
             <p-paginator [first]="first" [rows]="1" [totalRecords]="12" (onPageChange)="onPageChange($event)" [showJumpToPageDropdown]="true" [showPageLinks]="false"></p-paginator>
             <img [src]="'https://primefaces.org/cdn/primeng/images/demo/nature/nature' + (first + 1) + '.jpg'" class="max-w-full rounded-xl" />
         </div>
@@ -115,7 +115,7 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
             <div class="flex items-center justify-center">
                 <div>
                     <p-button icon="pi pi-star" outlined />
@@ -171,7 +171,12 @@ export class PaginatorTemplateDemo {
     first3: number = 0;
     rows3: number = 10;
     totalRecords: number = 120;
-    options: any[];
+    options: any[] = [
+        { label: 5, value: 5 },
+        { label: 10, value: 10 },
+        { label: 20, value: 20 },
+        { label: 120, value: 120 }
+    ];
 
     onPageChange1(event: PaginatorState) {
         this.first1 = event.first ?? 0;
@@ -198,31 +203,29 @@ Paginator is a generic component to display content in paged format.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<PaginatorPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| pageLinkSize | number | 5 | Number of page links to display. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| alwaysShow | boolean | true | Whether to show it even there is only one page. |
-| dropdownAppendTo | any | - | Target element to attach the dropdown overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, PaginatorPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| pageLinkSize | number | - | Number of page links to display. |
+| alwaysShow | boolean | - | Whether to show it even there is only one page. |
 | templateLeft | TemplateRef<PaginatorTemplateContext> | - | Template instance to inject into the left side of the paginator. |
 | templateRight | TemplateRef<PaginatorTemplateContext> | - | Template instance to inject into the right side of the paginator. |
-| dropdownScrollHeight | string | 200px | Dropdown height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
-| currentPageReportTemplate | string | {currentPage} of {totalPages} | Template of the current page report element. Available placeholders are {currentPage},{totalPages},{rows},{first},{last} and {totalRecords} |
-| showCurrentPageReport | boolean | false | Whether to display current page report. |
-| showFirstLastIcon | boolean | true | When enabled, icons are displayed on paginator to go first and last page. |
-| totalRecords | number | 0 | Number of total records. |
-| rows | number | 0 | Data count to display per page. |
+| dropdownScrollHeight | string | - | Dropdown height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
+| currentPageReportTemplate | string | - | Template of the current page report element. Available placeholders are {currentPage},{totalPages},{rows},{first},{last} and {totalRecords} |
+| showCurrentPageReport | boolean | - | Whether to display current page report. |
+| showFirstLastIcon | boolean | - | When enabled, icons are displayed on paginator to go first and last page. |
+| totalRecords | number | - | Number of total records. |
+| rows | number | - | Data count to display per page. |
+| first | number | - | Zero-relative number of the first row to be displayed. |
 | rowsPerPageOptions | any[] | - | Array of integer/object values to display inside rows per page dropdown. A object that have 'showAll' key can be added to it to show all data. Exp; [10,20,30,{showAll:'All'}] |
-| showJumpToPageDropdown | boolean | false | Whether to display a dropdown to navigate to any page. |
-| showJumpToPageInput | boolean | false | Whether to display a input to navigate to any page. |
+| showJumpToPageDropdown | boolean | - | Whether to display a dropdown to navigate to any page. |
+| showJumpToPageInput | boolean | - | Whether to display a input to navigate to any page. |
 | jumpToPageItemTemplate | TemplateRef<PaginatorDropdownItemTemplateContext> | - | Template instance to inject into the jump to page dropdown item inside in the paginator. |
-| showPageLinks | boolean | true | Whether to show page links. |
+| showPageLinks | boolean | - | Whether to show page links. |
 | locale | string | - | Locale to be used in formatting. |
 | dropdownItemTemplate | TemplateRef<PaginatorDropdownItemTemplateContext> | - | Template instance to inject into the rows per page dropdown item inside in the paginator. |
-| first | number | - | Zero-relative number of the first row to be displayed. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 
 ### Emits
 
@@ -306,11 +309,15 @@ Paginator is a generic component to display content in paged format.
 | paginator.nav.button.width | --p-paginator-nav-button-width | Width of nav button |
 | paginator.nav.button.height | --p-paginator-nav-button-height | Height of nav button |
 | paginator.nav.button.border.radius | --p-paginator-nav-button-border-radius | Border radius of nav button |
+| paginator.nav.button.font.weight | --p-paginator-nav-button-font-weight | Font weight of nav button |
+| paginator.nav.button.font.size | --p-paginator-nav-button-font-size | Font size of nav button |
 | paginator.nav.button.focus.ring.width | --p-paginator-nav-button-focus-ring-width | Focus ring width of nav button |
 | paginator.nav.button.focus.ring.style | --p-paginator-nav-button-focus-ring-style | Focus ring style of nav button |
 | paginator.nav.button.focus.ring.color | --p-paginator-nav-button-focus-ring-color | Focus ring color of nav button |
 | paginator.nav.button.focus.ring.offset | --p-paginator-nav-button-focus-ring-offset | Focus ring offset of nav button |
 | paginator.nav.button.focus.ring.shadow | --p-paginator-nav-button-focus-ring-shadow | Focus ring shadow of nav button |
 | paginator.current.page.report.color | --p-paginator-current-page-report-color | Color of current page report |
+| paginator.current.page.report.font.weight | --p-paginator-current-page-report-font-weight | Font weight of current page report |
+| paginator.current.page.report.font.size | --p-paginator-current-page-report-font-size | Font size of current page report |
 | paginator.jump.to.page.input.max.width | --p-paginator-jump-to-page-input-max-width | Max width of jump to page input |
 

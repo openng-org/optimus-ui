@@ -16,33 +16,33 @@ import { AccordionModule } from 'primeng/accordion';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-accordion value="0">
                 <p-accordion-panel value="0">
                     <p-accordion-header>Header I</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.
+                        <p class="m-0 text-sm">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                            id est laborum.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="1">
                     <p-accordion-header>Header II</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        <p class="m-0 text-sm">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="2">
                     <p-accordion-header>Header III</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        <p class="m-0 text-sm">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -66,43 +66,41 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex mb-4 gap-2 justify-end">
-                <p-button (onClick)="active = '0'" [rounded]="true" label="1" styleClass="w-8 h-8 p-0" [outlined]="active !== '0'" />
-                <p-button (onClick)="active = '1'" [rounded]="true" label="2" styleClass="w-8 h-8 p-0" [outlined]="active !== '1'" />
-                <p-button (onClick)="active = '2'" [rounded]="true" label="3" styleClass="w-8 h-8 p-0" [outlined]="active !== '2'" />
-            </div>
-            <p-accordion [(value)]="active">
-                <p-accordion-panel value="0">
-                    <p-accordion-header>Header I</p-accordion-header>
-                    <p-accordion-content>
-                        <p class="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.
-                        </p>
-                    </p-accordion-content>
-                </p-accordion-panel>
-                <p-accordion-panel value="1">
-                    <p-accordion-header>Header II</p-accordion-header>
-                    <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
-                        </p>
-                    </p-accordion-content>
-                </p-accordion-panel>
-                <p-accordion-panel value="2">
-                    <p-accordion-header>Header III</p-accordion-header>
-                    <p-accordion-content>
-                        <p class="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                            culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
-                        </p>
-                    </p-accordion-content>
-                </p-accordion-panel>
-            </p-accordion>
+        <div class="flex mb-4 gap-2 justify-end">
+            <p-button (onClick)="active = '0'" [rounded]="true" label="1" styleClass="w-8 h-8 p-0" [outlined]="active !== '0'" />
+            <p-button (onClick)="active = '1'" [rounded]="true" label="2" styleClass="w-8 h-8 p-0" [outlined]="active !== '1'" />
+            <p-button (onClick)="active = '2'" [rounded]="true" label="3" styleClass="w-8 h-8 p-0" [outlined]="active !== '2'" />
         </div>
+        <p-accordion [(value)]="active">
+            <p-accordion-panel value="0">
+                <p-accordion-header>Header I</p-accordion-header>
+                <p-accordion-content>
+                    <p class="m-0 text-sm">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
+                        laborum.
+                    </p>
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="1">
+                <p-accordion-header>Header II</p-accordion-header>
+                <p-accordion-content>
+                    <p class="m-0 text-sm">
+                        Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
+                        enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                    </p>
+                </p-accordion-content>
+            </p-accordion-panel>
+            <p-accordion-panel value="2">
+                <p-accordion-header>Header III</p-accordion-header>
+                <p-accordion-content>
+                    <p class="m-0 text-sm">
+                        At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
+                        culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                    </p>
+                </p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
     `,
     standalone: true,
     imports: [AccordionModule, ButtonModule]
@@ -122,33 +120,34 @@ import { AccordionModule } from 'primeng/accordion';
 
 @Component({
     template: `
-        <div class="card flex justify-content-center">
+        <div class="flex justify-content-center">
             <p-accordion [value]="['0']" [multiple]="true">
                 <p-accordion-panel value="0">
                     <p-accordion-header>Header I</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.
+                        <p class="m-0 text-sm">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                            id est laborum.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="1">
                     <p-accordion-header>Header II</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        <p class="m-0 text-sm">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="2">
                     <p-accordion-header>Header III</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                            culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                        <p class="m-0 text-sm">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
+                            in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                            minus.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -174,24 +173,26 @@ import { AccordionModule } from 'primeng/accordion';
 
 @Component({
     template: `
-        <div class="card">
-            <p-accordion [value]="['0']">
-                @for (tab of tabs; track tab.title) {
-                    <p-accordion-panel [value]="tab.value">
-                        <p-accordion-header>{{ tab.title }}</p-accordion-header>
-                        <p-accordion-content>
-                            <p class="m-0">{{ tab.content }}</p>
-                        </p-accordion-content>
-                    </p-accordion-panel>
-                }
-            </p-accordion>
-        </div>
+        <p-accordion [value]="['0']">
+            @for (tab of tabs; track tab.title) {
+                <p-accordion-panel [value]="tab.value">
+                    <p-accordion-header>{{ tab.title }}</p-accordion-header>
+                    <p-accordion-content>
+                        <p class="m-0 text-sm">{{ tab.content }}</p>
+                    </p-accordion-content>
+                </p-accordion-panel>
+            }
+        </p-accordion>
     `,
     standalone: true,
     imports: [AccordionModule]
 })
 export class AccordionDynamicDemo {
-    tabs: any[];
+    tabs: any[] = [
+        { title: 'Title 1', content: 'Content 1', value: '0' },
+        { title: 'Title 2', content: 'Content 2', value: '1' },
+        { title: 'Title 3', content: 'Content 3', value: '2' }
+    ];
 }
 ```
 
@@ -205,33 +206,34 @@ import { AccordionModule } from 'primeng/accordion';
 
 @Component({
     template: `
-        <div class="card flex justify-content-center">
+        <div class="flex justify-content-center">
             <p-accordion [value]="['0']" [multiple]="true">
                 <p-accordion-panel value="0">
                     <p-accordion-header>Header I</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.
+                        <p class="m-0 text-sm">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                            id est laborum.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="1">
                     <p-accordion-header>Header II</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        <p class="m-0 text-sm">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
                 <p-accordion-panel value="2">
                     <p-accordion-header>Header III</p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                            culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                        <p class="m-0 text-sm">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
+                            in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                            minus.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -256,7 +258,7 @@ import { BadgeModule } from 'primeng/badge';
 
 @Component({
     template: `
-        <div class="card flex justify-content-center">
+        <div class="flex justify-content-center">
             <p-accordion value="0">
                 <p-accordion-panel value="0">
                     <p-accordion-header>
@@ -274,10 +276,10 @@ import { BadgeModule } from 'primeng/badge';
                         </span>
                     </p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-                            laborum.
+                        <p class="m-0 text-sm">
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+                            commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim
+                            id est laborum.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -297,9 +299,9 @@ import { BadgeModule } from 'primeng/badge';
                         </span>
                     </p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
-                            enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
+                        <p class="m-0 text-sm">
+                            Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.
+                            Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -319,9 +321,10 @@ import { BadgeModule } from 'primeng/badge';
                         </span>
                     </p-accordion-header>
                     <p-accordion-content>
-                        <p class="m-0">
-                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
-                            culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
+                        <p class="m-0 text-sm">
+                            At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt
+                            in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo
+                            minus.
                         </p>
                     </p-accordion-content>
                 </p-accordion-panel>
@@ -342,18 +345,16 @@ Accordion groups a collection of contents in tabs.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| value | ModelSignal<string \| number \| string[] \| number[]> | undefined | Value of the active tab. |
-| multiple | InputSignalWithTransform<boolean, any> | false | When enabled, multiple tabs can be activated at the same time. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
+| value | string \| number \| (string \| number)[] \| null \| undefined | undefined | Value of the active tab. |
+| multiple | boolean | false | When enabled, multiple tabs can be activated at the same time. |
 | expandIcon | string | - | Icon of a collapsed tab. |
 | collapseIcon | string | - | Icon of an expanded tab. |
-| selectOnFocus | InputSignalWithTransform<boolean, any> | false | When enabled, the focused tab is activated. |
-| transitionOptions | string | 400ms cubic-bezier(0.86, 0, 0.07, 1) | Transition options of the animation. **(Deprecated)** |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<AccordionPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| selectOnFocus | boolean | false | When enabled, the focused tab is activated. |
+| motionOptions | MotionOptions | - | The motion options. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, AccordionPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ### Emits
 
@@ -395,6 +396,7 @@ Accordion groups a collection of contents in tabs.
 | accordion.header.active.hover.color | --p-accordion-header-active-hover-color | Active hover color of header |
 | accordion.header.padding | --p-accordion-header-padding | Padding of header |
 | accordion.header.font.weight | --p-accordion-header-font-weight | Font weight of header |
+| accordion.header.font.size | --p-accordion-header-font-size | Font size of header |
 | accordion.header.border.radius | --p-accordion-header-border-radius | Border radius of header |
 | accordion.header.border.width | --p-accordion-header-border-width | Border width of header |
 | accordion.header.border.color | --p-accordion-header-border-color | Border color of header |

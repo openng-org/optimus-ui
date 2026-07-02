@@ -1,32 +1,22 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {
-    booleanAttribute,
-    ChangeDetectionStrategy,
-    Component,
-    ContentChild,
-    ContentChildren,
-    ElementRef,
-    EventEmitter,
-    inject,
-    Input,
-    NgModule,
-    NgZone,
-    numberAttribute,
-    Output,
-    QueryList,
-    SimpleChanges,
-    TemplateRef,
-    ViewChild,
-    ViewEncapsulation
-} from '@angular/core';
-import { addClass, find, findSingle, getAttribute, removeClass, setAttribute, uuid } from '@primeuix/utils';
-import { Footer, Header, PrimeTemplate, SharedModule } from 'primeng/api';
-import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
+import { NgTemplateOutlet } from '@angular/common';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChildren, effect, inject, input, NgModule, numberAttribute, output, signal, untracked, ViewEncapsulation } from '@angular/core';
+import { SharedModule } from 'primeng/api';
+import { PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
-import { ButtonModule, ButtonProps } from 'primeng/button';
-import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon } from 'primeng/icons';
-import { CarouselItemTemplateContext, CarouselPageEvent, CarouselResponsiveOptions } from 'primeng/types/carousel';
+import { ButtonModule } from 'primeng/button';
+import { ChevronDown as ChevronDownIcon } from '@primeicons/angular/chevron-down';
+import { ChevronLeft as ChevronLeftIcon } from '@primeicons/angular/chevron-left';
+import { ChevronRight as ChevronRightIcon } from '@primeicons/angular/chevron-right';
+import { ChevronUp as ChevronUpIcon } from '@primeicons/angular/chevron-up';
 import { CarouselStyle } from './style/carouselstyle';
+import { CAROUSEL_ROOT } from './carousel-token';
+import { CarouselContent as CarouselContentComp } from './carousel-content';
+import { CarouselItem } from './carousel-item';
+import { CarouselNext } from './carousel-next';
+import { CarouselPrev } from './carousel-prev';
+import { CarouselIndicators } from './carousel-indicators';
+import { CarouselIndicator } from './carousel-indicator';
+import { CarouselLegacyBase } from './carousel-legacy';
 
 /**
  * Carousel is a content slider featuring various customization options.
@@ -35,1006 +25,595 @@ import { CarouselStyle } from './style/carouselstyle';
 @Component({
     selector: 'p-carousel',
     standalone: true,
-    imports: [CommonModule, ChevronRightIcon, ButtonModule, ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon, SharedModule, BindModule],
+    imports: [NgTemplateOutlet, ChevronRightIcon, ButtonModule, ChevronLeftIcon, ChevronDownIcon, ChevronUpIcon, SharedModule, BindModule],
     template: `
-        <div [class]="cx('header')" *ngIf="headerFacet || headerTemplate" [pBind]="ptm('header')">
-            <ng-content select="p-header"></ng-content>
-            <ng-container *ngTemplateOutlet="headerTemplate"></ng-container>
-        </div>
-        <div [class]="contentClass" [ngClass]="cx('contentContainer')" [pBind]="ptm('contentContainer')">
-            <div [class]="cx('content')" [attr.aria-live]="allowAutoplay ? 'polite' : 'off'" [pBind]="ptm('content')">
-                <p-button
-                    *ngIf="showNavigators"
-                    [class]="cx('pcPrevButton')"
-                    [attr.aria-label]="ariaPrevButtonLabel()"
-                    (click)="navBackward($event)"
-                    [text]="true"
-                    [buttonProps]="prevButtonProps"
-                    [pt]="ptm('pcPrevButton')"
-                    [unstyled]="unstyled()"
-                    attr.data-pc-group-section="navigator"
-                >
-                    <ng-template #icon>
-                        <ng-container *ngIf="!previousIconTemplate && !_previousIconTemplate && !prevButtonProps?.icon">
-                            <svg data-p-icon="chevron-left" *ngIf="!isVertical()" />
-                            <svg data-p-icon="chevron-up" *ngIf="isVertical()" />
-                        </ng-container>
-                        <ng-container *ngIf="(previousIconTemplate || _previousIconTemplate) && !prevButtonProps?.icon">
-                            <ng-template *ngTemplateOutlet="previousIconTemplate || _previousIconTemplate"></ng-template>
-                        </ng-container>
-                    </ng-template>
-                </p-button>
-                <div [class]="cx('viewport')" [ngStyle]="{ height: isVertical() ? verticalViewPortHeight : 'auto' }" (touchend)="onTouchEnd($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" [pBind]="ptm('viewport')">
-                    <div #itemsContainer [class]="cx('itemList')" (transitionend)="onTransitionEnd()" [pBind]="ptm('itemList')">
-                        <div
-                            *ngFor="let item of clonedItemsForStarting; let index = index"
-                            [class]="cx('itemClone', { index })"
-                            [attr.aria-hidden]="!(totalShiftedItems * -1 === value.length)"
-                            [attr.aria-label]="ariaSlideNumber(index)"
-                            [attr.aria-roledescription]="ariaSlideLabel()"
-                            [attr.data-p-carousel-item-active]="totalShiftedItems * -1 === value.length + _numVisible"
-                            [attr.data-p-carousel-item-start]="index === 0"
-                            [attr.data-p-carousel-item-end]="clonedItemsForStarting && clonedItemsForStarting.length - 1 === index"
-                            [pBind]="ptm('itemClone')"
+        @if (isCompositionMode()) {
+            <ng-content></ng-content>
+        } @else {
+            @if (hasHeader()) {
+                <div [class]="cx('header')" [pBind]="ptm('header')">
+                    <ng-content select="p-header"></ng-content>
+                    <ng-container *ngTemplateOutlet="headerTemplate()"></ng-container>
+                </div>
+            }
+            <div [class]="cn(cx('contentContainer'), contentClass())" [pBind]="ptm('contentContainer')">
+                <div [class]="cx('content')" [attr.aria-live]="ariaLive()" [pBind]="ptm('content')">
+                    @if (showNavigators()) {
+                        <p-button
+                            [class]="cx('pcPrevButton')"
+                            [attr.aria-label]="ariaPrevButtonLabel()"
+                            (click)="navBackward($event)"
+                            [text]="true"
+                            [buttonProps]="prevButtonProps()"
+                            [pt]="ptm('pcPrevButton')"
+                            [unstyled]="unstyled()"
+                            attr.data-pc-group-section="navigator"
                         >
-                            <ng-container *ngTemplateOutlet="itemTemplate || _itemTemplate; context: { $implicit: item }"></ng-container>
-                        </div>
-                        <div
-                            *ngFor="let item of value; let index = index"
-                            [class]="cx('item', { index })"
-                            role="group"
-                            [attr.aria-hidden]="!(firstIndex() <= index && lastIndex() >= index)"
-                            [attr.aria-label]="ariaSlideNumber(index)"
-                            [attr.aria-roledescription]="ariaSlideLabel()"
-                            [attr.data-p-carousel-item-active]="firstIndex() <= index && lastIndex() >= index"
-                            [attr.data-p-carousel-item-start]="firstIndex() === index"
-                            [attr.data-p-carousel-item-end]="lastIndex() === index"
-                            [pBind]="getItemPTOptions('item', index)"
-                        >
-                            <ng-container *ngTemplateOutlet="itemTemplate || _itemTemplate; context: { $implicit: item }"></ng-container>
-                        </div>
-                        <div
-                            *ngFor="let item of clonedItemsForFinishing; let index = index"
-                            [class]="cx('itemClone', { index })"
-                            [attr.data-p-carousel-item-active]="false"
-                            [attr.data-p-carousel-item-start]="false"
-                            [attr.data-p-carousel-item-end]="false"
-                            [pBind]="ptm('itemClone')"
-                        >
-                            <ng-container *ngTemplateOutlet="itemTemplate || _itemTemplate; context: { $implicit: item }"></ng-container>
+                            <ng-template #icon>
+                                @if (showDefaultPrevIcon()) {
+                                    @if (!isVertical()) {
+                                        <svg data-p-icon="chevron-left" />
+                                    }
+                                    @if (isVertical()) {
+                                        <svg data-p-icon="chevron-up" />
+                                    }
+                                }
+                                @if (showPrevIconTemplate()) {
+                                    <ng-template *ngTemplateOutlet="previousIconTemplate()"></ng-template>
+                                }
+                            </ng-template>
+                        </p-button>
+                    }
+                    <div [class]="cx('viewport')" [style]="viewportStyle()" (touchend)="onTouchEnd($event)" (touchstart)="onTouchStart($event)" (touchmove)="onTouchMove($event)" [pBind]="ptm('viewport')">
+                        <div #itemsContainer [class]="cx('itemList')" (transitionend)="onTransitionEnd()" [pBind]="ptm('itemList')">
+                            @for (item of clonedItemsForStarting(); track item; let i = $index) {
+                                <div
+                                    [class]="cx('itemClone', { index: i })"
+                                    [attr.aria-hidden]="isCloneStartAriaHidden()"
+                                    [attr.aria-label]="ariaSlideNumber(i)"
+                                    [attr.aria-roledescription]="ariaSlideLabel()"
+                                    [attr.data-p-carousel-item-active]="isCloneStartActive()"
+                                    [attr.data-p-carousel-item-start]="i === 0"
+                                    [attr.data-p-carousel-item-end]="isCloneStartEnd(i)"
+                                    [pBind]="ptm('itemClone')"
+                                >
+                                    <ng-container *ngTemplateOutlet="itemTemplate(); context: { $implicit: item }"></ng-container>
+                                </div>
+                            }
+                            @for (item of value(); track item; let i = $index) {
+                                <div
+                                    [class]="cx('item', { index: i })"
+                                    role="group"
+                                    [attr.aria-hidden]="isItemAriaHidden(i)"
+                                    [attr.aria-label]="ariaSlideNumber(i)"
+                                    [attr.aria-roledescription]="ariaSlideLabel()"
+                                    [attr.data-p-carousel-item-active]="isItemActive(i)"
+                                    [attr.data-p-carousel-item-start]="isItemStart(i)"
+                                    [attr.data-p-carousel-item-end]="isItemEnd(i)"
+                                    [pBind]="getItemPTOptions('item', i)"
+                                >
+                                    <ng-container *ngTemplateOutlet="itemTemplate(); context: { $implicit: item }"></ng-container>
+                                </div>
+                            }
+                            @for (item of clonedItemsForFinishing(); track item) {
+                                <div [class]="cx('itemClone', { index: 0 })" [attr.data-p-carousel-item-active]="false" [attr.data-p-carousel-item-start]="false" [attr.data-p-carousel-item-end]="false" [pBind]="ptm('itemClone')">
+                                    <ng-container *ngTemplateOutlet="itemTemplate(); context: { $implicit: item }"></ng-container>
+                                </div>
+                            }
                         </div>
                     </div>
+                    @if (showNavigators()) {
+                        <p-button
+                            type="button"
+                            [class]="cx('pcNextButton')"
+                            (click)="navForward($event)"
+                            [attr.aria-label]="ariaNextButtonLabel()"
+                            [buttonProps]="nextButtonProps()"
+                            [text]="true"
+                            [pt]="ptm('pcNextButton')"
+                            [unstyled]="unstyled()"
+                            attr.data-pc-group-section="navigator"
+                        >
+                            <ng-template #icon>
+                                @if (showDefaultNextIcon()) {
+                                    @if (!isVertical()) {
+                                        <svg data-p-icon="chevron-right" />
+                                    }
+                                    @if (isVertical()) {
+                                        <svg data-p-icon="chevron-down" />
+                                    }
+                                }
+                                @if (showNextIconTemplate()) {
+                                    <ng-template *ngTemplateOutlet="nextIconTemplate()"></ng-template>
+                                }
+                            </ng-template>
+                        </p-button>
+                    }
                 </div>
-                <p-button
-                    type="button"
-                    *ngIf="showNavigators"
-                    [class]="cx('pcNextButton')"
-                    (click)="navForward($event)"
-                    [attr.aria-label]="ariaNextButtonLabel()"
-                    [buttonProps]="nextButtonProps"
-                    [text]="true"
-                    [pt]="ptm('pcNextButton')"
-                    [unstyled]="unstyled()"
-                    attr.data-pc-group-section="navigator"
-                >
-                    <ng-template #icon>
-                        <ng-container *ngIf="!nextIconTemplate && !_nextIconTemplate && !nextButtonProps?.icon">
-                            <svg data-p-icon="chevron-right" *ngIf="!isVertical()" />
-                            <svg data-p-icon="chevron-down" *ngIf="isVertical()" />
-                        </ng-container>
-                        <span *ngIf="nextIconTemplate || (_nextIconTemplate && !nextButtonProps?.icon)">
-                            <ng-template *ngTemplateOutlet="nextIconTemplate || _nextIconTemplate"></ng-template>
-                        </span>
-                    </ng-template>
-                </p-button>
+                @if (showIndicators()) {
+                    <ul #indicatorContent [class]="cx('indicatorList')" [style]="indicatorsContentStyle()" (keydown)="onIndicatorKeydown($event)" [pBind]="ptm('indicatorList')">
+                        @for (dot of totalDotsArray(); track dot) {
+                            <li [class]="cx('indicator', { index: dot })" [attr.data-p-active]="isIndicatorActive(dot)" [pBind]="getIndicatorPTOptions('indicator', dot)">
+                                <button
+                                    type="button"
+                                    [class]="cx('indicatorButton')"
+                                    (click)="onDotClick($event, dot)"
+                                    [style]="indicatorStyle()"
+                                    [attr.aria-label]="ariaPageLabel(dot + 1)"
+                                    [attr.aria-current]="getIndicatorAriaCurrent(dot)"
+                                    [tabindex]="getIndicatorTabindex(dot)"
+                                    [pBind]="getIndicatorPTOptions('indicatorButton', dot)"
+                                ></button>
+                            </li>
+                        }
+                    </ul>
+                }
             </div>
-            <ul #indicatorContent [class]="cx('indicatorList')" [ngStyle]="indicatorsContentStyle" *ngIf="showIndicators" (keydown)="onIndicatorKeydown($event)" [pBind]="ptm('indicatorList')">
-                <li *ngFor="let totalDot of totalDotsArray(); let i = index" [class]="cx('indicator', { index: i })" [attr.data-p-active]="_page === i" [pBind]="getIndicatorPTOptions('indicator', i)">
-                    <button
-                        type="button"
-                        [class]="cx('indicatorButton')"
-                        (click)="onDotClick($event, i)"
-                        [ngStyle]="indicatorStyle"
-                        [attr.aria-label]="ariaPageLabel(i + 1)"
-                        [attr.aria-current]="_page === i ? 'page' : undefined"
-                        [tabindex]="_page === i ? 0 : -1"
-                        [pBind]="getIndicatorPTOptions('indicatorButton', i)"
-                    ></button>
-                </li>
-            </ul>
-        </div>
-        <div [class]="cx('footer')" *ngIf="footerFacet || footerTemplate || _footerTemplate" [pBind]="ptm('footer')">
-            <ng-content select="p-footer"></ng-content>
-            <ng-container *ngTemplateOutlet="footerTemplate || _footerTemplate"></ng-container>
-        </div>
+            @if (hasFooter()) {
+                <div [class]="cx('footer')" [pBind]="ptm('footer')">
+                    <ng-content select="p-footer"></ng-content>
+                    <ng-container *ngTemplateOutlet="footerTemplate()"></ng-container>
+                </div>
+            }
+        }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [CarouselStyle, { provide: PARENT_INSTANCE, useExisting: Carousel }],
+    providers: [CarouselStyle, { provide: PARENT_INSTANCE, useExisting: Carousel }, { provide: CAROUSEL_ROOT, useExisting: Carousel }],
     hostDirectives: [Bind],
     host: {
         '[attr.id]': 'id',
         '[attr.role]': "'region'",
-        '[class]': "cn(cx('root'), styleClass)"
+        '[class]': 'hostClass()',
+        '[attr.data-scope]': 'dataScope()',
+        '[attr.data-part]': 'dataPart()',
+        '[attr.data-orientation]': 'dataOrientation()',
+        '[attr.data-align]': 'dataAlign()',
+        '[attr.data-page]': 'dataPage()',
+        '[attr.data-swiping]': 'dataSwiping()',
+        '[attr.data-autosize]': 'dataAutosize()'
     }
 })
-export class Carousel extends BaseComponent {
+export class Carousel extends CarouselLegacyBase {
     componentName = 'Carousel';
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
+    onAfterViewChecked() {
         this.bindDirectiveInstance.setAttrs(this.ptm('root'));
     }
 
+    _compositionContent = contentChildren(CarouselContentComp, { descendants: true });
+
+    isCompositionMode = computed(() => this._compositionContent().length > 0);
+
+    hostClass = computed(() => (this.isCompositionMode() ? this.cx('compositionRoot') : this.cx('root')));
+
     /**
-     * Index of the first item.
-     * @defaultValue 0
+     * Alignment of the carousel items (composition mode).
      * @group Props
+     * @defaultValue 'start'
      */
-    @Input() get page(): number {
-        return this._page;
-    }
-
-    set page(val: number) {
-        if (this.isCreated && val !== this._page) {
-            if (this.autoplayInterval) {
-                this.stopAutoplay();
-            }
-
-            if (val > this._page && val <= this.totalDots() - 1) {
-                this.step(-1, val);
-            } else if (val < this._page) {
-                this.step(1, val);
-            }
-        }
-
-        this._page = val;
-    }
+    align = input<'start' | 'center' | 'end'>('start');
 
     /**
-     * Number of items per page.
+     * Alias for orientation used by composition mode host bindings.
+     * Delegates to the existing `orientation` input.
+     */
+    compositionOrientation = computed(() => this.orientation());
+
+    /**
+     * Alias for align used by composition mode host bindings.
+     * Delegates to the `align` input.
+     */
+    compositionAlign = computed(() => this.align());
+
+    /**
+     * Whether the carousel should loop (composition mode).
+     * @group Props
+     * @defaultValue false
+     */
+    loop = input(false, { transform: booleanAttribute });
+
+    /**
+     * Scroll snap type applied to the track (composition mode).
+     * @group Props
+     * @defaultValue 'mandatory'
+     */
+    snapType = input<'mandatory' | 'proximity'>('mandatory');
+
+    /**
+     * Spacing between carousel items in pixels (composition mode).
+     * @group Props
+     * @defaultValue 16
+     */
+    spacing = input(16, { transform: numberAttribute });
+
+    /**
+     * Whether the carousel should auto size items (composition mode).
+     * @group Props
+     * @defaultValue false
+     */
+    autoSize = input(false, { transform: booleanAttribute });
+
+    /**
+     * Alias for autoSize used by composition mode host bindings.
+     */
+    compositionAutoSize = computed(() => this.autoSize());
+
+    // Host data attributes (composition mode only)
+    dataScope = computed(() => (this.isCompositionMode() ? 'carousel' : null));
+    dataPart = computed(() => (this.isCompositionMode() ? 'root' : null));
+    dataOrientation = computed(() => (this.isCompositionMode() ? this.compositionOrientation() : null));
+    dataAlign = computed(() => (this.isCompositionMode() ? this.compositionAlign() : null));
+    dataPage = computed(() => (this.isCompositionMode() ? this.pageState() : null));
+    dataSwiping = computed(() => (this.isCompositionMode() && this.swiping() ? '' : null));
+    dataAutosize = computed(() => (this.isCompositionMode() && this.compositionAutoSize() ? '' : null));
+
+    /**
+     * How many slides are visible per page (composition mode). Supports fractions (e.g. 1.5).
+     * @group Props
      * @defaultValue 1
-     * @group Props
      */
-    @Input() get numVisible(): number {
-        return this._numVisible;
-    }
-
-    set numVisible(val: number) {
-        this._numVisible = val;
-    }
+    slidesPerPage = input(1, { transform: numberAttribute });
 
     /**
-     * Number of items to scroll.
-     * @defaultValue 1
+     * Index of the active slide (composition mode).
      * @group Props
      */
-    @Input() get numScroll(): number {
-        return this._numVisible;
-    }
-
-    set numScroll(val: number) {
-        this._numScroll = val;
-    }
+    slide = input<number | undefined>(undefined);
 
     /**
-     * An array of options for responsive design.
-     * @see {CarouselResponsiveOptions}
-     * @group Props
-     */
-    @Input() responsiveOptions: CarouselResponsiveOptions[] | undefined;
-    /**
-     * Specifies the layout of the component.
-     * @group Props
-     */
-    @Input() orientation: 'horizontal' | 'vertical' = 'horizontal';
-    /**
-     * Height of the viewport in vertical layout.
-     * @group Props
-     */
-    @Input() verticalViewPortHeight: string = '300px';
-    /**
-     * Style class of main content.
-     * @group Props
-     */
-    @Input() contentClass: string = '';
-    /**
-     * Style class of the indicator items.
-     * @group Props
-     */
-    @Input() indicatorsContentClass: string = '';
-    /**
-     * Inline style of the indicator items.
-     * @group Props
-     */
-    @Input() indicatorsContentStyle: { [klass: string]: any } | null | undefined;
-    /**
-     * Style class of the indicators.
-     * @group Props
-     */
-    @Input() indicatorStyleClass: string = '';
-    /**
-     * Style of the indicators.
-     * @group Props
-     */
-    @Input() indicatorStyle: { [klass: string]: any } | null | undefined;
-
-    /**
-     * An array of objects to display.
-     * @defaultValue null
-     * @group Props
-     */
-    @Input() get value(): any[] {
-        return this._value as any[];
-    }
-
-    set value(val) {
-        this._value = val;
-    }
-
-    /**
-     * Defines if scrolling would be infinite.
-     * @group Props
-     */
-    @Input({ transform: booleanAttribute }) circular: boolean = false;
-    /**
-     * Whether to display indicator container.
-     * @group Props
-     */
-    @Input({ transform: booleanAttribute }) showIndicators: boolean = true;
-    /**
-     * Whether to display navigation buttons in container.
-     * @group Props
-     */
-    @Input({ transform: booleanAttribute }) showNavigators: boolean = true;
-    /**
-     * Time in milliseconds to scroll items automatically.
-     * @group Props
-     */
-    @Input({ transform: numberAttribute }) autoplayInterval: number = 0;
-    /**
-     * Style class of the viewport container.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
-    /**
-     * Used to pass all properties of the ButtonProps to the Button component.
-     * @group Props
-     */
-    @Input() prevButtonProps: ButtonProps = {
-        severity: 'secondary',
-        text: true,
-        rounded: true
-    };
-    /**
-     * Used to pass all properties of the ButtonProps to the Button component.
-     * @group Props
-     */
-    @Input() nextButtonProps: ButtonProps = {
-        severity: 'secondary',
-        text: true,
-        rounded: true
-    };
-    /**
-     * Callback to invoke after scroll.
-     * @param {CarouselPageEvent} event - Custom page event.
+     * Callback fired when the carousel's page changes (composition mode).
      * @group Emits
      */
-    @Output() onPage: EventEmitter<CarouselPageEvent> = new EventEmitter<CarouselPageEvent>();
-
-    @ViewChild('itemsContainer') itemsContainer: ElementRef | undefined;
-
-    @ViewChild('indicatorContent') indicatorContent: ElementRef | undefined;
-
-    @ContentChild(Header) headerFacet: QueryList<Header> | undefined;
-
-    @ContentChild(Footer) footerFacet: QueryList<Footer> | undefined;
-
-    _numVisible: number = 1;
-
-    _numScroll: number = 1;
-
-    _oldNumScroll: number = 0;
-
-    prevState: any = {
-        numScroll: 0,
-        numVisible: 0,
-        value: []
-    };
-
-    defaultNumScroll: number = 1;
-
-    defaultNumVisible: number = 1;
-
-    _page: number = 0;
-
-    _value: any[] | null | undefined;
-
-    carouselStyle: any;
-
-    id: string | undefined;
-
-    totalShiftedItems;
-
-    isRemainingItemsAdded: boolean = false;
-
-    animationTimeout: any;
-
-    translateTimeout: any;
-
-    remainingItems: number = 0;
-
-    _items: any[] | undefined;
-
-    startPos: any;
-
-    documentResizeListener: any;
-
-    clonedItemsForStarting: any[] | undefined;
-
-    clonedItemsForFinishing: any[] | undefined;
-
-    allowAutoplay: boolean | undefined;
-
-    interval: any;
-
-    isCreated: boolean | undefined;
-
-    swipeThreshold: number = 20;
+    onPageChange = output<{ value: number }>();
 
     /**
-     * Custom item template.
-     * @group Templates
+     * Callback fired when the active slide changes (composition mode).
+     * @group Emits
      */
-    @ContentChild('item', { descendants: false }) itemTemplate: TemplateRef<CarouselItemTemplateContext> | undefined;
+    onSlideChange = output<{ value: number }>();
 
-    /**
-     * Custom header template.
-     * @group Templates
-     */
-    @ContentChild('header', { descendants: false }) headerTemplate: TemplateRef<void> | undefined;
+    // ==========================================
+    // Composition mode signals
+    // ==========================================
 
-    /**
-     * Custom footer template.
-     * @group Templates
-     */
-    @ContentChild('footer', { descendants: false }) footerTemplate: TemplateRef<void> | undefined;
+    swiping = signal(false);
+    isNextDisabled = signal(false);
+    isPrevDisabled = signal(false);
+    snapPoints = signal<Set<number>>(new Set());
+    pageState = signal(0);
+    contentEl = signal<HTMLElement | null>(null);
 
-    /**
-     * Custom previous icon template.
-     * @group Templates
-     */
-    @ContentChild('previousicon', { descendants: false }) previousIconTemplate: TemplateRef<void> | undefined;
+    private _snapPointsRef = new Set<number>();
+    private _scrollSnapsRef: number[] = [];
+    private _initialPageApplied = false;
+    private _initialControlledScroll = false;
 
-    /**
-     * Custom next icon template.
-     * @group Templates
-     */
-    @ContentChild('nexticon', { descendants: false }) nextIconTemplate: TemplateRef<void> | undefined;
+    private _resizeObserver: ResizeObserver | null = null;
+    private _mutationObserver: MutationObserver | null = null;
+    private _intersectionObserver: IntersectionObserver | null = null;
+    private _scrollTimeout: ReturnType<typeof setTimeout> | null = null;
+    private _wheelTimeout: ReturnType<typeof setTimeout> | null = null;
+    private _scrollListener: (() => void) | null = null;
 
-    _itemTemplate: TemplateRef<CarouselItemTemplateContext> | undefined;
+    private _swipeStartPoint = { x: 0, y: 0 };
+    private _isRealSwipe = false;
+    private _itemSelector = '[data-item]';
 
-    _headerTemplate: TemplateRef<void> | undefined;
-
-    _footerTemplate: TemplateRef<void> | undefined;
-
-    _previousIconTemplate: TemplateRef<void> | undefined;
-
-    _nextIconTemplate: TemplateRef<void> | undefined;
-
-    window: Window;
-
-    _componentStyle = inject(CarouselStyle);
-
-    constructor(
-        public el: ElementRef,
-        public zone: NgZone
-    ) {
-        super();
-        this.totalShiftedItems = this.page * this.numScroll * -1;
-        this.window = this.document.defaultView as Window;
-    }
-
-    onChanges(simpleChange: SimpleChanges) {
-        if (isPlatformBrowser(this.platformId)) {
-            if (simpleChange.value) {
-                if (this.circular && this._value) {
-                    this.setCloneItems();
-                }
-            }
-
-            if (this.isCreated) {
-                if (simpleChange.numVisible) {
-                    if (this.responsiveOptions) {
-                        this.defaultNumVisible = this.numVisible;
-                    }
-
-                    if (this.isCircular()) {
-                        this.setCloneItems();
-                    }
-
-                    this.createStyle();
-                    this.calculatePosition();
-                }
-
-                if (simpleChange.numScroll) {
-                    if (this.responsiveOptions) {
-                        this.defaultNumScroll = this.numScroll;
-                    }
-                }
-            }
+    private _areSetsEqual<T>(a: Set<T>, b: Set<T>): boolean {
+        if (a.size !== b.size) return false;
+        for (const value of a) {
+            if (!b.has(value)) return false;
         }
-        this.cd.markForCheck();
+        return true;
     }
 
-    @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate> | undefined;
+    constructor() {
+        super();
+
+        // Composition mode: watch slide input changes
+        effect(() => {
+            const slideVal = this.slide();
+            if (slideVal === undefined || slideVal === null) return;
+            if (!this.isCompositionMode()) return;
+            untracked(() => {
+                if (this._snapPointsRef.size > 0) {
+                    this.scrollToSlide(slideVal);
+                }
+            });
+        });
+    }
 
     onAfterContentInit() {
-        this.id = uuid('pn_id_');
-        if (isPlatformBrowser(this.platformId)) {
-            this.allowAutoplay = !!this.autoplayInterval;
-
-            if (this.circular) {
-                this.setCloneItems();
-            }
-
-            if (this.responsiveOptions) {
-                this.defaultNumScroll = this._numScroll;
-                this.defaultNumVisible = this._numVisible;
-            }
-
-            this.createStyle();
-            this.calculatePosition();
-
-            if (this.responsiveOptions) {
-                this.bindDocumentListeners();
-            }
-        }
-
-        this.templates?.forEach((item) => {
-            switch (item.getType()) {
-                case 'item':
-                    this._itemTemplate = item.template;
-                    break;
-
-                case 'header':
-                    this._headerTemplate = item.template;
-                    break;
-
-                case 'footer':
-                    this._footerTemplate = item.template;
-                    break;
-
-                case 'previousicon':
-                    this._previousIconTemplate = item.template;
-                    break;
-
-                case 'nexticon':
-                    this._nextIconTemplate = item.template;
-                    break;
-
-                default:
-                    this._itemTemplate = item.template;
-                    break;
-            }
-        });
-
-        this.cd.detectChanges();
+        this.legacyOnAfterContentInit();
     }
 
     onAfterContentChecked() {
-        if (isPlatformBrowser(this.platformId)) {
-            const isCircular = this.isCircular();
-            let totalShiftedItems = this.totalShiftedItems;
-
-            if (this.value && this.itemsContainer && (this.prevState.numScroll !== this._numScroll || this.prevState.numVisible !== this._numVisible || this.prevState.value.length !== this.value.length)) {
-                if (this.autoplayInterval) {
-                    this.stopAutoplay(false);
-                }
-
-                this.remainingItems = (this.value.length - this._numVisible) % this._numScroll;
-
-                let page = this._page;
-                if (this.totalDots() !== 0 && page >= this.totalDots()) {
-                    page = this.totalDots() - 1;
-                    this._page = page;
-                    this.onPage.emit({
-                        page: this.page
-                    });
-                }
-
-                totalShiftedItems = page * this._numScroll * -1;
-                if (isCircular) {
-                    totalShiftedItems -= this._numVisible;
-                }
-
-                if (page === this.totalDots() - 1 && this.remainingItems > 0) {
-                    totalShiftedItems += -1 * this.remainingItems + this._numScroll;
-                    this.isRemainingItemsAdded = true;
-                } else {
-                    this.isRemainingItemsAdded = false;
-                }
-
-                if (totalShiftedItems !== this.totalShiftedItems) {
-                    this.totalShiftedItems = totalShiftedItems;
-                }
-
-                this._oldNumScroll = this._numScroll;
-                this.prevState.numScroll = this._numScroll;
-                this.prevState.numVisible = this._numVisible;
-                this.prevState.value = [...(this._value as any[])];
-
-                if (this.totalDots() > 0 && this.itemsContainer.nativeElement) {
-                    this.itemsContainer.nativeElement.style.transform = this.isVertical() ? `translate3d(0, ${totalShiftedItems * (100 / this._numVisible)}%, 0)` : `translate3d(${totalShiftedItems * (100 / this._numVisible)}%, 0, 0)`;
-                }
-
-                this.isCreated = true;
-
-                if (this.autoplayInterval && this.isAutoplay()) {
-                    this.startAutoplay();
-                }
-            }
-
-            if (isCircular) {
-                if (this.page === 0) {
-                    totalShiftedItems = -1 * this._numVisible;
-                } else if (totalShiftedItems === 0) {
-                    totalShiftedItems = -1 * this.value.length;
-                    if (this.remainingItems > 0) {
-                        this.isRemainingItemsAdded = true;
-                    }
-                }
-
-                if (totalShiftedItems !== this.totalShiftedItems) {
-                    this.totalShiftedItems = totalShiftedItems;
-                }
-            }
-        }
-    }
-
-    createStyle() {
-        if (!this.carouselStyle) {
-            this.carouselStyle = this.renderer.createElement('style');
-            this.carouselStyle.type = 'text/css';
-            setAttribute(this.carouselStyle, 'nonce', this.config?.csp()?.nonce);
-            this.renderer.appendChild(this.document.head, this.carouselStyle);
-            setAttribute(this.carouselStyle, 'nonce', this.config?.csp()?.nonce);
-        }
-
-        let innerHTML = `
-            #${this.id} .p-carousel-item {
-				flex: 1 0 ${100 / this.numVisible}%
-			}
-        `;
-
-        if (this.responsiveOptions && !this.$unstyled()) {
-            this.responsiveOptions.sort((data1, data2) => {
-                const value1 = data1.breakpoint;
-                const value2 = data2.breakpoint;
-                let result: number | null = null;
-
-                if (value1 == null && value2 != null) result = -1;
-                else if (value1 != null && value2 == null) result = 1;
-                else if (value1 == null && value2 == null) result = 0;
-                else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2, undefined, { numeric: true });
-                else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-                return -1 * result;
-            });
-
-            for (let i = 0; i < this.responsiveOptions.length; i++) {
-                let res = this.responsiveOptions[i];
-
-                innerHTML += `
-                    @media screen and (max-width: ${res.breakpoint}) {
-                        #${this.id} .p-carousel-item {
-                            flex: 1 0 ${100 / res.numVisible}%
-                        }
-                    }
-                `;
-            }
-        }
-
-        this.carouselStyle.innerHTML = innerHTML;
-    }
-
-    calculatePosition() {
-        if (this.responsiveOptions) {
-            let matchedResponsiveData = {
-                numVisible: this.defaultNumVisible,
-                numScroll: this.defaultNumScroll
-            };
-
-            if (typeof window !== 'undefined') {
-                let windowWidth = window.innerWidth;
-                for (let i = 0; i < this.responsiveOptions.length; i++) {
-                    let res = this.responsiveOptions[i];
-
-                    if (parseInt(res.breakpoint, 10) >= windowWidth) {
-                        matchedResponsiveData = res;
-                    }
-                }
-            }
-
-            if (this._numScroll !== matchedResponsiveData.numScroll) {
-                let page = this._page;
-                page = Math.floor((page * this._numScroll) / matchedResponsiveData.numScroll);
-
-                let totalShiftedItems = matchedResponsiveData.numScroll * this.page * -1;
-
-                if (this.isCircular()) {
-                    totalShiftedItems -= matchedResponsiveData.numVisible;
-                }
-
-                this.totalShiftedItems = totalShiftedItems;
-                this._numScroll = matchedResponsiveData.numScroll;
-
-                this._page = page;
-                this.onPage.emit({
-                    page: this.page
-                });
-            }
-
-            if (this._numVisible !== matchedResponsiveData.numVisible) {
-                this._numVisible = matchedResponsiveData.numVisible;
-                this.setCloneItems();
-            }
-
-            this.cd.markForCheck();
-        }
-    }
-
-    setCloneItems() {
-        this.clonedItemsForStarting = [];
-        this.clonedItemsForFinishing = [];
-        if (this.isCircular()) {
-            this.clonedItemsForStarting.push(...this.value.slice(-1 * this._numVisible));
-            this.clonedItemsForFinishing.push(...this.value.slice(0, this._numVisible));
-        }
-    }
-
-    firstIndex() {
-        return this.isCircular() ? -1 * (this.totalShiftedItems + this.numVisible) : this.totalShiftedItems * -1;
-    }
-
-    lastIndex() {
-        return this.firstIndex() + this.numVisible - 1;
-    }
-
-    totalDots() {
-        return this.value?.length ? Math.ceil((this.value.length - this._numVisible) / this._numScroll) + 1 : 0;
-    }
-
-    totalDotsArray() {
-        const totalDots = this.totalDots();
-        return totalDots <= 0 ? [] : Array(totalDots).fill(0);
-    }
-
-    isVertical() {
-        return this.orientation === 'vertical';
-    }
-
-    isCircular() {
-        return this.circular && this.value && this.value.length >= this.numVisible;
-    }
-
-    isAutoplay() {
-        return this.autoplayInterval && this.allowAutoplay;
-    }
-
-    isForwardNavDisabled() {
-        return this.isEmpty() || (this._page >= this.totalDots() - 1 && !this.isCircular());
-    }
-
-    isBackwardNavDisabled() {
-        return this.isEmpty() || (this._page <= 0 && !this.isCircular());
-    }
-
-    isEmpty() {
-        return !this.value || this.value.length === 0;
-    }
-
-    navForward(e: MouseEvent | TouchEvent, index?: number) {
-        if (this.isCircular() || this._page < this.totalDots() - 1) {
-            this.step(-1, index);
-        }
-
-        if (this.autoplayInterval) {
-            this.stopAutoplay();
-        }
-
-        if (e && e.cancelable) {
-            e.preventDefault();
-        }
-    }
-
-    navBackward(e: MouseEvent | TouchEvent, index?: number) {
-        if (this.isCircular() || this._page !== 0) {
-            this.step(1, index);
-        }
-
-        if (this.autoplayInterval) {
-            this.stopAutoplay();
-        }
-
-        if (e && e.cancelable) {
-            e.preventDefault();
-        }
-    }
-
-    onDotClick(e: MouseEvent, index: number) {
-        let page = this._page;
-
-        if (this.autoplayInterval) {
-            this.stopAutoplay();
-        }
-
-        if (index > page) {
-            this.navForward(e, index);
-        } else if (index < page) {
-            this.navBackward(e, index);
-        }
-    }
-
-    onIndicatorKeydown(event: KeyboardEvent) {
-        switch (event.code) {
-            case 'ArrowRight':
-                this.onRightKey();
-                break;
-
-            case 'ArrowLeft':
-                this.onLeftKey();
-                break;
-        }
-    }
-
-    onRightKey() {
-        const indicators = [...find(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"]')];
-        const activeIndex = this.findFocusedIndicatorIndex();
-
-        this.changedFocusedIndicator(activeIndex, activeIndex + 1 === indicators.length ? indicators.length - 1 : activeIndex + 1);
-    }
-
-    onLeftKey() {
-        const activeIndex = this.findFocusedIndicatorIndex();
-
-        this.changedFocusedIndicator(activeIndex, activeIndex - 1 <= 0 ? 0 : activeIndex - 1);
-    }
-
-    onHomeKey() {
-        const activeIndex = this.findFocusedIndicatorIndex();
-
-        this.changedFocusedIndicator(activeIndex, 0);
-    }
-
-    onEndKey() {
-        const indicators = [...find(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"]')];
-        const activeIndex = this.findFocusedIndicatorIndex();
-
-        this.changedFocusedIndicator(activeIndex, indicators.length - 1);
-    }
-
-    onTabKey() {
-        const indicators = <any>[...find(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"]')];
-        const highlightedIndex = indicators.findIndex((ind) => getAttribute(ind, 'data-p-highlight') === true);
-
-        const activeIndicator = <any>findSingle(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"] > button[tabindex="0"]');
-        const activeIndex = indicators.findIndex((ind) => ind === activeIndicator.parentElement);
-
-        indicators[activeIndex].children[0].tabIndex = '-1';
-        indicators[highlightedIndex].children[0].tabIndex = '0';
-    }
-
-    findFocusedIndicatorIndex() {
-        const indicators = [...find(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"]')];
-        const activeIndicator = findSingle(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"] > button[tabindex="0"]');
-
-        return indicators.findIndex((ind) => ind === activeIndicator?.parentElement);
-    }
-
-    changedFocusedIndicator(prevInd, nextInd) {
-        const indicators = <any>[...find(this.indicatorContent?.nativeElement, '[data-pc-section="indicator"]')];
-
-        indicators[prevInd].children[0].tabIndex = '-1';
-        indicators[nextInd].children[0].tabIndex = '0';
-        indicators[nextInd].children[0].focus();
-    }
-
-    step(dir: number, page?: number) {
-        let totalShiftedItems = this.totalShiftedItems;
-        const isCircular = this.isCircular();
-
-        if (page != null) {
-            totalShiftedItems = this._numScroll * page * -1;
-
-            if (isCircular) {
-                totalShiftedItems -= this._numVisible;
-            }
-
-            this.isRemainingItemsAdded = false;
-        } else {
-            totalShiftedItems += this._numScroll * dir;
-            if (this.isRemainingItemsAdded) {
-                totalShiftedItems += this.remainingItems - this._numScroll * dir;
-                this.isRemainingItemsAdded = false;
-            }
-
-            let originalShiftedItems = isCircular ? totalShiftedItems + this._numVisible : totalShiftedItems;
-            page = Math.abs(Math.floor(originalShiftedItems / this._numScroll));
-        }
-
-        if (isCircular && this.page === this.totalDots() - 1 && dir === -1) {
-            totalShiftedItems = -1 * (this.value.length + this._numVisible);
-            page = 0;
-        } else if (isCircular && this.page === 0 && dir === 1) {
-            totalShiftedItems = 0;
-            page = this.totalDots() - 1;
-        } else if (page === this.totalDots() - 1 && this.remainingItems > 0) {
-            totalShiftedItems += this.remainingItems * -1 - this._numScroll * dir;
-            this.isRemainingItemsAdded = true;
-        }
-
-        if (this.itemsContainer) {
-            !this.$unstyled() && removeClass(this.itemsContainer.nativeElement, 'p-items-hidden');
-            this.itemsContainer.nativeElement.style.transform = this.isVertical() ? `translate3d(0, ${totalShiftedItems * (100 / this._numVisible)}%, 0)` : `translate3d(${totalShiftedItems * (100 / this._numVisible)}%, 0, 0)`;
-            this.itemsContainer.nativeElement.style.transition = 'transform 500ms ease 0s';
-        }
-
-        this.totalShiftedItems = totalShiftedItems;
-        this._page = page;
-        this.onPage.emit({
-            page: this.page
-        });
-        this.cd.markForCheck();
-    }
-
-    startAutoplay() {
-        this.interval = setInterval(() => {
-            if (this.totalDots() > 0) {
-                if (this.page === this.totalDots() - 1) {
-                    this.step(-1, 0);
-                } else {
-                    this.step(-1, this.page + 1);
-                }
-            }
-        }, this.autoplayInterval);
-        this.allowAutoplay = true;
-        this.cd.markForCheck();
-    }
-
-    stopAutoplay(changeAllow: boolean = true) {
-        if (this.interval) {
-            clearInterval(this.interval);
-            this.interval = undefined;
-            if (changeAllow) {
-                this.allowAutoplay = false;
-            }
-        }
-        this.cd.markForCheck();
-    }
-
-    isPlaying(): boolean {
-        return !!this.interval;
-    }
-
-    onTransitionEnd() {
-        if (this.itemsContainer) {
-            !this.$unstyled() && addClass(this.itemsContainer.nativeElement, 'p-items-hidden');
-            this.itemsContainer.nativeElement.style.transition = '';
-
-            if ((this.page === 0 || this.page === this.totalDots() - 1) && this.isCircular()) {
-                this.itemsContainer.nativeElement.style.transform = this.isVertical() ? `translate3d(0, ${this.totalShiftedItems * (100 / this._numVisible)}%, 0)` : `translate3d(${this.totalShiftedItems * (100 / this._numVisible)}%, 0, 0)`;
-            }
-        }
-    }
-
-    onTouchStart(e: TouchEvent) {
-        let touchobj = e.changedTouches[0];
-
-        this.startPos = {
-            x: touchobj.pageX,
-            y: touchobj.pageY
-        };
-    }
-
-    onTouchMove(e: TouchEvent | MouseEvent) {
-        if (e.cancelable) {
-            e.preventDefault();
-        }
-    }
-
-    onTouchEnd(e: TouchEvent) {
-        let touchobj = e.changedTouches[0];
-
-        if (this.isVertical()) {
-            this.changePageOnTouch(e, touchobj.pageY - this.startPos.y);
-        } else {
-            this.changePageOnTouch(e, touchobj.pageX - this.startPos.x);
-        }
-    }
-
-    changePageOnTouch(e: TouchEvent | MouseEvent, diff: number) {
-        if (Math.abs(diff) > this.swipeThreshold) {
-            if (diff < 0) {
-                this.navForward(e);
-            } else {
-                this.navBackward(e);
-            }
-        }
-    }
-
-    ariaPrevButtonLabel() {
-        return this.config.translation.aria ? this.config.translation.aria?.prevPageLabel : undefined;
-    }
-
-    ariaSlideLabel() {
-        return this.config.translation.aria ? this.config.translation.aria?.slide : undefined;
-    }
-
-    ariaNextButtonLabel() {
-        return this.config.translation.aria ? this.config.translation.aria?.nextPageLabel : undefined;
-    }
-
-    ariaSlideNumber(value) {
-        return this.config.translation.aria ? this.config.translation.aria?.slideNumber?.replace(/{slideNumber}/g, value) : undefined;
-    }
-
-    ariaPageLabel(value) {
-        return this.config.translation.aria ? this.config.translation.aria?.pageLabel?.replace(/{page}/g, value) : undefined;
-    }
-
-    getIndicatorPTOptions(key: string, index: number) {
-        return this.ptm(key, {
-            context: {
-                highlighted: index === this._page
-            }
-        });
-    }
-
-    getItemPTOptions(key: string, index: number) {
-        return this.ptm(key, {
-            context: {
-                index,
-                active: this.firstIndex() <= index && this.lastIndex() >= index,
-                start: this.firstIndex() === index,
-                end: this.lastIndex() === index
-            }
-        });
-    }
-
-    bindDocumentListeners() {
-        if (isPlatformBrowser(this.platformId)) {
-            if (!this.documentResizeListener) {
-                this.documentResizeListener = this.renderer.listen(this.window, 'resize', (event) => {
-                    this.calculatePosition();
-                });
-            }
-        }
-    }
-
-    unbindDocumentListeners() {
-        if (isPlatformBrowser(this.platformId)) {
-            if (this.documentResizeListener) {
-                this.documentResizeListener();
-                this.documentResizeListener = null;
-            }
-        }
+        this.legacyOnAfterContentChecked();
     }
 
     onDestroy() {
-        if (this.responsiveOptions) {
-            this.unbindDocumentListeners();
+        this.legacyOnDestroy();
+
+        // Composition mode cleanup
+        this._resizeObserver?.disconnect();
+        this._mutationObserver?.disconnect();
+        this._intersectionObserver?.disconnect();
+        this._scrollListener?.();
+        if (this._scrollTimeout) clearTimeout(this._scrollTimeout);
+        if (this._wheelTimeout) clearTimeout(this._wheelTimeout);
+    }
+
+    resolveSnapType(): string {
+        const axis = this.orientation() === 'vertical' ? 'y' : 'x';
+        return `${axis} ${this.snapType()}`;
+    }
+
+    setupObservers() {
+        const content = this.contentEl();
+        if (!content) return;
+
+        // ResizeObserver
+        this._resizeObserver = new ResizeObserver(() => {
+            this.computeSnapPoints();
+            const closest = this.setToClosest();
+            this.scrollToPage(closest ?? this.pageState(), true);
+        });
+        this._resizeObserver.observe(content);
+        this._observeResizeItems(content);
+
+        // Delay initial computation to ensure items have their data-item attributes
+        requestAnimationFrame(() => {
+            this.computeSnapPoints();
+            this._observeResizeItems(content);
+            this._observeIntersectionItems(content);
+            this._applyInitialPage();
+            this._applyControlledPage();
+            this._applyControlledSlide();
+        });
+
+        // MutationObserver
+        this._mutationObserver = new MutationObserver((mutations) => {
+            mutations.forEach(() => {
+                this.computeSnapPoints();
+                this._observeResizeItems(content);
+                this._observeIntersectionItems(content);
+                requestAnimationFrame(() => {
+                    const closest = this.setToClosest();
+                    this.scrollToPage(closest ?? this.pageState(), true);
+                });
+            });
+        });
+        this._mutationObserver.observe(content, { childList: true, subtree: true });
+
+        // IntersectionObserver
+        this._intersectionObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) entry.target.setAttribute('data-inview', '');
+                    else entry.target.removeAttribute('data-inview');
+                });
+            },
+            { root: content, threshold: 0.6 }
+        );
+        this._observeIntersectionItems(content);
+
+        // Scroll listener
+        const onScroll = () => {
+            if (this._scrollTimeout) clearTimeout(this._scrollTimeout);
+            this._scrollTimeout = setTimeout(() => {
+                this.setToClosest();
+            }, 80);
+        };
+        onScroll();
+        content.addEventListener('scroll', onScroll, { passive: true });
+        this._scrollListener = () => content.removeEventListener('scroll', onScroll);
+    }
+
+    private _applyInitialPage() {
+        if (this._initialPageApplied) return;
+        const slideInput = this.slide();
+        if (slideInput !== undefined && slideInput !== null) return;
+        const size = this._snapPointsRef.size || this.snapPoints().size;
+        if (size === 0) return;
+        this._initialPageApplied = true;
+        this.scrollToPage(0, true);
+    }
+
+    private _applyControlledPage() {
+        const pageInput = this.page();
+        const slideInput = this.slide();
+        if (pageInput === undefined || pageInput === null) return;
+        if (slideInput !== undefined && slideInput !== null) return;
+        if (this._snapPointsRef.size === 0 && this.snapPoints().size === 0) return;
+        const instant = !this._initialControlledScroll;
+        this._initialControlledScroll = true;
+        this.scrollToPage(pageInput, instant);
+    }
+
+    private _applyControlledSlide() {
+        const slideInput = this.slide();
+        if (slideInput === undefined || slideInput === null) return;
+        if (this._snapPointsRef.size === 0 && this.snapPoints().size === 0) return;
+        const instant = !this._initialControlledScroll;
+        this._initialControlledScroll = true;
+        this.scrollToSlide(slideInput, instant);
+    }
+
+    private _observeResizeItems(content: HTMLElement) {
+        if (!this._resizeObserver) return;
+        content.querySelectorAll<HTMLElement>(this._itemSelector).forEach((item) => this._resizeObserver!.observe(item));
+    }
+
+    private _observeIntersectionItems(content: HTMLElement) {
+        if (!this._intersectionObserver) return;
+        content.querySelectorAll<HTMLElement>(this._itemSelector).forEach((item) => this._intersectionObserver!.observe(item));
+    }
+
+    computeSnapPoints() {
+        const content = this.contentEl();
+        if (!content) return;
+
+        const isHorizontal = this.orientation() !== 'vertical';
+        const trackSize = isHorizontal ? content.clientWidth : content.clientHeight;
+        const maxOffset = Math.max(0, isHorizontal ? content.scrollWidth - trackSize : content.scrollHeight - trackSize);
+        const snaps: number[] = [];
+        const alignValue = this.align();
+
+        this._scrollSnapsRef = [];
+
+        content.querySelectorAll<HTMLElement>(this._itemSelector).forEach((item) => {
+            const offset = isHorizontal ? item.offsetLeft : item.offsetTop;
+            const size = isHorizontal ? item.clientWidth : item.clientHeight;
+
+            let snapPoint = offset;
+
+            if (alignValue === 'center') {
+                snapPoint = offset - (trackSize - size) / 2;
+            } else if (alignValue === 'end') {
+                snapPoint = offset - (trackSize - size);
+            }
+
+            const clamped = Math.max(0, Math.min(snapPoint, maxOffset));
+            this._scrollSnapsRef.push(clamped);
+            snaps.push(clamped);
+        });
+
+        const newSnapPoints = new Set(snaps.map(Number));
+        if (this._areSetsEqual(this._snapPointsRef, newSnapPoints)) return;
+
+        this._snapPointsRef = newSnapPoints;
+        this.snapPoints.set(newSnapPoints);
+    }
+
+    setPage(page: number) {
+        if (!this.loop()) {
+            const size = this._snapPointsRef.size || this.snapPoints().size;
+            this.isPrevDisabled.set(page === 0);
+            this.isNextDisabled.set(page === size - 1);
         }
-        if (this.autoplayInterval) {
-            this.stopAutoplay();
-        }
+        this.pageState.set(page);
+        this.onPageChange.emit({ value: page });
+        this.onSlideChange.emit({ value: page });
+    }
+
+    setToClosest(): number | undefined {
+        const content = this.contentEl();
+        const points = this._snapPointsRef;
+        if (!content || points.size === 0) return undefined;
+
+        const scrollPos = this.orientation() === 'horizontal' ? content.scrollLeft : content.scrollTop;
+        const closestSnapPoint = Array.from(points).reduce((closest, point) => {
+            return Math.abs(point - scrollPos) < Math.abs(closest - scrollPos) ? point : closest;
+        }, Infinity);
+
+        const index = Array.from(points).indexOf(closestSnapPoint);
+        this.setPage(index);
+        return index;
+    }
+
+    scrollToPage(pageNum?: number, instant = false) {
+        const points = this._snapPointsRef;
+        if (points.size === 0) return;
+        const target = pageNum ?? this.pageState();
+        const clampedPage = this.loop() ? (target + points.size) % points.size : Math.max(0, Math.min(target, points.size - 1));
+        this.setPage(clampedPage);
+        this.scrollTo(Array.from(points)[clampedPage], instant);
+    }
+
+    next() {
+        this.scrollToPage(this.pageState() + 1);
+    }
+
+    prev() {
+        this.scrollToPage(this.pageState() - 1);
+    }
+
+    scrollTo(snapPoint: number, instant = false) {
+        const content = this.contentEl();
+        if (!content) return;
+        content.scrollTo({
+            [this.orientation() === 'horizontal' ? 'left' : 'top']: snapPoint,
+            behavior: instant ? 'instant' : 'smooth'
+        });
+    }
+
+    scrollToSlide(slideNum: number, instant = false) {
+        const points = this._snapPointsRef;
+        const snaps = this._scrollSnapsRef;
+        if (points.size === 0 || snaps.length === 0) return;
+        const clampedSlide = Math.max(0, Math.min(slideNum, snaps.length - 1));
+        const snap = snaps[clampedSlide];
+        this.scrollTo(snap, instant);
+        const pageIdx = Array.from(points).indexOf(snap);
+        this.setPage(pageIdx);
+    }
+
+    setContentEl(el: HTMLElement) {
+        this.contentEl.set(el);
+    }
+
+    // Pointer event handlers (called by CarouselContent)
+    onContentPointerDown(e: PointerEvent) {
+        if (e.button !== 0) return;
+        if (e.pointerType === 'touch') return;
+        this.swiping.set(true);
+        this._swipeStartPoint = { x: e.clientX, y: e.clientY };
+        this._isRealSwipe = false;
+    }
+
+    onContentPointerMove(e: PointerEvent) {
+        const content = this.contentEl();
+        if (!this.swiping() || !content || e.pointerType === 'touch') return;
+        const deltaX = e.clientX - this._swipeStartPoint.x;
+        const deltaY = e.clientY - this._swipeStartPoint.y;
+        const distance = Math.abs(deltaX) + Math.abs(deltaY);
+        if (distance < 6) return;
+        if ((window.getSelection()?.toString().length ?? 0) > 0) return;
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        content.style.userSelect = 'none';
+        this._isRealSwipe = true;
+        content.style.scrollSnapType = 'none';
+        content.scrollBy({ left: -e.movementX, top: -e.movementY, behavior: 'instant' });
+        e.preventDefault();
+    }
+
+    onContentPointerUp(e: PointerEvent) {
+        this.swiping.set(false);
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+        if (!this._isRealSwipe) return;
+        const content = this.contentEl();
+        if (!content) return;
+        content.style.userSelect = '';
+        const scrollPos = this.orientation() === 'horizontal' ? content.scrollLeft : content.scrollTop;
+        const snapPointsSet = this._snapPointsRef;
+        const closestSnapPoint = Array.from(snapPointsSet).reduce((closest, point) => {
+            return Math.abs(point - scrollPos) < Math.abs(closest - scrollPos) ? point : closest;
+        }, Infinity);
+        const index = Array.from(snapPointsSet).indexOf(closestSnapPoint);
+        requestAnimationFrame(() => {
+            if (closestSnapPoint !== undefined) this.scrollToPage(index);
+            requestAnimationFrame(() => {
+                content.style.scrollSnapType = this.resolveSnapType();
+            });
+        });
+    }
+
+    onContentWheel(e: WheelEvent) {
+        if (this._wheelTimeout) clearTimeout(this._wheelTimeout);
+        this._wheelTimeout = setTimeout(() => {
+            const primaryDelta = this.orientation() === 'horizontal' ? e.deltaX || e.deltaY : e.deltaY || e.deltaX;
+            if (primaryDelta > 0 && this.isNextDisabled()) return;
+            if (primaryDelta < 0 && this.isPrevDisabled()) return;
+            this.setToClosest();
+        }, 80);
     }
 }
 
 @NgModule({
-    imports: [Carousel, SharedModule],
-    exports: [Carousel, SharedModule]
+    imports: [Carousel, CarouselContentComp, CarouselItem, CarouselNext, CarouselPrev, CarouselIndicators, CarouselIndicator, SharedModule],
+    exports: [Carousel, CarouselContentComp, CarouselItem, CarouselNext, CarouselPrev, CarouselIndicators, CarouselIndicator, SharedModule]
 })
 export class CarouselModule {}

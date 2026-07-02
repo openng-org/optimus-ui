@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -8,40 +9,39 @@ import { SortEvent } from 'primeng/api';
 import { Table, TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'removablesort-doc',
+    selector: 'removable-sort-doc',
     standalone: true,
-    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo],
-    template: `
-        <app-docsectiontext>
+    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
+    template: ` <app-docsectiontext>
             <p>The removable sort can be implemented using the <i>customSort</i> property.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table #dt [value]="products" (sortFunction)="customSort($event)" [customSort]="true">
                     <ng-template #header>
                         <tr>
                             <th pSortableColumn="code">
                                 <div class="flex items-center gap-2">
                                     Code
-                                    <p-sortIcon field="code" />
+                                    <p-sort-icon field="code" />
                                 </div>
                             </th>
                             <th pSortableColumn="name">
                                 <div class="flex items-center gap-2">
                                     Name
-                                    <p-sortIcon field="name" />
+                                    <p-sort-icon field="name" />
                                 </div>
                             </th>
                             <th pSortableColumn="category">
                                 <div class="flex items-center gap-2">
                                     Category
-                                    <p-sortIcon field="category" />
+                                    <p-sort-icon field="category" />
                                 </div>
                             </th>
                             <th pSortableColumn="quantity">
                                 <div class="flex items-center gap-2">
                                     Quantity
-                                    <p-sortIcon field="quantity" />
+                                    <p-sort-icon field="quantity" />
                                 </div>
                             </th>
                         </tr>
@@ -55,10 +55,9 @@ import { Table, TableModule } from 'primeng/table';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>
-    `,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemovableSortDoc {

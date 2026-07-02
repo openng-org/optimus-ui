@@ -17,7 +17,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" [feedback]="false" autocomplete="off" />
         </div>
     `,
@@ -40,14 +40,14 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" [feedback]="false" autocomplete="off" [showClear]="true" inputStyleClass="w-56" />
         </div>
     `,
     standalone: true,
     imports: [PasswordModule, FormsModule]
 })
-export class PasswordCleariconDemo {
+export class PasswordClearIconDemo {
     value!: string;
 }
 ```
@@ -63,7 +63,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" [disabled]="true" placeholder="Disabled" autocomplete="off" />
         </div>
     `,
@@ -86,7 +86,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" [feedback]="false" variant="filled" autocomplete="off" />
         </div>
     `,
@@ -110,7 +110,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel>
                 <p-password [(ngModel)]="value1" inputId="over_label" autocomplete="off" />
                 <label for="over_label">Over Label</label>
@@ -128,7 +128,7 @@ import { PasswordModule } from 'primeng/password';
     standalone: true,
     imports: [FloatLabelModule, PasswordModule, FormsModule]
 })
-export class PasswordFloatlabelDemo {
+export class PasswordFloatLabelDemo {
     value1!: string;
     value2!: string;
     value3!: string;
@@ -146,9 +146,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card">
-            <p-password [(ngModel)]="value" [feedback]="false" autocomplete="off" fluid />
-        </div>
+        <p-password [(ngModel)]="value" [feedback]="false" autocomplete="off" fluid />
     `,
     standalone: true,
     imports: [PasswordModule, FormsModule]
@@ -170,7 +168,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <p-password [(ngModel)]="value" inputId="password" autocomplete="off" />
                 <label for="password">Password</label>
@@ -180,7 +178,7 @@ import { PasswordModule } from 'primeng/password';
     standalone: true,
     imports: [IftaLabelModule, PasswordModule, FormsModule]
 })
-export class PasswordIftalabelDemo {
+export class PasswordIftaLabelDemo {
     value!: string;
 }
 ```
@@ -196,7 +194,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <p-password [(ngModel)]="value1" [invalid]="!value1" placeholder="Password" />
             <p-password [(ngModel)]="value2" [invalid]="!value2" variant="filled" placeholder="Password" />
         </div>
@@ -221,7 +219,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" promptLabel="Choose a password" weakLabel="Too simple" mediumLabel="Average complexity" strongLabel="Complex password" autocomplete="off" />
         </div>
     `,
@@ -244,7 +242,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" autocomplete="off" />
         </div>
     `,
@@ -265,14 +263,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 sm:w-56">
                 <div class="flex flex-col gap-1">
                     <p-password formControlName="value" [invalid]="isInvalid('value')" [feedback]="false" autocomplete="off" fluid />
@@ -285,10 +281,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, PasswordModule, ToastModule, ButtonModule, ReactiveFormsModule],
+    imports: [MessageModule, PasswordModule, ButtonModule, ReactiveFormsModule],
     providers: [MessageService]
 })
-export class PasswordReactiveformsDemo {
+export class PasswordReactiveFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
@@ -327,7 +323,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-password [(ngModel)]="value1" type="text" size="small" placeholder="Small" />
             <p-password [(ngModel)]="value2" type="text" placeholder="Normal" />
             <p-password [(ngModel)]="value3" type="text" size="large" placeholder="Large" />
@@ -355,7 +351,7 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" autocomplete="off">
                 <ng-template #header>
                     <div class="font-semibold text-xm mb-4">Reset Password</div>
@@ -387,14 +383,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { PasswordModule } from 'primeng/password';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex justify-center flex-col gap-4 md:w-56">
                 <div class="flex flex-col gap-1">
                     <p-password #model="ngModel" [(ngModel)]="value" [invalid]="model.invalid && (model.touched || exampleForm.submitted)" name="password" [feedback]="false" autocomplete="off" required fluid />
@@ -407,10 +401,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, PasswordModule, ToastModule, ButtonModule, FormsModule],
+    imports: [MessageModule, PasswordModule, ButtonModule, FormsModule],
     providers: [MessageService]
 })
-export class PasswordTemplatedrivenformsDemo {
+export class PasswordTemplateDrivenFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
     value: any;
@@ -435,14 +429,14 @@ import { PasswordModule } from 'primeng/password';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-password [(ngModel)]="value" [toggleMask]="true" autocomplete="off" />
         </div>
     `,
     standalone: true,
     imports: [PasswordModule, FormsModule]
 })
-export class PasswordTogglemaskDemo {
+export class PasswordToggleMaskDemo {
     value!: string;
 }
 ```
@@ -455,49 +449,45 @@ Password displays strength indicator for password fields.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<PasswordPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| fluid | InputSignalWithTransform<boolean, unknown> | false | Spans 100% width of the container when enabled. |
-| variant | InputSignal<"outlined" \| "filled"> | 'outlined' | Specifies the input variant of the component. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
-| inputSize | InputSignal<number> | undefined | Specifies the visible width of the input element in characters. |
-| pattern | InputSignal<string> | undefined | Specifies the value must match the pattern. |
-| min | InputSignal<number> | undefined | The value must be greater than or equal to the value. |
-| max | InputSignal<number> | undefined | The value must be less than or equal to the value. |
-| step | InputSignal<number> | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
-| minlength | InputSignal<number> | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
-| maxlength | InputSignal<number> | undefined | The number of characters (code points) must not exceed the value of the attribute. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, PasswordPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| fluid | boolean | false | Spans 100% width of the container when enabled. |
+| variant | "filled" \| "outlined" | 'outlined' | Specifies the input variant of the component. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
+| inputSize | number | undefined | Specifies the visible width of the input element in characters. |
+| pattern | string | undefined | Specifies the value must match the pattern. |
+| min | number | undefined | The value must be greater than or equal to the value. |
+| max | number | undefined | The value must be less than or equal to the value. |
+| step | number | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
+| minlength | number | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
+| maxlength | number | undefined | The number of characters (code points) must not exceed the value of the attribute. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Specifies one or more IDs in the DOM that labels the input field. |
 | label | string | - | Label of the input for accessibility. |
 | promptLabel | string | - | Text to prompt password entry. Defaults to PrimeNG I18N API configuration. |
-| mediumRegex | string | ^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,}) | Regex value for medium regex. |
-| strongRegex | string | ^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,}) | Regex value for strong regex. |
+| mediumRegex | string | - | Regex value for medium regex. |
+| strongRegex | string | - | Regex value for strong regex. |
 | weakLabel | string | - | Text for a weak password. Defaults to PrimeNG I18N API configuration. |
 | mediumLabel | string | - | Text for a medium password. Defaults to PrimeNG I18N API configuration. |
-| maxLength | number | - | specifies the maximum number of characters allowed in the input element. **(Deprecated)** |
 | strongLabel | string | - | Text for a strong password. Defaults to PrimeNG I18N API configuration. |
 | inputId | string | - | Identifier of the accessible input element. |
-| feedback | boolean | true | Whether to show the strength indicator or not. |
-| toggleMask | boolean | false | Whether to show an icon to display the password as plain text. |
+| feedback | boolean | - | Whether to show the strength indicator or not. |
+| toggleMask | boolean | - | Whether to show an icon to display the password as plain text. |
 | inputStyleClass | string | - | Style class of the input field. |
-| styleClass | string | - | Style class of the element. **(Deprecated)** |
-| inputStyle | { [klass: string]: any } | - | Inline style of the input field. |
-| showTransitionOptions | string | .12s cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | .1s linear | Transition options of the hide animation. **(Deprecated)** |
+| inputStyle | Partial<CSSStyleDeclaration> | - | Inline style of the input field. |
 | autocomplete | string | - | Specify automated assistance in filling out password by browser. |
 | placeholder | string | - | Advisory information to display on input. |
-| showClear | boolean | false | When enabled, a clear icon is displayed to clear the value. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
+| showClear | boolean | - | When enabled, a clear icon is displayed to clear the value. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
 | tabindex | number | - | Index of the element in tabbing order. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 | overlayOptions | OverlayOptions | - | Whether to use overlay API feature. The properties of overlay API can be used like an object in it. |
 
 ### Emits
@@ -506,7 +496,7 @@ Password displays strength indicator for password fields.
 |------|------------|-------------|
 | onFocus | event: Event | Callback to invoke when the component receives focus. |
 | onBlur | event: Event | Callback to invoke when the component loses focus. |
-| onClear | value: any | Callback to invoke when clear button is clicked. |
+| onClear | value: void | Callback to invoke when clear button is clicked. |
 
 ### Templates
 
@@ -568,6 +558,8 @@ Password displays strength indicator for password fields.
 | password.overlay.padding | --p-password-overlay-padding | Padding of overlay |
 | password.overlay.shadow | --p-password-overlay-shadow | Shadow of overlay |
 | password.content.gap | --p-password-content-gap | Gap of content |
+| password.meter.text.font.weight | --p-password-meter-text-font-weight | Font weight of meter text |
+| password.meter.text.font.size | --p-password-meter-text-font-size | Font size of meter text |
 | password.strength.weak.background | --p-password-strength-weak-background | Weak background of strength |
 | password.strength.medium.background | --p-password-strength-medium-background | Medium background of strength |
 | password.strength.strong.background | --p-password-strength-strong-background | Strong background of strength |

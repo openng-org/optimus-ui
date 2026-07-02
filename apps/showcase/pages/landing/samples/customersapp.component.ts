@@ -43,17 +43,17 @@ import { TooltipModule } from 'primeng/tooltip';
     template: `
         <div class="flex items-start gap-2 justify-between">
             <div>
-                <div class="text-2xl leading-8 text-color font-medium">Customers</div>
-                <div class="mt-1 leading-6 text-muted-color">The analysis list here shows all users</div>
+                <div class="text-lg leading-7 text-color font-medium">Customers</div>
+                <div class="mt-1 text-sm leading-5 text-muted-color">The analysis list here shows all users</div>
             </div>
             <p-button icon="pi pi-circle-fill text-green-500" label="950 Active User" outlined severity="secondary" />
         </div>
-        <div class="mt-10 mb-4 flex items-center justify-between">
+        <div class="mt-8 mb-3.5 flex items-center justify-between">
             <p-iconfield iconPosition="left">
                 <p-inputicon class="pi pi-search"> </p-inputicon>
                 <input pInputText type="text" [(ngModel)]="search" placeholder="Search" />
             </p-iconfield>
-            <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2.5">
                 <p-button icon="pi pi-filter" outlined severity="secondary" />
                 <p-divider layout="vertical" class="m-0 p-0" />
                 <p-button icon="pi pi-refresh" outlined severity="secondary" />
@@ -62,7 +62,7 @@ import { TooltipModule } from 'primeng/tooltip';
                 <p-button icon="pi pi-chevron-right" outlined severity="secondary" />
             </div>
         </div>
-        <div class="flex-1 last:[&>td]:border-0 rounded-lg border border-surface w-full overflow-auto">
+        <div class="flex-1 [&>td]:last:border-0 rounded-lg border border-surface w-full overflow-auto">
             <p-table [value]="tableData" [(selection)]="selectedRows" dataKey="id" [rows]="10" [dt]="tableTokens">
                 <ng-template #header>
                     <tr>
@@ -85,7 +85,7 @@ import { TooltipModule } from 'primeng/tooltip';
                         </td>
                         <td>
                             <div class="flex items-center">
-                                <p-overlayBadge [severity]="data.active === undefined ? 'contrast' : data.active ? 'success' : 'danger'" styleClass="w-fit">
+                                <p-overlaybadge [severity]="data.active === undefined ? 'contrast' : data.active ? 'success' : 'danger'" styleClass="w-fit">
                                     <p-avatar
                                         [image]="data.image"
                                         [label]="!data.image ? data.capName : ''"
@@ -94,28 +94,28 @@ import { TooltipModule } from 'primeng/tooltip';
                                             'rounded-md overflow-hidden flex': true
                                         }"
                                     />
-                                </p-overlayBadge>
+                                </p-overlaybadge>
 
-                                <div class="ml-4 leading-6 text-color font-medium">{{ data.name }}</div>
+                                <div class="ml-3.5 text-sm leading-5 text-color font-medium">{{ data.name }}</div>
                             </div>
                         </td>
                         <td>
-                            <div class="leading-6 text-muted-color">{{ data.title }}</div>
+                            <div class="text-sm leading-5 text-muted-color">{{ data.title }}</div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
                                 <div class="flex items-center justify-center" [innerHTML]="companyLogos[data.company.logo]"></div>
 
-                                <div class="leading-6 text-surface-600 dark:text-surface-400">
+                                <div class="text-sm leading-5 text-surface-600 dark:text-surface-400">
                                     {{ data.company.name }}
                                 </div>
                             </div>
                         </td>
                         <td field="email" header="Email Address">
-                            <div class="leading-6 text-muted-color truncate">{{ data.email }}</div>
+                            <div class="text-sm leading-5 text-muted-color truncate">{{ data.email }}</div>
                         </td>
                         <td field="lead" header="Lead Source">
-                            <div class="leading-6 text-muted-color">{{ data.lead }}</div>
+                            <div class="text-sm leading-5 text-muted-color">{{ data.lead }}</div>
                         </td>
                         <td>
                             <p-tag [severity]="data.status === 'Active' ? 'success' : data.status === 'Inactive' ? 'danger' : 'info'" [value]="data.status" styleClass="font-medium" />
@@ -129,7 +129,7 @@ import { TooltipModule } from 'primeng/tooltip';
                 </ng-template>
             </p-table>
             <p-popover #op>
-                <ng-template pTemplate="content">
+                <ng-template #content>
                     <div class="flex gap-2">
                         <p-button label="Details" size="small" outlined (onClick)="op.hide()"></p-button>
                         <p-button label="Delete" severity="danger" size="small" outlined (onClick)="op.hide()"></p-button>
@@ -139,7 +139,7 @@ import { TooltipModule } from 'primeng/tooltip';
         </div>
     `,
     host: {
-        class: 'h-full flex-1 flex flex-col overflow-hidden border border-surface rounded-2xl p-6'
+        class: 'h-full flex-1 flex flex-col overflow-hidden border border-surface rounded-2xl p-4'
     },
     changeDetection: ChangeDetectionStrategy.OnPush
 })

@@ -1,27 +1,32 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'dynamic-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, CheckboxModule, AppCode, AppDocSectionText],
+    imports: [FormsModule, CheckboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>Checkboxes can be generated using a list of values.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
-            <div class="flex flex-col gap-4">
-                <div *ngFor="let category of categories" class="flex items-center">
-                    <p-checkbox [inputId]="category.key" name="group" [value]="category" [(ngModel)]="selectedCategories" />
-                    <label [for]="category.key" class="ml-2"> {{ category.name }} </label>
+        <app-demo-wrapper>
+            <div class="flex justify-center">
+                <div class="flex flex-col gap-4">
+                    @for (category of categories; track category.key) {
+                        <div class="flex items-center">
+                            <p-checkbox [inputId]="category.key" name="group" [value]="category" [(ngModel)]="selectedCategories" />
+                            <label [for]="category.key" class="text-sm ml-2"> {{ category.name }} </label>
+                        </div>
+                    }
                 </div>
             </div>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class DynamicDoc {

@@ -4,7 +4,7 @@ OrganizationChart visualizes hierarchical organization data.
 
 ## Accessibility
 
-Screen Reader Component currently uses a table based implementation and does not provide high level of screen reader support, a nested list implementation replacement is planned with aria roles and attributes aligned to a tree widget for high level of reader support in the upcoming versions. Keyboard Support Key Function tab Moves focus through the focusable elements within the chart. enter Toggles the expanded state of a node. space Toggles the expanded state of a node.
+Screen Reader Component uses ARIA roles and attributes for screen reader accessibility. The root element has role="tree" with aria-multiselectable for multiple selection support. Each tree item uses role="treeitem" with aria-level for hierarchy, aria-expanded for collapse state, and aria-selected for selection state. Child nodes are grouped with role="group" . Keyboard Support Node Key Function tab Moves focus through the focusable nodes within the chart. enter Toggles the selection state of a node. space Toggles the selection state of a node. Collapse Button Key Function tab Moves focus through the focusable elements within the chart. enter Toggles the expanded state of a node. space Toggles the expanded state of a node.
 
 ## Basic
 
@@ -13,22 +13,110 @@ OrganizationChart requires a collection of TreeNode instances as a value .
 ```typescript
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
+import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card flex justify-center overflow-x-auto">
+        <div class="flex justify-center overflow-x-auto">
             <p-organization-chart [value]="data" />
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class OrganizationchartBasicDemo {
-    data: TreeNode[];
+export class OrganizationChartBasicDemo {
+    data: TreeNode[] = [
+        {
+            label: 'Founder',
+            expanded: true,
+            children: [
+                {
+                    label: 'Product Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'UX/UI Designer'
+                        },
+                        {
+                            label: 'Product Manager'
+                        }
+                    ]
+                },
+                {
+                    label: 'Engineering Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'Frontend Developer'
+                        },
+                        {
+                            label: 'Backend Developer'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
 }
 ```
 
-## colored.-doc
+## Collapsible
+
+Nodes can be expanded and collapsed when collapsible is enabled.
+
+```typescript
+import { Component } from '@angular/core';
+import { TreeNode } from 'primeng/api';
+import { Product } from '@/domain/product';
+
+@Component({
+    template: `
+        <div class="flex justify-center overflow-x-auto">
+            <p-organization-chart [value]="data" [collapsible]="true" />
+        </div>
+    `,
+    standalone: true,
+    imports: []
+})
+export class OrganizationChartCollapsibleDemo {
+    data: TreeNode[] = [
+        {
+            label: 'Founder',
+            expanded: true,
+            children: [
+                {
+                    label: 'Product Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'UX/UI Designer'
+                        },
+                        {
+                            label: 'Product Manager'
+                        }
+                    ]
+                },
+                {
+                    label: 'Engineering Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'Frontend Developer'
+                        },
+                        {
+                            label: 'Backend Developer'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+}
+```
+
+## Colored
+
+Styling a specific node is configured with styleClass option of a TreeNode and custom templates.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -36,19 +124,20 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <app-docsectiontext>
-            <p>Styling a specific node is configured with <i>class</i> and <i>style</i> options of a TreeNode.</p></app-docsectiontext
-        >
-        <div class="card overflow-x-auto">
+        <div class="overflow-x-auto">
             <p-organization-chart [value]="data" [collapsible]="true">
-                <ng-template let-node pTemplate="person">
-                    <div class="flex flex-col">
-                        <div class="flex flex-col items-center">
-                            <img [src]="node.data.image" class="mb-4 w-12 h-12" />
-                            <span class="font-bold mb-2">{{ node.data.name }}</span>
-                            <span>{{ node.data.title }}</span>
+                <ng-template #node let-node>
+                    @if (node.type === 'person') {
+                        <div class="flex items-center gap-3">
+                            <img [src]="node.data.image" [alt]="node.data.name" class="w-12 h-12" />
+                            <div class="flex flex-col items-start gap-1">
+                                <span class="font-bold">{{ node.data.name }}</span>
+                                <span class="text-sm">{{ node.data.title }}</span>
+                            </div>
                         </div>
-                    </div>
+                    } @else {
+                        <div>{{ node.label }}</div>
+                    }
                 </ng-template>
             </p-organization-chart>
         </div>
@@ -56,50 +145,233 @@ import { TreeNode } from 'primeng/api';
     standalone: true,
     imports: []
 })
-export class OrganizationchartColored.Demo {
-    data: TreeNode[];
+export class OrganizationChartColoredDemo {
+    data: TreeNode[] = [
+        {
+            expanded: true,
+            type: 'person',
+            styleClass: 'bg-rose-500/5! border-rose-500! text-rose-900! dark:text-rose-50! rounded-xl',
+            data: {
+                image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png',
+                name: 'Amy Elsner',
+                title: 'CEO'
+            },
+            children: [
+                {
+                    expanded: true,
+                    type: 'person',
+                    styleClass: 'bg-emerald-500/5! border-emerald-500! text-emerald-900! dark:text-emerald-50! rounded-xl',
+                    data: {
+                        image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/annafali.png',
+                        name: 'Anna Fali',
+                        title: 'CMO'
+                    },
+                    children: [
+                        {
+                            label: 'Sales'
+                        },
+                        {
+                            label: 'Marketing'
+                        }
+                    ]
+                },
+                {
+                    expanded: true,
+                    type: 'person',
+                    styleClass: 'bg-blue-500/5! border-blue-500! text-blue-900! dark:text-blue-50! rounded-xl',
+                    data: {
+                        image: 'https://primefaces.org/cdn/primeng/images/demo/avatar/stephenshaw.png',
+                        name: 'Stephen Shaw',
+                        title: 'CTO'
+                    },
+                    children: [
+                        {
+                            label: 'Development'
+                        },
+                        {
+                            label: 'UI/UX Design'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
 }
 ```
 
-## Selection
+## Default Collapsed & Selected
+
+Nodes can define collapsedByDefault and selectedByDefault properties to configure the initial state.
+
+```typescript
+import { Component } from '@angular/core';
+import { Product } from '@/domain/product';
+
+@Component({
+    template: `
+        <div class="flex justify-center overflow-x-auto">
+            <p-organization-chart [value]="data" [collapsible]="true" selectionMode="single" />
+        </div>
+    `,
+    standalone: true,
+    imports: []
+})
+export class OrganizationChartDefaultDemo {
+    data: OrgChartNode[] = [
+        {
+            label: 'Founder',
+            expanded: true,
+            children: [
+                {
+                    label: 'Product Lead',
+                    collapsedByDefault: true,
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'UX/UI Designer'
+                        },
+                        {
+                            label: 'Product Manager'
+                        }
+                    ]
+                },
+                {
+                    label: 'Engineering Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'Frontend Developer',
+                            selectedByDefault: true
+                        },
+                        {
+                            label: 'Backend Developer'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+}
+```
+
+## Partial Collapsible & Selectable
+
+Collapsible and selectable behaviors can be controlled at the node level using the collapsible and selectable properties of a TreeNode.
 
 ```typescript
 import { Component } from '@angular/core';
 import { TreeNode } from 'primeng/api';
+import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <app-docsectiontext>
-            <p>
-                Nodes can be selected by defining <i>selectionMode</i> along with a value binding with <i>selection</i> properties. By default only one node can be selected, set <i>selectionMode</i> as <i>multiple</i> to select more than one.
-            </p></app-docsectiontext
-        >
-        <div class="card flex justify-center overflow-x-auto">
-            <p-organization-chart [value]="data" selectionMode="multiple" [(selection)]="selectedNodes" [collapsible]="true">
-                <ng-template let-node pTemplate="person">
-                    <div class="flex flex-col">
-                        <div class="flex flex-col items-center">
-                            <img [src]="node.data.image" class="mb-4 w-12 h-12" />
-                            <div class="font-bold mb-2">{{ node.data.name }}</div>
-                            <div>{{ node.data.title }}</div>
-                        </div>
-                    </div>
-                </ng-template>
-            </p-organization-chart>
+        <div class="flex justify-center overflow-x-auto">
+            <p-organization-chart [value]="data" selectionMode="single" [(selection)]="selectedNode" />
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class OrganizationchartSelectionDemo {
+export class OrganizationChartPartialDemo {
+    selectedNode: any;
+    data: OrgChartNode[] = [
+        {
+            label: 'Founder',
+            expanded: true,
+            collapsible: true,
+            selectable: false,
+            children: [
+                {
+                    label: 'Product Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'UX/UI Designer',
+                            selectable: false
+                        },
+                        {
+                            label: 'Product Manager'
+                        }
+                    ]
+                },
+                {
+                    label: 'Engineering Lead',
+                    expanded: true,
+                    selectable: false,
+                    collapsible: true,
+                    children: [
+                        {
+                            label: 'Frontend Developer'
+                        },
+                        {
+                            label: 'Backend Developer'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
+}
+```
+
+## selection-doc
+
+Nodes can be selected by defining selectionMode along with a value binding with selection properties. By default only one node can be selected, set selectionMode as multiple to select more than one.
+
+```typescript
+import { Component } from '@angular/core';
+import { TreeNode } from 'primeng/api';
+import { Product } from '@/domain/product';
+
+@Component({
+    template: `
+        <div class="flex justify-center overflow-x-auto">
+            <p-organization-chart [value]="data" selectionMode="multiple" [(selection)]="selectedNodes" />
+        </div>
+    `,
+    standalone: true,
+    imports: []
+})
+export class OrganizationChartSelectionDemo {
     selectedNodes!: TreeNode[];
-    data: TreeNode[];
+    data: TreeNode[] = [
+        {
+            label: 'Founder',
+            expanded: true,
+            children: [
+                {
+                    label: 'Product Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'UX/UI Designer'
+                        },
+                        {
+                            label: 'Product Manager'
+                        }
+                    ]
+                },
+                {
+                    label: 'Engineering Lead',
+                    expanded: true,
+                    children: [
+                        {
+                            label: 'Frontend Developer'
+                        },
+                        {
+                            label: 'Backend Developer'
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
 }
 ```
 
 ## Template
 
-Custom content instead of a node label is defined using the pTemplate property.
+Custom content instead of a node label is defined using the #node template reference.
 
 ```typescript
 import { Component } from '@angular/core';
@@ -107,12 +379,15 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card overflow-x-auto">
+        <div class="overflow-x-auto">
             <p-organization-chart [value]="data" [collapsible]="true">
-                <ng-template let-node pTemplate="default">
-                    <div class="flex flex-col items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
-                        <div class="mt-4 font-medium text-lg">{{ node.label }}</div>
+                <ng-template #node let-node>
+                    <div class="flex items-start gap-2">
+                        <img src="https://primefaces.org/cdn/primeng/images/flag/flag_placeholder.png" [alt]="node.label" [class]="'h-full !w-10 flag flag-' + node.data.flag" />
+                        <div class="flex flex-col items-start gap-0.5">
+                            <div class="font-semibold leading-none">{{ node.label }}</div>
+                            <div class="text-xs leading-none opacity-75">{{ node.data.description }}</div>
+                        </div>
                     </div>
                 </ng-template>
             </p-organization-chart>
@@ -121,8 +396,46 @@ import { TreeNode } from 'primeng/api';
     standalone: true,
     imports: []
 })
-export class OrganizationchartTemplateDemo {
-    data: TreeNode[];
+export class OrganizationChartTemplateDemo {
+    data: TreeNode[] = [
+        {
+            label: 'USD',
+            expanded: true,
+            data: { flag: 'us', description: 'United States Dollar' },
+            children: [
+                {
+                    label: 'CAD',
+                    expanded: true,
+                    data: { flag: 'ca', description: 'Canadian Dollar' },
+                    children: [
+                        {
+                            label: 'AUD',
+                            data: { flag: 'au', description: 'Australian Dollar' }
+                        },
+                        {
+                            label: 'NZD',
+                            data: { flag: 'nz', description: 'New Zealand Dollar' }
+                        }
+                    ]
+                },
+                {
+                    label: 'MXN',
+                    expanded: true,
+                    data: { flag: 'mx', description: 'Mexican Peso' },
+                    children: [
+                        {
+                            label: 'COP',
+                            data: { flag: 'ar', description: 'Argentine Peso' }
+                        },
+                        {
+                            label: 'BRL',
+                            data: { flag: 'br', description: 'Brazilian Real' }
+                        }
+                    ]
+                }
+            ]
+        }
+    ];
 }
 ```
 
@@ -131,20 +444,13 @@ export class OrganizationchartTemplateDemo {
 | Name | Type | Description |
 |------|------|-------------|
 | root | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the root's DOM element. |
-| table | PassThroughOption<HTMLTableElement, I> | Used to pass attributes to the table's DOM element. |
-| body | PassThroughOption<HTMLTableSectionElement, I> | Used to pass attributes to the body's DOM element. |
-| row | PassThroughOption<HTMLTableRowElement, I> | Used to pass attributes to the row's DOM element. |
-| cell | PassThroughOption<HTMLTableCellElement, I> | Used to pass attributes to the cell's DOM element. |
+| subtree | PassThroughOption<HTMLUListElement, I> | Used to pass attributes to the subtree's DOM element. |
+| tree | PassThroughOption<HTMLLIElement, I> | Used to pass attributes to the tree's DOM element. |
 | node | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the node's DOM element. |
-| nodeToggleButton | PassThroughOption<HTMLAnchorElement, I> | Used to pass attributes to the node toggle button's DOM element. |
-| nodeToggleButtonIcon | PassThroughOption<HTMLElement, I> | Used to pass attributes to the node toggle button icon's DOM element. |
-| connectors | PassThroughOption<HTMLTableRowElement, I> | Used to pass attributes to the connectors' DOM element. |
-| lineCell | PassThroughOption<HTMLTableCellElement, I> | Used to pass attributes to the line cell's DOM element. |
-| connectorDown | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the connector down's DOM element. |
-| connectorLeft | PassThroughOption<HTMLTableCellElement, I> | Used to pass attributes to the connector left's DOM element. |
-| connectorRight | PassThroughOption<HTMLTableCellElement, I> | Used to pass attributes to the connector right's DOM element. |
-| nodeChildren | PassThroughOption<HTMLTableRowElement, I> | Used to pass attributes to the node children's DOM element. |
-| nodeCell | PassThroughOption<HTMLTableCellElement, I> | Used to pass attributes to the node cell's DOM element. |
+| nodeContent | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the node content's DOM element. |
+| collapseButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the collapse button's DOM element. |
+| collapseButtonDownIcon | PassThroughOption<HTMLElement, I> | Used to pass attributes to the collapse button down icon's DOM element. |
+| collapseButtonUpIcon | PassThroughOption<HTMLElement, I> | Used to pass attributes to the collapse button up icon's DOM element. |
 
 ## Theming
 
@@ -153,15 +459,13 @@ export class OrganizationchartTemplateDemo {
 | Class | Description |
 |-------|-------------|
 | p-organizationchart | Class name of the root element |
-| p-organizationchart-table | Class name of the table element |
+| p-organizationchart-subtree | Class name of the subtree element |
+| p-organizationchart-tree | Class name of the tree element |
 | p-organizationchart-node | Class name of the node element |
-| p-organizationchart-node-toggle-button | Class name of the node toggle button element |
-| p-organizationchart-node-toggle-button-icon | Class name of the node toggle button icon element |
-| p-organizationchart-connectors | Class name of the connectors element |
-| p-organizationchart-connector-down | Class name of the connector down element |
-| p-organizationchart-connector-left | Class name of the connector left element |
-| p-organizationchart-connector-right | Class name of the connector right element |
-| p-organizationchart-node-children | Class name of the node children element |
+| p-organizationchart-node-content | Class name of the node content element |
+| p-organizationchart-collapse-button | Class name of the collapse button element |
+| p-organizationchart-collapse-button-down-icon | Class name of the collapse button down icon element |
+| p-organizationchart-collapse-button-up-icon | Class name of the collapse button up icon element |
 
 ### Design Tokens
 
@@ -179,6 +483,13 @@ export class OrganizationchartTemplateDemo {
 | organizationchart.node.padding | --p-organizationchart-node-padding | Padding of node |
 | organizationchart.node.toggleable.padding | --p-organizationchart-node-toggleable-padding | Toggleable padding of node |
 | organizationchart.node.border.radius | --p-organizationchart-node-border-radius | Border radius of node |
+| organizationchart.node.font.size | --p-organizationchart-node-font-size | Font size of node |
+| organizationchart.node.font.weight | --p-organizationchart-node-font-weight | Font weight of node |
+| organizationchart.node.focus.ring.width | --p-organizationchart-node-focus-ring-width | Focus ring width of node |
+| organizationchart.node.focus.ring.style | --p-organizationchart-node-focus-ring-style | Focus ring style of node |
+| organizationchart.node.focus.ring.color | --p-organizationchart-node-focus-ring-color | Focus ring color of node |
+| organizationchart.node.focus.ring.offset | --p-organizationchart-node-focus-ring-offset | Focus ring offset of node |
+| organizationchart.node.focus.ring.shadow | --p-organizationchart-node-focus-ring-shadow | Focus ring shadow of node |
 | organizationchart.node.toggle.button.background | --p-organizationchart-node-toggle-button-background | Background of node toggle button |
 | organizationchart.node.toggle.button.hover.background | --p-organizationchart-node-toggle-button-hover-background | Hover background of node toggle button |
 | organizationchart.node.toggle.button.border.color | --p-organizationchart-node-toggle-button-border-color | Border color of node toggle button |
@@ -191,6 +502,7 @@ export class OrganizationchartTemplateDemo {
 | organizationchart.node.toggle.button.focus.ring.color | --p-organizationchart-node-toggle-button-focus-ring-color | Focus ring color of node toggle button |
 | organizationchart.node.toggle.button.focus.ring.offset | --p-organizationchart-node-toggle-button-focus-ring-offset | Focus ring offset of node toggle button |
 | organizationchart.node.toggle.button.focus.ring.shadow | --p-organizationchart-node-toggle-button-focus-ring-shadow | Focus ring shadow of node toggle button |
+| organizationchart.node.toggle.button.icon.size | --p-organizationchart-node-toggle-button-icon-size | Icon size of node toggle button |
 | organizationchart.connector.color | --p-organizationchart-connector-color | Color of connector |
 | organizationchart.connector.border.radius | --p-organizationchart-connector-border-radius | Border radius of connector |
 | organizationchart.connector.height | --p-organizationchart-connector-height | Height of connector |

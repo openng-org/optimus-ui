@@ -2,6 +2,8 @@ import { TemplateRef } from '@angular/core';
 import type { MotionOptions } from '@primeuix/motion';
 import type { PassThrough, PassThroughOption } from 'primeng/api';
 
+export type ImageLoading = 'lazy' | 'eager';
+
 /**
  * Custom pass-through(pt) options.
  * @template I Type of instance.
@@ -62,6 +64,10 @@ export interface ImagePassThroughOptions<I = unknown> {
      * Used to pass options to the motion component/directive.
      */
     motion?: MotionOptions;
+    /**
+     * Used to pass motion options for the mask animation.
+     */
+    maskMotion?: MotionOptions;
 }
 
 /**

@@ -1,9 +1,10 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
@@ -22,12 +23,12 @@ interface ExportColumn {
 @Component({
     selector: 'export-doc',
     standalone: true,
-    imports: [CommonModule, TableModule, ButtonModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [TableModule, ButtonModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>Table can export its data to CSV format.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table #dt [columns]="cols" [value]="products" [exportHeader]="'customExportHeader'" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #caption>
                         <div class="text-end pb-4">
@@ -36,22 +37,26 @@ interface ExportColumn {
                     </ng-template>
                     <ng-template #header let-columns>
                         <tr>
-                            <th *ngFor="let col of columns">
-                                {{ col.header }}
-                            </th>
+                            @for (col of columns; track col) {
+                                <th>
+                                    {{ col.header }}
+                                </th>
+                            }
                         </tr>
                     </ng-template>
                     <ng-template #body let-rowData let-columns="columns">
                         <tr>
-                            <td *ngFor="let col of columns">
-                                {{ rowData[col.field] }}
-                            </td>
+                            @for (col of columns; track col) {
+                                <td>
+                                    {{ rowData[col.field] }}
+                                </td>
+                            }
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExportDoc {

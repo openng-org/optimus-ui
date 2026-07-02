@@ -17,14 +17,14 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-toggleswitch [(ngModel)]="checked" />
         </div>
     `,
     standalone: true,
     imports: [ToggleSwitchModule, FormsModule]
 })
-export class ToggleswitchBasicDemo {
+export class ToggleSwitchBasicDemo {
     checked: boolean = false;
 }
 ```
@@ -40,14 +40,14 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-toggleswitch [(ngModel)]="checked" [disabled]="true" />
         </div>
     `,
     standalone: true,
     imports: [ToggleSwitchModule, FormsModule]
 })
-export class ToggleswitchDisabledDemo {
+export class ToggleSwitchDisabledDemo {
     checked: boolean = false;
 }
 ```
@@ -63,14 +63,14 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-toggleswitch [(ngModel)]="checked" [invalid]="!checked" />
         </div>
     `,
     standalone: true,
     imports: [ToggleSwitchModule, FormsModule]
 })
-export class ToggleswitchInvalidDemo {
+export class ToggleSwitchInvalidDemo {
     checked: boolean = false;
 }
 ```
@@ -86,14 +86,14 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-toggleswitch [(ngModel)]="checked" />
         </div>
     `,
     standalone: true,
     imports: [ToggleSwitchModule, FormsModule]
 })
-export class ToggleswitchPreselectionDemo {
+export class ToggleSwitchPreSelectionDemo {
     checked: boolean = true;
 }
 ```
@@ -106,15 +106,13 @@ ToggleSwitch can also be used with reactive forms. In this case, the formControl
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-48">
                 <div class="flex flex-col items-center gap-2">
                     <p-toggleswitch name="activation" formControlName="activation" [invalid]="isInvalid('activation')" />
@@ -127,9 +125,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ToggleSwitchModule, ButtonModule, ReactiveFormsModule]
+    imports: [MessageModule, ToggleSwitchModule, ButtonModule, ReactiveFormsModule]
 })
-export class ToggleswitchReactiveformsDemo {
+export class ToggleSwitchReactiveFormsDemo {
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
@@ -167,10 +165,10 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-toggleswitch [(ngModel)]="checked">
                 <ng-template #handle let-checked="checked">
-                    <i [ngClass]="['!text-xs', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
+                    <i [ngClass]="['text-xs!', 'pi', checked ? 'pi-check' : 'pi-times']"></i>
                 </ng-template>
             </p-toggleswitch>
         </div>
@@ -178,7 +176,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     standalone: true,
     imports: [ToggleSwitchModule, FormsModule]
 })
-export class ToggleswitchTemplateDemo {
+export class ToggleSwitchTemplateDemo {
     checked: boolean = false;
 }
 ```
@@ -189,15 +187,13 @@ export class ToggleswitchTemplateDemo {
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4 w-48">
                 <div class="flex flex-col items-center gap-2">
                     <p-toggleswitch #model="ngModel" [(ngModel)]="checked" name="activation" [invalid]="model.invalid && exampleForm.submitted" required />
@@ -210,9 +206,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ToggleSwitchModule, ButtonModule, FormsModule]
+    imports: [MessageModule, ToggleSwitchModule, ButtonModule, FormsModule]
 })
-export class ToggleswitchTemplatedrivenformsDemo {
+export class ToggleSwitchTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     checked: boolean;
 

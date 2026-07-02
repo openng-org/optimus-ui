@@ -18,15 +18,15 @@ import { ContextMenu } from 'primeng/contextmenu';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <img #img src="https://primefaces.org/cdn/primeng/images/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-[30rem] rounded shadow-lg" />
+        <div class="flex justify-center">
+            <img #img src="https://primefaces.org/cdn/primeng/images/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-120 rounded-sm shadow-lg" />
             <p-contextmenu [target]="img" [model]="items" />
         </div>
     `,
     standalone: true,
     imports: [ContextMenuModule]
 })
-export class ContextmenuBasicDemo implements OnInit {
+export class ContextMenuBasicDemo implements OnInit {
     items: MenuItem[] | undefined;
 
     ngOnInit() {
@@ -46,7 +46,6 @@ The function to invoke when an item is clicked is defined using the command prop
 import { Component, OnInit, inject } from '@angular/core';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
 import { TagModule } from 'primeng/tag';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ContextMenu } from 'primeng/contextmenu';
 
@@ -59,30 +58,30 @@ interface Users {
 
 @Component({
     template: `
-        <div class="card flex sm:justify-center">
-            <p-toast />
-            <ul class="m-0 list-none border border-surface rounded p-4 flex flex-col gap-2 w-full sm:w-96">
-                <li
-                    *ngFor="let user of users"
-                    class="p-2 hover:bg-emphasis rounded border border-transparent transition-all duration-200 flex items-center justify-content-between"
-                    [ngClass]="{ 'border-primary': selectedId === user.id }"
-                    (contextmenu)="onContextMenu($event, user)"
-                >
-                    <div class="flex flex-1 items-center gap-2">
-                        <img class="w-8 h-8" [alt]="user.name" [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image" />
-                        <span class="font-bold">{{ user.name }}</span>
-                    </div>
-                    <p-tag [value]="user.role" [severity]="getBadge(user)" />
-                </li>
+        <div class="flex sm:justify-center">
+            <ul class="m-0 list-none border border-surface rounded-sm p-4 flex flex-col gap-2 w-full sm:w-96">
+                @for (user of users; track user.id) {
+                    <li
+                        class="p-2 hover:bg-emphasis rounded-sm border border-transparent transition-all duration-200 flex items-center justify-content-between"
+                        [ngClass]="{ 'border-primary': selectedId === user.id }"
+                        (contextmenu)="onContextMenu($event, user)"
+                    >
+                        <div class="flex flex-1 items-center gap-2">
+                            <img class="w-8 h-8" [alt]="user.name" [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image" />
+                            <span class="font-bold text-sm">{{ user.name }}</span>
+                        </div>
+                        <p-tag [value]="user.role" [severity]="getBadge(user)" />
+                    </li>
+                }
             </ul>
             <p-contextmenu #cm [model]="items" (onHide)="onHide()" />
         </div>
     `,
     standalone: true,
-    imports: [ContextMenuModule, TagModule, ToastModule],
+    imports: [ContextMenuModule, TagModule],
     providers: [MessageService]
 })
-export class ContextmenuCommandDemo implements OnInit {
+export class ContextMenuCommandDemo implements OnInit {
     private messageService = inject(MessageService);
     items: MenuItem[] | undefined;
     selectedUser: Users;
@@ -165,15 +164,15 @@ import { ContextMenu } from 'primeng/contextmenu';
 
 @Component({
     template: `
-        <div class="card text-center">
-            <p class="mb-0">Right-Click anywhere on this page to view the global ContextMenu.</p>
+        <div class="text-center">
+            <p class="mb-0 text-sm">Right-Click anywhere on this page to view the global ContextMenu.</p>
             <p-contextmenu [model]="items" [global]="true" />
         </div>
     `,
     standalone: true,
     imports: [ContextMenuModule]
 })
-export class ContextmenuDocumentDemo implements OnInit {
+export class ContextMenuDocumentDemo implements OnInit {
     items: MenuItem[] | undefined;
 
     ngOnInit() {
@@ -219,8 +218,8 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <span #span class="inline-flex items-center justify-center border-2 border-primary rounded w-16 h-16" aria-haspopup="true">
+        <div class="flex justify-center">
+            <span #span class="inline-flex items-center justify-center border-2 border-primary rounded-sm w-16 h-16" aria-haspopup="true">
                 <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
                     <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
                     <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
@@ -239,7 +238,12 @@ import { MenuItem } from 'primeng/api';
                     />
                     <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
                     <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z" fill="var(--ground-background)" />
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
+                        fill="var(--ground-background)"
+                    />
                     <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
                     <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
                     <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
@@ -252,7 +256,7 @@ import { MenuItem } from 'primeng/api';
     standalone: true,
     imports: [ContextMenuModule]
 })
-export class ContextmenuRouterDemo implements OnInit {
+export class ContextMenuRouterDemo implements OnInit {
     items: MenuItem[] | undefined;
 
     ngOnInit() {
@@ -298,35 +302,42 @@ import { ContextMenu } from 'primeng/contextmenu';
 
 @Component({
     template: `
-        <div class="card flex md:justify-center">
-            <ul class="m-0 list-none border border-surface-200 dark:border-surface-700 rounded p-4 flex flex-col gap-2 w-full md:w-[30rem]">
-                <li
-                    *ngFor="let product of data"
-                    class="p-2 hover:bg-surface-100 dark:hover:bg-surface-800 rounded border border-transparent transition-all transition-duration-200"
-                    [ngClass]="{ 'border-primary': selectedId === product.id }"
-                    (contextmenu)="onContextMenu($event)"
-                >
-                    <div class="flex flex-wrap p-2 items-center gap-4">
-                        <img class="w-16 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
-                        <div class="flex-1 flex flex-col gap-1">
-                            <span class="font-bold">{{ product.name }}</span>
-                            <div class="flex items-center gap-2">
-                                <i class="pi pi-tag text-sm"></i>
-                                <span>{{ product.category }}</span>
+        <div class="flex md:justify-center">
+            <ul class="m-0 list-none border border-surface-200 dark:border-surface-700 rounded-sm p-3 flex flex-col gap-2 w-full md:w-120">
+                @for (product of data; track product.id) {
+                    <li
+                        class="p-2 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-sm border border-transparent transition-all transition-duration-200"
+                        [ngClass]="{ 'border-primary': selectedId === product.id }"
+                        (contextmenu)="onContextMenu($event)"
+                    >
+                        <div class="flex flex-wrap p-2 items-center gap-4">
+                            <img class="w-16 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
+                            <div class="flex-1 flex flex-col gap-1">
+                                <span class="font-bold text-sm">{{ product.name }}</span>
+                                <div class="flex items-center gap-2">
+                                    <i class="pi pi-tag text-sm"></i>
+                                    <span class="text-sm">{{ product.category }}</span>
+                                </div>
                             </div>
+                            <span class="font-bold ml-8 text-sm">&#36;{{ product.price }}</span>
                         </div>
-                        <span class="font-bold ml-8">&#36;{{ product.price }}</span>
-                    </div>
-                </li>
+                    </li>
+                }
             </ul>
             <p-contextmenu #cm [model]="items" (onHide)="onHide()">
                 <ng-template #item let-item>
-                    <a pRipple class="flex items-center px-4 py-3 cursor-pointer">
+                    <a pRipple class="flex items-center px-3 py-2 cursor-pointer">
                         <span [class]="item.icon"></span>
                         <span class="ms-2">{{ item.label }}</span>
-                        <p-badge *ngIf="item.badge" class="ms-auto" [value]="item.badge" />
-                        <span *ngIf="item.shortcut" class="ms-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
-                        <i *ngIf="item.items" class="pi pi-angle-right ms-auto rotate-90 lg:rotate-0"></i>
+                        @if (item.badge) {
+                            <p-badge class="ms-auto" [value]="item.badge" />
+                        }
+                        @if (item.shortcut) {
+                            <span class="ms-auto border border-surface rounded-sm bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+                        }
+                        @if (item.items) {
+                            <i class="pi pi-angle-right ms-auto rotate-90 lg:rotate-0"></i>
+                        }
                     </a>
                 </ng-template>
             </p-contextmenu>
@@ -335,10 +346,71 @@ import { ContextMenu } from 'primeng/contextmenu';
     standalone: true,
     imports: [BadgeModule, ContextMenuModule, RippleModule]
 })
-export class ContextmenuTemplateDemo implements OnInit {
+export class ContextMenuTemplateDemo implements OnInit {
     items: MenuItem[] | undefined;
     selectedId!: string;
-    data: any[];
+    data: any[] = [
+        {
+            id: '1000',
+            code: 'f230fh0g3',
+            name: 'Bamboo Watch',
+            description: 'Product Description',
+            image: 'bamboo-watch.jpg',
+            price: 65,
+            category: 'Accessories',
+            quantity: 24,
+            inventoryStatus: 'INSTOCK',
+            rating: 5
+        },
+        {
+            id: '1001',
+            code: 'nvklal433',
+            name: 'Black Watch',
+            description: 'Product Description',
+            image: 'black-watch.jpg',
+            price: 72,
+            category: 'Accessories',
+            quantity: 61,
+            inventoryStatus: 'INSTOCK',
+            rating: 4
+        },
+        {
+            id: '1002',
+            code: 'zz21cz3c1',
+            name: 'Blue Band',
+            description: 'Product Description',
+            image: 'blue-band.jpg',
+            price: 79,
+            category: 'Fitness',
+            quantity: 2,
+            inventoryStatus: 'LOWSTOCK',
+            rating: 3
+        },
+        {
+            id: '1003',
+            code: '244wgerg2',
+            name: 'Blue T-Shirt',
+            description: 'Product Description',
+            image: 'blue-t-shirt.jpg',
+            price: 29,
+            category: 'Clothing',
+            quantity: 25,
+            inventoryStatus: 'INSTOCK',
+            rating: 5
+        },
+        {
+            id: '1004',
+            code: 'h456wer53',
+            name: 'Bracelet',
+            description: 'Product Description',
+            image: 'bracelet.jpg',
+            price: 15,
+            category: 'Accessories',
+            quantity: 73,
+            inventoryStatus: 'INSTOCK',
+            rating: 4
+        }
+    ];
 
     ngOnInit() {
         this.items = [
@@ -393,32 +465,32 @@ ContextMenu displays an overlay menu on right click of its target. Note that com
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ContextMenuPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ContextMenuPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MenuItem[] | - | An array of menuitems. |
-| triggerEvent | string | contextmenu | Event for which the menu must be displayed. |
+| triggerEvent | string | - | Event for which the menu must be displayed. |
 | target | string \| HTMLElement | - | Local template variable name of the element to attach the context menu. |
-| global | boolean | false | Attaches the menu to document instead of a particular item. |
-| style | { [klass: string]: any } | - | Inline style of the component. |
+| global | boolean | - | Attaches the menu to document instead of a particular item. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
 | id | string | - | Current id state as a string. |
-| breakpoint | string | 960px | The breakpoint to define the maximum width boundary. |
+| breakpoint | string | - | The breakpoint to define the maximum width boundary. |
 | ariaLabel | string | - | Defines a string value that labels an interactive element. |
 | ariaLabelledBy | string | - | Identifier of the underlying input element. |
-| pressDelay | number | 500 | Press delay in touch devices as miliseconds. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| pressDelay | number | - | Press delay in touch devices as miliseconds. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| onShow | value: null | Callback to invoke when overlay menu is shown. |
-| onHide | value: null | Callback to invoke when overlay menu is hidden. |
+| onShow | value: void | Callback to invoke when overlay menu is shown. |
+| onHide | value: void | Callback to invoke when overlay menu is hidden. |
 
 ### Templates
 
@@ -483,7 +555,15 @@ ContextMenu displays an overlay menu on right click of its target. Note that com
 | contextmenu.item.icon.color | --p-contextmenu-item-icon-color | Icon color of item |
 | contextmenu.item.icon.focus.color | --p-contextmenu-item-icon-focus-color | Icon focus color of item |
 | contextmenu.item.icon.active.color | --p-contextmenu-item-icon-active-color | Icon active color of item |
+| contextmenu.item.icon.size | --p-contextmenu-item-icon-size | Icon size of item |
+| contextmenu.item.label.font.weight | --p-contextmenu-item-label-font-weight | Font weight of item label |
+| contextmenu.item.label.font.size | --p-contextmenu-item-label-font-size | Font size of item label |
 | contextmenu.submenu.mobile.indent | --p-contextmenu-submenu-mobile-indent | Mobile indent of submenu |
+| contextmenu.submenu.label.padding | --p-contextmenu-submenu-label-padding | Padding of submenu label |
+| contextmenu.submenu.label.font.weight | --p-contextmenu-submenu-label-font-weight | Font weight of submenu label |
+| contextmenu.submenu.label.font.size | --p-contextmenu-submenu-label-font-size | Font size of submenu label |
+| contextmenu.submenu.label.background | --p-contextmenu-submenu-label-background | Background of submenu label |
+| contextmenu.submenu.label.color | --p-contextmenu-submenu-label-color | Color of submenu label |
 | contextmenu.submenu.icon.size | --p-contextmenu-submenu-icon-size | Size of submenu icon |
 | contextmenu.submenu.icon.color | --p-contextmenu-submenu-icon-color | Color of submenu icon |
 | contextmenu.submenu.icon.focus.color | --p-contextmenu-submenu-icon-focus-color | Focus color of submenu icon |

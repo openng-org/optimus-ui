@@ -1,455 +1,34 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {
-    AfterViewChecked,
-    booleanAttribute,
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    ContentChild,
-    ContentChildren,
-    effect,
-    ElementRef,
-    EventEmitter,
-    forwardRef,
-    Inject,
-    inject,
-    InjectionToken,
-    input,
-    Input,
-    NgModule,
-    numberAttribute,
-    Output,
-    QueryList,
-    Renderer2,
-    signal,
-    TemplateRef,
-    ViewChild,
-    ViewEncapsulation,
-    ViewRef
-} from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { isPlatformBrowser } from '@angular/common';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, effect, inject, input, NgModule, numberAttribute, output, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
-import {
-    appendChild,
-    calculateScrollbarWidth,
-    findLastIndex,
-    findSingle,
-    focus,
-    getHiddenElementOuterHeight,
-    getHiddenElementOuterWidth,
-    getOffset,
-    getOuterWidth,
-    getViewport,
-    isAndroid,
-    isEmpty,
-    isIOS,
-    isNotEmpty,
-    isPrintableCharacter,
-    resolve,
-    uuid
-} from '@primeuix/utils';
-import { MenuItem, OverlayService, PrimeTemplate, SharedModule } from 'primeng/api';
-import { BadgeModule } from 'primeng/badge';
-import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
+import { appendChild, findLastIndex, findSingle, focus, getHiddenElementOuterHeight, getHiddenElementOuterWidth, getViewport, isAndroid, isEmpty, isIOS, isNotEmpty, isPrintableCharacter, resolve, uuid } from '@primeuix/utils';
+import { MenuItem, OverlayService, SharedModule } from 'primeng/api';
+import { BaseComponent } from 'primeng/basecomponent';
 import { BindModule } from 'primeng/bind';
-import { AngleRightIcon } from 'primeng/icons';
 import { MotionModule } from 'primeng/motion';
-import { Ripple } from 'primeng/ripple';
-import { TooltipModule } from 'primeng/tooltip';
+import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 import { VoidListener } from 'primeng/ts-helpers';
-import { ContextMenuItemTemplateContext, ContextMenuPassThrough, ContextMenuSubmenuIconTemplateContext } from 'primeng/types/contextmenu';
+import { ContextMenuItemTemplateContext, ContextMenuPassThrough, ContextMenuProcessedItem, ContextMenuSubmenuIconTemplateContext } from 'primeng/types/contextmenu';
 import { ZIndexUtils } from 'primeng/utils';
+import { ContextMenuSub } from './contextmenu-sub';
+import { CONTEXTMENU_INSTANCE } from './contextmenu-token';
 import { ContextMenuStyle } from './style/contextmenustyle';
 
-const CONTEXTMENU_INSTANCE = new InjectionToken<ContextMenu>('CONTEXTMENU_INSTANCE');
-const CONTEXTMENUSUB_INSTANCE = new InjectionToken<ContextMenuSub>('CONTEXTMENUSUB_INSTANCE');
-
-@Component({
-    selector: 'p-contextMenuSub, p-contextmenu-sub',
-    standalone: true,
-    imports: [CommonModule, RouterModule, Ripple, TooltipModule, AngleRightIcon, BadgeModule, SharedModule, BindModule, MotionModule],
-    template: `
-        @if (render()) {
-            <ul
-                #sublist
-                role="menu"
-                [class]="root ? cx('rootList') : cx('submenu')"
-                [pBind]="_ptm(root ? 'rootList' : 'submenu')"
-                [attr.id]="menuId + '_list'"
-                [tabindex]="tabindex"
-                [attr.aria-label]="ariaLabel"
-                [attr.aria-labelledBy]="ariaLabelledBy"
-                [attr.aria-activedescendant]="focusedItemId"
-                [attr.aria-orientation]="'vertical'"
-                (keydown)="menuKeydown.emit($event)"
-                (focus)="menuFocus.emit($event)"
-                (blur)="menuBlur.emit($event)"
-                [pMotion]="root ? true : visible"
-                [pMotionAppear]="true"
-                [pMotionName]="'p-anchored-overlay'"
-                [pMotionOptions]="motionOptions"
-                (pMotionOnBeforeEnter)="onBeforeEnter($event)"
-                (pMotionOnAfterLeave)="onAfterLeave()"
-            >
-                <ng-template ngFor let-processedItem [ngForOf]="items" let-index="index">
-                    <li
-                        *ngIf="isItemVisible(processedItem) && getItemProp(processedItem, 'separator')"
-                        [attr.id]="getItemId(processedItem)"
-                        [style]="getItemProp(processedItem, 'style')"
-                        [class]="cn(cx('separator'), getItemProp(processedItem, 'styleClass'))"
-                        role="separator"
-                        [pBind]="_ptm('separator')"
-                    ></li>
-                    <li
-                        #listItem
-                        *ngIf="isItemVisible(processedItem) && !getItemProp(processedItem, 'separator')"
-                        role="menuitem"
-                        [attr.id]="getItemId(processedItem)"
-                        [attr.data-p-highlight]="isItemActive(processedItem)"
-                        [attr.data-p-focused]="isItemFocused(processedItem)"
-                        [attr.data-p-disabled]="isItemDisabled(processedItem)"
-                        [attr.aria-label]="getItemLabel(processedItem)"
-                        [attr.aria-disabled]="isItemDisabled(processedItem) || undefined"
-                        [attr.aria-haspopup]="isItemGroup(processedItem) && !getItemProp(processedItem, 'to') ? 'menu' : undefined"
-                        [attr.aria-expanded]="isItemGroup(processedItem) ? isItemActive(processedItem) : undefined"
-                        [attr.aria-level]="level + 1"
-                        [attr.aria-setsize]="getAriaSetSize()"
-                        [attr.aria-posinset]="getAriaPosInset(index)"
-                        [style]="getItemProp(processedItem, 'style')"
-                        [class]="cn(cx('item', { instance: this, processedItem }), getItemProp(processedItem, 'styleClass'))"
-                        [pBind]="getPTOptions(processedItem, index, 'item')"
-                        pTooltip
-                        [tooltipOptions]="getItemProp(processedItem, 'tooltipOptions')"
-                        [pTooltipUnstyled]="unstyled()"
-                    >
-                        <div [class]="cx('itemContent')" [pBind]="getPTOptions(processedItem, index, 'itemContent')" (click)="onItemClick($event, processedItem)" (mouseenter)="onItemMouseEnter({ $event, processedItem })">
-                            <ng-container *ngIf="!itemTemplate">
-                                <a
-                                    *ngIf="!getItemProp(processedItem, 'routerLink')"
-                                    [attr.href]="getItemProp(processedItem, 'url')"
-                                    [attr.data-automationid]="getItemProp(processedItem, 'automationId')"
-                                    [attr.title]="getItemProp(processedItem, 'title')"
-                                    [target]="getItemProp(processedItem, 'target')"
-                                    [class]="cn(cx('itemLink'), getItemProp(processedItem, 'linkClass'))"
-                                    [ngStyle]="getItemProp(processedItem, 'linkStyle')"
-                                    [attr.tabindex]="-1"
-                                    [pBind]="getPTOptions(processedItem, index, 'itemLink')"
-                                    pRipple
-                                >
-                                    <span
-                                        *ngIf="getItemProp(processedItem, 'icon')"
-                                        [class]="cn(cx('itemIcon'), getItemProp(processedItem, 'icon'), getItemProp(processedItem, 'iconClass'))"
-                                        [ngStyle]="getItemProp(processedItem, 'iconStyle')"
-                                        [pBind]="getPTOptions(processedItem, index, 'itemIcon')"
-                                        [attr.aria-hidden]="true"
-                                        [attr.tabindex]="-1"
-                                    >
-                                    </span>
-                                    <span
-                                        *ngIf="getItemProp(processedItem, 'escape'); else htmlLabel"
-                                        [class]="cn(cx('itemLabel'), getItemProp(processedItem, 'labelClass'))"
-                                        [ngStyle]="getItemProp(processedItem, 'labelStyle')"
-                                        [pBind]="getPTOptions(processedItem, index, 'itemLabel')"
-                                    >
-                                        {{ getItemLabel(processedItem) }}
-                                    </span>
-                                    <ng-template #htmlLabel>
-                                        <span
-                                            [class]="cn(cx('itemLabel'), getItemProp(processedItem, 'labelClass'))"
-                                            [ngStyle]="getItemProp(processedItem, 'labelStyle')"
-                                            [innerHTML]="getItemLabel(processedItem)"
-                                            [pBind]="getPTOptions(processedItem, index, 'itemLabel')"
-                                        ></span>
-                                    </ng-template>
-                                    <p-badge *ngIf="getItemProp(processedItem, 'badge')" [class]="getItemProp(processedItem, 'badgeStyleClass')" [value]="getItemProp(processedItem, 'badge')" [unstyled]="unstyled()" />
-                                    <ng-container *ngIf="isItemGroup(processedItem)">
-                                        <svg
-                                            data-p-icon="angle-right"
-                                            *ngIf="!contextMenu.submenuIconTemplate && !contextMenu._submenuIconTemplate"
-                                            [class]="cx('submenuIcon')"
-                                            [pBind]="getPTOptions(processedItem, index, 'submenuIcon')"
-                                            [attr.aria-hidden]="true"
-                                        />
-                                        <ng-template *ngTemplateOutlet="contextMenu.submenuIconTemplate || contextMenu._submenuIconTemplate; context: { class: 'p-contextmenu-submenu-icon' }" [attr.aria-hidden]="true"></ng-template>
-                                    </ng-container>
-                                </a>
-                                <a
-                                    *ngIf="getItemProp(processedItem, 'routerLink')"
-                                    [routerLink]="getItemProp(processedItem, 'routerLink')"
-                                    [attr.data-automationid]="getItemProp(processedItem, 'automationId')"
-                                    [attr.title]="getItemProp(processedItem, 'title')"
-                                    [attr.tabindex]="-1"
-                                    [queryParams]="getItemProp(processedItem, 'queryParams')"
-                                    [routerLinkActiveOptions]="getItemProp(processedItem, 'routerLinkActiveOptions') || { exact: false }"
-                                    [target]="getItemProp(processedItem, 'target')"
-                                    [class]="cn(cx('itemLink'), getItemProp(processedItem, 'linkClass'))"
-                                    [ngStyle]="getItemProp(processedItem, 'linkStyle')"
-                                    [fragment]="getItemProp(processedItem, 'fragment')"
-                                    [queryParamsHandling]="getItemProp(processedItem, 'queryParamsHandling')"
-                                    [preserveFragment]="getItemProp(processedItem, 'preserveFragment')"
-                                    [skipLocationChange]="getItemProp(processedItem, 'skipLocationChange')"
-                                    [replaceUrl]="getItemProp(processedItem, 'replaceUrl')"
-                                    [state]="getItemProp(processedItem, 'state')"
-                                    [pBind]="getPTOptions(processedItem, index, 'itemLink')"
-                                    pRipple
-                                >
-                                    <span
-                                        *ngIf="getItemProp(processedItem, 'icon')"
-                                        [class]="cn(cx('itemIcon'), getItemProp(processedItem, 'icon'), getItemProp(processedItem, 'iconClass'))"
-                                        [ngStyle]="getItemProp(processedItem, 'iconStyle')"
-                                        [pBind]="getPTOptions(processedItem, index, 'itemIcon')"
-                                        [attr.aria-hidden]="true"
-                                        [attr.tabindex]="-1"
-                                    >
-                                    </span>
-                                    <span
-                                        *ngIf="getItemProp(processedItem, 'escape'); else htmlLabel"
-                                        [class]="cn(cx('itemLabel'), getItemProp(processedItem, 'labelClass'))"
-                                        [ngStyle]="getItemProp(processedItem, 'labelStyle')"
-                                        [pBind]="getPTOptions(processedItem, index, 'itemLabel')"
-                                    >
-                                        {{ getItemLabel(processedItem) }}
-                                    </span>
-                                    <ng-template #htmlLabel>
-                                        <span
-                                            [class]="cn(cx('itemLabel'), getItemProp(processedItem, 'labelClass'))"
-                                            [ngStyle]="getItemProp(processedItem, 'labelStyle')"
-                                            [innerHTML]="getItemLabel(processedItem)"
-                                            [pBind]="getPTOptions(processedItem, index, 'itemLabel')"
-                                        ></span>
-                                    </ng-template>
-                                    <p-badge *ngIf="getItemProp(processedItem, 'badge')" [class]="getItemProp(processedItem, 'badgeStyleClass')" [value]="getItemProp(processedItem, 'badge')" [unstyled]="unstyled()" />
-                                    <ng-container *ngIf="isItemGroup(processedItem)">
-                                        <svg
-                                            data-p-icon="angle-right"
-                                            *ngIf="!contextMenu.submenuIconTemplate && !contextMenu._submenuIconTemplate"
-                                            [class]="cx('submenuIcon')"
-                                            [pBind]="getPTOptions(processedItem, index, 'submenuIcon')"
-                                            [attr.aria-hidden]="true"
-                                        />
-                                        <ng-template *ngTemplateOutlet="contextMenu.submenuIconTemplate || contextMenu._submenuIconTemplate; context: { class: 'p-contextmenu-submenu-icon' }" [attr.aria-hidden]="true"></ng-template>
-                                    </ng-container>
-                                </a>
-                            </ng-container>
-                            <ng-container *ngIf="itemTemplate">
-                                <ng-template *ngTemplateOutlet="itemTemplate; context: { $implicit: processedItem.item }"></ng-template>
-                            </ng-container>
-                        </div>
-
-                        <p-contextmenu-sub
-                            *ngIf="isItemVisible(processedItem) && isItemGroup(processedItem)"
-                            [items]="processedItem.items"
-                            [itemTemplate]="itemTemplate"
-                            [menuId]="menuId"
-                            [visible]="isItemActive(processedItem) && isItemGroup(processedItem)"
-                            [activeItemPath]="activeItemPath"
-                            [focusedItemId]="focusedItemId"
-                            [level]="level + 1"
-                            (itemClick)="itemClick.emit($event)"
-                            (itemMouseEnter)="onItemMouseEnter($event)"
-                            [pt]="pt()"
-                            [motionOptions]="motionOptions"
-                            [unstyled]="unstyled()"
-                        />
-                    </li>
-                </ng-template>
-            </ul>
-        }
-    `,
-    encapsulation: ViewEncapsulation.None,
-    providers: [ContextMenuStyle, { provide: CONTEXTMENUSUB_INSTANCE, useExisting: ContextMenuSub }, { provide: PARENT_INSTANCE, useExisting: ContextMenuSub }]
-})
-export class ContextMenuSub extends BaseComponent<ContextMenuPassThrough> implements AfterViewChecked {
-    @Input() get visible(): boolean {
-        return this._visible;
-    }
-    set visible(value: boolean) {
-        this._visible = value;
-
-        if (this._visible || this.root) {
-            this.render.set(true);
-        }
-    }
-
-    @Input() items: any[];
-
-    @Input() itemTemplate: TemplateRef<ContextMenuItemTemplateContext> | undefined;
-
-    @Input({ transform: booleanAttribute }) root: boolean | undefined = false;
-
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
-
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
-
-    @Input({ transform: booleanAttribute }) popup: boolean | undefined;
-
-    @Input() menuId: string | undefined;
-
-    @Input() ariaLabel: string | undefined;
-
-    @Input() ariaLabelledBy: string | undefined;
-
-    @Input({ transform: numberAttribute }) level: number = 0;
-
-    @Input() focusedItemId: string | undefined;
-
-    @Input() activeItemPath: any[];
-
-    @Input() motionOptions: MotionOptions[] | undefined;
-
-    @Input({ transform: numberAttribute }) tabindex: number = 0;
-
-    @Output() itemClick: EventEmitter<any> = new EventEmitter();
-
-    @Output() itemMouseEnter: EventEmitter<any> = new EventEmitter();
-
-    @Output() menuFocus: EventEmitter<any> = new EventEmitter();
-
-    @Output() menuBlur: EventEmitter<any> = new EventEmitter();
-
-    @Output() menuKeydown: EventEmitter<any> = new EventEmitter();
-
-    @ViewChild('sublist') sublistViewChild: ElementRef;
-
-    render = signal<boolean>(false);
-
-    hostName = 'ContextMenu';
-
-    _componentStyle = inject(ContextMenuStyle);
-
-    $pcContextMenu: ContextMenu | undefined = inject(CONTEXTMENU_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
-    $pcContextMenuSub: ContextMenuSub | undefined = inject(CONTEXTMENUSUB_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
-    _visible: boolean = false;
-
-    constructor(
-        public el: ElementRef,
-        public renderer: Renderer2,
-        @Inject(forwardRef(() => ContextMenu)) public contextMenu: ContextMenu
-    ) {
-        super();
-
-        this.contextMenu.handleSubmenuAfterLeave = () => {
-            if (this.root) {
-                this.onAfterLeave();
-            }
-        };
-    }
-
-    getItemProp(processedItem: any, name: string, params: any | null = null): any {
-        return processedItem && processedItem.item ? resolve(processedItem.item[name], params) : undefined;
-    }
-
-    getItemId(processedItem: any): string {
-        return processedItem.item && processedItem.item?.id ? processedItem.item.id : `${this.menuId}_${processedItem.key}`;
-    }
-
-    getItemKey(processedItem: any): string {
-        return this.getItemId(processedItem);
-    }
-
-    getItemLabel(processedItem: any): string {
-        return this.getItemProp(processedItem, 'label');
-    }
-
-    getAriaSetSize() {
-        return this.items.filter((processedItem) => this.isItemVisible(processedItem) && !this.getItemProp(processedItem, 'separator')).length;
-    }
-
-    getAriaPosInset(index: number) {
-        return index - this.items.slice(0, index).filter((processedItem) => this.isItemVisible(processedItem) && this.getItemProp(processedItem, 'separator')).length + 1;
-    }
-
-    isItemVisible(processedItem: any): boolean {
-        return this.getItemProp(processedItem, 'visible') !== false;
-    }
-
-    isItemActive(processedItem: any): boolean | undefined {
-        if (this.activeItemPath) {
-            return this.activeItemPath.some((path) => path.key === processedItem.key);
-        }
-    }
-
-    isItemDisabled(processedItem: any): boolean | undefined {
-        return this.getItemProp(processedItem, 'disabled');
-    }
-
-    isItemFocused(processedItem: any): boolean {
-        return this.focusedItemId === this.getItemId(processedItem);
-    }
-
-    isItemGroup(processedItem: any): boolean {
-        return isNotEmpty(processedItem.items);
-    }
-
-    onItemMouseEnter(param: any) {
-        const { event, processedItem } = param;
-        this.itemMouseEnter.emit({ originalEvent: event, processedItem });
-    }
-
-    onItemClick(event: any, processedItem: any) {
-        this.getItemProp(processedItem, 'command', { originalEvent: event, item: processedItem.item });
-        this.itemClick.emit({ originalEvent: event, processedItem, isFocus: true });
-    }
-
-    onBeforeEnter(event: MotionEvent) {
-        this.position(event.element as HTMLUListElement);
-    }
-
-    onAfterLeave() {
-        this.render.set(false);
-    }
-
-    // TODO: will be removed later. Helper method to get PT from parent ContextMenu if available, otherwise use own PT
-    _ptm(section: string, options?: any) {
-        return this.$pcContextMenu ? this.$pcContextMenu.ptm(section, options) : this.ptm(section, options);
-    }
-
-    getPTOptions(processedItem: any, index: number, key: string) {
-        return this._ptm(key, {
-            context: {
-                item: processedItem.item,
-                index: index,
-                active: this.isItemActive(processedItem),
-                focused: this.isItemFocused(processedItem),
-                disabled: this.isItemDisabled(processedItem)
-            }
-        });
-    }
-
-    position(sublist) {
-        const parentItem = sublist.parentElement.parentElement;
-        const containerOffset = <any>getOffset(sublist.parentElement.parentElement);
-        const viewport = getViewport();
-        const sublistWidth = sublist.offsetParent ? sublist.offsetWidth : getHiddenElementOuterWidth(sublist);
-        const itemOuterWidth = <any>getOuterWidth(parentItem.children[0]);
-
-        sublist.style.top = '0px';
-
-        if (parseInt(containerOffset.left, 10) + itemOuterWidth + sublistWidth > viewport.width - calculateScrollbarWidth()) {
-            sublist.style.left = -1 * sublistWidth + 'px';
-        } else {
-            sublist.style.left = itemOuterWidth + 'px';
-        }
-    }
-}
 /**
  * ContextMenu displays an overlay menu on right click of its target. Note that components like Table has special integration with ContextMenu.
  * @group Components
  */
 @Component({
-    selector: 'p-contextMenu, p-contextmenu, p-context-menu',
+    selector: 'p-contextmenu, p-context-menu',
     standalone: true,
-    imports: [CommonModule, ContextMenuSub, RouterModule, TooltipModule, BadgeModule, SharedModule, BindModule, MotionModule],
+    imports: [ContextMenuSub, SharedModule, BindModule, MotionModule],
     template: `
         @if (render()) {
             <div
                 #container
-                [attr.id]="id"
-                [class]="cn(cx('root'), styleClass)"
+                [attr.id]="_id"
+                [class]="cn(cx('root'), styleClass())"
                 [style]="sx('root')"
-                [ngStyle]="style"
                 [pBind]="ptm('root')"
                 [pMotion]="visible()"
                 [pMotionName]="'p-anchored-overlay'"
@@ -463,12 +42,12 @@ export class ContextMenuSub extends BaseComponent<ContextMenuPassThrough> implem
                     #rootmenu
                     [root]="true"
                     [items]="processedItems"
-                    [itemTemplate]="itemTemplate || _itemTemplate"
-                    [menuId]="id"
-                    [ariaLabel]="ariaLabel"
-                    [ariaLabelledBy]="ariaLabelledBy"
-                    [baseZIndex]="baseZIndex"
-                    [autoZIndex]="autoZIndex"
+                    [itemTemplate]="itemTemplate()"
+                    [menuId]="_id"
+                    [ariaLabel]="ariaLabel()"
+                    [ariaLabelledBy]="ariaLabelledBy()"
+                    [baseZIndex]="baseZIndex()"
+                    [autoZIndex]="autoZIndex()"
                     [visible]="submenuVisible()"
                     [focusedItemId]="focused ? focusedItemId : undefined"
                     [activeItemPath]="activeItemPath()"
@@ -495,79 +74,75 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
      * An array of menuitems.
      * @group Props
      */
-    @Input() set model(value: MenuItem[] | undefined) {
-        this._model = value;
-        this._processedItems = this.createProcessedItems(this._model || []);
-    }
-    get model(): MenuItem[] | undefined {
-        return this._model;
-    }
+    model = input<MenuItem[]>();
     /**
      * Event for which the menu must be displayed.
      * @group Props
      */
-    @Input() triggerEvent: string = 'contextmenu';
+    triggerEvent = input('contextmenu');
     /**
      * Local template variable name of the element to attach the context menu.
      * @group Props
      */
-    @Input() target: HTMLElement | string | null | undefined;
+    target = input<HTMLElement | string | null>();
     /**
      * Attaches the menu to document instead of a particular item.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) global: boolean;
+    global = input(false, { transform: booleanAttribute });
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    style = input<CSSProperties>();
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    styleClass = input<string>();
     /**
      * Whether to automatically manage layering.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
+    autoZIndex = input(true, { transform: booleanAttribute });
     /**
      * Base zIndex value to use in layering.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
+    baseZIndex = input(0, { transform: numberAttribute });
     /**
      * Current id state as a string.
      * @group Props
      */
-    @Input() id: string | undefined;
+    id = input<string>();
+
+    _id: string | undefined;
     /**
      * The breakpoint to define the maximum width boundary.
      * @group Props
      */
-    @Input() breakpoint: string = '960px';
+    breakpoint = input('960px');
     /**
      * Defines a string value that labels an interactive element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    ariaLabel = input<string>();
     /**
      * Identifier of the underlying input element.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    ariaLabelledBy = input<string>();
     /**
      * Press delay in touch devices as miliseconds.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) pressDelay: number | undefined = 500;
+    pressDelay = input(500, { transform: numberAttribute });
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
      */
-    appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>(undefined);
+    appendTo = input<AppendTo>(undefined);
     /**
      * The motion options.
      * @group Props
@@ -584,14 +159,14 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
      * Callback to invoke when overlay menu is shown.
      * @group Emits
      */
-    @Output() onShow: EventEmitter<null> = new EventEmitter<null>();
+    onShow = output<void>();
     /**
      * Callback to invoke when overlay menu is hidden.
      * @group Emits
      */
-    @Output() onHide: EventEmitter<null> = new EventEmitter<null>();
+    onHide = output<void>();
 
-    @ViewChild('rootmenu') rootmenu: ContextMenuSub | undefined;
+    rootmenu = viewChild<ContextMenuSub>('rootmenu');
 
     container: HTMLElement | null | undefined;
 
@@ -633,8 +208,6 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     _processedItems: any[];
 
-    _model: MenuItem[] | undefined;
-
     pressTimer: any;
 
     hideCallback: any;
@@ -647,26 +220,34 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     _componentStyle = inject(ContextMenuStyle);
 
-    get visibleItems() {
-        const processedItem = this.activeItemPath().find((p) => p.key === this.focusedItemInfo().parentKey);
+    overlayService = inject(OverlayService);
 
-        return processedItem ? processedItem.items : this.processedItems;
+    get visibleItems(): ContextMenuProcessedItem[] {
+        const processedItem = this.activeItemPath().find((p: ContextMenuProcessedItem) => p.key === this.focusedItemInfo().parentKey);
+
+        return processedItem ? (processedItem.items ?? []) : this.processedItems;
     }
 
     get processedItems() {
         if (!this._processedItems || !this._processedItems.length) {
-            this._processedItems = this.createProcessedItems(this.model || []);
+            this._processedItems = this.createProcessedItems(this.model() || []);
         }
         return this._processedItems;
     }
 
     get focusedItemId() {
         const focusedItem = this.focusedItemInfo();
-        return focusedItem.item && focusedItem.item?.id ? focusedItem.item.id : focusedItem.index !== -1 ? `${this.id}${isNotEmpty(focusedItem.parentKey) ? '_' + focusedItem.parentKey : ''}_${focusedItem.index}` : null;
+        return focusedItem.item && focusedItem.item?.id ? focusedItem.item.id : focusedItem.index !== -1 ? `${this._id}${isNotEmpty(focusedItem.parentKey) ? '_' + focusedItem.parentKey : ''}_${focusedItem.index}` : null;
     }
 
-    constructor(public overlayService: OverlayService) {
+    constructor() {
         super();
+
+        effect(() => {
+            const value = this.model();
+            this._processedItems = this.createProcessedItems(value || []);
+        });
+
         effect(() => {
             const path = this.activeItemPath();
 
@@ -679,7 +260,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     }
 
     onInit() {
-        this.id = this.id || uuid('pn_id_');
+        this._id = this.id() || uuid('pn_id_');
         this.bindMatchMediaListener();
         this.bindTriggerEventListener();
     }
@@ -691,23 +272,25 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     bindTriggerEventListener() {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.triggerEventListener) {
+                const targetEl = this.target();
+                const triggerEventName = this.triggerEvent();
                 if (!this.isMobile()) {
-                    if (this.global) {
-                        this.triggerEventListener = this.renderer.listen(this.document, this.triggerEvent, (event) => {
+                    if (this.global()) {
+                        this.triggerEventListener = this.renderer.listen(this.document, triggerEventName, (event) => {
                             this.show(event);
                         });
-                    } else if (this.target) {
-                        this.triggerEventListener = this.renderer.listen(this.target, this.triggerEvent, (event) => {
+                    } else if (targetEl) {
+                        this.triggerEventListener = this.renderer.listen(targetEl, triggerEventName, (event) => {
                             this.show(event);
                         });
                     }
                 } else {
-                    if (this.global) {
+                    if (this.global()) {
                         this.triggerEventListener = this.renderer.listen(this.document, 'touchstart', this.onTouchStart.bind(this));
                         this.touchEndListener = this.renderer.listen(this.document, 'touchend', this.onTouchEnd.bind(this));
-                    } else if (this.target) {
-                        this.triggerEventListener = this.renderer.listen(this.target, 'touchstart', this.onTouchStart.bind(this));
-                        this.touchEndListener = this.renderer.listen(this.target, 'touchend', this.onTouchEnd.bind(this));
+                    } else if (targetEl) {
+                        this.triggerEventListener = this.renderer.listen(targetEl, 'touchstart', this.onTouchStart.bind(this));
+                        this.touchEndListener = this.renderer.listen(targetEl, 'touchend', this.onTouchEnd.bind(this));
                     }
                 }
             }
@@ -726,7 +309,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
                 });
             }
             if (!this.resizeListener) {
-                this.resizeListener = this.renderer.listen(this.document.defaultView, 'resize', (event) => {
+                this.resizeListener = this.renderer.listen(this.document.defaultView, 'resize', () => {
                     this.hide();
                 });
             }
@@ -736,37 +319,15 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
      * Custom item template.
      * @group Templates
      */
-    @ContentChild('item', { descendants: false }) itemTemplate: TemplateRef<ContextMenuItemTemplateContext> | undefined;
+    itemTemplate = contentChild<TemplateRef<ContextMenuItemTemplateContext>>('item', { descendants: false });
 
     /**
      * Custom submenu icon template.
      * @group Templates
      */
-    @ContentChild('submenuicon', { descendants: false }) submenuIconTemplate: TemplateRef<ContextMenuSubmenuIconTemplateContext> | undefined;
+    submenuIconTemplate = contentChild<TemplateRef<ContextMenuSubmenuIconTemplateContext>>('submenuicon', { descendants: false });
 
-    @ContentChildren(PrimeTemplate) templates: QueryList<PrimeTemplate> | undefined;
-
-    _submenuIconTemplate: TemplateRef<ContextMenuSubmenuIconTemplateContext> | undefined;
-
-    _itemTemplate: TemplateRef<ContextMenuItemTemplateContext> | undefined;
-
-    onAfterContentInit() {
-        this.templates?.forEach((item) => {
-            switch (item.getType()) {
-                case 'submenuicon':
-                    this._submenuIconTemplate = item.template;
-                    break;
-                case 'item':
-                    this._itemTemplate = item.template;
-                    break;
-                default:
-                    this._itemTemplate = item.template;
-                    break;
-            }
-        });
-    }
-
-    getPTOptions(key: string, item: any, index: number, id: string) {
+    getPTOptions(key: string, item: MenuItem, index: number, _id: string) {
         return this.ptm(key, {
             context: {
                 item: item,
@@ -777,17 +338,17 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         });
     }
 
-    isItemFocused(itemInfo: any): boolean {
+    isItemFocused(itemInfo: { index: number; item: MenuItem }): boolean {
         return this.focusedItemInfo().index === itemInfo.index;
     }
 
-    createProcessedItems(items: any, level: number = 0, parent: any = {}, parentKey: any = '') {
-        const processedItems: any[] = [];
+    createProcessedItems(items: MenuItem[], level: number = 0, parent: ContextMenuProcessedItem | Record<string, never> = {}, parentKey: string = ''): ContextMenuProcessedItem[] {
+        const processedItems: ContextMenuProcessedItem[] = [];
 
         items &&
-            items.forEach((item, index) => {
+            items.forEach((item: MenuItem, index: number) => {
                 const key = (parentKey !== '' ? parentKey + '_' : '') + index;
-                const newItem = {
+                const newItem: ContextMenuProcessedItem = {
                     item,
                     index,
                     level,
@@ -796,7 +357,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
                     parentKey
                 };
 
-                newItem['items'] = this.createProcessedItems(item.items, level + 1, newItem, key);
+                newItem.items = this.createProcessedItems(item.items ?? [], level + 1, newItem, key);
                 processedItems.push(newItem);
             });
 
@@ -806,7 +367,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     bindMatchMediaListener() {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.matchMediaListener) {
-                const query = window.matchMedia(`(max-width: ${this.breakpoint})`);
+                const query = window.matchMedia(`(max-width: ${this.breakpoint()})`);
 
                 this.query = query;
                 this.queryMatches.set(query.matches);
@@ -828,51 +389,51 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         }
     }
 
-    getItemProp(item: any, name: string) {
-        return item ? resolve(item[name]) : undefined;
+    getItemProp(item: MenuItem, name: string) {
+        return item ? resolve(item[name as keyof MenuItem]) : undefined;
     }
 
-    getProccessedItemLabel(processedItem: any) {
+    getProccessedItemLabel(processedItem: ContextMenuProcessedItem) {
         return processedItem ? this.getItemLabel(processedItem.item) : undefined;
     }
 
-    getItemLabel(item: any) {
+    getItemLabel(item: MenuItem) {
         return this.getItemProp(item, 'label');
     }
 
-    isProcessedItemGroup(processedItem: any): boolean {
+    isProcessedItemGroup(processedItem: ContextMenuProcessedItem): boolean {
         return processedItem && isNotEmpty(processedItem.items);
     }
 
-    isSelected(processedItem: any): boolean {
-        return this.activeItemPath().some((p) => p.key === processedItem.key);
+    isSelected(processedItem: ContextMenuProcessedItem): boolean {
+        return this.activeItemPath().some((p: ContextMenuProcessedItem) => p.key === processedItem.key);
     }
 
-    isValidSelectedItem(processedItem: any): boolean {
+    isValidSelectedItem(processedItem: ContextMenuProcessedItem): boolean {
         return this.isValidItem(processedItem) && this.isSelected(processedItem);
     }
 
-    isValidItem(processedItem: any): boolean {
+    isValidItem(processedItem: ContextMenuProcessedItem): boolean {
         return !!processedItem && !this.isItemDisabled(processedItem.item) && !this.isItemSeparator(processedItem.item);
     }
 
-    isItemDisabled(item: any): boolean {
-        return this.getItemProp(item, 'disabled');
+    isItemDisabled(item: MenuItem): boolean {
+        return this.getItemProp(item, 'disabled') as boolean;
     }
 
-    isItemSeparator(item: any): boolean {
-        return this.getItemProp(item, 'separator');
+    isItemSeparator(item: MenuItem): boolean {
+        return this.getItemProp(item, 'separator') as boolean;
     }
 
-    isItemMatched(processedItem: any): boolean {
+    isItemMatched(processedItem: ContextMenuProcessedItem): boolean {
         return this.isValidItem(processedItem) && this.getProccessedItemLabel(processedItem).toLocaleLowerCase().startsWith(this.searchValue.toLocaleLowerCase());
     }
 
-    isProccessedItemGroup(processedItem: any): boolean {
+    isProccessedItemGroup(processedItem: ContextMenuProcessedItem): boolean {
         return processedItem && isNotEmpty(processedItem.items);
     }
 
-    onItemClick(event: any) {
+    onItemClick(event: { processedItem: ContextMenuProcessedItem; isFocus?: boolean }) {
         const { processedItem } = event;
         const grouped = this.isProcessedItemGroup(processedItem);
         const selected = this.isSelected(processedItem);
@@ -880,16 +441,16 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         if (selected) {
             const { index, key, level, parentKey, item } = processedItem;
 
-            this.activeItemPath.set(this.activeItemPath().filter((p) => key !== p.key && key.startsWith(p.key)));
+            this.activeItemPath.set(this.activeItemPath().filter((p: ContextMenuProcessedItem) => key !== p.key && key.startsWith(p.key)));
             this.focusedItemInfo.set({ index, level, parentKey, item });
 
-            focus(this.rootmenu?.sublistViewChild?.nativeElement);
+            focus(this.rootmenu()?.sublistViewChild()?.nativeElement);
         } else {
             grouped ? this.onItemChange(event) : this.hide();
         }
     }
 
-    onItemMouseEnter(event: any) {
+    onItemMouseEnter(event: { originalEvent: MouseEvent; processedItem: ContextMenuProcessedItem }) {
         this.onItemChange(event, 'hover');
     }
 
@@ -996,7 +557,9 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     onArrowLeftKey(event: KeyboardEvent) {
         const processedItem = this.visibleItems[this.focusedItemInfo().index];
-        const parentItem = this.activeItemPath().find((p) => p.key === processedItem.parentKey);
+        if (!processedItem) return;
+
+        const parentItem = this.activeItemPath().find((p: ContextMenuProcessedItem) => p.key === processedItem.parentKey);
         const root = isEmpty(processedItem.parent);
 
         if (!root) {
@@ -1005,7 +568,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
             this.onArrowDownKey(event);
         }
 
-        const activeItemPath = this.activeItemPath().filter((p) => p.parentKey !== this.focusedItemInfo().parentKey);
+        const activeItemPath = this.activeItemPath().filter((p: ContextMenuProcessedItem) => p.parentKey !== this.focusedItemInfo().parentKey);
         this.activeItemPath.set(activeItemPath);
 
         event.preventDefault();
@@ -1029,7 +592,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         this.hide();
         const processedItem = this.findVisibleItem(this.findFirstFocusedItemIndex());
         const focusedItemInfo = this.focusedItemInfo();
-        this.focusedItemInfo.set({ ...focusedItemInfo, index: this.findFirstFocusedItemIndex(), item: processedItem.item });
+        this.focusedItemInfo.set({ ...focusedItemInfo, index: this.findFirstFocusedItemIndex(), item: processedItem?.item ?? null });
 
         event.preventDefault();
     }
@@ -1047,7 +610,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     onEnterKey(event: KeyboardEvent) {
         if (this.focusedItemInfo().index !== -1) {
-            const element = <any>findSingle(this.rootmenu?.el?.nativeElement, `li[id="${`${this.focusedItemId}`}"]`);
+            const element = <any>findSingle(this.rootmenu()?.el?.nativeElement, `li[id="${`${this.focusedItemId}`}"]`);
             const anchorElement = element && (<any>findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button'));
 
             anchorElement ? anchorElement.click() : element && element.click();
@@ -1064,20 +627,20 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         event.preventDefault();
     }
 
-    onItemChange(event: any, type?: string | undefined) {
+    onItemChange(event: { originalEvent?: Event; processedItem: ContextMenuProcessedItem; isFocus?: boolean }, type?: string) {
         const { processedItem, isFocus } = event;
         if (isEmpty(processedItem)) return;
 
         const { index, key, level, parentKey, items } = processedItem;
         const grouped = isNotEmpty(items);
-        const activeItemPath = this.activeItemPath().filter((p) => p.parentKey !== parentKey && p.parentKey !== key);
+        const activeItemPath = this.activeItemPath().filter((p: ContextMenuProcessedItem) => p.parentKey !== parentKey && p.parentKey !== key);
 
         if (grouped) {
             activeItemPath.push(processedItem);
             this.submenuVisible.set(true);
         }
         this.focusedItemInfo.set({ index, level, parentKey, item: processedItem.item });
-        isFocus && focus(this.rootmenu?.sublistViewChild?.nativeElement);
+        isFocus && focus(this.rootmenu()?.sublistViewChild()?.nativeElement);
 
         if (type === 'hover' && this.queryMatches()) {
             return;
@@ -1086,14 +649,14 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         this.activeItemPath.set(activeItemPath);
     }
 
-    onMenuFocus(event: any) {
+    onMenuFocus(_event: FocusEvent) {
         this.focused = true;
         const focusedItemInfo = this.focusedItemInfo().index !== -1 ? this.focusedItemInfo() : { index: -1, level: 0, parentKey: '', item: null };
 
         this.focusedItemInfo.set(focusedItemInfo);
     }
 
-    onMenuBlur(event: any) {
+    onMenuBlur(_event: FocusEvent) {
         this.focused = false;
         this.focusedItemInfo.set({ index: -1, level: 0, parentKey: '', item: null });
         this.searchValue = '';
@@ -1109,7 +672,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     onAfterEnter() {
         this.bindGlobalListeners();
-        focus(this.rootmenu?.sublistViewChild?.nativeElement);
+        focus(this.rootmenu()?.sublistViewChild()?.nativeElement);
     }
 
     onAfterLeave() {
@@ -1136,19 +699,15 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     }
 
     moveOnTop() {
-        if (this.autoZIndex && this.container) {
-            ZIndexUtils.set('menu', this.container, this.baseZIndex + this.config.zIndex.menu);
+        if (this.autoZIndex() && this.container) {
+            ZIndexUtils.set('menu', this.container, this.baseZIndex() + this.config.zIndex.menu);
         }
     }
 
     onOverlayHide() {
         this.unbindGlobalListeners();
 
-        if (!(this.cd as ViewRef).destroyed) {
-            this.target = null;
-        }
-
-        if (this.container && this.autoZIndex) {
+        if (this.container && this.autoZIndex()) {
             ZIndexUtils.clear(this.container);
         }
 
@@ -1158,7 +717,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     onTouchStart(event: MouseEvent) {
         this.pressTimer = setTimeout(() => {
             this.show(event);
-        }, this.pressDelay);
+        }, this.pressDelay());
     }
 
     onTouchEnd() {
@@ -1181,7 +740,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     show(event: any) {
         this.activeItemPath.set([]);
         this.focusedItemInfo.set({ index: -1, level: 0, parentKey: '', item: null });
-        focus(this.rootmenu?.sublistViewChild?.nativeElement);
+        focus(this.rootmenu()?.sublistViewChild()?.nativeElement);
 
         this.pageX = event.pageX;
         this.pageY = event.pageY;
@@ -1265,7 +824,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         return matched;
     }
 
-    findVisibleItem(index) {
+    findVisibleItem(index: number): ContextMenuProcessedItem | null {
         return isNotEmpty(this.visibleItems) ? this.visibleItems[index] : null;
     }
 
@@ -1275,17 +834,17 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     }
 
     findLastItemIndex() {
-        return findLastIndex(this.visibleItems, (processedItem) => this.isValidItem(processedItem));
+        return findLastIndex(this.visibleItems, (processedItem: ContextMenuProcessedItem) => this.isValidItem(processedItem));
     }
 
     findPrevItemIndex(index: number) {
-        const matchedItemIndex = index > 0 ? findLastIndex(this.visibleItems.slice(0, index), (processedItem) => this.isValidItem(processedItem)) : -1;
+        const matchedItemIndex = index > 0 ? findLastIndex(this.visibleItems.slice(0, index), (processedItem: ContextMenuProcessedItem) => this.isValidItem(processedItem)) : -1;
 
         return matchedItemIndex > -1 ? matchedItemIndex : index;
     }
 
     findNextItemIndex(index: number) {
-        const matchedItemIndex = index < this.visibleItems.length - 1 ? this.visibleItems.slice(index + 1).findIndex((processedItem) => this.isValidItem(processedItem)) : -1;
+        const matchedItemIndex = index < this.visibleItems.length - 1 ? this.visibleItems.slice(index + 1).findIndex((processedItem: ContextMenuProcessedItem) => this.isValidItem(processedItem)) : -1;
 
         return matchedItemIndex > -1 ? matchedItemIndex + index + 1 : index;
     }
@@ -1297,25 +856,25 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     }
 
     findFirstItemIndex() {
-        return this.visibleItems.findIndex((processedItem) => this.isValidItem(processedItem));
+        return this.visibleItems.findIndex((processedItem: ContextMenuProcessedItem) => this.isValidItem(processedItem));
     }
 
     findSelectedItemIndex() {
-        return this.visibleItems.findIndex((processedItem) => this.isValidSelectedItem(processedItem));
+        return this.visibleItems.findIndex((processedItem: ContextMenuProcessedItem) => this.isValidSelectedItem(processedItem));
     }
 
-    changeFocusedItemIndex(event: any, index: number) {
+    changeFocusedItemIndex(_event: KeyboardEvent, index: number) {
         const processedItem = this.findVisibleItem(index);
         const focusedItemInfo = this.focusedItemInfo();
         if (focusedItemInfo.index !== index) {
-            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem.item });
+            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem?.item ?? null });
             this.scrollInView();
         }
     }
 
     scrollInView(index: number = -1) {
-        const id = index !== -1 ? `${this.id}_${index}` : this.focusedItemId;
-        const element = findSingle(this.rootmenu?.el?.nativeElement, `li[id="${id}"]`);
+        const id = index !== -1 ? `${this._id}_${index}` : this.focusedItemId;
+        const element = findSingle(this.rootmenu()?.el?.nativeElement, `li[id="${id}"]`);
 
         if (element) {
             element.scrollIntoView && element.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -1325,7 +884,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     bindResizeListener() {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.resizeListener) {
-                this.resizeListener = this.renderer.listen(this.document.defaultView, 'resize', (event) => {
+                this.resizeListener = this.renderer.listen(this.document.defaultView, 'resize', () => {
                     this.hide();
                 });
             }

@@ -26,7 +26,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card dock-demo">
+        <div class="dock-demo">
             <p-menubar [model]="menubarItems">
                 <ng-template #start>
                     <i class="pi pi-apple px-2"></i>
@@ -35,7 +35,7 @@ import { MenuItem, MessageService } from 'primeng/api';
                     <i class="pi pi-video px-2"></i>
                     <i class="pi pi-wifi px-2"></i>
                     <i class="pi pi-volume-up px-2"></i>
-                    <span class="px-2">Fri 13:07</span>
+                    <span class="px-2 text-sm">Fri 13:07</span>
                     <i class="pi pi-search px-2"></i>
                     <i class="pi pi-bars px-2"></i>
                 </ng-template>
@@ -377,20 +377,20 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex flex-wrap gap-4 mb-8">
-                <div *ngFor="let pos of positionOptions" class="flex items-center">
+        <div class="flex flex-wrap gap-4 mb-7">
+            @for (pos of positionOptions; track pos.value) {
+                <div class="flex items-center">
                     <p-radiobutton name="dock" [value]="pos.value" [label]="pos.label" [(ngModel)]="position" [inputId]="pos.label" />
-                    <label [for]="pos.label" class="ml-2"> {{ pos.label }} </label>
+                    <label [for]="pos.label" class="ml-2 text-sm"> {{ pos.label }} </label>
                 </div>
-            </div>
-            <div class="dock-window">
-                <p-dock [model]="items" [position]="position">
-                    <ng-template #item let-item>
-                        <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon" [alt]="item.label" width="100%" />
-                    </ng-template>
-                </p-dock>
-            </div>
+            }
+        </div>
+        <div class="dock-window">
+            <p-dock [model]="items" [position]="position">
+                <ng-template #item let-item>
+                    <img [pTooltip]="item.label" tooltipPosition="top" [src]="item.icon" [alt]="item.label" width="100%" />
+                </ng-template>
+            </p-dock>
         </div>
     `,
     standalone: true,
@@ -398,7 +398,24 @@ import { MenuItem } from 'primeng/api';
 })
 export class DockBasicDemo implements OnInit {
     items: MenuItem[] | undefined;
-    positionOptions: any[];
+    positionOptions: any[] = [
+        {
+            label: 'Bottom',
+            value: 'bottom'
+        },
+        {
+            label: 'Top',
+            value: 'top'
+        },
+        {
+            label: 'Left',
+            value: 'left'
+        },
+        {
+            label: 'Right',
+            value: 'right'
+        }
+    ];
 
     ngOnInit() {
         this.items = [
@@ -431,14 +448,13 @@ Dock is a navigation component consisting of menuitems.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<DockPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, DockPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | id | string | - | Current id state as a string. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| model | MenuItem[] | null | MenuModel instance to define the action items. |
-| position | "right" \| "left" \| "top" \| "bottom" | bottom | Position of element. |
+| model | MenuItem[] | - | MenuModel instance to define the action items. |
+| position | "bottom" \| "top" \| "left" \| "right" | - | Position of element. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | breakpoint | string | 960px | The breakpoint to define the maximum width boundary. |
 | ariaLabelledBy | string | - | Defines a string that labels the dropdown button for accessibility. |

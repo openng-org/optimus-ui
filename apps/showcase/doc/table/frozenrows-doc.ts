@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Customer } from '@/domain/customer';
 import { CustomerService } from '@/service/customerservice';
@@ -7,14 +8,14 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'frozenrows-doc',
+    selector: 'frozen-rows-doc',
     standalone: true,
-    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>Frozen rows are used to fix certain rows while scrolling, this data is defined with the <i>frozenValue</i> property.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="unlockedCustomers" [frozenValue]="lockedCustomers" [scrollable]="true" scrollHeight="400px" [tableStyle]="{ 'min-width': '60rem' }">
                     <ng-template #header>
                         <tr>
@@ -32,7 +33,9 @@ import { TableModule } from 'primeng/table';
                             <td>{{ customer.company }}</td>
                             <td>{{ customer.representative.name }}</td>
                             <td>
-                                <button pButton pRipple type="button" [icon]="'pi pi-lock-open'" (click)="toggleLock(customer, true, index)" size="small" text></button>
+                                <button pButton pRipple type="button" (click)="toggleLock(customer, true, index)" size="small" text>
+                                    <span pButtonIcon class="pi pi-lock-open"></span>
+                                </button>
                             </td>
                         </tr>
                     </ng-template>
@@ -43,14 +46,16 @@ import { TableModule } from 'primeng/table';
                             <td>{{ customer.company }}</td>
                             <td>{{ customer.representative.name }}</td>
                             <td>
-                                <button pButton pRipple type="button" [icon]="'pi pi-lock'" [disabled]="lockedCustomers.length >= 2" (click)="toggleLock(customer, false, index)" size="small" text></button>
+                                <button pButton pRipple type="button" [disabled]="lockedCustomers.length >= 2" (click)="toggleLock(customer, false, index)" size="small" text>
+                                    <span pButtonIcon class="pi pi-lock"></span>
+                                </button>
                             </td>
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Customer']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Customer']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FrozenRowsDoc {

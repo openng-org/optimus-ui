@@ -1,11 +1,12 @@
-import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, Type, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgComponentOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, signal, Type, viewChild, ViewEncapsulation } from '@angular/core';
 import { uuid } from '@primeuix/utils';
 import { SharedModule, TranslationKeys } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
 import { Dialog, DialogPassThrough } from 'primeng/dialog';
 import { Nullable } from 'primeng/ts-helpers';
+import type { CSSProperties } from 'primeng/types/shared';
 import { DynamicDialogConfig } from './dynamicdialog-config';
 import { DynamicDialogRef } from './dynamicdialog-ref';
 import { DynamicDialogContent } from './dynamicdialogcontent';
@@ -14,42 +15,43 @@ import { DynamicDialogStyle } from './style/dynamicdialogstyle';
 const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALOG_INSTANCE');
 
 @Component({
-    selector: 'p-dynamicDialog, p-dynamicdialog, p-dynamic-dialog',
+    selector: 'p-dynamicdialog, p-dynamic-dialog',
     standalone: true,
-    imports: [CommonModule, SharedModule, DynamicDialogContent, Dialog, BindModule],
+    imports: [NgComponentOutlet, SharedModule, DynamicDialogContent, Dialog, BindModule],
     template: `
         <p-dialog
-            [(visible)]="visible"
-            [header]="ddconfig?.header"
-            [draggable]="ddconfig?.draggable !== false"
-            [resizable]="ddconfig?.resizable !== false"
-            [contentStyle]="ddconfig?.contentStyle"
-            [modal]="ddconfig?.modal !== false"
-            [closeOnEscape]="ddconfig?.closeOnEscape !== false"
-            [dismissableMask]="ddconfig?.dismissableMask"
-            [rtl]="ddconfig?.rtl"
+            [visible]="visible()"
+            [header]="header"
+            [draggable]="draggable"
+            [resizable]="resizable"
+            [contentStyle]="contentStyle"
+            [modal]="modal"
+            [closeOnEscape]="closeOnEscape"
+            [dismissableMask]="dismissableMask"
+            [rtl]="rtl"
             [closable]="closable"
             [breakpoints]="breakpoints"
-            [styleClass]="ddconfig?.styleClass"
-            [maskStyleClass]="ddconfig?.maskStyleClass"
-            [showHeader]="ddconfig?.showHeader !== false"
-            [autoZIndex]="ddconfig?.autoZIndex !== false"
-            [baseZIndex]="ddconfig?.baseZIndex || 0"
+            [styleClass]="styleClass"
+            [maskStyleClass]="maskStyleClass"
+            [showHeader]="showHeader"
+            [autoZIndex]="autoZIndex"
+            [baseZIndex]="baseZIndex"
             [minX]="minX"
             [minY]="minY"
-            [focusOnShow]="ddconfig?.focusOnShow !== false"
+            [focusOnShow]="focusOnShow"
             [maximizable]="maximizable"
             [keepInViewport]="keepInViewport"
-            [focusTrap]="ddconfig?.focusTrap !== false"
-            [transitionOptions]="ddconfig?.transitionOptions || '150ms cubic-bezier(0, 0, 0.2, 1)'"
-            [closeAriaLabel]="ddconfig?.closeAriaLabel || defaultCloseAriaLabel"
+            [focusTrap]="focusTrap"
+            [motionOptions]="motionOptions"
+            [maskMotionOptions]="maskMotionOptions"
+            [closeAriaLabel]="closeAriaLabel"
             [minimizeIcon]="minimizeIcon"
             [maximizeIcon]="maximizeIcon"
-            [closeButtonProps]="{ severity: 'secondary', variant: 'text', rounded: true }"
-            [maximizeButtonProps]="{ severity: 'secondary', variant: 'text', rounded: true }"
+            [closeButtonProps]="closeButtonProps"
+            [maximizeButtonProps]="maximizeButtonProps"
             [style]="dialogStyle"
             [position]="position"
-            (onHide)="onDialogHide($event)"
+            (onHide)="onDialogHide()"
             (onMaximize)="onDialogMaximize($event)"
             (onResizeInit)="onDialogResizeInit($event)"
             (onResizeEnd)="onDialogResizeEnd($event)"
@@ -60,27 +62,43 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             hostName="DynamicDialog"
             [unstyled]="isUnstyled"
         >
-            <ng-template #header *ngIf="headerTemplate">
-                <ng-container *ngComponentOutlet="headerTemplate"></ng-container>
-            </ng-template>
-            <ng-template #content *ngIf="contentTemplate">
-                <ng-container *ngComponentOutlet="contentTemplate"></ng-container>
-            </ng-template>
-            <ng-template #footer *ngIf="footerTemplate">
-                <ng-container *ngComponentOutlet="footerTemplate"></ng-container>
-            </ng-template>
-            <ng-template #closeicon *ngIf="closeIconTemplate">
-                <ng-container *ngComponentOutlet="closeIconTemplate"></ng-container>
-            </ng-template>
-            <ng-template #maximizeicon *ngIf="maximizeIconTemplate">
-                <ng-container *ngComponentOutlet="maximizeIconTemplate"></ng-container>
-            </ng-template>
-            <ng-template #minimizeicon *ngIf="minimizeIconTemplate">
-                <ng-container *ngComponentOutlet="minimizeIconTemplate"></ng-container>
-            </ng-template>
+            @if (headerTemplate) {
+                <ng-template #header>
+                    <ng-container *ngComponentOutlet="headerTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (contentTemplate) {
+                <ng-template #content>
+                    <ng-container *ngComponentOutlet="contentTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (footerTemplate) {
+                <ng-template #footer>
+                    <ng-container *ngComponentOutlet="footerTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (closeIconTemplate) {
+                <ng-template #closeicon>
+                    <ng-container *ngComponentOutlet="closeIconTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (maximizeIconTemplate) {
+                <ng-template #maximizeicon>
+                    <ng-container *ngComponentOutlet="maximizeIconTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (minimizeIconTemplate) {
+                <ng-template #minimizeicon>
+                    <ng-container *ngComponentOutlet="minimizeIconTemplate"></ng-container>
+                </ng-template>
+            }
 
-            <ng-template pDynamicDialogContent *ngIf="!contentTemplate"></ng-template>
-            <div *ngIf="ddconfig.footer && !footerTemplate">{{ ddconfig.footer }}</div>
+            @if (!contentTemplate) {
+                <ng-template pDynamicDialogContent></ng-template>
+            }
+            @if (ddconfig.footer && !footerTemplate) {
+                <div>{{ ddconfig.footer }}</div>
+            }
         </p-dialog>
     `,
     changeDetection: ChangeDetectionStrategy.Default,
@@ -97,89 +115,153 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
+    ddconfig = inject(DynamicDialogConfig);
+
+    dialogRef = inject(DynamicDialogRef);
+
     onAfterViewChecked(): void {
         this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
     }
 
-    visible: boolean = true;
+    visible = signal<boolean>(true);
 
-    componentRef: Nullable<ComponentRef<any>>;
+    componentRef: Nullable<ComponentRef<object>>;
 
     id: string = uuid('pn_id_');
 
-    @ViewChild(DynamicDialogContent) insertionPoint: Nullable<DynamicDialogContent>;
+    insertionPoint = viewChild(DynamicDialogContent);
 
-    @ViewChild(Dialog) dialog: Nullable<Dialog>;
+    dialog = viewChild(Dialog);
 
-    childComponentType: Nullable<Type<any>>;
+    childComponentType: Nullable<Type<object>>;
 
-    inputValues: Record<string, any>;
+    inputValues: NonNullable<DynamicDialogConfig['inputValues']> = {};
+
+    get draggable(): boolean {
+        return this.ddconfig.draggable !== false;
+    }
+
+    get resizable(): boolean {
+        return this.ddconfig.resizable !== false;
+    }
+
+    get modal(): boolean {
+        return this.ddconfig.modal !== false;
+    }
+
+    get closeOnEscape(): boolean {
+        return this.ddconfig.closeOnEscape !== false;
+    }
+
+    get showHeader(): boolean {
+        return this.ddconfig.showHeader !== false;
+    }
+
+    get autoZIndex(): boolean {
+        return this.ddconfig.autoZIndex !== false;
+    }
+
+    get baseZIndex(): number {
+        return this.ddconfig.baseZIndex ?? 0;
+    }
+
+    get focusOnShow(): boolean {
+        return this.ddconfig.focusOnShow !== false;
+    }
+
+    get focusTrap(): boolean {
+        return this.ddconfig.focusTrap !== false;
+    }
+
+    get closeAriaLabel(): string {
+        return this.ddconfig.closeAriaLabel ?? this.defaultCloseAriaLabel;
+    }
+
+    get rtl(): boolean | undefined {
+        return this.ddconfig.rtl;
+    }
+
+    get styleClass(): string | undefined {
+        return this.ddconfig.styleClass;
+    }
+
+    get maskStyleClass(): string | undefined {
+        return this.ddconfig.maskStyleClass;
+    }
+
+    get dismissableMask(): boolean | undefined {
+        return this.ddconfig.dismissableMask;
+    }
+
+    get contentStyle() {
+        return this.ddconfig.contentStyle;
+    }
 
     get minX(): number {
-        return this.ddconfig.minX ? this.ddconfig.minX : 0;
+        return this.ddconfig.minX ?? 0;
     }
 
     get minY(): number {
-        return this.ddconfig.minY ? this.ddconfig.minY : 0;
+        return this.ddconfig.minY ?? 0;
     }
 
     get keepInViewport(): boolean {
-        return this.ddconfig.keepInViewport!;
+        return this.ddconfig.keepInViewport ?? false;
     }
 
     get maximizable(): boolean {
-        return this.ddconfig.maximizable!;
+        return this.ddconfig.maximizable ?? false;
     }
 
-    get maximizeIcon(): string {
-        return this.ddconfig.maximizeIcon!;
+    get maximizeIcon(): string | undefined {
+        return this.ddconfig.maximizeIcon;
     }
 
-    get minimizeIcon(): string {
-        return this.ddconfig.minimizeIcon!;
+    get minimizeIcon(): string | undefined {
+        return this.ddconfig.minimizeIcon;
     }
 
-    get closable() {
-        return this.ddconfig.closable!;
+    get closable(): boolean | undefined {
+        return this.ddconfig.closable;
     }
 
-    get position(): string {
-        return this.ddconfig.position!;
+    get position() {
+        return this.ddconfig.position;
     }
 
     get defaultCloseAriaLabel(): string {
-        return this.config.getTranslation(TranslationKeys.ARIA)['close'];
+        return this.translate(TranslationKeys.ARIA, 'close');
     }
 
     get breakpoints() {
         return this.ddconfig.breakpoints;
     }
 
-    get footerTemplate() {
+    get footerTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.footer;
     }
 
-    get headerTemplate() {
+    get headerTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.header;
     }
 
-    get contentTemplate() {
+    get contentTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.content;
     }
 
-    get minimizeIconTemplate(): any {
+    get minimizeIconTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.minimizeicon;
     }
 
-    get maximizeIconTemplate(): any {
+    get maximizeIconTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.maximizeicon;
     }
 
-    get closeIconTemplate() {
+    get closeIconTemplate(): Type<object> | undefined {
         return this.ddconfig?.templates?.closeicon;
     }
 
-    get dialogStyle() {
+    get dialogStyle(): CSSProperties {
         return {
             ...(this.ddconfig?.style || {}),
             ...(this.ddconfig?.width && { width: this.ddconfig.width }),
@@ -187,7 +269,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         };
     }
 
-    get header() {
+    get header(): string | undefined {
         return this.ddconfig.header;
     }
 
@@ -195,12 +277,28 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         return this.ddconfig.data;
     }
 
-    get dialogId() {
+    get dialogId(): string {
         return this.$attrSelector;
     }
 
-    get isUnstyled() {
+    get isUnstyled(): boolean {
         return this.ddconfig.unstyled || this.$unstyled();
+    }
+
+    get motionOptions() {
+        return this.ddconfig.motionOptions;
+    }
+
+    get maskMotionOptions() {
+        return this.ddconfig.maskMotionOptions;
+    }
+
+    get closeButtonProps() {
+        return { severity: 'secondary', variant: 'text', rounded: true };
+    }
+
+    get maximizeButtonProps() {
+        return { severity: 'secondary', variant: 'text', rounded: true };
     }
 
     maximized: boolean | undefined;
@@ -211,38 +309,31 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 
     ariaLabelledBy: string | undefined | null;
 
-    _style: any = {};
-
-    styleElement: any;
-
     lastPageX: number | undefined;
 
     lastPageY: number | undefined;
 
-    contentViewChild: any;
+    contentViewChild: HTMLElement | null = null;
 
-    footerViewChild: any;
+    footerViewChild: HTMLElement | null = null;
 
-    headerViewChild: any;
+    headerViewChild: HTMLElement | null = null;
 
-    maskViewChild: any;
+    maskViewChild: HTMLElement | null = null;
 
-    maskClickListener: any;
+    maskClickListener: (() => void) | null = null;
 
-    documentDragListener: any;
+    documentDragListener: (() => void) | null = null;
 
-    documentDragEndListener: any;
+    documentDragEndListener: (() => void) | null = null;
 
-    documentResizeListener: any;
+    documentResizeListener: (() => void) | null = null;
 
-    documentResizeEndListener: any;
+    documentResizeEndListener: (() => void) | null = null;
 
-    documentEscapeListener: any;
+    documentEscapeListener: (() => void) | null = null;
 
-    constructor(
-        public ddconfig: DynamicDialogConfig,
-        private dialogRef: DynamicDialogRef
-    ) {
+    constructor() {
         super();
     }
 
@@ -267,8 +358,8 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         return uuid('pn_id_') + '_header';
     }
 
-    loadChildComponent(componentType: Type<any>) {
-        let viewContainerRef = this.insertionPoint?.viewContainerRef;
+    loadChildComponent(componentType: Type<object>) {
+        let viewContainerRef = this.insertionPoint()?.viewContainerRef;
         viewContainerRef?.clear();
 
         this.componentRef = viewContainerRef?.createComponent(componentType);
@@ -282,11 +373,11 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         this.dialogRef.onChildComponentLoaded.next(this.componentRef!.instance);
     }
 
-    onDialogHide(event: any) {
+    onDialogHide() {
         this.dialogRef.destroy();
     }
 
-    onDialogMaximize(event: any) {
+    onDialogMaximize(event: { maximized: boolean | undefined }) {
         this.maximized = event.maximized;
         this.dialogRef.maximize(event);
     }
@@ -307,8 +398,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     }
 
     close() {
-        this.visible = false;
-        this.cd.markForCheck();
+        this.visible.set(false);
     }
 
     hide() {
@@ -317,49 +407,15 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         }
     }
 
-    get _parent() {
-        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
-        if (domElements.length > 1) {
-            return domElements.pop();
-        }
-    }
+    container: HTMLElement | null = null;
 
-    get parentContent() {
-        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
-        if (domElements.length > 0) {
-            const contentElements = domElements[domElements.length - 1].querySelector('.p-dialog-content');
-            if (contentElements) return Array.isArray(contentElements) ? contentElements[0] : contentElements;
-        }
-    }
-
-    container: any;
-
-    wrapper: any;
+    wrapper: HTMLElement | null = null;
 
     unbindGlobalListeners() {
         this.unbindDocumentEscapeListener();
         this.unbindDocumentResizeListeners();
         this.unbindDocumentDragListener();
         this.unbindDocumentDragEndListener();
-    }
-
-    onAnimationStart(event: any) {
-        if (event.toState === 'visible') {
-            // If parent dialog exists, unbind its listeners first
-            if (this._parent) {
-                this.unbindGlobalListeners();
-            }
-            if (this.ddconfig.modal) {
-                this.enableModality();
-            }
-        }
-    }
-
-    onAnimationEnd(event: any) {
-        if (event.toState === 'void') {
-            this.onContainerDestroy();
-            this.dialogRef.destroy();
-        }
     }
 
     onContainerDestroy() {
@@ -400,24 +456,6 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         }
     }
 
-    initDrag(event: MouseEvent) {
-        // Don't initialize drag when clicking on header icons
-        if (event.target instanceof HTMLElement) {
-            const target = event.target;
-            if (target.closest('.p-dialog-header-icon') || target.closest('.p-dialog-header-icons')) {
-                return;
-            }
-        }
-
-        this.dragging = true;
-        this.lastPageX = event.pageX;
-        this.lastPageY = event.pageY;
-        this.dialogRef.dragStart(event);
-        this.bindDocumentDragListener();
-        this.bindDocumentDragEndListener();
-        // Handled by Dialog component
-    }
-
     onDrag(event: MouseEvent) {
         if (this.dragging) {
             this.lastPageX = event.pageX;
@@ -432,7 +470,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     endDrag(event: MouseEvent) {
         if (this.dragging) {
             this.dragging = false;
-            this.dialogRef.dragEnd(event as any);
+            this.dialogRef.dragEnd(event as DragEvent);
             this.cd.detectChanges();
         }
     }
@@ -498,8 +536,8 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 
     enableModality() {
         if (this.ddconfig.dismissableMask && this.wrapper) {
-            this.maskClickListener = this.renderer.listen(this.wrapper, 'mousedown', (event: any) => {
-                if (this.wrapper && this.wrapper.isSameNode(event.target)) {
+            this.maskClickListener = this.renderer.listen(this.wrapper, 'mousedown', (event: MouseEvent) => {
+                if (this.wrapper && this.wrapper.isSameNode(event.target as Node)) {
                     this.hide();
                 }
             });
@@ -535,39 +573,11 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         }
     }
 
-    createStyle() {
-        if (!this.styleElement && this.breakpoints) {
-            this.styleElement = this.renderer.createElement('style');
-            this.styleElement.type = 'text/css';
-            this.renderer.appendChild(this.document.head, this.styleElement);
-
-            let innerHTML = '';
-            for (let breakpoint in this.breakpoints) {
-                innerHTML += `
-                    @media screen and (max-width: ${breakpoint}) {
-                        .p-dialog[${this.dialogId}] {
-                            width: ${this.breakpoints[breakpoint]} !important;
-                        }
-                    }
-                `;
-            }
-            this.renderer.setProperty(this.styleElement, 'innerHTML', innerHTML);
-        }
-    }
-
-    destroyStyle() {
-        if (this.styleElement) {
-            this.renderer.removeChild(this.document.head, this.styleElement);
-            this.styleElement = null;
-        }
-    }
-
     onDestroy() {
         this.onContainerDestroy();
         if (this.componentRef && typeof this.componentRef.destroy === 'function') {
             this.componentRef.destroy();
         }
-        this.destroyStyle();
     }
 }
 

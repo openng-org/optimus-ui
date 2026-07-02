@@ -16,7 +16,7 @@ import { BadgeModule } from 'primeng/badge';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-badge value="2" />
         </div>
     `,
@@ -36,7 +36,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
+        <div class="flex justify-center flex-wrap gap-4">
             <p-button label="Emails" icon="pi pi-bell" label="Notifications" badge="2" />
             <p-button label="Inbox" icon="pi pi-inbox" badge="2" badgeSeverity="contrast" outlined />
         </div>
@@ -45,25 +45,6 @@ import { ButtonModule } from 'primeng/button';
     imports: [ButtonModule]
 })
 export class BadgeButtonDemo {}
-```
-
-## directive-doc
-
-Content of the badge is specified using the value property.
-
-```typescript
-import { Component } from '@angular/core';
-
-@Component({
-    template: `
-        <div class="card flex justify-center">
-            <i class="pi pi-bell !text-3xl" pBadge value="2"></i>
-        </div>
-    `,
-    standalone: true,
-    imports: []
-})
-export class BadgeDirectiveDemo {}
 ```
 
 ## Overlay
@@ -76,7 +57,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-6">
+        <div class="flex flex-wrap justify-center gap-6">
             <p-overlaybadge value="2">
                 <i class="pi pi-bell" style="font-size: 2rem"></i>
             </p-overlaybadge>
@@ -100,17 +81,24 @@ A Badge can be positioned at the top right corner of an element by adding p-over
 
 ```typescript
 import { Component } from '@angular/core';
+import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <i class="pi pi-bell mr-6 p-text-secondary" pBadge style="font-size: 2rem" value="2"></i>
-            <i class="pi pi-calendar mr-6 p-text-secondary" pBadge style="font-size: 2rem" [value]="'10+'" severity="danger"></i>
-            <i class="pi pi-envelope p-text-secondary" pBadge style="font-size: 2rem" severity="danger"></i>
+        <div class="flex justify-center">
+            <p-overlaybadge value="2" class="mr-6">
+                <i class="pi pi-bell p-text-secondary" style="font-size: 2rem"></i>
+            </p-overlaybadge>
+            <p-overlaybadge value="10+" severity="danger" class="mr-6">
+                <i class="pi pi-calendar p-text-secondary" style="font-size: 2rem"></i>
+            </p-overlaybadge>
+            <p-overlaybadge severity="danger">
+                <i class="pi pi-envelope p-text-secondary" style="font-size: 2rem"></i>
+            </p-overlaybadge>
         </div>
     `,
     standalone: true,
-    imports: []
+    imports: [OverlayBadgeModule]
 })
 export class BadgePositionDemo {}
 ```
@@ -125,7 +113,7 @@ import { BadgeModule } from 'primeng/badge';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
+        <div class="flex justify-center gap-2">
             <p-badge value="2" />
             <p-badge value="6" severity="secondary" />
             <p-badge value="8" severity="success" />
@@ -151,7 +139,7 @@ import { BadgeModule } from 'primeng/badge';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-1 items-end">
+        <div class="flex justify-center gap-1 items-end">
             <p-badge value="8" badgeSize="xlarge" severity="success" />
             <p-badge value="6" badgeSize="large" severity="warn" />
             <p-badge value="4" severity="info" />
@@ -172,16 +160,15 @@ Badge is a small status indicator for another element.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| styleClass | InputSignal<string> | ... | Class of the element. **(Deprecated)** |
-| badgeSize | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
-| size | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
-| severity | InputSignal<"success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast"> | ... | Severity type of the badge. |
-| value | InputSignal<string \| number> | ... | Value to display inside the badge. |
-| badgeDisabled | InputSignalWithTransform<boolean, boolean> | ... | When specified, disables the component. |
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<BadgePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| badgeSize | "small" \| "large" \| "xlarge" \| null | - | Size of the badge, valid options are "large" and "xlarge". |
+| size | "small" \| "large" \| "xlarge" \| null | - | Size of the badge, valid options are "large" and "xlarge". |
+| severity | "secondary" \| "info" \| "success" \| "warn" \| "danger" \| "contrast" \| null | - | Severity type of the badge. |
+| value | string \| number | - | Value to display inside the badge. |
+| badgeDisabled | boolean | - | When specified, disables the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, BadgePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ## Pass Through Options
 

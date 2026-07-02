@@ -17,7 +17,7 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value" />
         </div>
     `,
@@ -40,7 +40,7 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value" [disabled]="true" />
         </div>
     `,
@@ -63,14 +63,14 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value" [stars]="10" />
         </div>
     `,
     standalone: true,
     imports: [RatingModule, FormsModule]
 })
-export class RatingNumberofstarsDemo {
+export class RatingNumberOfStarsDemo {
     value: number = 5;
 }
 ```
@@ -84,14 +84,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { RatingModule } from 'primeng/rating';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-40">
                 <div class="flex flex-col items-center gap-2">
                     <p-rating formControlName="ratingValue" [invalid]="isInvalid('ratingValue')" />
@@ -104,10 +102,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, RatingModule, ToastModule, ButtonModule, ReactiveFormsModule],
+    imports: [MessageModule, RatingModule, ButtonModule, ReactiveFormsModule],
     providers: [MessageService]
 })
-export class RatingReactiveformsDemo {
+export class RatingReactiveFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
@@ -146,7 +144,7 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value" [readonly]="true" />
         </div>
     `,
@@ -169,7 +167,7 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value">
                 <ng-template #onicon>
                     <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon-active.png" height="24" width="24" />
@@ -195,14 +193,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { RatingModule } from 'primeng/rating';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4 w-40">
                 <div class="flex flex-col items-center gap-2">
                     <p-rating #ratingValue="ngModel" [(ngModel)]="value" required name="ratingValue" [invalid]="ratingValue.invalid && (ratingValue.touched || exampleForm.submitted)" />
@@ -215,10 +211,10 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, RatingModule, ToastModule, ButtonModule, FormsModule],
+    imports: [MessageModule, RatingModule, ButtonModule, FormsModule],
     providers: [MessageService]
 })
-export class RatingTemplatedrivenformsDemo {
+export class RatingTemplateDrivenFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
     value: any;
@@ -243,14 +239,14 @@ import { RatingModule } from 'primeng/rating';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-rating [(ngModel)]="value" />
         </div>
     `,
     standalone: true,
     imports: [RatingModule, FormsModule]
 })
-export class RatingWithoutcancelDemo {
+export class RatingWithoutCancelDemo {
     value!: number;
 }
 ```
@@ -263,21 +259,21 @@ Rating is an extension to standard radio button element with theming.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<RatingPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| readonly | boolean | false | When present, changing the value is not possible. |
-| stars | number | 5 | Number of stars. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, RatingPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| readonly | boolean | - | When present, changing the value is not possible. |
+| stars | number | - | Number of stars. |
 | iconOnClass | string | - | Style class of the on icon. |
-| iconOnStyle | { [klass: string]: any } | - | Inline style of the on icon. |
+| iconOnStyle | Partial<CSSStyleDeclaration> | - | Inline style of the on icon. |
 | iconOffClass | string | - | Style class of the off icon. |
-| iconOffStyle | { [klass: string]: any } | - | Inline style of the off icon. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
+| iconOffStyle | Partial<CSSStyleDeclaration> | - | Inline style of the off icon. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
 
 ### Emits
 

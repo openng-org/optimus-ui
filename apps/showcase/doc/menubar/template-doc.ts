@@ -1,6 +1,7 @@
-import { AppCodeModule } from '@/components/doc/app.code';
+import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
@@ -12,12 +13,12 @@ import { Ripple } from 'primeng/ripple';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [CommonModule, MenubarModule, BadgeModule, AvatarModule, InputTextModule, Ripple, AppCodeModule, AppDocSectionText],
+    imports: [NgClass, MenubarModule, BadgeModule, AvatarModule, InputTextModule, Ripple, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>Custom content can be placed inside the menubar using the <i>start</i> and <i>end</i> templates.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-menubar [model]="items">
                 <ng-template #start>
                     <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
@@ -51,11 +52,17 @@ import { Ripple } from 'primeng/ripple';
                     </svg>
                 </ng-template>
                 <ng-template #item let-item let-root="root">
-                    <a pRipple class="flex items-center px-4 py-3 cursor-pointer gap-2">
-                        <span>{{ item.label }}</span>
-                        <p-badge *ngIf="item.badge" [ngClass]="{ 'ms-auto': !root }" [value]="item.badge" />
-                        <span *ngIf="item.shortcut" class="ms-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
-                        <i *ngIf="item.items" [ngClass]="['ms-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+                    <a pRipple class="flex items-center px-3 py-2 cursor-pointer gap-2">
+                        <span class="text-sm">{{ item.label }}</span>
+                        @if (item.badge) {
+                            <p-badge [ngClass]="{ 'ms-auto': !root }" [value]="item.badge" />
+                        }
+                        @if (item.shortcut) {
+                            <span class="ms-auto border border-surface rounded-sm bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+                        }
+                        @if (item.items) {
+                            <i [ngClass]="['ms-auto pi', root ? 'pi-angle-down' : 'pi-angle-right']"></i>
+                        }
                     </a>
                 </ng-template>
                 <ng-template #end>
@@ -65,8 +72,8 @@ import { Ripple } from 'primeng/ripple';
                     </div>
                 </ng-template>
             </p-menubar>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc implements OnInit {

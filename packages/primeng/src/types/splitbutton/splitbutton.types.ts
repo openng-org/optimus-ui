@@ -2,6 +2,13 @@ import { TemplateRef } from '@angular/core';
 import type { PassThrough, PassThroughOption } from 'primeng/api';
 import type { ButtonPassThrough } from 'primeng/types/button';
 import { MenuPassThrough } from 'primeng/types/menu';
+import type { CSSProperties } from 'primeng/types/shared';
+
+/**
+ * Defines the icon position of the SplitButton.
+ * @group Types
+ */
+export type SplitButtonIconPosition = 'left' | 'right';
 
 /**
  * Custom pass-through(pt) options.
@@ -52,19 +59,4 @@ export interface SplitButtonTemplates {
      * Custom dropdown icon template.
      */
     dropdownicon(): TemplateRef<void>;
-}
-/**
- * Defines ButtonProps interface.
- */
-export interface ButtonProps {
-    ariaLabel?: string;
-}
-/**
- * Defines MenuButtonProps interface.
- */
-export interface MenuButtonProps {
-    ariaLabel?: string;
-    ariaHasPopup?: boolean;
-    ariaExpanded?: boolean;
-    ariaControls?: string;
 }

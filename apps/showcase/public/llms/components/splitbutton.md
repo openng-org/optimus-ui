@@ -13,21 +13,19 @@ SplitButton has a default action button and a collection of additional options d
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-splitbutton label="Save" (onClick)="save()" [model]="items" />
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonBasicDemo {
+export class SplitButtonBasicDemo {
     private messageService = inject(MessageService);
 
     constructor() {
@@ -71,21 +69,19 @@ When the disabled attribute is present, the element is uneditable and unfocused.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-splitbutton label="Save" icon="pi pi-plus" (onClick)="save('info')" [model]="items" [disabled]="true" />
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonDisabledDemo {
+export class SplitButtonDisabledDemo {
     private messageService = inject(MessageService);
 
     constructor() {
@@ -129,21 +125,19 @@ The buttons and menuitems have support to display icons.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-splitbutton label="Save" icon="pi pi-check" dropdownIcon="pi pi-cog" [model]="items" />
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonIconsDemo {
+export class SplitButtonIconsDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -185,21 +179,19 @@ SplitButton has a default action button and a collection of additional options d
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-splitbutton label="Save" (onClick)="save('info')" [model]="items" />
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonNestedDemo {
+export class SplitButtonNestedDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -345,13 +337,11 @@ Outlined buttons display a border without a background initially.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Primary" [model]="items" (onClick)="save('info')" outlined />
             <p-splitbutton label="Secondary" [model]="items" (onClick)="save('info')" outlined severity="secondary" />
             <p-splitbutton label="Success" [model]="items" (onClick)="save('info')" outlined severity="success" />
@@ -363,10 +353,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonOutlinedDemo {
+export class SplitButtonOutlinedDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -411,13 +401,11 @@ Raised buttons display a shadow to indicate elevation.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Primary" [model]="items" (onClick)="save('info')" raised />
             <p-splitbutton label="Secondary" [model]="items" (onClick)="save('info')" raised severity="secondary" />
             <p-splitbutton label="Success" [model]="items" (onClick)="save('info')" raised severity="success" />
@@ -429,10 +417,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonRaisedDemo {
+export class SplitButtonRaisedDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -477,13 +465,11 @@ Text buttons can be displayed as raised as well for elevation.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Primary" [model]="items" (onClick)="save('info')" raised text />
             <p-splitbutton label="Secondary" [model]="items" (onClick)="save('info')" raised text severity="secondary" />
             <p-splitbutton label="Success" [model]="items" (onClick)="save('info')" raised text severity="success" />
@@ -495,10 +481,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonRaisedtextDemo {
+export class SplitButtonRaisedTextDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -540,20 +526,18 @@ export class SplitbuttonRaisedtextDemo {
 
 Following keys are reserved in the preset scheme and cannot be used as a token name; primitive , semantic , components , directives , colorscheme , light , dark , common , root , states and extend .
 
-## Rounded
+## rounded-doc
 
 Rounded buttons have a circular border radius.
 
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Primary" [model]="items" (onClick)="save('info')" rounded />
             <p-splitbutton label="Secondary" [model]="items" (onClick)="save('info')" rounded severity="secondary" />
             <p-splitbutton label="Success" [model]="items" (onClick)="save('info')" rounded severity="success" />
@@ -565,10 +549,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonRoundedDemo {
+export class SplitButtonRoundedDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -613,13 +597,11 @@ The severity property defines the type of button.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Save" (onClick)="save()" [model]="items" />
             <p-splitbutton label="Save" (onClick)="save()" [model]="items" severity="secondary" />
             <p-splitbutton label="Save" (onClick)="save()" [model]="items" severity="success" />
@@ -631,10 +613,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonSeverityDemo {
+export class SplitButtonSeverityDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -679,23 +661,21 @@ SplitButton provides small and large sizes as alternatives to the standard.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-center gap-4">
-            <p-toast />
+        <div class="flex flex-wrap justify-center items-center gap-4">
             <p-splitbutton label="Small" [model]="items" (onClick)="save('info')" size="small" />
             <p-splitbutton label="Normal" [model]="items" (onClick)="save('info')" />
             <p-splitbutton label="Large" [model]="items" (onClick)="save('info')" size="large" />
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonSizesDemo {
+export class SplitButtonSizesDemo {
     private messageService = inject(MessageService);
 
     constructor() {
@@ -739,14 +719,12 @@ SplitButton has a default action button and a collection of additional options d
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
-            <p-splitbutton label="Save" (onClick)="save()" severity="contrast" [model]="items">
+        <div class="flex justify-center">
+            <p-splitbutton (onClick)="save()" severity="contrast" [model]="items">
                 <ng-template #content>
                     <span class="flex items-center font-bold">
                         <img alt="logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" style="height: 1rem; margin-right: 0.5rem" />
@@ -757,10 +735,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonTemplateDemo {
+export class SplitButtonTemplateDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -805,13 +783,11 @@ Text buttons are displayed as textual elements.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { SplitButtonModule } from 'primeng/splitbutton';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
-            <p-toast />
+        <div class="flex justify-center flex-wrap gap-4">
             <p-splitbutton label="Primary" [model]="items" (onClick)="save('info')" text />
             <p-splitbutton label="Secondary" [model]="items" (onClick)="save('info')" text severity="secondary" />
             <p-splitbutton label="Success" [model]="items" (onClick)="save('info')" text severity="success" />
@@ -823,10 +799,10 @@ import { MenuItem, MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [SplitButtonModule, ToastModule],
+    imports: [SplitButtonModule],
     providers: [MessageService]
 })
-export class SplitbuttonTextDemo {
+export class SplitButtonTextDemo {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -872,46 +848,43 @@ SplitButton groups a set of commands in an overlay with a default command.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<SplitButtonPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| model | MenuItem[] | - | MenuModel instance to define the overlay items. |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | - | Defines the style of the button. |
-| raised | boolean | false | Add a shadow to indicate elevation. |
-| rounded | boolean | false | Add a circular border radius to the button. |
-| text | boolean | false | Add a textual class to the button without a background initially. |
-| outlined | boolean | false | Add a border class without a background initially. |
-| size | "small" \| "large" | null | Defines the size of the button. |
-| plain | boolean | false | Add a plain textual class to the button without a background initially. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, SplitButtonPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| model_ | MenuItem[] | - | MenuModel instance to define the overlay items. |
+| severity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" \| null \| undefined | - | Defines the style of the button. |
+| raised | boolean | - | Add a shadow to indicate elevation. |
+| rounded | boolean | - | Add a circular border radius to the button. |
+| text | boolean | - | Add a textual class to the button without a background initially. |
+| outlined | boolean | - | Add a border class without a background initially. |
+| size | "small" \| "large" | - | Defines the size of the button. |
+| plain | boolean | - | Add a plain textual class to the button without a background initially. |
 | icon | string | - | Name of the icon. |
-| iconPos | SplitButtonIconPosition | left | Position of the icon. |
+| iconPos | "left" \| "right" | - | Position of the icon. |
 | label | string | - | Text of the button. |
 | tooltip | string | - | Tooltip for the main button. |
 | tooltipOptions | TooltipOptions | - | Tooltip options for the main button. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| menuStyle | { [klass: string]: any } | - | Inline style of the overlay menu. |
+| menuStyle | Partial<CSSStyleDeclaration> | - | Inline style of the overlay menu. |
 | menuStyleClass | string | - | Style class of the overlay menu. |
 | dropdownIcon | string | - | Name of the dropdown icon. |
-| appendTo | InputSignal<any> | 'body' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'body' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 | dir | string | - | Indicates the direction of the element. |
 | expandAriaLabel | string | - | Defines a string that labels the expand button for accessibility. |
-| showTransitionOptions | string | .12s cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | .1s linear | Transition options of the hide animation. **(Deprecated)** |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
+| motionOptions | MotionOptions | - | The motion options. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
 | disabled | boolean | - | When present, it specifies that the element should be disabled. |
 | tabindex | number | - | Index of the element in tabbing order. |
-| menuButtonDisabled | boolean | false | When present, it specifies that the menu button element should be disabled. |
-| buttonDisabled | boolean | false | When present, it specifies that the button element should be disabled. |
+| menuButtonDisabled | boolean | - | When present, it specifies that the menu button element should be disabled. |
+| buttonDisabled | boolean | - | When present, it specifies that the button element should be disabled. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
 | onClick | event: MouseEvent | Callback to invoke when default command button is clicked. |
-| onMenuHide | value: any | Callback to invoke when overlay menu is hidden. |
-| onMenuShow | value: any | Callback to invoke when overlay menu is shown. |
+| onMenuHide | value: void | Callback to invoke when overlay menu is hidden. |
+| onMenuShow | value: void | Callback to invoke when overlay menu is shown. |
 | onDropdownClick | event: MouseEvent | Callback to invoke when dropdown button is clicked. |
 
 ### Templates

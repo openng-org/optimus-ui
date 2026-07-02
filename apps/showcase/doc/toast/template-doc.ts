@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -9,12 +10,12 @@ import { AvatarModule } from 'primeng/avatar';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ToastModule, ButtonModule, AvatarModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToastModule, ButtonModule, AvatarModule],
     template: `
         <app-docsectiontext>
             <p>Templating allows customizing the content where the message instance is available as the implicit variable.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
+        <app-demo-wrapper>
             <p-toast position="bottom-center" key="confirm" (onClose)="onReject()" [baseZIndex]="5000">
                 <ng-template let-message #message>
                     <div class="flex flex-col items-start flex-auto">
@@ -27,14 +28,16 @@ import { AvatarModule } from 'primeng/avatar';
                     </div>
                 </ng-template>
             </p-toast>
-            <p-button (click)="showConfirm()" label="View" />
-        </div>
-        <app-code></app-code>
+            <div class="flex justify-center">
+                <p-button (click)="showConfirm()" label="View" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class TemplateDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     visible: boolean = false;
 

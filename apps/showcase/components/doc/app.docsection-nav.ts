@@ -1,6 +1,6 @@
 import { Doc } from '@/domain/doc';
 import { CommonModule, DOCUMENT, isPlatformBrowser, Location } from '@angular/common';
-import { Component, DestroyRef, ElementRef, inject, input, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, input, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -14,6 +14,7 @@ import { fromEvent } from 'rxjs';
     imports: [CommonModule, ButtonModule, RouterLink],
     template: `
         <div class="doc-section-nav-container">
+            <span class="doc-section-nav-title">ON THIS PAGE</span>
             <ul #nav class="doc-section-nav">
                 @for (doc of docs(); track doc.label) {
                     @if (!doc.isInterface) {
@@ -30,6 +31,19 @@ import { fromEvent } from 'rxjs';
                                                     {{ child.label }}
                                                 </button>
                                             </div>
+                                            @if (child.children) {
+                                                <ul>
+                                                    @for (grandchild of child.children; track grandchild.label) {
+                                                        <li class="navbar-item" [ngClass]="{ 'active-navbar-item': activeId() === grandchild.id }">
+                                                            <div class="navbar-item-content">
+                                                                <button (click)="onButtonClick(grandchild)">
+                                                                    {{ grandchild.label }}
+                                                                </button>
+                                                            </div>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            }
                                         </li>
                                     }
                                 </ul>
@@ -48,10 +62,10 @@ import { fromEvent } from 'rxjs';
                     <div class="text-center text-sm mt-4 text-secondary">{{ ad.details }}</div>
                     <span class="flex justify-center mt-4">
                         @if (ad.href) {
-                            <a pButton label="Learn More" size="small" [href]="ad.href" target="_blank" rel="noopener" rounded></a>
+                            <a pButton size="small" [href]="ad.href" target="_blank" rel="noopener" rounded><span pButtonLabel>Learn More</span></a>
                         }
                         @if (ad.routerLink) {
-                            <a pButton label="Learn More" size="small" [routerLink]="ad.routerLink" rounded></a>
+                            <a pButton size="small" [routerLink]="ad.routerLink" rounded><span pButtonLabel>Learn More</span></a>
                         }
                     </span>
                 </div>
@@ -72,7 +86,7 @@ import { fromEvent } from 'rxjs';
         </div>
     `
 })
-export class AppDocSectionNav implements OnInit {
+export class AppDocSectionNav implements OnInit, AfterViewInit {
     docs = input.required<Doc[]>();
 
     activeId = signal<string | null>(null);
@@ -132,14 +146,20 @@ export class AppDocSectionNav implements OnInit {
                 .subscribe(() => this.onScroll());
         }
 
-        // this.ad = this.ads[Math.floor(Math.random() * this.ads.length)];
-        this.ad = {
-            lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/store.images/discount/apr26/primestore-spring-2026-sm.jpg',
-            darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/store.images/discount/apr26/primestore-spring-2026-sm.jpg',
-            title: 'Spring Sale',
-            details: 'Spring Sale is here. 50% OFF everything at PrimeStore and PrimeBlocks.',
-            href: 'https://primeui.store/'
-        };
+        this.ad = this.ads[Math.floor(Math.random() * this.ads.length)];
+        // this.ad = {
+        //     lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/store.images/discount/apr26/primestore-spring-2026-sm.jpg',
+        //     darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/store.images/discount/apr26/primestore-spring-2026-sm.jpg',
+        //     title: 'Spring Sale',
+        //     details: 'Spring Sale is here. 50% OFF everything at PrimeStore and PrimeBlocks.',
+        //     href: 'https://primeui.store/'
+        // };
+    }
+
+    ngAfterViewInit() {
+        if (isPlatformBrowser(this.platformId)) {
+            setTimeout(() => this.updateIndicator(), 300);
+        }
     }
 
     scrollCurrentUrl() {
@@ -155,7 +175,7 @@ export class AppDocSectionNav implements OnInit {
     }
 
     getLabels() {
-        return [...Array.from(this.document.querySelectorAll(':is(h1,h2,h3).doc-section-label'))].filter((el: any) => DomHandler.isVisible(el));
+        return [...Array.from(this.document.querySelectorAll(':is(h1,h2,h3,h4).doc-section-label'))].filter((el: any) => DomHandler.isVisible(el));
     }
 
     onScroll() {
@@ -181,8 +201,10 @@ export class AppDocSectionNav implements OnInit {
                 this.isScrollBlocked = false;
 
                 const activeItem = DomHandler.findSingle(this.nav.nativeElement, '.active-navbar-item');
-
-                activeItem && activeItem.scrollIntoView({ block: 'nearest', inline: 'start' });
+                if (activeItem) {
+                    activeItem.scrollIntoView({ block: 'nearest', inline: 'start' });
+                }
+                this.updateIndicator();
             }, 50);
         }
     }
@@ -192,6 +214,7 @@ export class AppDocSectionNav implements OnInit {
         setTimeout(() => {
             this.scrollToLabelById(doc.id);
             this.isScrollBlocked = true;
+            this.updateIndicator();
         }, 1);
     }
 
@@ -205,6 +228,19 @@ export class AppDocSectionNav implements OnInit {
         }
 
         return this.topbarHeight + DomHandler.getHeight(label) * 3.5;
+    }
+
+    updateIndicator() {
+        const navEl = this.nav?.nativeElement;
+        if (!navEl) return;
+
+        const activeItem = DomHandler.findSingle(navEl, '.active-navbar-item > .navbar-item-content');
+        if (activeItem) {
+            const top = activeItem.offsetTop;
+            const height = activeItem.offsetHeight;
+            navEl.style.setProperty('--indicator-top', `${top}px`);
+            navEl.style.setProperty('--indicator-height', `${height}px`);
+        }
     }
 
     scrollToLabelById(id: string) {

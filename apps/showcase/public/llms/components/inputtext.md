@@ -17,14 +17,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input type="text" pInputText [(ngModel)]="value" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextBasicDemo {
+export class InputTextBasicDemo {
     value: string;
 }
 ```
@@ -40,14 +40,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText [disabled]="true" [(ngModel)]="value" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextDisabledDemo {
+export class InputTextDisabledDemo {
     value: string | undefined = 'Disabled';
 }
 ```
@@ -63,14 +63,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input type="text" pInputText [(ngModel)]="value" variant="filled" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextFilledDemo {
+export class InputTextFilledDemo {
     value: string;
 }
 ```
@@ -87,7 +87,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel>
                 <input pInputText id="over_label" [(ngModel)]="value1" autocomplete="off" />
                 <label for="over_label">Over Label</label>
@@ -105,7 +105,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, InputTextModule, FormsModule]
 })
-export class InputtextFloatlabelDemo {
+export class InputTextFloatLabelDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -123,14 +123,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input type="text" pInputText [(ngModel)]="value" fluid />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextFluidDemo {
+export class InputTextFluidDemo {
     value: string;
 }
 ```
@@ -146,18 +146,18 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div class="flex flex-col gap-2">
-                <label for="username">Username</label>
+                <label for="username" class="text-sm">Username</label>
                 <input pInputText id="username" aria-describedby="username-help" [(ngModel)]="value" />
-                <small id="username-help">Enter your username to reset your password.</small>
+                <small id="username-help" class="text-sm">Enter your username to reset your password.</small>
             </div>
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextHelptextDemo {
+export class InputTextHelpTextDemo {
     value: string | undefined;
 }
 ```
@@ -173,7 +173,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
                 <input type="text" pInputText [(ngModel)]="value" />
@@ -187,7 +187,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextIconsDemo {
+export class InputTextIconsDemo {
     value: string | undefined;
     value2: string | undefined;
 }
@@ -205,7 +205,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <input pInputText id="username" [(ngModel)]="value" autocomplete="off" />
                 <label for="username">Username</label>
@@ -215,7 +215,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IftaLabelModule, InputTextModule, FormsModule]
 })
-export class InputtextIftalabelDemo {
+export class InputTextIftaLabelDemo {
     value: string | undefined;
 }
 ```
@@ -231,7 +231,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <input pInputText [(ngModel)]="value1" [invalid]="!value1" placeholder="Name" />
             <input pInputText [(ngModel)]="value2" [invalid]="!value2" variant="filled" placeholder="Name" />
         </div>
@@ -239,7 +239,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextInvalidDemo {
+export class InputTextInvalidDemo {
     value1: string | undefined;
     value2: string | undefined;
 }
@@ -256,14 +256,14 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText pKeyFilter="int" placeholder="Integers" [(ngModel)]="value" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextKeyfilterDemo {
+export class InputTextKeyFilterDemo {
     value: number | undefined;
 }
 ```
@@ -274,15 +274,13 @@ export class InputtextKeyfilterDemo {
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full sm:w-56">
                 <div class="flex flex-col gap-1">
                     <input pInputText type="text" id="username" placeholder="Username" formControlName="username" [invalid]="isInvalid('username')" />
@@ -306,9 +304,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, InputTextModule, ReactiveFormsModule]
+    imports: [MessageModule, ButtonModule, InputTextModule, ReactiveFormsModule]
 })
-export class InputtextReactiveformsDemo {
+export class InputTextReactiveFormsDemo {
     messageService = inject(MessageService);
     exampleForm: FormGroup;
     formSubmitted: boolean = false;
@@ -347,7 +345,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4 ">
+        <div class="flex flex-col items-center gap-4">
             <input pInputText [(ngModel)]="value1" type="text" pSize="small" placeholder="Small" />
             <input pInputText [(ngModel)]="value2" type="text" placeholder="Normal" />
             <input pInputText [(ngModel)]="value3" type="text" pSize="large" placeholder="Large" />
@@ -356,7 +354,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [InputTextModule, FormsModule]
 })
-export class InputtextSizesDemo {
+export class InputTextSizesDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -369,15 +367,13 @@ export class InputtextSizesDemo {
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4 w-full sm:w-56">
                 <div class="flex flex-col gap-1">
                     <input pInputText type="text" id="username" placeholder="Username" name="username" [(ngModel)]="user.username" #username="ngModel" [invalid]="username.invalid && (username.touched || exampleForm.submitted)" required />
@@ -403,11 +399,14 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, InputTextModule, FormsModule]
+    imports: [MessageModule, ButtonModule, InputTextModule, FormsModule]
 })
-export class InputtextTemplatedrivenformsDemo {
+export class InputTextTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
-    user: any;
+    user: any = {
+        username: '',
+        email: ''
+    };
 
     onSubmit(form: any) {
         if (form.valid) {
@@ -426,17 +425,16 @@ InputText directive is an extension to standard input element with theming.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<InputTextPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| ptInputText | InputSignal<InputTextPassThrough> | undefined | Used to pass attributes to DOM elements inside the InputText component. **(Deprecated)** |
-| pInputTextPT | InputSignal<InputTextPassThrough> | undefined | Used to pass attributes to DOM elements inside the InputText component. |
-| pInputTextUnstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, InputTextPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| pInputTextPT | PassThrough<I, InputTextPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the InputText component. |
+| pInputTextUnstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
 | pSize | "small" \| "large" | - | Defines the size of the component. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
 
 ## Pass Through Options
 
@@ -485,4 +483,6 @@ InputText directive is an extension to standard input element with theming.
 | inputtext.lg.font.size | --p-inputtext-lg-font-size | Lg font size of root |
 | inputtext.lg.padding.x | --p-inputtext-lg-padding-x | Lg padding x of root |
 | inputtext.lg.padding.y | --p-inputtext-lg-padding-y | Lg padding y of root |
+| inputtext.font.weight | --p-inputtext-font-weight | Font weight of root |
+| inputtext.font.size | --p-inputtext-font-size | Font size of root |
 

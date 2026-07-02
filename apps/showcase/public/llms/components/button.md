@@ -16,7 +16,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4">
+        <div class="flex justify-center flex-wrap gap-4">
             <p-button label="Emails" badge="2" styleClass="m-0" />
             <p-button label="Messages" icon="pi pi-users" badge="2" badgeSeverity="contrast" styleClass="m-0" [outlined]="true" />
         </div>
@@ -37,7 +37,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button label="Submit" />
         </div>
     `,
@@ -57,7 +57,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-buttongroup>
                 <p-button label="Save" icon="pi pi-check" />
                 <p-button label="Delete" icon="pi pi-trash" />
@@ -68,7 +68,7 @@ import { ButtonModule } from 'primeng/button';
     standalone: true,
     imports: [ButtonModule]
 })
-export class ButtonButtongroupDemo {}
+export class ButtonButtonGroupDemo {}
 ```
 
 ## buttonset-doc
@@ -82,7 +82,7 @@ import { RippleModule } from 'primeng/ripple';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <span class="p-buttonset">
                 <button pButton pRipple label="Save" icon="pi pi-check"></button>
                 <button pButton pRipple label="Delete" icon="pi pi-trash"></button>
@@ -93,7 +93,7 @@ import { RippleModule } from 'primeng/ripple';
     standalone: true,
     imports: [ButtonModule, RippleModule]
 })
-export class ButtonButtonsetDemo {}
+export class ButtonButtonSetDemo {}
 ```
 
 ## Directive
@@ -106,7 +106,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <button pButton>
                 <i class="pi pi-check" pButtonIcon></i>
                 <span pButtonLabel>Save</span>
@@ -129,7 +129,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button label="Submit" [disabled]="true" />
         </div>
     `,
@@ -149,7 +149,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <div class="flex flex-wrap gap-4 justify-center">
                 <p-button icon="pi pi-home" aria-label="Save" />
                 <p-button label="Profile" icon="pi pi-user" />
@@ -177,58 +177,56 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex justify-center flex-wrap gap-4 mb-6">
-                <p-button icon="pi pi-check" />
-                <p-button icon="pi pi-bookmark" severity="secondary" />
-                <p-button icon="pi pi-search" severity="success" />
-                <p-button icon="pi pi-user" severity="info" />
-                <p-button icon="pi pi-bell" severity="warn" />
-                <p-button icon="pi pi-heart" severity="help" />
-                <p-button icon="pi pi-times" severity="danger" />
-            </div>
-            <div class="flex justify-center flex-wrap gap-4 mb-6">
-                <p-button icon="pi pi-check" [rounded]="true" />
-                <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" />
-                <p-button icon="pi pi-search" [rounded]="true" severity="success" />
-                <p-button icon="pi pi-user" [rounded]="true" severity="info" />
-                <p-button icon="pi pi-bell" [rounded]="true" severity="warn" />
-                <p-button icon="pi pi-heart" [rounded]="true" severity="help" />
-                <p-button icon="pi pi-times" [rounded]="true" severity="danger" />
-            </div>
-            <div class="flex justify-center flex-wrap gap-4 mb-6">
-                <p-button icon="pi pi-check" [rounded]="true" [outlined]="true" />
-                <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" [outlined]="true" />
-                <p-button icon="pi pi-search" [rounded]="true" severity="success" [outlined]="true" />
-                <p-button icon="pi pi-user" [rounded]="true" severity="info" [outlined]="true" />
-                <p-button icon="pi pi-bell" [rounded]="true" severity="warn" [outlined]="true" />
-                <p-button icon="pi pi-heart" [rounded]="true" severity="help" [outlined]="true" />
-                <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" />
-            </div>
-            <div class="flex justify-center flex-wrap gap-4 mb-6">
-                <p-button icon="pi pi-check" [rounded]="true" [text]="true" [raised]="true" />
-                <p-button icon="pi pi-bookmark" [rounded]="true" [text]="true" [raised]="true" severity="secondary" />
-                <p-button icon="pi pi-search" [rounded]="true" [text]="true" [raised]="true" severity="success" />
-                <p-button icon="pi pi-user" [rounded]="true" [text]="true" [raised]="true" severity="info" />
-                <p-button icon="pi pi-bell" [rounded]="true" [text]="true" [raised]="true" severity="warn" />
-                <p-button icon="pi pi-heart" [rounded]="true" [text]="true" [raised]="true" severity="help" />
-                <p-button icon="pi pi-times" [rounded]="true" [text]="true" [raised]="true" severity="danger" />
-            </div>
-            <div class="flex justify-center flex-wrap gap-4 mb-6">
-                <p-button icon="pi pi-check" [rounded]="true" [text]="true" />
-                <p-button icon="pi pi-bookmark" [rounded]="true" [text]="true" severity="secondary" />
-                <p-button icon="pi pi-search" [rounded]="true" [text]="true" severity="success" />
-                <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="info" />
-                <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="warn" />
-                <p-button icon="pi pi-heart" [rounded]="true" [text]="true" severity="help" />
-                <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger" />
-            </div>
+        <div class="flex justify-center flex-wrap gap-4 mb-6">
+            <p-button icon="pi pi-check" />
+            <p-button icon="pi pi-bookmark" severity="secondary" />
+            <p-button icon="pi pi-search" severity="success" />
+            <p-button icon="pi pi-user" severity="info" />
+            <p-button icon="pi pi-bell" severity="warn" />
+            <p-button icon="pi pi-heart" severity="help" />
+            <p-button icon="pi pi-times" severity="danger" />
+        </div>
+        <div class="flex justify-center flex-wrap gap-4 mb-6">
+            <p-button icon="pi pi-check" [rounded]="true" />
+            <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" />
+            <p-button icon="pi pi-search" [rounded]="true" severity="success" />
+            <p-button icon="pi pi-user" [rounded]="true" severity="info" />
+            <p-button icon="pi pi-bell" [rounded]="true" severity="warn" />
+            <p-button icon="pi pi-heart" [rounded]="true" severity="help" />
+            <p-button icon="pi pi-times" [rounded]="true" severity="danger" />
+        </div>
+        <div class="flex justify-center flex-wrap gap-4 mb-6">
+            <p-button icon="pi pi-check" [rounded]="true" [outlined]="true" />
+            <p-button icon="pi pi-bookmark" [rounded]="true" severity="secondary" [outlined]="true" />
+            <p-button icon="pi pi-search" [rounded]="true" severity="success" [outlined]="true" />
+            <p-button icon="pi pi-user" [rounded]="true" severity="info" [outlined]="true" />
+            <p-button icon="pi pi-bell" [rounded]="true" severity="warn" [outlined]="true" />
+            <p-button icon="pi pi-heart" [rounded]="true" severity="help" [outlined]="true" />
+            <p-button icon="pi pi-times" [rounded]="true" severity="danger" [outlined]="true" />
+        </div>
+        <div class="flex justify-center flex-wrap gap-4 mb-6">
+            <p-button icon="pi pi-check" [rounded]="true" [text]="true" [raised]="true" />
+            <p-button icon="pi pi-bookmark" [rounded]="true" [text]="true" [raised]="true" severity="secondary" />
+            <p-button icon="pi pi-search" [rounded]="true" [text]="true" [raised]="true" severity="success" />
+            <p-button icon="pi pi-user" [rounded]="true" [text]="true" [raised]="true" severity="info" />
+            <p-button icon="pi pi-bell" [rounded]="true" [text]="true" [raised]="true" severity="warn" />
+            <p-button icon="pi pi-heart" [rounded]="true" [text]="true" [raised]="true" severity="help" />
+            <p-button icon="pi pi-times" [rounded]="true" [text]="true" [raised]="true" severity="danger" />
+        </div>
+        <div class="flex justify-center flex-wrap gap-4 mb-6">
+            <p-button icon="pi pi-check" [rounded]="true" [text]="true" />
+            <p-button icon="pi pi-bookmark" [rounded]="true" [text]="true" severity="secondary" />
+            <p-button icon="pi pi-search" [rounded]="true" [text]="true" severity="success" />
+            <p-button icon="pi pi-user" [rounded]="true" [text]="true" severity="info" />
+            <p-button icon="pi pi-bell" [rounded]="true" [text]="true" severity="warn" />
+            <p-button icon="pi pi-heart" [rounded]="true" [text]="true" severity="help" />
+            <p-button icon="pi pi-times" [rounded]="true" [text]="true" severity="danger" />
         </div>
     `,
     standalone: true,
     imports: [ButtonModule]
 })
-export class ButtonIconsonlyDemo {}
+export class ButtonIconsOnlyDemo {}
 ```
 
 ## Link
@@ -241,7 +239,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-button label="Link" link />
             <a href="https://angular.dev/" pButton target="_blank" rel="noopener noreferrer">
                 <span pButtonLabel>Angular Website</span>
@@ -267,7 +265,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-button label="Search" icon="pi pi-check" [loading]="loading()" (onClick)="load()" />
         </div>
     `,
@@ -297,7 +295,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" variant="outlined" />
             <p-button label="Secondary" variant="outlined" severity="secondary" />
             <p-button label="Success" variant="outlined" severity="success" />
@@ -324,7 +322,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" [raised]="true" />
             <p-button label="Secondary" [raised]="true" severity="secondary" />
             <p-button label="Success" [raised]="true" severity="success" />
@@ -351,7 +349,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" variant="text" [raised]="true" />
             <p-button label="Secondary" variant="text" [raised]="true" severity="secondary" />
             <p-button label="Success" variant="text" [raised]="true" severity="success" />
@@ -365,10 +363,10 @@ import { ButtonModule } from 'primeng/button';
     standalone: true,
     imports: [ButtonModule]
 })
-export class ButtonRaisedtextDemo {}
+export class ButtonRaisedTextDemo {}
 ```
 
-## Rounded
+## rounded-doc
 
 Rounded buttons have a circular border radius.
 
@@ -378,7 +376,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" [rounded]="true" />
             <p-button label="Secondary" [rounded]="true" severity="secondary" />
             <p-button label="Success" [rounded]="true" severity="success" />
@@ -405,7 +403,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" />
             <p-button label="Secondary" severity="secondary" />
             <p-button label="Success" severity="success" />
@@ -432,7 +430,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center flex-wrap gap-4 items-center">
+        <div class="flex justify-center flex-wrap gap-4 items-center">
             <p-button label="Small" icon="pi pi-check" size="small" />
             <p-button label="Normal" icon="pi pi-check" />
             <p-button label="Large" icon="pi pi-check" size="large" />
@@ -454,7 +452,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button [outlined]="true">
                 <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
                     <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
@@ -474,7 +472,12 @@ import { ButtonModule } from 'primeng/button';
                     />
                     <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
                     <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z" fill="var(--ground-background)" />
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
+                        fill="var(--ground-background)"
+                    />
                     <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
                     <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
                     <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
@@ -499,7 +502,7 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-button label="Primary" variant="text" />
             <p-button label="Secondary" variant="text" severity="secondary" />
             <p-button label="Success" variant="text" severity="success" />
@@ -524,36 +527,35 @@ Button is an extension to standard button element with icons and theming.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ButtonPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| type | string | button | Type of the button. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ButtonPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| type | string | - | Type of the button. |
 | badge | string | - | Value of the badge. |
-| disabled | boolean | false | When present, it specifies that the component should be disabled. |
-| raised | boolean | false | Add a shadow to indicate elevation. |
-| rounded | boolean | false | Add a circular border radius to the button. |
-| text | boolean | false | Add a textual class to the button without a background initially. |
-| plain | boolean | false | Add a plain textual class to the button without a background initially. |
-| outlined | boolean | false | Add a border class without a background initially. |
-| link | boolean | false | Add a link style to the button. |
+| disabled | boolean | - | When present, it specifies that the component should be disabled. |
+| raised | boolean | - | Add a shadow to indicate elevation. |
+| rounded | boolean | - | Add a circular border radius to the button. |
+| text | boolean | - | Add a textual class to the button without a background initially. |
+| plain | boolean | - | Add a plain textual class to the button without a background initially. |
+| outlined | boolean | - | Add a border class without a background initially. |
+| link | boolean | - | Add a link style to the button. |
 | tabindex | number | - | Add a tabindex to the button. |
 | size | "small" \| "large" | - | Defines the size of the button. |
-| variant | "text" \| "outlined" | - | Specifies the variant of the component. |
-| style | { [klass: string]: any } | - | Inline style of the element. |
+| variant | "outlined" \| "text" | - | Specifies the variant of the component. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the element. |
 | styleClass | string | - | Class of the element. |
-| badgeClass | string | - | Style class of the badge. **(Deprecated)** |
-| badgeSeverity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | secondary | Severity type of the badge. |
+| badgeSeverity | "secondary" \| "info" \| "success" \| "warn" \| "danger" \| "contrast" \| null | secondary | Severity type of the badge. |
 | ariaLabel | string | - | Used to define a string that autocomplete attribute the current element. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| iconPos | ButtonIconPosition | left | Position of the icon. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| iconPos | "left" \| "right" \| "top" \| "bottom" | - | Position of the icon. |
 | icon | string | - | Name of the icon. |
 | label | string | - | Text of the button. |
-| loading | boolean | false | Whether the button is in loading state. |
+| loading | boolean | - | Whether the button is in loading state. |
 | loadingIcon | string | - | Icon to display in loading state. |
-| severity | ButtonSeverity | - | Defines the style of the button. |
+| severity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" \| null \| undefined | - | Defines the style of the button. |
 | buttonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
 
 ### Emits
 
@@ -603,6 +605,7 @@ Button is an extension to standard button element with icons and theming.
 | button.padding.x | --p-button-padding-x | Padding x of root |
 | button.padding.y | --p-button-padding-y | Padding y of root |
 | button.icon.only.width | --p-button-icon-only-width | Icon only width of root |
+| button.icon.only.width | --p-button-icon-only-width | Font size of root |
 | button.sm.font.size | --p-button-sm-font-size | Sm font size of root |
 | button.sm.padding.x | --p-button-sm-padding-x | Sm padding x of root |
 | button.sm.padding.y | --p-button-sm-padding-y | Sm padding y of root |

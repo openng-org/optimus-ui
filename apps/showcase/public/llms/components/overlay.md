@@ -28,9 +28,9 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="toggle()" label="Show Overlay"></p-button>
-            <p-overlay [(visible)]="overlayVisible" [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }" contentStyleClass="p-6 bg-surface-0 dark:bg-surface-900 shadow rounded-border"> Content </p-overlay>
+            <p-overlay [(visible)]="overlayVisible" [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }" contentStyleClass="p-6 bg-surface-0 dark:bg-surface-900 shadow-sm rounded-border"> Content </p-overlay>
         </div>
     `,
     standalone: true,
@@ -139,9 +139,9 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="toggle()" label="Show Overlay"></p-button>
-            <p-overlay [(visible)]="overlayVisible" [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }" contentStyleClass="p-6 bg-surface-0 dark:bg-surface-900 shadow rounded-border">
+            <p-overlay [(visible)]="overlayVisible" [responsive]="{ breakpoint: '640px', direction: 'bottom', contentStyleClass: 'h-20rem' }" contentStyleClass="p-6 bg-surface-0 dark:bg-surface-900 shadow-sm rounded-border">
                 <ng-template #content let-option> Content - {{ option.mode }} </ng-template>
             </p-overlay>
         </div>
@@ -158,10 +158,6 @@ export class OverlayTemplateDemo {
 }
 ```
 
-## transitionoptions-doc
-
-Transition options of the show or hide animation. The default value of showTransitionOptions is '.12s cubic-bezier(0, 0, 0.2, 1)' and the default value of hideTransitionOptions is '.1s linear'.
-
 ## Overlay
 
 This API allows overlay components to be controlled from the PrimeNG. In this way, all overlay components in the application can have the same behavior.
@@ -170,33 +166,30 @@ This API allows overlay components to be controlled from the PrimeNG. In this wa
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<any> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| visible | boolean | - | The visible property is an input that determines the visibility of the component. |
-| mode | string | - | The mode property is an input that determines the overlay mode type or string. |
-| style | { [klass: string]: any } | - | The style property is an input that determines the style object for the component. |
-| styleClass | string | - | The styleClass property is an input that determines the CSS class(es) for the component. |
-| contentStyle | { [klass: string]: any } | - | The contentStyle property is an input that determines the style object for the content of the component. |
-| contentStyleClass | string | - | The contentStyleClass property is an input that determines the CSS class(es) for the content of the component. |
-| target | string | - | The target property is an input that specifies the target element or selector for the component. |
-| autoZIndex | boolean | - | The autoZIndex determines whether to automatically manage layering. Its default value is 'false'. |
-| baseZIndex | number | - | The baseZIndex is base zIndex value to use in layering. |
-| showTransitionOptions | string | - | Transition options of the show or hide animation. **(Deprecated)** |
-| hideTransitionOptions | string | - | The hideTransitionOptions property is an input that determines the CSS transition options for hiding the component. **(Deprecated)** |
-| listener | any | - | The listener property is an input that specifies the listener object for the component. |
-| responsive | ResponsiveOverlayOptions | - | It is the option used to determine in which mode it should appear according to the given media or breakpoint. |
-| options | OverlayOptions | - | The options property is an input that specifies the overlay options for the component. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| inline | InputSignal<boolean> | false | Specifies whether the overlay should be rendered inline within the current component's template. |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | any | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| visible | boolean | false | The visible property is an input that determines the visibility of the component. |
+| mode | string | null | The mode property is an input that determines the overlay mode type or string. |
+| style | Partial<CSSStyleDeclaration> | null | The style property is an input that determines the style object for the component. |
+| styleClass | string | null | The styleClass property is an input that determines the CSS class(es) for the component. |
+| contentStyle | Partial<CSSStyleDeclaration> | null | The contentStyle property is an input that determines the style object for the content of the component. |
+| contentStyleClass | string | null | The contentStyleClass property is an input that determines the CSS class(es) for the content of the component. |
+| target | string | null | The target property is an input that specifies the target element or selector for the component. |
+| autoZIndex | boolean | false | The autoZIndex determines whether to automatically manage layering. Its default value is 'false'. |
+| baseZIndex | number | null | The baseZIndex is base zIndex value to use in layering. |
+| listener | any | null | The listener property is an input that specifies the listener object for the component. |
+| responsive | ResponsiveOverlayOptions | null | It is the option used to determine in which mode it should appear according to the given media or breakpoint. |
+| options | OverlayOptions | null | The options property is an input that specifies the overlay options for the component. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| inline | boolean | false | Specifies whether the overlay should be rendered inline within the current component's template. |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| visibleChange | value: boolean | This EventEmitter is used to notify changes in the visibility state of a component. |
 | onBeforeShow | event: OverlayOnBeforeShowEvent | Callback to invoke before the overlay is shown. |
 | onShow | event: OverlayOnShowEvent | Callback to invoke when the overlay is shown. |
 | onBeforeHide | event: OverlayOnBeforeHideEvent | Callback to invoke before the overlay is hidden. |

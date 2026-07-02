@@ -16,7 +16,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-tag value="New" />
         </div>
     `,
@@ -36,7 +36,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-2">
+        <div class="flex flex-wrap justify-center gap-2">
             <p-tag icon="pi pi-user" value="Primary" />
             <p-tag icon="pi pi-search" severity="secondary" value="Secondary" />
             <p-tag icon="pi pi-check" severity="success" value="Success" />
@@ -62,7 +62,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
+        <div class="flex justify-center gap-2">
             <p-tag value="Primary" [rounded]="true" />
             <p-tag severity="secondary" value="Secondary" [rounded]="true" />
             <p-tag severity="success" value="Success" [rounded]="true" />
@@ -88,7 +88,7 @@ import { TagModule } from 'primeng/tag';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
+        <div class="flex justify-center gap-2">
             <p-tag value="Primary" />
             <p-tag severity="secondary" value="Secondary" />
             <p-tag severity="success" value="Success" />
@@ -115,11 +115,11 @@ import { Country } from '@/domain/customer';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-tag [style]="{ border: '2px solid var(--border-color)', background: 'transparent', color: 'var(--text-color)' }">
                 <div class="flex items-center gap-2 px-1">
                     <img alt="Country" src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" class="flag flag-it" style="width: 18px" />
-                    <span class="text-base">Italy</span>
+                    <span class="text-sm">Italy</span>
                 </div>
             </p-tag>
         </div>
@@ -138,15 +138,14 @@ Tag component is used to categorize content.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TagPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" | - | Severity type of the tag. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TagPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| severity | "success" \| "secondary" \| "info" \| "warn" \| "danger" \| "contrast" | - | Severity type of the tag. |
 | value | string | - | Value to display inside the tag. |
 | icon | string | - | Icon of the tag to display next to the value. |
-| rounded | boolean | false | Whether the corners of the tag are rounded. |
+| rounded | boolean | - | Whether the corners of the tag are rounded. |
 
 ### Templates
 

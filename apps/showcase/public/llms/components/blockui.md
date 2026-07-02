@@ -18,22 +18,20 @@ import { PanelModule } from 'primeng/panel';
 
 @Component({
     template: `
-        <div class="card">
-            <p-button label="Block" (click)="blockedPanel = true" class="me-2" severity="secondary" />
-            <p-button label="Unblock" (click)="blockedPanel = false" severity="secondary" />
-            <p-blockui [target]="pnl" [blocked]="blockedPanel" />
-            <p-panel #pnl header="Header" class="mt-6">
-                <p class="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </p-panel>
-        </div>
+        <p-button label="Block" (click)="blockedPanel = true" class="me-2" severity="secondary" />
+        <p-button label="Unblock" (click)="blockedPanel = false" severity="secondary" />
+        <p-blockui [target]="pnl" [blocked]="blockedPanel" />
+        <p-panel #pnl header="Header" class="mt-5">
+            <p class="m-0 text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </p-panel>
     `,
     standalone: true,
     imports: [BlockUIModule, ButtonModule, PanelModule]
 })
-export class BlockuiBasicDemo {
+export class BlockUIBasicDemo {
     blockedPanel: boolean = false;
 }
 ```
@@ -49,15 +47,13 @@ import { ButtonModule } from 'primeng/button';
 
 @Component({
     template: `
-        <div class="card">
-            <p-blockui [blocked]="blockedDocument" />
-            <p-button label="Block" (click)="blockDocument()" />
-        </div>
+        <p-blockui [blocked]="blockedDocument" />
+        <p-button label="Block" (click)="blockDocument()" />
     `,
     standalone: true,
     imports: [BlockUIModule, ButtonModule]
 })
-export class BlockuiDocumentDemo {
+export class BlockUIDocumentDemo {
     blockedDocument: boolean = false;
 }
 ```
@@ -70,21 +66,20 @@ BlockUI can either block other components or the whole page.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<BlockUIPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, BlockUIPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | target | any | - | Name of the local ng-template variable referring to another component. |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
 | blocked | boolean | - | Current blocked state as a boolean. |
 
 ### Templates
 
 | Name | Type | Description |
 |------|------|-------------|
-| content | TemplateRef<any> | template of the content |
+| content | TemplateRef<any> | Template of the content. |
 
 ## Pass Through Options
 

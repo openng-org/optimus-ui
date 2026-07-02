@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
                 <input type="text" pInputText placeholder="Search" />
@@ -32,10 +32,10 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IconFieldModule, InputIconModule, InputTextModule]
 })
-export class IconfieldBasicDemo {}
+export class IconFieldBasicDemo {}
 ```
 
-## Float Label
+## floatlabel-doc
 
 FloatLabel visually integrates a label with its form element. Visit FloatLabel documentation for more information.
 
@@ -49,7 +49,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel>
                 <p-iconfield>
                     <p-inputicon class="pi pi-search" />
@@ -76,14 +76,14 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, IconFieldModule, InputIconModule, InputTextModule, FormsModule]
 })
-export class IconfieldFloatlabelDemo {
+export class IconFieldFloatLabelDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
 }
 ```
 
-## Ifta Label
+## iftalabel-doc
 
 IftaLabel is used to create infield top aligned labels. Visit IftaLabel documentation for more information.
 
@@ -97,7 +97,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <p-iconfield>
                     <p-inputicon class="pi pi-user" />
@@ -110,7 +110,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IconFieldModule, IftaLabelModule, InputIconModule, InputTextModule, FormsModule]
 })
-export class IconfieldIftalabelDemo {
+export class IconFieldIftaLabelDemo {
     value: string | undefined;
 }
 ```
@@ -128,7 +128,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-iconfield>
                 <p-inputicon class="pi pi-search" />
                 <input pInputText [(ngModel)]="value1" placeholder="Small" pSize="small" />
@@ -147,7 +147,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IconFieldModule, InputIconModule, InputTextModule, FormsModule]
 })
-export class IconfieldSizesDemo {
+export class IconFieldSizesDemo {
     value1: any = null;
     value2: any = null;
     value3: any = null;
@@ -166,7 +166,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iconfield iconPosition="left">
                 <p-inputicon>
                     <svg width="14" height="16" viewBox="0 0 35 40" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +206,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IconFieldModule, InputIconModule, InputTextModule]
 })
-export class IconfieldTemplateDemo {}
+export class IconFieldTemplateDemo {}
 ```
 
 ## Icon Field
@@ -217,12 +217,11 @@ IconField wraps an input and an icon.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<IconFieldPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| iconPosition | "right" \| "left" | left | Position of the icon. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, IconFieldPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| iconPosition | "right" \| "left" | - | Position of the icon. |
 
 ## Pass Through Options
 

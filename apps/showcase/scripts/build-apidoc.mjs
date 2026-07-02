@@ -41,6 +41,24 @@ async function main() {
     if (project) {
         let doc = {};
 
+        const resolveTypeString = (type) => {
+            if (!type) return null;
+
+            // For InputSignal<T>, InputSignalWithTransform<T, U>, ModelSignal<T>, Signal<T> - resolve T
+            if (['InputSignal', 'InputSignalWithTransform', 'ModelSignal', 'Signal'].includes(type.name) && type.typeArguments?.length > 0) {
+                const innerType = type.typeArguments[0];
+
+                // If the inner type is a reference to a type alias, resolve it to its actual type
+                if (innerType.type === 'reference' && innerType.reflection?.type) {
+                    return innerType.reflection.type.toString();
+                }
+
+                return innerType.toString();
+            }
+
+            return type.toString();
+        };
+
         const parseText = (text) => {
             return text.replace(/&#123;/g, '{').replace(/&#125;/g, '}');
         };
@@ -94,7 +112,8 @@ async function main() {
                                 components: {}
                             };
                         }
-                        const module_components_group = module.groups.find((g) => g.title === 'Components');
+                        const module_components_groups = module.groups.filter((g) => g.title === 'Components' || g.title === 'Directives');
+                        const module_components_group = module_components_groups.length > 0 ? { children: module_components_groups.flatMap((g) => g.children) } : null;
                         const module_events_group = module.groups.find((g) => g.title === 'Events');
                         const module_templates_group = module.groups.find((g) => g.title === 'Templates');
                         const module_interface_group = module.groups.find((g) => g.title === 'Interface');
@@ -161,7 +180,7 @@ async function main() {
                                     };
 
                                     component_props_group.children.forEach((prop) => {
-                                        let defaultValue = prop.defaultValue ? prop.defaultValue.replace(/^'|'$/g, '') : undefined;
+                                        let defaultValue = prop.defaultValue && prop.defaultValue !== '...' ? prop.defaultValue.replace(/^'|'$/g, '') : undefined;
 
                                         // Check for @defaultValue tag in comment blockTags
                                         if (prop.comment && prop.comment.blockTags) {
@@ -175,7 +194,7 @@ async function main() {
                                             name: prop.name,
                                             optional: prop.flags.isOptional,
                                             readonly: prop.flags.isReadonly,
-                                            type: prop.getSignature && prop.getSignature.type ? prop.getSignature.type.toString() : prop.type ? prop.type.toString() : null,
+                                            type: resolveTypeString(prop.getSignature?.type ?? prop.type),
                                             default: prop.type && prop.type.name === 'boolean' && !prop.defaultValue ? 'false' : defaultValue,
                                             description: (prop.getSignature?.comment?.summary || prop.setSignature?.comment?.summary || prop.comment?.summary)?.map((s) => s.text || '').join(' '),
                                             deprecated: getDeprecatedText(prop.getSignature) || getDeprecatedText(prop.setSignature) || getDeprecatedText(prop)
@@ -269,7 +288,7 @@ async function main() {
                                     };
 
                                     component_templates_group.children.forEach((template) => {
-                                        const templateType = template.type && template.type.toString();
+                                        const templateType = resolveTypeString(template.type);
                                         let contextType = 'unknown';
 
                                         const match = templateType && templateType.match(/TemplateRef<(.+)>/);
@@ -527,9 +546,23 @@ async function main() {
         // Identify sub-components based on module paths
         const subComponentMap = {};
 
+        // Strip common prefix (e.g., "src/") from module paths
+        const stripPrefix = (name) => name.replace(/^src\//, '');
+
+        // Collect all parent module names (modules that have a direct child with the same name)
+        const parentModuleNames = new Set();
         modules.children.forEach((module) => {
-            const fullPath = module.name;
-            const pathParts = fullPath.split('/');
+            const stripped = stripPrefix(module.name);
+            const pathParts = stripped.split('/');
+            // Pattern: accordion/accordion -> "accordion" is a parent module
+            if (pathParts.length === 2 && pathParts[0] === pathParts[1]) {
+                parentModuleNames.add(pathParts[0]);
+            }
+        });
+
+        modules.children.forEach((module) => {
+            const stripped = stripPrefix(module.name);
+            const pathParts = stripped.split('/');
 
             // Pattern: stepper/style/stepitemstyle -> stepitem is a sub-component of stepper
             if (pathParts.length === 3 && pathParts[1] === 'style') {
@@ -538,6 +571,18 @@ async function main() {
 
                 if (parentName !== childStyleName) {
                     subComponentMap[childStyleName] = parentName;
+                }
+            }
+
+            // Pattern: accordion/accordion-panel -> accordion-panel is a sub-component of accordion
+            if (pathParts.length === 2 && pathParts[0] !== pathParts[1] && parentModuleNames.has(pathParts[0])) {
+                const parentName = pathParts[0];
+                const childName = pathParts[1];
+                // Skip style, public_api, token, spec files
+                if (!childName.includes('style') && childName !== 'public_api' && !childName.includes('token') && !childName.includes('spec')) {
+                    if (!subComponentMap[childName]) {
+                        subComponentMap[childName] = parentName;
+                    }
                 }
             }
         });
@@ -555,6 +600,17 @@ async function main() {
                 mergedDocs[targetParentKey] = {
                     ...doc[targetParentKey]
                 };
+            }
+
+            // Merge sub-component's components into parent
+            if (isSubComponent && !key.includes('style') && !key.includes('.interface') && !key.includes('.types')) {
+                const subDoc = doc[key];
+                if (subDoc && subDoc.components) {
+                    if (!mergedDocs[targetParentKey].components) {
+                        mergedDocs[targetParentKey].components = {};
+                    }
+                    Object.assign(mergedDocs[targetParentKey].components, subDoc.components);
+                }
             }
 
             if (key.includes('style')) {
@@ -608,6 +664,13 @@ async function main() {
                         }
                     };
                 }
+            }
+        }
+
+        // Remove standalone entries for sub-components that were merged into their parent
+        for (const childName in subComponentMap) {
+            if (mergedDocs[childName] && subComponentMap[childName] !== childName) {
+                delete mergedDocs[childName];
             }
         }
 

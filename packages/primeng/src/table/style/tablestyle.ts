@@ -72,6 +72,7 @@ ${datatable_style}
         box-shadow dt('datatable.transition.duration');
 }
 
+.p-datatable-thead > tr > th p-column-filter,
 .p-datatable-thead > tr > th p-columnfilter {
     font-weight: normal;
 }
@@ -100,7 +101,7 @@ ${datatable_style}
     color: dt('datatable.row.selected.color');
 }
 
-p-sortIcon, p-sort-icon, p-sorticon {
+p-sort-icon, p-sorticon {
     display: inline-flex;
     align-items: center;
     gap: dt('datatable.header.cell.gap');
@@ -110,6 +111,7 @@ p-sortIcon, p-sort-icon, p-sorticon {
     padding: 0;
 }
 
+.p-datatable .p-editable-column.p-cell-editing p-cell-editor,
 .p-datatable .p-editable-column.p-cell-editing p-celleditor {
     display: block;
     width: 100%;
@@ -120,28 +122,28 @@ const classes = {
     root: ({ instance }) => [
         'p-datatable p-component',
         {
-            'p-datatable-hoverable': instance.rowHover || instance.selectionMode,
-            'p-datatable-resizable': instance.resizableColumns,
-            'p-datatable-resizable-fit': instance.resizableColumns && instance.columnResizeMode === 'fit',
-            'p-datatable-scrollable': instance.scrollable,
-            'p-datatable-flex-scrollable': instance.scrollable && instance.scrollHeight === 'flex',
-            'p-datatable-striped': instance.stripedRows,
-            'p-datatable-gridlines': instance.showGridlines,
-            'p-datatable-sm': instance.size === 'small',
-            'p-datatable-lg': instance.size === 'large'
+            'p-datatable-hoverable': instance.rowHover() || instance.selectionMode(),
+            'p-datatable-resizable': instance.resizableColumns(),
+            'p-datatable-resizable-fit': instance.resizableColumns() && instance.columnResizeMode() === 'fit',
+            'p-datatable-scrollable': instance.scrollable(),
+            'p-datatable-flex-scrollable': instance.scrollable() && instance.scrollHeight() === 'flex',
+            'p-datatable-striped': instance.stripedRows(),
+            'p-datatable-gridlines': instance.showGridlines(),
+            'p-datatable-sm': instance.size() === 'small',
+            'p-datatable-lg': instance.size() === 'large'
         }
     ],
     mask: 'p-datatable-mask p-overlay-mask',
     loadingIcon: 'p-datatable-loading-icon',
     header: 'p-datatable-header',
-    pcPaginator: ({ instance }) => 'p-datatable-paginator-' + instance.paginatorPosition,
+    pcPaginator: ({ instance }) => 'p-datatable-paginator-' + instance.paginatorPosition(),
     tableContainer: 'p-datatable-table-container',
     table: ({ instance }) => [
         'p-datatable-table',
         {
-            'p-datatable-scrollable-table': instance.scrollable,
-            'p-datatable-resizable-table': instance.resizableColumns,
-            'p-datatable-resizable-table-fit': instance.resizableColumns && instance.columnResizeMode === 'fit'
+            'p-datatable-scrollable-table': instance.scrollable(),
+            'p-datatable-resizable-table': instance.resizableColumns(),
+            'p-datatable-resizable-table-fit': instance.resizableColumns() && instance.columnResizeMode() === 'fit'
         }
     ],
     thead: 'p-datatable-thead',
@@ -153,15 +155,15 @@ const classes = {
     pcSortBadge: 'p-datatable-sort-badge',
     filter: ({ instance }) => ({
         'p-datatable-filter': true,
-        'p-datatable-inline-filter': instance.display === 'row',
-        'p-datatable-popover-filter': instance.display === 'menu'
+        'p-datatable-inline-filter': instance.display() === 'row',
+        'p-datatable-popover-filter': instance.display() === 'menu'
     }),
     filterElementContainer: 'p-datatable-filter-element-container',
     pcColumnFilterButton: 'p-datatable-column-filter-button',
     pcColumnFilterClearButton: 'p-datatable-column-filter-clear-button',
     filterOverlay: ({ instance }) => ({
         'p-datatable-filter-overlay p-component': true,
-        'p-datatable-filter-overlay-popover': instance.display === 'menu'
+        'p-datatable-filter-overlay-popover': instance.display() === 'menu'
     }),
     filterConstraintList: 'p-datatable-filter-constraint-list',
 
@@ -182,8 +184,8 @@ const classes = {
     pcFilterApplyButton: 'p-datatable-filter-apply-button',
     tbody: ({ instance }) => ({
         'p-datatable-tbody': true,
-        'p-datatable-frozen-tbody': instance.frozenValue || instance.frozenBodyTemplate,
-        'p-virtualscroller-content': instance.virtualScroll
+        'p-datatable-frozen-tbody': instance.frozenValue() || instance.frozenBodyTemplate(),
+        'p-virtualscroller-content': instance.virtualScroll()
     }),
     rowGroupHeader: 'p-datatable-row-group-header',
     rowToggleButton: 'p-datatable-row-toggle-button',
@@ -209,7 +211,7 @@ const classes = {
     rowReorderIndicatorDown: 'p-datatable-row-reorder-indicator-down',
     sortableColumn: ({ instance }) => ({
         'p-datatable-sortable-column': instance.isEnabled(),
-        ' p-datatable-column-sorted': instance.sorted
+        ' p-datatable-column-sorted': instance.sorted()
     }),
     sortableColumnIcon: 'p-datatable-sort-icon',
     sortableColumnBadge: 'p-sortable-column-badge',
@@ -221,8 +223,8 @@ const classes = {
     reorderableColumn: 'p-datatable-reorderable-column',
     rowEditorCancel: 'p-datatable-row-editor-cancel',
     frozenColumn: ({ instance }) => ({
-        'p-datatable-frozen-column': instance.frozen,
-        'p-datatable-frozen-column-left': instance.alignFrozenLeft === 'left'
+        'p-datatable-frozen-column': instance.frozen(),
+        'p-datatable-frozen-column-left': instance.alignFrozen() === 'left'
     }),
     contextMenuRowSelected: ({ instance }) => ({
         'p-datatable-contextmenu-row-selected': instance.selected
@@ -231,8 +233,8 @@ const classes = {
 
 const inlineStyles = {
     tableContainer: ({ instance }) => ({
-        'max-height': instance.virtualScroll ? null : (instance.scrollHeight ?? null),
-        height: instance.virtualScrollViewportHeight,
+        'max-height': instance.virtualScroll() ? null : instance.scrollHeight(),
+        height: instance.virtualScroll() && instance.scrollHeight() != null && instance.scrollHeight() !== 'flex' ? instance.scrollHeight() : null,
         overflow: 'auto'
     }),
     thead: { position: 'sticky' },

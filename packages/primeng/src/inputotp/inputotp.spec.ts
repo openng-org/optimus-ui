@@ -59,8 +59,8 @@ class TestAdvancedInputOtpComponent {
     integerOnly: boolean = false;
     readonly: boolean = false;
     autofocus: boolean = false;
-    variant: 'filled' | 'outlined' | undefined = undefined as any;
-    size: 'large' | 'small' | undefined = undefined as any;
+    variant: 'filled' | 'outlined' | undefined = undefined;
+    size: 'large' | 'small' | undefined = undefined;
 
     changeEvents: InputOtpChangeEvent[] = [];
     focusEvents: Event[] = [];
@@ -79,18 +79,18 @@ class TestAdvancedInputOtpComponent {
     }
 }
 
-// InputOTP pTemplate component
+// InputOTP #template component
 @Component({
     standalone: true,
     imports: [InputOtp, FormsModule],
     template: `
         <p-inputotp [(ngModel)]="value" [length]="length">
-            <!-- Input template with pTemplate directive -->
-            <ng-template pTemplate="input" let-value let-events="events" let-index="index">
+            <!-- Input template with #template reference -->
+            <ng-template #input let-value let-events="events" let-index="index">
                 <input
                     type="text"
                     class="custom-otp-input"
-                    [attr.data-testid]="'ptemplate-input-' + index"
+                    [attr.data-testid]="'template-input-' + index"
                     [value]="value"
                     (input)="events.input($event)"
                     (keydown)="events.keydown($event)"
@@ -104,7 +104,7 @@ class TestAdvancedInputOtpComponent {
         </p-inputotp>
     `
 })
-class TestInputOtpPTemplateComponent {
+class TestInputOtpTemplateComponent {
     value: string = '';
     length: number = 4;
 }
@@ -165,10 +165,10 @@ describe('InputOtp', () => {
         });
 
         it('should initialize with default properties', () => {
-            expect(inputOtpInstance.length).toBe(4);
-            expect(inputOtpInstance.mask).toBeFalsy();
-            expect(inputOtpInstance.integerOnly).toBeFalsy();
-            expect(inputOtpInstance.readonly).toBeFalsy();
+            expect(inputOtpInstance.length()).toBe(4);
+            expect(inputOtpInstance.mask()).toBeFalsy();
+            expect(inputOtpInstance.integerOnly()).toBeFalsy();
+            expect(inputOtpInstance.readonly()).toBeFalsy();
             expect(inputOtpInstance.tokens).toEqual([]);
         });
 
@@ -391,14 +391,14 @@ describe('InputOtp', () => {
         it('should respect length property', () => {
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             expect(inputs.length).toBe(6);
-            expect(inputOtpInstance.length).toBe(6);
+            expect(inputOtpInstance.length()).toBe(6);
         });
 
         it('should apply mask property', () => {
             component.mask = true;
             fixture.detectChanges();
 
-            expect(inputOtpInstance.inputType).toBe('password');
+            expect(inputOtpInstance.inputType()).toBe('password');
 
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             inputs.forEach((input) => {
@@ -594,26 +594,26 @@ describe('InputOtp', () => {
         });
     });
 
-    describe('pTemplate Tests', () => {
-        let fixture: ComponentFixture<TestInputOtpPTemplateComponent>;
-        let component: TestInputOtpPTemplateComponent;
+    describe('#template Tests', () => {
+        let fixture: ComponentFixture<TestInputOtpTemplateComponent>;
+        let component: TestInputOtpTemplateComponent;
         let inputOtpElement: DebugElement;
         let inputOtpInstance: InputOtp;
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [TestInputOtpPTemplateComponent],
+                imports: [TestInputOtpTemplateComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
-            fixture = TestBed.createComponent(TestInputOtpPTemplateComponent);
+            fixture = TestBed.createComponent(TestInputOtpTemplateComponent);
             component = fixture.componentInstance;
             inputOtpElement = fixture.debugElement.query(By.css('p-inputotp'));
             inputOtpInstance = inputOtpElement.componentInstance;
             fixture.detectChanges();
         });
 
-        it('should have input pTemplate', () => {
+        it('should have input #template', () => {
             expect(inputOtpInstance).toBeTruthy();
             expect(() => inputOtpInstance.inputTemplate).not.toThrow();
         });
@@ -659,7 +659,7 @@ describe('InputOtp', () => {
             expect(component.value).toBe('12');
         });
 
-        it('should process pTemplate after content init', async () => {
+        it('should process #template after content init', async () => {
             if (inputOtpInstance.ngAfterContentInit) {
                 inputOtpInstance.ngAfterContentInit();
             }
@@ -669,7 +669,7 @@ describe('InputOtp', () => {
             expect(inputOtpInstance).toBeTruthy();
         });
 
-        it('should handle pTemplate changes after view init', async () => {
+        it('should handle #template changes after view init', async () => {
             if (inputOtpInstance.ngAfterViewInit) {
                 inputOtpInstance.ngAfterViewInit();
             }
@@ -819,10 +819,10 @@ describe('InputOtp PassThrough Tests', () => {
 
     describe('PT Case 3: Instance variables', () => {
         it('should access instance variables in PT function', () => {
-            component.length = 6;
+            fixture.componentRef.setInput('length', 6);
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.length === 6 ? 'LENGTH_SIX' : ''
+                    class: instance?.length?.() === 6 ? 'LENGTH_SIX' : ''
                 })
             });
             fixture.detectChanges();

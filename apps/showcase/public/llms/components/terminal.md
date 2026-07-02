@@ -16,10 +16,8 @@ import { TerminalModule } from 'primeng/terminal';
 
 @Component({
     template: `
-        <div class="card">
-            <p>Enter "<strong>date</strong>" to display the current date, "<strong>greet &#123;0&#125;</strong>" for a message and "<strong>random</strong>" to get a random number.</p>
-            <p-terminal welcomeMessage="Welcome to PrimeNG" prompt="primeng $" />
-        </div>
+        <p>Enter "<strong>date</strong>" to display the current date, "<strong>greet &#123;0&#125;</strong>" for a message and "<strong>random</strong>" to get a random number.</p>
+        <p-terminal welcomeMessage="Welcome to PrimeNG" prompt="primeng $" />
     `,
     standalone: true,
     imports: [TerminalModule]
@@ -65,13 +63,13 @@ Terminal is a text based user interface.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TerminalPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TerminalPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | welcomeMessage | string | - | Initial text to display on terminal. |
 | prompt | string | - | Prompt text for each command. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| response | string | - | Response to display after a command. |
 
 ## Pass Through Options
 
@@ -114,6 +112,8 @@ Terminal is a text based user interface.
 | terminal.height | --p-terminal-height | Height of root |
 | terminal.padding | --p-terminal-padding | Padding of root |
 | terminal.border.radius | --p-terminal-border-radius | Border radius of root |
+| terminal.font.weight | --p-terminal-font-weight | Font weight of root |
+| terminal.font.size | --p-terminal-font-size | Font size of root |
 | terminal.prompt.gap | --p-terminal-prompt-gap | Gap of prompt |
 | terminal.command.response.margin | --p-terminal-command-response-margin | Margin of command response |
 

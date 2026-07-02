@@ -15,14 +15,14 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea rows="5" cols="30" pTextarea [autoResize]="true"></textarea>
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class TextareaAutoresizeDemo {}
+export class TextareaAutoResizeDemo {}
 ```
 
 ## Basic
@@ -35,7 +35,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea rows="5" cols="30" pTextarea [(ngModel)]="value"></textarea>
         </div>
     `,
@@ -56,7 +56,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea rows="5" cols="30" pTextarea [disabled]="true"></textarea>
         </div>
     `,
@@ -76,7 +76,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea [(ngModel)]="value" [variant]="'filled'" rows="5" cols="30" pTextarea></textarea>
         </div>
     `,
@@ -99,7 +99,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-stretch gap-4">
+        <div class="flex flex-wrap justify-center items-stretch gap-4">
             <p-floatlabel>
                 <textarea pTextarea id="over_label" [(ngModel)]="value1" rows="5" cols="30" style="resize: none" class="h-full"></textarea>
                 <label for="over_label">Over Label</label>
@@ -117,7 +117,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
     standalone: true,
     imports: [FloatLabelModule, FormsModule]
 })
-export class TextareaFloatlabelDemo {
+export class TextareaFloatLabelDemo {
     value1: string = '';
     value2: string = '';
     value3: string = '';
@@ -134,9 +134,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     template: `
-        <div class="card">
-            <textarea rows="5" cols="30" pTextarea [(ngModel)]="value" fluid></textarea>
-        </div>
+        <textarea rows="5" cols="30" pTextarea [(ngModel)]="value" fluid></textarea>
     `,
     standalone: true,
     imports: [FormsModule]
@@ -157,7 +155,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <textarea pTextarea id="description" [(ngModel)]="value" rows="5" cols="30" style="resize: none"></textarea>
                 <label for="description">Description</label>
@@ -167,7 +165,7 @@ import { IftaLabelModule } from 'primeng/iftalabel';
     standalone: true,
     imports: [IftaLabelModule, FormsModule]
 })
-export class TextareaIftalabelDemo {
+export class TextareaIftaLabelDemo {
     value: string = '';
 }
 ```
@@ -182,7 +180,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea rows="5" cols="30" pTextarea [(ngModel)]="value" [invalid]="!value" placeholder="Address"></textarea>
         </div>
     `,
@@ -203,14 +201,14 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <textarea pKeyFilter="int" rows="5" cols="30" pTextarea></textarea>
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class TextareaKeyfilterDemo {}
+export class TextareaKeyFilterDemo {}
 ```
 
 ## reactiveforms-doc
@@ -221,14 +219,12 @@ Textarea can also be used with reactive forms. In this case, the formControlName
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <textarea rows="5" cols="30" pTextarea formControlName="address" [invalid]="isInvalid('address')"></textarea>
@@ -241,9 +237,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class TextareaReactiveformsDemo {
+export class TextareaReactiveFormsDemo {
     messageService = inject(MessageService);
     items: any[] | undefined;
     exampleForm: FormGroup | undefined;
@@ -281,7 +277,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <textarea pTextarea [(ngModel)]="value1" pSize="small" placeholder="Small" rows="3"></textarea>
             <textarea pTextarea [(ngModel)]="value2" placeholder="Normal" rows="3"></textarea>
             <textarea pTextarea [(ngModel)]="value3" pSize="large" placeholder="Large" rows="3"></textarea>
@@ -303,14 +299,12 @@ export class TextareaSizesDemo {
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <textarea name="address" #address="ngModel" rows="5" cols="30" [(ngModel)]="value" pTextarea [invalid]="address.invalid && (address.touched || exampleForm.submitted)" required></textarea>
@@ -323,9 +317,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [MessageModule, ButtonModule, FormsModule]
 })
-export class TextareaTemplatedrivenformsDemo {
+export class TextareaTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     items: any[] = [];
     value: any;
@@ -347,17 +341,17 @@ Textarea adds styling and autoResize functionality to standard textarea element.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TextareaPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| pTextareaPT | InputSignal<TextareaPassThrough> | undefined | Used to pass attributes to DOM elements inside the Textarea component. |
-| pTextareaUnstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| autoResize | boolean | false | When present, textarea size changes as being typed. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TextareaPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| pTextareaPT | PassThrough<I, TextareaPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the Textarea component. |
+| pTextareaUnstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| autoResize | boolean | - | When present, textarea size changes as being typed. |
 | pSize | "small" \| "large" | - | Defines the size of the component. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
 
 ### Emits
 
@@ -413,4 +407,6 @@ Textarea adds styling and autoResize functionality to standard textarea element.
 | textarea.lg.font.size | --p-textarea-lg-font-size | Lg font size of root |
 | textarea.lg.padding.x | --p-textarea-lg-padding-x | Lg padding x of root |
 | textarea.lg.padding.y | --p-textarea-lg-padding-y | Lg padding y of root |
+| textarea.font.weight | --p-textarea-font-weight | Font weight of root |
+| textarea.font.size | --p-textarea-font-size | Font size of root |
 

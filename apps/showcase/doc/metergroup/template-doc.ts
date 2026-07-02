@@ -1,36 +1,36 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { MeterGroupModule } from 'primeng/metergroup';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { AppCodeModule } from '@/components/doc/app.code';
+import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [CommonModule, MeterGroupModule, CardModule, ButtonModule, AppCodeModule, AppDocSectionText],
+    imports: [MeterGroupModule, CardModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>MeterGroup provides templating support for labels, meter items, and content around the meters.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-metergroup [value]="value" labelPosition="start">
                 <ng-template #label>
                     <div class="flex flex-wrap gap-4">
-                        <ng-container *ngFor="let meterItem of value; let index = index">
+                        @for (meterItem of value; track $index; let index = $index) {
                             <p-card class="flex-1" styleClass="border border-surface shadow-none">
-                                <div class="flex justify-between gap-8">
+                                <div class="flex justify-between gap-7">
                                     <div class="flex flex-col gap-1">
                                         <span class="text-surface-500 dark:text-surface-400 text-sm">{{ meterItem.label }}</span>
-                                        <span class="font-bold text-lg">{{ meterItem.value }}%</span>
+                                        <span class="font-bold">{{ meterItem.value }}%</span>
                                     </div>
                                     <span class="w-8 h-8 rounded-full inline-flex justify-center items-center text-center" [style]="{ 'background-color': meterItem.color1, color: '#ffffff' }">
                                         <i [class]="meterItem.icon"></i>
                                     </span>
                                 </div>
                             </p-card>
-                        </ng-container>
+                        }
                     </div>
                 </ng-template>
                 <ng-template #meter let-value let-class="class" let-width="size">
@@ -38,9 +38,9 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 </ng-template>
                 <ng-template #start let-totalPercent="totalPercent">
                     <div class="flex justify-between mt-4 mb-2 relative">
-                        <span>Storage</span>
-                        <span [style]="{ width: totalPercent + '%' }" class="absolute text-right">{{ totalPercent }}%</span>
-                        <span class="font-medium">1TB</span>
+                        <span class="text-sm">Storage</span>
+                        <span [style]="{ width: totalPercent + '%' }" class="absolute text-right text-sm">{{ totalPercent }}%</span>
+                        <span class="font-medium text-sm">1TB</span>
                     </div>
                 </ng-template>
                 <ng-template #end>
@@ -50,8 +50,8 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                     </div>
                 </ng-template>
             </p-metergroup>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc {

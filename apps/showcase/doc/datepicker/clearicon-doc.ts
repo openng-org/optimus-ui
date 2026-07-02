@@ -1,21 +1,24 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 
 @Component({
-    selector: 'clearicon-doc',
+    selector: 'clear-icon-doc',
     standalone: true,
-    imports: [FormsModule, DatePickerModule, AppCode, AppDocSectionText],
+    imports: [FormsModule, DatePickerModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>When <i>showClear</i> is enabled, a clear icon is displayed to clear the value.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
-            <p-datepicker [(ngModel)]="date" [showClear]="true" inputStyleClass="w-56" />
-        </div>
-        <app-code></app-code>
+        <app-demo-wrapper>
+            <div class="flex justify-center">
+                <p-datepicker [(ngModel)]="date" [showClear]="true" inputStyleClass="w-56" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class ClearIconDoc {

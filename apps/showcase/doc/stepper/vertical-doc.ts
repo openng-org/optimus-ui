@@ -1,27 +1,28 @@
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { StepperModule } from 'primeng/stepper';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'vertical-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, StepperModule, ButtonModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, StepperModule, ButtonModule],
     template: `
         <app-docsectiontext>
             <p>Vertical layout requires <i>StepItem</i> as a wrapper of <i>Step</i> and <i>StepPanel</i> components.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-stepper [value]="1">
                 <p-step-item [value]="1">
                     <p-step>Header I</p-step>
                     <p-step-panel>
                         <ng-template #content let-activateCallback="activateCallback">
                             <div class="flex flex-col h-48">
-                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">Content I</div>
+                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded-sm bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium text-sm">Content I</div>
                             </div>
-                            <div class="py-6">
+                            <div class="py-5">
                                 <p-button label="Next" (onClick)="activateCallback(2)" />
                             </div>
                         </ng-template>
@@ -33,9 +34,9 @@ import { ButtonModule } from 'primeng/button';
                     <p-step-panel>
                         <ng-template #content let-activateCallback="activateCallback">
                             <div class="flex flex-col h-48">
-                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">Content II</div>
+                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded-sm bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium text-sm">Content II</div>
                             </div>
-                            <div class="flex py-6 gap-2">
+                            <div class="flex py-5 gap-2">
                                 <p-button label="Back" severity="secondary" (onClick)="activateCallback(1)" />
                                 <p-button label="Next" (onClick)="activateCallback(3)" />
                             </div>
@@ -48,17 +49,17 @@ import { ButtonModule } from 'primeng/button';
                     <p-step-panel>
                         <ng-template #content let-activateCallback="activateCallback">
                             <div class="flex flex-col h-48">
-                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium">Content III</div>
+                                <div class="border-2 border-dashed border-surface-200 dark:border-surface-700 rounded-sm bg-surface-50 dark:bg-surface-950 flex-auto flex justify-center items-center font-medium text-sm">Content III</div>
                             </div>
-                            <div class="py-6">
+                            <div class="py-5">
                                 <p-button label="Back" severity="secondary" (onClick)="activateCallback(2)" />
                             </div>
                         </ng-template>
                     </p-step-panel>
                 </p-step-item>
             </p-stepper>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class VerticalDoc {}

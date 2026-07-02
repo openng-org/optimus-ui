@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Customer } from '@/domain/customer';
 import { CustomerService } from '@/service/customerservice';
@@ -13,7 +14,7 @@ import { TagModule } from 'primeng/tag';
 @Component({
     selector: 'stateful-doc',
     standalone: true,
-    imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [TableModule, InputTextModule, TagModule, IconFieldModule, InputIconModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>Stateful table allows keeping the state such as page, sort and filtering either at local storage or session storage so that when the page is visited again, table would render the data using the last settings.</p>
             <p>
@@ -21,8 +22,8 @@ import { TagModule } from 'primeng/tag';
                 browser is closed. Other alternative is <i>local</i> referring to <i>localStorage</i> for an extended lifetime.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table
                     #dt1
                     [value]="customers"
@@ -49,25 +50,25 @@ import { TagModule } from 'primeng/tag';
                             <th pSortableColumn="name" style="width:25%">
                                 <div class="flex items-center gap-2">
                                     Name
-                                    <p-sortIcon field="name" />
+                                    <p-sort-icon field="name" />
                                 </div>
                             </th>
                             <th pSortableColumn="country.name" style="width:25%">
                                 <div class="flex items-center gap-2">
                                     Country
-                                    <p-sortIcon field="country.name" />
+                                    <p-sort-icon field="country.name" />
                                 </div>
                             </th>
                             <th pSortableColumn="representative.name" style="width:25%">
                                 <div class="flex items-center gap-2">
                                     Representative
-                                    <p-sortIcon field="representative.name" />
+                                    <p-sort-icon field="representative.name" />
                                 </div>
                             </th>
                             <th pSortableColumn="status" style="width:25%">
                                 <div class="flex items-center gap-2">
                                     Status
-                                    <p-sortIcon field="status" />
+                                    <p-sort-icon field="status" />
                                 </div>
                             </th>
                         </tr>
@@ -118,9 +119,9 @@ import { TagModule } from 'primeng/tag';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Customer']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Customer']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class StatefulDoc {

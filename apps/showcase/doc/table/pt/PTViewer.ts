@@ -24,7 +24,6 @@ interface Product {
         <app-docptviewer [docs]="docs">
             <p-table
                 [value]="products"
-                [tableStyle]="{ 'min-width': '50rem' }"
                 [pt]="{
                     root: { class: 'custom-table-root' },
                     table: { class: 'custom-table' },
@@ -57,8 +56,10 @@ interface Product {
                         <td>{{ product.price | currency: 'USD' }}</td>
                     </tr>
                 </ng-template>
-                <ng-template #summary>
-                    <div class="flex items-center justify-between">In total there are {{ products ? products.length : 0 }} products.</div>
+                <ng-template #footer>
+                    <tr>
+                        <td colspan="5" class="text-sm">In total there are {{ products ? products.length : 0 }} products.</td>
+                    </tr>
                 </ng-template>
             </p-table>
         </app-docptviewer>

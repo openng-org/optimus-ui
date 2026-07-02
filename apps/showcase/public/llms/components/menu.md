@@ -17,7 +17,7 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-menu [model]="items" />
         </div>
     `,
@@ -43,18 +43,16 @@ The function to invoke when an item is clicked is defined using the command prop
 ```typescript
 import { Component, OnInit, inject } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-menu [model]="items" />
         </div>
     `,
     standalone: true,
-    imports: [MenuModule, ToastModule],
+    imports: [MenuModule],
     providers: [MessageService]
 })
 export class MenuCommandDemo implements OnInit {
@@ -101,7 +99,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-menu [model]="items" />
         </div>
     `,
@@ -158,7 +156,7 @@ import { MenuItem, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-menu #menu [model]="items" [popup]="true" />
             <p-button (click)="menu.toggle($event)" icon="pi pi-ellipsis-v" />
         </div>
@@ -202,7 +200,7 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-menu [model]="items" />
         </div>
     `,
@@ -255,64 +253,66 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60">
-                <ng-template #start>
-                    <span class="inline-flex items-center gap-1 px-2 py-2">
-                        <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
-                            <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
-                            <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
-                                <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--ground-background)" />
-                            </mask>
-                            <g mask="url(#mask0_1_52)">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z" fill="var(--p-primary-color)" />
-                            </g>
-                            <path d="M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z" fill="var(--ground-background)" />
-                            <path d="M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z" fill="var(--ground-background)" />
-                            <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z"
-                                fill="var(--ground-background)"
-                            />
-                            <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
-                            <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
-                            <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
-                                fill="var(--ground-background)"
-                            />
-                            <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
-                            <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
-                            <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
-                            <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
-                        </svg>
-                        <span class="text-xl font-semibold">PRIME<span class="text-primary">APP</span></span>
+        <p-menu [model]="items" class="flex justify-center" styleClass="w-full md:w-60">
+            <ng-template #start>
+                <span class="inline-flex items-center gap-1 px-1.5 py-1.5">
+                    <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
+                        <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
+                        <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
+                            <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--ground-background)" />
+                        </mask>
+                        <g mask="url(#mask0_1_52)">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z" fill="var(--p-primary-color)" />
+                        </g>
+                        <path d="M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z" fill="var(--ground-background)" />
+                        <path d="M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z" fill="var(--ground-background)" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z"
+                            fill="var(--ground-background)"
+                        />
+                        <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
+                        <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
+                            fill="var(--ground-background)"
+                        />
+                        <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
+                        <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
+                        <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
+                        <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
+                    </svg>
+                    <span class="text-lg font-semibold">PRIME<span class="text-primary">APP</span></span>
+                </span>
+            </ng-template>
+            <ng-template #submenuheader let-item>
+                <span class="text-primary font-bold text-sm">{{ item.label }}</span>
+            </ng-template>
+            <ng-template #item let-item>
+                <a pRipple class="flex items-center px-2.5 py-1.5 cursor-pointer" [class]="item.linkClass">
+                    <span [class]="item.icon"></span>
+                    <span class="ms-2 text-sm">{{ item.label }}</span>
+                    @if (item.badge) {
+                        <p-badge class="ms-auto" [value]="item.badge" />
+                    }
+                    @if (item.shortcut) {
+                        <span class="ms-auto border border-surface rounded-sm bg-emphasis text-muted-color text-xs px-1 py-0.5">{{ item.shortcut }}</span>
+                    }
+                </a>
+            </ng-template>
+            <ng-template #end>
+                <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-1.5 pl-3.5 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
+                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />
+                    <span class="inline-flex flex-col items-start">
+                        <span class="text-sm font-bold">Amy Elsner</span>
+                        <span class="text-xs">Admin</span>
                     </span>
-                </ng-template>
-                <ng-template #submenuheader let-item>
-                    <span class="text-primary font-bold">{{ item.label }}</span>
-                </ng-template>
-                <ng-template #item let-item>
-                    <a pRipple class="flex items-center px-3 py-2 cursor-pointer" [class]="item.linkClass">
-                        <span [class]="item.icon"></span>
-                        <span class="ms-2">{{ item.label }}</span>
-                        <p-badge *ngIf="item.badge" class="ms-auto" [value]="item.badge" />
-                        <span *ngIf="item.shortcut" class="ms-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
-                    </a>
-                </ng-template>
-                <ng-template #end>
-                    <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />
-                        <span class="inline-flex flex-col items-start">
-                            <span class="font-bold">Amy Elsner</span>
-                            <span class="text-sm">Admin</span>
-                        </span>
-                    </button>
-                </ng-template>
-            </p-menu>
-        </div>
+                </button>
+            </ng-template>
+        </p-menu>
     `,
     standalone: true,
     imports: [AvatarModule, BadgeModule, MenuModule, RippleModule]
@@ -357,13 +357,61 @@ export class MenuTemplateDemo implements OnInit {
                         label: 'Logout',
                         icon: 'pi pi-sign-out',
                         shortcut: '⌘+Q',
-                        linkClass: '!text-red-500 dark:!text-red-400'
+                        linkClass: 'text-red-500! dark:text-red-400!'
                     }
                 ]
             },
             {
                 separator: true
             }
+        ];
+    }
+}
+```
+
+## Toggleable
+
+Nested submenus are toggleable by default. Use expanded to control the initial state and toggleable to override the default behavior per item.
+
+```typescript
+import { Component, OnInit } from '@angular/core';
+import { MenuModule } from 'primeng/menu';
+import { MenuItem } from 'primeng/api';
+
+@Component({
+    template: `
+        <div class="flex justify-center">
+            <p-menu [model]="items" />
+        </div>
+    `,
+    standalone: true,
+    imports: [MenuModule]
+})
+export class MenuToggleableDemo implements OnInit {
+    items: MenuItem[] | undefined;
+
+    ngOnInit() {
+        this.items = [
+            { label: 'Dashboard', icon: 'pi pi-home' },
+            { separator: true },
+            {
+                label: 'Workspace',
+                items: [
+                    { label: 'Analytics', icon: 'pi pi-chart-line' },
+                    {
+                        label: 'Projects',
+                        icon: 'pi pi-folder',
+                        items: [
+                            { label: 'Active Projects', icon: 'pi pi-briefcase' },
+                            { label: 'Recent', icon: 'pi pi-clock' },
+                            { label: 'Favorites', icon: 'pi pi-star' },
+                            { label: 'Completed', icon: 'pi pi-check-circle' }
+                        ]
+                    }
+                ]
+            },
+            { separator: true },
+            { label: 'Help & Support', icon: 'pi pi-question-circle' }
         ];
     }
 }
@@ -377,31 +425,29 @@ Menu is a navigation / command component that supports dynamic and static positi
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<MenuPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, MenuPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MenuItem[] | - | An array of menuitems. |
-| popup | boolean | false | Defines if menu would displayed as a popup. |
-| style | { [klass: string]: any } | - | Inline style of the component. |
+| popup | boolean | - | Defines if menu would displayed as a popup. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
-| showTransitionOptions | string | .12s cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | .1s linear | Transition options of the hide animation. **(Deprecated)** |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
 | ariaLabel | string | - | Defines a string value that labels an interactive element. |
 | ariaLabelledBy | string | - | Identifier of the underlying input element. |
 | id | string | - | Current id state as a string. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| onShow | value: any | Callback to invoke when overlay menu is shown. |
-| onHide | value: any | Callback to invoke when overlay menu is hidden. |
+| onShow | value: object | Callback to invoke when overlay menu is shown. |
+| onHide | value: object | Callback to invoke when overlay menu is hidden. |
 | onBlur | event: Event | Callback to invoke when the list loses focus. |
 | onFocus | event: Event | Callback to invoke when the list receives focus. |
 
@@ -411,16 +457,16 @@ Menu is a navigation / command component that supports dynamic and static positi
 |------|------|-------------|
 | start | TemplateRef<void> | Defines template option for start. |
 | end | TemplateRef<void> | Defines template option for end. |
-| header | TemplateRef<void> | Defines template option for header. |
 | item | TemplateRef<MenuItemTemplateContext> | Custom item template. |
 | submenuheader | TemplateRef<MenuSubmenuHeaderTemplateContext> | Custom submenu header template. |
+| submenuicon | TemplateRef<MenuSubmenuHeaderTemplateContext> | Custom submenu toggle icon template. |
 
 ### Methods
 
 | Name | Parameters | Return Type | Description |
 |------|------------|-------------|-------------|
 | toggle | event: Event | void | Toggles the visibility of the popup menu. |
-| show | event: any | void | Displays the popup menu. |
+| show | event: Event | void | Displays the popup menu. |
 | hide |  | void | Hides the popup menu. |
 
 ## Pass Through Options
@@ -431,6 +477,7 @@ Menu is a navigation / command component that supports dynamic and static positi
 | start | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the start's DOM element. |
 | list | PassThroughOption<HTMLUListElement, I> | Used to pass attributes to the list's DOM element. |
 | submenuLabel | PassThroughOption<HTMLLIElement, I> | Used to pass attributes to the submenu label's DOM element. |
+| submenuIcon | PassThroughOption<SVGElement, I> | Used to pass attributes to the submenu icon's DOM element. |
 | separator | PassThroughOption<HTMLLIElement, I> | Used to pass attributes to the separator's DOM element. |
 | item | PassThroughOption<HTMLLIElement, I> | Used to pass attributes to the item's DOM element. |
 | itemContent | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the item content's DOM element. |
@@ -457,6 +504,10 @@ Menu is a navigation / command component that supports dynamic and static positi
 | p-menu-item-link | Class name of the item link element |
 | p-menu-item-icon | Class name of the item icon element |
 | p-menu-item-label | Class name of the item label element |
+| p-menu-submenu | Class name of the submenu element |
+| p-menu-submenu-label | Class name of the submenu label element |
+| p-menu-submenu-icon | Class name of the submenu icon element |
+| p-menu-submenu-list | Class name of the submenu list element |
 
 ### Design Tokens
 
@@ -478,9 +529,16 @@ Menu is a navigation / command component that supports dynamic and static positi
 | menu.item.gap | --p-menu-item-gap | Gap of item |
 | menu.item.icon.color | --p-menu-item-icon-color | Icon color of item |
 | menu.item.icon.focus.color | --p-menu-item-icon-focus-color | Icon focus color of item |
+| menu.item.icon.size | --p-menu-item-icon-size | Icon size of item |
+| menu.item.label.font.weight | --p-menu-item-label-font-weight | Font weight of item label |
+| menu.item.label.font.size | --p-menu-item-label-font-size | Font size of item label |
 | menu.submenu.label.padding | --p-menu-submenu-label-padding | Padding of submenu label |
 | menu.submenu.label.font.weight | --p-menu-submenu-label-font-weight | Font weight of submenu label |
+| menu.submenu.label.font.size | --p-menu-submenu-label-font-size | Font size of submenu label |
 | menu.submenu.label.background | --p-menu-submenu-label-background | Background of submenu label |
 | menu.submenu.label.color | --p-menu-submenu-label-color | Color of submenu label |
+| menu.submenu.icon.size | --p-menu-submenu-icon-size | Size of submenu icon |
+| menu.submenu.icon.color | --p-menu-submenu-icon-color | Color of submenu icon |
+| menu.submenu.icon.focus.color | --p-menu-submenu-icon-focus-color | Focus color of submenu icon |
 | menu.separator.border.color | --p-menu-separator-border-color | Border color of separator |
 

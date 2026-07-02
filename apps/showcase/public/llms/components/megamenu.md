@@ -18,14 +18,12 @@ import { Table } from 'primeng/table';
 
 @Component({
     template: `
-        <div class="card">
-            <p-megamenu [model]="items" />
-        </div>
+        <p-megamenu [model]="items" />
     `,
     standalone: true,
     imports: [MegaMenuModule]
 })
-export class MegamenuBasicDemo implements OnInit {
+export class MegaMenuBasicDemo implements OnInit {
     items: MegaMenuItem[] | undefined;
 
     ngOnInit() {
@@ -144,14 +142,12 @@ import { MegaMenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-megamenu [model]="items" />
-        </div>
+        <p-megamenu [model]="items" />
     `,
     standalone: true,
     imports: [MegaMenuModule]
 })
-export class MegamenuRouterDemo implements OnInit {
+export class MegaMenuRouterDemo implements OnInit {
     items: MegaMenuItem[] | undefined;
 
     ngOnInit() {
@@ -215,69 +211,71 @@ import { MegaMenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-megamenu [model]="items" [style]="{ 'border-radius': '3rem', display: 'flex' }" class="p-4 bg-surface-0 dark:bg-surface-900">
-                <ng-template #start>
-                    <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
-                        <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
-                            <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--ground-background)" />
-                        </mask>
-                        <g mask="url(#mask0_1_52)">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z" fill="var(--p-primary-color)" />
-                        </g>
-                        <path d="M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z" fill="var(--ground-background)" />
-                        <path d="M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z" fill="var(--ground-background)" />
-                        <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z"
-                            fill="var(--ground-background)"
-                        />
-                        <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
-                        <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
-                        <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
-                            fill="var(--ground-background)"
-                        />
-                        <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
-                        <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
-                        <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
-                        <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
-                    </svg>
-                </ng-template>
-                <ng-template #item let-item>
-                    <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem">
+        <p-megamenu [model]="items" [style]="{ 'border-radius': '3rem', display: 'flex' }" class="p-3 bg-surface-0 dark:bg-surface-900">
+            <ng-template #start>
+                <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
+                    <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
+                        <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--ground-background)" />
+                    </mask>
+                    <g mask="url(#mask0_1_52)">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z" fill="var(--p-primary-color)" />
+                    </g>
+                    <path d="M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z" fill="var(--ground-background)" />
+                    <path d="M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z" fill="var(--ground-background)" />
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z"
+                        fill="var(--ground-background)"
+                    />
+                    <path d="M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z" fill="var(--ground-background)" />
+                    <path d="M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z" fill="var(--ground-background)" />
+                    <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z"
+                        fill="var(--ground-background)"
+                    />
+                    <path d="M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z" fill="var(--ground-background)" />
+                    <path d="M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z" fill="var(--ground-background)" />
+                    <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
+                    <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
+                </svg>
+            </ng-template>
+            <ng-template #item let-item>
+                @if (item.root) {
+                    <a pRipple class="flex items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold uppercase" style="border-radius: 2rem">
                         <i [ngClass]="item.icon"></i>
                         <span class="ml-2">{{ item.label }}</span>
                     </a>
-                    <a *ngIf="!item.root && !item.image" class="flex items-center p-4 cursor-pointer mb-2 gap-2">
+                } @else if (!item.image) {
+                    <a class="flex items-center p-3 cursor-pointer mb-2 gap-2">
                         <span class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12">
-                            <i [ngClass]="item.icon + ' text-lg'"></i>
+                            <i [ngClass]="item.icon"></i>
                         </span>
                         <span class="inline-flex flex-col gap-1">
-                            <span class="font-medium text-lg text-surface-900 dark:text-surface-0">{{ item.label }}</span>
-                            <span class="whitespace-nowrap">{{ item.subtext }}</span>
+                            <span class="font-medium text-surface-900 dark:text-surface-0">{{ item.label }}</span>
+                            <span class="whitespace-nowrap text-sm">{{ item.subtext }}</span>
                         </span>
                     </a>
-                    <div *ngIf="item.image" class="flex flex-col items-start gap-4">
+                } @else {
+                    <div class="flex flex-col items-start gap-4">
                         <img [src]="item.image" alt="megamenu-demo" class="w-full" />
-                        <span>{{ item.subtext }}</span>
+                        <span class="text-sm">{{ item.subtext }}</span>
                         <p-button [label]="item.label" [outlined]="true"></p-button>
                     </div>
-                </ng-template>
-                <ng-template #end>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
-                </ng-template>
-            </p-megamenu>
-        </div>
+                }
+            </ng-template>
+            <ng-template #end>
+                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+            </ng-template>
+        </p-megamenu>
     `,
     standalone: true,
     imports: [AvatarModule, ButtonModule, MegaMenuModule, RippleModule]
 })
-export class MegamenuTemplateDemo implements OnInit {
+export class MegaMenuTemplateDemo implements OnInit {
     items: MegaMenuItem[] | undefined;
 
     ngOnInit() {
@@ -352,14 +350,12 @@ import { MegaMenu } from 'primeng/megamenu';
 
 @Component({
     template: `
-        <div class="card">
-            <p-megamenu [model]="items" orientation="vertical" />
-        </div>
+        <p-megamenu [model]="items" orientation="vertical" />
     `,
     standalone: true,
     imports: [MegaMenuModule]
 })
-export class MegamenuVerticalDemo implements OnInit {
+export class MegaMenuVerticalDemo implements OnInit {
     items: MegaMenuItem[] | undefined;
 
     ngOnInit() {
@@ -471,20 +467,19 @@ MegaMenu is navigation component that displays submenus together.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<MegaMenuPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, MegaMenuPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MegaMenuItem[] | - | An array of menuitems. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| orientation | string | horizontal | Defines the orientation. |
+| orientation | "horizontal" \| "vertical" | - | Defines the orientation. |
 | id | string | - | Current id state as a string. |
 | ariaLabel | string | - | Defines a string value that labels an interactive element. |
 | ariaLabelledBy | string | - | Identifier of the underlying input element. |
-| breakpoint | string | 960px | The breakpoint to define the maximum width boundary. |
-| scrollHeight | string | 20rem | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
-| disabled | boolean | false | When present, it specifies that the component should be disabled. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
+| breakpoint | string | - | The breakpoint to define the maximum width boundary. |
+| scrollHeight | string | - | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
+| disabled | boolean | - | When present, it specifies that the component should be disabled. |
+| tabindex | number | - | Index of the element in tabbing order. |
 
 ### Templates
 
@@ -572,6 +567,9 @@ MegaMenu is navigation component that displays submenus together.
 | megamenu.item.icon.color | --p-megamenu-item-icon-color | Icon color of item |
 | megamenu.item.icon.focus.color | --p-megamenu-item-icon-focus-color | Icon focus color of item |
 | megamenu.item.icon.active.color | --p-megamenu-item-icon-active-color | Icon active color of item |
+| megamenu.item.icon.size | --p-megamenu-item-icon-size | Icon size of item |
+| megamenu.item.label.font.weight | --p-megamenu-item-label-font-weight | Font weight of item label |
+| megamenu.item.label.font.size | --p-megamenu-item-label-font-size | Font size of item label |
 | megamenu.overlay.padding | --p-megamenu-overlay-padding | Padding of overlay |
 | megamenu.overlay.background | --p-megamenu-overlay-background | Background of overlay |
 | megamenu.overlay.border.color | --p-megamenu-overlay-border-color | Border color of overlay |
@@ -583,6 +581,7 @@ MegaMenu is navigation component that displays submenus together.
 | megamenu.submenu.gap | --p-megamenu-submenu-gap | Gap of submenu |
 | megamenu.submenu.label.padding | --p-megamenu-submenu-label-padding | Padding of submenu label |
 | megamenu.submenu.label.font.weight | --p-megamenu-submenu-label-font-weight | Font weight of submenu label |
+| megamenu.submenu.label.font.size | --p-megamenu-submenu-label-font-size | Font size of submenu label |
 | megamenu.submenu.label.background | --p-megamenu-submenu-label-background | Background of submenu label |
 | megamenu.submenu.label.color | --p-megamenu-submenu-label-color | Color of submenu label |
 | megamenu.submenu.icon.size | --p-megamenu-submenu-icon-size | Size of submenu icon |

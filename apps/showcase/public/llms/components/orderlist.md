@@ -18,7 +18,7 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card sm:flex sm:justify-center">
+        <div class="sm:flex sm:justify-center">
             <p-orderlist [value]="products()" dataKey="id" [responsive]="true" breakpoint="575px">
                 <ng-template #item let-option>
                     {{ option.name }}
@@ -30,7 +30,7 @@ import { Product } from '@/domain/product';
     imports: [OrderListModule],
     providers: [ProductService]
 })
-export class OrderlistBasicDemo implements OnInit {
+export class OrderListBasicDemo implements OnInit {
     private productService = inject(ProductService);
     products = signal<Product[]>([]);
 
@@ -65,11 +65,11 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card sm:flex sm:justify-center">
+        <div class="sm:flex sm:justify-center">
             <p-orderlist [value]="products()" dataKey="id" [dragdrop]="true" [responsive]="true" breakpoint="575px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -92,7 +92,7 @@ import { Product } from '@/domain/product';
     imports: [OrderListModule],
     providers: [ProductService]
 })
-export class OrderlistDragdropDemo implements OnInit {
+export class OrderListDragDropDemo implements OnInit {
     private productService = inject(ProductService);
     products = signal<Product[]>([]);
 
@@ -127,11 +127,11 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card sm:flex sm:justify-center">
+        <div class="sm:flex sm:justify-center">
             <p-orderlist [value]="products()" filterBy="name" filterPlaceholder="Filter by name" [responsive]="true" breakpoint="575px" scrollHeight="20rem" class="sm:min-w-96">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -154,7 +154,7 @@ import { Product } from '@/domain/product';
     imports: [OrderListModule],
     providers: [ProductService]
 })
-export class OrderlistFilterDemo implements OnInit {
+export class OrderListFilterDemo implements OnInit {
     private productService = inject(ProductService);
     products = signal<Product[]>([]);
 
@@ -189,11 +189,11 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card sm:flex sm:justify-center">
+        <div class="sm:flex sm:justify-center">
             <p-orderlist [value]="products()" dataKey="id" [responsive]="true" breakpoint="575px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -216,7 +216,7 @@ import { Product } from '@/domain/product';
     imports: [OrderListModule],
     providers: [ProductService]
 })
-export class OrderlistTemplateDemo implements OnInit {
+export class OrderListTemplateDemo implements OnInit {
     private productService = inject(ProductService);
     products = signal<Product[]>([]);
 
@@ -247,35 +247,34 @@ OrderList is used to manage the order of a collection.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<OrderListPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, OrderListPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | header | string | - | Text for the caption. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
 | tabindex | number | - | Index of the element in tabbing order. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Specifies one or more IDs in the DOM that labels the input field. |
-| listStyle | { [klass: string]: any } | - | Inline style of the list element. |
-| responsive | boolean | false | A boolean value that indicates whether the component should be responsive. |
+| listStyle | Partial<CSSStyleDeclaration> | - | Inline style of the list element. |
+| responsive | boolean | - | A boolean value that indicates whether the component should be responsive. |
 | filterBy | string | - | When specified displays an input field to filter the items on keyup and decides which fields to search against. |
 | filterPlaceholder | string | - | Placeholder of the filter input. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
-| metaKeySelection | boolean | false | When true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
-| dragdrop | boolean | false | Whether to enable dragdrop based reordering. |
-| controlsPosition | "right" \| "left" | left | Defines the location of the buttons with respect to the list. |
+| metaKeySelection | boolean | - | When true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
+| dragdrop | boolean | - | Whether to enable dragdrop based reordering. |
+| controlsPosition | "left" \| "right" | - | Defines the location of the buttons with respect to the list. |
 | ariaFilterLabel | string | - | Defines a string that labels the filter input. |
-| filterMatchMode | "startsWith" \| "contains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "lt" \| "lte" \| "gt" \| "gte" | contains | Defines how the items are filtered. |
-| breakpoint | string | 960px | Indicates the width of the screen at which the component should change its behavior. |
-| stripedRows | boolean | false | Whether to displays rows with alternating colors. |
-| disabled | boolean | false | When present, it specifies that the component should be disabled. |
-| trackBy | Function | ... | Function to optimize the dom operations by delegating to ngForTrackBy, default algorithm checks for object identity. |
-| scrollHeight | string | 14rem | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
-| autoOptionFocus | boolean | true | Whether to focus on the first visible or selected element. |
+| filterMatchMode | "startsWith" \| "contains" \| "notContains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "between" \| "lt" \| "lte" \| "gt" \| "gte" \| "is" \| "isNot" \| "before" \| "after" \| "dateIs" \| "dateIsNot" \| "dateBefore" \| "dateAfter" | - | Defines how the items are filtered. |
+| breakpoint | string | - | Indicates the width of the screen at which the component should change its behavior. |
+| stripedRows | boolean | - | Whether to displays rows with alternating colors. |
+| disabled | boolean | - | When present, it specifies that the component should be disabled. |
+| trackBy | Function | - | Function to optimize the dom operations by delegating to ngForTrackBy, default algorithm checks for object identity. |
+| scrollHeight | string | - | Height of the viewport, a scrollbar is defined if height of list exceeds this value. |
+| autoOptionFocus | boolean | - | Whether to focus on the first visible or selected element. |
 | dataKey | string | - | Name of the field that uniquely identifies the record in the data. |
 | selection | any[] | - | A list of values that are currently selected. |
 | value | any[] | - | Array of values to be displayed in the component. It represents the data source for the list of items. |
-| buttonProps | ButtonProps | ... | Used to pass all properties of the ButtonProps to the Button component. |
+| buttonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
 | moveUpButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the move up button inside the component. |
 | moveTopButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the move top button inside the component. |
 | moveDownButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the move down button inside the component. |
@@ -285,7 +284,6 @@ OrderList is used to manage the order of a collection.
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| selectionChange | value: any | Callback to invoke on selection change. |
 | onReorder | value: any | Callback to invoke when list is reordered. |
 | onSelectionChange | event: OrderListSelectionChangeEvent | Callback to invoke when selection changes. |
 | onFilterEvent | event: OrderListFilterEvent | Callback to invoke when filtering occurs. |

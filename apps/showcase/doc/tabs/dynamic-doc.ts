@@ -2,17 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { TabsModule } from 'primeng/tabs';
 
 @Component({
     selector: 'dynamic-doc',
     standalone: true,
-    imports: [CommonModule, AppDocSectionText, AppCode, TabsModule],
+    imports: [CommonModule, AppDocSectionText, AppCode, AppDemoWrapper, TabsModule],
     template: `
         <app-docsectiontext>
             <p>Tabs can be generated dynamically using the standard <i>&#64;for</i> block.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-tabs value="0">
                 <p-tablist>
                     @for (tab of tabs; track tab.value) {
@@ -22,13 +23,13 @@ import { TabsModule } from 'primeng/tabs';
                 <p-tabpanels>
                     @for (tab of tabs; track tab.value) {
                         <p-tabpanel [value]="tab.value">
-                            <p class="m-0">{{ tab.content }}</p>
+                            <p class="m-0 text-sm">{{ tab.content }}</p>
                         </p-tabpanel>
                     }
                 </p-tabpanels>
             </p-tabs>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class DynamicDoc implements OnInit {

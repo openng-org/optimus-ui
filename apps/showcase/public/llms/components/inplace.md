@@ -16,19 +16,17 @@ import { InplaceModule } from 'primeng/inplace';
 
 @Component({
     template: `
-        <div class="card">
-            <p-inplace>
-                <ng-template #display>
-                    <span>View Content</span>
-                </ng-template>
-                <ng-template #content>
-                    <p class="m-0">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                    </p>
-                </ng-template>
-            </p-inplace>
-        </div>
+        <p-inplace>
+            <ng-template #display>
+                <span class="text-sm">View Content</span>
+            </ng-template>
+            <ng-template #content>
+                <p class="m-0 text-sm">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+            </ng-template>
+        </p-inplace>
     `,
     standalone: true,
     imports: [InplaceModule]
@@ -47,19 +45,17 @@ import { Photo } from '@/domain/photo';
 
 @Component({
     template: `
-        <div class="card">
-            <p-inplace>
-                <ng-template #display>
-                    <span class="inline-flex items-center gap-2">
-                        <span class="pi pi-image" style="vertical-align: middle"></span>
-                        <span class="ml-2">View Photo</span>
-                    </span>
-                </ng-template>
-                <ng-template #content>
-                    <img class="w-full sm:w-80 shadow-md" src="https://primefaces.org/cdn/primeng/images/demo/galleria/galleria5.jpg" alt="Nature" />
-                </ng-template>
-            </p-inplace>
-        </div>
+        <p-inplace>
+            <ng-template #display>
+                <span class="inline-flex items-center gap-2">
+                    <span class="pi pi-image" style="vertical-align: middle"></span>
+                    <span class="ml-2 text-sm">View Photo</span>
+                </span>
+            </ng-template>
+            <ng-template #content>
+                <img class="w-full sm:w-80 shadow-md" src="https://primefaces.org/cdn/primeng/images/demo/galleria/galleria5.jpg" alt="Nature" />
+            </ng-template>
+        </p-inplace>
     `,
     standalone: true,
     imports: [InplaceModule]
@@ -79,21 +75,19 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card">
-            <p-inplace>
-                <ng-template #display>
-                    <span>Click to Edit</span>
-                </ng-template>
-                <ng-template #content let-closeCallback="closeCallback">
-                    <span class="inline-flex gap-2">
-                        <input type="text" pInputText [pAutoFocus]="true" />
-                        <button type="button" pButton (click)="closeCallback($event)" text severity="danger">
-                            <i class="pi pi-times" pButtonIcon></i>
-                        </button>
-                    </span>
-                </ng-template>
-            </p-inplace>
-        </div>
+        <p-inplace>
+            <ng-template #display>
+                <span class="text-sm">Click to Edit</span>
+            </ng-template>
+            <ng-template #content let-closeCallback="closeCallback">
+                <span class="inline-flex gap-2">
+                    <input type="text" pInputText [pAutoFocus]="true" />
+                    <button type="button" pButton (click)="closeCallback($event)" text severity="danger">
+                        <i class="pi pi-times" pButtonIcon></i>
+                    </button>
+                </span>
+            </ng-template>
+        </p-inplace>
     `,
     standalone: true,
     imports: [InplaceModule, ButtonModule, InputTextModule]
@@ -114,33 +108,31 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card">
-            <p-inplace (onActivate)="loadData()">
-                <ng-template #display>
-                    <span>View Data</span>
-                </ng-template>
-                <ng-template #content>
-                    <p-table [value]="products" responsiveLayout="scroll">
-                        <ng-template #header>
-                            <tr>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Category</th>
-                                <th>Quantity</th>
-                            </tr>
-                        </ng-template>
-                        <ng-template #body let-product>
-                            <tr>
-                                <td>{{ product.code }}</td>
-                                <td>{{ product.name }}</td>
-                                <td>{{ product.category }}</td>
-                                <td>{{ product.quantity }}</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </ng-template>
-            </p-inplace>
-        </div>
+        <p-inplace (onActivate)="loadData()">
+            <ng-template #display>
+                <span class="text-sm">View Data</span>
+            </ng-template>
+            <ng-template #content>
+                <p-table [value]="products">
+                    <ng-template #header>
+                        <tr>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template #body let-product>
+                        <tr>
+                            <td>{{ product.code }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.category }}</td>
+                            <td>{{ product.quantity }}</td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </ng-template>
+        </p-inplace>
     `,
     standalone: true,
     imports: [InplaceModule, TableModule],
@@ -163,17 +155,13 @@ Inplace provides an easy to do editing and display at the same time where clicki
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<InplacePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| active | boolean | false | Whether the content is displayed or not. |
-| closable | boolean | false | Displays a button to switch back to display mode. **(Deprecated)** |
-| disabled | boolean | false | When present, it specifies that the element should be disabled. |
-| preventClick | boolean | false | Allows to prevent clicking. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| closeIcon | string | - | Icon to display in the close button. **(Deprecated)** |
-| closeAriaLabel | string | - | Establishes a string value that labels the close button. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, InplacePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| active | WritableSignal<boolean> | - | Whether the content is displayed or not. |
+| disabled | boolean | - | When present, it specifies that the element should be disabled. |
+| preventClick | boolean | - | Allows to prevent clicking. |
 
 ### Emits
 
@@ -188,7 +176,6 @@ Inplace provides an easy to do editing and display at the same time where clicki
 |------|------|-------------|
 | display | TemplateRef<void> | Custom display template. |
 | content | TemplateRef<InplaceContentTemplateContext> | Custom content template. |
-| closeicon | TemplateRef<void> | Custom close icon template. |
 
 ### Methods
 

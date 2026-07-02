@@ -72,13 +72,13 @@ class TestPopupTieredMenuComponent {
     standalone: false,
     template: `
         <p-tieredmenu [model]="model">
-            <ng-template pTemplate="item" let-item let-hasSubmenu="hasSubmenu">
+            <ng-template #item let-item let-hasSubmenu="hasSubmenu">
                 <div class="custom-item">
                     <span class="custom-label">{{ item.label }}</span>
                     <span *ngIf="hasSubmenu" class="custom-arrow">→</span>
                 </div>
             </ng-template>
-            <ng-template pTemplate="submenuicon">
+            <ng-template #submenuicon>
                 <i class="pi pi-angle-right custom-submenu-icon"></i>
             </ng-template>
         </p-tieredmenu>
@@ -214,17 +214,17 @@ describe('TieredMenu', () => {
         });
 
         it('should have default property values', () => {
-            expect(tieredMenu.popup).toBeFalsy();
-            expect(tieredMenu.disabled).toBe(false);
-            expect(tieredMenu.autoDisplay).toBe(true);
-            expect(tieredMenu.autoZIndex).toBe(true);
-            expect(tieredMenu.baseZIndex).toBe(0);
-            expect(tieredMenu.tabindex).toBe(0);
+            expect(tieredMenu.popup()).toBeFalsy();
+            expect(tieredMenu.disabled()).toBe(false);
+            expect(tieredMenu.autoDisplay()).toBe(true);
+            expect(tieredMenu.autoZIndex()).toBe(true);
+            expect(tieredMenu.baseZIndex()).toBe(0);
+            expect(tieredMenu.tabindex()).toBe(0);
         });
 
         it('should generate unique id', () => {
-            expect(tieredMenu.id).toBeDefined();
-            expect(tieredMenu.id).toMatch(/^pn_id_/);
+            expect(tieredMenu.$id()).toBeDefined();
+            expect(tieredMenu.$id()).toMatch(/^pn_id_/);
         });
 
         it('should process menu items correctly', () => {
@@ -243,7 +243,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.model).toEqual(newModel);
+            expect(tieredMenu.model()).toEqual(newModel);
             expect(tieredMenu.processedItems.length).toBe(1);
         });
 
@@ -253,7 +253,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.styleClass).toBe('custom-class');
+            expect(tieredMenu.styleClass()).toBe('custom-class');
         });
 
         it('should bind style object', async () => {
@@ -263,7 +263,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.style).toEqual(customStyle);
+            expect(tieredMenu.style()).toEqual(customStyle);
         });
 
         it('should bind popup property', async () => {
@@ -272,7 +272,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.popup).toBe(true);
+            expect(tieredMenu.popup()).toBe(true);
         });
 
         it('should bind disabled property', async () => {
@@ -281,7 +281,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.disabled).toBe(true);
+            expect(tieredMenu.disabled()).toBe(true);
         });
 
         it('should bind autoDisplay property', async () => {
@@ -290,7 +290,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.autoDisplay).toBe(false);
+            expect(tieredMenu.autoDisplay()).toBe(false);
         });
     });
 
@@ -358,7 +358,7 @@ describe('TieredMenu', () => {
         });
 
         it('should create popup menu', () => {
-            expect(popupTieredMenu.popup).toBe(true);
+            expect(popupTieredMenu.popup()).toBe(true);
             expect(popupTieredMenu.visible).toBeFalsy();
         });
 
@@ -413,14 +413,11 @@ describe('TieredMenu', () => {
 
             // Directly trigger the command on the save item
             const saveItem = popupTieredMenu.processedItems[0].items[0]; // Actions -> Save
-            const mockClickEvent = {
-                originalEvent: { preventDefault: () => {} },
-                processedItem: saveItem
-            };
+            const mockOriginalEvent = { preventDefault: () => {} } as Event;
 
             // Execute the command directly
             if (saveItem.item.command) {
-                saveItem.item.command({ originalEvent: mockClickEvent.originalEvent, item: saveItem.item });
+                saveItem.item.command({ originalEvent: mockOriginalEvent, item: saveItem.item });
             }
             await new Promise((resolve) => setTimeout(resolve, 100));
             await popupFixture.whenStable();
@@ -437,26 +434,23 @@ describe('TieredMenu', () => {
             templateFixture.detectChanges();
         });
 
-        it('should handle pTemplate content processing', async () => {
-            const pTemplateFixture = TestBed.createComponent(TestTemplateTieredMenuComponent);
-            pTemplateFixture.detectChanges();
+        it('should handle #item template content processing', async () => {
+            const templateFixture = TestBed.createComponent(TestTemplateTieredMenuComponent);
+            templateFixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
-            await pTemplateFixture.whenStable();
+            await templateFixture.whenStable();
 
-            const tieredMenuInstance = pTemplateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
+            const tieredMenuInstance = templateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
 
-            // Test that component handles pTemplate without errors
-            expect(() => tieredMenuInstance.ngAfterContentInit()).not.toThrow();
+            // Test that itemTemplate is set via contentChild
+            expect(tieredMenuInstance.itemTemplate()).toBeDefined();
 
-            // Test that templates property exists and is processed
-            expect(tieredMenuInstance.templates).toBeDefined();
-
-            // Verify pTemplate item container is rendered
-            const menuList = pTemplateFixture.debugElement.query(By.css('ul[role="menu"]'));
+            // Verify item container is rendered
+            const menuList = templateFixture.debugElement.query(By.css('ul[role="menu"]'));
             expect(menuList).toBeTruthy();
         });
 
-        it('should handle #item template processing', async () => {
+        it('should handle #item template with contentChild', async () => {
             const itemTemplateFixture = TestBed.createComponent(TestContentTemplateTieredMenuComponent);
             itemTemplateFixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -464,41 +458,36 @@ describe('TieredMenu', () => {
 
             const tieredMenuInstance = itemTemplateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
 
-            // Test that component handles #item template without errors
-            expect(() => tieredMenuInstance.ngAfterContentInit()).not.toThrow();
-
-            // Test that itemTemplate property exists (might be undefined in test environment)
-            expect(tieredMenuInstance.itemTemplate).toBeDefined();
+            // Test that itemTemplate property is set via contentChild
+            expect(tieredMenuInstance.itemTemplate()).toBeDefined();
 
             // Verify item container is rendered
             const menuList = itemTemplateFixture.debugElement.query(By.css('ul[role="menu"]'));
             expect(menuList).toBeTruthy();
         });
 
-        it('should render different template types correctly', async () => {
-            // Test both pTemplate and #item template approaches
-
-            // Test pTemplate rendering
-            const pTemplateFixture = TestBed.createComponent(TestTemplateTieredMenuComponent);
-            pTemplateFixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await pTemplateFixture.whenStable();
-
-            const pTemplateTieredMenu = pTemplateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
-            expect(pTemplateTieredMenu.templates).toBeDefined();
-            expect(() => pTemplateTieredMenu.ngAfterContentInit()).not.toThrow();
-
+        it('should render templates correctly via contentChild', async () => {
             // Test #item template rendering
+            const templateFixture = TestBed.createComponent(TestTemplateTieredMenuComponent);
+            templateFixture.detectChanges();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await templateFixture.whenStable();
+
+            const templateTieredMenu = templateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
+            expect(templateTieredMenu.itemTemplate()).toBeDefined();
+            expect(templateTieredMenu.submenuIconTemplate()).toBeDefined();
+
+            // Test another #item template component
             const itemTemplateFixture = TestBed.createComponent(TestContentTemplateTieredMenuComponent);
             itemTemplateFixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
             await itemTemplateFixture.whenStable();
 
             const itemTemplateTieredMenu = itemTemplateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
-            expect(itemTemplateTieredMenu.itemTemplate).toBeDefined();
+            expect(itemTemplateTieredMenu.itemTemplate()).toBeDefined();
         });
 
-        it('should render custom item template with pTemplate', async () => {
+        it('should render custom item template', async () => {
             templateFixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
             await templateFixture.whenStable();
@@ -509,12 +498,11 @@ describe('TieredMenu', () => {
             expect(customItems.length + customLabels.length).toBeGreaterThanOrEqual(0);
         });
 
-        it('should render custom submenu icon template with pTemplate', async () => {
+        it('should render custom submenu icon template', async () => {
             const tieredMenuInstance = templateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
 
-            // Test that submenu icon template is processed
-            expect(() => tieredMenuInstance.ngAfterContentInit()).not.toThrow();
-            expect(tieredMenuInstance.templates).toBeDefined();
+            // Test that submenu icon template is set via contentChild
+            expect(tieredMenuInstance.submenuIconTemplate()).toBeDefined();
 
             const customIcons = templateFixture.debugElement.queryAll(By.css('.custom-submenu-icon'));
             const angelIcons = templateFixture.debugElement.queryAll(By.css('.pi-angle-right'));
@@ -531,8 +519,8 @@ describe('TieredMenu', () => {
 
             const tieredMenuInstance = contextTemplateFixture.debugElement.query(By.directive(TieredMenu)).componentInstance;
 
-            // Test that template context is processed correctly
-            expect(() => tieredMenuInstance.ngAfterContentInit()).not.toThrow();
+            // Test that itemTemplate is set via contentChild
+            expect(tieredMenuInstance.itemTemplate()).toBeDefined();
 
             // Verify template context variables are available
             const contentTemplateItems = contextTemplateFixture.debugElement.queryAll(By.css('.content-template-item'));
@@ -552,7 +540,7 @@ describe('TieredMenu', () => {
     describe('Keyboard Navigation', () => {
         beforeEach(async () => {
             // Focus the menu first
-            tieredMenu.onMenuFocus({});
+            tieredMenu.onMenuFocus({} as FocusEvent);
             tieredMenu.focusedItemInfo.set({ index: 0, level: 0, parentKey: '', item: null });
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
@@ -693,7 +681,7 @@ describe('TieredMenu', () => {
         });
 
         it('should apply inline styles', async () => {
-            component.style = { 'background-color': 'red', border: '1px solid blue' };
+            component.style = { backgroundColor: 'red', border: '1px solid blue' };
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -701,7 +689,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
 
             // Verify the style is set on the component
-            expect(tieredMenu.style).toEqual({ 'background-color': 'red', border: '1px solid blue' });
+            expect(tieredMenu.style()).toEqual({ backgroundColor: 'red', border: '1px solid blue' });
         });
 
         it('should have default CSS classes', () => {
@@ -847,7 +835,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle breakpoint property', () => {
-            expect(breakpointTieredMenu.breakpoint).toBe('768px');
+            expect(breakpointTieredMenu.breakpoint()).toBe('768px');
         });
 
         it('should bind media query listener', () => {
@@ -920,12 +908,12 @@ describe('TieredMenu', () => {
 
             // Find the directive bound via the `tooltip` property on the MenuItem:
             // `content` is the @Input('pTooltip') property set directly by Angular
-            const directiveViaTooltipProp = tooltipDirectives.find((d) => d.content === 'Save the file');
+            const directiveViaTooltipProp = tooltipDirectives.find((d) => d.content() === 'Save the file');
             expect(directiveViaTooltipProp).withContext('Tooltip directive not found for item with tooltip property').toBeTruthy();
 
             // Find the directive bound via `tooltipOptions.tooltipLabel`:
             // `tooltipOptions` is the @Input() property set directly by Angular
-            const directiveViaTooltipOptions = tooltipDirectives.find((d) => (d.tooltipOptions as any)?.tooltipLabel === 'Delete the file');
+            const directiveViaTooltipOptions = tooltipDirectives.find((d) => (d.tooltipOptions() as any)?.tooltipLabel === 'Delete the file');
             expect(directiveViaTooltipOptions).withContext('Tooltip directive not found for item with tooltipOptions.tooltipLabel').toBeTruthy();
 
             // Activate each directive and verify the tooltip container (DOM element) is spawned
@@ -946,7 +934,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.model).toEqual([]);
+            expect(tieredMenu.model()).toEqual([]);
             expect(tieredMenu.processedItems.length).toBe(0);
         });
 
@@ -956,7 +944,7 @@ describe('TieredMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tieredMenu.model).toBeNull();
+            expect(tieredMenu.model()).toBeNull();
         });
 
         it('should handle items with no subitems', async () => {
@@ -1245,12 +1233,12 @@ describe('TieredMenu', () => {
                 pt = {
                     root: ({ instance }: any) => ({
                         class: {
-                            DISABLED: instance?.disabled
+                            DISABLED: instance?.disabled()
                         }
                     }),
                     item: ({ instance }: any) => ({
                         style: {
-                            'background-color': instance?.disabled ? 'yellow' : 'red'
+                            'background-color': instance?.disabled() ? 'yellow' : 'red'
                         }
                     })
                 };

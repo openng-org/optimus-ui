@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -9,9 +10,9 @@ import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
-    selector: 'singleselection-doc',
+    selector: 'single-selection-doc',
     standalone: true,
-    imports: [FormsModule, TableModule, ToggleSwitchModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [FormsModule, TableModule, ToggleSwitchModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>
                 Single row selection is enabled by defining <i>selectionMode</i> as <i>single</i> along with a value binding using <i>selection</i> property. When available, it is suggested to provide a unique identifier of a row with
@@ -22,11 +23,11 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
                 setting it to false.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
-                <div class="flex justify-center items-center mb-6 gap-2">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
+                <div class="flex justify-center items-center mb-5 gap-2">
                     <p-toggleswitch [(ngModel)]="metaKey" inputId="input-metakey" />
-                    <label for="input-metakey">MetaKey</label>
+                    <label for="input-metakey" class="text-sm">MetaKey</label>
                 </div>
                 <p-table [value]="products" selectionMode="single" [(selection)]="selectedProduct" [metaKeySelection]="metaKey" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
@@ -46,9 +47,9 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SingleSelectionDoc {

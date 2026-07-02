@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -9,19 +10,19 @@ import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'checkboxselection-doc',
+    selector: 'checkbox-selection-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, FormsModule, TableModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>Multiple selection can also be handled using checkboxes by enabling the <i>selectionMode</i> property of column as <i>multiple</i>.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="products" [(selection)]="selectedProducts" dataKey="code" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
                         <tr>
                             <th style="width: 4rem">
-                                <p-tableHeaderCheckbox />
+                                <p-table-header-checkbox />
                             </th>
                             <th>Code</th>
                             <th>Name</th>
@@ -32,7 +33,7 @@ import { TableModule } from 'primeng/table';
                     <ng-template #body let-product>
                         <tr>
                             <td>
-                                <p-tableCheckbox [value]="product" />
+                                <p-table-checkbox [value]="product" />
                             </td>
                             <td>{{ product.code }}</td>
                             <td>{{ product.name }}</td>
@@ -41,9 +42,9 @@ import { TableModule } from 'primeng/table';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CheckboxSelectionDoc {

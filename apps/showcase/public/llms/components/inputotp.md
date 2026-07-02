@@ -17,14 +17,14 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-inputotp [(ngModel)]="value" />
         </div>
     `,
     standalone: true,
     imports: [InputOtpModule, FormsModule]
 })
-export class InputotpBasicDemo {
+export class InputOtpBasicDemo {
     value: any;
 }
 ```
@@ -40,14 +40,14 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-inputotp [(ngModel)]="value" [integerOnly]="true" />
         </div>
     `,
     standalone: true,
     imports: [InputOtpModule, FormsModule]
 })
-export class InputotpIntegeronlyDemo {
+export class InputOtpIntegerOnlyDemo {
     value: any;
 }
 ```
@@ -63,14 +63,14 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-inputotp [(ngModel)]="value" [mask]="true" />
         </div>
     `,
     standalone: true,
     imports: [InputOtpModule, FormsModule]
 })
-export class InputotpMaskDemo {
+export class InputOtpMaskDemo {
     value: any;
 }
 ```
@@ -84,14 +84,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InputOtpModule } from 'primeng/inputotp';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <p-inputotp formControlName="value" [invalid]="isInvalid('value')" />
@@ -104,9 +102,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [InputOtpModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [InputOtpModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class InputotpReactiveformsDemo {
+export class InputOtpReactiveFormsDemo {
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
@@ -145,16 +143,18 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div class="flex flex-col items-center">
                 <div class="font-bold text-xl mb-2">Authenticate Your Account</div>
-                <p class="text-muted-color block mb-8">Please enter the code sent to your phone.</p>
+                <p class="text-sm text-muted-color block mb-8">Please enter the code sent to your phone.</p>
                 <p-inputotp [(ngModel)]="value" [length]="6">
                     <ng-template #input let-token let-events="events" let-index="index">
                         <input type="text" [maxLength]="1" (input)="events.input($event)" (keydown)="events.keydown($event)" [attr.value]="token" class="custom-otp-input" />
-                        <div *ngIf="index === 3" class="px-4">
-                            <i class="pi pi-minus"></i>
-                        </div>
+                        @if (index === 3) {
+                            <div class="px-4">
+                                <i class="pi pi-minus"></i>
+                            </div>
+                        }
                     </ng-template>
                 </p-inputotp>
                 <div class="flex justify-between mt-8 self-stretch">
@@ -167,7 +167,7 @@ import { InputOtpModule } from 'primeng/inputotp';
     standalone: true,
     imports: [ButtonModule, InputOtpModule, FormsModule]
 })
-export class InputotpSampleDemo {
+export class InputOtpSampleDemo {
     value: any;
 }
 ```
@@ -183,7 +183,7 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-inputotp [(ngModel)]="value1" size="small" />
             <p-inputotp [(ngModel)]="value2" />
             <p-inputotp [(ngModel)]="value3" size="large" />
@@ -192,7 +192,7 @@ import { InputOtpModule } from 'primeng/inputotp';
     standalone: true,
     imports: [InputOtpModule, FormsModule]
 })
-export class InputotpSizesDemo {
+export class InputOtpSizesDemo {
     value1: any;
     value2: any;
     value3: any;
@@ -210,7 +210,7 @@ import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-inputotp [(ngModel)]="value">
                 <ng-template #input let-token let-events="events">
                     <input class="custom-otp-input" (keydown)="events.keydown($event)" (input)="events.input($event)" type="text" [attr.value]="token" [maxLength]="1" />
@@ -221,7 +221,7 @@ import { InputOtpModule } from 'primeng/inputotp';
     standalone: true,
     imports: [InputOtpModule, FormsModule]
 })
-export class InputotpTemplateDemo {
+export class InputOtpTemplateDemo {
     value: any;
 }
 ```
@@ -233,14 +233,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputOtpModule } from 'primeng/inputotp';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-1">
                     <p-inputotp #otpModel="ngModel" [(ngModel)]="value" [invalid]="otpModel.invalid && (otpModel.touched || exampleForm.submitted)" name="value" required [minlength]="4" />
@@ -253,9 +251,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [InputOtpModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [InputOtpModule, MessageModule, ButtonModule, FormsModule]
 })
-export class InputotpTemplatedrivenformsDemo {
+export class InputOtpTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     value: any;
 
@@ -276,23 +274,23 @@ Input Otp is used to enter one time passwords.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<InputOtpPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| readonly | boolean | false | When present, it specifies that an input field is read-only. |
-| tabindex | number | null | Index of the element in tabbing order. |
-| length | number | 4 | Number of characters to initiate. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, InputOtpPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| readonly | boolean | - | When present, it specifies that an input field is read-only. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| length | number | - | Number of characters to initiate. |
 | styleClass | string | - | Style class of the input element. |
-| mask | boolean | false | Mask pattern. |
-| integerOnly | boolean | false | When present, it specifies that an input field is integer-only. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
+| mask | boolean | - | Mask pattern. |
+| integerOnly | boolean | - | When present, it specifies that an input field is integer-only. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
 
 ### Emits
 

@@ -12,28 +12,34 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-4">
             <div class="p-2 border border-surface rounded-border w-60">
                 <ul class="list-none flex flex-col gap-2 p-0 m-0">
-                    <li *ngFor="let product of availableProducts" class="p-2 rounded-border shadow-sm" pDraggable (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
-                        {{ product.name }}
-                    </li>
+                    @for (product of availableProducts; track product.id) {
+                        <li class="p-2 rounded-border shadow-xs" pDraggable (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
+                            {{ product.name }}
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="p-2 border border-surface rounded-border w-60" pDroppable (onDrop)="drop()">
                 <p class="text-center border-surface border-b">Drop Zone</p>
-                <ul class="list-none flex flex-col gap-2 p-0 m-0" *ngIf="selectedProducts">
-                    <li *ngFor="let product of selectedProducts" class="p-2 rounded-border shadow-sm">
-                        {{ product.name }}
-                    </li>
-                </ul>
+                @if (selectedProducts) {
+                    <ul class="list-none flex flex-col gap-2 p-0 m-0">
+                        @for (product of selectedProducts; track product.id) {
+                            <li class="p-2 rounded-border shadow-xs">
+                                {{ product.name }}
+                            </li>
+                        }
+                    </ul>
+                }
             </div>
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class DragdropBasicDemo implements OnInit {
+export class DragDropBasicDemo implements OnInit {
     availableProducts: Product[] | undefined;
     selectedProducts: Product[] | undefined;
     draggedProduct: Product | undefined | null;
@@ -89,28 +95,30 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card grid grid-cols-12 gap-4 grid-nogutter">
+        <div class="grid grid-cols-12 gap-4 grid-nogutter">
             <div class="col-span-12 md:col-span-6 drag-column">
-                <div *ngFor="let product of availableProducts">
-                    <div class="product-item" pDraggable="products" (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
-                        <div class="image-container">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="product-image" />
-                        </div>
-                        <div class="product-list-detail">
-                            <h5 class="mb-2">{{ product.name }}</h5>
-                            <i class="pi pi-tag product-category-icon"></i>
-                            <span class="product-category">{{ product.category }}</span>
-                        </div>
-                        <div class="product-list-action">
-                            <h6 class="mb-2">{{ product.price }}</h6>
-                            <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
+                @for (product of availableProducts; track product.id) {
+                    <div>
+                        <div class="product-item" pDraggable="products" (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
+                            <div class="image-container">
+                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="product-image" />
+                            </div>
+                            <div class="product-list-detail">
+                                <h5 class="mb-2">{{ product.name }}</h5>
+                                <i class="pi pi-tag product-category-icon"></i>
+                                <span class="product-category">{{ product.category }}</span>
+                            </div>
+                            <div class="product-list-action">
+                                <h6 class="mb-2">{{ product.price }}</h6>
+                                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
             <div class="col-span-12 md:col-span-6 drop-column" pDroppable="products" (onDrop)="drop()">
                 <p-table [value]="selectedProducts">
-                    <ng-template pTemplate="header">
+                    <ng-template #header>
                         <tr>
                             <th>ID</th>
                             <th>Category</th>
@@ -118,7 +126,7 @@ import { Product } from '@/domain/product';
                             <th>Price</th>
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-product>
+                    <ng-template #body let-product>
                         <tr>
                             <td>{{ product.id }}</td>
                             <td>{{ product.category }}</td>
@@ -134,7 +142,7 @@ import { Product } from '@/domain/product';
     imports: [TableModule, TagModule],
     providers: [ProductService]
 })
-export class DragdropDatatableDemo implements OnInit {
+export class DragDropDataTableDemo implements OnInit {
     private productService = inject(ProductService);
     availableProducts: Product[] | undefined;
     selectedProducts: Product[] | undefined;
@@ -197,16 +205,14 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card">
-            <div pDraggable dragHandle=".p-panel-header" class="w-60">
-                <p-panel header="Drag Header"> Content </p-panel>
-            </div>
+        <div pDraggable dragHandle=".p-panel-header" class="w-60">
+            <p-panel header="Drag Header"> Content </p-panel>
         </div>
     `,
     standalone: true,
     imports: [PanelModule]
 })
-export class DragdropDraghandleDemo {}
+export class DragDropDragHandleDemo {}
 ```
 
 ## Drop Indicator
@@ -219,28 +225,34 @@ import { Product } from '@/domain/product';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-4">
             <div class="p-2 border border-surface rounded-border w-60 h-40">
                 <ul class="list-none flex flex-col gap-2 p-0 m-0">
-                    <li *ngFor="let product of availableProducts" class="p-2 rounded-border shadow-sm" pDraggable (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
-                        {{ product.name }}
-                    </li>
+                    @for (product of availableProducts; track product.id) {
+                        <li class="p-2 rounded-border shadow-xs" pDraggable (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
+                            {{ product.name }}
+                        </li>
+                    }
                 </ul>
             </div>
             <div class="p-2 w-60 h-40 drop-column" pDroppable (onDrop)="drop()">
                 <p class="text-center border-surface border-b">Drop Zone</p>
-                <ul class="list-none flex flex-col gap-2 p-0 m-0" *ngIf="selectedProducts">
-                    <li *ngFor="let product of selectedProducts" class="p-2 rounded-border shadow-sm">
-                        {{ product.name }}
-                    </li>
-                </ul>
+                @if (selectedProducts) {
+                    <ul class="list-none flex flex-col gap-2 p-0 m-0">
+                        @for (product of selectedProducts; track product.id) {
+                            <li class="p-2 rounded-border shadow-xs">
+                                {{ product.name }}
+                            </li>
+                        }
+                    </ul>
+                }
             </div>
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class DragdropDropindicatorDemo implements OnInit {
+export class DragDropDropIndicatorDemo implements OnInit {
     availableProducts: Product[] | undefined;
     selectedProducts: Product[] | undefined;
     draggedProduct: Product | undefined | null;

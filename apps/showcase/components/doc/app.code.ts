@@ -1,12 +1,15 @@
 import { Code, ExtFile, RouteFile } from '@/domain/code';
 import { resolveDomainTypes, ResolvedRouteFiles, resolveRouteFiles } from '@/domain/types';
 import { DemoCodeService } from '@/service/democodeservice';
+import { HighlightService } from '@/service/highlightservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { afterNextRender, Component, computed, effect, ElementRef, inject, input, NgModule, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, NgModule, PLATFORM_ID, signal } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
 import { useCodeSandbox, useStackBlitz } from './codeeditor';
+import { IN_DEMO_WRAPPER } from './demo-mode.token';
 
 @Component({
     selector: 'app-code',
@@ -15,37 +18,26 @@ import { useCodeSandbox, useStackBlitz } from './codeeditor';
     template: `
         @if (resolvedCode()) {
             <div class="doc-section-code">
-                <div class="doc-section-code-buttons animate-scalein animate-duration-300">
-                    @if (!hideToggleCode()) {
-                        <button [pTooltip]="fullCodeVisible() ? 'Collapse' : 'Expand'" tooltipStyleClass="doc-section-code-tooltip" tooltipPosition="bottom" class="h-8 w-8 p-0 inline-flex items-center justify-center" (click)="toggleCode()">
-                            <i class="pi pi-arrows-v"></i>
+                @if (!inDemoWrapper) {
+                    <div class="doc-section-code-buttons animate-scalein animate-duration-300">
+                        @if (!hideToggleCode()) {
+                            <button [pTooltip]="fullCodeVisible() ? 'Collapse' : 'Expand'" tooltipStyleClass="doc-section-code-tooltip" tooltipPosition="bottom" class="h-8 w-8 p-0 inline-flex items-center justify-center" (click)="toggleCode()">
+                                <i class="pi" [class.pi-arrow-up-right-and-arrow-down-left-from-center]="!fullCodeVisible()" [class.pi-arrow-down-left-and-arrow-up-right-to-center]="fullCodeVisible()"></i>
+                            </button>
+                        }
+                        @if (!hideStackBlitz() && !hideToggleCode()) {
+                            <button pTooltip="Edit in StackBlitz" tooltipPosition="bottom" tooltipStyleClass="doc-section-code-tooltip" class="h-8 w-8 p-0 inline-flex items-center justify-center" (click)="openStackBlitz()">
+                                <i class="pi pi-bolt"></i>
+                            </button>
+                        }
+                        <button type="button" class="h-8 w-8 p-0 inline-flex items-center justify-center" [disabled]="copied()" (click)="copyCode()" pTooltip="Copy Code" tooltipPosition="bottom" tooltipStyleClass="doc-section-code-tooltip">
+                            <i class="pi" [class.pi-clone]="!copied()" [class.pi-check]="copied()"></i>
                         </button>
-                    }
-                    @if (!hideStackBlitz() && !hideToggleCode()) {
-                        <button pTooltip="Edit in StackBlitz" tooltipPosition="bottom" tooltipStyleClass="doc-section-code-tooltip" class="h-8 w-8 p-0 inline-flex items-center justify-center" (click)="openStackBlitz()">
-                            <svg role="img" width="13" height="18" viewBox="0 0 13 19" fill="currentColor" xmlns="http://www.w3.org/2000/svg" style="display: 'block'">
-                                <path d="M0 10.6533H5.43896L2.26866 18.1733L12.6667 7.463H7.1986L10.3399 0L0 10.6533Z" />
-                            </svg>
-                        </button>
-                    }
-                    <button type="button" class="h-8 w-8 p-0 inline-flex items-center justify-center" (click)="copyCode()" pTooltip="Copy Code" tooltipPosition="bottom" tooltipStyleClass="doc-section-code-tooltip">
-                        <i class="pi pi-copy"></i>
-                    </button>
-                </div>
+                    </div>
+                }
 
-                <div dir="ltr">
-                    @if (lang() === 'typescript') {
-                        <pre [style]="{ 'max-height': codeHeight() }" class="language-typescript"><code #codeElement>{{ resolvedCode()!.typescript }}</code></pre>
-                    }
-                    @if (lang() === 'html') {
-                        <pre [style]="{ 'max-height': codeHeight() }" class="language-markup"><code #codeElement>{{ resolvedCode()!.html }}</code></pre>
-                    }
-                    @if (lang() === 'scss') {
-                        <pre [style]="{ 'max-height': codeHeight() }" class="language-scss"><code #codeElement>{{ resolvedCode()!.scss }}</code></pre>
-                    }
-                    @if (lang() === 'command') {
-                        <pre class="language-shell"><code #codeElement>{{ resolvedCode()!.command }}</code></pre>
-                    }
+                <div dir="ltr" [style]="{ 'max-height': codeHeight() }" class="overflow-auto">
+                    <div style="width: max-content; min-width: 100%" [innerHTML]="highlightedHtml()"></div>
                 </div>
             </div>
         }
@@ -61,13 +53,13 @@ export class AppCode {
     hideCodeSandbox = input(true, { transform: (v: boolean | string) => v === '' || v === true });
     hideStackBlitz = input(false, { transform: (v: boolean | string) => v === '' || v === true });
     importCode = input(false, { transform: (v: boolean | string) => v === '' || v === true });
-    codeHeight = computed(() => (this.fullCodeVisible() ? '50rem' : '20rem'));
+    codeHeight = computed(() => (this.hideToggleCode() ? 'none' : this.fullCodeVisible() ? '50rem' : '20rem'));
 
-    @ViewChild('codeElement') codeElement: ElementRef;
-
+    copied = signal(false);
     fullCodeVisible = signal(false);
     lang = signal('typescript');
     resolvedCode = signal<Code | null>(null);
+    highlightedHtml = signal<SafeHtml>('');
     resolvedExtFiles = signal<ExtFile[]>([]);
     resolvedRouteFiles = signal<RouteFile[]>([]);
     resolvedService = signal<string[]>([]);
@@ -110,7 +102,11 @@ export class AppCode {
         return 'typescript';
     });
 
+    inDemoWrapper = inject(IN_DEMO_WRAPPER, { optional: true }) ?? false;
+
     private demoCodeService = inject(DemoCodeService);
+    private highlightService = inject(HighlightService);
+    private sanitizer = inject(DomSanitizer);
     private elementRef = inject(ElementRef);
     private route = inject(ActivatedRoute);
     private platformId = inject(PLATFORM_ID);
@@ -123,28 +119,22 @@ export class AppCode {
             const isLoaded = this.demoCodeService.isLoaded();
 
             if (codeInput) {
-                // Priority 1: Use code input prop
                 this.resolvedCode.set(codeInput);
                 this.resolvedExtFiles.set(this.resolveExtFilesInput(this.extFiles()));
                 const { routeFiles: resolvedRoutes, services: routeServices } = this.resolveRouteFilesInput(this.routeFiles());
                 this.resolvedRouteFiles.set(resolvedRoutes);
-                // Merge services from route files with code.service
                 const codeServices = this.service() || [];
                 this.resolvedService.set(this.mergeServices(codeServices, routeServices));
             } else if (selector && isLoaded) {
-                // Priority 2: Look up from JSON
                 const demo = this.demoCodeService.getCode(selector);
                 if (demo) {
                     this.resolvedCode.set(demo.code);
-                    // Merge extFiles from input with those from demos.json
                     const inputExtFiles = this.resolveExtFilesInput(this.extFiles());
                     const demoExtFiles = demo.metadata.extFiles || [];
                     this.resolvedExtFiles.set(this.mergeExtFiles(inputExtFiles, demoExtFiles));
-                    // Merge routeFiles from input with those from demos.json
                     const { routeFiles: inputRouteFiles, services: routeServices } = this.resolveRouteFilesInput(this.routeFiles());
                     const demoRouteFiles = demo.metadata.routeFiles || [];
                     this.resolvedRouteFiles.set(this.mergeRouteFiles(inputRouteFiles, demoRouteFiles));
-                    // Merge services from route files with those from demos.json
                     const demoServices = demo.metadata.services || [];
                     this.resolvedService.set(this.mergeServices(demoServices, routeServices));
                 }
@@ -155,51 +145,42 @@ export class AppCode {
         effect(() => {
             const initialLang = this.initialLang();
             if (initialLang && this.lang() === 'typescript' && initialLang !== 'typescript') {
-                // Only update if we haven't manually changed the lang
                 this.lang.set(initialLang);
             }
         });
 
-        // Prism highlighting after render
-        afterNextRender(() => {
-            this.highlightCode();
-        });
-    }
+        // Effect: Highlight code with Shiki when code or lang changes
+        effect(() => {
+            const code = this.resolvedCode();
+            const lang = this.lang();
 
-    private highlightCode() {
-        if (isPlatformBrowser(this.platformId)) {
-            if (window['Prism'] && this.codeElement && !this.codeElement.nativeElement.classList.contains('prism')) {
-                window['Prism'].highlightElement(this.codeElement.nativeElement);
-                this.codeElement.nativeElement.classList.add('prism');
-                this.codeElement.nativeElement.setAttribute('tabindex', '-1');
-                this.codeElement.nativeElement.parentElement?.setAttribute('tabindex', '-1');
+            if (code && isPlatformBrowser(this.platformId)) {
+                const source = code[lang] || '';
+                const shikiLang = lang === 'html' ? 'html' : lang === 'scss' ? 'scss' : lang === 'command' ? 'bash' : 'typescript';
+
+                this.highlightService.highlight(source, shikiLang).then((html) => {
+                    this.highlightedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
+                });
             }
-        }
+        });
     }
 
     changeLang(newLang: string) {
         this.lang.set(newLang);
-        // Re-highlight after lang change
-        setTimeout(() => this.highlightCode(), 0);
     }
 
     async copyCode() {
         const code = this.resolvedCode();
         if (code) {
             await navigator.clipboard.writeText(code[this.lang()]);
+            this.copied.set(true);
+            setTimeout(() => this.copied.set(false), 2000);
         }
     }
 
     toggleCode() {
-        const isVisible = !this.fullCodeVisible();
-        this.fullCodeVisible.set(isVisible);
-
-        const code = this.resolvedCode();
-        if (code) {
-            this.lang.set('typescript');
-            // Re-highlight after toggle
-            setTimeout(() => this.highlightCode(), 0);
-        }
+        this.fullCodeVisible.set(!this.fullCodeVisible());
+        this.lang.set('typescript');
     }
 
     openStackBlitz() {

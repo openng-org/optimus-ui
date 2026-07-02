@@ -1,4 +1,5 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -9,13 +10,13 @@ import { PickListModule } from 'primeng/picklist';
 @Component({
     selector: 'filter-doc',
     standalone: true,
-    imports: [CommonModule, PickListModule, AppCode, AppDocSectionText],
+    imports: [CommonModule, PickListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
     template: `
         <app-docsectiontext>
             <p>Filter value is checked against the property of an object configured with the <i>filterBy</i> property.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-picklist
                 [source]="sourceProducts()"
                 [target]="targetProducts()"
@@ -29,7 +30,7 @@ import { PickListModule } from 'primeng/picklist';
             >
                 <ng-template let-option let-selected="selected" #option>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -45,8 +46,8 @@ import { PickListModule } from 'primeng/picklist';
                     </div>
                 </ng-template>
             </p-picklist>
-        </div>
-        <app-code [extFiles]="['Product']"></app-code>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>
     `
 })
 export class FilterDoc implements OnInit {

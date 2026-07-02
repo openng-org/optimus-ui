@@ -154,7 +154,7 @@ describe('FocusTrap', () => {
         });
 
         it('should have default values', () => {
-            expect(directive.pFocusTrapDisabled).toBe(false);
+            expect(directive.pFocusTrapDisabled()).toBe(false);
         });
 
         it('should inject platform ID and document', () => {
@@ -772,46 +772,11 @@ describe('FocusTrap', () => {
             directive = fixture.debugElement.query(By.directive(FocusTrap)).injector.get(FocusTrap);
         });
 
-        it('should call ngOnInit and create hidden elements', () => {
-            spyOn(directive, 'createHiddenFocusableElements').and.callThrough();
+        it('should create hidden elements on init', () => {
+            fixture.detectChanges();
 
-            directive.ngOnInit();
-
-            expect(directive.createHiddenFocusableElements).toHaveBeenCalled();
-        });
-
-        it('should handle ngOnChanges for pFocusTrapDisabled', () => {
-            const changes = {
-                pFocusTrapDisabled: {
-                    currentValue: true,
-                    previousValue: false,
-                    firstChange: false,
-                    isFirstChange: () => false
-                }
-            };
-
-            spyOn(directive, 'removeHiddenFocusableElements');
-
-            directive.ngOnChanges(changes);
-
-            expect(directive.removeHiddenFocusableElements).toHaveBeenCalled();
-        });
-
-        it('should handle ngOnChanges when enabling focus trap', () => {
-            const changes = {
-                pFocusTrapDisabled: {
-                    currentValue: false,
-                    previousValue: true,
-                    firstChange: false,
-                    isFirstChange: () => false
-                }
-            };
-
-            spyOn(directive, 'createHiddenFocusableElements');
-
-            directive.ngOnChanges(changes);
-
-            expect(directive.createHiddenFocusableElements).toHaveBeenCalled();
+            expect(directive.firstHiddenFocusableElement).toBeTruthy();
+            expect(directive.lastHiddenFocusableElement).toBeTruthy();
         });
     });
 
@@ -840,13 +805,17 @@ describe('FocusTrap', () => {
         });
 
         it('should remove hidden elements from DOM when removeHiddenFocusableElements is called', () => {
-            expect(directive.firstHiddenFocusableElement.parentNode).toBe(element);
-            expect(directive.lastHiddenFocusableElement.parentNode).toBe(element);
+            const firstEl = directive.firstHiddenFocusableElement;
+            const lastEl = directive.lastHiddenFocusableElement;
+            expect(firstEl.parentNode).toBe(element);
+            expect(lastEl.parentNode).toBe(element);
 
             directive.removeHiddenFocusableElements();
 
-            expect(directive.firstHiddenFocusableElement.parentNode).toBeNull();
-            expect(directive.lastHiddenFocusableElement.parentNode).toBeNull();
+            expect(firstEl.parentNode).toBeNull();
+            expect(lastEl.parentNode).toBeNull();
+            expect(directive.firstHiddenFocusableElement).toBeNull();
+            expect(directive.lastHiddenFocusableElement).toBeNull();
         });
 
         it('should handle removeHiddenFocusableElements when elements have no parent', () => {

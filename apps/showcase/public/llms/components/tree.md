@@ -18,9 +18,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="files()" class="w-full md:w-[30rem]" />
-        </div>
+        <p-tree [value]="files()" class="w-full md:w-120" />
     `,
     standalone: true,
     imports: [TreeModule],
@@ -50,9 +48,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="files()" selectionMode="checkbox" class="w-full md:w-[30rem]" [(selection)]="selectedFiles" />
-        </div>
+        <p-tree [value]="files()" selectionMode="checkbox" class="w-full md:w-120" [(selection)]="selectedFiles" />
     `,
     standalone: true,
     imports: [TreeModule],
@@ -78,7 +74,6 @@ Tree has exclusive integration with ContextMenu using the contextMenu property a
 ```typescript
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ContextMenu, ContextMenuModule } from 'primeng/contextmenu';
-import { ToastModule } from 'primeng/toast';
 import { TreeModule } from 'primeng/tree';
 import { NodeService } from '@/service/nodeservice';
 import { TreeNode, MenuItem, MessageService } from 'primeng/api';
@@ -86,17 +81,14 @@ import { ContextMenu } from 'primeng/contextmenu';
 
 @Component({
     template: `
-        <div class="card">
-            <p-toast [style]="{ marginTop: '80px' }" />
-            <p-tree [value]="files()" class="w-full md:w-80" selectionMode="single" [(selection)]="selectedNode" [(contextMenuSelection)]="contextMenuNode" [contextMenu]="cm" contextMenuSelectionMode="separate" />
-            <p-contextmenu #cm [model]="items" />
-        </div>
+        <p-tree [value]="files()" class="w-full md:w-80" selectionMode="single" [(selection)]="selectedNode" [(contextMenuSelection)]="contextMenuNode" [contextMenu]="cm" />
+        <p-contextmenu #cm [model]="items" />
     `,
     standalone: true,
-    imports: [ContextMenuModule, ToastModule, TreeModule],
+    imports: [ContextMenuModule, TreeModule],
     providers: [NodeService, MessageService]
 })
-export class TreeContextmenuDemo implements OnInit {
+export class TreeContextMenuDemo implements OnInit {
     private nodeService = inject(NodeService);
     private messageService = inject(MessageService);
     files = signal<TreeNode[]>([]);
@@ -151,13 +143,11 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex flex-wrap gap-2 mb-6">
-                <p-button icon="pi pi-plus" label="Expand all" (click)="expandAll()" />
-                <p-button icon="pi pi-minus" label="Collapse all" (click)="collapseAll()" />
-            </div>
-            <p-tree [value]="files()" class="w-full md:w-[30rem]" />
+        <div class="flex flex-wrap gap-2 mb-6">
+            <p-button icon="pi pi-plus" label="Expand all" (click)="expandAll()" />
+            <p-button icon="pi pi-minus" label="Collapse all" (click)="collapseAll()" />
         </div>
+        <p-tree [value]="files()" class="w-full md:w-120" />
     `,
     standalone: true,
     imports: [ButtonModule, TreeModule],
@@ -191,29 +181,25 @@ An event is provided for each type of user interaction such as expand, collapse 
 
 ```typescript
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { ToastModule } from 'primeng/toast';
 import { TreeModule } from 'primeng/tree';
 import { NodeService } from '@/service/nodeservice';
 import { TreeNode, MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-toast />
-            <p-tree
-                [value]="files()"
-                class="w-full md:w-[30rem]"
-                selectionMode="single"
-                [(selection)]="selectedFile"
-                (onNodeExpand)="nodeExpand($event)"
-                (onNodeCollapse)="nodeCollapse($event)"
-                (onNodeSelect)="nodeSelect($event)"
-                (onNodeUnselect)="nodeUnselect($event)"
-            />
-        </div>
+        <p-tree
+            [value]="files()"
+            class="w-full md:w-120"
+            selectionMode="single"
+            [(selection)]="selectedFile"
+            (onNodeExpand)="nodeExpand($event)"
+            (onNodeCollapse)="nodeCollapse($event)"
+            (onNodeSelect)="nodeSelect($event)"
+            (onNodeUnselect)="nodeUnselect($event)"
+        />
     `,
     standalone: true,
-    imports: [ToastModule, TreeModule],
+    imports: [TreeModule],
     providers: [NodeService, MessageService]
 })
 export class TreeEventDemo implements OnInit {
@@ -258,7 +244,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-4">
             <div class="flex-auto md:flex md:justify-start md:items-center flex-col">
                 <p-tree [value]="files()" [filter]="true" filterPlaceholder="Lenient Filter" />
             </div>
@@ -296,9 +282,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree class="w-full md:w-[30rem]" [value]="nodes()" loadingMode="icon" (onNodeExpand)="onNodeExpand($event)" />
-        </div>
+        <p-tree class="w-full md:w-120" [value]="nodes()" loadingMode="icon" (onNodeExpand)="onNodeExpand($event)" />
     `,
     standalone: true,
     imports: [TreeModule]
@@ -375,13 +359,11 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex items-center mb-6 gap-2">
-                <p-toggleswitch inputId="input-metakey" [(ngModel)]="metaKeySelection" />
-                <label for="input-metakey">MetaKey</label>
-            </div>
-            <p-tree [metaKeySelection]="metaKeySelection" [value]="files()" class="w-full md:w-[30rem]" selectionMode="multiple" [(selection)]="selectedFiles" />
+        <div class="flex items-center mb-6 gap-2">
+            <p-toggleswitch inputId="input-metakey" [(ngModel)]="metaKeySelection" />
+            <label for="input-metakey">MetaKey</label>
         </div>
+        <p-tree [metaKeySelection]="metaKeySelection" [value]="files()" class="w-full md:w-120" selectionMode="multiple" [(selection)]="selectedFiles" />
     `,
     standalone: true,
     imports: [ToggleSwitchModule, TreeModule, FormsModule],
@@ -413,9 +395,7 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="files()" class="w-full md:w-[30rem]" selectionMode="single" [(selection)]="selectedFile" />
-        </div>
+        <p-tree [value]="files()" class="w-full md:w-120" selectionMode="single" [(selection)]="selectedFile" />
     `,
     standalone: true,
     imports: [TreeModule],
@@ -436,7 +416,7 @@ export class TreeSingleDemo implements OnInit {
 
 ## Template
 
-Custom node content instead of a node label is defined with the pTemplate property.
+Custom node content instead of a node label is defined with the #node template reference.
 
 ```typescript
 import { Component, OnInit, signal } from '@angular/core';
@@ -445,16 +425,15 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="nodes()" class="w-full md:w-[30rem]">
-                <ng-template let-node pTemplate="url">
+        <p-tree [value]="nodes()" class="w-full md:w-120">
+            <ng-template #node let-node>
+                @if (node.type === 'url') {
                     <a [href]="node.data" target="_blank" rel="noopener noreferrer" class="text-surface-700 dark:text-surface-100 hover:text-primary">{{ node.label }}</a>
-                </ng-template>
-                <ng-template let-node pTemplate="default">
+                } @else {
                     <b>{{ node.label }}</b>
-                </ng-template>
-            </p-tree>
-        </div>
+                }
+            </ng-template>
+        </p-tree>
     `,
     standalone: true,
     imports: [TreeModule]
@@ -501,15 +480,13 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="nodes()" scrollHeight="250px" [virtualScroll]="true" [virtualScrollItemSize]="35" />
-        </div>
+        <p-tree [value]="nodes()" scrollHeight="250px" [virtualScroll]="true" [virtualScrollItemSize]="35" />
     `,
     standalone: true,
     imports: [TreeModule],
     providers: [NodeService]
 })
-export class TreeVirtualscrollDemo implements OnInit {
+export class TreeVirtualScrollDemo implements OnInit {
     private nodeService = inject(NodeService);
     nodes = signal<TreeNode[]>(undefined);
 
@@ -531,15 +508,13 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-tree [value]="nodes()" scrollHeight="250px" [virtualScroll]="true" [lazy]="true" [virtualScrollItemSize]="35" (onNodeExpand)="nodeExpand($event)" [loading]="loading()" />
-        </div>
+        <p-tree [value]="nodes()" scrollHeight="250px" [virtualScroll]="true" [lazy]="true" [virtualScrollItemSize]="35" (onNodeExpand)="nodeExpand($event)" [loading]="loading()" />
     `,
     standalone: true,
     imports: [TreeModule],
     providers: [NodeService]
 })
-export class TreeVirtualscrolllazyDemo implements OnInit {
+export class TreeVirtualScrollLazyDemo implements OnInit {
     private nodeService = inject(NodeService);
     loading = signal<boolean>(false);
     nodes = signal<TreeNode[]>(undefined);
@@ -573,49 +548,46 @@ Tree is used to display hierarchical data.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TreePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TreePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | value | any | - | An array of treenodes. |
-| selectionMode | "multiple" \| "single" \| "checkbox" | - | Defines the selection mode. |
-| loadingMode | "icon" \| "mask" | mask | Loading mode display. |
-| selection | ModelSignal<TreeNode<any> \| TreeNode<any>[]> | ... | A single treenode instance or an array to refer to the selections. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| selectionMode | "single" \| "multiple" \| "checkbox" \| null \| undefined | - | Defines the selection mode. |
+| loadingMode | "mask" \| "icon" | - | Loading mode display. |
+| selection | TreeNode<any> \| TreeNode<any>[] | - | A single treenode instance or an array to refer to the selections. |
 | contextMenu | any | - | Context menu instance. |
-| contextMenuSelectionMode | "separate" \| "joint" | joint | Defines the behavior of context menu selection, in "separate" mode context menu updates contextMenuSelection property whereas in joint mode selection property is used instead so that when row selection is enabled, both row selection and context menu selection use the same property. |
-| contextMenuSelection | ModelSignal<TreeNode<any>> | ... | Selected node with a context menu. |
+| contextMenuSelection | TreeNode<any> | - | Selected node with a context menu. |
 | draggableScope | any | - | Scope of the draggable nodes to match a droppableScope. |
 | droppableScope | any | - | Scope of the droppable nodes to match a draggableScope. |
-| draggableNodes | boolean | false | Whether the nodes are draggable. |
-| droppableNodes | boolean | false | Whether the nodes are droppable. |
-| metaKeySelection | boolean | false | Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
-| propagateSelectionUp | boolean | true | Whether checkbox selections propagate to ancestor nodes. |
-| propagateSelectionDown | boolean | true | Whether checkbox selections propagate to descendant nodes. |
-| loading | boolean | false | Displays a loader to indicate data load is in progress. |
+| draggableNodes | boolean | - | Whether the nodes are draggable. |
+| droppableNodes | boolean | - | Whether the nodes are droppable. |
+| metaKeySelection | boolean | - | Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically. |
+| propagateSelectionUp | boolean | - | Whether checkbox selections propagate to ancestor nodes. |
+| propagateSelectionDown | boolean | - | Whether checkbox selections propagate to descendant nodes. |
+| loading | boolean | - | Displays a loader to indicate data load is in progress. |
 | loadingIcon | string | - | The icon to show while indicating data load is in progress. |
 | emptyMessage | string | - | Text to display when there is no data. |
 | ariaLabel | string | - | Used to define a string that labels the tree. |
 | togglerAriaLabel | string | - | Defines a string that labels the toggler icon for accessibility. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| validateDrop | boolean | false | When enabled, drop can be accepted or rejected based on condition defined at onNodeDrop. |
-| filter | boolean | false | When specified, displays an input field to filter the items. |
-| filterInputAutoFocus | boolean | false | Determines whether the filter input should be automatically focused when the component is rendered. |
-| filterBy | string | label | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
-| filterMode | string | lenient | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
+| validateDrop | boolean | - | When enabled, drop can be accepted or rejected based on condition defined at onNodeDrop. |
+| filter | boolean | - | When specified, displays an input field to filter the items. |
+| filterInputAutoFocus | boolean | - | Determines whether the filter input should be automatically focused when the component is rendered. |
+| filterBy | string | - | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
+| filterMode | string | - | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
 | filterOptions | any | - | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
 | filterPlaceholder | string | - | Placeholder text to show when filter input is empty. |
 | filteredNodes | TreeNode<any>[] | - | Values after the tree nodes are filtered. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
 | scrollHeight | string | - | Height of the scrollable viewport. |
-| lazy | boolean | false | Defines if data is loaded and interacted with in lazy manner. |
-| virtualScroll | boolean | false | Whether the data should be loaded on demand during scroll. |
+| lazy | boolean | - | Defines if data is loaded and interacted with in lazy manner. |
+| virtualScroll | boolean | - | Whether the data should be loaded on demand during scroll. |
 | virtualScrollItemSize | number | - | Height of an item in the list for VirtualScrolling. |
 | virtualScrollOptions | ScrollerOptions | - | Whether to use the scroller feature. The properties of scroller component can be used like an object in it. |
-| indentation | number | 1.5 | Indentation factor for spacing of the nested node when virtual scrolling is enabled. |
-| _templateMap | any | - | Custom templates of the component. |
-| trackBy | Function | ... | Function to optimize the node list rendering, default algorithm checks for object identity. |
-| highlightOnSelect | boolean | false | Highlights the node on select. |
+| indentation | number | - | Indentation factor for spacing of the nested node when virtual scrolling is enabled. |
+| trackBy | Function | - | Function to optimize the node list rendering, default algorithm checks for object identity. |
+| highlightOnSelect | boolean | - | Highlights the node on select. |
 
 ### Emits
 
@@ -731,6 +703,9 @@ Tree is used to display hierarchical data.
 | tree.node.icon.color | --p-tree-node-icon-color | Color of node icon |
 | tree.node.icon.hover.color | --p-tree-node-icon-hover-color | Hover color of node icon |
 | tree.node.icon.selected.color | --p-tree-node-icon-selected-color | Selected color of node icon |
+| tree.node.label.font.weight | --p-tree-node-label-font-weight | Font weight of node label |
+| tree.node.label.font.size | --p-tree-node-label-font-size | Font size of node label |
+| tree.node.label.selected.font.weight | --p-tree-node-label-selected-font-weight | Font weight of a selected node label |
 | tree.node.toggle.button.border.radius | --p-tree-node-toggle-button-border-radius | Border radius of node toggle button |
 | tree.node.toggle.button.size | --p-tree-node-toggle-button-size | Size of node toggle button |
 | tree.node.toggle.button.hover.background | --p-tree-node-toggle-button-hover-background | Hover background of node toggle button |

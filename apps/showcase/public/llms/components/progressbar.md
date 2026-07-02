@@ -16,14 +16,12 @@ import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     template: `
-        <div class="card">
-            <p-progressbar [value]="50" />
-        </div>
+        <p-progressbar [value]="50" />
     `,
     standalone: true,
     imports: [ProgressBarModule]
 })
-export class ProgressbarBasicDemo {}
+export class ProgressBarBasicDemo {}
 ```
 
 ## Dynamic
@@ -33,21 +31,17 @@ Value is reactive so updating it dynamically changes the bar as well.
 ```typescript
 import { Component, OnInit, inject } from '@angular/core';
 import { ProgressBarModule } from 'primeng/progressbar';
-import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-toast />
-            <p-progressbar [value]="value" />
-        </div>
+        <p-progressbar [value]="value" />
     `,
     standalone: true,
-    imports: [ProgressBarModule, ToastModule],
+    imports: [ProgressBarModule],
     providers: [MessageService]
 })
-export class ProgressbarDynamicDemo implements OnInit {
+export class ProgressBarDynamicDemo implements OnInit {
     private messageService = inject(MessageService);
     value: number = 0;
     interval: any;
@@ -86,15 +80,13 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" />
-        </div>
+        <p-progressbar mode="indeterminate" [style]="{ height: '6px' }" />
     `,
     standalone: true,
     imports: [ProgressBarModule],
     providers: [MessageService]
 })
-export class ProgressbarIndeterminateDemo {
+export class ProgressBarIndeterminateDemo {
     private messageService = inject(MessageService);
 }
 ```
@@ -109,18 +101,16 @@ import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     template: `
-        <div class="card">
-            <p-progressbar [value]="50">
-                <ng-template #content let-value>
-                    <span>{{ value }}/100</span>
-                </ng-template>
-            </p-progressbar>
-        </div>
+        <p-progressbar [value]="50">
+            <ng-template #content let-value>
+                <span>{{ value }}/100</span>
+            </ng-template>
+        </p-progressbar>
     `,
     standalone: true,
     imports: [ProgressBarModule]
 })
-export class ProgressbarTemplateDemo {}
+export class ProgressBarTemplateDemo {}
 ```
 
 ## Progress Bar
@@ -131,16 +121,15 @@ ProgressBar is a process status indicator.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ProgressBarPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ProgressBarPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | value | number | - | Current value of the progress. |
-| showValue | boolean | true | Whether to display the progress bar value. |
-| styleClass | string | - | Style class of the element. **(Deprecated)** |
+| showValue | boolean | - | Whether to display the progress bar value. |
 | valueStyleClass | string | - | Style class of the value element. |
-| unit | string | % | Unit sign appended to the value. |
-| mode | "indeterminate" \| "determinate" | 'determinate' | Defines the mode of the progress |
+| unit | string | - | Unit sign appended to the value. |
+| mode | "determinate" \| "indeterminate" | 'determinate' | Defines the mode of the progress |
 | color | string | - | Color for the background of the progress. |
 
 ### Templates

@@ -1,4 +1,3 @@
-import { AppNewsComponent } from '@/components/layout/news/app.news.component';
 import { AppTopBarComponent } from '@/components/layout/topbar/app.topbar.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
@@ -18,7 +17,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
-    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, BlockSectionComponent, TemplateSectionComponent, FooterSectionComponent]
+    imports: [CommonModule, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, BlockSectionComponent, TemplateSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {
     subscription!: Subscription;

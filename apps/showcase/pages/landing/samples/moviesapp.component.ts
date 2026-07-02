@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -17,9 +16,9 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
 @Component({
     selector: 'movies-app',
     standalone: true,
-    imports: [CommonModule, RouterModule, SelectButton, FormsModule, AvatarModule, TooltipModule, IconField, InputIcon, ButtonModule, InputTextModule, ProgressBar, Carousel, OverlayBadgeModule],
+    imports: [RouterModule, SelectButton, FormsModule, AvatarModule, TooltipModule, IconField, InputIcon, ButtonModule, InputTextModule, ProgressBar, Carousel, OverlayBadgeModule],
     template: `
-        <div class="flex flex-wrap gap-4 items-center justify-between">
+        <div class="flex flex-wrap gap-3.5 items-center justify-between">
             <p-selectbutton [(ngModel)]="value" [options]="options" aria-labelledby="basic" />
             <div class="flex gap-2.5 items-center">
                 <p-iconfield iconPosition="left">
@@ -27,16 +26,16 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
                     <input type="text" pInputText [(ngModel)]="search" placeholder="Search" />
                 </p-iconfield>
                 <p-button severity="secondary" outlined>
-                    <p-overlayBadge severity="danger" badgeSize="small" styleClass="!min-w-0 !w-2.5 !h-2.5">
+                    <p-overlaybadge severity="danger" badgeSize="small" styleClass="min-w-0! w-2.5! h-2.5!">
                         <i class="pi pi-bell"></i>
-                    </p-overlayBadge>
+                    </p-overlaybadge>
                 </p-button>
-                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" shape="circle" class="w-9 h-9 cursor-pointer" />
+                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" shape="circle" class="w-8 h-8 cursor-pointer" />
             </div>
         </div>
         <div class="">
-            <div class="flex items-center justify-between gap-2 mb-6">
-                <div class="text-color text-xl font-medium leading-7">Keep watching</div>
+            <div class="flex items-center justify-between gap-2 mb-5">
+                <div class="text-color text-base font-medium leading-6">Keep watching</div>
                 <div class="xl:flex hidden items-center gap-2">
                     <p-button [disabled]="page === 0" (click)="previousPage()" icon="pi pi-chevron-left" severity="secondary" outlined />
                     <p-button [disabled]="page === carouselData.length - page" (click)="nextPage()" icon="pi pi-chevron-right" severity="secondary" outlined />
@@ -49,7 +48,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
             <p-carousel [value]="carouselData" [page]="page" [numVisible]="5" [numScroll]="1" [responsiveOptions]="responsiveOptions" [showIndicators]="false" [showNavigators]="false">
                 <ng-template #item let-item>
                     <div class="p-2 rounded-xl hover:bg-emphasis transition-colors cursor-pointer">
-                        <div class="relative w-full aspect-[195/118.5] rounded-lg overflow-hidden">
+                        <div class="relative w-full aspect-195/118.5 rounded-lg overflow-hidden">
                             <img [src]="item.image" class="w-full h-full object-cover" alt="Carousel Movie Image" />
                             <div class="absolute z-10 top-2 right-2 px-2 py-1 text-sm font-medium leading-tight bg-surface-0 dark:bg-surface-950 border border-surface rounded-md">
                                 {{ item.point }}
@@ -58,26 +57,28 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
                                 <p-progressbar
                                     [value]="item.watchedPercent"
                                     [showValue]="false"
-                                    styleClass="!h-1.5 !bg-surface-950 dark:!bg-surface-50 !rounded-full"
-                                    valueStyleClass="p-progressbar-value !bg-surface-0 dark:!bg-surface-950 !rounded-full"
+                                    class="h-1.5! bg-surface-950! dark:bg-surface-50! rounded-full!"
+                                    valueStyleClass="p-progressbar-value bg-surface-0! dark:bg-surface-950! rounded-full!"
                                 />
                             </div>
                         </div>
                         <div class="mt-2 flex items-start justify-between gap-1">
                             <div class="px-2 flex-1">
-                                <div class="font-medium text-color leading-6 line-clamp-1">{{ item.name }}</div>
-                                <div class="mt-1 text-muted-color text-sm leading-5">
+                                <div class="text-sm font-medium text-color leading-5 line-clamp-1">{{ item.name }}</div>
+                                <div class="mt-1 text-muted-color text-sm leading-4">
                                     {{ item.categories.join(', ') }}
                                 </div>
                             </div>
-                            <p-button *ngIf="item.bookmarked" icon="pi pi-bookmark-fill" severity="contrast" text rounded />
+                            @if (item.bookmarked) {
+                                <p-button icon="pi pi-bookmark-fill" severity="contrast" text rounded />
+                            }
                         </div>
                     </div>
                 </ng-template>
             </p-carousel>
         </div>
         <div>
-            <div class="mb-6 flex items-center gap-4 justify-between">
+            <div class="mb-4 flex items-center gap-3.5 justify-between">
                 <div class="flex items-center gap-2">
                     <p-button label="Popular" severity="secondary" />
                     <p-button label="New Releases" text severity="secondary" />
@@ -87,29 +88,33 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
                 <p-button label="Show All" severity="secondary" outlined />
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-x-4 gap-y-6">
-                <div *ngFor="let movie of popularMovies" class="cursor-pointer">
-                    <div class="relative aspect-[259/174.5] rounded-lg overflow-hidden">
-                        <img class="w-full h-full object-cover" [src]="movie.image" alt="Popular Movie Cover" />
-                        <div class="absolute z-10 top-2 right-2 px-2 py-1 text-sm font-medium leading-tight bg-surface-0 dark:bg-surface-950 border border-surface rounded-md">
-                            {{ movie.point }}
-                        </div>
-                    </div>
-                    <div class="mt-2 flex items-start justify-between gap-1">
-                        <div class="px-2 flex-1">
-                            <div class="font-medium text-color leading-6 line-clamp-1">{{ movie.name }}</div>
-                            <div class="mt-1 text-muted-color text-sm leading-5">
-                                {{ movie.categories.join(', ') }}
+                @for (movie of popularMovies; track movie.name) {
+                    <div class="cursor-pointer">
+                        <div class="relative aspect-259/174.5 rounded-lg overflow-hidden">
+                            <img class="w-full h-full object-cover" [src]="movie.image" alt="Popular Movie Cover" />
+                            <div class="absolute z-10 top-2 right-2 px-2 py-1 text-sm font-medium leading-tight bg-surface-0 dark:bg-surface-950 border border-surface rounded-md">
+                                {{ movie.point }}
                             </div>
                         </div>
-                        <p-button *ngIf="movie.bookmarked" icon="pi pi-bookmark-fill" severity="contrast" text rounded />
+                        <div class="mt-2 flex items-start justify-between gap-1">
+                            <div class="px-2 flex-1">
+                                <div class="text-sm font-medium text-color leading-5 line-clamp-1">{{ movie.name }}</div>
+                                <div class="mt-1 text-muted-color text-sm leading-4">
+                                    {{ movie.categories.join(', ') }}
+                                </div>
+                            </div>
+                            @if (movie.bookmarked) {
+                                <p-button icon="pi pi-bookmark-fill" severity="contrast" text rounded />
+                            }
+                        </div>
                     </div>
-                </div>
+                }
             </div>
         </div>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
-        class: 'flex-1 flex flex-col gap-6 p-6 h-full overflow-y-auto overflow-x-clip overflow-hidden border border-surface rounded-2xl'
+        class: 'flex-1 flex flex-col gap-4 p-4 h-full overflow-y-auto overflow-x-clip overflow-hidden border border-surface rounded-2xl'
     }
 })
 export class MoviesApp {
@@ -275,7 +280,7 @@ export class MoviesApp {
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/movie-cover13.png',
-                name: 'The Lord Of The Rings: Fellowship of the ring',
+                name: 'The Lord Of The Rings: Fellowship of the ring-3',
                 bookmarked: true,
                 point: '4.9',
                 categories: ['Action', 'Adventure', 'Drama']

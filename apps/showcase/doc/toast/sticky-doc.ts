@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -9,24 +10,26 @@ import { Ripple } from 'primeng/ripple';
 @Component({
     selector: 'sticky-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ToastModule, ButtonModule, Ripple],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToastModule, ButtonModule, Ripple],
     template: `
         <app-docsectiontext>
             <p>A toast disappears after the time defined by the <i>life</i> option, set <i>sticky</i> option <i>true</i> on the message to override this and not hide the toast automatically.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
+        <app-demo-wrapper>
             <p-toast />
-            <div class="flex flex-wrap gap-2">
-                <p-button pRipple (click)="show()" label="Sticky" />
-                <p-button pRipple (click)="clear()" severity="secondary" label="Clear" />
+            <div class="flex justify-center">
+                <div class="flex flex-wrap gap-2">
+                    <p-button pRipple (click)="show()" label="Sticky" />
+                    <p-button pRipple (click)="clear()" severity="secondary" label="Clear" />
+                </div>
             </div>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class StickyDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     show() {
         this.messageService.add({ severity: 'info', summary: 'Sticky', detail: 'Message Content', sticky: true });

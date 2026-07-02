@@ -20,13 +20,13 @@ import { Tag } from 'primeng/tag';
         <section class="landing-themes py-20">
             <div class="section-header">Components</div>
             <p class="section-detail">The most complete UI component library for Angular based on a design-agnostic infrastructure.</p>
-            <div class="themes-main flex mt-16 justify-center px-8 lg:px-20">
-                <div class="box overflow-hidden z-10 p-8 table-container">
+            <div class="themes-main flex mt-14 justify-center px-7 lg:px-20">
+                <div class="box overflow-hidden z-10 p-7 table-container">
                     <p-table #dt [value]="customers" [(selection)]="selectedCustomers" dataKey="id" [rowHover]="true" [rows]="5" [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
                         <ng-template #caption>
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-                                <span class="text-xl font-bold">Customers</span>
-                                <p-iconfield class="mt-4 sm:mt-0 w-full sm:w-auto">
+                                <span class="text-lg font-bold">Customers</span>
+                                <p-iconfield class="mt-3.5 sm:mt-0 w-full sm:w-auto">
                                     <p-inputicon>
                                         <i class="pi pi-search"></i>
                                     </p-inputicon>
@@ -124,7 +124,9 @@ import { Tag } from 'primeng/tag';
                                     <p-progressbar [value]="customer.activity" [showValue]="false" [style]="{ height: '6px' }"></p-progressbar>
                                 </td>
                                 <td style="text-align: center">
-                                    <button pButton type="button" class="p-button-text p-button-icon-only" icon="pi pi-cog"></button>
+                                    <button pButton type="button" class="p-button-text p-button-icon-only">
+                                        <span pButtonIcon class="pi pi-cog"></span>
+                                    </button>
                                 </td>
                             </tr>
                         </ng-template>

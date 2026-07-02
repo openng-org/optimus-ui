@@ -2,11 +2,12 @@ import { AccessibilityDoc } from '@/doc/menu/accessibility-doc';
 import { BasicDoc } from '@/doc/menu/basic-doc';
 import { CommandDoc } from '@/doc/menu/command-doc';
 import { GroupDoc } from '@/doc/menu/group-doc';
-import { ImportDoc } from '@/doc/menu/import-doc';
+import { UsageDoc } from '@/doc/menu/usage-doc';
 import { PopupDoc } from '@/doc/menu/popup-doc';
 import { PTComponent } from '@/doc/menu/pt/PTComponent';
 import { RouterDoc } from '@/doc/menu/router-doc';
 import { TemplateDoc } from '@/doc/menu/template-doc';
+import { ToggleableDoc } from '@/doc/menu/toggleable-doc';
 import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
@@ -16,6 +17,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         header="Menu"
         description="Menu is a navigation / command component that supports dynamic and static positioning."
         [docs]="docs"
+        [heroDoc]="heroDoc"
         [apiDocs]="['Menu', 'MenuItem']"
         [ptDocs]="ptComponent"
         themeDocs="menu"
@@ -24,41 +26,27 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc]
 })
 export class MenuDemo {
+    heroDoc = BasicDoc;
+    ptComponent = PTComponent;
+
     docs = [
         {
-            id: 'import',
-            label: 'Import',
-            component: ImportDoc
+            id: 'usage',
+            label: 'Usage',
+            component: UsageDoc
         },
         {
-            id: 'basic',
-            label: 'Basic',
-            component: BasicDoc
-        },
-        {
-            id: 'group',
-            label: 'Group',
-            component: GroupDoc
-        },
-        {
-            id: 'popup',
-            label: 'Popup',
-            component: PopupDoc
-        },
-        {
-            id: 'template',
-            label: 'Template',
-            component: TemplateDoc
-        },
-        {
-            id: 'command',
-            label: 'Command',
-            component: CommandDoc
-        },
-        {
-            id: 'router',
-            label: 'Router',
-            component: RouterDoc
+            id: 'examples',
+            label: 'Examples',
+            children: [
+                { id: 'basic', label: 'Basic', component: BasicDoc },
+                { id: 'group', label: 'Group', component: GroupDoc },
+                { id: 'popup', label: 'Popup', component: PopupDoc },
+                { id: 'template', label: 'Template', component: TemplateDoc },
+                { id: 'command', label: 'Command', component: CommandDoc },
+                { id: 'router', label: 'Router', component: RouterDoc },
+                { id: 'toggleable', label: 'Toggleable', component: ToggleableDoc }
+            ]
         },
         {
             id: 'accessibility',
@@ -66,6 +54,4 @@ export class MenuDemo {
             component: AccessibilityDoc
         }
     ];
-
-    ptComponent = PTComponent;
 }

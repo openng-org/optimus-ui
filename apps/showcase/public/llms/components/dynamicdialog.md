@@ -17,23 +17,21 @@ Dynamic dialogs require an instance of a DialogService that is responsible for d
 ```typescript
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ToastModule } from 'primeng/toast';
 import { MessageService, DialogService } from 'primeng/api';
 import { Product } from '@/domain/product';
 import { Dialog } from 'primeng/dialog';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-button (click)="show()" icon="pi pi-search" label="Select a Product" />
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, ToastModule],
+    imports: [ButtonModule],
     providers: [DialogService, MessageService]
 })
-export class DynamicdialogExampleDemo {
+export class DynamicDialogExampleDemo {
     private dialogService = inject(DialogService);
     private messageService = inject(MessageService);
 
@@ -86,10 +84,6 @@ To pass data to a dynamically loaded component, you can use either the data or i
 ## style-doc
 
 Following is the list of structural style classes, for theming classes visit theming page.
-
-## Usage
-
-To use dynamic dialog, a reference should be declared as DynamicDialogRef after the DialogService injected into the component.
 
 ## Theming
 

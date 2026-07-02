@@ -1,6 +1,7 @@
 import { TemplateRef } from '@angular/core';
 import type { PassThrough, PassThroughOption } from 'primeng/api';
-import type { BadgePassThrough } from 'primeng/types/badge';
+import type { BadgePassThrough, BadgeSeverity } from 'primeng/types/badge';
+import type { CSSProperties } from 'primeng/types/shared';
 
 /**
  * Custom pass-through(pt) options.
@@ -95,7 +96,9 @@ export interface ButtonTemplates {
     loadingicon(context: ButtonLoadingIconTemplateContext): TemplateRef<ButtonLoadingIconTemplateContext>;
 }
 
-type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';
+export type ButtonIconPosition = 'left' | 'right' | 'top' | 'bottom';
+
+export type ButtonVariant = 'outlined' | 'text';
 
 export interface ButtonProps {
     type?: string;
@@ -115,13 +118,14 @@ export interface ButtonProps {
     link?: boolean;
     tabindex?: number | undefined;
     size?: 'small' | 'large' | undefined;
-    style?: { [klass: string]: any } | null | undefined;
+    style?: CSSProperties;
     styleClass?: string | undefined;
-    badgeClass?: string | undefined;
-    badgeSeverity?: 'success' | 'info' | 'warning' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
+    badgeSeverity?: BadgeSeverity;
     ariaLabel?: string | undefined;
     autofocus?: boolean | undefined;
     variant?: string | undefined;
 }
 
 export type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
+
+export type ButtonSize = 'small' | 'large';

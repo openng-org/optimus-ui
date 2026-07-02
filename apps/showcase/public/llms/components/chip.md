@@ -16,7 +16,7 @@ import { ChipModule } from 'primeng/chip';
 
 @Component({
     template: `
-        <div class="card flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
             <p-chip label="Action" />
             <p-chip label="Comedy" />
             <p-chip label="Mystery" />
@@ -39,7 +39,7 @@ import { ChipModule } from 'primeng/chip';
 
 @Component({
     template: `
-        <div class="card flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
             <p-chip label="Apple" icon="pi pi-apple" />
             <p-chip label="Facebook" icon="pi pi-facebook" />
             <p-chip label="Google" icon="pi pi-google" />
@@ -62,7 +62,7 @@ import { ChipModule } from 'primeng/chip';
 
 @Component({
     template: `
-        <div class="card flex items-center gap-2 flex-wrap">
+        <div class="flex items-center gap-2 flex-wrap">
             <p-chip label="Amy Elsner" image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" alt="Avatar image" />
             <p-chip label="Asiya Javayant" image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" alt="Avatar image" />
             <p-chip label="Onyama Limba" image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" alt="Avatar image" />
@@ -85,12 +85,10 @@ import { ChipModule } from 'primeng/chip';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chip class="!py-0 !pl-0 !pr-4">
-                <span class="bg-primary text-primary-contrast rounded-full w-8 h-8 flex items-center justify-center">P</span>
-                <span class="ml-2 font-medium">PRIME</span>
-            </p-chip>
-        </div>
+        <p-chip class="py-0! pl-0! pr-4!">
+            <span class="bg-primary text-primary-contrast rounded-full w-8 h-8 flex items-center justify-center">P</span>
+            <span class="ml-2 font-medium">PRIME</span>
+        </p-chip>
     `,
     standalone: true,
     imports: [ChipModule]
@@ -106,17 +104,16 @@ Chip represents people using icons, labels and images.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ChipPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ChipPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | label | string | - | Defines the text to display. |
 | icon | string | - | Defines the icon to display. |
 | image | string | - | Defines the image to display. |
 | alt | string | - | Alt attribute of the image. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| disabled | boolean | false | When present, it specifies that the element should be disabled. |
-| removable | boolean | false | Whether to display a remove icon. |
+| disabled | boolean | - | When present, it specifies that the element should be disabled. |
+| removable | boolean | - | Whether to display a remove icon. |
 | removeIcon | string | - | Icon of the remove element. |
 | chipProps | ChipProps | - | Used to pass all properties of the chipProps to the Chip component. |
 
@@ -166,11 +163,14 @@ Chip represents people using icons, labels and images.
 | chip.gap | --p-chip-gap | Gap of root |
 | chip.transition.duration | --p-chip-transition-duration | Transition duration of root |
 | chip.background | --p-chip-background | Background of root |
+| chip.focus.background | --p-chip-focus-background | Focus background of root |
 | chip.color | --p-chip-color | Color of root |
 | chip.image.width | --p-chip-image-width | Width of image |
 | chip.image.height | --p-chip-image-height | Height of image |
 | chip.icon.size | --p-chip-icon-size | Size of icon |
 | chip.icon.color | --p-chip-icon-color | Color of icon |
+| chip.label.font.weight | --p-chip-label-font-weight | Font weight of label |
+| chip.label.font.size | --p-chip-label-font-size | Font size of label |
 | chip.remove.icon.size | --p-chip-remove-icon-size | Size of remove icon |
 | chip.remove.icon.focus.ring.width | --p-chip-remove-icon-focus-ring-width | Focus ring width of remove icon |
 | chip.remove.icon.focus.ring.style | --p-chip-remove-icon-focus-ring-style | Focus ring style of remove icon |

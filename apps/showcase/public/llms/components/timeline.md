@@ -24,7 +24,7 @@ interface EventItem {
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-12">
+        <div class="flex flex-wrap gap-12">
             <p-timeline [value]="events" class="w-full md:w-80">
                 <ng-template #content let-event>
                     {{ event.status }}
@@ -69,13 +69,11 @@ import { TimelineModule } from 'primeng/timeline';
 
 @Component({
     template: `
-        <div class="card">
-            <p-timeline [value]="events">
-                <ng-template #content let-event>
-                    {{ event.status }}
-                </ng-template>
-            </p-timeline>
-        </div>
+        <p-timeline [value]="events">
+            <ng-template #content let-event>
+                {{ event.status }}
+            </ng-template>
+        </p-timeline>
     `,
     standalone: true,
     imports: [TimelineModule]
@@ -104,7 +102,7 @@ import { TimelineModule } from 'primeng/timeline';
 
 @Component({
     template: `
-        <div class="card flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
             <p-timeline [value]="events" layout="horizontal" align="top">
                 <ng-template #content let-event>
                     {{ event }}
@@ -153,16 +151,14 @@ interface EventItem {
 
 @Component({
     template: `
-        <div class="card">
-            <p-timeline [value]="events">
-                <ng-template #opposite let-event>
-                    <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
-                </ng-template>
-                <ng-template #content let-event>
-                    {{ event.status }}
-                </ng-template>
-            </p-timeline>
-        </div>
+        <p-timeline [value]="events">
+            <ng-template #opposite let-event>
+                <small class="text-surface-500 dark:text-surface-400">{{ event.date }}</small>
+            </ng-template>
+            <ng-template #content let-event>
+                {{ event.status }}
+            </ng-template>
+        </p-timeline>
     `,
     standalone: true,
     imports: [TimelineModule]
@@ -201,25 +197,25 @@ interface EventItem {
 
 @Component({
     template: `
-        <div class="card">
-            <p-timeline [value]="events" align="alternate" class="customized-timeline">
-                <ng-template #marker let-event>
-                    <span class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-sm" [style]="{ 'background-color': event.color }">
-                        <i [class]="event.icon"></i>
-                    </span>
-                </ng-template>
-                <ng-template #content let-event>
-                    <p-card [header]="event.status" [subheader]="event.date">
-                        <img *ngIf="event.image" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + event.image" [alt]="event.name" width="200" class="shadow" />
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
-                            neque quas!
-                        </p>
-                        <p-button label="Read more" [text]="true" />
-                    </p-card>
-                </ng-template>
-            </p-timeline>
-        </div>
+        <p-timeline [value]="events" align="alternate" class="customized-timeline">
+            <ng-template #marker let-event>
+                <span class="flex w-8 h-8 items-center justify-center text-white rounded-full z-10 shadow-xs" [style]="{ 'background-color': event.color }">
+                    <i [class]="event.icon"></i>
+                </span>
+            </ng-template>
+            <ng-template #content let-event>
+                <p-card [header]="event.status" [subheader]="event.date">
+                    @if (event.image) {
+                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + event.image" [alt]="event.name" width="200" class="shadow-sm" />
+                    }
+                    <p>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
+                        neque quas!
+                    </p>
+                    <p-button label="Read more" [text]="true" />
+                </p-card>
+            </ng-template>
+        </p-timeline>
     `,
     standalone: true,
     imports: [ButtonModule, CardModule, TimelineModule]
@@ -246,14 +242,13 @@ Timeline visualizes a series of chained events.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TimelinePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TimelinePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | value | any[] | - | An array of events to display. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| align | string | left | Position of the timeline bar relative to the content. Valid values are "left", "right" for vertical layout and "top", "bottom" for horizontal layout. |
-| layout | "vertical" \| "horizontal" | vertical | Orientation of the timeline. |
+| align | "left" \| "right" \| "top" \| "bottom" \| "alternate" | - | Position of the timeline bar relative to the content. Valid values are "left", "right" for vertical layout and "top", "bottom" for horizontal layout. |
+| layout | "vertical" \| "horizontal" | - | Orientation of the timeline. |
 
 ### Templates
 

@@ -1,4 +1,5 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -9,17 +10,17 @@ import { PickListModule } from 'primeng/picklist';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [CommonModule, PickListModule, AppCode, AppDocSectionText],
+    imports: [CommonModule, PickListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
     template: `
         <app-docsectiontext>
             <p>For custom content support define an <i>item</i> template that gets the item instance as a parameter. In addition <i>sourceheader</i> and <i>targetheader</i> templates are provided for further customization.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-picklist [source]="sourceProducts()" [target]="targetProducts()" [dragdrop]="true" [responsive]="true" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" breakpoint="1400px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded-sm" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -35,8 +36,8 @@ import { PickListModule } from 'primeng/picklist';
                     </div>
                 </ng-template>
             </p-picklist>
-        </div>
-        <app-code [extFiles]="['Product']"></app-code>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc implements OnInit {

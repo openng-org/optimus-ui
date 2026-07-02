@@ -1,6 +1,6 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, signal } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
@@ -8,22 +8,23 @@ import { TreeModule } from 'primeng/tree';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [TreeModule, AppCode, AppDocSectionText, CommonModule],
+    imports: [TreeModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>Custom node content instead of a node label is defined with the <i>pTemplate</i> property.</p>
+            <p>Custom node content instead of a node label is defined with the <i>#node</i> template reference.</p>
         </app-docsectiontext>
-        <div class="card">
-            <p-tree [value]="nodes()" class="w-full md:w-[30rem]">
-                <ng-template let-node pTemplate="url">
-                    <a [href]="node.data" target="_blank" rel="noopener noreferrer" class="text-surface-700 dark:text-surface-100 hover:text-primary">{{ node.label }}</a>
-                </ng-template>
-                <ng-template let-node pTemplate="default">
-                    <b>{{ node.label }}</b>
+        <app-demo-wrapper>
+            <p-tree [value]="nodes()" class="w-full md:w-120">
+                <ng-template #node let-node>
+                    @if (node.type === 'url') {
+                        <a [href]="node.data" target="_blank" rel="noopener noreferrer" class="text-surface-700 dark:text-surface-100 hover:text-primary">{{ node.label }}</a>
+                    } @else {
+                        <b>{{ node.label }}</b>
+                    }
                 </ng-template>
             </p-tree>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc implements OnInit {

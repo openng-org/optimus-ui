@@ -76,6 +76,11 @@
                             "routerLink": "/colorpicker"
                         },
                         {
+                            "name": "InputColor",
+                            "routerLink": "/inputcolor",
+                            "badge": "NEW"
+                        },
+                        {
                             "name": "DatePicker",
                             "routerLink": "/datepicker"
                         },
@@ -330,6 +335,11 @@
                             "routerLink": "/breadcrumb"
                         },
                         {
+                            "name": "CommandMenu",
+                            "routerLink": "/commandmenu",
+                            "badge": "NEW"
+                        },
+                        {
                             "name": "ContextMenu",
                             "routerLink": "/contextmenu"
                         },
@@ -387,6 +397,11 @@
                         {
                             "name": "Carousel",
                             "routerLink": "/carousel"
+                        },
+                        {
+                            "name": "Gallery",
+                            "routerLink": "/gallery",
+                            "badge": "NEW"
                         },
                         {
                             "name": "Galleria",

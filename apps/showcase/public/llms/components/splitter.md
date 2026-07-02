@@ -16,16 +16,14 @@ import { SplitterModule } from 'primeng/splitter';
 
 @Component({
     template: `
-        <div class="card">
-            <p-splitter [style]="{ height: '300px' }" class="mb-8">
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 1</div>
-                </ng-template>
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 2</div>
-                </ng-template>
-            </p-splitter>
-        </div>
+        <p-splitter [style]="{ height: '300px' }" class="mb-8">
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 1</div>
+            </ng-template>
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 2</div>
+            </ng-template>
+        </p-splitter>
     `,
     standalone: true,
     imports: [SplitterModule]
@@ -43,30 +41,28 @@ import { SplitterModule } from 'primeng/splitter';
 
 @Component({
     template: `
-        <div class="card">
-            <p-splitter [style]="{ height: '300px' }" [panelSizes]="[20, 80]" [minSizes]="[10, 0]" class="mb-8">
-                <ng-template #panel>
-                    <div class="col flex w-full items-center justify-center">Panel 1</div>
-                </ng-template>
-                <ng-template #panel>
-                    <p-splitter layout="vertical" [panelSizes]="[50, 50]">
-                        <ng-template #panel>
-                            <div style="flex-grow: 1;" class="flex items-center justify-center">Panel 2</div>
-                        </ng-template>
-                        <ng-template #panel>
-                            <p-splitter [panelSizes]="[20, 80]">
-                                <ng-template #panel>
-                                    <div class="col h-full flex items-center justify-center">Panel 3</div>
-                                </ng-template>
-                                <ng-template #panel>
-                                    <div class="col h-full flex items-center justify-center">Panel 4</div>
-                                </ng-template>
-                            </p-splitter>
-                        </ng-template>
-                    </p-splitter>
-                </ng-template>
-            </p-splitter>
-        </div>
+        <p-splitter [style]="{ height: '300px' }" [panelSizes]="[20, 80]" [minSizes]="[10, 0]" class="mb-8">
+            <ng-template #panel>
+                <div class="col flex w-full items-center justify-center text-sm">Panel 1</div>
+            </ng-template>
+            <ng-template #panel>
+                <p-splitter layout="vertical" [panelSizes]="[50, 50]">
+                    <ng-template #panel>
+                        <div style="grow: 1;" class="flex items-center justify-center text-sm">Panel 2</div>
+                    </ng-template>
+                    <ng-template #panel>
+                        <p-splitter [panelSizes]="[20, 80]">
+                            <ng-template #panel>
+                                <div class="col h-full flex items-center justify-center text-sm">Panel 3</div>
+                            </ng-template>
+                            <ng-template #panel>
+                                <div class="col h-full flex items-center justify-center text-sm">Panel 4</div>
+                            </ng-template>
+                        </p-splitter>
+                    </ng-template>
+                </p-splitter>
+            </ng-template>
+        </p-splitter>
     `,
     standalone: true,
     imports: [SplitterModule]
@@ -84,16 +80,14 @@ import { SplitterModule } from 'primeng/splitter';
 
 @Component({
     template: `
-        <div class="card">
-            <p-splitter [panelSizes]="[25, 75]" [style]="{ height: '300px' }" class="mb-8">
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 1</div>
-                </ng-template>
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 2</div>
-                </ng-template>
-            </p-splitter>
-        </div>
+        <p-splitter [panelSizes]="[25, 75]" [style]="{ height: '300px' }" class="mb-8">
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 1</div>
+            </ng-template>
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 2</div>
+            </ng-template>
+        </p-splitter>
     `,
     standalone: true,
     imports: [SplitterModule]
@@ -111,16 +105,14 @@ import { SplitterModule } from 'primeng/splitter';
 
 @Component({
     template: `
-        <div class="card">
-            <p-splitter [style]="{ height: '300px' }" class="mb-8" [panelSizes]="[50, 50]" layout="vertical">
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 1</div>
-                </ng-template>
-                <ng-template #panel>
-                    <div class="flex items-center justify-center h-full">Panel 2</div>
-                </ng-template>
-            </p-splitter>
-        </div>
+        <p-splitter [style]="{ height: '300px' }" class="mb-8" [panelSizes]="[50, 50]" layout="vertical">
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 1</div>
+            </ng-template>
+            <ng-template #panel>
+                <div class="flex items-center justify-center h-full text-sm">Panel 2</div>
+            </ng-template>
+        </p-splitter>
     `,
     standalone: true,
     imports: [SplitterModule]
@@ -136,19 +128,18 @@ Splitter is utilized to separate and resize panels.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<SplitterPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, SplitterPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | panelStyleClass | string | - | Style class of the panel. |
-| panelStyle | { [klass: string]: any } | - | Inline style of the panel. |
-| stateStorage | string | session | Defines where a stateful splitter keeps its state, valid values are 'session' for sessionStorage and 'local' for localStorage. |
-| stateKey | string | null | Storage identifier of a stateful Splitter. |
-| layout | string | horizontal | Orientation of the panels. Valid values are 'horizontal' and 'vertical'. |
-| gutterSize | number | 4 | Size of the divider in pixels. |
-| step | number | 5 | Step factor to increment/decrement the size of the panels while pressing the arrow keys. |
-| minSizes | number[] | [] | Minimum size of the elements relative to 100%. |
+| panelStyle | Partial<CSSStyleDeclaration> | - | Inline style of the panel. |
+| stateStorage | "session" \| "local" | - | Defines where a stateful splitter keeps its state, valid values are 'session' for sessionStorage and 'local' for localStorage. |
+| stateKey | string | - | Storage identifier of a stateful Splitter. |
+| layout | "horizontal" \| "vertical" | - | Orientation of the panels. Valid values are 'horizontal' and 'vertical'. |
+| gutterSize | number | - | Size of the divider in pixels. |
+| step | number | - | Step factor to increment/decrement the size of the panels while pressing the arrow keys. |
+| minSizes | number[] | - | Minimum size of the elements relative to 100%. |
 | panelSizes | number[] | - | Size of the elements relative to 100%. |
 
 ### Emits

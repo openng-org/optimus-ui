@@ -10,7 +10,7 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
     template: `
         <app-docptviewer [docs]="docs">
             <p-organizationchart [value]="data" [collapsible]="true">
-                <ng-template let-node pTemplate="default">
+                <ng-template let-node #node>
                     <span>{{ node.label }}</span>
                 </ng-template>
             </p-organizationchart>
@@ -20,30 +20,30 @@ import { OrganizationChartModule } from 'primeng/organizationchart';
 export class PTViewer {
     data = [
         {
-            label: 'Argentina',
+            label: 'Founder',
             expanded: true,
             children: [
                 {
-                    label: 'Argentina',
+                    label: 'Product Lead',
                     expanded: true,
                     children: [
                         {
-                            label: 'Argentina'
+                            label: 'UX/UI Designer'
                         },
                         {
-                            label: 'Croatia'
+                            label: 'Product Manager'
                         }
                     ]
                 },
                 {
-                    label: 'France',
+                    label: 'Engineering Lead',
                     expanded: true,
                     children: [
                         {
-                            label: 'France'
+                            label: 'Frontend Developer'
                         },
                         {
-                            label: 'Morocco'
+                            label: 'Backend Developer'
                         }
                     ]
                 }

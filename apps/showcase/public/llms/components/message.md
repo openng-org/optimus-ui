@@ -16,9 +16,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card">
-            <p-message>Message Content</p-message>
-        </div>
+        <p-message>Message Content</p-message>
     `,
     standalone: true,
     imports: [MessageModule]
@@ -36,9 +34,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card">
-            <p-message closable>Closable Message</p-message>
-        </div>
+        <p-message closable>Closable Message</p-message>
     `,
     standalone: true,
     imports: [MessageModule]
@@ -57,14 +53,14 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center justify-center gap-4">
+        <div class="flex flex-col items-center justify-center gap-4">
             <div class="flex gap-2">
                 <p-button label="Show" (onClick)="addMessages()" />
                 <p-button label="Clear" severity="secondary" (onClick)="clearMessages()" />
             </div>
             <div class="flex flex-col">
                 @for (message of messages(); track message.severity; let first = $first) {
-                    <p-message [severity]="message.severity" [text]="message.content" [ngClass]="{ 'mt-4': !first }" [closable]="message?.closable" />
+                    <p-message [severity]="message.severity" [class]="{ 'mt-4': !first }" [closable]="message?.closable">{{ message.content }}</p-message>
                 }
             </div>
         </div>
@@ -102,9 +98,9 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div class="flex flex-col gap-4">
-                <p-message severity="error" icon="pi pi-times-circle" styleClass="mb-2">Validation Failed</p-message>
+                <p-message severity="error" icon="pi pi-times-circle" class="mb-2">Validation Failed</p-message>
                 <div class="flex flex-col gap-1">
                     <input pInputText placeholder="Username" [(ngModel)]="username" aria-label="username" [invalid]="!username" />
                     @if (!username) {
@@ -140,8 +136,8 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex justify-center items-center gap-4">
-            <p-message severity="info" icon="pi pi-send" text="Info Message" styleClass="h-full" />
+        <div class="flex justify-center items-center gap-4">
+            <p-message severity="info" icon="pi pi-send" class="h-full">Info Message</p-message>
             <p-message severity="success">
                 <ng-template #icon>
                     <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
@@ -167,7 +163,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center justify-center">
+        <div class="flex flex-col items-center justify-center">
             <p-button label="Show" (onClick)="showMessage()" [disabled]="visible()" styleClass="mb-4" />
             @if (visible()) {
                 <p-message [life]="3000" severity="success">Auto disappear message</p-message>
@@ -200,7 +196,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-message severity="success" variant="outlined">Success Message</p-message>
             <p-message severity="info" variant="outlined">Info Message</p-message>
             <p-message severity="warn" variant="outlined">Warn Message</p-message>
@@ -225,7 +221,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-message severity="success">Success Message</p-message>
             <p-message severity="info">Info Message</p-message>
             <p-message severity="warn">Warn Message</p-message>
@@ -250,7 +246,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap gap-4 justify-center">
+        <div class="flex flex-wrap gap-4 justify-center">
             <p-message severity="success" variant="simple">Success Message</p-message>
             <p-message severity="info" variant="simple">Info Message</p-message>
             <p-message severity="warn" variant="simple">Warn Message</p-message>
@@ -275,7 +271,7 @@ import { MessageModule } from 'primeng/message';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-message size="small" icon="pi pi-send">Small Message</p-message>
             <p-message icon="pi pi-user">Normal Message</p-message>
             <p-message size="large" icon="pi pi-check">Large Message</p-message>
@@ -295,29 +291,23 @@ Message groups a collection of contents in tabs.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<MessagePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| severity | "success" \| "info" \| "warn" \| "secondary" \| "contrast" \| "error" | 'info' | Severity level of the message. |
-| text | string | - | Text content. **(Deprecated)** |
-| escape | boolean | true | Whether displaying messages would be escaped or not. **(Deprecated)** |
-| style | { [klass: string]: any } | - | Inline style of the component. |
-| styleClass | string | - | Style class of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, MessagePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| severity | "success" \| "info" \| "warn" \| "error" \| "secondary" \| "contrast" | 'info' | Severity level of the message. |
 | closable | boolean | false | Whether the message can be closed manually using the close icon. |
 | icon | string | undefined | Icon to display in the message. |
 | closeIcon | string | undefined | Icon to display in the message close button. |
-| showTransitionOptions | string | '300ms ease-out' | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | '200ms cubic-bezier(0.86, 0, 0.07, 1)' | Transition options of the hide animation. **(Deprecated)** |
-| size | "small" \| "large" | - | Defines the size of the component. |
-| variant | "text" \| "outlined" \| "simple" | - | Specifies the input variant of the component. |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| size | "large" \| "small" | - | Defines the size of the component. |
+| variant | "outlined" \| "text" \| "simple" | - | Specifies the input variant of the component. |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| onClose | event: { originalEvent: Event } | Emits when the message is closed. |
+| onClose | event: MessageCloseEvent | Emits when the message is closed. |
 
 ### Templates
 

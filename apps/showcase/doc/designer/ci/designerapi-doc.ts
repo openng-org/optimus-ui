@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-    selector: 'designerapi-doc',
+    selector: 'designer-api-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, RouterModule, AppCode],
     template: `<app-docsectiontext>
@@ -26,7 +26,7 @@ import { RouterModule } from '@angular/router';
         <h3>Parameters</h3>
         <p>The request type must be <i>POST</i>.</p>
         <div class="doc-tablewrapper">
-            <table class="doc-table !mb-0">
+            <table class="doc-table mb-0!">
                 <thead>
                     <tr>
                         <th>Name</th>

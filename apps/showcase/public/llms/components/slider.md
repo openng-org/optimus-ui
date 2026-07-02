@@ -17,7 +17,7 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-slider [(ngModel)]="value" class="w-56" />
         </div>
     `,
@@ -41,9 +41,9 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div class="flex flex-col items-center">
-                <img alt="user header" class="w-full md:w-80 rounded mb-6" src="https://primefaces.org/cdn/primevue/images/card-vue.jpg" [style]="filterStyle" />
+                <img alt="user header" class="w-full md:w-80 rounded-sm mb-6" src="https://primefaces.org/cdn/primevue/images/card-vue.jpg" [style]="filterStyle" />
                 <p-selectbutton [(ngModel)]="filter" [options]="filterOptions" optionLabel="label" optionValue="value" class="mb-4" />
                 <p-slider [(ngModel)]="filterValues[filter]" class="w-56" [min]="0" [max]="200" />
             </div>
@@ -55,7 +55,11 @@ import { SliderModule } from 'primeng/slider';
 export class SliderFilterDemo {
     filter: number = 0;
     filterValues: number[] = [100, 100, 0];
-    filterOptions: any;
+    filterOptions: any = [
+        { label: 'Contrast', value: 0 },
+        { label: 'Brightness', value: 1 },
+        { label: 'Sepia', value: 2 }
+    ];
 }
 ```
 
@@ -71,7 +75,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div>
                 <input type="text" pInputText [(ngModel)]="value" class="w-full mb-4" />
                 <p-slider [(ngModel)]="value" class="w-full" />
@@ -97,7 +101,7 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-slider [(ngModel)]="rangeValues" [range]="true" class="w-56" />
         </div>
     `,
@@ -118,17 +122,15 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { SliderModule } from 'primeng/slider';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div class="flex flex-col gap-4">
-                    <p-slider formControlName="value" styleClass="w-56" />
+                    <p-slider formControlName="value" class="w-56" />
                     @if (isInvalid('value')) {
                         <p-message severity="error" size="small" variant="simple">Must be greater than 25.</p-message>
                     }
@@ -138,9 +140,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, SliderModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [MessageModule, SliderModule, ButtonModule, ReactiveFormsModule]
 })
-export class SliderReactiveformsDemo {
+export class SliderReactiveFormsDemo {
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
@@ -178,7 +180,7 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-slider [(ngModel)]="value" [step]="20" class="w-56" />
         </div>
     `,
@@ -197,14 +199,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { SliderModule } from 'primeng/slider';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex justify-center flex-col gap-4">
                 <div class="flex flex-col gap-4">
                     <p-slider #model="ngModel" [(ngModel)]="value" class="w-56" required [invalid]="model.invalid && (model.touched || exampleForm.submitted)" name="slider" />
@@ -217,9 +217,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, SliderModule, ToastModule, ButtonModule, FormsModule]
+    imports: [MessageModule, SliderModule, ButtonModule, FormsModule]
 })
-export class SliderTemplatedrivenformsDemo {
+export class SliderTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     value: any;
 
@@ -243,7 +243,7 @@ import { SliderModule } from 'primeng/slider';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-slider [(ngModel)]="value" orientation="vertical" class="h-56" />
         </div>
     `,
@@ -263,25 +263,24 @@ Slider is a component to provide input with a drag handle.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<SliderPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| animate | boolean | false | When enabled, displays an animation on click of the slider bar. |
-| min | number | 0 | Mininum boundary value. |
-| max | number | 100 | Maximum boundary value. |
-| orientation | "vertical" \| "horizontal" | horizontal | Orientation of the slider. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, SliderPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| animate | boolean | - | When enabled, displays an animation on click of the slider bar. |
+| min | number | - | Mininum boundary value. |
+| max | number | - | Maximum boundary value. |
+| orientation | "horizontal" \| "vertical" | - | Orientation of the slider. |
 | step | number | - | Step factor to increment/decrement the value. |
-| range | boolean | false | When specified, allows two boundary values to be picked. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| range | boolean | - | When specified, allows two boundary values to be picked. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
 
 ### Emits
 

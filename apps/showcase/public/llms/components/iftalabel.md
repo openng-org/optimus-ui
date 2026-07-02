@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <input pInputText id="username" [(ngModel)]="value" autocomplete="off" />
                 <label for="username">Username</label>
@@ -28,7 +28,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IftaLabelModule, InputTextModule, FormsModule]
 })
-export class IftalabelBasicDemo {
+export class IftaLabelBasicDemo {
     value: string | undefined;
 }
 ```
@@ -45,7 +45,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <input pInputText id="username" [(ngModel)]="value" [invalid]="!value" autocomplete="off" />
                 <label for="username">Username</label>
@@ -55,7 +55,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [IftaLabelModule, InputTextModule, FormsModule]
 })
-export class IftalabelInvalidDemo {
+export class IftaLabelInvalidDemo {
     value: string | undefined;
 }
 ```
@@ -68,10 +68,10 @@ IftaLabel is used to create infield top aligned labels.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<IftaLabelPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, IftaLabelPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ## Pass Through Options
 

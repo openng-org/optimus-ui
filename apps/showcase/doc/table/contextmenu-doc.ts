@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -11,9 +12,9 @@ import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-    selector: 'contextmenu-doc',
+    selector: 'context-menu-doc',
     standalone: true,
-    imports: [CommonModule, TableModule, ContextMenuModule, ToastModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, TableModule, ContextMenuModule, ToastModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>
                 Table has exclusive integration with <i>contextmenu</i> component. In order to attach a menu to a table, add <i>pContextMenuRow</i> directive to the rows that can be selected with context menu, define a local template variable for the
@@ -21,8 +22,9 @@ import { ToastModule } from 'primeng/toast';
                 <i>contextMenuSelection</i> property is used to get a hold of the right clicked row. For dynamic columns, setting <i>pContextMenuRowDisabled</i> property as true disables context menu for that particular row.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <p-toast />
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-contextmenu #cm [model]="items" (onHide)="selectedProduct = null" />
                 <p-table [value]="products" [(contextMenuSelection)]="selectedProduct" [contextMenu]="cm" dataKey="code" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
@@ -42,10 +44,9 @@ import { ToastModule } from 'primeng/toast';
                         </tr>
                     </ng-template>
                 </p-table>
-                <p-toast />
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService]
 })

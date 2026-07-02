@@ -7,14 +7,13 @@ import { PrimeNG } from 'primeng/config';
 import { DomHandler } from 'primeng/dom';
 import { AppFooterComponent } from './footer/app.footer.component';
 import { AppMenuComponent } from './menu/app.menu.component';
-import { AppNewsComponent } from './news/app.news.component';
 import { AppTopBarComponent } from './topbar/app.topbar.component';
 
 @Component({
     selector: 'app-main',
     template: `
         <div class="layout-wrapper" [ngClass]="containerClass()">
-            <app-news />
+            <!-- <app-news /> -->
             <app-topbar />
             @if (isMenuActive()) {
                 <div class="layout-mask" (click)="hideMenu()" animate.enter="px-modal-enter" animate.leave="px-modal-leave"></div>
@@ -29,14 +28,14 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
         </div>
     `,
     standalone: true,
-    imports: [RouterOutlet, AppFooterComponent, CommonModule, AppNewsComponent, AppMenuComponent, AppTopBarComponent]
+    imports: [RouterOutlet, AppFooterComponent, CommonModule, AppMenuComponent, AppTopBarComponent]
 })
 export class AppMainComponent {
     configService: AppConfigService = inject(AppConfigService);
 
     primeng: PrimeNG = inject(PrimeNG);
 
-    isNewsActive = computed(() => this.configService.newsActive());
+    isNewsActive = computed(() => false);
 
     isMenuActive = computed(() => this.configService.appState().menuActive);
 

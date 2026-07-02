@@ -16,17 +16,17 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-col gap-6">
+        <div class="flex flex-col gap-5">
             <div>
-                <label for="non-fluid" class="font-bold mb-2 block">Non-Fluid</label>
+                <label for="non-fluid" class="font-bold mb-2 block text-sm">Non-Fluid</label>
                 <input type="text" pInputText id="non-fluid" />
             </div>
             <div>
-                <label for="fluid" class="font-bold mb-2 block">Fluid Prop</label>
+                <label for="fluid" class="font-bold mb-2 block text-sm">Fluid Prop</label>
                 <input type="text" pInputText id="fluid" fluid />
             </div>
             <p-fluid>
-                <span class="font-bold mb-2 block">Fluid Container</span>
+                <span class="font-bold mb-2 block text-sm">Fluid Container</span>
                 <div class="grid grid-cols-2 gap-4">
                     <div><input type="text" pInputText /></div>
                     <div><input type="text" pInputText /></div>
@@ -50,10 +50,10 @@ Fluid is a layout component to make descendant components span full width of the
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<FluidPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, FluidPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ## Pass Through Options
 

@@ -1,4 +1,5 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
@@ -7,7 +8,7 @@ import { ClassNamesModule } from 'primeng/classnames';
 @Component({
     selector: 'examples-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ClassNamesModule, CommonModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ClassNamesModule, CommonModule],
     template: `
         <app-docsectiontext>
             <p>
@@ -19,24 +20,24 @@ import { ClassNamesModule } from 'primeng/classnames';
                 <a href="https://github.com/tailwindlabs/tailwindcss-intellisense?tab=readme-ov-file#tailwindcssclassattributes" target="_blank" rel="noopener noreferrer">classAttributes</a> configuration for intellisense support.
             </p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <div class="flex justify-between gap-4">
                 <div class="flex flex-col gap-4">
-                    <div class="font-semibold">pClass Directive</div>
+                    <div class="font-semibold text-sm">pClass Directive</div>
                     <div class="flex flex-wrap items-center gap-4">
-                        <div pClass="py-4 px-8 border border-surface rounded-lg">String</div>
-                        <div [pClass]="['py-4', 'px-8', 'bg-primary text-primary-contrast', 'font-semibold', 'rounded-lg']">Array</div>
-                        <div [pClass]="['p-4 rounded-lg', ['cursor-pointer', 'select-none', 'border'], { 'bg-primary text-primary-contrast border-primary': active1() }]" (click)="toggle1()">Combined</div>
+                        <div pClass="py-3 px-7 border border-surface rounded-lg text-sm">String</div>
+                        <div [pClass]="['py-3', 'px-7', 'bg-primary text-primary-contrast', 'font-semibold text-sm', 'rounded-lg']">Array</div>
+                        <div [pClass]="['p-3 rounded-lg text-sm', ['cursor-pointer', 'select-none', 'border'], { 'bg-primary text-primary-contrast border-primary': active1() }]" (click)="toggle1()">Combined</div>
                         <div [pClass]="nestedClasses()" (click)="toggle2()">Nested</div>
                     </div>
                 </div>
                 <div class="flex flex-col gap-4">
-                    <div class="font-semibold">Native Class Directive</div>
+                    <div class="font-semibold text-sm">Native Class Directive</div>
                     <div class="flex flex-wrap items-center gap-4">
-                        <div class="py-4 px-8 border border-surface rounded-lg">String</div>
-                        <div [class]="['py-4', 'px-8', 'bg-primary', 'text-primary-contrast', 'font-semibold', 'rounded-lg']">Array</div>
+                        <div class="py-3 px-7 border border-surface rounded-lg text-sm">String</div>
+                        <div [class]="['py-3', 'px-7', 'bg-primary', 'text-primary-contrast', 'font-semibold', 'text-sm', 'rounded-lg']">Array</div>
                         <div
-                            class="p-4 rounded-lg"
+                            class="p-3 rounded-lg text-sm"
                             [class]="['cursor-pointer', 'select-none', 'border']"
                             [class.bg-primary]="active1()"
                             [class.text-primary-contrast]="active1()"
@@ -49,8 +50,8 @@ import { ClassNamesModule } from 'primeng/classnames';
                     </div>
                 </div>
             </div>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class ExamplesDoc {
@@ -59,7 +60,7 @@ export class ExamplesDoc {
     active2 = signal<boolean>(false);
 
     nestedClasses = computed(() => [
-        'p-4',
+        'p-3 text-sm',
         'rounded-lg',
         {
             'bg-primary text-primary-contrast': this.active2()
@@ -70,7 +71,7 @@ export class ExamplesDoc {
             {
                 'bg-primary-100 text-primary-800': !this.active2()
             },
-            ['shadow-sm hover:shadow-lg', 'transition-all']
+            ['shadow-xs hover:shadow-lg', 'transition-all']
         ]
     ]);
 

@@ -22,7 +22,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
         </div>
     `,
@@ -45,6 +45,71 @@ export class SelectBasicDemo implements OnInit {
 }
 ```
 
+## checkboxselection-doc
+
+Multiple selection with checkboxes using multiple and custom #item and #header templates.
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CheckboxModule } from 'primeng/checkbox';
+import { SelectModule } from 'primeng/select';
+
+interface City {
+    name: string;
+    code: string;
+}
+
+@Component({
+    template: `
+        <div class="flex justify-center">
+            <p-select [options]="cities" [(ngModel)]="selectedCities" [multiple]="true" optionLabel="name" optionValue="code" [showClear]="true" placeholder="Select Cities" class="w-full md:w-56">
+                <ng-template #header>
+                    <div class="px-3 py-2">
+                        <p-checkbox [ngModel]="allSelected" [binary]="true" [indeterminate]="indeterminate" (ngModelChange)="onToggleAll($event)" label="Select All" />
+                    </div>
+                </ng-template>
+                <ng-template #selectedItem>
+                    <span>{{ getLabel() }}</span>
+                </ng-template>
+                <ng-template let-city #item>
+                    <div class="flex items-center gap-2">
+                        <p-checkbox [ngModel]="isItemSelected(city)" [binary]="true" [tabindex]="-1" [readonly]="true" />
+                        <span>{{ city.name }}</span>
+                    </div>
+                </ng-template>
+            </p-select>
+        </div>
+    `,
+    standalone: true,
+    imports: [CheckboxModule, SelectModule, FormsModule]
+})
+export class SelectCheckboxSelectionDemo {
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
+    selectedCities: string[] = [];
+
+    getLabel(): string {
+        if (this.selectedCities.length === 0) return '';
+        const first = this.cities.find((c) => c.code === this.selectedCities[0])?.name ?? this.selectedCities[0];
+        return this.selectedCities.length > 1 ? `${first} (+${this.selectedCities.length - 1} more)` : first;
+    }
+
+    isItemSelected(city: City): boolean {
+        return this.selectedCities.includes(city.code);
+    }
+
+    onToggleAll(checked: boolean) {
+        this.selectedCities = checked ? this.cities.map((c) => c.code) : [];
+    }
+}
+```
+
 ## Checkmark
 
 An alternative way to highlight the selected option is displaying a checkmark instead.
@@ -61,14 +126,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" [checkmark]="true" optionLabel="name" [showClear]="true" placeholder="Select a City" class="w-full md:w-56" />
         </div>
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
 })
-export class SelectCheckmarkDemo implements OnInit {
+export class SelectCheckMarkDemo implements OnInit {
     cities: City[];
     selectedCity: City | undefined;
 
@@ -80,6 +145,80 @@ export class SelectCheckmarkDemo implements OnInit {
             { name: 'Istanbul', code: 'IST' },
             { name: 'Paris', code: 'PRS' }
         ];
+    }
+}
+```
+
+## Chip
+
+Selected items displayed as chips using a custom #selectedItem template in multiple mode.
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ChipModule } from 'primeng/chip';
+import { SelectModule } from 'primeng/select';
+
+interface Member {
+    name: string;
+    code: string;
+    avatar: string;
+}
+
+@Component({
+    template: `
+        <div class="flex justify-center">
+            <p-select [options]="members" [(ngModel)]="selected" [multiple]="true" optionLabel="name" optionValue="code" [showClear]="true" placeholder="Select Members" class="w-full">
+                <ng-template let-member #item>
+                    <div class="flex items-center gap-2">
+                        <img [src]="member.avatar" [alt]="member.name" class="w-7 h-7 rounded-full" />
+                        <span>{{ member.name }}</span>
+                    </div>
+                </ng-template>
+                <ng-template #selectedItem let-selectedOption>
+                    <div class="flex flex-wrap gap-1">
+                        @for (code of selected; track code) {
+                            <p-chip
+                                [label]="getFirstName(code)"
+                                [image]="getAvatar(code)"
+                                [removable]="true"
+                                (onRemove)="removeItem($event, code)"
+                                [pt]="{ root: { class: 'py-0!' }, label: { class: 'text-xs!' }, image: { class: 'w-5! h-5!' } }"
+                            />
+                        }
+                    </div>
+                </ng-template>
+            </p-select>
+        </div>
+    `,
+    standalone: true,
+    imports: [ChipModule, SelectModule, FormsModule]
+})
+export class SelectChipDemo {
+    members: Member[] = [
+        { name: 'Amy Elsner', code: 'AE', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png' },
+        { name: 'Anna Fali', code: 'AF', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/annafali.png' },
+        { name: 'Asiya Javayant', code: 'AJ', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/asiyajavayant.png' },
+        { name: 'Bernardo Dominic', code: 'BD', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/bernardodominic.png' },
+        { name: 'Elwin Sharvill', code: 'ES', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/elwinsharvill.png' },
+        { name: 'Ioni Bowcher', code: 'IB', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/ionibowcher.png' },
+        { name: 'Ivan Magalhaes', code: 'IM', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/ivanmagalhaes.png' },
+        { name: 'Stephen Shaw', code: 'SS', avatar: 'https://primefaces.org/cdn/primevue/images/avatar/stephenshaw.png' }
+    ];
+    selected: string[] = [];
+
+    getFirstName(code: string): string {
+        const member = this.members.find((m) => m.code === code);
+        return member ? member.name.split(' ')[0] : code;
+    }
+
+    getAvatar(code: string): string {
+        return this.members.find((m) => m.code === code)?.avatar ?? '';
+    }
+
+    removeItem(event: MouseEvent, code: string) {
+        event.stopPropagation();
+        this.selected = this.selected.filter((c) => c !== code);
     }
 }
 ```
@@ -100,14 +239,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" [showClear]="true" />
         </div>
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
 })
-export class SelectCleariconDemo implements OnInit {
+export class SelectClearIconDemo implements OnInit {
     cities: City[];
     selectedCity: City | undefined;
 
@@ -143,9 +282,9 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
-                <ng-template pTemplate="filter" let-options="options">
+                <ng-template #filter let-options="options">
                     <div class="flex gap-1">
                         <p-inputgroup (click)="$event.stopPropagation()">
                             <p-inputgroup-addon><i class="pi pi-search"></i></p-inputgroup-addon>
@@ -154,13 +293,13 @@ interface City {
                         <p-button icon="pi pi-times" (click)="resetFunction(options)" severity="secondary" />
                     </div>
                 </ng-template>
-                <ng-template pTemplate="selectedItem" let-selectedOption>
+                <ng-template #selectedItem let-selectedOption>
                     <div class="flex items-center gap-2">
                         <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
                         <div>{{ selectedOption.name }}</div>
                     </div>
                 </ng-template>
-                <ng-template let-country pTemplate="item">
+                <ng-template #item let-country>
                     <div class="flex items-center gap-2">
                         <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
@@ -172,7 +311,7 @@ interface City {
     standalone: true,
     imports: [ButtonModule, SelectModule, InputGroupModule, InputTextModule, FormsModule]
 })
-export class SelectCustomfilterDemo implements OnInit {
+export class SelectCustomFilterDemo implements OnInit {
     countries: City[] | undefined;
     selectedCountry: string | undefined;
     filterValue: string | undefined = '';
@@ -219,7 +358,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" placeholder="Select a City" optionLabel="name" [disabled]="true" class="w-full md:w-56" />
         </div>
     `,
@@ -258,7 +397,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" placeholder="Select a City" [editable]="true" optionLabel="name" class="w-full md:w-56" />
         </div>
     `,
@@ -297,7 +436,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" variant="filled" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
         </div>
     `,
@@ -332,7 +471,7 @@ import { Country } from '@/domain/customer';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country" class="w-full md:w-56">
                 <ng-template #selectedItem let-selectedOption>
                     <div class="flex items-center gap-2">
@@ -390,7 +529,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel class="w-full md:w-56">
                 <p-select [(ngModel)]="value1" inputId="over_label" [options]="cities" optionLabel="name" class="w-full" />
                 <label for="over_label">Over Label</label>
@@ -408,7 +547,7 @@ interface City {
     standalone: true,
     imports: [SelectModule, FloatLabelModule, FormsModule]
 })
-export class SelectFloatlabelDemo implements OnInit {
+export class SelectFloatLabelDemo implements OnInit {
     cities: City[] | undefined;
     value1: City | undefined;
     value2: City | undefined;
@@ -442,9 +581,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card">
-            <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" fluid />
-        </div>
+        <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select a City" fluid />
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
@@ -477,7 +614,7 @@ import { SelectItemGroup } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="groupedCities" [(ngModel)]="selectedCity" placeholder="Select a City" [group]="true" class="w-full md:w-56">
                 <ng-template let-group #group>
                     <div class="flex items-center">
@@ -549,7 +686,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel class="w-full md:w-56">
                 <p-select [(ngModel)]="selectedCity" inputId="dd-city" [options]="cities" optionLabel="name" class="w-full" />
                 <label for="dd-city">City</label>
@@ -559,7 +696,7 @@ interface City {
     standalone: true,
     imports: [SelectModule, IftaLabelModule, FormsModule]
 })
-export class SelectIftalabelDemo implements OnInit {
+export class SelectIftaLabelDemo implements OnInit {
     cities: City[] | undefined;
     selectedCity: City | undefined;
 
@@ -591,7 +728,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-select [options]="cities" [(ngModel)]="selectedCity1" optionLabel="name" [showClear]="true" [invalid]="value1" placeholder="Select a City" class="w-full md:w-56" />
             <p-select [options]="cities" [(ngModel)]="selectedCity2" optionLabel="name" [showClear]="true" [invalid]="value2" placeholder="Select a City" class="w-full md:w-56" variant="filled" />
         </div>
@@ -600,7 +737,13 @@ interface City {
     imports: [SelectModule, FormsModule]
 })
 export class SelectInvalidDemo {
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     selectedCity1: City | undefined;
     selectedCity2: City | undefined;
     value1: boolean = true;
@@ -618,19 +761,24 @@ import { SelectItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="items" [(ngModel)]="selectedItem" placeholder="Select Item" [virtualScroll]="true" [virtualScrollItemSize]="32" [virtualScrollOptions]="options" class="w-full md:w-56" />
         </div>
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
 })
-export class SelectLazyvirtualscrollDemo {
+export class SelectLazyVirtualScrollDemo {
     items: SelectItem[];
     selectedItem: string | undefined;
     loading: boolean = false;
     loadLazyTimeout: any = null;
-    options: ScrollerOptions;
+    options: ScrollerOptions = {
+        delay: 250,
+        showLoader: true,
+        lazy: true,
+        onLazyLoad: this.onLazyLoad.bind(this)
+    };
 
     constructor() {
         this.items = [];
@@ -681,14 +829,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="cities" [(ngModel)]="selectedCity" [loading]="true" optionLabel="name" placeholder="Loading..." class="w-full md:w-56" />
         </div>
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
 })
-export class SelectLoadingstateDemo implements OnInit {
+export class SelectLoadingStateDemo implements OnInit {
     cities: City[];
     selectedCity: City | undefined;
 
@@ -704,6 +852,54 @@ export class SelectLoadingstateDemo implements OnInit {
 }
 ```
 
+## Multiple
+
+When multiple is enabled, multiple items can be selected. Use checkmark to display a check indicator and a custom #selectedItem template for the label.
+
+```typescript
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
+
+interface Topping {
+    label: string;
+    value: string;
+}
+
+@Component({
+    template: `
+        <div class="flex justify-center">
+            <p-select [options]="toppings" [(ngModel)]="selected" [multiple]="true" [checkmark]="true" optionLabel="label" optionValue="value" [showClear]="true" placeholder="Select Toppings" class="w-full md:w-56">
+                <ng-template #selectedItem>
+                    <span>{{ getLabel() }}</span>
+                </ng-template>
+            </p-select>
+        </div>
+    `,
+    standalone: true,
+    imports: [SelectModule, FormsModule]
+})
+export class SelectMultipleDemo {
+    toppings: Topping[] = [
+        { label: 'Pepperoni', value: 'pepperoni' },
+        { label: 'Mushrooms', value: 'mushrooms' },
+        { label: 'Onions', value: 'onions' },
+        { label: 'Black Olives', value: 'olives' },
+        { label: 'Green Peppers', value: 'peppers' },
+        { label: 'Mozzarella', value: 'mozzarella' },
+        { label: 'Basil', value: 'basil' },
+        { label: 'Tomatoes', value: 'tomatoes' }
+    ];
+    selected: string[] = [];
+
+    getLabel(): string {
+        if (this.selected.length === 0) return '';
+        const first = this.toppings.find((t) => t.value === this.selected[0])?.label ?? this.selected[0];
+        return this.selected.length > 1 ? `${first} (+${this.selected.length - 1} more)` : first;
+    }
+}
+```
+
 ## reactiveforms-doc
 
 Select can also be used with reactive forms. In this case, the formControlName property is used to bind the component to a form control.
@@ -713,7 +909,6 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
@@ -724,8 +919,7 @@ interface City {
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full sm:w-56">
                 <div class="flex flex-col gap-1">
                     <p-select formControlName="city" [options]="cities" [invalid]="isInvalid('city')" optionLabel="name" placeholder="Select a City" class="w-full md:w-56" />
@@ -738,11 +932,17 @@ interface City {
         </div>
     `,
     standalone: true,
-    imports: [SelectModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [SelectModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class SelectReactiveformsDemo {
+export class SelectReactiveFormsDemo {
     messageService = inject(MessageService);
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
 
@@ -784,7 +984,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-select [(ngModel)]="value1" [options]="cities" optionLabel="name" size="small" placeholder="Small" class="w-full md:w-56" />
             <p-select [(ngModel)]="value2" [options]="cities" optionLabel="name" placeholder="Normal" class="w-full md:w-56" />
             <p-select [(ngModel)]="value3" [options]="cities" optionLabel="name" size="large" placeholder="Large" class="w-full md:w-56" />
@@ -823,13 +1023,15 @@ import { SelectModule } from 'primeng/select';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" placeholder="Select a country" class="w-full md:w-56">
                 <ng-template #selectedItem let-selectedOption>
-                    <div class="flex items-center gap-2" *ngIf="selectedOption">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
-                        <div>{{ selectedOption.name }}</div>
-                    </div>
+                    @if (selectedOption) {
+                        <div class="flex items-center gap-2">
+                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
+                            <div>{{ selectedOption.name }}</div>
+                        </div>
+                    }
                 </ng-template>
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
@@ -882,7 +1084,6 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
@@ -893,8 +1094,7 @@ interface City {
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4 w-full sm:w-56">
                 <div class="flex flex-col gap-1">
                     <p-select
@@ -917,11 +1117,17 @@ interface City {
         </div>
     `,
     standalone: true,
-    imports: [SelectModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [SelectModule, MessageModule, ButtonModule, FormsModule]
 })
-export class SelectTemplatedrivenformsDemo {
+export class SelectTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     selectedCity: City | undefined;
 
     onSubmit(form: any) {
@@ -945,14 +1151,14 @@ import { SelectItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-select [options]="items" [(ngModel)]="selectedItem" placeholder="Select Item" [virtualScroll]="true" [virtualScrollItemSize]="32" class="w-full md:w-56" />
         </div>
     `,
     standalone: true,
     imports: [SelectModule, FormsModule]
 })
-export class SelectVirtualscrollDemo {
+export class SelectVirtualScrollDemo {
     items: SelectItem[];
     selectedItem: string | undefined;
 
@@ -973,34 +1179,33 @@ Select is used to choose an item from a collection of options.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<SelectPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| fluid | InputSignalWithTransform<boolean, unknown> | false | Spans 100% width of the container when enabled. |
-| variant | InputSignal<"outlined" \| "filled"> | 'outlined' | Specifies the input variant of the component. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
-| inputSize | InputSignal<number> | undefined | Specifies the visible width of the input element in characters. |
-| pattern | InputSignal<string> | undefined | Specifies the value must match the pattern. |
-| min | InputSignal<number> | undefined | The value must be greater than or equal to the value. |
-| max | InputSignal<number> | undefined | The value must be less than or equal to the value. |
-| step | InputSignal<number> | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
-| minlength | InputSignal<number> | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
-| maxlength | InputSignal<number> | undefined | The number of characters (code points) must not exceed the value of the attribute. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, SelectPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| fluid | boolean | false | Spans 100% width of the container when enabled. |
+| variant | "filled" \| "outlined" | 'outlined' | Specifies the input variant of the component. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
+| inputSize | number | undefined | Specifies the visible width of the input element in characters. |
+| pattern | string | undefined | Specifies the value must match the pattern. |
+| min | number | undefined | The value must be greater than or equal to the value. |
+| max | number | undefined | The value must be less than or equal to the value. |
+| step | number | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
+| minlength | number | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
+| maxlength | number | undefined | The number of characters (code points) must not exceed the value of the attribute. |
 | id | string | - | Unique identifier of the component |
-| scrollHeight | string | 200px | Height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
-| filter | boolean | false | When specified, displays an input field to filter the items on keyup. |
-| panelStyle | { [klass: string]: any } | - | Inline style of the overlay panel element. |
-| styleClass | string | - | Style class of the element. **(Deprecated)** |
+| scrollHeight | string | - | Height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
+| filter | boolean | - | When specified, displays an input field to filter the items on keyup. |
+| panelStyle | Partial<CSSStyleDeclaration> | - | Inline style of the overlay panel element. |
 | panelStyleClass | string | - | Style class of the overlay panel element. |
-| readonly | boolean | false | When present, it specifies that the component cannot be edited. |
-| editable | boolean | false | When present, custom value instead of predefined options can be entered using the editable input field. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
-| placeholder | Signal<string> | - | Default text to display when no option is selected. |
+| readonly | boolean | - | When present, it specifies that the component cannot be edited. |
+| editable | boolean | - | When present, custom value instead of predefined options can be entered using the editable input field. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| placeholder | string | - | Default text to display when no option is selected. |
 | loadingIcon | string | - | Icon to display in loading state. |
 | filterPlaceholder | string | - | Placeholder text to show when filter input is empty. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
@@ -1008,41 +1213,42 @@ Select is used to choose an item from a collection of options.
 | dataKey | string | - | A property to uniquely identify a value in options. |
 | filterBy | string | - | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
 | filterFields | any[] | - | Fields used when filtering the options, defaults to optionLabel. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| resetFilterOnHide | boolean | false | Clears the filter value when hiding the select. |
-| checkmark | boolean | false | Whether the selected option will be shown with a check mark. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| resetFilterOnHide | boolean | - | Clears the filter value when hiding the select. |
+| checkmark | boolean | - | Whether the selected option will be shown with a check mark. |
 | dropdownIcon | string | - | Icon class of the select icon. |
-| loading | boolean | false | Whether the select is in loading state. |
+| loading | boolean | - | Whether the select is in loading state. |
 | optionLabel | string | - | Name of the label field of an option. |
 | optionValue | string | - | Name of the value field of an option. |
 | optionDisabled | string | - | Name of the disabled field of an option. |
-| optionGroupLabel | string | label | Name of the label field of an option group. |
-| optionGroupChildren | string | items | Name of the options field of an option group. |
-| group | boolean | false | Whether to display options as grouped when nested options are provided. |
-| showClear | boolean | false | When enabled, a clear icon is displayed to clear the value. |
+| optionGroupLabel | string | - | Name of the label field of an option group. |
+| optionGroupChildren | string | - | Name of the options field of an option group. |
+| group | boolean | - | Whether to display options as grouped when nested options are provided. |
+| showClear | boolean | - | When enabled, a clear icon is displayed to clear the value. |
 | emptyFilterMessage | string | - | Text to display when filtering does not return any results. Defaults to global value in i18n translation configuration. |
 | emptyMessage | string | - | Text to display when there is no data. Defaults to global value in i18n translation configuration. |
-| lazy | boolean | false | Defines if data is loaded and interacted with in lazy manner. |
-| virtualScroll | boolean | false | Whether the data should be loaded on demand during scroll. |
+| lazy | boolean | - | Defines if data is loaded and interacted with in lazy manner. |
+| virtualScroll | boolean | - | Whether the data should be loaded on demand during scroll. |
 | virtualScrollItemSize | number | - | Height of an item in the list for VirtualScrolling. |
 | virtualScrollOptions | ScrollerOptions | - | Whether to use the scroller feature. The properties of scroller component can be used like an object in it. |
 | overlayOptions | OverlayOptions | - | Whether to use overlay API feature. The properties of overlay API can be used like an object in it. |
 | ariaFilterLabel | string | - | Defines a string that labels the filter input. |
 | ariaLabel | string | - | Used to define a aria label attribute the current element. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| filterMatchMode | "startsWith" \| "contains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "lt" \| "lte" \| "gt" \| "gte" | contains | Defines how the items are filtered. |
+| filterMatchMode | "startsWith" \| "contains" \| "notContains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "between" \| "lt" \| "lte" \| "gt" \| "gte" \| "is" \| "isNot" \| "before" \| "after" \| "dateIs" \| "dateIsNot" \| "dateBefore" \| "dateAfter" | - | Defines how the items are filtered. |
 | tooltip | string | - | Advisory information to display in a tooltip on hover. |
-| tooltipPosition | "right" \| "left" \| "top" \| "bottom" | right | Position of the tooltip. |
-| tooltipPositionStyle | string | absolute | Type of CSS position. |
+| tooltipPosition | "right" \| "left" \| "top" \| "bottom" | - | Position of the tooltip. |
+| tooltipPositionStyle | string | - | Type of CSS position. |
 | tooltipStyleClass | string | - | Style class of the tooltip. |
-| focusOnHover | boolean | true | Fields used when filtering the options, defaults to optionLabel. |
-| selectOnFocus | boolean | false | Determines if the option will be selected on focus. |
-| autoOptionFocus | boolean | false | Whether to focus on the first visible or selected element when the overlay panel is shown. |
-| autofocusFilter | boolean | true | Applies focus to the filter element when the overlay is shown. |
+| focusOnHover | boolean | - | Fields used when filtering the options, defaults to optionLabel. |
+| selectOnFocus | boolean | - | Determines if the option will be selected on focus. |
+| multiple | boolean | - | When enabled, allows multiple items to be selected. |
+| autoOptionFocus | boolean | - | Whether to focus on the first visible or selected element when the overlay panel is shown. |
+| autofocusFilter | boolean | - | Applies focus to the filter element when the overlay is shown. |
 | filterValue | string | - | When specified, filter displays with this value. |
 | options | any[] | - | An array of objects to display as the available options. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
@@ -1179,6 +1385,8 @@ Select is used to choose an item from a collection of options.
 | select.lg.font.size | --p-select-lg-font-size | Lg font size of root |
 | select.lg.padding.x | --p-select-lg-padding-x | Lg padding x of root |
 | select.lg.padding.y | --p-select-lg-padding-y | Lg padding y of root |
+| select.font.weight | --p-select-font-weight | Font weight of root |
+| select.font.size | --p-select-font-size | Font size of root |
 | select.dropdown.width | --p-select-dropdown-width | Width of dropdown |
 | select.dropdown.color | --p-select-dropdown-color | Color of dropdown |
 | select.overlay.background | --p-select-overlay-background | Background of overlay |
@@ -1196,11 +1404,15 @@ Select is used to choose an item from a collection of options.
 | select.option.focus.color | --p-select-option-focus-color | Focus color of option |
 | select.option.selected.color | --p-select-option-selected-color | Selected color of option |
 | select.option.selected.focus.color | --p-select-option-selected-focus-color | Selected focus color of option |
+| select.option.selected.font.weight | --p-select-option-selected-font-weight | Font weight of a selected option |
 | select.option.padding | --p-select-option-padding | Padding of option |
 | select.option.border.radius | --p-select-option-border-radius | Border radius of option |
+| select.option.font.weight | --p-select-option-font-weight | Font weight of option |
+| select.option.font.size | --p-select-option-font-size | Font size of option |
 | select.option.group.background | --p-select-option-group-background | Background of option group |
 | select.option.group.color | --p-select-option-group-color | Color of option group |
 | select.option.group.font.weight | --p-select-option-group-font-weight | Font weight of option group |
+| select.option.group.font.size | --p-select-option-group-font-size | Font size of option group |
 | select.option.group.padding | --p-select-option-group-padding | Padding of option group |
 | select.clear.icon.color | --p-select-clear-icon-color | Color of clear icon |
 | select.checkmark.color | --p-select-checkmark-color | Color of checkmark |

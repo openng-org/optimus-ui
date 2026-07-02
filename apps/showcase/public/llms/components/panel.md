@@ -16,9 +16,9 @@ import { PanelModule } from 'primeng/panel';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-panel header="Header">
-                <p class="m-0">
+                <p class="m-0 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
@@ -44,33 +44,31 @@ import { PanelModule } from 'primeng/panel';
 
 @Component({
     template: `
-        <div class="card">
-            <p-panel [toggleable]="true">
-                <ng-template #header>
+        <p-panel [toggleable]="true">
+            <ng-template #header>
+                <div class="flex items-center gap-2">
+                    <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+                    <span class="font-bold">Amy Elsner</span>
+                </div>
+            </ng-template>
+            <ng-template #footer>
+                <div class="flex flex-wrap items-center justify-between gap-4">
                     <div class="flex items-center gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-                        <span class="font-bold">Amy Elsner</span>
+                        <p-button icon="pi pi-user" rounded text></p-button>
+                        <p-button icon="pi pi-bookmark" severity="secondary" rounded text></p-button>
                     </div>
-                </ng-template>
-                <ng-template #footer>
-                    <div class="flex flex-wrap items-center justify-between gap-4">
-                        <div class="flex items-center gap-2">
-                            <p-button icon="pi pi-user" rounded text></p-button>
-                            <p-button icon="pi pi-bookmark" severity="secondary" rounded text></p-button>
-                        </div>
-                        <span class="text-surface-500 dark:text-surface-400">Updated 2 hours ago</span>
-                    </div>
-                </ng-template>
-                <ng-template #icons>
-                    <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
-                    <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
-                </ng-template>
-                <p class="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </p-panel>
-        </div>
+                    <span class="text-surface-500 dark:text-surface-400">Updated 2 hours ago</span>
+                </div>
+            </ng-template>
+            <ng-template #icons>
+                <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
+                <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
+            </ng-template>
+            <p class="m-0 text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </p-panel>
     `,
     standalone: true,
     imports: [AvatarModule, ButtonModule, MenuModule, PanelModule]
@@ -108,14 +106,12 @@ import { PanelModule } from 'primeng/panel';
 
 @Component({
     template: `
-        <div class="card">
-            <p-panel header="Header" [toggleable]="true">
-                <p class="m-0">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                </p>
-            </p-panel>
-        </div>
+        <p-panel header="Header" [toggleable]="true">
+            <p class="m-0 text-sm">
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+            </p>
+        </p-panel>
     `,
     standalone: true,
     imports: [PanelModule]
@@ -131,26 +127,23 @@ Panel is a container with the optional content toggle feature.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<PanelPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| toggleable | boolean | false | Defines if content of panel can be expanded and collapsed. |
-| _header | string | - | Header text of the panel. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, PanelPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| toggleable | boolean | - | Defines if content of panel can be expanded and collapsed. |
+| header | string | - | Header text of the panel. |
 | collapsed | boolean | - | Defines the initial state of panel content, supports one or two-way binding as well. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| iconPos | "center" \| "start" \| "end" | end | Position of the icons. |
-| showHeader | boolean | true | Specifies if header of panel cannot be displayed. |
-| toggler | "icon" \| "header" | icon | Specifies the toggler element to toggle the panel content. |
-| transitionOptions | string | 400ms cubic-bezier(0.86, 0, 0.07, 1) | Transition options of the animation. **(Deprecated)** |
-| toggleButtonProps | any | - | Used to pass all properties of the ButtonProps to the Button component. |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| iconPos | "start" \| "end" \| "center" | - | Position of the icons. |
+| showHeader | boolean | - | Specifies if header of panel cannot be displayed. |
+| toggler | "icon" \| "header" | - | Specifies the toggler element to toggle the panel content. |
+| toggleButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| collapsedChange | value: boolean | Emitted when the collapsed changes. |
 | onBeforeToggle | event: PanelBeforeToggleEvent | Callback to invoke before panel toggle. |
 | onAfterToggle | event: PanelAfterToggleEvent | Callback to invoke after panel toggle. |
 
@@ -159,7 +152,7 @@ Panel is a container with the optional content toggle feature.
 | Name | Type | Description |
 |------|------|-------------|
 | header | TemplateRef<void> | Defines template option for header. |
-| icons | TemplateRef<void> | Defines template option for icons. |
+| icon | TemplateRef<void> | Defines template option for icons. |
 | content | TemplateRef<void> | Defines template option for content. |
 | footer | TemplateRef<void> | Defines template option for footer. |
 | headericons | TemplateRef<PanelHeaderIconsTemplateContext> | Defines template option for headerIcon. |
@@ -212,6 +205,7 @@ Panel is a container with the optional content toggle feature.
 | panel.header.border.radius | --p-panel-header-border-radius | Border radius of header |
 | panel.toggleable.header.padding | --p-panel-toggleable-header-padding | Padding of toggleable header |
 | panel.title.font.weight | --p-panel-title-font-weight | Font weight of title |
+| panel.title.font.size | --p-panel-title-font-size | Font size of title |
 | panel.content.padding | --p-panel-content-padding | Padding of content |
 | panel.footer.padding | --p-panel-footer-padding | Padding of footer |
 

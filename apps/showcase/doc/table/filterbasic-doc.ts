@@ -12,12 +12,13 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectModule } from 'primeng/select';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 
 @Component({
-    selector: 'filterbasic-doc',
+    selector: 'filter-basic-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, TagModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, SelectModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, FormsModule, TableModule, TagModule, IconFieldModule, InputIconModule, InputTextModule, MultiSelectModule, SelectModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>
                 Data filtering is enabled by defining the <i>filters</i> property referring to a <i>DataTableFilterMeta</i> instance. Each column to filter also requires <i>filter</i> to be enabled. Built-in filter element is a input field and using
@@ -25,8 +26,8 @@ import { DeferredDemo } from '@/components/demo/deferreddemo';
             </p>
             <p>The optional global filtering searches the data against a single value that is bound to the <i>global</i> key of the <i>filters</i> object. The fields to search against is defined with the <i>globalFilterFields</i>.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table
                     #dt2
                     [value]="customers"
@@ -58,13 +59,13 @@ import { DeferredDemo } from '@/components/demo/deferreddemo';
                         </tr>
                         <tr>
                             <th>
-                                <p-columnFilter type="text" field="name" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-columnFilter>
+                                <p-column-filter type="text" field="name" placeholder="Type to search" ariaLabel="Filter Name" filterOn="input"></p-column-filter>
                             </th>
                             <th>
-                                <p-columnFilter type="text" field="country.name" placeholder="Enter key to search" ariaLabel="Filter Country"></p-columnFilter>
+                                <p-column-filter type="text" field="country.name" placeholder="Enter key to search" ariaLabel="Filter Country"></p-column-filter>
                             </th>
                             <th>
-                                <p-columnFilter field="representative" matchMode="in" [showMenu]="false">
+                                <p-column-filter field="representative" matchMode="in" [showMenu]="false">
                                     <ng-template #filter let-value let-filter="filterCallback">
                                         <p-multiselect [(ngModel)]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
                                             <ng-template let-option #item>
@@ -75,10 +76,10 @@ import { DeferredDemo } from '@/components/demo/deferreddemo';
                                             </ng-template>
                                         </p-multiselect>
                                     </ng-template>
-                                </p-columnFilter>
+                                </p-column-filter>
                             </th>
                             <th>
-                                <p-columnFilter field="status" matchMode="equals" [showMenu]="false">
+                                <p-column-filter field="status" matchMode="equals" [showMenu]="false">
                                     <ng-template #filter let-value let-filter="filterCallback">
                                         <p-select [(ngModel)]="value" [options]="statuses" (onChange)="filter($event.value)" placeholder="Select One" [showClear]="true" style="min-width: 12rem">
                                             <ng-template let-option #item>
@@ -86,10 +87,10 @@ import { DeferredDemo } from '@/components/demo/deferreddemo';
                                             </ng-template>
                                         </p-select>
                                     </ng-template>
-                                </p-columnFilter>
+                                </p-column-filter>
                             </th>
                             <th>
-                                <p-columnFilter type="boolean" field="verified"></p-columnFilter>
+                                <p-column-filter type="boolean" field="verified"></p-column-filter>
                             </th>
                         </tr>
                     </ng-template>
@@ -130,9 +131,9 @@ import { DeferredDemo } from '@/components/demo/deferreddemo';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code></app-code>`,
+            </p-deferred-demo>
+            <app-code></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FilterBasicDoc {

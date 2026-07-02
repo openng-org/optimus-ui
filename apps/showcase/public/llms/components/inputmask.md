@@ -18,14 +18,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText pInputMask="99-999999" [(ngModel)]="value" placeholder="99-999999" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskBasicDemo {
+export class InputMaskBasicDemo {
     value: string | undefined;
 }
 ```
@@ -41,14 +41,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-inputmask mask="99-999999" [(ngModel)]="value" placeholder="99-999999" [showClear]="true" />
         </div>
     `,
     standalone: true,
     imports: [InputMaskModule, FormsModule]
 })
-export class InputmaskCleariconDemo {
+export class InputMaskClearIconDemo {
     value: string | undefined;
 }
 ```
@@ -65,14 +65,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText pInputMask="999-99-9999" [(ngModel)]="value" disabled />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskDisabledDemo {
+export class InputMaskDisabledDemo {
     value: string | undefined;
 }
 ```
@@ -89,14 +89,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText pInputMask="99-999999" [(ngModel)]="value" variant="filled" placeholder="99-999999" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskFilledDemo {
+export class InputMaskFilledDemo {
     value: string | undefined;
 }
 ```
@@ -114,7 +114,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel>
                 <input pInputText id="over_label" [(ngModel)]="value1" pInputMask="999-99-9999" />
                 <label for="over_label">Over Label</label>
@@ -132,7 +132,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     standalone: true,
     imports: [FloatLabelModule, InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskFloatlabelDemo {
+export class InputMaskFloatLabelDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -151,14 +151,12 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card">
-            <input pInputText pInputMask="99-999999" [(ngModel)]="value" placeholder="99-999999" fluid />
-        </div>
+        <input pInputText pInputMask="99-999999" [(ngModel)]="value" placeholder="99-999999" fluid />
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskFluidDemo {
+export class InputMaskFluidDemo {
     value: string | undefined;
 }
 ```
@@ -176,7 +174,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel>
                 <input pInputText id="ssn" [(ngModel)]="value" pInputMask="999-99-9999" autocomplete="off" />
                 <label for="ssn">SSN</label>
@@ -186,7 +184,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     standalone: true,
     imports: [IftaLabelModule, InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskIftalabelDemo {
+export class InputMaskIftaLabelDemo {
     value: string | undefined;
 }
 ```
@@ -203,7 +201,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <input pInputText [(ngModel)]="value1" pInputMask="99-999999" placeholder="Serial Key" [invalid]="!value1" />
             <input pInputText [(ngModel)]="value2" pInputMask="99-999999" placeholder="Serial Key" [invalid]="!value2" variant="filled" />
         </div>
@@ -211,7 +209,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskInvalidDemo {
+export class InputMaskInvalidDemo {
     value1: string | undefined;
     value2: string | undefined;
 }
@@ -229,7 +227,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <p-fluid class="card flex flex-wrap gap-4">
+        <p-fluid class="flex flex-wrap gap-4">
             <div class="flex-auto">
                 <span class="font-bold block mb-2">SSN</span>
                 <input pInputText pInputMask="999-99-9999" [(ngModel)]="value1" placeholder="999-99-9999" />
@@ -247,7 +245,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskMaskDemo {
+export class InputMaskMaskDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -266,14 +264,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText pInputMask="(999) 999-9999? x99999" [(ngModel)]="value" placeholder="(999) 999-9999? x99999" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskOptionalDemo {
+export class InputMaskOptionalDemo {
     value: string | undefined;
 }
 ```
@@ -286,7 +284,6 @@ InputMask can also be used with reactive forms. In this case, the formControlNam
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -294,8 +291,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 sm:w-56">
                 <div class="flex flex-col gap-1">
                     <input pInputText pInputMask="99-999999" formControlName="value" placeholder="99-999999" [invalid]="isInvalid('value')" fluid />
@@ -308,9 +304,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, InputTextModule, InputMaskModule, ReactiveFormsModule]
+    imports: [MessageModule, ButtonModule, InputTextModule, InputMaskModule, ReactiveFormsModule]
 })
-export class InputmaskReactiveformsDemo {
+export class InputMaskReactiveFormsDemo {
     messageService = inject(MessageService);
     items: any[] | undefined;
     exampleForm: FormGroup | undefined;
@@ -350,7 +346,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <input pInputText [(ngModel)]="value1" placeholder="Small" pSize="small" pInputMask="99-999999" />
             <input pInputText [(ngModel)]="value2" placeholder="Normal" pInputMask="99-999999" />
             <input pInputText [(ngModel)]="value3" placeholder="Large" pSize="large" pInputMask="99-999999" />
@@ -359,7 +355,7 @@ import { InputMaskModule } from 'primeng/inputmask';
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskSizesDemo {
+export class InputMaskSizesDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -378,14 +374,14 @@ import { InputMaskModule } from 'primeng/inputmask';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <input pInputText [(ngModel)]="value" pInputMask="99/99/9999" placeholder="99/99/9999" slotChar="mm/dd/yyyy" />
         </div>
     `,
     standalone: true,
     imports: [InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskSlotcharDemo {
+export class InputMaskSlotCharDemo {
     value: string | undefined;
 }
 ```
@@ -396,7 +392,6 @@ export class InputmaskSlotcharDemo {
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputMaskModule } from 'primeng/inputmask';
@@ -404,8 +399,7 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex justify-center flex-col gap-4 md:w-56">
                 <div class="flex flex-col gap-1">
                     <input pInputText name="serial" pInputMask="99-999999" #serialNumber="ngModel" [(ngModel)]="value" placeholder="99-999999" [invalid]="serialNumber.invalid && (serialNumber.touched || exampleForm.submitted)" required fluid />
@@ -418,9 +412,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ButtonModule, InputTextModule, InputMaskModule, FormsModule]
+    imports: [MessageModule, ButtonModule, InputTextModule, InputMaskModule, FormsModule]
 })
-export class InputmaskTemplatedrivenformsDemo {
+export class InputMaskTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     items: any[] = [];
     value: any;
@@ -442,29 +436,29 @@ InputMask component is used to enter input in a certain format such as numeric, 
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<InputMaskPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| fluid | InputSignalWithTransform<boolean, unknown> | false | Spans 100% width of the container when enabled. |
-| variant | InputSignal<"outlined" \| "filled"> | 'outlined' | Specifies the input variant of the component. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
-| inputSize | InputSignal<number> | undefined | Specifies the visible width of the input element in characters. |
-| pattern | InputSignal<string> | undefined | Specifies the value must match the pattern. |
-| min | InputSignal<number> | undefined | The value must be greater than or equal to the value. |
-| max | InputSignal<number> | undefined | The value must be less than or equal to the value. |
-| step | InputSignal<number> | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
-| minlength | InputSignal<number> | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
-| maxlength | InputSignal<number> | undefined | The number of characters (code points) must not exceed the value of the attribute. |
-| type | string | text | HTML5 input type. |
-| slotChar | string | _ | Placeholder character in mask, default is underscore. |
-| autoClear | boolean | true | Clears the incomplete value on blur. |
-| showClear | boolean | false | When enabled, a clear icon is displayed to clear the value. |
-| style | { [klass: string]: any } | - | Inline style of the input field. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, InputMaskPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| fluid | boolean | false | Spans 100% width of the container when enabled. |
+| variant | "filled" \| "outlined" | 'outlined' | Specifies the input variant of the component. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
+| inputSize | number | undefined | Specifies the visible width of the input element in characters. |
+| pattern | string | undefined | Specifies the value must match the pattern. |
+| min | number | undefined | The value must be greater than or equal to the value. |
+| max | number | undefined | The value must be less than or equal to the value. |
+| step | number | undefined | Unless the step is set to the any literal, the value must be min + an integral multiple of the step. |
+| minlength | number | undefined | The number of characters (code points) must not be less than the value of the attribute, if non-empty. |
+| maxlength | number | undefined | The number of characters (code points) must not exceed the value of the attribute. |
+| type | string | - | HTML5 input type. |
+| slotChar | string | - | Placeholder character in mask, default is underscore. |
+| autoClear | boolean | - | Clears the incomplete value on blur. |
+| showClear | boolean | - | When enabled, a clear icon is displayed to clear the value. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the input field. |
 | inputId | string | - | Identifier of the focus input to match a label defined for the component. |
 | styleClass | string | - | Style class of the input field. |
 | placeholder | string | - | Advisory information to display on input. |
@@ -472,25 +466,25 @@ InputMask component is used to enter input in a certain format such as numeric, 
 | title | string | - | Title text of the input text. |
 | ariaLabel | string | - | Used to define a string that labels the input element. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| ariaRequired | boolean | false | Used to indicate that user input is required on an element before a form can be submitted. |
-| readonly | boolean | false | When present, it specifies that an input field is read-only. |
-| unmask | boolean | false | Defines if ngModel sets the raw unmasked value to bound value or the formatted mask value. |
-| characterPattern | string | [A-Za-z] | Regex pattern for alpha characters |
-| autofocus | boolean | false | When present, the input gets a focus automatically on load. |
+| ariaRequired | boolean | - | Used to indicate that user input is required on an element before a form can be submitted. |
+| readonly | boolean | - | When present, it specifies that an input field is read-only. |
+| unmask | boolean | - | Defines if ngModel sets the raw unmasked value to bound value or the formatted mask value. |
+| characterPattern | string | - | Regex pattern for alpha characters |
+| autofocus | boolean | - | When present, the input gets a focus automatically on load. |
 | autocomplete | string | - | Used to define a string that autocomplete attribute the current element. |
-| keepBuffer | boolean | false | When present, it specifies that whether to clean buffer value from model. |
+| keepBuffer | boolean | - | When present, it specifies that whether to clean buffer value from model. |
 | mask | string | - | Mask pattern. |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| onComplete | value: any | Callback to invoke when the mask is completed. |
+| onComplete | value: void | Callback to invoke when the mask is completed. |
 | onFocus | event: Event | Callback to invoke when the component receives focus. |
 | onBlur | event: Event | Callback to invoke when the component loses focus. |
 | onInput | event: Event | Callback to invoke on input. |
 | onKeydown | event: Event | Callback to invoke on input key press. |
-| onClear | value: any | Callback to invoke when input field is cleared. |
+| onClear | value: void | Callback to invoke when input field is cleared. |
 
 ### Templates
 

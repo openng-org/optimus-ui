@@ -17,7 +17,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-checkbox [(ngModel)]="checked" [binary]="true" />
         </div>
     `,
@@ -40,7 +40,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
+        <div class="flex justify-center gap-2">
             <p-checkbox [(ngModel)]="checked1" [binary]="true" [disabled]="true" />
             <p-checkbox [(ngModel)]="checked2" [binary]="true" [disabled]="true" />
         </div>
@@ -65,12 +65,14 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <div class="flex flex-col gap-4">
-                <div *ngFor="let category of categories" class="flex items-center">
-                    <p-checkbox [inputId]="category.key" name="group" [value]="category" [(ngModel)]="selectedCategories" />
-                    <label [for]="category.key" class="ml-2"> {{ category.name }} </label>
-                </div>
+                @for (category of categories; track category.key) {
+                    <div class="flex items-center">
+                        <p-checkbox [inputId]="category.key" name="group" [value]="category" [(ngModel)]="selectedCategories" />
+                        <label [for]="category.key" class="text-sm ml-2"> {{ category.name }} </label>
+                    </div>
+                }
             </div>
         </div>
     `,
@@ -79,7 +81,12 @@ import { CheckboxModule } from 'primeng/checkbox';
 })
 export class CheckboxDynamicDemo implements OnInit {
     selectedCategories: any[] = [];
-    categories: any[];
+    categories: any[] = [
+        { name: 'Accounting', key: 'A' },
+        { name: 'Marketing', key: 'M' },
+        { name: 'Production', key: 'P' },
+        { name: 'Research', key: 'R' }
+    ];
 
     ngOnInit() {
         this.selectedCategories = [this.categories[1]];
@@ -98,7 +105,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-checkbox [(ngModel)]="checked" [binary]="true" variant="filled" />
         </div>
     `,
@@ -121,7 +128,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-checkbox [(ngModel)]="checked" [binary]="true" [indeterminate]="true" />
         </div>
     `,
@@ -144,7 +151,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-checkbox [(ngModel)]="checked" [binary]="true" [invalid]="!checked" />
         </div>
     `,
@@ -167,7 +174,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-checkbox name="groupname" value="val1" label="Value 1" [(ngModel)]="selectedValues"></p-checkbox>
             <p-checkbox name="groupname" value="val2" label="Value 2" [(ngModel)]="selectedValues"></p-checkbox>
         </div>
@@ -191,22 +198,22 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <div class="flex items-center">
                 <p-checkbox inputId="ingredient1" name="pizza" value="Cheese" [(ngModel)]="pizza" />
-                <label for="ingredient1" class="ml-2"> Cheese </label>
+                <label for="ingredient1" class="text-sm ml-2"> Cheese </label>
             </div>
             <div class="flex items-center">
                 <p-checkbox inputId="ingredient2" name="pizza" value="Mushroom" [(ngModel)]="pizza" />
-                <label for="ingredient2" class="ml-2"> Mushroom </label>
+                <label for="ingredient2" class="text-sm ml-2"> Mushroom </label>
             </div>
             <div class="flex items-center">
                 <p-checkbox inputId="ingredient3" name="pizza" value="Pepper" [(ngModel)]="pizza" />
-                <label for="ingredient3" class="ml-2"> Pepper </label>
+                <label for="ingredient3" class="text-sm ml-2"> Pepper </label>
             </div>
             <div class="flex items-center">
                 <p-checkbox inputId="ingredient4" name="pizza" value="Onion" [(ngModel)]="pizza" />
-                <label for="ingredient4" class="ml-2"> Onion </label>
+                <label for="ingredient4" class="text-sm ml-2"> Onion </label>
             </div>
         </div>
     `,
@@ -227,20 +234,18 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
                 <div class="flex flex-wrap gap-4">
                     @for (item of formKeys; track item) {
                         <div class="flex items-center gap-2">
                             <p-checkbox [formControlName]="item" [binary]="true" [inputId]="item" [invalid]="isInvalid(item)" />
-                            <label [for]="item"> {{ item | titlecase }} </label>
+                            <label [for]="item" class="text-sm"> {{ item | titlecase }} </label>
                         </div>
                     }
                 </div>
@@ -254,9 +259,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [CheckboxModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [CheckboxModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class CheckboxReactiveformsDemo {
+export class CheckboxReactiveFormsDemo {
     messageService = inject(MessageService);
     formSubmitted: boolean = false;
     exampleForm: FormGroup;
@@ -323,7 +328,7 @@ import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center gap-4">
+        <div class="flex flex-wrap justify-center gap-4">
             <div class="flex items-center gap-2">
                 <p-checkbox [(ngModel)]="size" inputId="size_small" name="size" value="Small" size="small" />
                 <label for="size_small" class="text-sm">Small</label>
@@ -353,20 +358,18 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #form="ngForm" (ngSubmit)="onSubmit(form)" class="flex flex-col gap-4">
                 <div class="flex flex-wrap gap-4">
                     @for (item of formKeys; track item) {
                         <div class="flex items-center gap-2">
                             <p-checkbox [inputId]="item" [name]="item" [(ngModel)]="formModel[item]" [binary]="true" [invalid]="isInvalid()"></p-checkbox>
-                            <label [for]="item">{{ item | titlecase }}</label>
+                            <label [for]="item" class="text-sm">{{ item | titlecase }}</label>
                         </div>
                     }
                 </div>
@@ -380,12 +383,17 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [CheckboxModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [CheckboxModule, MessageModule, ButtonModule, FormsModule]
 })
-export class CheckboxTemplatedrivenformsDemo {
+export class CheckboxTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     formSubmitted: boolean = false;
-    formModel: any;
+    formModel: any = {
+        cheese: false,
+        mushroom: false,
+        pepper: false,
+        onion: false
+    };
 
     isInvalid(): boolean {
         return this.formSubmitted && !this.isAtLeastOneSelected();
@@ -428,32 +436,31 @@ Checkbox is an extension to standard checkbox element with theming.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<CheckboxPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, CheckboxPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
 | value | any | - | Value of the checkbox. |
-| binary | boolean | false | Allows to select a boolean value instead of multiple values. |
+| binary | boolean | - | Allows to select a boolean value instead of multiple values. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
 | ariaLabel | string | - | Used to define a string that labels the input element. |
 | tabindex | number | - | Index of the element in tabbing order. |
 | inputId | string | - | Identifier of the focus input to match a label defined for the component. |
-| inputStyle | { [klass: string]: any } | - | Inline style of the input element. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| inputStyle | Partial<CSSStyleDeclaration> | - | Inline style of the input element. |
 | inputClass | string | - | Style class of the input element. |
-| indeterminate | boolean | false | When present, it specifies input state as indeterminate. |
+| indeterminate | boolean | - | When present, it specifies input state as indeterminate. |
 | formControl | FormControl<any> | - | Form control value. |
 | checkboxIcon | string | - | Icon class of the checkbox icon. |
-| readonly | boolean | false | When present, it specifies that the component cannot be edited. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| trueValue | any | true | Value in checked state. |
-| falseValue | any | false | Value in unchecked state. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
+| readonly | boolean | - | When present, it specifies that the component cannot be edited. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| trueValue | any | - | Value in checked state. |
+| falseValue | any | - | Value in unchecked state. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
 
 ### Emits
 
@@ -467,7 +474,7 @@ Checkbox is an extension to standard checkbox element with theming.
 
 | Name | Type | Description |
 |------|------|-------------|
-| checkboxicon | TemplateRef<CheckboxIconTemplateContext> | Custom checkbox icon template. |
+| icon | TemplateRef<CheckboxIconTemplateContext> | Custom checkbox icon template. |
 
 ## Pass Through Options
 

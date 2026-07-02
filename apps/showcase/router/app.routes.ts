@@ -56,6 +56,7 @@ export const routes: Routes = [
                 path: 'colorpicker',
                 loadChildren: () => import('@/pages/colorpicker/routes')
             },
+            { path: 'commandmenu', loadChildren: () => import('@/pages/commandmenu/routes') },
             {
                 path: 'confirmdialog',
                 loadChildren: () => import('@/pages/confirmdialog/routes')
@@ -114,6 +115,7 @@ export const routes: Routes = [
                 path: 'focustrap',
                 loadChildren: () => import('@/pages/focustrap/routes')
             },
+            { path: 'gallery', loadChildren: () => import('@/pages/gallery/routes') },
             {
                 path: 'galleria',
                 loadChildren: () => import('@/pages/galleria/routes')
@@ -121,6 +123,7 @@ export const routes: Routes = [
             { path: 'image', loadChildren: () => import('@/pages/image/routes') },
             { path: 'imagecompare', loadChildren: () => import('@/pages/imagecompare/routes') },
             { path: 'inplace', loadChildren: () => import('@/pages/inplace/routes') },
+            { path: 'inputcolor', loadChildren: () => import('@/pages/inputcolor/routes') },
             { path: 'fluid', loadChildren: () => import('@/pages/fluid/routes') },
             {
                 path: 'metergroup',

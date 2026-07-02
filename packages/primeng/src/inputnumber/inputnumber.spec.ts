@@ -12,7 +12,7 @@ import { InputNumber, InputNumberModule } from './inputnumber';
 @Component({
     standalone: false,
     template: `
-        <p-inputNumber
+        <p-inputnumber
             [(ngModel)]="value"
             [showButtons]="showButtons"
             [showClear]="showClear"
@@ -36,7 +36,6 @@ import { InputNumber, InputNumberModule } from './inputnumber';
             [allowEmpty]="allowEmpty"
             [autofocus]="autofocus"
             [inputId]="inputId"
-            [styleClass]="styleClass"
             [inputStyleClass]="inputStyleClass"
             [incrementButtonClass]="incrementButtonClass"
             [decrementButtonClass]="decrementButtonClass"
@@ -53,7 +52,7 @@ import { InputNumber, InputNumberModule } from './inputnumber';
             (onBlur)="onBlurChange($event)"
             (onKeyDown)="onKeyDownChange($event)"
             (onClear)="onClearChange()"
-        ></p-inputNumber>
+        ></p-inputnumber>
     `
 })
 class TestBasicInputNumberComponent {
@@ -80,7 +79,6 @@ class TestBasicInputNumberComponent {
     allowEmpty: boolean = true;
     autofocus: boolean = false;
     inputId: string | undefined = undefined as any;
-    styleClass: string | undefined = undefined as any;
     inputStyleClass: string | undefined = undefined as any;
     incrementButtonClass: string | undefined = undefined as any;
     decrementButtonClass: string | undefined = undefined as any;
@@ -104,7 +102,7 @@ class TestBasicInputNumberComponent {
     standalone: false,
     template: `
         <form [formGroup]="form">
-            <p-inputNumber formControlName="numberField" [showButtons]="showButtons" [min]="min" [max]="max" [step]="step"></p-inputNumber>
+            <p-inputnumber formControlName="numberField" [showButtons]="showButtons" [min]="min" [max]="max" [step]="step"></p-inputnumber>
         </form>
     `
 })
@@ -118,29 +116,29 @@ class TestFormInputNumberComponent {
     step: number = 10;
 }
 
-// InputNumber pTemplate component
+// InputNumber #template component
 @Component({
     standalone: false,
     template: `
-        <p-inputNumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
-            <!-- Clear icon template with pTemplate directive -->
-            <ng-template pTemplate="clearicon">
+        <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
+            <!-- Clear icon template with #template reference -->
+            <ng-template #clearicon>
                 <i class="pi pi-times custom-clear-icon" data-testid="ptemplate-clearicon"></i>
             </ng-template>
 
             <!-- Increment button icon template -->
-            <ng-template pTemplate="incrementbuttonicon">
+            <ng-template #incrementbuttonicon>
                 <i class="pi pi-plus custom-increment-icon" data-testid="ptemplate-incrementicon"></i>
             </ng-template>
 
             <!-- Decrement button icon template -->
-            <ng-template pTemplate="decrementbuttonicon">
+            <ng-template #decrementbuttonicon>
                 <i class="pi pi-minus custom-decrement-icon" data-testid="ptemplate-decrementicon"></i>
             </ng-template>
-        </p-inputNumber>
+        </p-inputnumber>
     `
 })
-class TestInputNumberPTemplateComponent {
+class TestInputNumberTemplateComponent {
     value: number = 1234.56;
     min: number = 0;
     max: number = 9999;
@@ -151,7 +149,7 @@ class TestInputNumberPTemplateComponent {
 @Component({
     standalone: false,
     template: `
-        <p-inputNumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
+        <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
             <!-- Clear icon template with #template reference -->
             <ng-template #clearicon>
                 <i class="pi pi-times custom-clear-icon" data-testid="ref-clearicon"></i>
@@ -166,7 +164,7 @@ class TestInputNumberPTemplateComponent {
             <ng-template #decrementbuttonicon>
                 <i class="pi pi-minus custom-decrement-icon" data-testid="ref-decrementicon"></i>
             </ng-template>
-        </p-inputNumber>
+        </p-inputnumber>
     `
 })
 class TestInputNumberRefTemplateComponent {
@@ -183,7 +181,7 @@ describe('InputNumber', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
-            declarations: [TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberPTemplateComponent, TestInputNumberRefTemplateComponent],
+            declarations: [TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberTemplateComponent, TestInputNumberRefTemplateComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -198,13 +196,13 @@ describe('InputNumber', () => {
         });
 
         it('should have default values', () => {
-            expect(component.showButtons).toBe(false);
-            expect(component.format).toBe(true);
-            expect(component.buttonLayout).toBe('stacked');
-            expect(component.mode).toBe('decimal');
-            expect(component.useGrouping).toBe(true);
-            expect(component.allowEmpty).toBe(true);
-            expect(component.showClear).toBe(false);
+            expect(component.showButtons()).toBe(false);
+            expect(component.format()).toBe(true);
+            expect(component.buttonLayout()).toBe('stacked');
+            expect(component.mode()).toBe('decimal');
+            expect(component.useGrouping()).toBe(true);
+            expect(component.allowEmpty()).toBe(true);
+            expect(component.showClear()).toBe(false);
             expect(component.step()).toBeUndefined();
         });
 
@@ -235,9 +233,9 @@ describe('InputNumber', () => {
         // });
 
         it('should format currency correctly', () => {
-            component.mode = 'currency';
-            component.currency = 'USD';
-            component.locale = 'en-US';
+            fixture.componentRef.setInput('mode', 'currency');
+            fixture.componentRef.setInput('currency', 'USD');
+            fixture.componentRef.setInput('locale', 'en-US');
             fixture.detectChanges();
 
             const formatted = component.formatValue(1234.56);
@@ -245,9 +243,9 @@ describe('InputNumber', () => {
         });
 
         it('should handle prefix and suffix', () => {
-            component.prefix = '$ ';
-            component.suffix = ' USD';
-            component.format = true;
+            fixture.componentRef.setInput('prefix', '$ ');
+            fixture.componentRef.setInput('suffix', ' USD');
+            fixture.componentRef.setInput('format', true);
             component.value = 100;
             fixture.detectChanges();
 
@@ -263,7 +261,7 @@ describe('InputNumber', () => {
             testComponent.max = 100;
             testFixture.detectChanges();
 
-            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputnumber')).componentInstance;
 
             // Test validation behavior
             expect(inputNumberInstance.validateValue(5)).toBe(10); // Should clamp to min
@@ -272,8 +270,8 @@ describe('InputNumber', () => {
         });
 
         it('should handle fraction digits correctly', () => {
-            component.minFractionDigits = 2;
-            component.maxFractionDigits = 4;
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.componentRef.setInput('maxFractionDigits', 4);
             component.value = 123.1;
             fixture.detectChanges();
 
@@ -640,42 +638,42 @@ describe('InputNumber', () => {
         });
     });
 
-    describe('InputNumber pTemplate Tests', () => {
-        let templateComponent: TestInputNumberPTemplateComponent;
-        let templateFixture: ComponentFixture<TestInputNumberPTemplateComponent>;
+    describe('InputNumber #template Tests', () => {
+        let templateComponent: TestInputNumberTemplateComponent;
+        let templateFixture: ComponentFixture<TestInputNumberTemplateComponent>;
         let inputNumberElement: any;
 
         beforeEach(() => {
-            templateFixture = TestBed.createComponent(TestInputNumberPTemplateComponent);
+            templateFixture = TestBed.createComponent(TestInputNumberTemplateComponent);
             templateComponent = templateFixture.componentInstance;
-            inputNumberElement = templateFixture.debugElement.query(By.css('p-inputNumber'));
+            inputNumberElement = templateFixture.debugElement.query(By.css('p-inputnumber'));
             templateFixture.detectChanges();
         });
 
-        it('should create component with pTemplate templates', () => {
+        it('should create component with #template references', () => {
             expect(templateComponent).toBeTruthy();
             expect(inputNumberElement).toBeTruthy();
         });
 
-        it('should have clearicon pTemplate', () => {
+        it('should have clearicon #template', () => {
             const inputNumberComponent = inputNumberElement.componentInstance;
             expect(inputNumberComponent).toBeTruthy();
             expect(() => inputNumberComponent.clearIconTemplate).not.toThrow();
         });
 
-        it('should have incrementbuttonicon pTemplate', () => {
+        it('should have incrementbuttonicon #template', () => {
             const inputNumberComponent = inputNumberElement.componentInstance;
             expect(inputNumberComponent).toBeTruthy();
             expect(() => inputNumberComponent.incrementButtonIconTemplate).not.toThrow();
         });
 
-        it('should have decrementbuttonicon pTemplate', () => {
+        it('should have decrementbuttonicon #template', () => {
             const inputNumberComponent = inputNumberElement.componentInstance;
             expect(inputNumberComponent).toBeTruthy();
             expect(() => inputNumberComponent.decrementButtonIconTemplate).not.toThrow();
         });
 
-        it('should process all pTemplates after content init', async () => {
+        it('should process all #templates after content init', async () => {
             const inputNumberComponent = inputNumberElement.componentInstance;
 
             if (inputNumberComponent.ngAfterContentInit) {
@@ -687,7 +685,7 @@ describe('InputNumber', () => {
             expect(inputNumberComponent).toBeTruthy();
         });
 
-        it('should handle pTemplate changes after view init', async () => {
+        it('should handle #template changes after view init', async () => {
             const inputNumberComponent = inputNumberElement.componentInstance;
 
             if (inputNumberComponent.ngAfterViewInit) {
@@ -699,28 +697,28 @@ describe('InputNumber', () => {
             expect(inputNumberComponent).toBeTruthy();
         });
 
-        it('should render custom clear icon pTemplate when showClear is enabled', () => {
+        it('should render custom clear icon #template when showClear is enabled', () => {
             templateFixture.detectChanges();
             const clearIcon = templateFixture.debugElement.query(By.css('[data-testid="ptemplate-clearicon"]'));
             expect(clearIcon || true).toBeTruthy();
         });
 
-        it('should render custom increment icon pTemplate when showButtons is enabled', () => {
+        it('should render custom increment icon #template when showButtons is enabled', () => {
             templateFixture.detectChanges();
             const incrementIcon = templateFixture.debugElement.query(By.css('[data-testid="ptemplate-incrementicon"]'));
             expect(incrementIcon || true).toBeTruthy();
         });
 
-        it('should render custom decrement icon pTemplate when showButtons is enabled', () => {
+        it('should render custom decrement icon #template when showButtons is enabled', () => {
             templateFixture.detectChanges();
             const decrementIcon = templateFixture.debugElement.query(By.css('[data-testid="ptemplate-decrementicon"]'));
             expect(decrementIcon || true).toBeTruthy();
         });
 
-        it('should handle currency formatting with pTemplates', () => {
+        it('should handle currency formatting with #templates', () => {
             const inputNumberInstance = inputNumberElement.componentInstance;
-            expect(inputNumberInstance.mode).toBe('currency');
-            expect(inputNumberInstance.currency).toBe('USD');
+            expect(inputNumberInstance.mode()).toBe('currency');
+            expect(inputNumberInstance.currency()).toBe('USD');
             expect(templateComponent.value).toBe(1234.56);
         });
     });
@@ -733,7 +731,7 @@ describe('InputNumber', () => {
         beforeEach(() => {
             templateFixture = TestBed.createComponent(TestInputNumberRefTemplateComponent);
             templateComponent = templateFixture.componentInstance;
-            inputNumberElement = templateFixture.debugElement.query(By.css('p-inputNumber'));
+            inputNumberElement = templateFixture.debugElement.query(By.css('p-inputnumber'));
             templateFixture.detectChanges();
         });
 
@@ -804,8 +802,8 @@ describe('InputNumber', () => {
 
         it('should handle currency formatting with #templates', () => {
             const inputNumberInstance = inputNumberElement.componentInstance;
-            expect(inputNumberInstance.mode).toBe('currency');
-            expect(inputNumberInstance.currency).toBe('USD');
+            expect(inputNumberInstance.mode()).toBe('currency');
+            expect(inputNumberInstance.currency()).toBe('USD');
             expect(templateComponent.value).toBe(1234.56);
         });
     });
@@ -967,9 +965,9 @@ describe('InputNumber', () => {
             await testFixture.whenStable();
 
             // Test that currency mode is set correctly
-            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
-            expect(inputNumberInstance.mode).toBe('currency');
-            expect(inputNumberInstance.currency).toBe('USD');
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputnumber')).componentInstance;
+            expect(inputNumberInstance.mode()).toBe('currency');
+            expect(inputNumberInstance.currency()).toBe('USD');
         });
 
         it('should format EUR currency correctly', async () => {
@@ -981,9 +979,9 @@ describe('InputNumber', () => {
             await testFixture.whenStable();
 
             // Test that EUR currency mode is set correctly
-            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
-            expect(inputNumberInstance.mode).toBe('currency');
-            expect(inputNumberInstance.currency).toBe('EUR');
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputnumber')).componentInstance;
+            expect(inputNumberInstance.mode()).toBe('currency');
+            expect(inputNumberInstance.currency()).toBe('EUR');
         });
 
         it('should handle different currency display modes', async () => {
@@ -995,9 +993,9 @@ describe('InputNumber', () => {
             await testFixture.whenStable();
 
             // Test that currency display mode is set correctly
-            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
-            expect(inputNumberInstance.currencyDisplay).toBe('code');
-            expect(inputNumberInstance.currency).toBe('USD');
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputnumber')).componentInstance;
+            expect(inputNumberInstance.currencyDisplay()).toBe('code');
+            expect(inputNumberInstance.currency()).toBe('USD');
         });
 
         it('should handle different locales', async () => {
@@ -1082,7 +1080,7 @@ describe('InputNumber', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase1Component {
                 value: number = 100;
@@ -1127,7 +1125,7 @@ describe('InputNumber', () => {
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase2Component {
                 value: number = 100;
@@ -1182,7 +1180,7 @@ describe('InputNumber', () => {
         describe('Case 3: Mixed object and string values', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase3Component {
                 value: number = 100;
@@ -1220,7 +1218,7 @@ describe('InputNumber', () => {
         describe('Case 4: Use variables from instance', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase4Component {
                 value: number = 20;
@@ -1264,7 +1262,7 @@ describe('InputNumber', () => {
         describe('Case 5: Event binding', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase5Component {
                 value: number = 100;
@@ -1311,7 +1309,7 @@ describe('InputNumber', () => {
         describe('Case 6: Inline PT', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [pt]="{ root: 'INLINE_ROOT_CLASS', pcInputText: { root: 'INLINE_INPUT_CLASS' } }" [showButtons]="true"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [pt]="{ root: 'INLINE_ROOT_CLASS', pcInputText: { root: 'INLINE_INPUT_CLASS' } }" [showButtons]="true"></p-inputnumber>`
             })
             class TestPTCase6InlineComponent {
                 value: number = 100;
@@ -1319,7 +1317,7 @@ describe('InputNumber', () => {
 
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, pcInputText: { root: { class: 'INLINE_INPUT_OBJECT_CLASS' } } }" [showButtons]="true"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, pcInputText: { root: { class: 'INLINE_INPUT_OBJECT_CLASS' } } }" [showButtons]="true"></p-inputnumber>`
             })
             class TestPTCase6InlineObjectComponent {
                 value: number = 100;
@@ -1368,8 +1366,8 @@ describe('InputNumber', () => {
             @Component({
                 standalone: false,
                 template: `
-                    <p-inputNumber [(ngModel)]="value1" [showButtons]="true"></p-inputNumber>
-                    <p-inputNumber [(ngModel)]="value2" [showButtons]="true"></p-inputNumber>
+                    <p-inputnumber [(ngModel)]="value1" [showButtons]="true"></p-inputnumber>
+                    <p-inputnumber [(ngModel)]="value2" [showButtons]="true"></p-inputnumber>
                 `
             })
             class TestPTCase7GlobalComponent {
@@ -1411,7 +1409,7 @@ describe('InputNumber', () => {
         describe('Case 8: PT Hooks', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase8HooksComponent {
                 value: number = 100;
@@ -1460,7 +1458,7 @@ describe('InputNumber', () => {
         describe('PT Section Coverage', () => {
             @Component({
                 standalone: false,
-                template: `<p-inputNumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputNumber>`
+                template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCoveragComponent {
                 value: number = 100;

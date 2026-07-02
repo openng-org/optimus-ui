@@ -11,26 +11,13 @@ import { ConfirmPopup } from './confirmpopup';
 @Component({
     standalone: false,
     template: `
-        <p-confirmpopup
-            [key]="key"
-            [defaultFocus]="defaultFocus"
-            [showTransitionOptions]="showTransitionOptions"
-            [hideTransitionOptions]="hideTransitionOptions"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [style]="style"
-            [styleClass]="styleClass"
-            [visible]="visible"
-        >
-        </p-confirmpopup>
+        <p-confirmpopup [key]="key" [defaultFocus]="defaultFocus" [autoZIndex]="autoZIndex" [baseZIndex]="baseZIndex" [style]="style" [styleClass]="styleClass" [visible]="visible"> </p-confirmpopup>
         <button #triggerBtn (click)="confirm($event)" class="trigger-btn">Trigger</button>
     `
 })
 class TestBasicConfirmPopupComponent {
     key: string | undefined;
     defaultFocus: string = 'accept';
-    showTransitionOptions: string = '.12s cubic-bezier(0, 0, 0.2, 1)';
-    hideTransitionOptions: string = '.1s linear';
     autoZIndex: boolean = true;
     baseZIndex: number = 0;
     style: any = {};
@@ -57,24 +44,24 @@ class TestBasicConfirmPopupComponent {
     }
 }
 
-// ConfirmPopup with pTemplate Templates
+// ConfirmPopup with #template Templates
 @Component({
     standalone: false,
     template: `
         <p-confirmpopup>
-            <ng-template pTemplate="content" let-message>
+            <ng-template #content let-message>
                 <div class="custom-content">
                     <i class="pi pi-info-circle custom-content-icon"></i>
                     <span class="custom-content-text">{{ message.message }}</span>
                 </div>
             </ng-template>
-            <ng-template pTemplate="accepticon">
+            <ng-template #accepticon>
                 <i class="pi pi-check custom-accept-icon"></i>
             </ng-template>
-            <ng-template pTemplate="rejecticon">
+            <ng-template #rejecticon>
                 <i class="pi pi-times custom-reject-icon"></i>
             </ng-template>
-            <ng-template pTemplate="headless" let-message>
+            <ng-template #headless let-message>
                 <div class="custom-headless">
                     <h3>{{ message.header }}</h3>
                     <p>{{ message.message }}</p>
@@ -88,7 +75,7 @@ class TestBasicConfirmPopupComponent {
         <button #triggerBtn (click)="confirm($event)" class="trigger-btn">Trigger</button>
     `
 })
-class TestTemplatePConfirmPopupComponent {
+class TestTemplateConfirmPopupComponent {
     constructor(private confirmationService: ConfirmationService) {}
 
     confirm(event: Event) {
@@ -286,7 +273,7 @@ describe('ConfirmPopup', () => {
         await TestBed.configureTestingModule({
             declarations: [
                 TestBasicConfirmPopupComponent,
-                TestTemplatePConfirmPopupComponent,
+                TestTemplateConfirmPopupComponent,
                 TestContentTemplateConfirmPopupComponent,
                 TestMultipleKeysComponent,
                 TestFocusConfirmPopupComponent,
@@ -312,11 +299,9 @@ describe('ConfirmPopup', () => {
         });
 
         it('should have correct default values', () => {
-            expect(confirmPopupInstance.defaultFocus).toBe('accept');
-            expect(confirmPopupInstance.showTransitionOptions).toBe('.12s cubic-bezier(0, 0, 0.2, 1)');
-            expect(confirmPopupInstance.hideTransitionOptions).toBe('.1s linear');
-            expect(confirmPopupInstance.autoZIndex).toBe(true);
-            expect(confirmPopupInstance.baseZIndex).toBe(0);
+            expect(confirmPopupInstance.defaultFocus()).toBe('accept');
+            expect(confirmPopupInstance.autoZIndex()).toBe(true);
+            expect(confirmPopupInstance.baseZIndex()).toBe(0);
         });
 
         it('should subscribe to confirmation service', () => {
@@ -335,7 +320,7 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.key).toBe('testKey');
+            expect(confirmPopupInstance.key()).toBe('testKey');
         });
 
         it('should update defaultFocus property', async () => {
@@ -343,17 +328,7 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.defaultFocus).toBe('reject');
-        });
-
-        it('should update transition options', async () => {
-            component.showTransitionOptions = '.2s ease-in';
-            component.hideTransitionOptions = '.15s ease-out';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-
-            expect(confirmPopupInstance.showTransitionOptions).toBe('.2s ease-in');
-            expect(confirmPopupInstance.hideTransitionOptions).toBe('.15s ease-out');
+            expect(confirmPopupInstance.defaultFocus()).toBe('reject');
         });
 
         it('should update autoZIndex and baseZIndex', async () => {
@@ -362,8 +337,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.autoZIndex).toBe(false);
-            expect(confirmPopupInstance.baseZIndex).toBe(1000);
+            expect(confirmPopupInstance.autoZIndex()).toBe(false);
+            expect(confirmPopupInstance.baseZIndex()).toBe(1000);
         });
 
         it('should update style and styleClass', async () => {
@@ -372,8 +347,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.style).toEqual({ width: '300px' });
-            expect(confirmPopupInstance.styleClass).toBe('custom-popup');
+            expect(confirmPopupInstance.style()).toEqual({ width: '300px' });
+            expect(confirmPopupInstance.styleClass()).toBe('custom-popup');
         });
 
         it('should update visible property', async () => {
@@ -395,8 +370,8 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
 
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation).toBeDefined();
-            expect(confirmPopupInstance.confirmation?.message).toBe('Are you sure?');
+            expect(confirmPopupInstance.confirmation()).toBeDefined();
+            expect(confirmPopupInstance.confirmation()?.message).toBe('Are you sure?');
         });
 
         it('should handle accept action', async () => {
@@ -466,7 +441,9 @@ describe('ConfirmPopup', () => {
         });
 
         it('should only respond to confirmations with matching key', async () => {
-            confirmPopupInstance.key = 'specificKey';
+            component.key = 'specificKey';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             confirmationService.confirm({
                 key: 'differentKey',
@@ -508,7 +485,7 @@ describe('ConfirmPopup', () => {
 
             // Verify handleFocus was called and defaultFocus is set to accept
             expect(handleFocusSpy).toHaveBeenCalled();
-            expect(confirmPopupInstance.defaultFocus).toBe('accept');
+            expect(confirmPopupInstance.defaultFocus()).toBe('accept');
         });
 
         it('should focus reject button when defaultFocus is reject', async () => {
@@ -534,7 +511,7 @@ describe('ConfirmPopup', () => {
 
             // Verify handleFocus was called and defaultFocus is set to reject
             expect(handleFocusSpy).toHaveBeenCalled();
-            expect(confirmPopupInstance.defaultFocus).toBe('reject');
+            expect(confirmPopupInstance.defaultFocus()).toBe('reject');
         });
 
         it('should not focus any button when defaultFocus is none', async () => {
@@ -558,23 +535,23 @@ describe('ConfirmPopup', () => {
     });
 
     describe('Templates', () => {
-        describe('pTemplate Approach Tests', () => {
-            it('should handle pTemplate content processing', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+        describe('#template Approach Tests', () => {
+            it('should handle #template content processing', async () => {
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
                 const confirmPopupInstance = templateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
-                // Test that component handles pTemplate without errors
+                // Test that component handles #template without errors
                 expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
 
                 // Test that templates property exists and is processed
-                expect(confirmPopupInstance.templates).toBeDefined();
+                expect(confirmPopupInstance.contentTemplate()).toBeDefined();
             });
 
-            it('should process _contentTemplate from pTemplate="content"', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+            it('should process _contentTemplate from #content', async () => {
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -584,8 +561,8 @@ describe('ConfirmPopup', () => {
                 expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
             });
 
-            it('should process _acceptIconTemplate from pTemplate="accepticon"', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+            it('should process _acceptIconTemplate from #accepticon', async () => {
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -595,8 +572,8 @@ describe('ConfirmPopup', () => {
                 expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
             });
 
-            it('should process _rejectIconTemplate from pTemplate="rejecticon"', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+            it('should process _rejectIconTemplate from #rejecticon', async () => {
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -606,8 +583,8 @@ describe('ConfirmPopup', () => {
                 expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
             });
 
-            it('should process _headlessTemplate from pTemplate="headless"', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+            it('should process _headlessTemplate from #headless', async () => {
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
@@ -630,7 +607,7 @@ describe('ConfirmPopup', () => {
                 expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
 
                 // Test that contentTemplate property exists (ContentChild)
-                expect(confirmPopupInstance.contentTemplate).toBeDefined();
+                expect(confirmPopupInstance.contentTemplate()).toBeDefined();
             });
 
             it("should process contentTemplate from @ContentChild('content')", async () => {
@@ -641,8 +618,8 @@ describe('ConfirmPopup', () => {
                 const confirmPopupInstance = contentTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
                 // @ContentChild('content') should set contentTemplate
-                expect(confirmPopupInstance.contentTemplate).toBeDefined();
-                expect(confirmPopupInstance.contentTemplate?.constructor.name).toBe('TemplateRef');
+                expect(confirmPopupInstance.contentTemplate()).toBeDefined();
+                expect(confirmPopupInstance.contentTemplate()?.constructor.name).toBe('TemplateRef');
             });
 
             it("should process acceptIconTemplate from @ContentChild('accepticon')", async () => {
@@ -653,8 +630,8 @@ describe('ConfirmPopup', () => {
                 const confirmPopupInstance = contentTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
                 // @ContentChild('accepticon') should set acceptIconTemplate
-                expect(confirmPopupInstance.acceptIconTemplate).toBeDefined();
-                expect(confirmPopupInstance.acceptIconTemplate?.constructor.name).toBe('TemplateRef');
+                expect(confirmPopupInstance.acceptIconTemplate()).toBeDefined();
+                expect(confirmPopupInstance.acceptIconTemplate()?.constructor.name).toBe('TemplateRef');
             });
 
             it("should process rejectIconTemplate from @ContentChild('rejecticon')", async () => {
@@ -665,8 +642,8 @@ describe('ConfirmPopup', () => {
                 const confirmPopupInstance = contentTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
                 // @ContentChild('rejecticon') should set rejectIconTemplate
-                expect(confirmPopupInstance.rejectIconTemplate).toBeDefined();
-                expect(confirmPopupInstance.rejectIconTemplate?.constructor.name).toBe('TemplateRef');
+                expect(confirmPopupInstance.rejectIconTemplate()).toBeDefined();
+                expect(confirmPopupInstance.rejectIconTemplate()?.constructor.name).toBe('TemplateRef');
             });
 
             it("should process headlessTemplate from @ContentChild('headless')", async () => {
@@ -677,50 +654,48 @@ describe('ConfirmPopup', () => {
                 const confirmPopupInstance = contentTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
                 // @ContentChild('headless') should set headlessTemplate
-                expect(confirmPopupInstance.headlessTemplate).toBeDefined();
-                expect(confirmPopupInstance.headlessTemplate?.constructor.name).toBe('TemplateRef');
+                expect(confirmPopupInstance.headlessTemplate()).toBeDefined();
+                expect(confirmPopupInstance.headlessTemplate()?.constructor.name).toBe('TemplateRef');
             });
         });
 
         describe('Template Integration Tests', () => {
             it('should render different template types correctly', async () => {
-                // Test both pTemplate and #content template approaches
-
-                // Test pTemplate rendering
-                const pTemplateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
-                await pTemplateFixture.whenStable();
+                // Test #content template rendering
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
+                await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
-                const pTemplateConfirmPopup = pTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
-                expect(pTemplateConfirmPopup.templates).toBeDefined();
-                expect(() => pTemplateConfirmPopup.ngAfterContentInit()).not.toThrow();
+                const templateConfirmPopup = templateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
+                // Test that contentTemplate signal returns a template
+                expect(templateConfirmPopup.contentTemplate()).toBeDefined();
 
-                // Test #content template rendering
+                // Test another #content template rendering
                 const contentTemplateFixture = TestBed.createComponent(TestContentTemplateConfirmPopupComponent);
                 await contentTemplateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
                 const contentTemplateConfirmPopup = contentTemplateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
-                expect(contentTemplateConfirmPopup.contentTemplate).toBeDefined();
+                expect(contentTemplateConfirmPopup.contentTemplate()).toBeDefined();
             });
 
             it('should use default templates when custom ones are not provided', () => {
                 // Test default behavior without custom templates
-                expect(confirmPopupInstance.contentTemplate).toBeUndefined();
-                expect(confirmPopupInstance.acceptIconTemplate).toBeUndefined();
-                expect(confirmPopupInstance.rejectIconTemplate).toBeUndefined();
-                expect(confirmPopupInstance.headlessTemplate).toBeUndefined();
+                expect(confirmPopupInstance.contentTemplate()).toBeUndefined();
+                expect(confirmPopupInstance.acceptIconTemplate()).toBeUndefined();
+                expect(confirmPopupInstance.rejectIconTemplate()).toBeUndefined();
+                expect(confirmPopupInstance.headlessTemplate()).toBeUndefined();
             });
 
             it('should handle ngAfterContentInit template processing correctly', async () => {
-                const templateFixture = TestBed.createComponent(TestTemplatePConfirmPopupComponent);
+                const templateFixture = TestBed.createComponent(TestTemplateConfirmPopupComponent);
                 await templateFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
                 const confirmPopupInstance = templateFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
 
-                expect(() => confirmPopupInstance.ngAfterContentInit()).not.toThrow();
-                expect(confirmPopupInstance.templates).toBeDefined();
+                // Test that contentTemplate signal returns a template
+                expect(confirmPopupInstance.contentTemplate()).toBeDefined();
             });
         });
     });
@@ -738,7 +713,7 @@ describe('ConfirmPopup', () => {
             await buttonPropsFixture.whenStable();
 
             const confirmPopupInstance = buttonPropsFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
-            const confirmation = confirmPopupInstance.confirmation;
+            const confirmation = confirmPopupInstance.confirmation();
 
             expect(confirmation?.acceptIcon).toBe('pi pi-check');
             expect(confirmation?.rejectIcon).toBe('pi pi-times');
@@ -756,8 +731,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.confirmation?.acceptVisible).toBe(false);
-            expect(confirmPopupInstance.confirmation?.rejectVisible).toBe(true);
+            expect(confirmPopupInstance.confirmation()?.acceptVisible).toBe(false);
+            expect(confirmPopupInstance.confirmation()?.rejectVisible).toBe(true);
         });
     });
 
@@ -1040,7 +1015,7 @@ describe('ConfirmPopup', () => {
 
             // Verify popup is visible
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBe(true);
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBe(true);
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1063,7 +1038,7 @@ describe('ConfirmPopup', () => {
             await fixture.whenStable();
 
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBe(false);
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBe(false);
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1085,7 +1060,7 @@ describe('ConfirmPopup', () => {
 
             // Default behavior - closeOnEscape is undefined, should work as true
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBeUndefined();
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBeUndefined();
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1098,7 +1073,7 @@ describe('ConfirmPopup', () => {
         });
 
         it('should not handle Escape key when confirmation is null', () => {
-            confirmPopupInstance.confirmation = null as any;
+            confirmPopupInstance.confirmation.set(null);
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
             spyOn(confirmPopupInstance, 'onReject');
 
@@ -1219,7 +1194,7 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.styleClass).toBe('my-custom-popup');
+            expect(confirmPopupInstance.styleClass()).toBe('my-custom-popup');
         });
 
         it('should apply inline styles', async () => {
@@ -1234,7 +1209,7 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.style).toEqual({ backgroundColor: 'red' });
+            expect(confirmPopupInstance.style()).toEqual({ backgroundColor: 'red' });
         });
     });
 

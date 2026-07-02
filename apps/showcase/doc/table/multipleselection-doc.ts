@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -10,9 +11,9 @@ import { TableModule } from 'primeng/table';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 
 @Component({
-    selector: 'multipleselection-doc',
+    selector: 'multiple-selection-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, ToggleSwitchModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, FormsModule, TableModule, ToggleSwitchModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>
                 More than one row is selectable by setting <i>selectionMode</i> to <i>multiple</i>. By default in multiple selection mode, metaKey press (e.g. <i>⌘</i>) is not necessary to add to existing selections. When the optional
@@ -20,11 +21,11 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
                 is present, behavior is changed in a way that selecting a new row requires meta key to be present. Note that in touch enabled devices, DataTable always ignores metaKey.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
-                <div class="flex justify-center items-center mb-6 gap-2">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
+                <div class="flex justify-center items-center mb-5 gap-2">
                     <p-toggleswitch [(ngModel)]="metaKey" inputId="input-metakey" />
-                    <label for="input-metakey">MetaKey</label>
+                    <label for="input-metakey" class="text-sm">MetaKey</label>
                 </div>
                 <p-table [value]="products" selectionMode="multiple" [(selection)]="selectedProducts" [metaKeySelection]="metaKey" dataKey="code" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
@@ -44,9 +45,9 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MultipleSelectionDoc {

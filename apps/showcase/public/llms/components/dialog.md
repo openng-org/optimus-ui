@@ -18,16 +18,16 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
-                <span class="p-text-secondary block mb-8">Update your information.</span>
+                <span class="p-text-secondary block mb-8 text-sm">Update your information.</span>
                 <div class="flex items-center gap-4 mb-4">
-                    <label for="username" class="font-semibold w-24">Username</label>
+                    <label for="username" class="font-semibold w-24 text-sm">Username</label>
                     <input pInputText id="username" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex items-center gap-4 mb-8">
-                    <label for="email" class="font-semibold w-24">Email</label>
+                    <label for="email" class="font-semibold w-24 text-sm">Email</label>
                     <input pInputText id="email" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex justify-end gap-2">
@@ -61,11 +61,11 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" icon="pi pi-user" label="Login" />
-            <p-dialog maskStyleClass="backdrop-blur-sm" [(visible)]="visible" styleClass="!border-0 !bg-transparent">
+            <p-dialog maskStyleClass="backdrop-blur-xs" [(visible)]="visible" styleClass="border-0! bg-transparent!">
                 <ng-template #headless>
-                    <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl" style="border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))">
+                    <div class="flex flex-col px-8 py-8 gap-5 rounded-2xl" style="border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))">
                         <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg" class="block mx-auto">
                             <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
                             <mask id="mask0_1_52" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="0" y="0" width="31" height="33">
@@ -96,16 +96,16 @@ import { InputTextModule } from 'primeng/inputtext';
                             <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
                         </svg>
                         <div class="inline-flex flex-col gap-2">
-                            <label for="username" class="text-primary-50 font-semibold">Username</label>
-                            <input pInputText id="username" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" />
+                            <label for="username" class="text-primary-50 font-semibold text-sm">Username</label>
+                            <input pInputText id="username" class="bg-white/20! border-0! p-3! text-primary-50! w-80" />
                         </div>
                         <div class="inline-flex flex-col gap-2">
-                            <label for="password" class="text-primary-50 font-semibold">Password</label>
-                            <input pInputText id="password" class="!bg-white/20 !border-0 !p-4 !text-primary-50 w-80" type="password" />
+                            <label for="password" class="text-primary-50 font-semibold text-sm">Password</label>
+                            <input pInputText id="password" class="bg-white/20! border-0! p-3! text-primary-50! w-80" type="password" />
                         </div>
                         <div class="flex items-center gap-4">
-                            <p-button label="Cancel" (click)="closeDialog()" [text]="true" styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10" class="w-full" />
-                            <p-button label="Sign-In" (click)="closeDialog()" [text]="true" styleClass="!p-4 w-full !text-primary-50 !border !border-white/30 hover:!bg-white/10" class="w-full" />
+                            <p-button label="Cancel" (click)="closeDialog()" [text]="true" styleClass="p-3! w-full text-primary-50! border! border-white/30! hover:bg-white/10!" class="w-full" />
+                            <p-button label="Sign-In" (click)="closeDialog()" [text]="true" styleClass="p-3! w-full text-primary-50! border! border-white/30! hover:bg-white/10!" class="w-full" />
                         </div>
                     </div>
                 </ng-template>
@@ -139,40 +139,40 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog header="Header" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
-                <p class="mb-8">
+                <p class="mb-8 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
-                <p class="mb-8">
+                <p class="mb-8 text-sm">
                     "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
                     ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
-                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
+                    ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
                 </p>
-                <p class="mb-8">
-                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-                    officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime
-                    placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
-                    recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+                <p class="mb-8 text-sm">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                    qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                    maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
+                    non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
                 </p>
-                <p class="mb-8">
+                <p class="mb-8 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
-                <p class="mb-8">
+                <p class="mb-8 text-sm">
                     "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim
                     ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea
-                    commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
+                    adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
+                    ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
                 </p>
-                <p>
-                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui
-                    officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime
-                    placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non
-                    recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
+                <p class="text-sm">
+                    At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa
+                    qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod
+                    maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae
+                    non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
                 </p>
             </p-dialog>
         </div>
@@ -180,7 +180,7 @@ import { DialogModule } from 'primeng/dialog';
     standalone: true,
     imports: [ButtonModule, DialogModule]
 })
-export class DialogLongcontentDemo {
+export class DialogLongContentDemo {
     visible: boolean = false;
 
     showDialog() {
@@ -200,10 +200,10 @@ import { DialogModule } from 'primeng/dialog';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog header="Header" [modal]="true" [(visible)]="visible" [style]="{ width: '50rem' }" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
-                <p>
+                <p class="text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
@@ -236,7 +236,7 @@ import { Dialog, DialogModule } from 'primeng/dialog';
         <div class="card flex justify-center">
             <p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
             <p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                <p class="m-0">
+                <p class="m-0 text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
@@ -273,7 +273,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" icon="pi pi-external-link" label="Show"></p-button>
             <p-dialog header="Header" [(visible)]="visible" [style]="{ width: '50vw' }">
                 <div class="flex py-2 justify-center">
@@ -285,7 +285,7 @@ interface City {
     standalone: true,
     imports: [ButtonModule, DialogModule, SelectModule, FormsModule]
 })
-export class DialogOverlaysinsideDemo implements OnInit {
+export class DialogOverlaysInsideDemo implements OnInit {
     cities: City[] | undefined;
     selectedCity: City | undefined;
     visible: boolean = false;
@@ -318,37 +318,35 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card">
-            <div class="flex flex-wrap justify-center gap-2 mb-2">
-                <p-button (click)="showDialog('left')" icon="pi pi-arrow-right" label="Left" severity="secondary" styleClass="min-w-40" />
-                <p-button (click)="showDialog('right')" icon="pi pi-arrow-left" label="Right" severity="secondary" styleClass="min-w-40" />
-            </div>
-            <div class="flex flex-wrap justify-center gap-2 mb-2">
-                <p-button (click)="showDialog('topleft')" icon="pi pi-arrow-down-right" label="TopLeft" severity="secondary" styleClass="min-w-40" />
-                <p-button (click)="showDialog('top')" icon="pi pi-arrow-down" label="Top" severity="secondary" styleClass="min-w-40" />
-                <p-button (click)="showDialog('topright')" icon="pi pi-arrow-down-left" label="TopRight" severity="secondary" styleClass="min-w-40" />
-            </div>
-            <div class="flex flex-wrap justify-center gap-2">
-                <p-button (click)="showDialog('bottomleft')" icon="pi pi-arrow-up-right" label="BottomLeft" severity="secondary" styleClass="min-w-40" />
-                <p-button (click)="showDialog('bottom')" icon="pi pi-arrow-up" label="Bottom" severity="secondary" styleClass="min-w-40" />
-                <p-button (click)="showDialog('bottomright')" icon="pi pi-arrow-up-left" label="BottomRight" severity="secondary" styleClass="min-w-40" />
-            </div>
-            <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [position]="position" [style]="{ width: '25rem' }">
-                <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span>
-                <div class="flex items-center gap-4 mb-4">
-                    <label for="username" class="font-semibold w-24">Username</label>
-                    <input pInputText id="username" class="flex-auto" autocomplete="off" />
-                </div>
-                <div class="flex items-center gap-4 mb-8">
-                    <label for="email" class="font-semibold w-24">Email</label>
-                    <input pInputText id="email" class="flex-auto" autocomplete="off" />
-                </div>
-                <div class="flex justify-end gap-2">
-                    <p-button label="Cancel" severity="secondary" (click)="visible = false" />
-                    <p-button label="Save" (click)="visible = false" />
-                </div>
-            </p-dialog>
+        <div class="flex flex-wrap justify-center gap-2 mb-2">
+            <p-button (click)="showDialog('left')" icon="pi pi-arrow-right" label="Left" severity="secondary" styleClass="min-w-40" />
+            <p-button (click)="showDialog('right')" icon="pi pi-arrow-left" label="Right" severity="secondary" styleClass="min-w-40" />
         </div>
+        <div class="flex flex-wrap justify-center gap-2 mb-2">
+            <p-button (click)="showDialog('topleft')" icon="pi pi-arrow-down-right" label="TopLeft" severity="secondary" styleClass="min-w-40" />
+            <p-button (click)="showDialog('top')" icon="pi pi-arrow-down" label="Top" severity="secondary" styleClass="min-w-40" />
+            <p-button (click)="showDialog('topright')" icon="pi pi-arrow-down-left" label="TopRight" severity="secondary" styleClass="min-w-40" />
+        </div>
+        <div class="flex flex-wrap justify-center gap-2">
+            <p-button (click)="showDialog('bottomleft')" icon="pi pi-arrow-up-right" label="BottomLeft" severity="secondary" styleClass="min-w-40" />
+            <p-button (click)="showDialog('bottom')" icon="pi pi-arrow-up" label="Bottom" severity="secondary" styleClass="min-w-40" />
+            <p-button (click)="showDialog('bottomright')" icon="pi pi-arrow-up-left" label="BottomRight" severity="secondary" styleClass="min-w-40" />
+        </div>
+        <p-dialog header="Edit Profile" [modal]="true" [(visible)]="visible" [position]="position" [style]="{ width: '25rem' }">
+            <span class="text-surface-500 dark:text-surface-400 block mb-8 text-sm">Update your information.</span>
+            <div class="flex items-center gap-4 mb-4">
+                <label for="username" class="font-semibold w-24 text-sm">Username</label>
+                <input pInputText id="username" class="flex-auto" autocomplete="off" />
+            </div>
+            <div class="flex items-center gap-4 mb-8">
+                <label for="email" class="font-semibold w-24 text-sm">Email</label>
+                <input pInputText id="email" class="flex-auto" autocomplete="off" />
+            </div>
+            <div class="flex justify-end gap-2">
+                <p-button label="Cancel" severity="secondary" (click)="visible = false" />
+                <p-button label="Save" (click)="visible = false" />
+            </div>
+        </p-dialog>
     `,
     standalone: true,
     imports: [ButtonModule, DialogModule, InputTextModule]
@@ -374,10 +372,10 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog header="Header" [(visible)]="visible" [modal]="true" [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false">
-                <p>
+                <p class="text-sm">
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                     consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
                 </p>
@@ -409,7 +407,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
                 <ng-template #header>
@@ -418,13 +416,13 @@ import { InputTextModule } from 'primeng/inputtext';
                         <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                     </div>
                 </ng-template>
-                <span class="text-surface-500 dark:text-surface-400 block mb-8">Update your information.</span>
+                <span class="text-surface-500 dark:text-surface-400 block mb-8 text-sm">Update your information.</span>
                 <div class="flex items-center gap-4 mb-4">
-                    <label for="username" class="font-semibold w-24">Username</label>
+                    <label for="username" class="font-semibold w-24 text-sm">Username</label>
                     <input pInputText id="username" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex items-center gap-4 mb-2">
-                    <label for="email" class="font-semibold w-24">Email</label>
+                    <label for="email" class="font-semibold w-24 text-sm">Email</label>
                     <input pInputText id="email" class="flex-auto" autocomplete="off" />
                 </div>
                 <ng-template #footer>
@@ -458,16 +456,16 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-button (click)="showDialog()" label="Show" />
             <p-dialog header="Edit Profile" [(visible)]="visible" [style]="{ width: '25rem' }">
-                <span class="p-text-secondary block mb-8">Update your information.</span>
+                <span class="p-text-secondary block mb-8 text-sm">Update your information.</span>
                 <div class="flex items-center gap-4 mb-4">
-                    <label for="username" class="font-semibold w-24">Username</label>
+                    <label for="username" class="font-semibold w-24 text-sm">Username</label>
                     <input pInputText id="username" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex items-center gap-4 mb-8">
-                    <label for="email" class="font-semibold w-24">Email</label>
+                    <label for="email" class="font-semibold w-24 text-sm">Email</label>
                     <input pInputText id="email" class="flex-auto" autocomplete="off" />
                 </div>
                 <div class="flex justify-end gap-2">
@@ -480,7 +478,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [ButtonModule, DialogModule, InputTextModule]
 })
-export class DialogWithoutmodalDemo {
+export class DialogWithoutModalDemo {
     visible: boolean = false;
 
     showDialog() {
@@ -497,80 +495,71 @@ Dialog is a container to display content in an overlay window.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<DialogPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, DialogPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | header | string | - | Title text of the dialog. |
-| draggable | boolean | true | Enables dragging to change the position using header. |
-| resizable | boolean | true | Enables resizing of the content. |
-| contentStyle | any | - | Style of the content section. |
+| draggable | boolean | - | Enables dragging to change the position using header. |
+| resizable | boolean | - | Enables resizing of the content. |
+| contentStyle | Partial<CSSStyleDeclaration> | - | Style of the content section. |
 | contentStyleClass | string | - | Style class of the content. |
-| modal | boolean | false | Defines if background should be blocked when dialog is displayed. |
-| closeOnEscape | boolean | true | Specifies if pressing escape key should hide the dialog. |
-| dismissableMask | boolean | false | Specifies if clicking the modal background should hide the dialog. |
-| rtl | boolean | false | When enabled dialog is displayed in RTL direction. |
-| closable | boolean | true | Adds a close icon to the header to hide the dialog. |
-| breakpoints | any | - | Object literal to define widths per screen size. |
+| modal | boolean | - | Defines if background should be blocked when dialog is displayed. |
+| closeOnEscape | boolean | - | Specifies if pressing escape key should hide the dialog. |
+| dismissableMask | boolean | - | Specifies if clicking the modal background should hide the dialog. |
+| rtl | boolean | - | When enabled dialog is displayed in RTL direction. |
+| closable | boolean | - | Adds a close icon to the header to hide the dialog. |
+| breakpoints | Record<string, string> | - | Object literal to define widths per screen size. |
 | styleClass | string | - | Style class of the component. |
 | maskStyleClass | string | - | Style class of the mask. |
-| maskStyle | { [klass: string]: any } | - | Style of the mask. |
-| showHeader | boolean | true | Whether to show the header or not. |
-| blockScroll | boolean | false | Whether background scroll should be blocked when dialog is visible. |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
-| minX | number | 0 | Minimum value for the left coordinate of dialog in dragging. |
-| minY | number | 0 | Minimum value for the top coordinate of dialog in dragging. |
-| focusOnShow | boolean | true | When enabled, first focusable element receives focus on show. |
-| maximizable | boolean | false | Whether the dialog can be displayed full screen. |
-| keepInViewport | boolean | true | Keeps dialog in the viewport. |
-| focusTrap | boolean | true | When enabled, can only focus on elements inside the dialog. |
-| transitionOptions | string | 150ms cubic-bezier(0, 0, 0.2, 1) | Transition options of the animation. **(Deprecated)** |
-| maskMotionOptions | InputSignal<MotionOptions> | ... | The motion options for the mask. |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| maskStyle | Partial<CSSStyleDeclaration> | - | Style of the mask. |
+| showHeader | boolean | - | Whether to show the header or not. |
+| blockScroll | boolean | - | Whether background scroll should be blocked when dialog is visible. |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
+| minX | number | - | Minimum value for the left coordinate of dialog in dragging. |
+| minY | number | - | Minimum value for the top coordinate of dialog in dragging. |
+| focusOnShow | boolean | - | When enabled, first focusable element receives focus on show. |
+| maximizable | boolean | - | Whether the dialog can be displayed full screen. |
+| keepInViewport | boolean | - | Keeps dialog in the viewport. |
+| focusTrap | boolean | - | When enabled, can only focus on elements inside the dialog. |
+| maskMotionOptions | MotionOptions | - | The motion options for the mask. |
+| motionOptions | MotionOptions | - | The motion options. |
 | closeIcon | string | - | Name of the close icon. |
 | closeAriaLabel | string | - | Defines a string that labels the close button for accessibility. |
-| closeTabindex | string | 0 | Index of the close button in tabbing order. |
+| closeTabindex | string | - | Index of the close button in tabbing order. |
 | minimizeIcon | string | - | Name of the minimize icon. |
 | maximizeIcon | string | - | Name of the maximize icon. |
-| closeButtonProps | ButtonProps | ... | Used to pass all properties of the ButtonProps to the Button component. |
-| maximizeButtonProps | ButtonProps | ... | Used to pass all properties of the ButtonProps to the Button component. |
+| closeButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
+| maximizeButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
 | visible | boolean | - | Specifies the visibility of the dialog. |
-| style | any | - | Inline style of the component. |
-| position | "right" \| "left" \| "top" \| "bottom" \| "center" \| "topleft" \| "bottomleft" \| "topright" \| "bottomright" | - | Position of the dialog. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the component. |
+| position | "center" \| "top" \| "bottom" \| "left" \| "right" \| "topleft" \| "topright" \| "bottomleft" \| "bottomright" | - | Position of the dialog, options are "center", "top", "bottom", "left", "right", "topleft", "topright", "bottomleft" or "bottomright". |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
-| role | value: undefined | Role attribute of html element. |
+| role | value: string | Role attribute of html element. |
 | onShow | value: any | Callback to invoke when dialog is shown. |
 | onHide | value: any | Callback to invoke when dialog is hidden. |
-| visibleChange | value: boolean | This EventEmitter is used to notify changes in the visibility state of a component. |
 | onResizeInit | event: MouseEvent | Callback to invoke when dialog resizing is initiated. |
 | onResizeEnd | event: MouseEvent | Callback to invoke when dialog resizing is completed. |
 | onDragEnd | event: DragEvent | Callback to invoke when dialog dragging is completed. |
-| onMaximize | value: any | Callback to invoke when dialog maximized or unmaximized. |
+| onMaximize | value: { maximized: boolean } | Callback to invoke when dialog maximized or unmaximized. |
 
 ### Templates
 
 | Name | Type | Description |
 |------|------|-------------|
-| header | TemplateRef<void> | Header template. |
-| content | TemplateRef<void> | Content template. |
-| footer | TemplateRef<void> | Footer template. |
-| closeicon | TemplateRef<void> | Close icon template. |
-| maximizeicon | TemplateRef<void> | Maximize icon template. |
-| minimizeicon | TemplateRef<void> | Minimize icon template. |
-| headless | TemplateRef<void> | Headless template. |
-| _header | TemplateRef<void> | Custom header template. |
-| _content | TemplateRef<void> | Custom content template. |
-| _footer | TemplateRef<void> | Custom footer template. |
-| _closeicon | TemplateRef<void> | Custom close icon template. |
-| _maximizeicon | TemplateRef<void> | Custom maximize icon template. |
-| _minimizeicon | TemplateRef<void> | Custom minimize icon template. |
-| _headless | TemplateRef<void> | Custom headless template. |
+| header | TemplateRef<void> | Custom header template. |
+| content | TemplateRef<void> | Custom content template. |
+| footer | TemplateRef<void> | Custom footer template. |
+| closeicon | TemplateRef<void> | Custom close icon template. |
+| maximizeicon | TemplateRef<void> | Custom maximize icon template. |
+| minimizeicon | TemplateRef<void> | Custom minimize icon template. |
+| headless | TemplateRef<void> | Custom headless template. |
 
 ## Pass Through Options
 
@@ -587,7 +576,8 @@ Dialog is a container to display content in an overlay window.
 | pcCloseButton | ButtonPassThrough | Used to pass attributes to the close Button component. |
 | content | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the content's DOM element. |
 | footer | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the footer's DOM element. |
-| motion | MotionOptions | Used to pass options to the motion component/directive. |
+| motion | MotionOptions | Used to pass motion options for the dialog animation. |
+| maskMotion | MotionOptions | Used to pass motion options for the mask animation. |
 
 ## Theming
 

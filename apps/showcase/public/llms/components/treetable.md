@@ -44,7 +44,7 @@ import { TreeNode } from 'primeng/api';
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableBasicDemo implements OnInit {
+export class TreeTableBasicDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
 
@@ -107,7 +107,7 @@ import { Product } from '@/domain/product';
     standalone: true,
     imports: [TreeTableModule]
 })
-export class TreetableColumngroupDemo implements OnInit {
+export class TreeTableColumnGroupDemo implements OnInit {
     sales!: TreeNode[];
 
     ngOnInit() {
@@ -416,7 +416,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableColumnresizeexpandDemo implements OnInit {
+export class TreeTableColumnResizeExpandDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -481,7 +481,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableColumnresizefitDemo implements OnInit {
+export class TreeTableColumnResizeFitDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -554,7 +554,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableColumnresizescrollableDemo implements OnInit {
+export class TreeTableColumnResizeScrollableDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -626,7 +626,7 @@ interface Column {
     imports: [MultiSelectModule, TreeTableModule, FormsModule],
     providers: [NodeService]
 })
-export class TreetableColumntoggleDemo implements OnInit {
+export class TreeTableColumnToggleDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -672,7 +672,7 @@ interface Column {
                 </tr>
             </ng-template>
             <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
-                <tr [ttRow]="rowNode" [ngClass]="{ '!bg-surface-100 dark:!bg-surface-800': rowData.size.endsWith('kb') }">
+                <tr [ttRow]="rowNode" [ngClass]="{ 'bg-surface-100! dark:bg-surface-800!': rowData.size.endsWith('kb') }">
                     @for (col of columns; let first = $first; track col) {
                         <td [class]="{ 'line-through': col.field === 'size' && rowData.size.endsWith('kb') }">
                             @if (first) {
@@ -693,7 +693,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableConditionalstyleDemo implements OnInit {
+export class TreeTableConditionalStyleDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -759,7 +759,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService, MessageService]
 })
-export class TreetableContextmenuDemo implements OnInit {
+export class TreeTableContextMenuDemo implements OnInit {
     private nodeService = inject(NodeService);
     private messageService = inject(MessageService);
     files!: TreeNode[];
@@ -829,7 +829,7 @@ import { TreeNode } from 'primeng/api';
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableControlledDemo implements OnInit {
+export class TreeTableControlledDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
 
@@ -898,7 +898,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableDynamiccolumnsDemo implements OnInit {
+export class TreeTableDynamicColumnsDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -934,24 +934,30 @@ interface Column {
 @Component({
     template: `
         <p-treetable [value]="files" [columns]="cols" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header" let-columns>
+            <ng-template #header let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
-                        {{ col.header }}
-                    </th>
+                    @for (col of columns; track col.field) {
+                        <th>
+                            {{ col.header }}
+                        </th>
+                    }
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
                 <tr [ttRow]="rowNode">
-                    <td *ngFor="let col of columns; let i = index" ttEditableColumn [ttEditableColumnDisabled]="i == 0" [ngClass]="{ 'p-toggler-column': i === 0 }">
-                        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0" />
-                        <p-treetableCellEditor>
-                            <ng-template pTemplate="input">
-                                <input pInputText type="text" [(ngModel)]="rowData[col.field]" />
-                            </ng-template>
-                            <ng-template pTemplate="output">{{ rowData[col.field] }}</ng-template>
-                        </p-treetableCellEditor>
-                    </td>
+                    @for (col of columns; track col.field; let i = $index) {
+                        <td ttEditableColumn [ttEditableColumnDisabled]="i == 0" [ngClass]="{ 'p-toggler-column': i === 0 }">
+                            @if (i === 0) {
+                                <p-treetable-toggler [rowNode]="rowNode" />
+                            }
+                            <p-treetable-cell-editor>
+                                <ng-template #input>
+                                    <input pInputText type="text" [(ngModel)]="rowData[col.field]" />
+                                </ng-template>
+                                <ng-template #output>{{ rowData[col.field] }}</ng-template>
+                            </p-treetable-cell-editor>
+                        </td>
+                    }
                 </tr>
             </ng-template>
         </p-treetable>
@@ -960,7 +966,7 @@ interface Column {
     imports: [TreeTableModule, InputTextModule, FormsModule],
     providers: [NodeService]
 })
-export class TreetableEditDemo implements OnInit {
+export class TreeTableEditDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1048,10 +1054,13 @@ interface Column {
     imports: [IconFieldModule, InputIconModule, TreeTableModule, InputTextModule],
     providers: [NodeService]
 })
-export class TreetableFilterDemo implements OnInit {
+export class TreeTableFilterDemo implements OnInit {
     private nodeService = inject(NodeService);
     filterMode: string = 'lenient';
-    filterModes: any[];
+    filterModes: any[] = [
+        { label: 'Lenient', value: 'lenient' },
+        { label: 'Strict', value: 'strict' }
+    ];
     files!: TreeNode[];
     cols!: Column[];
 
@@ -1114,7 +1123,7 @@ import { TreeNode } from 'primeng/api';
     imports: [ButtonModule, DialogModule, TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableFlexiblescrollDemo implements OnInit {
+export class TreeTableFlexibleScrollDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     dialogVisible: boolean = false;
@@ -1165,7 +1174,7 @@ import { TreeNode } from 'primeng/api';
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableGridlinesDemo implements OnInit {
+export class TreeTableGridLinesDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
 
@@ -1192,53 +1201,51 @@ interface Column {
 
 @Component({
     template: `
-        <div class="card">
-            <p-treetable
-                [value]="files"
-                [columns]="cols"
-                [paginator]="true"
-                [rows]="10"
-                [lazy]="true"
-                (onLazyLoad)="loadNodes($event)"
-                [totalRecords]="1000"
-                [loading]="loading"
-                (onNodeExpand)="onNodeExpand($event)"
-                [scrollable]="true"
-                [tableStyle]="{ 'min-width': '50rem' }"
-            >
-                <ng-template #header let-columns>
-                    <tr>
-                        @for (col of columns; track col) {
-                            <th>
-                                {{ col.header }}
-                            </th>
-                        }
-                    </tr>
-                </ng-template>
-                <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
-                    <tr [ttRow]="rowNode">
-                        @for (col of columns; let first = $first; track col) {
-                            <td>
-                                @if (first) {
-                                    <div class="flex items-center gap-2">
-                                        <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
-                                        <span>{{ rowData[col.field] }}</span>
-                                    </div>
-                                } @else {
-                                    {{ rowData[col.field] }}
-                                }
-                            </td>
-                        }
-                    </tr>
-                </ng-template>
-            </p-treetable>
-        </div>
+        <p-treetable
+            [value]="files"
+            [columns]="cols"
+            [paginator]="true"
+            [rows]="10"
+            [lazy]="true"
+            (onLazyLoad)="loadNodes($event)"
+            [totalRecords]="1000"
+            [loading]="loading"
+            (onNodeExpand)="onNodeExpand($event)"
+            [scrollable]="true"
+            [tableStyle]="{ 'min-width': '50rem' }"
+        >
+            <ng-template #header let-columns>
+                <tr>
+                    @for (col of columns; track col) {
+                        <th>
+                            {{ col.header }}
+                        </th>
+                    }
+                </tr>
+            </ng-template>
+            <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
+                <tr [ttRow]="rowNode">
+                    @for (col of columns; let first = $first; track col) {
+                        <td>
+                            @if (first) {
+                                <div class="flex items-center gap-2">
+                                    <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
+                                    <span>{{ rowData[col.field] }}</span>
+                                </div>
+                            } @else {
+                                {{ rowData[col.field] }}
+                            }
+                        </td>
+                    }
+                </tr>
+            </ng-template>
+        </p-treetable>
     `,
     standalone: true,
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableLazyloadDemo implements OnInit {
+export class TreeTableLazyLoadDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1321,35 +1328,33 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-treetable [value]="files" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }" [loading]="true">
-                <ng-template #header>
-                    <tr>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>Type</th>
-                    </tr>
-                </ng-template>
-                <ng-template #body let-rowNode let-rowData="rowData">
-                    <tr [ttRow]="rowNode">
-                        <td>
-                            <div class="flex items-center gap-2">
-                                <p-treetable-toggler [rowNode]="rowNode" />
-                                <span>{{ rowData.name }}</span>
-                            </div>
-                        </td>
-                        <td>{{ rowData.size }}</td>
-                        <td>{{ rowData.type }}</td>
-                    </tr>
-                </ng-template>
-            </p-treetable>
-        </div>
+        <p-treetable [value]="files" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }" [loading]="true">
+            <ng-template #header>
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-rowNode let-rowData="rowData">
+                <tr [ttRow]="rowNode">
+                    <td>
+                        <div class="flex items-center gap-2">
+                            <p-treetable-toggler [rowNode]="rowNode" />
+                            <span>{{ rowData.name }}</span>
+                        </div>
+                    </td>
+                    <td>{{ rowData.size }}</td>
+                    <td>{{ rowData.type }}</td>
+                </tr>
+            </ng-template>
+        </p-treetable>
     `,
     standalone: true,
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableLoadingmaskDemo implements OnInit {
+export class TreeTableLoadingMaskDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
 
@@ -1372,30 +1377,28 @@ import { TreeNode } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card">
-            <p-treetable [value]="files()" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
-                <ng-template #header>
-                    <tr>
-                        <th>Name</th>
-                        <th>Size</th>
-                        <th>Type</th>
-                    </tr>
-                </ng-template>
-                <ng-template #body>
-                    <tr>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                        <td><p-skeleton /></td>
-                    </tr>
-                </ng-template>
-            </p-treetable>
-        </div>
+        <p-treetable [value]="files()" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
+            <ng-template #header>
+                <tr>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Type</th>
+                </tr>
+            </ng-template>
+            <ng-template #body>
+                <tr>
+                    <td><p-skeleton /></td>
+                    <td><p-skeleton /></td>
+                    <td><p-skeleton /></td>
+                </tr>
+            </ng-template>
+        </p-treetable>
     `,
     standalone: true,
     imports: [SkeletonModule, TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableLoadingskeletonDemo implements OnInit {
+export class TreeTableLoadingSkeletonDemo implements OnInit {
     private nodeService = inject(NodeService);
     files = signal<TreeNode[]>([]);
 
@@ -1452,7 +1455,7 @@ interface Column {
     standalone: true,
     imports: [TreeTableModule]
 })
-export class TreetablePaginatorbasicDemo implements OnInit {
+export class TreeTablePaginatorBasicDemo implements OnInit {
     files!: TreeNode[];
     cols!: Column[];
 
@@ -1541,7 +1544,7 @@ interface Column {
     standalone: true,
     imports: [ButtonModule, TreeTableModule]
 })
-export class TreetablePaginatortemplateDemo implements OnInit {
+export class TreeTablePaginatorTemplateDemo implements OnInit {
     files!: TreeNode[];
     cols!: Column[];
 
@@ -1624,7 +1627,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableReorderDemo implements OnInit {
+export class TreeTableReorderDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1699,7 +1702,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableScrollfrozencolumnsDemo implements OnInit {
+export class TreeTableScrollFrozenColumnsDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1782,7 +1785,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableScrollhorizontalDemo implements OnInit {
+export class TreeTableScrollHorizontalDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1847,7 +1850,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableScrollverticalDemo implements OnInit {
+export class TreeTableScrollVerticalDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -1913,7 +1916,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSelectioncheckboxDemo implements OnInit {
+export class TreeTableSelectionCheckboxDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     selectionKeys: any = {};
@@ -2014,7 +2017,7 @@ interface NodeEvent {
     imports: [TreeTableModule],
     providers: [NodeService, MessageService]
 })
-export class TreetableSelectioneventscDemo implements OnInit {
+export class TreeTableSelectionEventsCDemo implements OnInit {
     private nodeService = inject(NodeService);
     private messageService = inject(MessageService);
     files!: TreeNode[];
@@ -2090,7 +2093,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSelectionmultipleDemo implements OnInit {
+export class TreeTableSelectionMultipleDemo implements OnInit {
     private nodeService = inject(NodeService);
     metaKeySelection: boolean = true;
     files!: TreeNode[];
@@ -2157,7 +2160,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSelectionsingleDemo implements OnInit {
+export class TreeTableSelectionSingleDemo implements OnInit {
     private nodeService = inject(NodeService);
     metaKeySelection: boolean = true;
     files!: TreeNode[];
@@ -2213,7 +2216,7 @@ import { TreeNode } from 'primeng/api';
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSizeDemo implements OnInit {
+export class TreeTableSizeDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     sizes!: any[];
@@ -2282,7 +2285,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSortmultiplecolumnsDemo implements OnInit {
+export class TreeTableSortMultipleColumnsDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -2329,20 +2332,26 @@ interface Column {
             [scrollable]="true"
             [tableStyle]="{ 'min-width': '50rem' }"
         >
-            <ng-template pTemplate="header" let-columns>
+            <ng-template #header let-columns>
                 <tr>
-                    <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
-                        {{ col.header }}
-                        <p-treetableSortIcon [field]="col.field" />
-                    </th>
+                    @for (col of columns; track col.field) {
+                        <th [ttSortableColumn]="col.field">
+                            {{ col.header }}
+                            <p-treetableSortIcon [field]="col.field" />
+                        </th>
+                    }
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
+            <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
                 <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
-                    <td *ngFor="let col of columns; let i = index">
-                        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0" />
-                        {{ rowData[col.field] }}
-                    </td>
+                    @for (col of columns; track col.field; let i = $index) {
+                        <td>
+                            @if (i === 0) {
+                                <p-treetable-toggler [rowNode]="rowNode" />
+                            }
+                            {{ rowData[col.field] }}
+                        </td>
+                    }
                 </tr>
             </ng-template>
         </p-treetable>
@@ -2351,7 +2360,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSortremovableDemo implements OnInit {
+export class TreeTableSortRemovableDemo implements OnInit {
     private nodeService = inject(NodeService);
     metaKeySelection: boolean = true;
     files!: TreeNode[];
@@ -2455,7 +2464,7 @@ interface Column {
     imports: [TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableSortsinglecolumnDemo implements OnInit {
+export class TreeTableSortSingleColumnDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -2532,7 +2541,7 @@ interface Column {
     imports: [ButtonModule, TreeTableModule],
     providers: [NodeService]
 })
-export class TreetableTemplateDemo implements OnInit {
+export class TreeTableTemplateDemo implements OnInit {
     private nodeService = inject(NodeService);
     files!: TreeNode[];
     cols!: Column[];
@@ -2557,72 +2566,69 @@ TreeTable is used to display hierarchical data in tabular format.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<TreeTablePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, TreeTablePassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | columns | any[] | - | An array of objects to represent dynamic columns. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| tableStyle | { [klass: string]: any } | - | Inline style of the table. |
+| tableStyle | Partial<CSSStyleDeclaration> | - | Inline style of the table. |
 | tableStyleClass | string | - | Style class of the table. |
-| autoLayout | boolean | false | Whether the cell widths scale according to their content or not. |
-| lazy | boolean | false | Defines if data is loaded and interacted with in lazy manner. |
-| lazyLoadOnInit | boolean | true | Whether to call lazy loading on initialization. |
-| paginator | boolean | false | When specified as true, enables the pagination. |
+| autoLayout | boolean | - | Whether the cell widths scale according to their content or not. |
+| lazy | boolean | - | Defines if data is loaded and interacted with in lazy manner. |
+| lazyLoadOnInit | boolean | - | Whether to call lazy loading on initialization. |
+| paginator | boolean | - | When specified as true, enables the pagination. |
 | rows | number | - | Number of rows to display per page. |
-| first | number | 0 | Index of the first row to be displayed. |
-| pageLinks | number | 5 | Number of page links to display in paginator. |
+| firstInput | number | - | Index of the first row to be displayed. |
+| pageLinks | number | - | Number of page links to display in paginator. |
 | rowsPerPageOptions | any[] | - | Array of integer/object values to display inside rows per page dropdown of paginator |
-| alwaysShowPaginator | boolean | true | Whether to show it even there is only one page. |
-| paginatorPosition | "top" \| "bottom" \| "both" | bottom | Position of the paginator. |
+| alwaysShowPaginator | boolean | - | Whether to show it even there is only one page. |
+| paginatorPosition | "top" \| "bottom" \| "both" | - | Position of the paginator. |
 | paginatorStyleClass | string | - | Custom style class for paginator |
 | paginatorDropdownAppendTo | any | - | Target element to attach the paginator dropdown overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| currentPageReportTemplate | string | {currentPage} of {totalPages} | Template of the current page report element. Available placeholders are {currentPage},{totalPages},{rows},{first},{last} and {totalRecords} |
-| showCurrentPageReport | boolean | false | Whether to display current page report. |
-| showJumpToPageDropdown | boolean | false | Whether to display a dropdown to navigate to any page. |
-| showFirstLastIcon | boolean | true | When enabled, icons are displayed on paginator to go first and last page. |
-| showPageLinks | boolean | true | Whether to show page links. |
-| defaultSortOrder | number | 1 | Sort order to use when an unsorted column gets sorted by user interaction. |
-| sortMode | "multiple" \| "single" | single | Defines whether sorting works on single column or on multiple columns. |
-| resetPageOnSort | boolean | true | When true, resets paginator to first page after sorting. |
-| customSort | boolean | false | Whether to use the default sorting or a custom one using sortFunction. |
-| selectionMode | string | - | Specifies the selection mode, valid values are "single" and "multiple". |
+| currentPageReportTemplate | string | - | Template of the current page report element. Available placeholders are {currentPage},{totalPages},{rows},{first},{last} and {totalRecords} |
+| showCurrentPageReport | boolean | - | Whether to display current page report. |
+| showJumpToPageDropdown | boolean | - | Whether to display a dropdown to navigate to any page. |
+| showFirstLastIcon | boolean | - | When enabled, icons are displayed on paginator to go first and last page. |
+| showPageLinks | boolean | - | Whether to show page links. |
+| defaultSortOrder | number | - | Sort order to use when an unsorted column gets sorted by user interaction. |
+| sortMode | "single" \| "multiple" | - | Defines whether sorting works on single column or on multiple columns. |
+| resetPageOnSort | boolean | - | When true, resets paginator to first page after sorting. |
+| customSort | boolean | - | Whether to use the default sorting or a custom one using sortFunction. |
+| selectionMode | "single" \| "multiple" \| "checkbox" | - | Specifies the selection mode, valid values are "single" and "multiple". |
 | contextMenuSelection | any | - | Selected row with a context menu. |
-| contextMenuSelectionMode | string | separate | Mode of the contet menu selection. |
 | dataKey | string | - | A property to uniquely identify a record in data. |
-| metaKeySelection | boolean | false | Defines whether metaKey is should be considered for the selection. On touch enabled devices, metaKeySelection is turned off automatically. |
-| compareSelectionBy | string | deepEquals | Algorithm to define if a row is selected, valid values are "equals" that compares by reference and "deepEquals" that compares all fields. |
-| rowHover | boolean | false | Adds hover effect to rows without the need for selectionMode. |
-| loading | boolean | false | Displays a loader to indicate data load is in progress. |
+| metaKeySelection | boolean | - | Defines whether metaKey is should be considered for the selection. On touch enabled devices, metaKeySelection is turned off automatically. |
+| compareSelectionBy | "equals" \| "deepEquals" | - | Algorithm to define if a row is selected, valid values are "equals" that compares by reference and "deepEquals" that compares all fields. |
+| rowHover | boolean | - | Adds hover effect to rows without the need for selectionMode. |
+| loading | boolean | - | Displays a loader to indicate data load is in progress. |
 | loadingIcon | string | - | The icon to show while indicating data load is in progress. |
-| showLoader | boolean | true | Whether to show the loading mask when loading property is true. |
-| scrollable | boolean | false | When specified, enables horizontal and/or vertical scrolling. |
+| showLoader | boolean | - | Whether to show the loading mask when loading property is true. |
+| scrollable | boolean | - | When specified, enables horizontal and/or vertical scrolling. |
 | scrollHeight | string | - | Height of the scroll viewport in fixed pixels or the "flex" keyword for a dynamic size. |
-| virtualScroll | boolean | false | Whether the data should be loaded on demand during scroll. |
+| virtualScroll | boolean | - | Whether the data should be loaded on demand during scroll. |
 | virtualScrollItemSize | number | - | Height of a row to use in calculations of virtual scrolling. |
 | virtualScrollOptions | ScrollerOptions | - | Whether to use the scroller feature. The properties of scroller component can be used like an object in it. |
-| virtualScrollDelay | number | 150 | The delay (in milliseconds) before triggering the virtual scroll. This determines the time gap between the user's scroll action and the actual rendering of the next set of items in the virtual scroll. |
+| virtualScrollDelay | number | - | The delay (in milliseconds) before triggering the virtual scroll. This determines the time gap between the user's scroll action and the actual rendering of the next set of items in the virtual scroll. |
 | frozenWidth | string | - | Width of the frozen columns container. |
-| frozenColumns | { [klass: string]: any } | - | An array of objects to represent dynamic columns that are frozen. |
-| resizableColumns | boolean | false | When enabled, columns can be resized using drag and drop. |
-| columnResizeMode | string | fit | Defines whether the overall table width should change on column resize, valid values are "fit" and "expand". |
-| reorderableColumns | boolean | false | When enabled, columns can be reordered using drag and drop. |
+| frozenColumns | any | - | An array of objects to represent dynamic columns that are frozen. |
+| resizableColumns | boolean | - | When enabled, columns can be resized using drag and drop. |
+| columnResizeMode | "fit" \| "expand" | - | Defines whether the overall table width should change on column resize, valid values are "fit" and "expand". |
+| reorderableColumns | boolean | - | When enabled, columns can be reordered using drag and drop. |
 | contextMenu | any | - | Local ng-template varilable of a ContextMenu. |
-| rowTrackBy | Function | ... | Function to optimize the dom operations by delegating to ngForTrackBy, default algorithm checks for object identity. |
-| filters | { [s: string]: FilterMetadata } | {} | An array of FilterMetadata objects to provide external filters. |
+| rowTrackBy | Function | - | Function to optimize the dom operations by delegating to ngForTrackBy, default algorithm checks for object identity. |
+| filtersInput | { [s: string]: FilterMetadata } | - | An array of FilterMetadata objects to provide external filters. |
 | globalFilterFields | string[] | - | An array of fields as string to use in global filtering. |
-| filterDelay | number | 300 | Delay in milliseconds before filtering the data. |
-| filterMode | string | lenient | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
+| filterDelay | number | - | Delay in milliseconds before filtering the data. |
+| filterMode | "lenient" \| "strict" | - | Mode for filtering valid values are "lenient" and "strict". Default is lenient. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
 | paginatorLocale | string | - | Locale to be used in paginator formatting. |
-| totalRecords | number | - | Number of total records, defaults to length of value when not defined. |
-| sortField | string | - | Name of the field to sort data by default. |
-| sortOrder | number | - | Order to sort when default sorting is enabled. |
-| multiSortMeta | SortMeta[] | - | An array of SortMeta objects to sort the data by default in multiple sort mode. |
-| selection | any | - | Selected row in single mode or an array of values in multiple mode. |
-| value | TreeNode<any>[] | - | An array of objects to display. |
-| virtualRowHeight | number | - | Indicates the height of rows to be scrolled. **(Deprecated)** |
-| selectionKeys | any | - | A map of keys to control the selection state. |
+| totalRecordsInput | number | - | Number of total records, defaults to length of value when not defined. |
+| sortFieldInput | string | - | Name of the field to sort data by default. |
+| sortOrderInput | number | 1 | Order to sort when default sorting is enabled. |
+| multiSortMetaInput | SortMeta[] | null | An array of SortMeta objects to sort the data by default in multiple sort mode. |
+| selectionInput | any | null | Selected row in single mode or an array of values in multiple mode. |
+| valueInput | TreeNode<any>[] | null | An array of objects to display. |
+| selectionKeysInput | any | - | A map of keys to control the selection state. |
 | showGridlines | boolean | false | Whether to show grid lines between cells. |
 
 ### Emits
@@ -2648,6 +2654,37 @@ TreeTable is used to display hierarchical data in tabular format.
 | onEditComplete | event: TreeTableEditEvent | Callback to invoke when cell edit is completed. |
 | onEditCancel | event: TreeTableEditEvent | Callback to invoke when cell edit is cancelled with escape key. |
 | selectionKeysChange | value: any | Callback to invoke when selectionKeys are changed. |
+
+### Templates
+
+| Name | Type | Description |
+|------|------|-------------|
+| colgroup | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| caption | TemplateRef<void> |  |
+| header | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| body | TemplateRef<TreeTableBodyTemplateContext> |  |
+| footer | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| summary | TemplateRef<void> |  |
+| emptymessage | TemplateRef<TreeTableEmptyMessageTemplateContext> |  |
+| paginatorleft | TemplateRef<void> |  |
+| paginatorright | TemplateRef<void> |  |
+| paginatordropdownitem | TemplateRef<void> |  |
+| frozenheader | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| frozenbody | TemplateRef<void> |  |
+| frozenfooter | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| frozencolgroup | TemplateRef<TreeTableColumnsTemplateContext> |  |
+| loadingicon | TemplateRef<void> |  |
+| reorderindicatorupicon | TemplateRef<void> |  |
+| reorderindicatordownicon | TemplateRef<void> |  |
+| sorticon | TemplateRef<TreeTableSortIconTemplateContext> |  |
+| checkboxicon | TemplateRef<TreeTableCheckboxIconTemplateContext> |  |
+| headercheckboxicon | TemplateRef<TreeTableHeaderCheckboxIconTemplateContext> |  |
+| togglericon | TemplateRef<TreeTableTogglerIconTemplateContext> |  |
+| paginatorfirstpagelinkicon | TemplateRef<void> |  |
+| paginatorlastpagelinkicon | TemplateRef<void> |  |
+| paginatorpreviouspagelinkicon | TemplateRef<void> |  |
+| paginatornextpagelinkicon | TemplateRef<void> |  |
+| loader | TemplateRef<void> |  |
 
 ### Methods
 
@@ -2767,6 +2804,7 @@ TreeTable is used to display hierarchical data in tabular format.
 | treetable.header.cell.focus.ring.offset | --p-treetable-header-cell-focus-ring-offset | Focus ring offset of header cell |
 | treetable.header.cell.focus.ring.shadow | --p-treetable-header-cell-focus-ring-shadow | Focus ring shadow of header cell |
 | treetable.column.title.font.weight | --p-treetable-column-title-font-weight | Font weight of column title |
+| treetable.column.title.font.size | --p-treetable-column-title-font-size | Font size of column title |
 | treetable.row.background | --p-treetable-row-background | Background of row |
 | treetable.row.hover.background | --p-treetable-row-hover-background | Hover background of row |
 | treetable.row.selected.background | --p-treetable-row-selected-background | Selected background of row |
@@ -2782,11 +2820,14 @@ TreeTable is used to display hierarchical data in tabular format.
 | treetable.body.cell.padding | --p-treetable-body-cell-padding | Padding of body cell |
 | treetable.body.cell.gap | --p-treetable-body-cell-gap | Gap of body cell |
 | treetable.body.cell.selected.border.color | --p-treetable-body-cell-selected-border-color | Selected border color of body cell |
+| treetable.body.cell.font.weight | --p-treetable-body-cell-font-weight | Font weight of body cell |
+| treetable.body.cell.font.size | --p-treetable-body-cell-font-size | Font size of body cell |
 | treetable.footer.cell.background | --p-treetable-footer-cell-background | Background of footer cell |
 | treetable.footer.cell.border.color | --p-treetable-footer-cell-border-color | Border color of footer cell |
 | treetable.footer.cell.color | --p-treetable-footer-cell-color | Color of footer cell |
 | treetable.footer.cell.padding | --p-treetable-footer-cell-padding | Padding of footer cell |
 | treetable.column.footer.font.weight | --p-treetable-column-footer-font-weight | Font weight of column footer |
+| treetable.column.footer.font.size | --p-treetable-column-footer-font-size | Font size of column footer |
 | treetable.footer.background | --p-treetable-footer-background | Background of footer |
 | treetable.footer.border.color | --p-treetable-footer-border-color | Border color of footer |
 | treetable.footer.color | --p-treetable-footer-color | Color of footer |

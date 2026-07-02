@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
@@ -9,27 +10,29 @@ import { Ripple } from 'primeng/ripple';
 @Component({
     selector: 'position-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ToastModule, ButtonModule, Ripple],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToastModule, ButtonModule, Ripple],
     template: `
         <app-docsectiontext>
             <p>Location of the toast is customized with the <i>position</i> property. Valid values are <i>top-left</i>, <i>top-center</i>, <i>top-right</i>, <i>bottom-left</i>, <i>bottom-center</i>, <i>bottom-right</i> and <i>center</i>.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
+        <app-demo-wrapper>
             <p-toast position="top-left" key="tl" />
             <p-toast position="bottom-left" key="bl" />
             <p-toast position="bottom-right" key="br" />
-            <div class="flex flex-wrap gap-2">
-                <p-button pRipple (click)="showTopLeft()" label="Top Left" />
-                <p-button pRipple (click)="showBottomLeft()" label="Bottom Left" />
-                <p-button pRipple (click)="showBottomRight()" label="Bottom Right" />
+            <div class="flex justify-center">
+                <div class="flex flex-wrap gap-2">
+                    <p-button pRipple (click)="showTopLeft()" label="Top Left" />
+                    <p-button pRipple (click)="showBottomLeft()" label="Bottom Left" />
+                    <p-button pRipple (click)="showBottomRight()" label="Bottom Right" />
+                </div>
             </div>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class PositionDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     showTopLeft() {
         this.messageService.add({

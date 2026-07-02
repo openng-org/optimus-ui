@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -17,16 +18,16 @@ interface Column {
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [CommonModule, TableModule, AppDocSectionText, AppCode, DeferredDemo, RatingModule, TagModule],
+    imports: [CommonModule, TableModule, AppDocSectionText, AppCode, DeferredDemo, RatingModule, TagModule, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>Custom content at <i>header</i>, <i>body</i> and <i>footer</i> sections are supported via templating.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="products" [tableStyle]="{ 'min-width': '60rem' }">
                     <ng-template #caption>
                         <div class="flex items-center justify-between">
-                            <span class="text-xl font-bold">Products</span>
+                            <span class="text-lg font-bold">Products</span>
                             <p-button icon="pi pi-refresh" rounded raised />
                         </div>
                     </ng-template>
@@ -44,7 +45,7 @@ interface Column {
                         <tr>
                             <td>{{ product.name }}</td>
                             <td>
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded" />
+                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded-sm" />
                             </td>
                             <td>{{ product.price | currency: 'USD' }}</td>
                             <td>{{ product.category }}</td>
@@ -56,13 +57,13 @@ interface Column {
                     </ng-template>
                     <ng-template #footer>
                         <tr>
-                            <td colspan="6">In total there are {{ products ? products.length : 0 }} products.</td>
+                            <td colspan="6" class="text-sm">In total there are {{ products ? products.length : 0 }} products.</td>
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TemplateDoc {

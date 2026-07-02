@@ -11,8 +11,8 @@ import { TableModule } from 'primeng/table';
     template: ` <div class="flex justify-end mt-1 mb-4">
             <p-button icon="pi pi-external-link" label="Nested Dialog" [outlined]="true" severity="success" (click)="showInfo()" />
         </div>
-        <p-table [value]="products()" responsiveLayout="scroll" [rows]="5">
-            <ng-template pTemplate="header">
+        <p-table [value]="products()" [rows]="5">
+            <ng-template #header>
                 <tr>
                     <th pSortableColumn="code">Code</th>
                     <th pSortableColumn="name">Name</th>
@@ -22,7 +22,7 @@ import { TableModule } from 'primeng/table';
                     <th style="width:4em"></th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-product>
+            <ng-template #body let-product>
                 <tr>
                     <td>{{ product.code }}</td>
                     <td>{{ product.name }}</td>

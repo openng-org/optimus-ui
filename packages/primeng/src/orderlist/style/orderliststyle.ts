@@ -12,7 +12,7 @@ const theme = /*css*/ `
 `;
 
 const classes = {
-    root: ({ instance }) => ['p-orderlist p-component', { 'p-orderlist-controls-left': instance.controlsPosition === 'left', 'p-orderlist-controls-right': instance.controlsPosition === 'right' }],
+    root: ({ instance }) => ['p-orderlist p-component', { 'p-orderlist-controls-left': instance.controlsPosition() === 'left', 'p-orderlist-controls-right': instance.controlsPosition() === 'right' }],
     controls: 'p-orderlist-controls'
 };
 

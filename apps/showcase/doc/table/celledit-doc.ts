@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -10,14 +11,14 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'celledit-doc',
+    selector: 'cell-edit-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, TableModule, InputTextModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, FormsModule, TableModule, InputTextModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
-            <p>In-cell editing is enabled by adding <i>pEditableColumn</i> directive to an editable cell that has a <i>p-cellEditor</i> helper component to define the input-output templates for the edit and view modes respectively.</p>
+            <p>In-cell editing is enabled by adding <i>pEditableColumn</i> directive to an editable cell that has a <i>p-cell-editor</i> helper component to define the input-output templates for the edit and view modes respectively.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
                         <tr>
@@ -30,51 +31,51 @@ import { TableModule } from 'primeng/table';
                     <ng-template #body let-product let-editing="editing">
                         <tr>
                             <td [pEditableColumn]="product.code" pEditableColumnField="code">
-                                <p-cellEditor>
+                                <p-cell-editor>
                                     <ng-template #input>
                                         <input pInputText type="text" [(ngModel)]="product.code" fluid />
                                     </ng-template>
                                     <ng-template #output>
                                         {{ product.code }}
                                     </ng-template>
-                                </p-cellEditor>
+                                </p-cell-editor>
                             </td>
                             <td [pEditableColumn]="product.name" pEditableColumnField="name">
-                                <p-cellEditor>
+                                <p-cell-editor>
                                     <ng-template #input>
                                         <input pInputText type="text" [(ngModel)]="product.name" required fluid />
                                     </ng-template>
                                     <ng-template #output>
                                         {{ product.name }}
                                     </ng-template>
-                                </p-cellEditor>
+                                </p-cell-editor>
                             </td>
                             <td [pEditableColumn]="product.quantity" pEditableColumnField="quantity">
-                                <p-cellEditor>
+                                <p-cell-editor>
                                     <ng-template #input>
                                         <input pInputText [(ngModel)]="product.quantity" fluid />
                                     </ng-template>
                                     <ng-template #output>
                                         {{ product.quantity }}
                                     </ng-template>
-                                </p-cellEditor>
+                                </p-cell-editor>
                             </td>
                             <td [pEditableColumn]="product.price" pEditableColumnField="price">
-                                <p-cellEditor>
+                                <p-cell-editor>
                                     <ng-template #input>
                                         <input pInputText type="text" [(ngModel)]="product.price" fluid />
                                     </ng-template>
                                     <ng-template #output>
                                         {{ product.price | currency: 'USD' }}
                                     </ng-template>
-                                </p-cellEditor>
+                                </p-cell-editor>
                             </td>
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CellEditDoc {

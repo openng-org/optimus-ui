@@ -1,6 +1,28 @@
 import { Injectable } from '@angular/core';
-import { style } from '@primeuix/styles/carousel';
+import { style as carousel_style } from '@primeuix/styles/carousel';
 import { BaseStyle } from 'primeng/base';
+
+const style = /*css*/ `
+    ${carousel_style}
+
+    /* For PrimeNG - Composition Carousel */
+
+    p-carousel:has(p-carousel-indicators) .p-carousel-indicator-active.p-carousel-indicator-button {
+        background: dt('carousel.indicator.active.background');
+    }
+
+    p-carousel:has(p-carousel-content) p-carousel-content {
+        display: block;
+    }
+
+    p-carousel:has(p-carousel-item) p-carousel-item {
+        display: block;
+    }
+
+    p-carousel:has(p-carousel-indicators) p-carousel-indicators {
+        display: block;
+    }
+`;
 
 const classes = {
     root: ({ instance }) => [
@@ -24,9 +46,9 @@ const classes = {
     itemClone: ({ instance, index }) => [
         'p-carousel-item p-carousel-item-clone',
         {
-            'p-carousel-item-active': instance.totalShiftedItems * -1 === instance.value.length,
+            'p-carousel-item-active': instance.totalShiftedItems() * -1 === instance.value()?.length,
             'p-carousel-item-start': 0 === index,
-            'p-carousel-item-end': instance.clonedItemsForStarting.length - 1 === index
+            'p-carousel-item-end': instance.clonedItemsForStarting().length - 1 === index
         }
     ],
     item: ({ instance, index }) => [
@@ -43,15 +65,22 @@ const classes = {
             'p-disabled': instance.isForwardNavDisabled()
         }
     ],
-    indicatorList: ({ instance }) => ['p-carousel-indicator-list', instance.indicatorsContentClass],
+    indicatorList: ({ instance }) => ['p-carousel-indicator-list', instance.indicatorsContentClass()],
     indicator: ({ instance, index }) => [
         'p-carousel-indicator',
         {
-            'p-carousel-indicator-active': instance._page === index
+            'p-carousel-indicator-active': instance._page() === index
         }
     ],
-    indicatorButton: ({ instance }) => ['p-carousel-indicator-button', instance.indicatorStyleClass],
-    footer: 'p-carousel-footer'
+    indicatorButton: ({ instance }) => ['p-carousel-indicator-button', instance.indicatorStyleClass()],
+    footer: 'p-carousel-footer',
+    // Composition mode
+    compositionRoot: 'p-carousel p-component',
+    compositionIndicator: ({ instance, index }) => ['p-carousel-indicator-button', { 'p-carousel-indicator-active': instance.pageState() === index }],
+    compositionContent: ({ instance }) => ['p-carousel-content', instance.orientation() === 'vertical' ? 'p-carousel-content-vertical' : 'p-carousel-content-horizontal'],
+    compositionItem: 'p-carousel-item',
+    compositionPrev: ({ instance }) => [{ 'p-disabled': instance.isPrevDisabled() }],
+    compositionNext: ({ instance }) => [{ 'p-disabled': instance.isNextDisabled() }]
 };
 
 @Injectable()

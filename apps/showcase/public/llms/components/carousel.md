@@ -6,328 +6,303 @@ Carousel is a content slider featuring various customization options.
 
 Screen Reader Carousel uses region role and since any attribute is passed to the main container element, attributes such as aria-label and aria-roledescription can be used as well. The slides container has aria-live attribute set as "polite" if carousel is not in autoplay mode, otherwise "off" would be the value in autoplay. A slide has a group role with an aria-label that refers to the aria.slideNumber property of the locale API. Similarly aria.slide is used as the aria-roledescription of the item. Inactive slides are hidden from the readers with aria-hidden . Next and Previous navigators are button elements with aria-label attributes referring to the aria.nextPageLabel and aria.firstPageLabel properties of the locale API by default respectively, you may still use your own aria roles and attributes as any valid attribute is passed to the button elements implicitly by using nextButtonProps and prevButtonProps . Quick navigation elements are button elements with an aria-label attribute referring to the aria.pageLabel of the locale API. Current page is marked with aria-current . Next/Prev Keyboard Support Key Function tab Moves focus through interactive elements in the carousel. enter Activates navigation. space Activates navigation. Quick Navigation Keyboard Support Key Function tab Moves focus through the active slide link. enter Activates the focused slide link. space Activates the focused slide link. right arrow Moves focus to the next slide link. left arrow Moves focus to the previous slide link. home Moves focus to the first slide link. end Moves focus to the last slide link.
 
+## Alignment
+
+Use align to control snap alignment and slidesPerPage to show partial slides.
+
+```typescript
+import { Component } from '@angular/core';
+import { CarouselModule } from 'primeng/carousel';
+import { ChevronLeft } from '@primeicons/angular/chevron-left';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
+
+@Component({
+    template: `
+        <div class="mt-8 mb-16">
+            <p-carousel class="max-w-xl mx-auto" align="start" [slidesPerPage]="1.5">
+                <p-carousel-content style="height: 240px">
+                    @for (item of items; track item) {
+                        <p-carousel-item>
+                            <div class="h-full text-5xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-xl border border-surface">
+                                <span>{{ item }}</span>
+                            </div>
+                        </p-carousel-item>
+                    }
+                </p-carousel-content>
+                <div class="flex mt-4 gap-4">
+                    <p-carousel-indicators></p-carousel-indicators>
+                    <div class="flex items-center justify-end gap-2 flex-1">
+                        <button
+                            pCarouselPrev
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-left" class="text-lg"></svg>
+                        </button>
+                        <button
+                            pCarouselNext
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-right" class="text-lg"></svg>
+                        </button>
+                    </div>
+                </div>
+            </p-carousel>
+        </div>
+    `,
+    standalone: true,
+    imports: [CarouselModule, ChevronLeft, ChevronRight]
+})
+export class CarouselAlignmentDemo {
+    items: any[] = [1, 2, 3, 4, 5];
+}
+```
+
 ## Basic
 
-Carousel requires a collection of items as its value along with a template to render each item.
+Composition-based carousel using native scroll-snap with sub-components for root, content, items, navigation, and indicators.
 
 ```typescript
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
-import { TagModule } from 'primeng/tag';
-import { ProductService } from '@/service/productservice';
-import { Product } from '@/domain/product';
+import { ChevronLeft } from '@primeicons/angular/chevron-left';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 
 @Component({
     template: `
-        <div class="card">
-            <p-carousel [value]="products()" [numVisible]="3" [numScroll]="3" [circular]="false" [responsiveOptions]="responsiveOptions">
-                <ng-template let-product #item>
-                    <div class="border border-surface rounded-border m-2 p-4">
-                        <div class="mb-4">
-                            <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
-                                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+        <div class="mt-8 mb-16">
+            <p-carousel class="max-w-xl mx-auto" align="center">
+                <p-carousel-content style="height: 240px">
+                    @for (item of items; track item) {
+                        <p-carousel-item>
+                            <div class="h-full text-5xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-xl border border-surface">
+                                <span>{{ item }}</span>
                             </div>
-                        </div>
-                        <div class="mb-4 font-medium">{{ product.name }}</div>
-                        <div class="flex justify-between items-center">
-                            <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
-                            <span>
-                                <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
-                                <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
-                            </span>
-                        </div>
+                        </p-carousel-item>
+                    }
+                </p-carousel-content>
+                <div class="flex mt-4 gap-4">
+                    <p-carousel-indicators></p-carousel-indicators>
+                    <div class="flex items-center justify-end gap-2 flex-1">
+                        <button
+                            pCarouselPrev
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-left" class="text-lg"></svg>
+                        </button>
+                        <button
+                            pCarouselNext
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-right" class="text-lg"></svg>
+                        </button>
                     </div>
-                </ng-template>
+                </div>
             </p-carousel>
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, CarouselModule, TagModule],
-    providers: [ProductService]
+    imports: [CarouselModule, ChevronLeft, ChevronRight]
 })
-export class CarouselBasicDemo implements OnInit {
-    private productService = inject(ProductService);
-    products = signal<Product[]>([]);
-    responsiveOptions: any[] | undefined;
+export class CarouselBasicDemo {
+    items: any[] = [1, 2, 3, 4, 5];
+}
+```
 
-    ngOnInit() {
-        this.productService.getProductsSmall().then((data) => {
-            this.products.set(data.slice(0, 9));
-        });
-        this.responsiveOptions = [
-            {
-                breakpoint: '1400px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '1199px',
-                numVisible: 3,
-                numScroll: 1
-            },
-            {
-                breakpoint: '767px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '575px',
-                numVisible: 1,
-                numScroll: 1
-            }
-        ];
+## Gallery
+
+Two carousels synchronized via slide input to create a gallery with thumbnail navigation.
+
+```typescript
+import { Component, signal } from '@angular/core';
+import { CarouselModule } from 'primeng/carousel';
+
+@Component({
+    template: `
+        <div class="mt-8 mb-16">
+            <div class="max-w-2xl mx-auto">
+                <p-carousel align="center" [slide]="selectedImage()" (onSlideChange)="onSlideChange($event)">
+                    <p-carousel-content style="height: 396px">
+                        @for (image of images; track image; let i = $index) {
+                            <p-carousel-item class="basis-full!">
+                                <img [attr.draggable]="false" [src]="image" [alt]="'Image ' + (i + 1)" class="h-full w-full object-cover select-none" />
+                            </p-carousel-item>
+                        }
+                    </p-carousel-content>
+                </p-carousel>
+                <p-carousel class="mt-3" [spacing]="8" align="center" [slide]="selectedImage()">
+                    <p-carousel-content style="height: 90px">
+                        @for (image of images; track image; let i = $index) {
+                            <p-carousel-item class="cursor-pointer basis-1/4! transition-opacity" [class.opacity-60]="selectedImage() !== i" [class.hover:opacity-40]="selectedImage() !== i" (click)="selectImage(i)">
+                                <img [attr.draggable]="false" [src]="image" [alt]="'Image ' + (i + 1)" class="h-full w-full object-cover select-none" />
+                            </p-carousel-item>
+                        }
+                    </p-carousel-content>
+                </p-carousel>
+            </div>
+        </div>
+    `,
+    standalone: true,
+    imports: [CarouselModule]
+})
+export class CarouselGalleryDemo {
+    images: any = images;
+    selectedImage = signal(0);
+
+    selectImage(index: number) {
+        this.selectedImage.set(index);
     }
 
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-        }
+    onSlideChange(event: { value: number }) {
+        this.selectedImage.set(event.value);
     }
 }
 ```
 
-## Circular
+## Loop
 
-When autoplayInterval is defined in milliseconds, items are scrolled automatically. In addition, for infinite scrolling circular property needs to be added which is enabled automatically in auto play mode.
+Enable continuous looping with the loop property. Use slidesPerPage to show partial slides.
 
 ```typescript
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
-import { TagModule } from 'primeng/tag';
-import { ProductService } from '@/service/productservice';
-import { Product } from '@/domain/product';
+import { ChevronLeft } from '@primeicons/angular/chevron-left';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 
 @Component({
     template: `
-        <div class="card">
-            <p-carousel [value]="products()" [numVisible]="3" [numScroll]="1" [circular]="true" [responsiveOptions]="responsiveOptions" autoplayInterval="3000">
-                <ng-template let-product #item>
-                    <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-                        <div class="mb-4">
-                            <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
-                                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+        <div class="mt-8 mb-16">
+            <p-carousel class="max-w-xl mx-auto" align="center" [loop]="true" [slidesPerPage]="1.75">
+                <p-carousel-content style="height: 240px">
+                    @for (item of items; track item) {
+                        <p-carousel-item>
+                            <div class="h-full text-5xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-xl border border-surface">
+                                <span>{{ item }}</span>
                             </div>
-                        </div>
-                        <div class="mb-4 font-medium">{{ product.name }}</div>
-                        <div class="flex justify-between items-center">
-                            <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
-                            <span>
-                                <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
-                                <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
-                            </span>
-                        </div>
+                        </p-carousel-item>
+                    }
+                </p-carousel-content>
+                <div class="flex mt-4 gap-4">
+                    <p-carousel-indicators></p-carousel-indicators>
+                    <div class="flex items-center justify-end gap-2 flex-1">
+                        <button
+                            pCarouselPrev
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-left" class="text-lg"></svg>
+                        </button>
+                        <button
+                            pCarouselNext
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-right" class="text-lg"></svg>
+                        </button>
                     </div>
-                </ng-template>
+                </div>
             </p-carousel>
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, CarouselModule, TagModule],
-    providers: [ProductService]
+    imports: [CarouselModule, ChevronLeft, ChevronRight]
 })
-export class CarouselCircularDemo implements OnInit {
-    private productService = inject(ProductService);
-    products = signal<Product[]>([]);
-    responsiveOptions: any[] | undefined;
-
-    ngOnInit() {
-        this.productService.getProductsSmall().then((data) => {
-            this.products.set(data.slice(0, 9));
-        });
-        this.responsiveOptions = [
-            {
-                breakpoint: '1400px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '1199px',
-                numVisible: 3,
-                numScroll: 1
-            },
-            {
-                breakpoint: '767px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '575px',
-                numVisible: 1,
-                numScroll: 1
-            }
-        ];
-    }
-
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-        }
-    }
+export class CarouselLoopDemo {
+    items: any[] = [1, 2, 3, 4, 5];
 }
 ```
 
-## Responsive
+## Orientation
 
-Carousel supports specific configuration per screen size with the responsiveOptions property that takes an array of objects where each object defines the max-width breakpoint , numVisible for the number of items items per page and numScroll for number of items to scroll. When responsiveOptions is defined, the numScroll and numVisible properties of the Carousel are used as default when there is breakpoint that applies.
+Set orientation to vertical for a vertical carousel layout.
 
 ```typescript
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
-import { TagModule } from 'primeng/tag';
-import { ProductService } from '@/service/productservice';
-import { Product } from '@/domain/product';
+import { ChevronUp } from '@primeicons/angular/chevron-up';
+import { ChevronDown } from '@primeicons/angular/chevron-down';
 
 @Component({
     template: `
-        <div class="card">
-            <p-carousel [value]="products()" [numVisible]="3" [numScroll]="1" [responsiveOptions]="responsiveOptions">
-                <ng-template let-product #item>
-                    <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-                        <div class="mb-4">
-                            <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
-                                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+        <div class="mt-8 mb-16">
+            <p-carousel class="max-w-sm mx-auto flex flex-col gap-8 items-center" orientation="vertical" [slidesPerPage]="1.3">
+                <button
+                    pCarouselPrev
+                    class="w-10 h-10 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                >
+                    <svg data-p-icon="chevron-up" class="text-lg"></svg>
+                </button>
+                <p-carousel-content style="height: 240px; width: 100%">
+                    @for (item of items; track item) {
+                        <p-carousel-item>
+                            <div class="h-full text-5xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-xl border border-surface">
+                                <span>{{ item }}</span>
                             </div>
-                        </div>
-                        <div class="mb-4 font-medium">{{ product.name }}</div>
-                        <div class="flex justify-between items-center">
-                            <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
-                            <span>
-                                <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
-                                <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
-                            </span>
-                        </div>
-                    </div>
-                </ng-template>
+                        </p-carousel-item>
+                    }
+                </p-carousel-content>
+                <button
+                    pCarouselNext
+                    class="w-10 h-10 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                >
+                    <svg data-p-icon="chevron-down" class="text-lg"></svg>
+                </button>
             </p-carousel>
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, CarouselModule, TagModule],
-    providers: [ProductService]
+    imports: [CarouselModule, ChevronUp, ChevronDown]
 })
-export class CarouselResponsiveDemo implements OnInit {
-    private productService = inject(ProductService);
-    products = signal<Product[]>([]);
-    responsiveOptions: any[] | undefined;
-
-    ngOnInit() {
-        this.productService.getProductsSmall().then((products) => {
-            this.products.set(products);
-        });
-        this.responsiveOptions = [
-            {
-                breakpoint: '1400px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '1199px',
-                numVisible: 3,
-                numScroll: 1
-            },
-            {
-                breakpoint: '767px',
-                numVisible: 2,
-                numScroll: 1
-            },
-            {
-                breakpoint: '575px',
-                numVisible: 1,
-                numScroll: 1
-            }
-        ];
-    }
-
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-        }
-    }
+export class CarouselOrientationDemo {
+    items: any[] = [1, 2, 3, 4, 5];
 }
 ```
 
-## Vertical
+## Variable Size
 
-To create a vertical Carousel, orientation needs to be set to vertical along with a verticalViewPortHeight .
+Enable autoSize to allow items with variable widths.
 
 ```typescript
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
+import { Component } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
-import { TagModule } from 'primeng/tag';
-import { ProductService } from '@/service/productservice';
-import { Product } from '@/domain/product';
+import { ChevronLeft } from '@primeicons/angular/chevron-left';
+import { ChevronRight } from '@primeicons/angular/chevron-right';
 
 @Component({
     template: `
-        <div class="card">
-            <p-carousel [value]="products()" [numVisible]="1" [numScroll]="1" orientation="vertical" verticalViewPortHeight="330px" contentClass="flex items-center">
-                <ng-template let-product #item>
-                    <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
-                        <div class="mb-4">
-                            <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded" />
-                                <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
+        <div class="mt-8 mb-16">
+            <p-carousel class="max-w-xl mx-auto" align="center" [autoSize]="true">
+                <p-carousel-content class="h-35">
+                    @for (item of items; track item.width; let i = $index) {
+                        <p-carousel-item [style.width]="item.width">
+                            <div class="h-full text-4xl font-semibold bg-surface-50 dark:bg-surface-950 text-surface-950 dark:text-surface-0 flex flex-col items-center justify-center gap-6 rounded-lg border border-surface">
+                                <span>{{ i + 1 }}</span>
                             </div>
-                        </div>
-                        <div class="mb-4 font-medium">{{ product.name }}</div>
-                        <div class="flex justify-between items-center">
-                            <div class="mt-0 font-semibold text-xl">{{ '$' + product.price }}</div>
-                            <span>
-                                <p-button icon="pi pi-heart" severity="secondary" [outlined]="true" />
-                                <p-button icon="pi pi-shopping-cart" styleClass="ml-2" />
-                            </span>
-                        </div>
+                        </p-carousel-item>
+                    }
+                </p-carousel-content>
+                <div class="flex mt-4 gap-4">
+                    <p-carousel-indicators></p-carousel-indicators>
+                    <div class="flex items-center justify-end gap-2 flex-1">
+                        <button
+                            pCarouselPrev
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-left" class="text-lg"></svg>
+                        </button>
+                        <button
+                            pCarouselNext
+                            class="w-9 h-9 flex items-center justify-center rounded-full border border-surface bg-surface-0 dark:bg-surface-800 text-surface-500 dark:text-surface-400 hover:opacity-75 cursor-pointer transition-opacity"
+                        >
+                            <svg data-p-icon="chevron-right" class="text-lg"></svg>
+                        </button>
                     </div>
-                </ng-template>
+                </div>
             </p-carousel>
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, CarouselModule, TagModule],
-    providers: [ProductService]
+    imports: [CarouselModule, ChevronLeft, ChevronRight]
 })
-export class CarouselVerticalDemo implements OnInit {
-    private productService = inject(ProductService);
-    products = signal<Product[]>([]);
-
-    ngOnInit() {
-        this.productService.getProductsSmall().then((products) => {
-            this.products.set(products);
-        });
-    }
-
-    getSeverity(status: string) {
-        switch (status) {
-            case 'INSTOCK':
-                return 'success';
-            case 'LOWSTOCK':
-                return 'warn';
-            case 'OUTOFSTOCK':
-                return 'danger';
-        }
-    }
+export class CarouselVariableSizeDemo {
+    items: any[] = [{ width: '120px' }, { width: '80px' }, { width: '200px' }, { width: '160px' }, { width: '220px' }, { width: '180px' }, { width: '280px' }, { width: '100px' }];
 }
 ```
 
@@ -339,35 +314,43 @@ Carousel is a content slider featuring various customization options.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<any> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| page | number | - | Index of the first item. |
-| numVisible | number | - | Number of items per page. |
-| numScroll | number | - | Number of items to scroll. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | any | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| page | number | 0 | Index of the first item. |
+| numVisible | number | 1 | Number of items per page. |
+| numScroll | number | 1 | Number of items to scroll. |
 | responsiveOptions | CarouselResponsiveOptions[] | - | An array of options for responsive design. |
-| orientation | "vertical" \| "horizontal" | horizontal | Specifies the layout of the component. |
-| verticalViewPortHeight | string | 300px | Height of the viewport in vertical layout. |
+| orientation | "horizontal" \| "vertical" | - | Specifies the layout of the component. |
+| verticalViewPortHeight | string | - | Height of the viewport in vertical layout. |
 | contentClass | string | - | Style class of main content. |
 | indicatorsContentClass | string | - | Style class of the indicator items. |
-| indicatorsContentStyle | { [klass: string]: any } | - | Inline style of the indicator items. |
+| indicatorsContentStyle | Partial<CSSStyleDeclaration> | - | Inline style of the indicator items. |
 | indicatorStyleClass | string | - | Style class of the indicators. |
-| indicatorStyle | { [klass: string]: any } | - | Style of the indicators. |
-| value | any[] | - | An array of objects to display. |
-| circular | boolean | false | Defines if scrolling would be infinite. |
-| showIndicators | boolean | true | Whether to display indicator container. |
-| showNavigators | boolean | true | Whether to display navigation buttons in container. |
-| autoplayInterval | number | 0 | Time in milliseconds to scroll items automatically. |
-| styleClass | string | - | Style class of the viewport container. **(Deprecated)** |
-| prevButtonProps | ButtonProps | ... | Used to pass all properties of the ButtonProps to the Button component. |
-| nextButtonProps | ButtonProps | ... | Used to pass all properties of the ButtonProps to the Button component. |
+| indicatorStyle | Partial<CSSStyleDeclaration> | - | Style of the indicators. |
+| value | any[] | null | An array of objects to display. |
+| circular | boolean | - | Defines if scrolling would be infinite. |
+| showIndicators | boolean | - | Whether to display indicator container. |
+| showNavigators | boolean | - | Whether to display navigation buttons in container. |
+| autoplayInterval | number | - | Time in milliseconds to scroll items automatically. |
+| prevButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
+| nextButtonProps | ButtonProps | - | Used to pass all properties of the ButtonProps to the Button component. |
+| align | "center" \| "start" \| "end" | 'start' | Alignment of the carousel items (composition mode). |
+| loop | boolean | false | Whether the carousel should loop (composition mode). |
+| snapType | "mandatory" \| "proximity" | 'mandatory' | Scroll snap type applied to the track (composition mode). |
+| spacing | number | 16 | Spacing between carousel items in pixels (composition mode). |
+| autoSize | boolean | false | Whether the carousel should auto size items (composition mode). |
+| slidesPerPage | number | 1 | How many slides are visible per page (composition mode). Supports fractions (e.g. 1.5). |
+| slide | number | - | Index of the active slide (composition mode). |
 
 ### Emits
 
 | Name | Parameters | Description |
 |------|------------|-------------|
 | onPage | event: CarouselPageEvent | Callback to invoke after scroll. |
+| onPageChange | value: { value: number } | Callback fired when the carousel's page changes (composition mode). |
+| onSlideChange | value: { value: number } | Callback fired when the active slide changes (composition mode). |
 
 ### Templates
 

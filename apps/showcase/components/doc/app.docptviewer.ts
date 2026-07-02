@@ -1,5 +1,4 @@
 import APIDoc from '@/doc/apidoc/index.json';
-import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, input, InputSignal, viewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { addClass, find, removeClass } from '@primeuix/utils/dom';
@@ -16,7 +15,7 @@ interface Doc {
     data: DocItem[];
 }
 
-export const getPTOptions = (name) => {
+export const getPTOptions = (name, { exclude = [] }: { exclude?: string[] } = {}) => {
     // TODO: will be removed later. Map sub-components to their parent component
     const componentMapping = {
         steplist: 'stepper',
@@ -33,7 +32,44 @@ export const getPTOptions = (name) => {
         accordionheader: 'accordion',
         accordioncontent: 'accordion',
         contextmenusub: 'contextmenu',
-        columnfilter: 'table'
+        columnfilter: 'table',
+        inputcolorarea: 'inputcolor',
+        inputcolorareabackground: 'inputcolor',
+        inputcolorareathumb: 'inputcolor',
+        inputcolorslider: 'inputcolor',
+        inputcolorslidertrack: 'inputcolor',
+        inputcolorsliderthumb: 'inputcolor',
+        inputcolorswatch: 'inputcolor',
+        inputcolorswatchbackground: 'inputcolor',
+        inputcolortransparencygrid: 'inputcolor',
+        inputcoloreyedropper: 'inputcolor',
+        gallerybackdrop: 'gallery',
+        galleryheader: 'gallery',
+        gallerycontent: 'gallery',
+        galleryfooter: 'gallery',
+        galleryitem: 'gallery',
+        galleryprev: 'gallery',
+        gallerynext: 'gallery',
+        gallerytoolbar: 'gallery',
+        gallerytoolbaritem: 'gallery',
+        galleryzoomin: 'gallery',
+        galleryzoomout: 'gallery',
+        galleryzoomtoggle: 'gallery',
+        galleryrotateleft: 'gallery',
+        galleryrotateright: 'gallery',
+        galleryflipx: 'gallery',
+        galleryflipy: 'gallery',
+        gallerydownload: 'gallery',
+        galleryfullscreen: 'gallery',
+        gallerythumbnail: 'gallery',
+        gallerythumbnailcontent: 'gallery',
+        gallerythumbnailitem: 'gallery',
+        carouselcontent: 'carousel',
+        carouselitem: 'carousel',
+        carouselindicators: 'carousel',
+        carouselnext: 'carousel',
+        carouselprev: 'carousel',
+        carouselindicator: 'carousel'
     };
 
     const passthroughNameMapping = {
@@ -55,6 +91,8 @@ export const getPTOptions = (name) => {
     let data = [];
 
     for (const [i, prop] of props.entries()) {
+        if (exclude.includes(prop.name)) continue;
+
         if (options) {
             if (!prop.deprecated) {
                 data.push({
@@ -79,7 +117,7 @@ export const getPTOptions = (name) => {
 @Component({
     selector: 'app-docptviewer',
     standalone: true,
-    imports: [CommonModule, AppDocSectionText, RouterModule],
+    imports: [AppDocSectionText, RouterModule],
     template: `
         <app-docsectiontext>
             <p>
@@ -92,16 +130,18 @@ export const getPTOptions = (name) => {
                 <ng-content />
             </div>
             <div class="doc-ptoptions">
-                <ng-container *ngIf="docs() && docs()[0]?.data">
-                    <ng-container *ngFor="let doc of docs()">
-                        <div *ngFor="let item of handleData(doc.data)" class="doc-ptoption" (mouseenter)="enterSection(item, doc.key)" (mouseleave)="leaveSection()">
-                            <span class="doc-ptoption-text">
-                                {{ item.label }}
-                                {{ findComponentName(item.label, doc) }}
-                            </span>
-                        </div>
-                    </ng-container>
-                </ng-container>
+                @if (docs() && docs()[0]?.data) {
+                    @for (doc of docs(); track $index) {
+                        @for (item of handleData(doc.data); track $index) {
+                            <div class="doc-ptoption" (mouseenter)="enterSection(item, doc.key)" (mouseleave)="leaveSection()">
+                                <span class="doc-ptoption-text">
+                                    {{ item.label }}
+                                    {{ findComponentName(item.label, doc) }}
+                                </span>
+                            </div>
+                        }
+                    }
+                }
             </div>
         </div>
     `
@@ -179,13 +219,13 @@ export class AppDocPtViewer {
         }
 
         this.hoveredElements?.forEach((el) => {
-            addClass(el, '!ring !ring-blue-500 !z-10');
+            addClass(el, 'ring-3! ring-blue-500! z-10!');
         });
     }
 
     leaveSection(): void {
         this.hoveredElements.forEach((el) => {
-            removeClass(el, '!ring !ring-blue-500 !z-10');
+            removeClass(el, 'ring-3! ring-blue-500! z-10!');
         });
 
         this.hoveredElements = [];

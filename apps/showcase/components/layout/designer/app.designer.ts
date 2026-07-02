@@ -16,14 +16,16 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     selector: 'app-designer',
     standalone: true,
     imports: [CommonModule, DrawerModule, ToastModule, ConfirmDialogModule, DesignDashboard, DesignCreateTheme, DesignEditor, DesignEditorFooter, ConfirmPopupModule],
-    template: `<p-drawer #drawer [(visible)]="visible" position="right" styleClass="designer !w-screen md:!w-[48rem]" [modal]="false" [dismissible]="false">
+    template: `<p-drawer #drawer [(visible)]="visible" position="right" styleClass="designer w-screen! md:w-2xl!" [modal]="false" [dismissible]="false">
             <ng-template #headless>
                 <div class="flex items-center justify-between p-5">
                     <div class="flex items-center gap-2">
-                        <button *ngIf="activeView() !== 'dashboard'" type="button" (click)="openDashboard()" class="icon-btn">
-                            <i class="pi pi-chevron-left"></i>
-                        </button>
-                        <span class="font-bold text-xl">{{ viewTitle() }}</span>
+                        @if (activeView() !== 'dashboard') {
+                            <button type="button" (click)="openDashboard()" class="icon-btn">
+                                <i class="pi pi-chevron-left"></i>
+                            </button>
+                        }
+                        <span class="font-bold text-lg">{{ viewTitle() }}</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="button" (click)="toggleDarkMode()" class="icon-btn">
@@ -36,13 +38,21 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
                 </div>
 
                 <div class="flex-auto overflow-auto overflow-x-hidden pb-5 px-5">
-                    <design-dashboard *ngIf="activeView() === 'dashboard'" />
-                    <design-create-theme *ngIf="activeView() === 'create_theme'" />
-                    <design-editor *ngIf="activeView() === 'editor'" />
+                    @if (activeView() === 'dashboard') {
+                        <design-dashboard />
+                    }
+                    @if (activeView() === 'create_theme') {
+                        <design-create-theme />
+                    }
+                    @if (activeView() === 'editor') {
+                        <design-editor />
+                    }
                 </div>
 
                 <div class="p-5">
-                    <design-editor-footer *ngIf="activeView() === 'editor'" />
+                    @if (activeView() === 'editor') {
+                        <design-editor-footer />
+                    }
                 </div>
             </ng-template>
         </p-drawer>

@@ -17,8 +17,8 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <div pFocusTrap class="w-full sm:w-80 flex flex-col gap-6">
+        <div class="flex justify-center">
+            <div pFocusTrap class="w-full sm:w-80 flex flex-col gap-5">
                 <p-iconfield>
                     <p-inputicon>
                         <i class="pi pi-user"></i>
@@ -33,7 +33,7 @@ import { InputTextModule } from 'primeng/inputtext';
                 </p-iconfield>
                 <div class="flex items-center gap-2">
                     <p-checkbox id="accept" [(ngModel)]="accept" name="accept" value="Accept" />
-                    <label for="accept">I agree to the terms and conditions.</label>
+                    <label for="accept" class="text-sm">I agree to the terms and conditions.</label>
                 </div>
                 <p-button type="submit" label="Submit" class="mt-2" styleClass="w-full" />
             </div>
@@ -42,7 +42,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [ButtonModule, CheckboxModule, IconFieldModule, InputIconModule, InputTextModule, FormsModule]
 })
-export class FocustrapBasicDemo {
+export class FocusTrapBasicDemo {
     name: string = '';
     email: string = '';
     accept: boolean = false;
@@ -57,9 +57,9 @@ Focus Trap keeps focus within a certain DOM element while tabbing.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<any> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| pFocusTrapDisabled | boolean | false | When set as true, focus wouldn't be managed. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | any | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| pFocusTrapDisabled | boolean | - | When set as true, focus wouldn't be managed. |
 

@@ -22,14 +22,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectBasicDemo implements OnInit {
+export class MultiSelectBasicDemo implements OnInit {
     cities!: City[];
     selectedCities!: any[];
 
@@ -61,14 +61,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" placeholder="Select Cities" optionLabel="name" display="chip" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectChipsDemo implements OnInit {
+export class MultiSelectChipsDemo implements OnInit {
     cities!: City[];
     selectedCities!: City[];
 
@@ -100,14 +100,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" [showClear]="true" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectCleariconDemo implements OnInit {
+export class MultiSelectClearIconDemo implements OnInit {
     cities!: City[];
     selectedCities!: any[];
 
@@ -139,14 +139,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" [disabled]="true" optionLabel="name" placeholder="Select Cities" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectDisabledDemo implements OnInit {
+export class MultiSelectDisabledDemo implements OnInit {
     cities!: City[];
     selectedCities!: City[];
 
@@ -178,14 +178,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" variant="filled" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectFilledDemo implements OnInit {
+export class MultiSelectFilledDemo implements OnInit {
     cities!: City[];
     selectedCities!: any[];
 
@@ -217,14 +217,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" [filter]="true" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectFilterDemo implements OnInit {
+export class MultiSelectFilterDemo implements OnInit {
     cities!: City[];
     selectedCities!: City[];
 
@@ -257,7 +257,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel class="w-full md:w-80">
                 <p-multiselect id="over_label" [(ngModel)]="value1" [options]="cities" optionLabel="name" filter [maxSelectedLabels]="3" class="w-full" />
                 <label for="over_label">Over Label</label>
@@ -275,7 +275,7 @@ interface City {
     standalone: true,
     imports: [FloatLabelModule, MultiSelectModule, FormsModule]
 })
-export class MultiselectFloatlabelDemo implements OnInit {
+export class MultiSelectFloatLabelDemo implements OnInit {
     cities!: City[];
     value1!: City[];
     value2!: City[];
@@ -309,14 +309,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" fluid />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectFluidDemo implements OnInit {
+export class MultiSelectFluidDemo implements OnInit {
     cities!: City[];
     selectedCities!: any[];
 
@@ -349,7 +349,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="groupedCities" [group]="true" [(ngModel)]="selectedCities" placeholder="Select Cities" scrollHeight="250px" display="chip" class="w-full md:w-80">
                 <ng-template let-group #group>
                     <div class="flex items-center">
@@ -363,7 +363,7 @@ interface City {
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectGroupDemo {
+export class MultiSelectGroupDemo {
     groupedCities!: SelectItemGroup[];
     selectedCities!: City[];
 
@@ -421,7 +421,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-iftalabel class="w-full md:w-80">
                 <p-multiselect [(ngModel)]="selectedCities" inputId="ms_cities" [options]="cities" optionLabel="name" [filter]="true" [maxSelectedLabels]="3" class="w-full" />
                 <label for="ms_cities">Cities</label>
@@ -431,7 +431,7 @@ interface City {
     standalone: true,
     imports: [IftaLabelModule, MultiSelectModule, FormsModule]
 })
-export class MultiselectIftalabelDemo implements OnInit {
+export class MultiSelectIftaLabelDemo implements OnInit {
     cities!: City[];
     selectedCities!: City[];
 
@@ -463,7 +463,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-4">
+        <div class="flex justify-center gap-4">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities1" [invalid]="value1" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" />
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities2" [invalid]="value2" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" class="w-full md:w-80" variant="filled" />
         </div>
@@ -471,10 +471,16 @@ interface City {
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectInvalidDemo {
+export class MultiSelectInvalidDemo {
     value1: boolean = true;
     value2: boolean = true;
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     selectedCities1!: City[];
     selectedCities2!: City[];
 }
@@ -496,14 +502,14 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="cities" [(ngModel)]="selectedCities" [loading]="true" optionLabel="name" placeholder="Loading..." class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectLoadingstateDemo implements OnInit {
+export class MultiSelectLoadingStateDemo implements OnInit {
     cities!: City[];
     selectedCities!: any[];
 
@@ -528,7 +534,6 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
@@ -539,8 +544,7 @@ interface City {
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex justify-center flex-col gap-4 w-full md:w-80">
                 <div class="flex flex-col gap-1">
                     <p-multiselect [options]="cities" formControlName="city" optionLabel="name" placeholder="Select Cities" [maxSelectedLabels]="3" [fluid]="true" [invalid]="isInvalid('city')" />
@@ -553,13 +557,19 @@ interface City {
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, MultiSelectModule, ToastModule, ButtonModule, ReactiveFormsModule],
+    imports: [MessageModule, MultiSelectModule, ButtonModule, ReactiveFormsModule],
     providers: [MessageService]
 })
-export class MultiselectReactiveformsDemo {
+export class MultiSelectReactiveFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
 
@@ -601,7 +611,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-multiselect [(ngModel)]="value1" [options]="cities" optionLabel="name" [maxSelectedLabels]="3" class="w-full md:w-80" size="small" placeholder="Small" />
             <p-multiselect [(ngModel)]="value2" [options]="cities" optionLabel="name" [maxSelectedLabels]="3" class="w-full md:w-80" placeholder="Normal" />
             <p-multiselect [(ngModel)]="value3" [options]="cities" optionLabel="name" [maxSelectedLabels]="3" class="w-full md:w-80" size="large" placeholder="Large" />
@@ -610,7 +620,7 @@ interface City {
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectSizesDemo implements OnInit {
+export class MultiSelectSizesDemo implements OnInit {
     cities!: City[];
     value1: any[];
     value2: any[];
@@ -646,7 +656,7 @@ interface Country {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect [options]="countries" [(ngModel)]="selectedCountries" placeholder="Select Countries" optionLabel="name" class="w-full md:w-80" display="chip">
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
@@ -675,7 +685,7 @@ interface Country {
     standalone: true,
     imports: [ButtonModule, MultiSelectModule, FormsModule]
 })
-export class MultiselectTemplateDemo implements OnInit {
+export class MultiSelectTemplateDemo implements OnInit {
     countries!: Country[];
     selectedCountries!: Country[];
 
@@ -703,7 +713,6 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
@@ -714,8 +723,7 @@ interface City {
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex justify-center flex-col gap-4 w-full md:w-80">
                 <div class="flex flex-col gap-1">
                     <p-multiselect
@@ -739,13 +747,19 @@ interface City {
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, MultiSelectModule, ToastModule, ButtonModule, FormsModule],
+    imports: [MessageModule, MultiSelectModule, ButtonModule, FormsModule],
     providers: [MessageService]
 })
-export class MultiselectTemplatedrivenformsDemo {
+export class MultiSelectTemplateDrivenFormsDemo {
     private messageService = inject(MessageService);
     messageService = inject(MessageService);
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
     selectedCity: City | undefined;
 
     onSubmit(form: any) {
@@ -768,7 +782,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-multiselect
                 [options]="items"
                 [showToggleAll]="true"
@@ -784,8 +798,12 @@ import { MultiSelectModule } from 'primeng/multiselect';
                 #ms
             >
                 <ng-template #headercheckboxicon let-allSelected="checked" let-partialSelected="partialSelected">
-                    <i class="pi pi-check" *ngIf="allSelected"></i>
-                    <i class="pi pi-minus" *ngIf="partialSelected" [ngStyle]="{ color: 'var(--text-color)' }"></i>
+                    @if (allSelected) {
+                        <i class="pi pi-check"></i>
+                    }
+                    @if (partialSelected) {
+                        <i class="pi pi-minus" [ngStyle]="{ color: 'var(--text-color)' }"></i>
+                    }
                 </ng-template>
             </p-multiselect>
         </div>
@@ -793,7 +811,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     standalone: true,
     imports: [MultiSelectModule, FormsModule]
 })
-export class MultiselectVirtualscrollDemo {
+export class MultiSelectVirtualScrollDemo {
     items: any = Array.from({ length: 100000 }, (_, i) => ({ label: `Item #${i}`, value: i }));
     selectedItems!: any[];
     selectAll: boolean = false;
@@ -813,79 +831,78 @@ MultiSelect is used to select multiple items from a collection.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<MultiSelectPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, MultiSelectPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
 | id | string | - | Unique identifier of the component |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
-| styleClass | string | - | Style class of the element. **(Deprecated)** |
-| panelStyle | any | - | Inline style of the overlay panel. |
+| panelStyle | Partial<CSSStyleDeclaration> | - | Inline style of the overlay panel. |
 | panelStyleClass | string | - | Style class of the overlay panel element. |
 | inputId | string | - | Identifier of the focus input to match a label defined for the component. |
-| readonly | boolean | false | When present, it specifies that the component cannot be edited. |
-| group | boolean | false | Whether to display options as grouped when nested options are provided. |
-| filter | boolean | true | When specified, displays an input field to filter the items on keyup. |
+| readonly | boolean | - | When present, it specifies that the component cannot be edited. |
+| group | boolean | - | Whether to display options as grouped when nested options are provided. |
+| filter | boolean | - | When specified, displays an input field to filter the items on keyup. |
 | filterPlaceHolder | string | - | Defines placeholder of the filter input. |
 | filterLocale | string | - | Locale to use in filtering. The default locale is the host environment's current locale. |
-| overlayVisible | boolean | false | Specifies the visibility of the options panel. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
+| overlayVisible | boolean | - | Specifies the visibility of the options panel. |
+| tabindex | number | - | Index of the element in tabbing order. |
 | dataKey | string | - | A property to uniquely identify a value in options. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| displaySelectedLabel | boolean | - | Whether to show labels of selected item labels or use default label. |
-| maxSelectedLabels | number | - | Decides how many selected item labels to show at most. |
+| displaySelectedLabel | boolean | true | Whether to show labels of selected item labels or use default label. |
+| maxSelectedLabels | number | 3 | Decides how many selected item labels to show at most. |
 | selectionLimit | number | - | Maximum number of selectable items. |
 | selectedItemsLabel | string | - | Label to display after exceeding max selected labels e.g. ({0} items selected), defaults "ellipsis" keyword to indicate a text-overflow. |
-| showToggleAll | boolean | true | Whether to show the checkbox at header to toggle all items at once. |
+| showToggleAll | boolean | - | Whether to show the checkbox at header to toggle all items at once. |
 | emptyFilterMessage | string | - | Text to display when filtering does not return any results. |
 | emptyMessage | string | - | Text to display when there is no data. Defaults to global value in i18n translation configuration. |
-| resetFilterOnHide | boolean | false | Clears the filter value when hiding the dropdown. |
+| resetFilterOnHide | boolean | - | Clears the filter value when hiding the dropdown. |
 | dropdownIcon | string | - | Icon class of the dropdown icon. |
 | chipIcon | string | - | Icon class of the chip icon. |
 | optionLabel | string | - | Name of the label field of an option. |
 | optionValue | string | - | Name of the value field of an option. |
 | optionDisabled | string | - | Name of the disabled field of an option. |
-| optionGroupLabel | string | label | Name of the label field of an option group. |
-| optionGroupChildren | string | items | Name of the options field of an option group. |
-| showHeader | boolean | true | Whether to show the header. |
+| optionGroupLabel | string | - | Name of the label field of an option group. |
+| optionGroupChildren | string | - | Name of the options field of an option group. |
+| showHeader | boolean | - | Whether to show the header. |
 | filterBy | string | - | When filtering is enabled, filterBy decides which field or fields (comma separated) to search against. |
-| scrollHeight | string | 200px | Height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
-| lazy | boolean | false | Defines if data is loaded and interacted with in lazy manner. |
-| virtualScroll | boolean | false | Whether the data should be loaded on demand during scroll. |
-| loading | boolean | false | Whether the multiselect is in loading state. |
+| scrollHeight | string | - | Height of the viewport in pixels, a scrollbar is defined if height of list exceeds this value. |
+| lazy | boolean | - | Defines if data is loaded and interacted with in lazy manner. |
+| virtualScroll | boolean | - | Whether the data should be loaded on demand during scroll. |
+| loading | boolean | - | Whether the multiselect is in loading state. |
 | virtualScrollItemSize | number | - | Height of an item in the list for VirtualScrolling. |
 | loadingIcon | string | - | Icon to display in loading state. |
 | virtualScrollOptions | ScrollerOptions | - | Whether to use the scroller feature. The properties of scroller component can be used like an object in it. |
 | overlayOptions | OverlayOptions | - | Whether to use overlay API feature. The properties of overlay API can be used like an object in it. |
 | ariaFilterLabel | string | - | Defines a string that labels the filter input. |
-| filterMatchMode | "startsWith" \| "contains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "lt" \| "lte" \| "gt" \| "gte" | contains | Defines how the items are filtered. |
+| filterMatchMode | "startsWith" \| "contains" \| "notContains" \| "endsWith" \| "equals" \| "notEquals" \| "in" \| "between" \| "lt" \| "lte" \| "gt" \| "gte" \| "is" \| "isNot" \| "before" \| "after" \| "dateIs" \| "dateIsNot" \| "dateBefore" \| "dateAfter" | - | Defines how the items are filtered. |
 | tooltip | string | - | Advisory information to display in a tooltip on hover. |
-| tooltipPosition | "right" \| "left" \| "top" \| "bottom" | right | Position of the tooltip. |
-| tooltipPositionStyle | string | absolute | Type of CSS position. |
+| tooltipPosition | "right" \| "left" \| "top" \| "bottom" | - | Position of the tooltip. |
+| tooltipPositionStyle | string | - | Type of CSS position. |
 | tooltipStyleClass | string | - | Style class of the tooltip. |
-| autofocusFilter | boolean | false | Applies focus to the filter element when the overlay is shown. |
-| display | string | comma | Defines how the selected items are displayed. |
-| autocomplete | string | off | Defines the autocomplete is active. |
-| showClear | boolean | false | When enabled, a clear icon is displayed to clear the value. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
-| placeholder | Signal<string> | - | Label to display when there are no selections. |
+| autofocusFilter | boolean | - | Applies focus to the filter element when the overlay is shown. |
+| display | "comma" \| "chip" | - | Defines how the selected items are displayed. |
+| autocomplete | string | - | Defines the autocomplete is active. |
+| showClear | boolean | - | When enabled, a clear icon is displayed to clear the value. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
+| placeholder | string | - | Label to display when there are no selections. |
 | options | any[] | - | An array of objects to display as the available options. |
 | filterValue | string | - | When specified, filter displays with this value. |
 | selectAll | boolean | - | Whether all data is selected. |
-| focusOnHover | boolean | true | Indicates whether to focus on options when hovering over them, defaults to optionLabel. |
-| filterFields | any[] | - | Fields used when filtering the options, defaults to optionLabel. |
-| selectOnFocus | boolean | false | Determines if the option will be selected on focus. |
-| autoOptionFocus | boolean | false | Whether to focus on the first visible or selected element when the overlay panel is shown. |
-| highlightOnSelect | boolean | true | Whether the selected option will be add highlight class. |
-| size | InputSignal<"small" \| "large"> | undefined | Specifies the size of the component. |
-| variant | InputSignal<"outlined" \| "filled"> | undefined | Specifies the input variant of the component. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| focusOnHover | boolean | - | Indicates whether to focus on options when hovering over them, defaults to optionLabel. |
+| filterFields | string[] | - | Fields used when filtering the options, defaults to optionLabel. |
+| selectOnFocus | boolean | - | Determines if the option will be selected on focus. |
+| autoOptionFocus | boolean | - | Whether to focus on the first visible or selected element when the overlay panel is shown. |
+| highlightOnSelect | boolean | - | Whether the selected option will be add highlight class. |
+| size | "small" \| "large" | undefined | Specifies the size of the component. |
+| variant | "filled" \| "outlined" | undefined | Specifies the input variant of the component. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| motionOptions | MotionOptions | - | The motion options. |
 
 ### Emits
 
@@ -1019,6 +1036,8 @@ MultiSelect is used to select multiple items from a collection.
 | multiselect.lg.font.size | --p-multiselect-lg-font-size | Lg font size of root |
 | multiselect.lg.padding.x | --p-multiselect-lg-padding-x | Lg padding x of root |
 | multiselect.lg.padding.y | --p-multiselect-lg-padding-y | Lg padding y of root |
+| multiselect.font.weight | --p-multiselect-font-weight | Font weight of root |
+| multiselect.font.size | --p-multiselect-font-size | Font size of root |
 | multiselect.dropdown.width | --p-multiselect-dropdown-width | Width of dropdown |
 | multiselect.dropdown.color | --p-multiselect-dropdown-color | Color of dropdown |
 | multiselect.overlay.background | --p-multiselect-overlay-background | Background of overlay |
@@ -1036,12 +1055,16 @@ MultiSelect is used to select multiple items from a collection.
 | multiselect.option.focus.color | --p-multiselect-option-focus-color | Focus color of option |
 | multiselect.option.selected.color | --p-multiselect-option-selected-color | Selected color of option |
 | multiselect.option.selected.focus.color | --p-multiselect-option-selected-focus-color | Selected focus color of option |
+| multiselect.option.selected.font.weight | --p-multiselect-option-selected-font-weight | Font weight of a selected option |
 | multiselect.option.padding | --p-multiselect-option-padding | Padding of option |
 | multiselect.option.border.radius | --p-multiselect-option-border-radius | Border radius of option |
 | multiselect.option.gap | --p-multiselect-option-gap | Gap of option |
+| multiselect.option.font.weight | --p-multiselect-option-font-weight | Font weight of option |
+| multiselect.option.font.size | --p-multiselect-option-font-size | Font size of option |
 | multiselect.option.group.background | --p-multiselect-option-group-background | Background of option group |
 | multiselect.option.group.color | --p-multiselect-option-group-color | Color of option group |
 | multiselect.option.group.font.weight | --p-multiselect-option-group-font-weight | Font weight of option group |
+| multiselect.option.group.font.size | --p-multiselect-option-group-font-size | Font size of option group |
 | multiselect.option.group.padding | --p-multiselect-option-group-padding | Padding of option group |
 | multiselect.clear.icon.color | --p-multiselect-clear-icon-color | Color of clear icon |
 | multiselect.chip.border.radius | --p-multiselect-chip-border-radius | Border radius of chip |

@@ -15,14 +15,14 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-progress-spinner ariaLabel="loading" />
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class ProgressspinnerBasicDemo {}
+export class ProgressSpinnerBasicDemo {}
 ```
 
 ## Custom
@@ -34,14 +34,14 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
         </div>
     `,
     standalone: true,
     imports: []
 })
-export class ProgressspinnerCustomDemo {}
+export class ProgressSpinnerCustomDemo {}
 ```
 
 ## Progress Spinner
@@ -52,14 +52,13 @@ ProgressSpinner is a process status indicator.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ProgressSpinnerPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| strokeWidth | string | 2 | Width of the circle stroke. |
-| fill | string | none | Color for the background of the circle. |
-| animationDuration | string | 2s | Duration of the rotate animation. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ProgressSpinnerPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| strokeWidth | string | - | Width of the circle stroke. |
+| fill | string | - | Color for the background of the circle. |
+| animationDuration | string | - | Duration of the rotate animation. |
 | ariaLabel | string | - | Used to define a aria label attribute the current element. |
 
 ## Pass Through Options

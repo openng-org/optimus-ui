@@ -17,14 +17,14 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-togglebutton [(ngModel)]="checked" onLabel="On" offLabel="Off" class="w-24" />
         </div>
     `,
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonBasicDemo {
+export class ToggleButtonBasicDemo {
     checked: boolean = false;
 }
 ```
@@ -40,14 +40,14 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-togglebutton [(ngModel)]="checked" onLabel="Locked" offLabel="Unlocked" onIcon="pi pi-check" offIcon="pi pi-times" onIcon="pi pi-lock" offIcon="pi pi-lock-open" class="w-36" ariaLabel="Do you confirm" />
         </div>
     `,
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonCustomizedDemo {
+export class ToggleButtonCustomizedDemo {
     checked: boolean = false;
 }
 ```
@@ -63,14 +63,14 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-togglebutton disabled="true" onIcon="pi pi-check" offIcon="pi pi-times" [(ngModel)]="checked" onLabel="Yes" offLabel="No" class="w-full sm:w-40" ariaLabel="Confirmation" />
         </div>
     `,
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonDisabledDemo {
+export class ToggleButtonDisabledDemo {
     checked: boolean = false;
 }
 ```
@@ -86,14 +86,14 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-togglebutton [(ngModel)]="checked" onLabel="On" offLabel="Off" fluid />
         </div>
     `,
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonFluidDemo {
+export class ToggleButtonFluidDemo {
     checked: boolean = false;
 }
 ```
@@ -109,14 +109,14 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-togglebutton [(ngModel)]="checked" onIcon="pi pi-check" offIcon="pi pi-times" [invalid]="!checked" class="w-full sm:w-40" aria-label="Confirmation" />
         </div>
     `,
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonInvalidDemo {
+export class ToggleButtonInvalidDemo {
     checked: boolean = false;
 }
 ```
@@ -129,15 +129,13 @@ ToggleButton can also be used with reactive forms. In this case, the formControl
 import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4">
                 <div class="flex flex-col items-center gap-1">
                     <p-togglebutton name="consent" formControlName="checked" [invalid]="isInvalid('checked')" onLabel="Accept All" offLabel="Reject All" class="min-w-40" />
@@ -150,9 +148,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ToggleButtonModule, ButtonModule, ReactiveFormsModule]
+    imports: [MessageModule, ToggleButtonModule, ButtonModule, ReactiveFormsModule]
 })
-export class TogglebuttonReactiveformsDemo {
+export class ToggleButtonReactiveFormsDemo {
     messageService = inject(MessageService);
     exampleForm: FormGroup | undefined;
     formSubmitted: boolean = false;
@@ -190,7 +188,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-togglebutton [(ngModel)]="value1" onLabel="On" offLabel="Off" size="small" class="min-w-16" />
             <p-togglebutton [(ngModel)]="value2" onLabel="On" offLabel="Off" class="min-w-20" />
             <p-togglebutton [(ngModel)]="value3" onLabel="On" offLabel="Off" size="large" class="min-w-24" />
@@ -199,7 +197,7 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     standalone: true,
     imports: [ToggleButtonModule, FormsModule]
 })
-export class TogglebuttonSizesDemo {
+export class ToggleButtonSizesDemo {
     value1: boolean = false;
     value2: boolean = false;
     value3: boolean = false;
@@ -212,15 +210,13 @@ export class TogglebuttonSizesDemo {
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col items-center gap-4">
                 <div class="flex flex-col items-center gap-1">
                     <p-togglebutton #model="ngModel" [(ngModel)]="checked" [invalid]="model.invalid && (model.touched || exampleForm.submitted)" name="country" onLabel="Accept All" offLabel="Reject All" required class="min-w-40" />
@@ -235,9 +231,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [MessageModule, ToastModule, ToggleButtonModule, ButtonModule, FormsModule]
+    imports: [MessageModule, ToggleButtonModule, ButtonModule, FormsModule]
 })
-export class TogglebuttonTemplatedrivenformsDemo {
+export class ToggleButtonTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     checked: boolean;
 
@@ -258,28 +254,27 @@ ToggleButton is used to select a boolean value using a button.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ToggleButtonPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| onLabel | string | Yes | Label for the on state. |
-| offLabel | string | No | Label for the off state. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ToggleButtonPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| onLabel | string | - | Label for the on state. |
+| offLabel | string | - | Label for the off state. |
 | onIcon | string | - | Icon for the on state. |
 | offIcon | string | - | Icon for the off state. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Establishes relationships between the component and label(s) where its value should be one or more element IDs. |
-| styleClass | string | - | Style class of the element. **(Deprecated)** |
 | inputId | string | - | Identifier of the focus input to match a label defined for the component. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
-| iconPos | "right" \| "left" | left | Position of the icon. |
-| autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| iconPos | "left" \| "right" | - | Position of the icon. |
+| autofocus | boolean | - | When present, it specifies that the component should automatically get focus on load. |
 | size | "small" \| "large" | - | Defines the size of the component. |
-| allowEmpty | boolean | false | Whether selection can not be cleared. |
-| fluid | InputSignalWithTransform<boolean, unknown> | undefined | Spans 100% width of the container when enabled. |
+| allowEmpty | boolean | - | Whether selection can not be cleared. |
+| fluid | boolean | undefined | Spans 100% width of the container when enabled. |
 
 ### Emits
 
@@ -322,6 +317,7 @@ ToggleButton is used to select a boolean value using a button.
 | togglebutton.padding | --p-togglebutton-padding | Padding of root |
 | togglebutton.border.radius | --p-togglebutton-border-radius | Border radius of root |
 | togglebutton.gap | --p-togglebutton-gap | Gap of root |
+| togglebutton.font.size | --p-togglebutton-font-size | Font size of root |
 | togglebutton.font.weight | --p-togglebutton-font-weight | Font weight of root |
 | togglebutton.disabled.background | --p-togglebutton-disabled-background | Disabled background of root |
 | togglebutton.disabled.border.color | --p-togglebutton-disabled-border-color | Disabled border color of root |

@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Customer } from '@/domain/customer';
 import { CustomerService } from '@/service/customerservice';
@@ -11,14 +12,14 @@ import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
 @Component({
-    selector: 'expandablerowgroup-doc',
+    selector: 'expandable-row-group-doc',
     standalone: true,
-    imports: [CommonModule, TableModule, ButtonModule, RippleModule, TagModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [CommonModule, TableModule, ButtonModule, RippleModule, TagModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>When <i>expandableRowGroups</i> is present in subheader based row grouping, groups can be expanded and collapsed. State of the expansions are controlled using the <i>expandedRows</i> and <i>onRowToggle</i> properties.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="customers" sortField="representative.name" sortMode="single" dataKey="representative.name" rowGroupMode="subheader" groupRowsBy="representative.name" [tableStyle]="{ 'min-width': '70rem' }">
                     <ng-template #header>
                         <tr>
@@ -32,7 +33,9 @@ import { TagModule } from 'primeng/tag';
                     <ng-template #groupheader let-customer let-rowIndex="rowIndex" let-expanded="expanded">
                         <tr>
                             <td colspan="5">
-                                <button type="button" pButton pRipple [pRowToggler]="customer" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+                                <button type="button" pButton pRipple [pRowToggler]="customer" text rounded plain class="mr-2">
+                                    <span pButtonIcon [class]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></span>
+                                </button>
                                 <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle; display: inline-block" />
                                 <span class="font-bold ml-2">{{ customer.representative.name }}</span>
                             </td>
@@ -67,9 +70,9 @@ import { TagModule } from 'primeng/tag';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Customer']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Customer']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ExpandableRowGroupDoc {

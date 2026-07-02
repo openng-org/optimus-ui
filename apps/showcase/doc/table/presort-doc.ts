@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -8,49 +9,48 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/
 import { TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'presort-doc',
+    selector: 'pre-sort-doc',
     standalone: true,
-    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo, CommonModule],
-    template: `
-        <app-docsectiontext>
+    imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper, CommonModule],
+    template: ` <app-docsectiontext>
             <p>
                 Defining a default <i>sortField</i> and <i>sortOrder</i> displays data as sorted initially in single column sorting. In <i>multiple</i> sort mode, <i>multiSortMeta</i> should be used instead by providing an array of
                 <i>DataTableSortMeta</i> objects.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="products" sortField="price" [sortOrder]="-1" [tableStyle]="{ 'min-width': '60rem' }">
                     <ng-template #header>
                         <tr>
                             <th pSortableColumn="code" style="width:20%">
                                 <div class="flex items-center gap-2">
                                     Code
-                                    <p-sortIcon field="code" />
+                                    <p-sort-icon field="code" />
                                 </div>
                             </th>
                             <th pSortableColumn="name" style="width:20%">
                                 <div class="flex items-center gap-2">
                                     Name
-                                    <p-sortIcon field="name" />
+                                    <p-sort-icon field="name" />
                                 </div>
                             </th>
                             <th pSortableColumn="price" style="width:20%">
                                 <div class="flex items-center gap-2">
                                     Price
-                                    <p-sortIcon field="price" />
+                                    <p-sort-icon field="price" />
                                 </div>
                             </th>
                             <th pSortableColumn="category" style="width:20%">
                                 <div class="flex items-center gap-2">
                                     Category
-                                    <p-sortIcon field="category" />
+                                    <p-sort-icon field="category" />
                                 </div>
                             </th>
                             <th pSortableColumn="quantity" style="width:20%">
                                 <div class="flex items-center gap-2">
                                     Quantity
-                                    <p-sortIcon field="quantity" />
+                                    <p-sort-icon field="quantity" />
                                 </div>
                             </th>
                         </tr>
@@ -65,10 +65,9 @@ import { TableModule } from 'primeng/table';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>
-    `,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PreSortDoc {

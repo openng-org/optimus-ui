@@ -1,6 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
@@ -8,7 +9,7 @@ import { ToastModule } from 'primeng/toast';
 @Component({
     selector: 'responsive-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, ToastModule, ButtonModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToastModule, ButtonModule],
     template: `
         <app-docsectiontext>
             <p>
@@ -16,16 +17,18 @@ import { ToastModule } from 'primeng/toast';
                 should be an object literal whose keys are the maximum screen sizes and values are the styles per screen.
             </p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
+        <app-demo-wrapper>
             <p-toast [breakpoints]="{ '920px': { width: '50%', right: 'auto' } }" />
-            <p-button (click)="show()" label="Show" />
-        </div>
-        <app-code></app-code>
+            <div class="flex justify-center">
+                <p-button (click)="show()" label="Show" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     providers: [MessageService]
 })
 export class ResponsiveDoc {
-    constructor(private messageService: MessageService) {}
+    private messageService = inject(MessageService);
 
     show() {
         this.messageService.add({ severity: 'contrast', summary: 'Success', detail: 'Message Content' });

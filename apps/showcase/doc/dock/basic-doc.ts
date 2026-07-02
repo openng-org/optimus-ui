@@ -1,17 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { MenuItem } from 'primeng/api';
 import { DockModule } from 'primeng/dock';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { TooltipModule } from 'primeng/tooltip';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'basic-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, DockModule, RadioButtonModule, TooltipModule, AppCode, AppDocSectionText],
+    imports: [FormsModule, DockModule, RadioButtonModule, TooltipModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>
@@ -19,12 +20,14 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 <i>item</i> template.
             </p>
         </app-docsectiontext>
-        <div class="card">
-            <div class="flex flex-wrap gap-4 mb-8">
-                <div *ngFor="let pos of positionOptions" class="flex items-center">
-                    <p-radiobutton name="dock" [value]="pos.value" [label]="pos.label" [(ngModel)]="position" [inputId]="pos.label" />
-                    <label [for]="pos.label" class="ml-2"> {{ pos.label }} </label>
-                </div>
+        <app-demo-wrapper>
+            <div class="flex flex-wrap gap-4 mb-7">
+                @for (pos of positionOptions; track pos.value) {
+                    <div class="flex items-center">
+                        <p-radiobutton name="dock" [value]="pos.value" [label]="pos.label" [(ngModel)]="position" [inputId]="pos.label" />
+                        <label [for]="pos.label" class="ml-2 text-sm"> {{ pos.label }} </label>
+                    </div>
+                }
             </div>
             <div class="dock-window">
                 <p-dock [model]="items" [position]="position">
@@ -33,8 +36,8 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                     </ng-template>
                 </p-dock>
             </div>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `,
     styles: [
         `

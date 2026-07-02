@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 
@@ -10,17 +11,19 @@ interface City {
 }
 
 @Component({
-    selector: 'loadingstate-doc',
+    selector: 'loading-state-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, FormsModule, SelectModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, SelectModule],
     template: `
         <app-docsectiontext>
             <p>Loading state can be used <i>loading</i> property.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
-            <p-select [options]="cities" [(ngModel)]="selectedCity" [loading]="true" optionLabel="name" placeholder="Loading..." class="w-full md:w-56" />
-        </div>
-        <app-code></app-code>
+        <app-demo-wrapper>
+            <div class="flex justify-center">
+                <p-select [options]="cities" [(ngModel)]="selectedCity" [loading]="true" optionLabel="name" placeholder="Loading..." class="w-full md:w-56" />
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class LoadingStateDoc implements OnInit {

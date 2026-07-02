@@ -17,7 +17,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" />
         </div>
     `,
@@ -40,7 +40,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" valueColor="SlateGray" rangeColor="MediumTurquoise" />
         </div>
     `,
@@ -63,7 +63,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [disabled]="true" />
         </div>
     `,
@@ -86,14 +86,14 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [min]="-50" [max]="50" />
         </div>
     `,
     standalone: true,
     imports: [KnobModule, FormsModule]
 })
-export class KnobMinmaxDemo {
+export class KnobMinMaxDemo {
     value: number = 10;
 }
 ```
@@ -110,7 +110,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-2">
+        <div class="flex flex-col items-center gap-2">
             <p-knob [(ngModel)]="value" size="150" readonly="true" />
             <div class="flex gap-2">
                 <p-button icon="pi pi-plus" (click)="value = value + 1" [disabled]="value >= 100" />
@@ -135,14 +135,12 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { KnobModule } from 'primeng/knob';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col items-center gap-4">
                 <div class="flex flex-col items-center gap-1">
                     <p-knob formControlName="value" [invalid]="isInvalid('value')" />
@@ -155,9 +153,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [KnobModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [KnobModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class KnobReactiveformsDemo {
+export class KnobReactiveFormsDemo {
     messageService = inject(MessageService);
     items: any[] | undefined;
     exampleForm: FormGroup | undefined;
@@ -215,7 +213,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [readonly]="true" />
         </div>
     `,
@@ -238,7 +236,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [size]="200" />
         </div>
     `,
@@ -261,7 +259,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [step]="10" />
         </div>
     `,
@@ -284,7 +282,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" [strokeWidth]="5" />
         </div>
     `,
@@ -307,7 +305,7 @@ import { KnobModule } from 'primeng/knob';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-knob [(ngModel)]="value" valueTemplate="{value}%" />
         </div>
     `,
@@ -326,14 +324,12 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { KnobModule } from 'primeng/knob';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col items-center gap-4">
                 <div class="flex flex-col items-center gap-1">
                     <p-knob #model="ngModel" [(ngModel)]="value" [invalid]="isInvalid(model)" name="knob" />
@@ -346,9 +342,9 @@ import { MessageService } from 'primeng/api';
         </div>
     `,
     standalone: true,
-    imports: [KnobModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [KnobModule, MessageModule, ButtonModule, FormsModule]
 })
-export class KnobTemplatedrivenformsDemo {
+export class KnobTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     value: number = 15;
     formSubmitted: boolean = false;
@@ -396,29 +392,28 @@ Knob is a form component to define number inputs with a dial.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<KnobPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, KnobPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
 | ariaLabel | string | - | Defines a string that labels the input for accessibility. |
 | ariaLabelledBy | string | - | Specifies one or more IDs in the DOM that labels the input field. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
-| valueColor | string | ... | Background of the value. |
-| rangeColor | string | ... | Background color of the range. |
-| textColor | string | ... | Color of the value text. |
-| valueTemplate | string | {value} | Template string of the value. |
-| size | number | 100 | Size of the component in pixels. |
-| min | number | 0 | Mininum boundary value. |
-| max | number | 100 | Maximum boundary value. |
-| step | number | 1 | Step factor to increment/decrement the value. |
-| strokeWidth | number | 14 | Width of the knob stroke. |
-| showValue | boolean | true | Whether the show the value inside the knob. |
-| readonly | boolean | false | When present, it specifies that the component value cannot be edited. |
+| tabindex | number | - | Index of the element in tabbing order. |
+| valueColor | string | - | Background of the value. |
+| rangeColor | string | - | Background color of the range. |
+| textColor | string | - | Color of the value text. |
+| valueTemplate | string | - | Template string of the value. |
+| size | number | - | Size of the component in pixels. |
+| min | number | - | Mininum boundary value. |
+| max | number | - | Maximum boundary value. |
+| step | number | - | Step factor to increment/decrement the value. |
+| strokeWidth | number | - | Width of the knob stroke. |
+| showValue | boolean | - | Whether the show the value inside the knob. |
+| readonly | boolean | - | When present, it specifies that the component value cannot be edited. |
 
 ### Emits
 
@@ -460,4 +455,6 @@ Knob is a form component to define number inputs with a dial.
 | knob.value.background | --p-knob-value-background | Background of value |
 | knob.range.background | --p-knob-range-background | Background of range |
 | knob.text.color | --p-knob-text-color | Color of text |
+| knob.text.font.size | --p-knob-text-font-size | Font size of text |
+| knob.text.font.weight | --p-knob-text-font-weight | Font weight of text |
 

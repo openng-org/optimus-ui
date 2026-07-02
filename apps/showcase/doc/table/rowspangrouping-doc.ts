@@ -1,22 +1,23 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Customer } from '@/domain/customer';
 import { CustomerService } from '@/service/customerservice';
-import { CommonModule } from '@angular/common';
+
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
 
 @Component({
-    selector: 'rowspangrouping-doc',
+    selector: 'row-span-grouping-doc',
     standalone: true,
-    imports: [CommonModule, TableModule, TagModule, AppDocSectionText, AppCode, DeferredDemo],
+    imports: [TableModule, TagModule, AppDocSectionText, AppCode, DeferredDemo, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>When <i>rowGroupMode</i> is configured to be <i>rowspan</i>, the grouping column spans multiple rows.</p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="customers" rowGroupMode="rowspan" groupRowsBy="representative.name" sortField="representative.name" sortMode="single" [tableStyle]="{ 'min-width': '75rem' }">
                     <ng-template #header>
                         <tr>
@@ -31,12 +32,14 @@ import { TagModule } from 'primeng/tag';
                     <ng-template #body let-customer let-rowIndex="rowIndex" let-rowgroup="rowgroup" let-rowspan="rowspan">
                         <tr>
                             <td>{{ rowIndex }}</td>
-                            <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
-                                <div class="flex items-center gap-2">
-                                    <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
-                                    <span>{{ customer.representative.name }}</span>
-                                </div>
-                            </td>
+                            @if (rowgroup) {
+                                <td [attr.rowspan]="rowspan">
+                                    <div class="flex items-center gap-2">
+                                        <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                        <span>{{ customer.representative.name }}</span>
+                                    </div>
+                                </td>
+                            }
                             <td>
                                 {{ customer.name }}
                             </td>
@@ -55,9 +58,9 @@ import { TagModule } from 'primeng/tag';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Customer']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Customer']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RowspanGroupingDoc {

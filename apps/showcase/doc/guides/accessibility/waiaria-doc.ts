@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
 import { CheckboxModule } from 'primeng/checkbox';
 
 @Component({
-    selector: 'waiaria-doc',
+    selector: 'wai-aria-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCodeModule, CheckboxModule],
     template: `
@@ -40,7 +40,7 @@ import { CheckboxModule } from 'primeng/checkbox';
             <app-code [code]="code4" [hideToggleCode]="true"></app-code>
             <p class="doc-section-description mt-4">A working sample is the PrimeNG checkbox that is tabbable, keyboard accessible and is compliant with a screen reader. Instead of ARIA roles it relies on a hidden native checkbox.</p>
             <div class="card flex items-center">
-                <label for="binary" class="mr-2">Remember Me</label>
+                <label for="binary" class="mr-2 text-sm">Remember Me</label>
                 <p-checkbox inputId="binary" [binary]="true"></p-checkbox>
             </div>
         </app-docsectiontext>
@@ -53,14 +53,18 @@ export class WAIARIADoc {
 
     code2: Code = {
         html: `<div class="fancy-checkbox">
-    <i *ngIf="checked" class="checked-icon"></i>
+    @if (checked) {
+        <i class="checked-icon"></i>
+    }
 </div>`
     };
 
     code3: Code = {
         html: `<span id="chk-label">Remember Me></span>
 <div class="fancy-checkbox" role="checkbox" aria-checked="false" tabindex="0" aria-labelledby="chk-label" (click)="toggle()" (keydown)="onKeyDown($event)">
-    <i *ngIf="checked" class="checked-icon"></i>
+    @if (checked) {
+        <i class="checked-icon"></i>
+    }
 </div>`
     };
 
@@ -68,7 +72,9 @@ export class WAIARIADoc {
         html: `<label for="chkbox">Remember Me></label>
 <div class="fancy-checkbox" (click)="toggle()">
     <input class="p-sr-only" type="checkbox" id="chkbox" (focus)="updateParentVisuals()" (blur)="updateParentVisuals()" (keydown)="$event.keyCode === 32 && updateParentVisuals()">
-    <i *ngIf="checked" class="checked-icon"></i>
+    @if (checked) {
+        <i class="checked-icon"></i>
+    }
 </div>`
     };
 }

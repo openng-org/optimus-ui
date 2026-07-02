@@ -16,9 +16,7 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
-        </div>
+        <p-chart type="bar" [data]="basicData" [options]="basicOptions" />
     `,
     standalone: true,
     imports: [ChartModule]
@@ -104,9 +102,7 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="line" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
@@ -203,8 +199,8 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-chart type="doughnut" [data]="data" [options]="options" class="w-full md:w-[30rem]" />
+        <div class="flex justify-center">
+            <p-chart type="doughnut" [data]="data" [options]="options" class="w-full md:w-120" />
         </div>
     `,
     standalone: true,
@@ -263,14 +259,12 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="bar" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartHorizontalbarDemo implements OnInit {
+export class ChartHorizontalBarDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
@@ -357,9 +351,7 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="line" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
@@ -449,14 +441,12 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="line" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartLinestyleDemo implements OnInit {
+export class ChartLineStyleDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
@@ -590,14 +580,12 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="line" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="line" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartMultiaxisDemo implements OnInit {
+export class ChartMultiAxisDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
@@ -698,8 +686,8 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-chart type="pie" [data]="data" [options]="options" class="w-full md:w-[30rem]" />
+        <div class="flex justify-center">
+            <p-chart type="pie" [data]="data" [options]="options" class="w-full md:w-120" />
         </div>
     `,
     standalone: true,
@@ -758,14 +746,14 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-chart type="polarArea" [data]="data" [options]="options" class="w-full md:w-[30rem]" />
+        <div class="flex justify-center">
+            <p-chart type="polarArea" [data]="data" [options]="options" class="w-full md:w-120" />
         </div>
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartPolarareaDemo implements OnInit {
+export class ChartPolarAreaDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
@@ -907,8 +895,8 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-chart type="radar" [data]="data" [options]="options" class="w-full md:w-[30rem]" />
+        <div class="flex justify-center">
+            <p-chart type="radar" [data]="data" [options]="options" class="w-full md:w-120" />
         </div>
     `,
     standalone: true,
@@ -987,14 +975,12 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="bar" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartStackedbarDemo implements OnInit {
+export class ChartStackedBarDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);
@@ -1089,14 +1075,12 @@ import { ChartModule } from 'primeng/chart';
 
 @Component({
     template: `
-        <div class="card">
-            <p-chart type="bar" [data]="data" [options]="options" class="h-[30rem]" />
-        </div>
+        <p-chart type="bar" [data]="data" [options]="options" class="h-120" />
     `,
     standalone: true,
     imports: [ChartModule]
 })
-export class ChartVerticalbarDemo implements OnInit {
+export class ChartVerticalBarDemo implements OnInit {
     data: any;
     options: any;
     platformId = inject(PLATFORM_ID);

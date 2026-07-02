@@ -1,6 +1,6 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
@@ -10,25 +10,33 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, TieredMenuModule, BadgeModule, CommonModule, RippleModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, TieredMenuModule, BadgeModule, RippleModule],
     template: `
         <app-docsectiontext>
             <p>TieredMenu offers item customization with the <i>item</i> template that receives the menuitem instance from the model as a parameter.</p>
         </app-docsectiontext>
-        <div class="card flex justify-center">
-            <p-tieredmenu [model]="items">
-                <ng-template #item let-item let-hasSubmenu="hasSubmenu">
-                    <a pRipple class="flex items-center px-4 py-3 cursor-pointer">
-                        <span [class]="item.icon"></span>
-                        <span class="ms-2">{{ item.label }}</span>
-                        <p-badge *ngIf="item.badge" class="ml-auto" [value]="item.badge" />
-                        <span *ngIf="item.shortcut" class="ml-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
-                        <i *ngIf="hasSubmenu" class="pi pi-angle-right ms-auto rotate-90 lg:rotate-0"></i>
-                    </a>
-                </ng-template>
-            </p-tieredmenu>
-        </div>
-        <app-code></app-code>
+        <app-demo-wrapper>
+            <div class="flex justify-center">
+                <p-tieredmenu [model]="items">
+                    <ng-template #item let-item let-hasSubmenu="hasSubmenu">
+                        <a pRipple class="flex items-center px-3 py-2 cursor-pointer">
+                            <span [class]="item.icon"></span>
+                            <span class="ms-2 text-sm">{{ item.label }}</span>
+                            @if (item.badge) {
+                                <p-badge class="ml-auto" [value]="item.badge" />
+                            }
+                            @if (item.shortcut) {
+                                <span class="ml-auto border border-surface rounded-sm bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+                            }
+                            @if (hasSubmenu) {
+                                <i class="pi pi-angle-right ms-auto rotate-90 lg:rotate-0"></i>
+                            }
+                        </a>
+                    </ng-template>
+                </p-tieredmenu>
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc implements OnInit {

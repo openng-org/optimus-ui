@@ -1,6 +1,7 @@
-import { AppCodeModule } from '@/components/doc/app.code';
+import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MegaMenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
@@ -11,13 +12,13 @@ import { RippleModule } from 'primeng/ripple';
 @Component({
     selector: 'template-doc',
     standalone: true,
-    imports: [CommonModule, MegaMenuModule, ButtonModule, AvatarModule, RippleModule, AppCodeModule, AppDocSectionText],
+    imports: [NgClass, MegaMenuModule, ButtonModule, AvatarModule, RippleModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>Custom content can be placed between p-megamenu tags. Megamenu should be <i>horizontal</i> for custom content.</p>
         </app-docsectiontext>
-        <div class="card">
-            <p-megamenu [model]="items" [style]="{ 'border-radius': '3rem', display: 'flex' }" class="p-4 bg-surface-0 dark:bg-surface-900">
+        <app-demo-wrapper>
+            <p-megamenu [model]="items" [style]="{ 'border-radius': '3rem', display: 'flex' }" class="p-3 bg-surface-0 dark:bg-surface-900">
                 <ng-template #start>
                     <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z" fill="var(--p-primary-color)" />
@@ -50,31 +51,35 @@ import { RippleModule } from 'primeng/ripple';
                     </svg>
                 </ng-template>
                 <ng-template #item let-item>
-                    <a *ngIf="item.root" pRipple class="flex items-center cursor-pointer px-4 py-2 overflow-hidden relative font-semibold text-lg uppercase" style="border-radius: 2rem">
-                        <i [ngClass]="item.icon"></i>
-                        <span class="ml-2">{{ item.label }}</span>
-                    </a>
-                    <a *ngIf="!item.root && !item.image" class="flex items-center p-4 cursor-pointer mb-2 gap-2">
-                        <span class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12">
-                            <i [ngClass]="item.icon + ' text-lg'"></i>
-                        </span>
-                        <span class="inline-flex flex-col gap-1">
-                            <span class="font-medium text-lg text-surface-900 dark:text-surface-0">{{ item.label }}</span>
-                            <span class="whitespace-nowrap">{{ item.subtext }}</span>
-                        </span>
-                    </a>
-                    <div *ngIf="item.image" class="flex flex-col items-start gap-4">
-                        <img [src]="item.image" alt="megamenu-demo" class="w-full" />
-                        <span>{{ item.subtext }}</span>
-                        <p-button [label]="item.label" [outlined]="true"></p-button>
-                    </div>
+                    @if (item.root) {
+                        <a pRipple class="flex items-center cursor-pointer px-3 py-2 overflow-hidden relative font-semibold uppercase" style="border-radius: 2rem">
+                            <i [ngClass]="item.icon"></i>
+                            <span class="ml-2">{{ item.label }}</span>
+                        </a>
+                    } @else if (!item.image) {
+                        <a class="flex items-center p-3 cursor-pointer mb-2 gap-2">
+                            <span class="inline-flex items-center justify-center rounded-full bg-primary text-primary-contrast w-12 h-12">
+                                <i [ngClass]="item.icon"></i>
+                            </span>
+                            <span class="inline-flex flex-col gap-1">
+                                <span class="font-medium text-surface-900 dark:text-surface-0">{{ item.label }}</span>
+                                <span class="whitespace-nowrap text-sm">{{ item.subtext }}</span>
+                            </span>
+                        </a>
+                    } @else {
+                        <div class="flex flex-col items-start gap-4">
+                            <img [src]="item.image" alt="megamenu-demo" class="w-full" />
+                            <span class="text-sm">{{ item.subtext }}</span>
+                            <p-button [label]="item.label" [outlined]="true"></p-button>
+                        </div>
+                    }
                 </ng-template>
                 <ng-template #end>
                     <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
                 </ng-template>
             </p-megamenu>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class TemplateDoc implements OnInit {

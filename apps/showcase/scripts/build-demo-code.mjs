@@ -149,6 +149,7 @@ const SELECTOR_TO_MODULE = {
     'p-fieldset': 'FieldsetModule',
     'p-fileupload': 'FileUploadModule',
     'p-floatlabel': 'FloatLabelModule',
+    'p-gallery': 'GalleryModule',
     'p-galleria': 'GalleriaModule',
     'p-iconfield': 'IconFieldModule',
     'p-iftalabel': 'IftaLabelModule',
@@ -213,11 +214,67 @@ const SELECTOR_TO_MODULE = {
     'p-virtualscroller': 'VirtualScrollerModule'
 };
 
+// Compound component names that need proper casing when converting to PascalCase
+const COMPOUND_NAMES = {
+    animateonscroll: 'AnimateOnScroll',
+    autocomplete: 'AutoComplete',
+    autofocus: 'AutoFocus',
+    blockui: 'BlockUI',
+    cascadeselect: 'CascadeSelect',
+    colorpicker: 'ColorPicker',
+    confirmdialog: 'ConfirmDialog',
+    confirmpopup: 'ConfirmPopup',
+    confirmationapi: 'ConfirmationApi',
+    contextmenu: 'ContextMenu',
+    dataview: 'DataView',
+    datepicker: 'DatePicker',
+    dragdrop: 'DragDrop',
+    dynamicdialog: 'DynamicDialog',
+    fileupload: 'FileUpload',
+    filterservice: 'FilterService',
+    floatlabel: 'FloatLabel',
+    focustrap: 'FocusTrap',
+    iconfield: 'IconField',
+    iftalabel: 'IftaLabel',
+    imagecompare: 'ImageCompare',
+    inputcolor: 'InputColor',
+    inputgroup: 'InputGroup',
+    inputmask: 'InputMask',
+    inputnumber: 'InputNumber',
+    inputotp: 'InputOtp',
+    inputtext: 'InputText',
+    keyfilter: 'KeyFilter',
+    megamenu: 'MegaMenu',
+    metergroup: 'MeterGroup',
+    multiselect: 'MultiSelect',
+    orderlist: 'OrderList',
+    organizationchart: 'OrganizationChart',
+    overlaybadge: 'OverlayBadge',
+    panelmenu: 'PanelMenu',
+    picklist: 'PickList',
+    progressbar: 'ProgressBar',
+    progressspinner: 'ProgressSpinner',
+    radiobutton: 'RadioButton',
+    scrollpanel: 'ScrollPanel',
+    scrolltop: 'ScrollTop',
+    selectbutton: 'SelectButton',
+    speeddial: 'SpeedDial',
+    splitbutton: 'SplitButton',
+    styleclass: 'StyleClass',
+    tabmenu: 'TabMenu',
+    tieredmenu: 'TieredMenu',
+    togglebutton: 'ToggleButton',
+    toggleswitch: 'ToggleSwitch',
+    treeselect: 'TreeSelect',
+    treetable: 'TreeTable',
+    virtualscroller: 'VirtualScroller'
+};
+
 // Component name to PascalCase mapping
 function toPascalCase(str) {
     return str
         .split(/[-_]/)
-        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .map((word) => COMPOUND_NAMES[word] || word.charAt(0).toUpperCase() + word.slice(1))
         .join('');
 }
 
@@ -285,10 +342,11 @@ function extractClassProperties(content) {
     // Match property declarations at class level (4 spaces indentation)
     const lines = propertiesSection.split('\n');
 
-    for (const line of lines) {
+    for (let lineIdx = 0; lineIdx < lines.length; lineIdx++) {
+        const line = lines[lineIdx];
         // Match lines that start with exactly 4 spaces and a word character (property declaration)
         // Pattern 1: With type annotation - name: Type = value;
-        let propMatch = line.match(/^    ([\w]+)([!?]?):\s*([A-Za-z][\w<>\[\]|, ]*(?:\s*\|\s*[\w\[\]]+)*)(?:\s*=\s*(.+))?;?\s*$/);
+        let propMatch = line.match(/^    ([\w]+)([!?]?):\s*([A-Za-z\[][\w<>\[\]|, ]*(?:\s*\|\s*[\w\[\]]+)*)(?:\s*=\s*(.+))?;?\s*$/);
 
         // Pattern 2: Without type annotation - name = value;
         if (!propMatch) {
@@ -350,22 +408,47 @@ function extractClassProperties(content) {
             continue;
         }
 
-        // Clean up default value - handle multiline arrays/objects and trailing semicolons
+        // Handle multiline default values - collect subsequent lines until balanced
         if (defaultValue) {
             // Remove trailing semicolon from default value
             defaultValue = defaultValue.replace(/;$/, '');
-            // Handle multiline arrays (incomplete)
+
+            // Collect multiline arrays
             if (defaultValue.startsWith('[') && !defaultValue.endsWith(']')) {
-                defaultValue = undefined;
+                let bracketCount = (defaultValue.match(/\[/g) || []).length - (defaultValue.match(/\]/g) || []).length;
+                while (bracketCount > 0 && lineIdx + 1 < lines.length) {
+                    lineIdx++;
+                    defaultValue += '\n' + lines[lineIdx];
+                    bracketCount += (lines[lineIdx].match(/\[/g) || []).length;
+                    bracketCount -= (lines[lineIdx].match(/\]/g) || []).length;
+                }
+                defaultValue = defaultValue.replace(/;$/, '');
             }
-            // Handle multiline objects (incomplete - only has opening brace)
+
+            // Collect multiline objects
             if (defaultValue && (defaultValue === '{' || (defaultValue.startsWith('{') && !defaultValue.endsWith('}')))) {
-                defaultValue = undefined;
+                let braceCount = (defaultValue.match(/\{/g) || []).length - (defaultValue.match(/\}/g) || []).length;
+                while (braceCount > 0 && lineIdx + 1 < lines.length) {
+                    lineIdx++;
+                    defaultValue += '\n' + lines[lineIdx];
+                    braceCount += (lines[lineIdx].match(/\{/g) || []).length;
+                    braceCount -= (lines[lineIdx].match(/\}/g) || []).length;
+                }
+                defaultValue = defaultValue.replace(/;$/, '');
             }
+
             // Handle multiline function calls (incomplete - has unmatched parentheses)
             if (defaultValue) {
-                const openParens = (defaultValue.match(/\(/g) || []).length;
-                const closeParens = (defaultValue.match(/\)/g) || []).length;
+                let openParens = (defaultValue.match(/\(/g) || []).length;
+                let closeParens = (defaultValue.match(/\)/g) || []).length;
+                while (openParens !== closeParens && lineIdx + 1 < lines.length) {
+                    lineIdx++;
+                    defaultValue += '\n' + lines[lineIdx];
+                    openParens = (defaultValue.match(/\(/g) || []).length;
+                    closeParens = (defaultValue.match(/\)/g) || []).length;
+                }
+                defaultValue = defaultValue.replace(/;$/, '');
+                // If still unbalanced after exhausting lines, discard
                 if (openParens !== closeParens) {
                     defaultValue = undefined;
                 }
@@ -697,6 +780,12 @@ function extractDemoContent(template) {
     html = html.replace(/<app-code[^>]*><\/app-code>/g, '');
     html = html.replace(/<app-code[^>]*\/>/g, '');
 
+    // Handle app-demo-wrapper - extract inner content
+    const wrapperMatch = html.match(/<app-demo-wrapper[^>]*>([\s\S]*?)<\/app-demo-wrapper>/);
+    if (wrapperMatch) {
+        html = wrapperMatch[1];
+    }
+
     // Handle p-deferred-demo wrapper - extract inner content
     const deferredMatch = html.match(/<p-deferred-demo[^>]*>([\s\S]*?)<\/p-deferred-demo>/);
     if (deferredMatch) {
@@ -995,6 +1084,16 @@ function detectPrimeNGModules(template) {
         }
     }
 
+    // Check for pGallery* directives
+    if (/pGallery/.test(template)) {
+        modules.add('GalleryModule');
+    }
+
+    // Check for pCarousel* directives
+    if (/pCarousel/.test(template)) {
+        modules.add('CarouselModule');
+    }
+
     // Check for pButton directive
     if (/pButton/.test(template)) {
         modules.add('ButtonModule');
@@ -1139,8 +1238,26 @@ function generateTypescript(componentName, template, services = [], fileContent 
         }
     }
 
+    // Detect and add @primeicons/angular imports from data-p-icon attributes
+    const iconNames = [...new Set([...template.matchAll(/data-p-icon="([^"]+)"/g)].map((m) => m[1]))];
+    for (const iconName of iconNames) {
+        const className = iconName
+            .split('-')
+            .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+            .join('');
+        importStatements += `import { ${className} } from '@primeicons/angular/${iconName}';\n`;
+    }
+
     // Build imports array for decorator (actual modules, not ImportsModule)
-    const decoratorImports = primeModules.filter((m) => m !== 'CommonModule');
+    const decoratorImports = [
+        ...primeModules.filter((m) => m !== 'CommonModule'),
+        ...iconNames.map((n) =>
+            n
+                .split('-')
+                .map((p) => p.charAt(0).toUpperCase() + p.slice(1))
+                .join('')
+        )
+    ];
 
     // Build providers if services exist (include both custom services and PrimeNG API services)
     const allProviders = [...services, ...primeNGServices];
@@ -1246,6 +1363,26 @@ function deriveSelectorFromFilename(fileName, componentDir) {
     return `${routeName}-${section}-demo`;
 }
 
+// Extract the actual selector from a component file's @Component decorator
+function extractSelector(content) {
+    const match = content.match(/selector:\s*['"]([^'"]+)['"]/);
+    return match ? match[1] : null;
+}
+
+// Derive demo key from the actual selector in the file
+// e.g., selector "template-driven-forms-doc" -> "select-template-driven-forms-demo"
+function deriveDemoKey(content, fileName, componentDir) {
+    const selector = extractSelector(content);
+    if (selector) {
+        // Replace -doc suffix with -demo, prepend component dir
+        const base = selector.replace(/-doc$/, '');
+        const routeName = DIR_TO_ROUTE[componentDir] || componentDir;
+        return `${routeName}-${base}-demo`;
+    }
+    // Fallback to filename-based derivation
+    return deriveSelectorFromFilename(fileName, componentDir);
+}
+
 // Parse a single doc file
 function parseDocFile(filePath, componentDir) {
     const content = fs.readFileSync(filePath, 'utf-8');
@@ -1267,8 +1404,8 @@ function parseDocFile(filePath, componentDir) {
     // Remove doc suffix (handles both "basicdoc" and "basic-doc" patterns)
     const section = fileName.replace(/-?doc$/, '');
 
-    // Derive selector from filename - no need for app-code selector attribute
-    const uniqueKey = deriveSelectorFromFilename(fileName, componentDir);
+    // Derive demo key from actual selector in file, falling back to filename
+    const uniqueKey = deriveDemoKey(content, fileName, componentDir);
 
     // Get component name from selector (properly hyphenated) for correct PascalCase
     // e.g., "tree-table-sort-multiple-columns-demo" -> "TreeTableSortMultipleColumns"

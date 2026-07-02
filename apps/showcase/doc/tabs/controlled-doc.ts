@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { TabsModule } from 'primeng/tabs';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'controlled-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, TabsModule, ButtonModule],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, TabsModule, ButtonModule],
     template: `
         <app-docsectiontext>
             <p>Tabs can be controlled programmatically using <i>value</i> property as a model.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <div class="flex mb-2 gap-2 justify-end">
                 <p-button (onClick)="value = 0" rounded="true" styleClass="w-8 h-8 p-0" [outlined]="value !== 0" label="1" />
                 <p-button (onClick)="value = 1" rounded="true" styleClass="w-8 h-8 p-0" [outlined]="value !== 1" label="2" />
@@ -26,28 +27,28 @@ import { ButtonModule } from 'primeng/button';
                 </p-tablist>
                 <p-tabpanels>
                     <p-tabpanel [value]="0">
-                        <p class="m-0">
+                        <p class="m-0 text-sm">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                             consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
                             laborum.
                         </p>
                     </p-tabpanel>
                     <p-tabpanel [value]="1">
-                        <p class="m-0">
+                        <p class="m-0 text-sm">
                             Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo
                             enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit, sed quia non numquam eius modi.
                         </p>
                     </p-tabpanel>
                     <p-tabpanel [value]="2">
-                        <p class="m-0">
+                        <p class="m-0 text-sm">
                             At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in
                             culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus.
                         </p>
                     </p-tabpanel>
                 </p-tabpanels>
             </p-tabs>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class ControlledDoc {

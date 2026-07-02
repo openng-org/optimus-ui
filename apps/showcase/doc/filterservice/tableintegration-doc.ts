@@ -1,40 +1,46 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Car } from '@/domain/car';
 import { CarService } from '@/service/carservice';
-import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FilterMatchMode, FilterService, SelectItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
 @Component({
-    selector: 'tableintegration-doc',
+    selector: 'table-integration-doc',
     standalone: true,
-    imports: [CommonModule, AppCode, AppDocSectionText, TableModule],
+    imports: [AppCode, AppDemoWrapper, AppDocSectionText, TableModule],
     template: `
         <app-docsectiontext>
             <p>A custom equals filter that checks for exact case sensitive value is registered and defined as a match mode of a column filter.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-table #dt [columns]="cols" [value]="cars" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '75rem' }">
-                <ng-template pTemplate="header" let-columns>
+                <ng-template #header let-columns>
                     <tr>
-                        <th *ngFor="let col of columns" [style.width]="'25%'">{{ col.header }}</th>
+                        @for (col of columns; track col.field) {
+                            <th [style.width]="'25%'">{{ col.header }}</th>
+                        }
                     </tr>
                     <tr>
-                        <th *ngFor="let col of columns">
-                            <p-columnFilter type="text" [field]="col.field" [matchModeOptions]="matchModeOptions" [matchMode]="'custom-equals'" />
-                        </th>
+                        @for (col of columns; track col.field) {
+                            <th>
+                                <p-column-filter type="text" [field]="col.field" [matchModeOptions]="matchModeOptions" [matchMode]="'custom-equals'" />
+                            </th>
+                        }
                     </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <ng-template #body let-rowData let-columns="columns">
                     <tr [pSelectableRow]="rowData">
-                        <td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
+                        @for (col of columns; track col.field) {
+                            <td>{{ rowData[col.field] }}</td>
+                        }
                     </tr>
                 </ng-template>
             </p-table>
-        </div>
-        <app-code [extFiles]="['Product', 'Car']"></app-code>
+            <app-code [extFiles]="['Product', 'Car']"></app-code>
+        </app-demo-wrapper>
     `,
     providers: [FilterService]
 })

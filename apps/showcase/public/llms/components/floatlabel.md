@@ -18,7 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-floatlabel>
                 <input id="username" pInputText [(ngModel)]="value" autocomplete="off" />
                 <label for="username">Username</label>
@@ -28,7 +28,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, InputTextModule, FormsModule]
 })
-export class FloatlabelBasicDemo {
+export class FloatLabelBasicDemo {
     value: string | undefined;
 }
 ```
@@ -45,7 +45,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel>
                 <input pInputText id="value1" [(ngModel)]="value1" [invalid]="!value1" autocomplete="off" />
                 <label for="value1">Username</label>
@@ -63,7 +63,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, InputTextModule, FormsModule]
 })
-export class FloatlabelInvalidDemo {
+export class FloatLabelInvalidDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -82,7 +82,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-wrap justify-center items-end gap-4">
+        <div class="flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel variant="in">
                 <input pInputText id="in_label" [(ngModel)]="value1" autocomplete="off" />
                 <label for="in_label">In Label</label>
@@ -96,7 +96,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, InputTextModule, FormsModule]
 })
-export class FloatlabelVariantsDemo {
+export class FloatLabelVariantsDemo {
     value1: string | undefined;
     value2: string | undefined;
 }
@@ -110,11 +110,11 @@ FloatLabel appears on top of the input field when focused.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<FloatLabelPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| variant | "in" \| "on" \| "over" | over | Defines the positioning of the label relative to the input. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, FloatLabelPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| variant | "in" \| "over" \| "on" | - | Defines the positioning of the label relative to the input. |
 
 ## Pass Through Options
 
@@ -142,6 +142,7 @@ FloatLabel appears on top of the input field when focused.
 | floatlabel.transition.duration | --p-floatlabel-transition-duration | Transition duration of root |
 | floatlabel.position.x | --p-floatlabel-position-x | Position x of root |
 | floatlabel.position.y | --p-floatlabel-position-y | Position y of root |
+| floatlabel.font.size | --p-floatlabel-font-size | Font size of root |
 | floatlabel.font.weight | --p-floatlabel-font-weight | Font weight of root |
 | floatlabel.active.font.size | --p-floatlabel-active-font-size | Active font size of root |
 | floatlabel.active.font.weight | --p-floatlabel-active-font-weight | Active font weight of root |

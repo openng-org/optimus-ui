@@ -1,5 +1,6 @@
-import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef } from '@angular/core';
+import { inject, Injectable, PLATFORM_ID, signal } from '@angular/core';
 import { FilterMatchMode, OverlayOptions, Translation } from 'primeng/api';
+import type { AppendTo } from 'primeng/types/shared';
 import { Subject } from 'rxjs';
 import type { PrimeNGConfigType, ThemeConfigType, ZIndex } from './primeng.types';
 import { ThemeProvider } from './themeprovider';
@@ -9,14 +10,10 @@ export class PrimeNG extends ThemeProvider {
     ripple = signal<boolean>(false);
 
     public platformId: any = inject(PLATFORM_ID);
-    /**
-     * @deprecated Since v20. Use `inputVariant` instead.
-     */
-    inputStyle = signal<'outlined' | 'filled' | null>(null);
 
     inputVariant = signal<'outlined' | 'filled' | null>(null);
 
-    overlayAppendTo = signal<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>('self');
+    overlayAppendTo = signal<AppendTo>('self');
 
     overlayOptions: OverlayOptions = {};
 
@@ -186,12 +183,11 @@ export class PrimeNG extends ThemeProvider {
     }
 
     setConfig(config: PrimeNGConfigType): void {
-        const { csp, ripple, inputStyle, inputVariant, theme, overlayOptions, translation, filterMatchModeOptions, overlayAppendTo, zIndex, ptOptions, pt, unstyled } = config || {};
+        const { csp, ripple, inputVariant, theme, overlayOptions, translation, filterMatchModeOptions, overlayAppendTo, zIndex, ptOptions, pt, unstyled } = config || {};
 
         if (csp) this.csp.set(csp);
         if (overlayAppendTo) this.overlayAppendTo.set(overlayAppendTo);
         if (ripple) this.ripple.set(ripple);
-        if (inputStyle) this.inputStyle.set(inputStyle);
         if (inputVariant) this.inputVariant.set(inputVariant);
         if (overlayOptions) this.overlayOptions = overlayOptions;
         if (translation) this.setTranslation(translation);

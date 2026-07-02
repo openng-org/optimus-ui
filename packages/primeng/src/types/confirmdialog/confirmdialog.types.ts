@@ -2,6 +2,13 @@ import { TemplateRef } from '@angular/core';
 import type { Confirmation, PassThrough, PassThroughOption } from 'primeng/api';
 import { DialogPassThrough } from 'primeng/types/dialog';
 import type { ButtonPassThrough } from 'primeng/types/button';
+import { MotionOptions } from '@primeuix/motion';
+
+/**
+ * Element to receive the focus when the dialog gets visible.
+ * @group Types
+ */
+export type ConfirmDialogDefaultFocus = 'accept' | 'reject' | 'close' | 'none';
 
 /**
  * Custom pass-through(pt) options.
@@ -71,6 +78,14 @@ export interface ConfirmDialogPassThroughOptions<I = unknown> {
      * @see {@link ButtonPassThrough}
      */
     pcRejectButton?: ButtonPassThrough;
+    /**
+     * Used to pass options to the motion component/directive.
+     */
+    motion?: MotionOptions;
+    /**
+     * Used to pass motion options for the mask animation.
+     */
+    maskMotion?: MotionOptions;
 }
 
 /**

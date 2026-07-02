@@ -4,6 +4,12 @@ import { TemplateRef } from '@angular/core';
 import type { MotionOptions } from '@primeuix/motion';
 
 /**
+ * Defines the position of the dialog.
+ * @group Types
+ */
+export type DialogPosition = 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright';
+
+/**
  * Custom pass-through(pt) options.
  * @template I Type of instance.
  *
@@ -58,9 +64,13 @@ export interface DialogPassThroughOptions<I = unknown> {
      */
     footer?: PassThroughOption<HTMLDivElement, I>;
     /**
-     * Used to pass options to the motion component/directive.
+     * Used to pass motion options for the dialog animation.
      */
     motion?: MotionOptions;
+    /**
+     * Used to pass motion options for the mask animation.
+     */
+    maskMotion?: MotionOptions;
 }
 
 /**
@@ -70,6 +80,15 @@ export interface DialogPassThroughOptions<I = unknown> {
  * @template I Type of instance.
  */
 export type DialogPassThrough<I = unknown> = PassThrough<I, DialogPassThroughOptions<I>>;
+
+/**
+ * Context interface for the Dialog header template.
+ * @property {string | null} ariaLabelledBy - The aria-labelledby attribute value.
+ * @group Interface
+ */
+export interface DialogHeaderTemplateContext {
+    ariaLabelledBy: string | null;
+}
 
 /**
  * Defines valid templates in Dialog.

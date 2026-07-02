@@ -18,14 +18,14 @@ import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-panelmenu [model]="items" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
     imports: [PanelMenuModule]
 })
-export class PanelmenuBasicDemo implements OnInit {
+export class PanelMenuBasicDemo implements OnInit {
     items: MenuItem[];
 
     ngOnInit() {
@@ -118,22 +118,20 @@ The command property defines the callback to run when an item is activated by cl
 ```typescript
 import { Component, OnInit, inject } from '@angular/core';
 import { PanelMenu, PanelMenuModule } from 'primeng/panelmenu';
-import { ToastModule } from 'primeng/toast';
 import { MenuItem, MessageService } from 'primeng/api';
 import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
+        <div class="flex justify-center">
             <p-panelmenu [model]="items" class="w-full md:w-80" />
         </div>
     `,
     standalone: true,
-    imports: [PanelMenuModule, ToastModule],
+    imports: [PanelMenuModule],
     providers: [MessageService]
 })
-export class PanelmenuCommandDemo implements OnInit {
+export class PanelMenuCommandDemo implements OnInit {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -221,7 +219,7 @@ import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
+        <div class="flex flex-col items-center gap-4">
             <p-button label="Toggle All" [text]="true" (onClick)="toggleAll()" />
             <p-panelmenu [model]="items" class="w-full md:w-80" />
         </div>
@@ -229,7 +227,7 @@ import { PanelMenu } from 'primeng/panelmenu';
     standalone: true,
     imports: [ButtonModule, PanelMenuModule]
 })
-export class PanelmenuControlledDemo implements OnInit {
+export class PanelMenuControlledDemo implements OnInit {
     items: MenuItem[];
 
     ngOnInit() {
@@ -319,14 +317,14 @@ import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-panelmenu [model]="items" styleClass="w-full md:w-80" [multiple]="true" />
+        <div class="flex justify-center">
+            <p-panelmenu [model]="items" class="w-full md:w-80" [multiple]="true" />
         </div>
     `,
     standalone: true,
     imports: [PanelMenuModule]
 })
-export class PanelmenuMultipleDemo implements OnInit {
+export class PanelMenuMultipleDemo implements OnInit {
     items: MenuItem[];
 
     ngOnInit() {
@@ -424,7 +422,7 @@ import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
+        <div class="flex justify-center">
             <p-panelmenu [model]="items" class="w-full md:w-80" />
         </div>
     `,
@@ -432,7 +430,7 @@ import { PanelMenu } from 'primeng/panelmenu';
     imports: [PanelMenuModule],
     providers: [MessageService]
 })
-export class PanelmenuRouterDemo implements OnInit {
+export class PanelMenuRouterDemo implements OnInit {
     private messageService = inject(MessageService);
     items: MenuItem[];
 
@@ -496,14 +494,18 @@ import { PanelMenu } from 'primeng/panelmenu';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center">
+        <div class="flex flex-col items-center">
             <p-panelmenu [model]="items" class="w-full md:w-80">
                 <ng-template #item let-item>
                     <a pRipple class="flex items-center px-4 py-2 cursor-pointer group">
                         <i [class]="item.icon + ' text-primary group-hover:text-inherit'"></i>
-                        <span class="ms-2">{{ item.label }}</span>
-                        <p-badge *ngIf="item.badge" class="ms-auto" [value]="item.badge" />
-                        <span *ngIf="item.shortcut" class="ms-auto border border-surface rounded bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+                        <span class="ms-2" [class.text-sm]="!item.items">{{ item.label }}</span>
+                        @if (item.badge) {
+                            <p-badge class="ms-auto" [value]="item.badge" />
+                        }
+                        @if (item.shortcut) {
+                            <span class="ms-auto border border-surface rounded-sm bg-emphasis text-muted-color text-xs p-1">{{ item.shortcut }}</span>
+                        }
                     </a>
                 </ng-template>
             </p-panelmenu>
@@ -512,7 +514,7 @@ import { PanelMenu } from 'primeng/panelmenu';
     standalone: true,
     imports: [BadgeModule, PanelMenuModule, RippleModule]
 })
-export class PanelmenuTemplateDemo implements OnInit {
+export class PanelMenuTemplateDemo implements OnInit {
     items: MenuItem[];
 
     ngOnInit() {
@@ -596,17 +598,15 @@ PanelMenu is a hybrid of Accordion and Tree components.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<PanelMenuPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, PanelMenuPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MenuItem[] | - | An array of menuitems. |
-| styleClass | string | - | Style class of the component. **(Deprecated)** |
-| multiple | boolean | false | Whether multiple tabs can be activated at the same time or not. |
-| transitionOptions | string | 400ms cubic-bezier(0.86, 0, 0.07, 1) | Transition options of the animation. **(Deprecated)** |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+| multiple | boolean | - | Whether multiple tabs can be activated at the same time or not. |
+| motionOptions | MotionOptions | - | The motion options. |
 | id | string | - | Current id state as a string. |
-| tabindex | number | 0 | Index of the element in tabbing order. |
+| tabindex | number | - | Index of the element in tabbing order. |
 
 ### Templates
 
@@ -696,6 +696,9 @@ PanelMenu is a hybrid of Accordion and Tree components.
 | panelmenu.item.border.radius | --p-panelmenu-item-border-radius | Border radius of item |
 | panelmenu.item.icon.color | --p-panelmenu-item-icon-color | Icon color of item |
 | panelmenu.item.icon.focus.color | --p-panelmenu-item-icon-focus-color | Icon focus color of item |
+| panelmenu.item.icon.size | --p-panelmenu-item-icon-size | Icon size of item |
+| panelmenu.item.label.font.weight | --p-panelmenu-item-label-font-weight | Font weight of item label |
+| panelmenu.item.label.font.size | --p-panelmenu-item-label-font-size | Font size of item label |
 | panelmenu.submenu.indent | --p-panelmenu-submenu-indent | Indent of submenu |
 | panelmenu.submenu.icon.color | --p-panelmenu-submenu-icon-color | Color of submenu icon |
 | panelmenu.submenu.icon.focus.color | --p-panelmenu-submenu-icon-focus-color | Focus color of submenu icon |

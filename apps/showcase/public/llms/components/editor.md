@@ -17,9 +17,7 @@ import { EditorModule } from 'primeng/editor';
 
 @Component({
     template: `
-        <div class="card">
-            <p-editor [(ngModel)]="text" [style]="{ height: '320px' }" />
-        </div>
+        <p-editor [(ngModel)]="text" [style]="{ height: '320px' }" />
     `,
     standalone: true,
     imports: [EditorModule, FormsModule]
@@ -40,22 +38,20 @@ import { EditorModule } from 'primeng/editor';
 
 @Component({
     template: `
-        <div class="card">
-            <p-editor [(ngModel)]="text" [style]="{ height: '320px' }">
-                <ng-template #header>
-                    <span class="ql-formats">
-                        <button type="button" class="ql-bold" aria-label="Bold"></button>
-                        <button type="button" class="ql-italic" aria-label="Italic"></button>
-                        <button type="button" class="ql-underline" aria-label="Underline"></button>
-                    </span>
-                </ng-template>
-            </p-editor>
-        </div>
+        <p-editor [(ngModel)]="text" [style]="{ height: '320px' }">
+            <ng-template #header>
+                <span class="ql-formats">
+                    <button type="button" class="ql-bold" aria-label="Bold"></button>
+                    <button type="button" class="ql-italic" aria-label="Italic"></button>
+                    <button type="button" class="ql-underline" aria-label="Underline"></button>
+                </span>
+            </ng-template>
+        </p-editor>
     `,
     standalone: true,
     imports: [EditorModule, FormsModule]
 })
-export class EditorCustomtoolbarDemo {
+export class EditorCustomToolbarDemo {
     text: string = '<div>Hello World!</div><div>PrimeNG <b>Editor</b> Rocks</div><div><br></div>';
 }
 ```
@@ -73,29 +69,25 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { EditorModule } from 'primeng/editor';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card ">
-            <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-                <div class="flex flex-col gap-1">
-                    <p-editor formControlName="text" [invalid]="isInvalid('text')" [style]="{ height: '320px' }" />
-                    @if (isInvalid('text')) {
-                        <p-message severity="error" size="small" variant="simple">Content is required.</p-message>
-                    }
-                </div>
-                <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
-            </form>
-        </div>
+        <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <p-editor formControlName="text" [invalid]="isInvalid('text')" [style]="{ height: '320px' }" />
+                @if (isInvalid('text')) {
+                    <p-message severity="error" size="small" variant="simple">Content is required.</p-message>
+                }
+            </div>
+            <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
+        </form>
     `,
     standalone: true,
-    imports: [EditorModule, MessageModule, ToastModule, ButtonModule, ReactiveFormsModule]
+    imports: [EditorModule, MessageModule, ButtonModule, ReactiveFormsModule]
 })
-export class EditorReactiveformsDemo {
+export class EditorReactiveFormsDemo {
     messageService = inject(MessageService);
     items: any[] | undefined;
     exampleForm: FormGroup | undefined;
@@ -134,9 +126,7 @@ import { EditorModule } from 'primeng/editor';
 
 @Component({
     template: `
-        <div class="card">
-            <p-editor [(ngModel)]="text" [readonly]="true" [style]="{ height: '320px' }" />
-        </div>
+        <p-editor [(ngModel)]="text" [readonly]="true" [style]="{ height: '320px' }" />
     `,
     standalone: true,
     imports: [EditorModule, FormsModule]
@@ -153,29 +143,25 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { EditorModule } from 'primeng/editor';
 import { MessageModule } from 'primeng/message';
-import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 
 @Component({
     template: `
-        <p-toast />
-        <div class="card">
-            <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
-                <div class="flex flex-col gap-1">
-                    <p-editor #content="ngModel" [(ngModel)]="text" [invalid]="content.invalid && (content.touched || exampleForm.submitted)" name="content" [style]="{ height: '320px' }" required />
-                    @if (content.invalid && (content.touched || exampleForm.submitted)) {
-                        <p-message severity="error" size="small" variant="simple">Content is required.</p-message>
-                    }
-                </div>
-                <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
-            </form>
-        </div>
+        <form #exampleForm="ngForm" (ngSubmit)="onSubmit(exampleForm)" class="flex flex-col gap-4">
+            <div class="flex flex-col gap-1">
+                <p-editor #content="ngModel" [(ngModel)]="text" [invalid]="content.invalid && (content.touched || exampleForm.submitted)" name="content" [style]="{ height: '320px' }" required />
+                @if (content.invalid && (content.touched || exampleForm.submitted)) {
+                    <p-message severity="error" size="small" variant="simple">Content is required.</p-message>
+                }
+            </div>
+            <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
+        </form>
     `,
     standalone: true,
-    imports: [EditorModule, MessageModule, ToastModule, ButtonModule, FormsModule]
+    imports: [EditorModule, MessageModule, ButtonModule, FormsModule]
 })
-export class EditorTemplatedrivenformsDemo {
+export class EditorTemplateDrivenFormsDemo {
     messageService = inject(MessageService);
     text: string | undefined;
 
@@ -196,20 +182,19 @@ Editor groups a collection of contents in tabs.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<EditorPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| required | InputSignalWithTransform<boolean, unknown> | false | There must be a value (if set). |
-| invalid | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have invalid state style. |
-| disabled | InputSignalWithTransform<boolean, unknown> | false | When present, it specifies that the component should have disabled state style. |
-| name | InputSignal<string> | undefined | When present, it specifies that the name of the input. |
-| style | { [klass: string]: any } | - | Inline style of the container. |
-| styleClass | string | - | Style class of the container. **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, EditorPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
+| required | boolean | false | There must be a value (if set). |
+| invalid | boolean | false | When present, it specifies that the component should have invalid state style. |
+| disabled | boolean | false | When present, it specifies that the component should have disabled state style. |
+| name | string | undefined | When present, it specifies that the name of the input. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the container. |
 | placeholder | string | - | Placeholder text to show when editor is empty. |
 | formats | string[] | - | Whitelist of formats to display, see [here](https://quilljs.com/docs/formats/) for available options. |
 | modules | object | - | Modules configuration of Editor, see [here](https://quilljs.com/docs/modules/) for available options. |
-| bounds | string \| HTMLElement | - | DOM Element or a CSS selector for a DOM Element, within which the editor’s p elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries. |
+| bounds | string \| HTMLElement | - | DOM Element or a CSS selector for a DOM Element, within which the editor's p elements (i.e. tooltips, etc.) should be confined. Currently, it only considers left and right boundaries. |
 | scrollingContainer | string \| HTMLElement | - | DOM Element or a CSS selector for a DOM Element, specifying which container has the scrollbars (i.e. overflow-y: auto), if is has been changed from the default ql-editor with custom CSS. Necessary to fix scroll jumping bugs when Quill is set to auto grow its height, and another ancestor container is responsible from the scrolling.. |
 | debug | string | - | Shortcut for debug. Note debug is a static method and will affect other instances of Quill editors on the page. Only warning and error messages are enabled by default. |
 | readonly | boolean | - | Whether to instantiate the editor to read-only mode. |

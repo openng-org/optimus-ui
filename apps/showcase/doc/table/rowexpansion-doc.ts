@@ -1,5 +1,6 @@
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
@@ -15,18 +16,18 @@ import { TagModule } from 'primeng/tag';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-    selector: 'rowexpansion-doc',
+    selector: 'row-expansion-doc',
     standalone: true,
-    imports: [TableModule, ToastModule, ButtonModule, FormsModule, RippleModule, AppDocSectionText, AppCode, DeferredDemo, CommonModule, RatingModule, TagModule],
+    imports: [TableModule, ToastModule, ButtonModule, FormsModule, RippleModule, AppDocSectionText, AppCode, DeferredDemo, CommonModule, RatingModule, TagModule, AppDemoWrapper],
     template: ` <app-docsectiontext>
             <p>
                 Row expansion allows displaying detailed content for a particular row. To use this feature, define a <i>dataKey</i>, add a template named <i>expandedrow</i> and use the <i>pRowToggler</i> directive on an element as the target to
                 toggle an expansion. This enables providing your custom UI such as buttons, links and so on. Example below uses an anchor with an icon as a toggler. Setting <i>pRowTogglerDisabled</i> as true disables the toggle event for the element.
             </p>
         </app-docsectiontext>
-        <p-deferred-demo (load)="loadDemoData()">
-            <div class="card">
-                <p-toast />
+        <p-toast />
+        <app-demo-wrapper>
+            <p-deferred-demo (load)="loadDemoData()">
                 <p-table [value]="products" dataKey="id" [tableStyle]="{ 'min-width': '60rem' }" [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)">
                     <ng-template #caption>
                         <div class="flex flex-wrap justify-end gap-2">
@@ -75,31 +76,31 @@ import { ToastModule } from 'primeng/toast';
                                                 <th pSortableColumn="id">
                                                     <div class="flex items-center gap-2">
                                                         Id
-                                                        <p-sortIcon field="price" />
+                                                        <p-sort-icon field="price" />
                                                     </div>
                                                 </th>
                                                 <th pSortableColumn="customer">
                                                     <div class="flex items-center gap-2">
                                                         Customer
-                                                        <p-sortIcon field="customer" />
+                                                        <p-sort-icon field="customer" />
                                                     </div>
                                                 </th>
                                                 <th pSortableColumn="date">
                                                     <div class="flex items-center gap-2">
                                                         Date
-                                                        <p-sortIcon field="date" />
+                                                        <p-sort-icon field="date" />
                                                     </div>
                                                 </th>
                                                 <th pSortableColumn="amount">
                                                     <div class="flex items-center gap-2">
                                                         Amount
-                                                        <p-sortIcon field="amount" />
+                                                        <p-sort-icon field="amount" />
                                                     </div>
                                                 </th>
                                                 <th pSortableColumn="status">
                                                     <div class="flex items-center gap-2">
                                                         Status
-                                                        <p-sortIcon field="status" />
+                                                        <p-sort-icon field="status" />
                                                     </div>
                                                 </th>
                                                 <th style="width: 4rem"></th>
@@ -130,9 +131,9 @@ import { ToastModule } from 'primeng/toast';
                         </tr>
                     </ng-template>
                 </p-table>
-            </div>
-        </p-deferred-demo>
-        <app-code [extFiles]="['Product']"></app-code>`,
+            </p-deferred-demo>
+            <app-code [extFiles]="['Product']"></app-code>
+        </app-demo-wrapper>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MessageService]
 })

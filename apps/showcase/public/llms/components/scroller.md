@@ -50,10 +50,10 @@ Scroller is a performance-approach to handle huge data efficiently.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<VirtualScrollerPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, VirtualScrollerPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | id | string | - | Unique identifier of the element. |
 | style | any | - | Inline style of the component. |
 | styleClass | string | - | Style class of the element. |
@@ -74,7 +74,7 @@ Scroller is a performance-approach to handle huge data efficiently.
 | columns | any[] | - | Columns to display. |
 | showSpacer | boolean | - | Used to implement a custom spacer instead of using the spacer feature in the scroller. |
 | showLoader | boolean | - | Defines whether to show loader. |
-| numToleratedItems | number | - | Determines how many additional elements to add to the DOM outside of the view. According to the scrolls made up and down, extra items are added in a certain algorithm in the form of multiples of this number. Default value is half the number of items shown in the view. |
+| numToleratedItems | any | - | Determines how many additional elements to add to the DOM outside of the view. According to the scrolls made up and down, extra items are added in a certain algorithm in the form of multiples of this number. Default value is half the number of items shown in the view. |
 | loading | boolean | - | Defines whether the data is loaded. |
 | autoSize | boolean | - | Defines whether to dynamically change the height or width of scrollable container. |
 | trackBy | Function | - | Function to optimize the dom operations by delegating to ngForTrackBy, default algoritm checks for object identity. |

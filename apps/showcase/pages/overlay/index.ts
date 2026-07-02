@@ -6,13 +6,12 @@ import { BaseZIndexDoc } from '@/doc/overlay/basezindex-doc';
 import { OverlayBasicDemo } from '@/doc/overlay/basic-doc';
 import { EventsDoc } from '@/doc/overlay/events-doc';
 import { HideOnEscapeDoc } from '@/doc/overlay/hideonescape-doc';
-import { ImportDoc } from '@/doc/overlay/import-doc';
 import { ModeDoc } from '@/doc/overlay/mode-doc';
 import { PTComponent } from '@/doc/overlay/pt/PTComponent';
 import { ResponsiveDoc } from '@/doc/overlay/responsive-doc';
 import { TargetDoc } from '@/doc/overlay/target-doc';
 import { OverlayTemplateDemo } from '@/doc/overlay/template-doc';
-import { TransitionOptionsDoc } from '@/doc/overlay/transitionoptions-doc';
+import { UsageDoc } from '@/doc/overlay/usage-doc';
 import { Component } from '@angular/core';
 
 @Component({
@@ -24,27 +23,35 @@ import { Component } from '@angular/core';
         [apiDocs]="['Overlay', 'OverlayOptions']"
         [ptDocs]="ptComponent"
         themeDocs="overlay"
+        [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })
 export class OverlayDemo {
     ptComponent = PTComponent;
+    heroDoc = OverlayBasicDemo;
     docs = [
         {
-            id: 'import',
-            label: 'Import',
-            component: ImportDoc
+            id: 'usage',
+            label: 'Usage',
+            component: UsageDoc
         },
         {
-            id: 'basic',
-            label: 'Basic',
-            component: OverlayBasicDemo
-        },
-        {
-            id: 'template',
-            label: 'Template',
-            component: OverlayTemplateDemo
+            id: 'examples',
+            label: 'Examples',
+            children: [
+                {
+                    id: 'basic',
+                    label: 'Basic',
+                    component: OverlayBasicDemo
+                },
+                {
+                    id: 'template',
+                    label: 'Template',
+                    component: OverlayTemplateDemo
+                }
+            ]
         },
         {
             id: 'options',
@@ -84,11 +91,6 @@ export class OverlayDemo {
                     id: 'hide-on-escape',
                     label: 'HideOnEscape',
                     component: HideOnEscapeDoc
-                },
-                {
-                    id: 'transition-options',
-                    label: 'ShowTransitionOptions and HideTransitionOptions',
-                    component: TransitionOptionsDoc
                 },
                 {
                     id: 'events',

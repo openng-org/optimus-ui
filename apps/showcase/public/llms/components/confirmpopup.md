@@ -8,29 +8,25 @@ Screen Reader ConfirmPopup component uses alertdialog role and since any attribu
 
 ## Basic
 
-ConfirmPopup is defined using p-confirmPopup tag and an instance of ConfirmationService is required to display it bycalling confirm method.
+ConfirmPopup is defined using p-confirmpopup tag and an instance of ConfirmationService is required to display it bycalling confirm method.
 
 ```typescript
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ToastModule } from 'primeng/toast';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center gap-2">
-            <p-toast />
-            <p-confirmpopup />
+        <div class="flex justify-center gap-2">
             <p-button (onClick)="confirm1($event)" label="Save" [outlined]="true" />
             <p-button (onClick)="confirm2($event)" label="Delete" severity="danger" [outlined]="true" />
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, ConfirmPopupModule, ToastModule],
+    imports: [ButtonModule],
     providers: [ConfirmationService, MessageService]
 })
-export class ConfirmpopupBasicDemo {
+export class ConfirmPopupBasicDemo {
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
 
@@ -168,7 +164,7 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: []
 })
-export class ConfirmpopupConfirmationapiDemo {}
+export class ConfirmPopupConfirmationApiDemo {}
 ```
 
 ## Headless
@@ -178,33 +174,19 @@ Headless mode allows you to customize the entire user interface instead of the d
 ```typescript
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ToastModule } from 'primeng/toast';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
-            <p-confirmpopup #cp>
-                <ng-template #headless let-message>
-                    <div class="rounded p-4">
-                        <span>{{ message.message }}</span>
-                        <div class="flex items-center gap-2 mt-4">
-                            <p-button (onClick)="cp.onAccept()" label="Save" size="small" [autofocus]="true" />
-                            <p-button (onClick)="cp.onReject()" label="Cancel" [text]="true" size="small" severity="secondary" />
-                        </div>
-                    </div>
-                </ng-template>
-            </p-confirmpopup>
+        <div class="flex justify-center">
             <p-button (onClick)="confirm($event)" label="Save" />
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, ConfirmPopupModule, ToastModule],
+    imports: [ButtonModule],
     providers: [ConfirmationService, MessageService]
 })
-export class ConfirmpopupHeadlessDemo {
+export class ConfirmPopupHeadlessDemo {
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
 }
@@ -233,18 +215,6 @@ import { Component } from '@angular/core';
                         <td>string</td>
                         <td>null</td>
                         <td>Optional key to match the key of confirm object, necessary to use when component tree has multiple confirm dialogs.</td>
-                    </tr>
-                    <tr>
-                        <td>showTransitionOptions</td>
-                        <td>string</td>
-                        <td>.12s cubic-bezier(0, 0, 0.2, 1)</td>
-                        <td>Transition options of the show animation.</td>
-                    </tr>
-                    <tr>
-                        <td>hideTransitionOptions</td>
-                        <td>string</td>
-                        <td>.1s linear</td>
-                        <td>Transition options of the hide animation.</td>
                     </tr>
                     <tr>
                         <td>autoZIndex</td>
@@ -277,7 +247,7 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: []
 })
-export class ConfirmpopupPropsDemo {}
+export class ConfirmPopupPropsDemo {}
 ```
 
 ## Template
@@ -287,30 +257,19 @@ Content section can be customized using content template.
 ```typescript
 import { Component, inject } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { ConfirmPopupModule } from 'primeng/confirmpopup';
-import { ToastModule } from 'primeng/toast';
 import { MessageService, ConfirmationService } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-toast />
-            <p-confirmpopup>
-                <ng-template #content let-message>
-                    <div class="flex flex-col items-center w-full gap-4 border-b border-surface-200 dark:border-surface-700 p-4 mb-4 pb-0">
-                        <i [class]="message.icon" class="!text-6xl text-primary-500"></i>
-                        <p>{{ message.message }}</p>
-                    </div>
-                </ng-template>
-            </p-confirmpopup>
+        <div class="flex justify-center">
             <p-button (click)="confirm($event)" label="Save" />
         </div>
     `,
     standalone: true,
-    imports: [ButtonModule, ConfirmPopupModule, ToastModule],
+    imports: [ButtonModule],
     providers: [ConfirmationService, MessageService]
 })
-export class ConfirmpopupTemplateDemo {
+export class ConfirmPopupTemplateDemo {
     private confirmationService = inject(ConfirmationService);
     private messageService = inject(MessageService);
 }
@@ -347,7 +306,7 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: []
 })
-export class ConfirmpopupTemplatesDemo {}
+export class ConfirmPopupTemplatesDemo {}
 ```
 
 ## Confirm Popup
@@ -358,21 +317,19 @@ ConfirmPopup displays a confirmation overlay displayed relatively to its target.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<ConfirmPopupPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, ConfirmPopupPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 | key | string | - | Optional key to match the key of confirm object, necessary to use when component tree has multiple confirm dialogs. |
-| defaultFocus | string | accept | Element to receive the focus when the popup gets visible, valid values are "accept", "reject", and "none". |
-| showTransitionOptions | string | .12s cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation. **(Deprecated)** |
-| hideTransitionOptions | string | .1s linear | Transition options of the hide animation. **(Deprecated)** |
-| autoZIndex | boolean | true | Whether to automatically manage layering. |
-| baseZIndex | number | 0 | Base zIndex value to use in layering. |
-| style | { [klass: string]: any } | - | Inline style of the component. |
+| defaultFocus | "accept" \| "reject" \| "none" | - | Element to receive the focus when the popup gets visible, valid values are "accept", "reject", and "none". |
+| autoZIndex | boolean | - | Whether to automatically manage layering. |
+| baseZIndex | number | - | Base zIndex value to use in layering. |
+| style | Partial<CSSStyleDeclaration> | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
-| visible | InputSignal<boolean> | ... | Defines if the component is visible. |
-| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
-| appendTo | InputSignal<any> | 'body' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| visible | boolean | - | Defines if the component is visible. |
+| motionOptions | MotionOptions | - | The motion options. |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'body' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 
 ### Templates
 
@@ -426,6 +383,9 @@ ConfirmPopup displays a confirmation overlay displayed relatively to its target.
 | confirmpopup.content.gap | --p-confirmpopup-content-gap | Gap of content |
 | confirmpopup.icon.size | --p-confirmpopup-icon-size | Size of icon |
 | confirmpopup.icon.color | --p-confirmpopup-icon-color | Color of icon |
+| confirmpopup.message.color | --p-confirmpopup-message-color | Color of message |
+| confirmpopup.message.font.weight | --p-confirmpopup-message-font-weight | Font weight of message |
+| confirmpopup.message.font.size | --p-confirmpopup-message-font-size | Font size of message |
 | confirmpopup.footer.gap | --p-confirmpopup-footer-gap | Gap of footer |
 | confirmpopup.footer.padding | --p-confirmpopup-footer-padding | Padding of footer |
 

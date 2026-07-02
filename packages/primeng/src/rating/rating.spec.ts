@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -81,10 +81,10 @@ class TestReactiveRatingComponent {
     imports: [Rating, FormsModule],
     template: `
         <p-rating [(ngModel)]="value">
-            <ng-template pTemplate="onicon">
+            <ng-template #onicon>
                 <span class="custom-on-icon">★</span>
             </ng-template>
-            <ng-template pTemplate="officon">
+            <ng-template #officon>
                 <span class="custom-off-icon">☆</span>
             </ng-template>
         </p-rating>
@@ -115,25 +115,25 @@ class TestAdvancedRatingComponent {
     }
 }
 
-// Rating pTemplate component
+// Rating #onicon/#officon component
 @Component({
     standalone: true,
-    imports: [Rating, FormsModule, CommonModule, SharedModule],
+    imports: [Rating, FormsModule, NgClass, SharedModule],
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
-            <!-- On icon template with pTemplate directive -->
-            <ng-template pTemplate="onicon" let-value let-class="class">
+            <!-- On icon template with #template reference -->
+            <ng-template #onicon let-value let-class="class">
                 <i class="pi pi-star-fill custom-on-icon" [attr.data-testid]="'ptemplate-onicon-' + value" [ngClass]="class" [title]="'Star ' + value + ' filled'"></i>
             </ng-template>
 
-            <!-- Off icon template with pTemplate directive -->
-            <ng-template pTemplate="officon" let-value let-class="class">
+            <!-- Off icon template with #template reference -->
+            <ng-template #officon let-value let-class="class">
                 <i class="pi pi-star custom-off-icon" [attr.data-testid]="'ptemplate-officon-' + value" [ngClass]="class" [title]="'Star ' + value + ' empty'"></i>
             </ng-template>
         </p-rating>
     `
 })
-class TestRatingPTemplateComponent {
+class TestRatingTemplateComponent {
     value: number = 3;
     stars: number = 5;
 }
@@ -141,7 +141,7 @@ class TestRatingPTemplateComponent {
 // Rating #template reference component
 @Component({
     standalone: true,
-    imports: [Rating, FormsModule, CommonModule, SharedModule],
+    imports: [Rating, FormsModule, NgClass, SharedModule],
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
             <!-- On icon template with #template reference -->
@@ -187,10 +187,10 @@ describe('Rating', () => {
         });
 
         it('should initialize with default properties', () => {
-            expect(ratingInstance.stars).toBe(5 as any);
-            expect(ratingInstance.readonly).toBeFalsy();
-            expect(ratingInstance.value).toBeNull();
-            expect(ratingInstance.autofocus).toBeFalsy();
+            expect(ratingInstance.stars()).toBe(5 as any);
+            expect(ratingInstance.readonly()).toBeFalsy();
+            expect(ratingInstance.value()).toBeNull();
+            expect(ratingInstance.autofocus()).toBeFalsy();
         });
 
         it('should create stars array', () => {
@@ -250,7 +250,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             expect(component.value).toBe(3 as any);
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
         });
 
         it('should emit onRate event', async () => {
@@ -309,7 +309,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Check that the Rating component has the correct value
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
 
             // Check that we have the correct number of total icons (on + off = 5)
             const allSvgs = fixture.debugElement.queryAll(By.css('svg'));
@@ -348,7 +348,7 @@ describe('Rating', () => {
         });
 
         it('should support custom number of stars', () => {
-            expect(ratingInstance.stars).toBe(10);
+            expect(ratingInstance.stars()).toBe(10);
             expect(ratingInstance.starsArray?.length).toBe(10);
 
             // Find divs that are direct children of ng-template and contain input elements
@@ -510,7 +510,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             expect(component.ratingForm.get('rating')?.value).toBeNull();
-            expect(ratingInstance.value).toBeNull();
+            expect(ratingInstance.value()).toBeNull();
         });
     });
 
@@ -692,7 +692,7 @@ describe('Rating', () => {
 
             const inputs = fixture.debugElement.queryAll(By.css('input[type="radio"]'));
             // Check that the pAutoFocus directive is applied - look for the attribute it adds
-            expect(ratingInstance.autofocus).toBe(true);
+            expect(ratingInstance.autofocus()).toBe(true);
         });
     });
 
@@ -719,7 +719,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBeNull();
+            expect(ratingInstance.value()).toBeNull();
 
             const onIcons = fixture.debugElement.queryAll(By.css('[data-pc-section="onIcon"]'));
             expect(onIcons.length).toBe(0 as any);
@@ -731,7 +731,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(10);
+            expect(ratingInstance.value()).toBe(10);
 
             // Should show all icons
             const allIcons = fixture.debugElement.queryAll(By.css('svg'));
@@ -744,7 +744,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(-1);
+            expect(ratingInstance.value()).toBe(-1);
 
             const onIcons = fixture.debugElement.queryAll(By.css('[data-pc-section="onIcon"]'));
             expect(onIcons.length).toBe(0 as any);
@@ -857,33 +857,33 @@ describe('Rating', () => {
         });
     });
 
-    describe('pTemplate Tests', () => {
-        let component: TestRatingPTemplateComponent;
-        let fixture: ComponentFixture<TestRatingPTemplateComponent>;
+    describe('Template Reference Tests', () => {
+        let component: TestRatingTemplateComponent;
+        let fixture: ComponentFixture<TestRatingTemplateComponent>;
         let ratingElement: DebugElement;
         let ratingInstance: Rating;
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [TestRatingPTemplateComponent],
+                imports: [TestRatingTemplateComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
-            fixture = TestBed.createComponent(TestRatingPTemplateComponent);
+            fixture = TestBed.createComponent(TestRatingTemplateComponent);
             component = fixture.componentInstance;
             ratingElement = fixture.debugElement.query(By.css('p-rating'));
             ratingInstance = ratingElement.componentInstance;
             fixture.detectChanges();
         });
 
-        it('should have onicon pTemplate', () => {
+        it('should have onicon #template', () => {
             expect(ratingInstance).toBeTruthy();
-            expect(() => ratingInstance.onIconTemplate).not.toThrow();
+            expect(() => ratingInstance.onIconTemplate()).not.toThrow();
         });
 
-        it('should have officon pTemplate', () => {
+        it('should have officon #template', () => {
             expect(ratingInstance).toBeTruthy();
-            expect(() => ratingInstance.offIconTemplate).not.toThrow();
+            expect(() => ratingInstance.offIconTemplate()).not.toThrow();
         });
 
         it('should pass context parameters to onicon template', async () => {
@@ -894,7 +894,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -906,7 +906,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(2 as any);
+            expect(ratingInstance.value()).toBe(2 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -917,7 +917,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
 
             // Change to 1 star filled
             component.value = 1;
@@ -925,112 +925,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(1 as any);
-        });
-
-        it('should process pTemplates after content init', async () => {
-            if (ratingInstance.ngAfterContentInit) {
-                ratingInstance.ngAfterContentInit();
-            }
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await fixture.whenStable();
-            fixture.detectChanges();
-
-            expect(ratingInstance).toBeTruthy();
-        });
-
-        it('should handle pTemplate changes after view init', async () => {
-            if (ratingInstance.ngAfterViewInit) {
-                ratingInstance.ngAfterViewInit();
-            }
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await fixture.whenStable();
-            fixture.detectChanges();
-
-            expect(ratingInstance).toBeTruthy();
-        });
-
-        it('should apply class context to templates', async () => {
-            component.value = 3;
-            fixture.changeDetectorRef.markForCheck();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            // Verify that the rating component works correctly
-            expect(ratingInstance.value).toBe(3 as any);
-            expect(ratingInstance.stars).toBe(5 as any);
-        });
-    });
-
-    describe('#template Tests', () => {
-        let component: TestRatingRefTemplateComponent;
-        let fixture: ComponentFixture<TestRatingRefTemplateComponent>;
-        let ratingElement: DebugElement;
-        let ratingInstance: Rating;
-
-        beforeEach(async () => {
-            await TestBed.configureTestingModule({
-                imports: [TestRatingRefTemplateComponent],
-                providers: [provideZonelessChangeDetection()]
-            }).compileComponents();
-
-            fixture = TestBed.createComponent(TestRatingRefTemplateComponent);
-            component = fixture.componentInstance;
-            ratingElement = fixture.debugElement.query(By.css('p-rating'));
-            ratingInstance = ratingElement.componentInstance;
-            fixture.detectChanges();
-        });
-
-        it('should have onicon #template', () => {
-            expect(ratingInstance).toBeTruthy();
-            expect(() => ratingInstance.onIconTemplate).not.toThrow();
-        });
-
-        it('should have officon #template', () => {
-            expect(ratingInstance).toBeTruthy();
-            expect(() => ratingInstance.offIconTemplate).not.toThrow();
-        });
-
-        it('should pass context parameters to onicon template', async () => {
-            // Set value to 3 - first 3 hearts should be filled
-            component.value = 3;
-            fixture.changeDetectorRef.markForCheck();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(3 as any);
-            expect(component.stars).toBe(5 as any);
-        });
-
-        it('should pass context parameters to officon template', async () => {
-            // Set value to 2 - last 3 hearts should be empty
-            component.value = 2;
-            fixture.changeDetectorRef.markForCheck();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(2 as any);
-            expect(component.stars).toBe(5 as any);
-        });
-
-        it('should update templates when value changes', async () => {
-            // Initially 3 hearts filled
-            component.value = 3;
-            fixture.changeDetectorRef.markForCheck();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            expect(ratingInstance.value).toBe(3 as any);
-
-            // Change to 1 heart filled
-            component.value = 1;
-            fixture.changeDetectorRef.markForCheck();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            expect(ratingInstance.value).toBe(1 as any);
+            expect(ratingInstance.value()).toBe(1 as any);
         });
 
         it('should process #templates after content init', async () => {
@@ -1062,8 +957,113 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component works correctly
-            expect(ratingInstance.value).toBe(3 as any);
-            expect(ratingInstance.stars).toBe(5 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
+            expect(ratingInstance.stars()).toBe(5 as any);
+        });
+    });
+
+    describe('#template Tests', () => {
+        let component: TestRatingRefTemplateComponent;
+        let fixture: ComponentFixture<TestRatingRefTemplateComponent>;
+        let ratingElement: DebugElement;
+        let ratingInstance: Rating;
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [TestRatingRefTemplateComponent],
+                providers: [provideZonelessChangeDetection()]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestRatingRefTemplateComponent);
+            component = fixture.componentInstance;
+            ratingElement = fixture.debugElement.query(By.css('p-rating'));
+            ratingInstance = ratingElement.componentInstance;
+            fixture.detectChanges();
+        });
+
+        it('should have onicon #template', () => {
+            expect(ratingInstance).toBeTruthy();
+            expect(() => ratingInstance.onIconTemplate()).not.toThrow();
+        });
+
+        it('should have officon #template', () => {
+            expect(ratingInstance).toBeTruthy();
+            expect(() => ratingInstance.offIconTemplate()).not.toThrow();
+        });
+
+        it('should pass context parameters to onicon template', async () => {
+            // Set value to 3 - first 3 hearts should be filled
+            component.value = 3;
+            fixture.changeDetectorRef.markForCheck();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            // Verify that the rating component is working with the value
+            expect(ratingInstance.value()).toBe(3 as any);
+            expect(component.stars).toBe(5 as any);
+        });
+
+        it('should pass context parameters to officon template', async () => {
+            // Set value to 2 - last 3 hearts should be empty
+            component.value = 2;
+            fixture.changeDetectorRef.markForCheck();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            // Verify that the rating component is working with the value
+            expect(ratingInstance.value()).toBe(2 as any);
+            expect(component.stars).toBe(5 as any);
+        });
+
+        it('should update templates when value changes', async () => {
+            // Initially 3 hearts filled
+            component.value = 3;
+            fixture.changeDetectorRef.markForCheck();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(ratingInstance.value()).toBe(3 as any);
+
+            // Change to 1 heart filled
+            component.value = 1;
+            fixture.changeDetectorRef.markForCheck();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(ratingInstance.value()).toBe(1 as any);
+        });
+
+        it('should process #templates after content init', async () => {
+            if (ratingInstance.ngAfterContentInit) {
+                ratingInstance.ngAfterContentInit();
+            }
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(ratingInstance).toBeTruthy();
+        });
+
+        it('should handle #template changes after view init', async () => {
+            if (ratingInstance.ngAfterViewInit) {
+                ratingInstance.ngAfterViewInit();
+            }
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(ratingInstance).toBeTruthy();
+        });
+
+        it('should apply class context to templates', async () => {
+            component.value = 3;
+            fixture.changeDetectorRef.markForCheck();
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            // Verify that the rating component works correctly
+            expect(ratingInstance.value()).toBe(3 as any);
+            expect(ratingInstance.stars()).toBe(5 as any);
         });
     });
 
@@ -1200,13 +1200,13 @@ describe('Rating', () => {
                 pt = {
                     host: ({ instance }: any) => {
                         return {
-                            class: instance?.value > 2 ? 'HIGH_RATING_CLASS' : 'LOW_RATING_CLASS'
+                            class: instance?.value() > 2 ? 'HIGH_RATING_CLASS' : 'LOW_RATING_CLASS'
                         };
                     },
                     option: ({ instance }: any) => {
                         return {
                             style: {
-                                opacity: instance?.value > 2 ? '1' : '0.5'
+                                opacity: instance?.value() > 2 ? '1' : '0.5'
                             }
                         };
                     }

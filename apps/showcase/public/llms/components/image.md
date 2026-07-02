@@ -63,7 +63,7 @@ import { ImageModule } from 'primeng/image';
     standalone: true,
     imports: [ImageModule]
 })
-export class ImagePreviewimagesourceDemo {}
+export class ImagePreviewImageSourceDemo {}
 ```
 
 ## Template
@@ -108,25 +108,24 @@ Displays an image with preview and tranformation options. For multiple image, se
 | unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
 | pt | InputSignal<ImagePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| imageClass | string | - | Style class of the image element. |
-| imageStyle | { [klass: string]: any } | - | Inline style of the image element. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
-| src | string \| SafeUrl | - | The source path for the main image. |
-| srcSet | string \| SafeUrl | - | The srcset definition for the main image. |
-| sizes | string | - | The sizes definition for the main image. |
-| previewImageSrc | string \| SafeUrl | - | The source path for the preview image. |
-| previewImageSrcSet | string \| SafeUrl | - | The srcset definition for the preview image. |
-| previewImageSizes | string | - | The sizes definition for the preview image. |
-| alt | string | - | Attribute of the preview image element. |
-| width | string | - | Attribute of the image element. |
-| height | string | - | Attribute of the image element. |
-| loading | "eager" \| "lazy" | - | Attribute of the image element. |
-| preview | boolean | false | Controls the preview functionality. |
+| imageClass | InputSignal<string> | ... | Style class of the image element. |
+| imageStyle | InputSignal<Partial<CSSStyleDeclaration>> | ... | Inline style of the image element. |
+| src | InputSignal<string \| SafeUrl> | ... | The source path for the main image. |
+| srcSet | InputSignal<string \| SafeUrl> | ... | The srcset definition for the main image. |
+| sizes | InputSignal<string> | ... | The sizes definition for the main image. |
+| previewImageSrc | InputSignal<string \| SafeUrl> | ... | The source path for the preview image. |
+| previewImageSrcSet | InputSignal<string \| SafeUrl> | ... | The srcset definition for the preview image. |
+| previewImageSizes | InputSignal<string> | ... | The sizes definition for the preview image. |
+| alt | InputSignal<string> | ... | Attribute of the preview image element. |
+| width | InputSignal<string> | ... | Attribute of the image element. |
+| height | InputSignal<string> | ... | Attribute of the image element. |
+| loading | InputSignal<ImageLoading> | ... | Attribute of the image element. |
+| preview | InputSignalWithTransform<boolean, unknown> | ... | Controls the preview functionality. |
 | showTransitionOptions | string | 150ms cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation **(Deprecated)** |
 | hideTransitionOptions | string | 150ms cubic-bezier(0, 0, 0.2, 1) | Transition options of the hide animation **(Deprecated)** |
 | modalEnterAnimation | InputSignal<string> | 'p-modal-enter' | Enter animation class name of modal. |
 | modalLeaveAnimation | InputSignal<string> | 'p-modal-leave' | Leave animation class name of modal. |
-| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| appendTo | HTMLElement \| ElementRef \| TemplateRef<any> \| "self" \| "body" \| null \| undefined | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 | maskMotionOptions | InputSignal<MotionOptions> | ... | The motion options for the mask. |
 | motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
 
@@ -168,6 +167,7 @@ Displays an image with preview and tranformation options. For multiple image, se
 | closeButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the close button's DOM element. |
 | original | PassThroughOption<HTMLImageElement, I> | Used to pass attributes to the original/preview image's DOM element. |
 | motion | MotionOptions | Used to pass options to the motion component/directive. |
+| maskMotion | MotionOptions | Used to pass motion options for the mask animation. |
 
 ## Theming
 

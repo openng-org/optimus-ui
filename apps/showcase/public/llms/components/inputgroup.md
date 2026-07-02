@@ -25,7 +25,7 @@ interface City {
 
 @Component({
     template: `
-        <div class="card grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <p-inputgroup>
                 <p-inputgroup-addon>
                     <i class="pi pi-user"></i>
@@ -52,12 +52,18 @@ interface City {
     standalone: true,
     imports: [SelectModule, InputGroupModule, InputNumberModule, InputTextModule, FormsModule]
 })
-export class InputgroupBasicDemo {
+export class InputGroupBasicDemo {
     text1: string | undefined;
     text2: string | undefined;
     number: string | undefined;
     selectedCity: City | undefined;
-    cities: City[];
+    cities: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' },
+        { name: 'London', code: 'LDN' },
+        { name: 'Istanbul', code: 'IST' },
+        { name: 'Paris', code: 'PRS' }
+    ];
 }
 ```
 
@@ -75,7 +81,7 @@ import { MenuItem } from 'primeng/api';
 
 @Component({
     template: `
-        <div class="card flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col md:flex-row gap-4">
             <p-inputgroup>
                 <p-button label="Search" />
                 <input pInputText placeholder="Keyword" />
@@ -86,7 +92,7 @@ import { MenuItem } from 'primeng/api';
                     <p-button icon="pi pi-search" severity="secondary" variant="text" (click)="menu.toggle($event)" />
                 </p-inputgroup-addon>
             </p-inputgroup>
-            <p-menu #menu [model]="items" popup styleClass="!min-w-fit" />
+            <p-menu #menu [model]="items" popup styleClass="min-w-fit!" />
             <p-inputgroup>
                 <p-inputgroup-addon>
                     <p-button icon="pi pi-check" severity="secondary" />
@@ -101,7 +107,7 @@ import { MenuItem } from 'primeng/api';
     standalone: true,
     imports: [ButtonModule, InputGroupModule, MenuModule, InputTextModule]
 })
-export class InputgroupButtonDemo implements OnInit {
+export class InputGroupButtonDemo implements OnInit {
     items: MenuItem[] | undefined;
 
     ngOnInit() {
@@ -124,7 +130,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-col md:flex-row gap-4">
+        <div class="flex flex-col md:flex-row gap-4">
             <p-inputgroup>
                 <input type="text" pInputText placeholder="Price" />
                 <p-inputgroup-addon><p-radiobutton [(ngModel)]="radioValue1" name="rb1" value="rb1" /></p-inputgroup-addon>
@@ -143,7 +149,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [CheckboxModule, InputGroupModule, RadioButtonModule, InputTextModule, FormsModule]
 })
-export class InputgroupCheckboxDemo {
+export class InputGroupCheckboxDemo {
     radioValue1: boolean = false;
     checked1: boolean = false;
     checked2: boolean = false;
@@ -164,7 +170,7 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex flex-col md:items-end md:flex-row gap-4">
+        <div class="flex flex-col md:items-end md:flex-row gap-4">
             <p-inputgroup>
                 <p-inputgroup-addon>
                     <i class="pi pi-user"></i>
@@ -194,7 +200,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [FloatLabelModule, InputGroupModule, InputTextModule, FormsModule]
 })
-export class InputgroupFloatlabelDemo {
+export class InputGroupFloatLabelDemo {
     value1: string | undefined;
     value2: string | undefined;
     value3: string | undefined;
@@ -214,8 +220,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-inputgroup class="md:!w-80">
+        <div class="flex justify-center">
+            <p-inputgroup class="md:w-80!">
                 <p-inputgroup-addon>
                     <i class="pi pi-shopping-cart"></i>
                 </p-inputgroup-addon>
@@ -229,7 +235,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     standalone: true,
     imports: [IftaLabelModule, InputGroupModule, InputNumberModule, FormsModule]
 })
-export class InputgroupIftalabelDemo {
+export class InputGroupIftaLabelDemo {
     value: number = 10;
 }
 ```
@@ -245,8 +251,8 @@ import { InputTextModule } from 'primeng/inputtext';
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-inputgroup class="w-full md:!w-[30rem]">
+        <div class="flex justify-center">
+            <p-inputgroup class="w-full md:w-120!">
                 <p-inputgroup-addon>
                     <i class="pi pi-clock"></i>
                 </p-inputgroup-addon>
@@ -262,7 +268,7 @@ import { InputTextModule } from 'primeng/inputtext';
     standalone: true,
     imports: [InputGroupModule, InputTextModule]
 })
-export class InputgroupMultipleDemo {}
+export class InputGroupMultipleDemo {}
 ```
 
 ## Input Group
@@ -273,11 +279,10 @@ InputGroup displays text, icon, buttons and other content can be grouped next to
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<InputGroupPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| styleClass | string | - | Class of the element. **(Deprecated)** |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | PassThrough<I, InputGroupPassThroughOptions<I>> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ## Pass Through Options
 
@@ -304,4 +309,6 @@ InputGroup displays text, icon, buttons and other content can be grouped next to
 | inputgroup.addon.border.radius | --p-inputgroup-addon-border-radius | Border radius of addon |
 | inputgroup.addon.padding | --p-inputgroup-addon-padding | Padding of addon |
 | inputgroup.addon.min.width | --p-inputgroup-addon-min-width | Min width of addon |
+| inputgroup.addon.font.weight | --p-inputgroup-addon-font-weight | Font weight of addon |
+| inputgroup.addon.font.size | --p-inputgroup-addon-font-size | Font size of addon |
 

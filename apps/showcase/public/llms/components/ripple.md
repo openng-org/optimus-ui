@@ -16,8 +16,8 @@ import { RippleModule } from 'primeng/ripple';
 
 @Component({
     template: `
-        <div class="card flex flex-col gap-4 items-center">
-            <span
+        <div class="flex flex-col gap-4 items-center">
+            <span class="text-sm"
                 >Ripple option at the
                 <span class="mx-1 h-8 w-8 rounded-border inline-flex items-center justify-center bg-primary text-primary-contrast"><i class="pi pi-palette"></i></span>
                 configurator needs to be turned on for the demo.</span
@@ -45,8 +45,8 @@ import { RippleModule } from 'primeng/ripple';
 
 @Component({
     template: `
-        <div class="card flex flex-col items-center gap-4">
-            <span
+        <div class="flex flex-col items-center gap-4">
+            <span class="text-sm"
                 >Ripple option at the
                 <span class="mx-1 h-8 w-8 rounded-border inline-flex items-center justify-center bg-primary text-primary-contrast"><i class="pi pi-palette"></i></span>
                 configurator needs to be turned on for the demo.</span
@@ -68,10 +68,10 @@ Ripple directive adds ripple effect to the host element.
 
 | Name | Type | Default | Description |
 |------|------|---------|-------------|
-| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
-| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
-| pt | InputSignal<any> | undefined | Used to pass attributes to DOM elements inside the component. |
-| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| dt | Object | undefined | Defines scoped design tokens of the component. |
+| unstyled | boolean | undefined | Indicates whether the component should be rendered without styles. |
+| pt | any | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | PassThroughOptions | undefined | Used to configure passthrough(pt) options of the component. |
 
 ## Theming
 

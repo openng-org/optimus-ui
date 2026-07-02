@@ -1,7 +1,8 @@
 import { AppCode } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { PhotoService } from '@/service/photoservice';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { NgStyle, isPlatformBrowser } from '@angular/common';
 import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Galleria, GalleriaModule } from 'primeng/galleria';
@@ -9,12 +10,12 @@ import { Galleria, GalleriaModule } from 'primeng/galleria';
 @Component({
     selector: 'advanced-doc',
     standalone: true,
-    imports: [CommonModule, GalleriaModule, ButtonModule, AppCode, AppDocSectionText],
+    imports: [NgStyle, GalleriaModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>Galleria can be extended further to implement complex requirements.</p>
         </app-docsectiontext>
-        <div class="card">
+        <app-demo-wrapper>
             <p-galleria
                 #galleria
                 [(value)]="images"
@@ -39,37 +40,27 @@ import { Galleria, GalleriaModule } from 'primeng/galleria';
                 </ng-template>
                 <ng-template #footer let-item>
                     <div class="flex items-stretch gap-2 bg-surface-950 text-white h-10">
-                        <button
-                            type="button"
-                            pButton
-                            icon="pi pi-th-large"
-                            (click)="onThumbnailButtonClick()"
-                            class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3"
-                        ></button>
-                        <button
-                            type="button"
-                            pButton
-                            [icon]="slideButtonIcon()"
-                            (click)="toggleAutoSlide()"
-                            class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3"
-                        ></button>
-                        <span *ngIf="images()" class="flex items-center gap-4 ml-3">
-                            <span class="text-sm">{{ activeIndex + 1 }}/{{ images().length }}</span>
-                            <span class="font-bold text-sm">{{ images()[activeIndex].title }}</span>
-                            <span class="text-sm">{{ images()[activeIndex].alt }}</span>
-                        </span>
-                        <button
-                            type="button"
-                            pButton
-                            [icon]="fullScreenIcon()"
-                            (click)="toggleFullScreen()"
-                            class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3 ml-auto"
-                        ></button>
+                        <button type="button" pButton (click)="onThumbnailButtonClick()" class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3">
+                            <span pButtonIcon class="pi pi-th-large"></span>
+                        </button>
+                        <button type="button" pButton (click)="toggleAutoSlide()" class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3">
+                            <span pButtonIcon [class]="slideButtonIcon()"></span>
+                        </button>
+                        @if (images()) {
+                            <span class="flex items-center gap-4 ml-3">
+                                <span class="text-xs">{{ activeIndex + 1 }}/{{ images().length }}</span>
+                                <span class="font-bold text-xs">{{ images()[activeIndex].title }}</span>
+                                <span class="text-xs">{{ images()[activeIndex].alt }}</span>
+                            </span>
+                        }
+                        <button type="button" pButton (click)="toggleFullScreen()" class="bg-transparent border-none rounded-none hover:bg-white/10 text-white inline-flex justify-center items-center cursor-pointer px-3 ml-auto">
+                            <span pButtonIcon [class]="fullScreenIcon()"></span>
+                        </button>
                     </div>
                 </ng-template>
             </p-galleria>
-        </div>
-        <app-code></app-code>
+            <app-code></app-code>
+        </app-demo-wrapper>
     `
 })
 export class AdvancedDoc implements OnInit, OnDestroy {
