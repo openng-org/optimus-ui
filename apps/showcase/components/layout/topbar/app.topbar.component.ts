@@ -13,7 +13,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-topbar',
-    standalone: true,
     imports: [NgClass, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent],
     templateUrl: './app.topbar.component.html'
 })
