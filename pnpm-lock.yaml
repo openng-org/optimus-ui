@@ -80,8 +80,8 @@ catalogs:
       specifier: ^3.0.0-alpha.1
       version: 3.0.0-rc.1
     '@primeuix/themes':
-      specifier: ^3.0.0-alpha.1
-      version: 3.0.0-rc.1
+      specifier: 3.0.0-alpha.13
+      version: 3.0.0-alpha.13
     '@primeuix/utils':
       specifier: ^0.7.2
       version: 0.7.2
@@ -234,7 +234,7 @@ importers:
         version: 3.9.0(@algolia/client-search@4.27.0)(@types/react@18.3.31)(search-insights@2.17.3)
       '@primeuix/themes':
         specifier: 'catalog:'
-        version: 3.0.0-rc.1
+        version: 3.0.0-alpha.13
       '@stackblitz/sdk':
         specifier: 1.9.0
         version: 1.9.0
@@ -384,7 +384,7 @@ importers:
         version: 0.7.4
       '@primeuix/themes':
         specifier: 'catalog:'
-        version: 3.0.0-rc.1
+        version: 3.0.0-alpha.13
     publishDirectory: dist
 
 packages:
@@ -2686,8 +2686,8 @@ packages:
   '@primeuix/styles@3.0.0-rc.1':
     resolution: {integrity: sha512-hqQVXTY73exs4Y7xXSsvVAI88DINShSX/Z2Xvuq22uRpEf9z99bgXnMr9NszZ/dT1TypN2kWg4GnEycDu7Rz8Q==}
 
-  '@primeuix/themes@3.0.0-rc.1':
-    resolution: {integrity: sha512-4/XKn2w/sLbsji2WFPdSDhAB17jLer/G+fvvl+Ruag5tp0xBFc78kOhPSDvpHEJwOfypP06yuwK+1VSa4eG2YQ==}
+  '@primeuix/themes@3.0.0-alpha.13':
+    resolution: {integrity: sha512-H0fYNjNyJhH9oApanWrFtnSUNzVEVrN/NTuKwTeTDOUOH00VivrEdy/tXfmrIdNztkZNfiqlgPscESx3ONE8XQ==}
 
   '@primeuix/utils@0.6.4':
     resolution: {integrity: sha512-pZ5f+vj7wSzRhC7KoEQRU5fvYAe+RP9+m39CTscZ3UywCD1Y2o6Fe1rRgklMPSkzUcty2jzkA0zMYkiJBD1hgg==}
@@ -10163,9 +10163,9 @@ snapshots:
     dependencies:
       '@primeuix/styled': 1.0.0-rc.1
 
-  '@primeuix/themes@3.0.0-rc.1':
+  '@primeuix/themes@3.0.0-alpha.13':
     dependencies:
-      '@primeuix/styled': 1.0.0-rc.1
+      '@primeuix/styled': 0.7.4
 
   '@primeuix/utils@0.6.4': {}
 
