@@ -33,12 +33,6 @@ export class AppTopBarComponent {
     private readonly configService = inject(AppConfigService);
     private readonly window = this.document.defaultView;
 
-    constructor() {
-        afterNextRender(() => {
-            this.initDocSearch();
-        });
-    }
-
     readonly isSticky = toSignal(
         fromEventPattern(
             (handler) => this.renderer.listen(this.window, 'scroll', handler),
@@ -52,6 +46,12 @@ export class AppTopBarComponent {
     readonly isDarkMode = computed(() => this.configService.appState().darkTheme);
     readonly isMenuActive = computed(() => this.configService.appState().menuActive);
     readonly isDesignerActive = computed(() => this.configService.designerActive());
+
+    constructor() {
+        afterNextRender(() => {
+            this.initDocSearch();
+        });
+    }
 
     toggleMenu() {
         if (this.isMenuActive()) {
