@@ -2,7 +2,7 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { NgClass, DOCUMENT } from '@angular/common';
-import { afterNextRender, booleanAttribute, Component, computed, ElementRef, inject, input, OnDestroy, Renderer2 } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, DestroyRef, ElementRef, inject, input, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
@@ -172,7 +172,7 @@ import { StyleClass } from 'primeng/styleclass';
         </div>
     </div>`
 })
-export class AppTopBarComponent implements OnDestroy {
+export class AppTopBarComponent {
     readonly showConfigurator = input(true, { transform: booleanAttribute });
 
     readonly showMenuButton = input(true, { transform: booleanAttribute });
@@ -199,6 +199,8 @@ export class AppTopBarComponent implements OnDestroy {
     private readonly window = this.document.defaultView;
 
     constructor() {
+        inject(DestroyRef).onDestroy(() => this.unbindScrollListener());
+
         afterNextRender(() => {
             this.bindScrollListener();
             this.initDocSearch();
@@ -259,9 +261,5 @@ export class AppTopBarComponent implements OnDestroy {
             this.scrollListener();
             this.scrollListener = null;
         }
-    }
-
-    ngOnDestroy() {
-        this.unbindScrollListener();
     }
 }
