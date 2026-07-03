@@ -17,6 +17,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
     templateUrl: './app.topbar.component.html'
 })
 export class AppTopBarComponent {
+    private readonly document = inject(DOCUMENT);
+    private readonly renderer = inject(Renderer2);
+    private readonly configService = inject(AppConfigService);
+    private readonly window = this.document.defaultView;
+
     readonly showConfigurator = input(true, { transform: booleanAttribute });
     readonly showMenuButton = input(true, { transform: booleanAttribute });
 
@@ -27,11 +32,6 @@ export class AppTopBarComponent {
         { href: 'https://discord.gg/gzKFYnpmCY', icon: 'pi-discord' },
         { href: 'https://github.com/openng-foundation/open-prime/discussions', icon: 'pi-comments' }
     ];
-
-    private readonly document = inject(DOCUMENT);
-    private readonly renderer = inject(Renderer2);
-    private readonly configService = inject(AppConfigService);
-    private readonly window = this.document.defaultView;
 
     readonly isSticky = toSignal(
         fromEventPattern(
