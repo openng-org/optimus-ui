@@ -96,21 +96,13 @@ import { StyleClass } from 'primeng/styleclass';
                 <li>
                     <div id="docsearch"></div>
                 </li>
-                <li>
-                    <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="topbar-item">
-                        <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://discord.gg/gzKFYnpmCY" target="_blank" rel="noopener noreferrer" class="topbar-item">
-                        <i class="pi pi-discord text-surface-700 dark:text-surface-100"></i>
-                    </a>
-                </li>
-                <li>
-                    <a href="https://github.com/orgs/primefaces/discussions" target="_blank" rel="noopener noreferrer" class="topbar-item">
-                        <i class="pi pi-comments text-surface-700 dark:text-surface-100"></i>
-                    </a>
-                </li>
+                @for (link of socialLinks; track link.href) {
+                    <li>
+                        <a [href]="link.href" target="_blank" rel="noopener noreferrer" class="topbar-item">
+                            <i class="pi text-surface-700 dark:text-surface-100" [ngClass]="link.icon"></i>
+                        </a>
+                    </li>
+                }
                 <li>
                     <button type="button" class="topbar-item" (click)="toggleDarkMode()">
                         <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
@@ -186,6 +178,13 @@ export class AppTopBarComponent implements OnDestroy {
     @Input({ transform: booleanAttribute }) showMenuButton = true;
 
     versions: any[] = Versions;
+
+    socialLinks = [
+        { href: 'https://github.com/openng-foundation/open-prime', icon: 'pi-github' },
+        // TODO: Invite to angular discord open-prime channel
+        { href: 'https://discord.gg/gzKFYnpmCY', icon: 'pi-discord' },
+        { href: 'https://github.com/openng-foundation/open-prime/discussions', icon: 'pi-comments' }
+    ];
 
     scrollListener: VoidFunction | null;
 
