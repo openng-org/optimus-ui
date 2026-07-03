@@ -233,7 +233,7 @@ export class AppTopBarComponent implements OnDestroy {
         this.configService.appState.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
     }
 
-    initDocSearch() {
+    private initDocSearch() {
         docsearch({
             appId: 'XG1L2MUWT9',
             apiKey: '0c7d92ce7c38649263123110162ac181',
@@ -242,7 +242,7 @@ export class AppTopBarComponent implements OnDestroy {
         });
     }
 
-    bindScrollListener() {
+    private bindScrollListener() {
         if (!this.scrollListener) {
             this.scrollListener = this.renderer.listen(this.window, 'scroll', () => {
                 if (this.window.scrollY > 0) {
@@ -254,7 +254,7 @@ export class AppTopBarComponent implements OnDestroy {
         }
     }
 
-    unbindScrollListener() {
+    private unbindScrollListener() {
         if (this.scrollListener) {
             this.scrollListener();
             this.scrollListener = null;
