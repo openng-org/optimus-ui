@@ -19,11 +19,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 export class AppTopBarComponent {
     readonly showConfigurator = input(true, { transform: booleanAttribute });
-
     readonly showMenuButton = input(true, { transform: booleanAttribute });
 
     readonly versions = Versions;
-
     readonly socialLinks = [
         { href: 'https://github.com/openng-foundation/open-prime', icon: 'pi-github' },
         // TODO: Invite to angular discord open-prime channel
@@ -32,11 +30,8 @@ export class AppTopBarComponent {
     ];
 
     private readonly document = inject(DOCUMENT);
-
     private readonly renderer = inject(Renderer2);
-
     private readonly configService = inject(AppConfigService);
-
     private readonly window = this.document.defaultView;
 
     constructor() {
@@ -56,9 +51,7 @@ export class AppTopBarComponent {
     );
 
     readonly isDarkMode = computed(() => this.configService.appState().darkTheme);
-
     readonly isMenuActive = computed(() => this.configService.appState().menuActive);
-
     readonly isDesignerActive = computed(() => this.configService.designerActive());
 
     toggleMenu() {
