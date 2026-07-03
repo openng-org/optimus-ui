@@ -2,12 +2,14 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { NgClass, DOCUMENT } from '@angular/common';
-import { afterNextRender, booleanAttribute, Component, computed, DestroyRef, ElementRef, inject, input, Renderer2 } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, inject, input, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
 import { DomHandler } from 'primeng/dom';
 import { StyleClass } from 'primeng/styleclass';
+import { fromEventPattern, map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
     selector: 'app-topbar',
@@ -29,11 +31,7 @@ export class AppTopBarComponent {
         { href: 'https://github.com/openng-foundation/open-prime/discussions', icon: 'pi-comments' }
     ];
 
-    scrollListener: VoidFunction | null;
-
     private readonly document = inject(DOCUMENT);
-
-    private readonly el = inject(ElementRef);
 
     private readonly renderer = inject(Renderer2);
 
@@ -42,13 +40,20 @@ export class AppTopBarComponent {
     private readonly window = this.document.defaultView;
 
     constructor() {
-        inject(DestroyRef).onDestroy(() => this.unbindScrollListener());
-
         afterNextRender(() => {
-            this.bindScrollListener();
             this.initDocSearch();
         });
     }
+
+    readonly isSticky = toSignal(
+        fromEventPattern(
+            (handler) => this.renderer.listen(this.window, 'scroll', handler),
+            (_handler, unlisten) => unlisten()
+        ).pipe(map(() => this.window.scrollY > 0)),
+        {
+            initialValue: this.window.scrollY > 0
+        }
+    );
 
     readonly isDarkMode = computed(() => this.configService.appState().darkTheme);
 
@@ -85,24 +90,5 @@ export class AppTopBarComponent {
             indexName: 'primeng',
             container: '#docsearch'
         });
-    }
-
-    private bindScrollListener() {
-        if (!this.scrollListener) {
-            this.scrollListener = this.renderer.listen(this.window, 'scroll', () => {
-                if (this.window.scrollY > 0) {
-                    this.el.nativeElement.children[0].classList.add('layout-topbar-sticky');
-                } else {
-                    this.el.nativeElement.children[0].classList.remove('layout-topbar-sticky');
-                }
-            });
-        }
-    }
-
-    private unbindScrollListener() {
-        if (this.scrollListener) {
-            this.scrollListener();
-            this.scrollListener = null;
-        }
     }
 }
