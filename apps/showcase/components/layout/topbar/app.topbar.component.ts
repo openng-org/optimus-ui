@@ -177,7 +177,7 @@ export class AppTopBarComponent implements OnDestroy {
 
     showMenuButton = input(true, { transform: booleanAttribute });
 
-    versions: any[] = Versions;
+    versions = Versions;
 
     socialLinks = [
         { href: 'https://github.com/openng-foundation/open-prime', icon: 'pi-github' },
