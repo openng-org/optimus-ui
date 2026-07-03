@@ -2,7 +2,7 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { NgClass, DOCUMENT } from '@angular/common';
-import { afterNextRender, booleanAttribute, Component, computed, ElementRef, Inject, input, OnDestroy, Renderer2 } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, ElementRef, inject, input, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
@@ -188,16 +188,17 @@ export class AppTopBarComponent implements OnDestroy {
 
     scrollListener: VoidFunction | null;
 
-    private window: Window;
+    private document = inject(DOCUMENT);
 
-    constructor(
-        @Inject(DOCUMENT) private document: Document,
-        private el: ElementRef,
-        private renderer: Renderer2,
-        private configService: AppConfigService
-    ) {
-        this.window = this.document.defaultView as Window;
+    private el = inject(ElementRef);
 
+    private renderer = inject(Renderer2);
+
+    private configService = inject(AppConfigService);
+
+    private window = this.document.defaultView;
+
+    constructor() {
         afterNextRender(() => {
             this.bindScrollListener();
             this.initDocSearch();
