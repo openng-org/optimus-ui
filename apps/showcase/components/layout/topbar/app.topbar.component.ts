@@ -2,7 +2,7 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { NgClass, DOCUMENT } from '@angular/common';
-import { afterNextRender, booleanAttribute, Component, computed, ElementRef, Inject, Input, OnDestroy, Renderer2 } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, ElementRef, Inject, input, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
@@ -108,7 +108,7 @@ import { StyleClass } from 'primeng/styleclass';
                         <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
                     </button>
                 </li>
-                @if (showConfigurator) {
+                @if (showConfigurator()) {
                     <li class="relative">
                         <button
                             type="button"
@@ -161,7 +161,7 @@ import { StyleClass } from 'primeng/styleclass';
                         </ul>
                     </div>
                 </li>
-                @if (showMenuButton) {
+                @if (showMenuButton()) {
                     <li class="menu-button">
                         <button type="button" class="topbar-item menu-button" (click)="toggleMenu()" aria-label="Menu">
                             <i class="pi pi-bars"></i>
@@ -173,9 +173,9 @@ import { StyleClass } from 'primeng/styleclass';
     </div>`
 })
 export class AppTopBarComponent implements OnDestroy {
-    @Input({ transform: booleanAttribute }) showConfigurator = true;
+    showConfigurator = input(true, { transform: booleanAttribute });
 
-    @Input({ transform: booleanAttribute }) showMenuButton = true;
+    showMenuButton = input(true, { transform: booleanAttribute });
 
     versions: any[] = Versions;
 
