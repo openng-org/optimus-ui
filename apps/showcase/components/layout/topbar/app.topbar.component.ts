@@ -173,13 +173,13 @@ import { StyleClass } from 'primeng/styleclass';
     </div>`
 })
 export class AppTopBarComponent implements OnDestroy {
-    showConfigurator = input(true, { transform: booleanAttribute });
+    readonly showConfigurator = input(true, { transform: booleanAttribute });
 
-    showMenuButton = input(true, { transform: booleanAttribute });
+    readonly showMenuButton = input(true, { transform: booleanAttribute });
 
-    versions = Versions;
+    readonly versions = Versions;
 
-    socialLinks = [
+    readonly socialLinks = [
         { href: 'https://github.com/openng-foundation/open-prime', icon: 'pi-github' },
         // TODO: Invite to angular discord open-prime channel
         { href: 'https://discord.gg/gzKFYnpmCY', icon: 'pi-discord' },
@@ -188,15 +188,15 @@ export class AppTopBarComponent implements OnDestroy {
 
     scrollListener: VoidFunction | null;
 
-    private document = inject(DOCUMENT);
+    private readonly document = inject(DOCUMENT);
 
-    private el = inject(ElementRef);
+    private readonly el = inject(ElementRef);
 
-    private renderer = inject(Renderer2);
+    private readonly renderer = inject(Renderer2);
 
-    private configService = inject(AppConfigService);
+    private readonly configService = inject(AppConfigService);
 
-    private window = this.document.defaultView;
+    private readonly window = this.document.defaultView;
 
     constructor() {
         afterNextRender(() => {
@@ -205,11 +205,11 @@ export class AppTopBarComponent implements OnDestroy {
         });
     }
 
-    isDarkMode = computed(() => this.configService.appState().darkTheme);
+    readonly isDarkMode = computed(() => this.configService.appState().darkTheme);
 
-    isMenuActive = computed(() => this.configService.appState().menuActive);
+    readonly isMenuActive = computed(() => this.configService.appState().menuActive);
 
-    isDesignerActive = computed(() => this.configService.designerActive());
+    readonly isDesignerActive = computed(() => this.configService.designerActive());
 
     toggleMenu() {
         if (this.isMenuActive()) {
