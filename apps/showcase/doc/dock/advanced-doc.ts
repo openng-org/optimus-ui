@@ -1,3 +1,4 @@
+import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { NodeService } from '@/service/nodeservice';
 import { PhotoService } from '@/service/photoservice';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -54,7 +55,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                     </p-dialog>
 
                     <p-dialog [maximizable]="true" [(visible)]="displayTerminal" [breakpoints]="{ '960px': '50vw' }" [style]="{ width: '30vw' }" [draggable]="false" [resizable]="false" header="Terminal">
-                        <p-terminal welcomeMessage="Welcome to PrimeNG (cmd: 'date', 'greet {0}', 'random')" prompt="primeng $" />
+                        <p-terminal welcomeMessage="Welcome to {{ PROJECT_NAME }} (cmd: 'date', 'greet {0}', 'random')" prompt="primeng $" />
                     </p-dialog>
 
                     <p-galleria
@@ -100,6 +101,9 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     providers: [MessageService, TerminalService, PhotoService, NodeService]
 })
 export class AdvancedDoc implements OnInit, OnDestroy {
+    PROJECT_NAME = PROJECT_NAME;
+    GITHUB_REPO_URL = GITHUB_REPO_URL;
+
     displayTerminal: boolean | undefined;
 
     displayFinder: boolean | undefined;
@@ -202,7 +206,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     showDelay: 1000
                 },
                 icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
-                url: 'https://github.com/primefaces/primeng'
+                url: GITHUB_REPO_URL
             },
             {
                 label: 'Trash',

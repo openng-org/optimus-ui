@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AnimationsDoc } from '@/doc/tailwind/animations-doc';
 import { ColorPaletteDoc } from '@/doc/tailwind/colorpalette-doc';
 import { ExtensionsDoc } from '@/doc/tailwind/extensions-doc';
@@ -11,11 +12,13 @@ import { DarkModeDoc } from '@/doc/tailwind/darkmode-doc';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Tailwind CSS - PrimeNG" header="Tailwind CSS" description="Integration between PrimeNG and Tailwind CSS." [docs]="docs" docType="page"></app-doc>`,
+    template: `<app-doc docTitle="Tailwind CSS - {{ PROJECT_NAME }}" header="Tailwind CSS" description="Integration between {{ PROJECT_NAME }} and Tailwind CSS." [docs]="docs" docType="page"></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })
 export class TailwindDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'overview',

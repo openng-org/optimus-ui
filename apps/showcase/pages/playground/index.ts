@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
         <div class="doc-main">
             <div class="doc-intro">
                 <h1>Playground</h1>
-                <p>Experience PrimeNG right now with the interactive environment.</p>
+                <p>Experience {{ PROJECT_NAME }} right now with the interactive environment.</p>
             </div>
             <section class="py-6">
                 <iframe class="w-full h-full" style="border: 1px solid rgba(0, 0, 0, 0.1); border-radius: 2px; min-height: 800px" allowfullscreen src="https://stackblitz.com/edit/stackblitz-starters-mmltglkm?embed=1&file=src%2Fmain.ts"></iframe>
@@ -16,4 +17,6 @@ import { Component } from '@angular/core';
         </div>
     </div>`
 })
-export class PlaygroundDemo {}
+export class PlaygroundDemo {
+    PROJECT_NAME = PROJECT_NAME;
+}

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -13,10 +14,12 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 that take this approach to build components specifically for Tailwind.
             </p>
             <p>
-                Tailwind is an outstanding CSS library, however it lacks a true comprehensive UI suite when combined with Angular, this is where PrimeNG comes in by providing a wide range of highly accessible and feature rich UI component library.
-                The core of PrimeNG does not depend on Tailwind CSS.
+                Tailwind is an outstanding CSS library, however it lacks a true comprehensive UI suite when combined with Angular, this is where {{ PROJECT_NAME }} comes in by providing a wide range of highly accessible and feature rich UI component library.
+                The core of {{ PROJECT_NAME }} does not depend on Tailwind CSS.
             </p>
         </app-docsectiontext>
     `
 })
-export class OverviewDoc {}
+export class OverviewDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

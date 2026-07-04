@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CspDoc } from '@/doc/configuration/csp-doc';
 import { DynamicDoc } from '@/doc/configuration/dynamic-doc';
 import { FilterModeDoc } from '@/doc/configuration/filtermode-doc';
@@ -18,9 +19,11 @@ import { AppDoc } from '@/components/doc/app.doc';
     selector: 'configuration',
     standalone: true,
     imports: [AppDoc],
-    template: `<app-doc docTitle="Configuration - PrimeNG" header="Configuration" description="Application wide configuration for PrimeNG." [docs]="docs" docType="page"></app-doc>`
+    template: `<app-doc docTitle="Configuration - {{ PROJECT_NAME }}" header="Configuration" description="Application wide configuration for {{ PROJECT_NAME }}." [docs]="docs" docType="page"></app-doc>`
 })
 export class ConfigurationDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'provider',

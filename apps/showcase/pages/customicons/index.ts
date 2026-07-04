@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { FontAwesomeDoc } from '@/doc/customicons/fontawesome-doc';
 import { ImageDoc } from '@/doc/customicons/image-doc';
 import { MaterialDoc } from '@/doc/customicons/material-doc';
@@ -8,9 +9,11 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc title="Custom Icons - PrimeNG" header="Custom Icons" description="PrimeNG components can be used with any icon library using the templating features." [docs]="docs" docType="page"></app-doc>`
+    template: ` <app-doc title="Custom Icons - {{ PROJECT_NAME }}" header="Custom Icons" description="{{ PROJECT_NAME }} components can be used with any icon library using the templating features." [docs]="docs" docType="page"></app-doc>`
 })
 export class CustomIconsDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'material',

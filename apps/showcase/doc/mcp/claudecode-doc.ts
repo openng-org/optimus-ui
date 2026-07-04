@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -9,7 +10,7 @@ import { Component } from '@angular/core';
     imports: [AppCodeModule, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>Add the PrimeNG MCP server using the CLI. After adding, start a new session and use <i>/mcp</i> to verify the connection.</p>
+            <p>Add the {{ PROJECT_NAME }} MCP server using the CLI. After adding, start a new session and use <i>/mcp</i> to verify the connection.</p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
         <p class="doc-section-description">
@@ -18,6 +19,8 @@ import { Component } from '@angular/core';
     `
 })
 export class ClaudeCodeDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code: Code = {
         command: `# Add to user config (available in all projects)
 claude mcp add primeng -s user -- npx -y @primeng/mcp

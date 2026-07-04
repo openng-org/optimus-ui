@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
 import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
@@ -27,10 +28,10 @@ export class AppTopBarComponent {
 
     readonly versions = Versions;
     readonly socialLinks = [
-        { href: 'https://github.com/openng-foundation/open-prime', icon: 'pi-github' },
+        { href: GITHUB_REPO_URL, icon: 'pi-github' },
         // TODO: Invite to angular discord open-prime channel
-        { href: 'https://discord.gg/gzKFYnpmCY', icon: 'pi-discord' },
-        { href: 'https://github.com/openng-foundation/open-prime/discussions', icon: 'pi-comments' }
+        { href: DISCORD_URL, icon: 'pi-discord' },
+        { href: GITHUB_DISCUSSIONS_URL, icon: 'pi-comments' }
     ];
 
     readonly isSticky = toSignal(

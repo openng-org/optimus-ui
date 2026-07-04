@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDoc } from '@/components/doc/app.doc';
 import { BackwardCompatibleDoc } from '@/doc/migration/v20/backwardcompatibledoc';
 import { BreakingDoc } from '@/doc/migration/v20/breakingdoc';
@@ -8,9 +9,11 @@ import { Component } from '@angular/core';
 @Component({
     imports: [AppDoc],
     standalone: true,
-    template: `<app-doc docTitle="Migration - PrimeNG v20" header="Migration to v20" description="Migration guide to PrimeNG v20." [docs]="docs" docType="page"></app-doc>`
+    template: `<app-doc docTitle="Migration - {{ PROJECT_NAME }} v20" header="Migration to v20" description="Migration guide to {{ PROJECT_NAME }} v20." [docs]="docs" docType="page"></app-doc>`
 })
 export class v20MigrationDemoComponent {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'overview',

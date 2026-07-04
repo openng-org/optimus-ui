@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDoc } from '@/components/doc/app.doc';
 import { GlobalDoc } from '@/doc/guides/passthrough/global-doc';
 import { InstanceDoc } from '@/doc/guides/passthrough/instance-doc';
@@ -11,9 +12,11 @@ import { Component } from '@angular/core';
     selector: 'passthrough',
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="PrimeNG - Pass Through" header="Pass Through" description="The Pass Through attributes is an API to customize the internal DOM Structure of the components." [docs]="docs" docType="page"></app-doc> `
+    template: ` <app-doc docTitle="{{ PROJECT_NAME }} - Pass Through" header="Pass Through" description="The Pass Through attributes is an API to customize the internal DOM Structure of the components." [docs]="docs" docType="page"></app-doc> `
 })
 export class PassThroughDemoComponent {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'introduction',

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
@@ -10,9 +11,9 @@ import { Meta, Title } from '@angular/platform-browser';
             <div class="doc-intro">
                 <h1>Roadmap</h1>
                 <p>
-                    At <a href="https://www.primetek.com.tr/" target="_blank" rel="noopener noreferrer" class="text-primary font-medium hover:underline">PrimeTek</a>, we are passionate about improving PrimeNG and would like to share our ideas for
-                    2026 (Year 10) with the community. These are planned to be implemented in parallel to the regular maintenance work of the library involving review of issue tickets, PRs, LTS updates and PrimeNG PRO support. Based on semantic
-                    versioning guidelines, PrimeNG updates will be backward compatible with a clear migration path when necessary.
+                    At <a href="https://www.primetek.com.tr/" target="_blank" rel="noopener noreferrer" class="text-primary font-medium hover:underline">PrimeTek</a>, we are passionate about improving {{ PROJECT_NAME }} and would like to share our ideas for
+                    2026 (Year 10) with the community. These are planned to be implemented in parallel to the regular maintenance work of the library involving review of issue tickets, PRs, LTS updates and {{ PROJECT_NAME }} PRO support. Based on semantic
+                    versioning guidelines, {{ PROJECT_NAME }} updates will be backward compatible with a clear migration path when necessary.
                 </p>
             </div>
 
@@ -60,7 +61,7 @@ import { Meta, Title } from '@angular/platform-browser';
                                     <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
                                 </div>
                                 <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded-sm border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeNG v22</h2>
+                                    <h2 class="text-lg font-bold mt-0 mb-2">{{ PROJECT_NAME }} v22</h2>
                                     <p class="mt-0 mb-4 leading-normal">Angular v22 compatible version.</p>
                                 </div>
                             </div>
@@ -80,7 +81,7 @@ import { Meta, Title } from '@angular/platform-browser';
                                     <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
                                 </div>
                                 <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded-sm border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeNG v23</h2>
+                                    <h2 class="text-lg font-bold mt-0 mb-2">{{ PROJECT_NAME }} v23</h2>
                                     <p class="mt-0 mb-4 leading-normal">Angular v23 compatible version.</p>
                                 </div>
                             </div>
@@ -135,6 +136,8 @@ import { Meta, Title } from '@angular/platform-browser';
     `
 })
 export class RoadmapDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     constructor(
         private titleService: Title,
         private metaService: Meta

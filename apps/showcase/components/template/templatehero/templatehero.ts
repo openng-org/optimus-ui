@@ -1,3 +1,4 @@
+import { GITHUB_DISCUSSIONS_URL } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { TemplateHeroLight } from './templateherolight';
@@ -49,7 +50,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                         </a>
                     </div>
                     <div class="flex items-center gap-4 mt-5">
-                        <a [href]="templateHeroData?.supportHref ?? 'https://github.com/orgs/primefaces/discussions/categories/primeng-templates'" target="_blank" class="flex items-center gap-2 text-primary-contrast lg:text-sm text-xs">
+                        <a [href]="templateHeroData?.supportHref ?? '{{ GITHUB_DISCUSSIONS_URL }}/categories/primeng-templates'" target="_blank" class="flex items-center gap-2 text-primary-contrast lg:text-sm text-xs">
                             <i class="pi pi-github " style="font-size: 0.875rem;"></i>
                             <span class="hover:underline">{{ templateHeroData?.free ? 'Open Issues' : 'Community' }}</span>
                         </a>
@@ -85,6 +86,8 @@ import { TemplateHeroRectangle } from './templateherorectangle';
     styleUrl: '../../../pages/templates/learnmore/learnmore.scss'
 })
 export class TemplateHero {
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+
     @Input() templateHeroData;
     @Input() templateLogo;
 }

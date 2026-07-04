@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import APIDoc from '@/doc/apidoc/index.json';
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, input, InputSignal, viewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -121,7 +122,7 @@ export const getPTOptions = (name, { exclude = [] }: { exclude?: string[] } = {}
     template: `
         <app-docsectiontext>
             <p>
-                Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a PrimeNG component not a DOM element. Visit the
+                Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a {{ PROJECT_NAME }} component not a DOM element. Visit the
                 <a routerLink="/passthrough">pass-through</a> documentation for more information.
             </p>
         </app-docsectiontext>
@@ -147,6 +148,8 @@ export const getPTOptions = (name, { exclude = [] }: { exclude?: string[] } = {}
     `
 })
 export class AppDocPtViewer {
+    PROJECT_NAME = PROJECT_NAME;
+
     header: InputSignal<any[] | undefined | null> = input<any[] | undefined | null>();
 
     docs: InputSignal<Doc[] | undefined | null> = input<Doc[] | undefined | null>(null);

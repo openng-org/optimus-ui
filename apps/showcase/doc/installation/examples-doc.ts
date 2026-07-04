@@ -1,3 +1,4 @@
+import { GITHUB_REPO_URL } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -7,8 +8,10 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     imports: [AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>An example starter with Angular CLI is available at <a href="https://github.com/primefaces/primeng-examples">GitHub</a>.</p>
+            <p>An example starter with Angular CLI is available at <a href="{{ GITHUB_REPO_URL }}-examples">GitHub</a>.</p>
         </app-docsectiontext>
     `
 })
-export class ExamplesDoc {}
+export class ExamplesDoc {
+    GITHUB_REPO_URL = GITHUB_REPO_URL;
+}

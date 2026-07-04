@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
@@ -11,9 +12,9 @@ import { Component } from '@angular/core';
                     <i class="pi pi-github absolute opacity-20" style="bottom: -50px; right: -50px; font-size: 200px; transform: rotateX(45deg) rotateY(0deg) rotateZ(-45deg)"></i>
                     <div class="text-xl font-semibold mb-3 relative">Community Support</div>
                     <p class="m-0 leading-normal relative">
-                        <a href="https://github.com/orgs/primefaces/discussions" class="doc-link" target="_blank" rel="noopener noreferrer">Forum</a>
+                        <a [href]="GITHUB_DISCUSSIONS_URL" class="doc-link" target="_blank" rel="noopener noreferrer">Forum</a>
                         and
-                        <a href="https://discord.gg/gzKFYnpmCY" class="doc-link" target="_blank" rel="noopener noreferrer">Discord</a> are where the community users gather to seek support, post topics and discuss the technology. GitHub issue is the
+                        <a [href]="DISCORD_URL" class="doc-link" target="_blank" rel="noopener noreferrer">Discord</a> are where the community users gather to seek support, post topics and discuss the technology. GitHub issue is the
                         channel for the community users to create tickets however PrimeTek does not guarantee a response time although they are monitored and maintained by our staff. If you need to secure a response, you may consider PRO support
                         instead.
                     </p>
@@ -21,7 +22,7 @@ import { Component } from '@angular/core';
                 <div class="card m-0! flex-1 bg-primary! text-primary-contrast! font-medium">
                     <div class="text-xl font-semibold mb-3">Professional Support</div>
                     <p class="m-0 leading-normal">
-                        With PRO support, it's easy to support, tune, and add features to PrimeNG as an in-house library. With the exclusive services of a PRO account, you no longer need to post questions in the community forum and the community
+                        With PRO support, it's easy to support, tune, and add features to {{ PROJECT_NAME }} as an in-house library. With the exclusive services of a PRO account, you no longer need to post questions in the community forum and the community
                         issue tracker at GitHub. Service is delivered via a private issue tracker based on a one-business-day response time.
                     </p>
                 </div>
@@ -78,7 +79,7 @@ import { Component } from '@angular/core';
                         </ul>
                     </div>
                     <a
-                        href="mailto:contact@primetek.com.tr?subject=PrimeNG%20PRO%20Support"
+                        href="mailto:contact@primetek.com.tr?subject={{ PROJECT_NAME }}%20PRO%20Support"
                         class="block mt-3 w-full bg-primary rounded-border py-3 px-3 hover:bg-primary-emphasis text-center transition-all duration-300 text-primary-contrast font-semibold leading-none"
                     >
                         Buy Now
@@ -115,7 +116,7 @@ import { Component } from '@angular/core';
                         <li>
                             <div class="font-semibold mb-1">6. Delivery</div>
                             <span class="leading-normal"
-                                >If the issue requires an update in the library, it gets published to npm by as part of the public PrimeNG package. A patch update on an older version can also be requested if you are not using the latest version.
+                                >If the issue requires an update in the library, it gets published to npm by as part of the public {{ PROJECT_NAME }} package. A patch update on an older version can also be requested if you are not using the latest version.
                             </span>
                         </li>
                     </ul>
@@ -175,11 +176,11 @@ import { Component } from '@angular/core';
                     <div class="flex-1 flex flex-col gap-7">
                         <div>
                             <div class="leading-normal mb-2 font-semibold">Are the changes delivered with a custom build?</div>
-                            <p class="m-0! leading-normal">No, changes become part of the PrimeNG core and pushed to the public npm package on next update.</p>
+                            <p class="m-0! leading-normal">No, changes become part of the {{ PROJECT_NAME }} core and pushed to the public npm package on next update.</p>
                         </div>
                         <div>
                             <div class="leading-normal mb-2 font-semibold">Who provides the support service?</div>
-                            <p class="m-0! leading-normal">Support service is provided by the PrimeNG team at PrimeTek.</p>
+                            <p class="m-0! leading-normal">Support service is provided by the {{ PROJECT_NAME }} team at PrimeTek.</p>
                         </div>
                         <div>
                             <div class="leading-normal mb-2 font-semibold">Is there a minimum hour requirement?</div>
@@ -213,4 +214,8 @@ import { Component } from '@angular/core';
         </div>
     `
 })
-export class Support {}
+export class Support {
+    DISCORD_URL = DISCORD_URL;
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+    PROJECT_NAME = PROJECT_NAME;
+}

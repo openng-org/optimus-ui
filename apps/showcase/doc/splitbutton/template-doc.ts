@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AppCode } from '@/components/doc/app.code';
@@ -22,7 +23,7 @@ import { RouterModule } from '@angular/router';
                     <ng-template #content>
                         <span class="flex items-center font-bold">
                             <img alt="logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" style="height: 1rem; margin-right: 0.5rem" />
-                            <span>PrimeNG</span>
+                            <span>{{ PROJECT_NAME }}</span>
                         </span>
                     </ng-template>
                 </p-splitbutton>
@@ -33,6 +34,8 @@ import { RouterModule } from '@angular/router';
     providers: [MessageService]
 })
 export class TemplateDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     items: MenuItem[];
 
     constructor(private messageService: MessageService) {

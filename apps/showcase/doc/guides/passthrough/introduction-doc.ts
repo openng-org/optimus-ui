@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
@@ -31,7 +32,7 @@ import { Panel, PanelModule, PanelPassThrough } from 'primeng/panel';
             <p>
                 In this example, a Panel is customized with various options through <i>pt</i>. The styling is overriden with Tailwind CSS and header receives custom attributes along with a click event. The attributes passed to the header are not
                 available in the component API, thanks to PassThrough feature, this is no longer an issue as you are not limited to the component api. Note that, you may avoid the <i>!</i> based overrides in Tailwind classes if you setup CSS Layers
-                with PrimeNG. Visit the <a [routerLink]="'/tailwind'">Override</a> section at Tailwind integration for examples.
+                with {{ PROJECT_NAME }}. Visit the <a [routerLink]="'/tailwind'">Override</a> section at Tailwind integration for examples.
             </p>
         </app-docsectiontext>
         <div class="card">
@@ -46,6 +47,8 @@ import { Panel, PanelModule, PanelPassThrough } from 'primeng/panel';
     `
 })
 export class IntroductionDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     pt: PanelPassThrough<Panel> = {
         root: 'border! border-transparent! rounded-2xl! p-4! bg-linear-to-br! from-indigo-600! to-indigo-400!',
         header: {

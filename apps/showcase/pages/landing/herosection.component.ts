@@ -1,3 +1,4 @@
+import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
@@ -53,14 +54,14 @@ import { OverviewApp } from './samples/overviewapp.component';
             <div class="flex flex-col items-center">
                 <h1 class="text-4xl font-bold text-center xl:text-left leading-tight">The Next-Gen UI Suite for <span class="font-bold text-primary">Angular</span></h1>
                 <p class="text-center mt-0 mb-7 text-surface-500 dark:text-surface-400 font-medium text-lg leading-relaxed lg:px-44">
-                    Enhance your web applications with PrimeNG's comprehensive suite of customizable, feature-rich UI components. With PrimeNG, turning your development vision into reality has never been easier.
+                    Enhance your web applications with {{ PROJECT_NAME }}'s comprehensive suite of customizable, feature-rich UI components. With {{ PROJECT_NAME }}, turning your development vision into reality has never been easier.
                 </p>
                 <div class="flex items-center gap-3.5">
                     <a [routerLink]="'installation'" class="linkbox linkbox-primary">
                         <span class="text-sm">Get Started</span>
                         <i class="pi pi-arrow-right ms-3.5"></i>
                     </a>
-                    <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="linkbox">
+                    <a [href]="GITHUB_REPO_URL" target="_blank" rel="noopener noreferrer" class="linkbox">
                         <span class="text-sm">Give a Star</span>
                         <i class="pi pi-star-fill ms-3.5 text-yellow-500"></i>
                     </a>
@@ -416,6 +417,9 @@ import { OverviewApp } from './samples/overviewapp.component';
     `
 })
 export class HeroSectionComponent implements OnInit, OnDestroy {
+    PROJECT_NAME = PROJECT_NAME;
+    GITHUB_REPO_URL = GITHUB_REPO_URL;
+
     selectedSampleOption;
 
     sampleOptions;

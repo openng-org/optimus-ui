@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDoc } from '@/components/doc/app.doc';
 import { ColorsDoc } from '@/doc/guides/accessibility/colors-doc';
 import { FormControlsDoc } from '@/doc/guides/accessibility/formcontrols-doc';
@@ -12,14 +13,16 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AppDoc],
     template: `<app-doc
-        docTitle="Accessibility - PrimeNG"
+        docTitle="Accessibility - {{ PROJECT_NAME }}"
         header="Accessibility"
-        description="PrimeNG targets AA level compliance on WCAG specification, refer to the accessibility documentation of each component for detailed information."
+        description="{{ PROJECT_NAME }} targets AA level compliance on WCAG specification, refer to the accessibility documentation of each component for detailed information."
         [docs]="docs"
         docType="page"
     ></app-doc>`
 })
 export class AccessibilityDemoComponent {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'introduction',
