@@ -12,6 +12,7 @@ import {
     inject,
     InjectionToken,
     input,
+    isDevMode,
     NgModule,
     numberAttribute,
     output,
@@ -21,6 +22,10 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ChevronDown as ChevronDownIcon } from '@primeicons/angular/chevron-down';
+import { Spinner as SpinnerIcon } from '@primeicons/angular/spinner';
+import { Times as TimesIcon } from '@primeicons/angular/times';
+import { TimesCircle as TimesCircleIcon } from '@primeicons/angular/times-circle';
 import { MotionOptions } from '@primeuix/motion';
 import { equals, findLastIndex, findSingle, focus, isEmpty, isNotEmpty, resolveFieldData, uuid } from '@primeuix/utils';
 import { OverlayOptions, OverlayService, ScrollerOptions, SharedModule, TranslationKeys } from 'primeng/api';
@@ -29,12 +34,7 @@ import { PARENT_INSTANCE } from 'primeng/basecomponent';
 import { BaseInput } from 'primeng/baseinput';
 import { Bind, BindModule } from 'primeng/bind';
 import { Chip } from 'primeng/chip';
-import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 import { ConnectedOverlayScrollHandler } from 'primeng/dom';
-import { ChevronDown as ChevronDownIcon } from '@primeicons/angular/chevron-down';
-import { Spinner as SpinnerIcon } from '@primeicons/angular/spinner';
-import { TimesCircle as TimesCircleIcon } from '@primeicons/angular/times-circle';
-import { Times as TimesIcon } from '@primeicons/angular/times';
 import { InputText } from 'primeng/inputtext';
 import { Overlay } from 'primeng/overlay';
 import { Ripple } from 'primeng/ripple';
@@ -54,6 +54,7 @@ import {
     AutoCompleteSelectEvent,
     AutoCompleteUnselectEvent
 } from 'primeng/types/autocomplete';
+import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 import { AutoCompleteStyle } from './style/autocompletestyle';
 
 const AUTOCOMPLETE_INSTANCE = new InjectionToken<AutoComplete>('AUTOCOMPLETE_INSTANCE');
@@ -864,8 +865,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         if (isNotEmpty(modelValue)) {
             if (typeof modelValue === 'object' || this.optionValueSelected) {
                 const label = this.getOptionLabel(selectedOption);
-
-                return label != null ? label : modelValue;
+                return label != null ? (typeof label === 'object' ? '' : label) : modelValue;
             } else {
                 return modelValue;
             }
@@ -948,6 +948,18 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
                 this.handleSuggestionsChange();
             }
         });
+        if (isDevMode()) {
+            const refEffect = effect(() => {
+                const value = this.modelValue();
+                const label = this.optionLabel();
+                const valueField = this.optionValue();
+                const isMultiple = this.multiple();
+                if (!isMultiple && isNotEmpty(value) && typeof value === 'object' && (!label || !valueField)) {
+                    console.warn('When using an object as a model value, you must define optionLabel and optionValue property to determine how to display the selected value.');
+                    refEffect.destroy();
+                }
+            });
+        }
     }
 
     onAfterViewChecked() {
