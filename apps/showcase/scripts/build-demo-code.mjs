@@ -823,7 +823,7 @@ function extractDemoContent(template) {
     let html = template;
 
     // Remove app-docsectiontext
-    html = html.replace(/<app-docsectiontext[\s\S]*?<\/app-docsectiontext>/g, '');
+    html = html.replace(/<app-docsectiontext[\s\S]*?<\/app-docsectiontext\s*>/g, '');
 
     // Remove app-code (self-closing and regular)
     html = html.replace(/<app-code[^>]*><\/app-code>/g, '');
