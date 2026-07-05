@@ -29,7 +29,6 @@ export class AppTopBarComponent {
     readonly versions = Versions;
     readonly socialLinks = [
         { href: GITHUB_REPO_URL, icon: 'pi-github' },
-        // TODO: Invite to angular discord open-prime channel
         { href: DISCORD_URL, icon: 'pi-discord' },
         { href: GITHUB_DISCUSSIONS_URL, icon: 'pi-comments' }
     ];
