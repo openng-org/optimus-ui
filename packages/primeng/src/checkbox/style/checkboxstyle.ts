@@ -11,6 +11,10 @@ const style = /*css*/ `
     p-checkbox.ng-invalid.ng-dirty .p-checkbox-box {
         border-color: dt('checkbox.invalid.border.color');
     }
+
+    .p-checkbox.p-readonly .p-checkbox-input {
+        cursor: default;
+    }
 `;
 
 const classes = {
@@ -19,6 +23,7 @@ const classes = {
         {
             'p-checkbox-checked p-highlight': instance.checked(),
             'p-disabled': instance.$disabled(),
+            'p-readonly': instance.readonly(),
             'p-invalid': instance.$invalid(),
             'p-variant-filled': instance.$variant() === 'filled',
             'p-checkbox-sm p-inputfield-sm': instance.size() === 'small',

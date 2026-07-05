@@ -688,6 +688,21 @@ describe('Checkbox', () => {
             expect(checkboxInstance.variant()).toBe('filled');
             expect(checkboxInstance.size()).toBe('large');
         });
+
+        it('should apply readonly class when readonly', async () => {
+            const readonlyFixture = TestBed.createComponent(Checkbox);
+            readonlyFixture.componentRef.setInput('readonly', true);
+            readonlyFixture.changeDetectorRef.markForCheck();
+            await readonlyFixture.whenStable();
+
+            expect(readonlyFixture.nativeElement.classList.contains('p-readonly')).toBe(true);
+
+            readonlyFixture.componentRef.setInput('readonly', false);
+            readonlyFixture.changeDetectorRef.markForCheck();
+            await readonlyFixture.whenStable();
+
+            expect(readonlyFixture.nativeElement.classList.contains('p-readonly')).toBe(false);
+        });
     });
 
     describe('Edge Cases', () => {
