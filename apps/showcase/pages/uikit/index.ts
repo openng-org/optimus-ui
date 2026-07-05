@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
@@ -12,13 +13,13 @@ import { TooltipModule } from 'primeng/tooltip';
     imports: [CommonModule, Ripple, BadgeModule, TooltipModule, RouterModule],
     template: ` <div>
         <div style="border-radius: 50px" class="overflow-hidden mb-7 flex items-center">
-            <img alt="PrimeNG Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/primeone-cover-{{ isDarkMode() ? 'dark' : 'light' }}.jpg" class="w-full" />
+            <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/primeone-cover-{{ isDarkMode() ? 'dark' : 'light' }}.jpg" class="w-full" />
         </div>
 
         <div class="card mb-7" style="border-radius: 50px">
             <div class="flex flex-col md:flex-row items-center gap-5 md:gap-18 mb-18">
                 <div class="w-full md:w-6/12">
-                    <img alt="PrimeNG Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-figma.png" class="w-full" />
+                    <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-figma.png" class="w-full" />
                 </div>
                 <div class="w-full md:w-6/12">
                     <div class="text-primary font-bold mb-2 text-sm">UP-TO-DATE</div>
@@ -79,12 +80,12 @@ import { TooltipModule } from 'primeng/tooltip';
                     </ul>
                 </div>
                 <div class="w-full md:w-6/12">
-                    <img alt="PrimeNG Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-system.png" class="w-full" />
+                    <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-system.png" class="w-full" />
                 </div>
             </div>
             <div class="flex flex-col md:flex-row items-center gap-5 md:gap-18 mb-18">
                 <div class="w-full md:w-6/12">
-                    <img alt="PrimeNG Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-themes.png" class="w-full" />
+                    <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/uikit-themes.png" class="w-full" />
                 </div>
                 <div class="w-full md:w-6/12">
                     <div class="text-primary font-bold mb-2 text-sm">DARK MODE</div>
@@ -137,7 +138,7 @@ import { TooltipModule } from 'primeng/tooltip';
             </div>
             <div class="flex flex-col md:flex-row items-center gap-5 md:gap-18">
                 <div class="w-full md:w-6/12">
-                    <img alt="PrimeNG Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/designer/feature-2.png" class="w-full" />
+                    <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/designer/feature-2.png" class="w-full" />
                 </div>
                 <div class="w-full md:w-6/12">
                     <div class="text-primary font-bold mb-2 text-sm">AUTOMATED</div>
@@ -368,8 +369,8 @@ import { TooltipModule } from 'primeng/tooltip';
                     <div class="leading-normal mb-2 font-bold">How can I get support?</div>
                     <p class="mt-0 mb-12 p-0 leading-normal">
                         PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users can
-                        seek assistance in our community via our public <a href="https://discord.com/invite/gzKFYnpmCY" class="doc-link">Discord</a> and
-                        <a href="https://github.com/orgs/primefaces/discussions/categories/figma-ui-kit" class="doc-link">Forum</a>.
+                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and
+                        <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/figma-ui-kit" class="doc-link">Forum</a>.
                     </p>
                 </div>
                 <div class="col-span-12 lg:col-span-4 px-2 lg:px-8">
@@ -390,6 +391,10 @@ import { TooltipModule } from 'primeng/tooltip';
     </div>`
 })
 export class OverviewDemo {
+    DISCORD_URL = DISCORD_URL;
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+    PROJECT_NAME = PROJECT_NAME;
+
     configService = inject(AppConfigService);
 
     isDarkMode = computed(() => this.configService.appState().darkTheme);

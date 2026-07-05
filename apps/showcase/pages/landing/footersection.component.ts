@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -18,7 +19,7 @@ import { RouterModule } from '@angular/router';
                             </li>
                             <li class="mb-4">
                                 <a
-                                    href="https://github.com/primefaces/primeng-examples"
+                                    href="{{ GITHUB_REPO_URL }}-examples"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
@@ -32,7 +33,7 @@ import { RouterModule } from '@angular/router';
                             <li class="text-sm font-bold mb-7">Support</li>
                             <li class="mb-4">
                                 <a
-                                    href="https://github.com/orgs/primefaces/discussions"
+                                    [href]="GITHUB_DISCUSSIONS_URL"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
@@ -40,7 +41,7 @@ import { RouterModule } from '@angular/router';
                                 >
                             </li>
                             <li class="mb-4">
-                                <a href="https://discord.gg/gzKFYnpmCY" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Discord</a>
+                                <a [href]="DISCORD_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Discord</a>
                             </li>
                             <li class="mb-4">
                                 <a [routerLink]="['support']" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">PRO Support </a>
@@ -71,7 +72,7 @@ import { RouterModule } from '@angular/router';
                                 <a href="https://primeui.store" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Store</a>
                             </li>
                             <li class="mb-4">
-                                <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
+                                <a [href]="GITHUB_REPO_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
                                     >Source Code</a
                                 >
                             </li>
@@ -145,13 +146,13 @@ import { RouterModule } from '@angular/router';
                         <a href="https://twitter.com/prime_ng" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-twitter"></i>
                         </a>
-                        <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
+                        <a [href]="GITHUB_REPO_URL" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-github"></i>
                         </a>
-                        <a href="https://discord.gg/gzKFYnpmCY" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
+                        <a [href]="DISCORD_URL" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-discord"></i>
                         </a>
-                        <a href="https://github.com/orgs/primefaces/discussions" class="linkbox linkbox-icon">
+                        <a [href]="GITHUB_DISCUSSIONS_URL" class="linkbox linkbox-icon">
                             <i class="pi pi-comments"></i>
                         </a>
                     </div>
@@ -160,4 +161,8 @@ import { RouterModule } from '@angular/router';
         </section>
     `
 })
-export class FooterSectionComponent {}
+export class FooterSectionComponent {
+    DISCORD_URL = DISCORD_URL;
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+    GITHUB_REPO_URL = GITHUB_REPO_URL;
+}

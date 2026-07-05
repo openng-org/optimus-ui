@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { IntroductionDoc } from '@/doc/guides/animations/introduction-doc';
 import { AnchoredOverlaysDoc } from '@/doc/guides/animations/anchoredoverlays-doc';
 import { CollapsiblesDoc } from '@/doc/guides/animations/collapsibles-doc';
@@ -12,14 +13,16 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: `<app-doc
-        docTitle="Animations - PrimeNG"
+        docTitle="Animations - {{ PROJECT_NAME }}"
         header="Animations"
-        description="Various PrimeNG Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations."
+        description="Various {{ PROJECT_NAME }} Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations."
         [docs]="docs"
         docType="page"
     ></app-doc>`
 })
 export class AnimationsDemoComponent {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'introduction',

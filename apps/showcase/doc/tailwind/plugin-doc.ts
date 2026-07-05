@@ -1,3 +1,4 @@
+import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
@@ -10,7 +11,7 @@ import { Component } from '@angular/core';
         <app-docsectiontext>
             <p>
                 The <a href="https://www.npmjs.com/package/tailwindcss-primeui" target="_blank" rel="noopener noreferrer">tailwindcss-primeui</a> is an official plugin by PrimeTek to provide first class integration between a Prime UI library like
-                PrimeNG and Tailwind CSS. It is designed to work both in styled and unstyled modes. In styled mode, for instance the semantic colors such as primary and surfaces are provided as Tailwind utilities e.g. <i>bg-primary</i>,
+                {{ PROJECT_NAME }} and Tailwind CSS. It is designed to work both in styled and unstyled modes. In styled mode, for instance the semantic colors such as primary and surfaces are provided as Tailwind utilities e.g. <i>bg-primary</i>,
                 <i>text-surface-500</i>, <i>text-muted-color</i>.
             </p>
             <p>
@@ -23,7 +24,7 @@ import { Component } from '@angular/core';
             <p>In the CSS file that contains the tailwindcss import, add the <i>tailwindcss-primeui</i> import as well.</p>
             <app-code [code]="code2" [importCode]="true" [hideToggleCode]="true" [hideStackBlitz]="true" />
             <p class="mt-4">
-                For a comprehensive starter guide, review the <a href="https://github.com/primefaces/primeng-examples/tree/main/primeng-quickstart-tailwind" target="_blank" rel="noopener noreferrer">primeng-quickstart-tailwind</a> repository which
+                For a comprehensive starter guide, review the <a href="{{ GITHUB_REPO_URL }}-examples/tree/main/primeng-quickstart-tailwind" target="_blank" rel="noopener noreferrer">primeng-quickstart-tailwind</a> repository which
                 demonstrates the integration.
             </p>
             <h3>Tailwind v3</h3>
@@ -33,6 +34,9 @@ import { Component } from '@angular/core';
     `
 })
 export class PluginDoc {
+    PROJECT_NAME = PROJECT_NAME;
+    GITHUB_REPO_URL = GITHUB_REPO_URL;
+
     code1 = {
         typescript: `npm i tailwindcss-primeui`
     };

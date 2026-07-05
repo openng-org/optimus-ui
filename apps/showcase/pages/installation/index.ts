@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { DownloadDoc } from '@/doc/installation/download-doc';
 import { ExamplesDoc } from '@/doc/installation/examples-doc';
 import { NextStepsDoc } from '@/doc/installation/nextsteps-doc';
@@ -10,9 +11,11 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [CommonModule, AppDoc],
-    template: `<app-doc docTitle="Getting Started - PrimeNG" header="Installation" description="Setting up PrimeNG in an Angular CLI project." [docs]="docs" docType="page"></app-doc>`
+    template: `<app-doc docTitle="Getting Started - {{ PROJECT_NAME }}" header="Installation" description="Setting up {{ PROJECT_NAME }} in an Angular CLI project." [docs]="docs" docType="page"></app-doc>`
 })
 export class InstallationDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'download',

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -8,7 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     template: `
         <app-docsectiontext>
             <p>
-                Various PrimeNG Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default
+                Various {{ PROJECT_NAME }} Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default
                 animations, this documentation covers the entire set of built-in animations.
             </p>
             <p>
@@ -19,4 +20,6 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         </app-docsectiontext>
     `
 })
-export class IntroductionDoc {}
+export class IntroductionDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

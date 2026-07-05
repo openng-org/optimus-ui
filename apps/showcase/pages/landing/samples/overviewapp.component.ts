@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { DesignerService } from '@/service/designerservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -48,7 +49,7 @@ import { TooltipModule } from 'primeng/tooltip';
             <div class="flex flex-wrap gap-3.5 items-start justify-between p-1">
                 <div class="flex-1">
                     <div class="text-sm text-muted-color font-medium leading-normal">Overview</div>
-                    <div class="text-color text-xl font-semibold leading-normal">Welcome to PrimeNG</div>
+                    <div class="text-color text-xl font-semibold leading-normal">Welcome to {{ PROJECT_NAME }}</div>
                 </div>
                 <div class="flex gap-2 whitespace-nowrap flex-nowrap">
                     <p-iconfield iconPosition="left">
@@ -185,6 +186,8 @@ import { TooltipModule } from 'primeng/tooltip';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class OverviewApp {
+    PROJECT_NAME = PROJECT_NAME;
+
     chartData: any;
 
     chartOptions: any;

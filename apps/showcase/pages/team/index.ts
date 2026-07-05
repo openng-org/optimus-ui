@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
@@ -13,7 +14,7 @@ import { Component } from '@angular/core';
                     is a world renowned vendor of popular UI Component suites including
                     <a href="https://primefaces.org" class="text-primary font-medium hover:underline"> PrimeFaces </a>
                     ,
-                    <a href="https://primeng.org" class="text-primary font-medium hover:underline"> PrimeNG </a>
+                    <a href="https://primeng.org" class="text-primary font-medium hover:underline"> {{ PROJECT_NAME }} </a>
                     ,
                     <a href="https://primereact.org" class="text-primary font-medium hover:underline"> PrimeReact </a>
                     and
@@ -80,4 +81,6 @@ import { Component } from '@angular/core';
         </div>
     `
 })
-export class TeamDemo {}
+export class TeamDemo {
+    PROJECT_NAME = PROJECT_NAME;
+}

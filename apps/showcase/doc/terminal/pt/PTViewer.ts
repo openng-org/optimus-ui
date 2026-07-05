@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -15,12 +16,14 @@ import { TerminalModule, TerminalService } from 'primeng/terminal';
                     Enter "<strong>date</strong>" to display the current date, "<strong>greet {{ '{0}' }}</strong
                     >" for a message and "<strong>random</strong>" to get a random number.
                 </p>
-                <p-terminal welcomeMessage="Welcome to PrimeNG" prompt="primeng $" aria-label="PrimeNG Terminal Service"></p-terminal>
+                <p-terminal welcomeMessage="Welcome to {{ PROJECT_NAME }}" prompt="primeng $" aria-label="{{ PROJECT_NAME }} Terminal Service"></p-terminal>
             </div>
         </app-docptviewer>
     `
 })
 export class PTViewer implements OnInit, OnDestroy {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             data: getPTOptions('Terminal'),

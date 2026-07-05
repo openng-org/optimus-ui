@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -25,7 +26,7 @@ import { Component } from '@angular/core';
             <h4>PrimeUIX Themes</h4>
             <p>
                 PrimeUIX is a shared package between all Prime libraries, this shared approach allows PrimeTek teams to share theming and the Design team who is responsible for the Figma UI Kit to work on a single design file, which is the single
-                source of truth. Prior to v20, PrimeNG has its own fork in default styles and for the design tokens <i>{{ '@' }}primeng/themes</i> package is required. With v20, PrimeNG receives the styles from <i>{{ '@' }}primeuix/styles</i> under
+                source of truth. Prior to v20, {{ PROJECT_NAME }} has its own fork in default styles and for the design tokens <i>{{ '@' }}primeng/themes</i> package is required. With v20, {{ PROJECT_NAME }} receives the styles from <i>{{ '@' }}primeuix/styles</i> under
                 the hood and the design tokens as theme presets are loaded from <i>{{ '@' }}primeuix/themes</i>.
             </p>
             <p>
@@ -41,6 +42,8 @@ import { Component } from '@angular/core';
     `
 })
 export class BackwardCompatibleDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code1: Code = {
         command: `.p-inputtext.ng-invalid.ng-dirty {
     border-color: \${dt('inputtext.invalid.border.color')};

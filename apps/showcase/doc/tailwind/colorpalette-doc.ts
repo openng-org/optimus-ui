@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { NgClass, NgStyle } from '@angular/common';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -7,7 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     standalone: true,
     imports: [NgClass, NgStyle, AppDocSectionText],
     template: `
-        <app-docsectiontext> <p>PrimeNG color palette as utility classes.</p></app-docsectiontext>
+        <app-docsectiontext> <p>{{ PROJECT_NAME }} color palette as utility classes.</p></app-docsectiontext>
         <div class="card">
             <div class="flex flex-col gap-12">
                 <ul class="p-0 m-0 list-none flex sm:flex-col gap-4 flex-wrap sm:flex-nowrap">
@@ -36,6 +37,8 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     `
 })
 export class ColorPaletteDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     shades: number[] = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
     colors: string[] = ['primary', 'surface'];
 }

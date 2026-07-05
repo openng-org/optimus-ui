@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
@@ -9,10 +10,10 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                In styled mode, PrimeNG uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, ensure that <i>darkModeSelector</i> is aligned with the Tailwind dark
+                In styled mode, {{ PROJECT_NAME }} uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, ensure that <i>darkModeSelector</i> is aligned with the Tailwind dark
                 variant for seamless integration. Note that, this particular configuration isn't required if you're utilizing the default system color scheme.
             </p>
-            <p>Suppose that, the darkModeSelector is set as <i>my-app-dark</i> in PrimeNG.</p>
+            <p>Suppose that, the darkModeSelector is set as <i>my-app-dark</i> in {{ PROJECT_NAME }}.</p>
             <app-code [code]="code1" [importCode]="true" [hideToggleCode]="true" [hideStackBlitz]="true" />
             <h3>Tailwind v4</h3>
             <p>Add a custom variant for dark with a custom selector.</p>
@@ -24,6 +25,8 @@ import { Component } from '@angular/core';
     `
 })
 export class DarkModeDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code1 = {
         typescript: `providePrimeNG({
     theme: {

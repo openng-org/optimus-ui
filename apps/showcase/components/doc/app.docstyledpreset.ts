@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component, Input } from '@angular/core';
 import { AppDocSectionText } from './app.docsectiontext';
 
@@ -6,7 +7,7 @@ import { AppDocSectionText } from './app.docsectiontext';
     standalone: true,
     imports: [AppDocSectionText],
     template: `<app-docsectiontext title="Built-in Presets" id="built-in-presets" [level]="3">
-        <p>PrimeNG offers various preset options that allow you to customize the component's styling to match your application's design system. Below you'll find links to the implementation and type definitions for each preset.</p>
+        <p>{{ PROJECT_NAME }} offers various preset options that allow you to customize the component's styling to match your application's design system. Below you'll find links to the implementation and type definitions for each preset.</p>
         <div class="doc-tablewrapper mt-4">
             <table class="doc-preset-table">
                 <thead>
@@ -54,6 +55,8 @@ import { AppDocSectionText } from './app.docsectiontext';
     </app-docsectiontext>`
 })
 export class AppDocStyledPreset {
+    PROJECT_NAME = PROJECT_NAME;
+
     @Input() data: string;
 
     headers: string[] = ['Preset', 'Implementation', 'Types'];

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { RouterModule } from '@angular/router';
@@ -8,7 +9,7 @@ import { RouterModule } from '@angular/router';
     imports: [AppDocSectionText, RouterModule],
     template: `
         <app-docsectiontext>
-            <p>Welcome to the Prime UI Ecosystem! Once you have PrimeNG up and running, we recommend exploring the following resources to gain a deeper understanding of the library.</p>
+            <p>Welcome to the Prime UI Ecosystem! Once you have {{ PROJECT_NAME }} up and running, we recommend exploring the following resources to gain a deeper understanding of the library.</p>
             <ul class="leading-relaxed">
                 <li><a [routerLink]="'/configuration'" class="doc-link">Global configuration</a></li>
                 <li><a [routerLink]="'/theming'" class="doc-link">Customization of styles</a></li>
@@ -17,4 +18,6 @@ import { RouterModule } from '@angular/router';
         </app-docsectiontext>
     `
 })
-export class NextStepsDoc {}
+export class NextStepsDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

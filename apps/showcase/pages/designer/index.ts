@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { Component, computed, inject, signal } from '@angular/core';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
@@ -10,7 +11,7 @@ import { RippleModule } from 'primeng/ripple';
     imports: [AnimateOnScrollModule, RippleModule, ButtonModule, DialogModule],
     template: `<div>
         <div style="border-radius: 50px; max-height: 500px" class="overflow-hidden mb-7 flex items-center">
-            <img alt="PrimeNG Designer" [src]="coverImage()" class="w-full" />
+            <img alt="{{ PROJECT_NAME }} Designer" [src]="coverImage()" class="w-full" />
         </div>
 
         <div class="card mb-7!" style="border-radius: 50px">
@@ -19,7 +20,7 @@ import { RippleModule } from 'primeng/ripple';
                     <img
                         pAnimateOnScroll
                         enterClass="animate-enter fade-in-10 slide-in-from-l-4 animate-duration-1000"
-                        alt="PrimeNG UI Kit"
+                        alt="{{ PROJECT_NAME }} UI Kit"
                         src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/designer/feature-1.png"
                         class="w-full"
                     />
@@ -27,7 +28,7 @@ import { RippleModule } from 'primeng/ripple';
                 <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-r-4 animate-duration-1000" class="w-full md:w-6/12">
                     <div class="text-primary font-bold mb-2 text-sm">POWERFUL</div>
                     <div class="text-4xl font-bold mb-4">Visual Editor</div>
-                    <p class="mb-4">Transform your PrimeNG components with our advanced visual editor. Design, customize, and preview changes in real-time, all within an intuitive interface.</p>
+                    <p class="mb-4">Transform your {{ PROJECT_NAME }} components with our advanced visual editor. Design, customize, and preview changes in real-time, all within an intuitive interface.</p>
 
                     <ul class="flex flex-wrap m-0 p-0">
                         <li class="flex items-center w-6/12 p-3">
@@ -98,7 +99,7 @@ import { RippleModule } from 'primeng/ripple';
                     <img
                         pAnimateOnScroll
                         enterClass="animate-enter fade-in-10 slide-in-from-r-4 animate-duration-1000"
-                        alt="PrimeNG Designer"
+                        alt="{{ PROJECT_NAME }} Designer"
                         src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/designer/feature-2.png"
                         class="w-full"
                     />
@@ -110,7 +111,7 @@ import { RippleModule } from 'primeng/ripple';
                     <img
                         pAnimateOnScroll
                         enterClass="animate-enter fade-in-10 slide-in-from-l-4 animate-duration-1000"
-                        alt="PrimeNG Designer"
+                        alt="{{ PROJECT_NAME }} Designer"
                         src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/designer/feature-3.png"
                         class="w-full"
                     />
@@ -341,8 +342,8 @@ import { RippleModule } from 'primeng/ripple';
                     <div class="leading-normal mb-2 font-bold">How can I get support?</div>
                     <p class="mt-0 mb-11 p-0 leading-normal">
                         PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users can
-                        seek assistance in our community via our public <a href="https://discord.com/invite/gzKFYnpmCY" class="doc-link">Discord</a> and
-                        <a href="https://github.com/orgs/primefaces/discussions/categories/theme-designer" class="doc-link">Forum</a>.
+                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and
+                        <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/theme-designer" class="doc-link">Forum</a>.
                     </p>
                 </div>
                 <div class="col-span-12 lg:col-span-4 px-2 lg:px-7">
@@ -362,11 +363,11 @@ import { RippleModule } from 'primeng/ripple';
         </div>
         <p-dialog [(visible)]="termsVisible" [modal]="true" header="Terms and Conditions" styleClass="w-11/12">
             <div class="font-bold mb-4">Effective Date: April 7, 2025</div>
-            <p>Welcome to PrimeNG Theme Designer. By accessing or using our services, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>
+            <p>Welcome to {{ PROJECT_NAME }} Theme Designer. By accessing or using our services, you agree to comply with and be bound by the following terms and conditions. Please read them carefully.</p>
             <ol>
                 <li>
                     <div class="font-bold mb-4">1. Acceptance of Terms</div>
-                    <p>By purchasing, and using the PrimeNG Theme Designer, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
+                    <p>By purchasing, and using the {{ PROJECT_NAME }} Theme Designer, you acknowledge that you have read, understood, and agree to be bound by these Terms and Conditions.</p>
                 </li>
                 <li>
                     <div class="font-bold mb-4">2. Subscription Plans</div>
@@ -422,7 +423,7 @@ import { RippleModule } from 'primeng/ripple';
                 <li>
                     <div class="font-bold mb-4">10. Contact Information</div>
                     <p>
-                        For any questions regarding these Terms and Conditions, please contact us through our official channels as listed on our website. By using the PrimeNG Theme Designer, you acknowledge that you have read and agree to these Terms
+                        For any questions regarding these Terms and Conditions, please contact us through our official channels as listed on our website. By using the {{ PROJECT_NAME }} Theme Designer, you acknowledge that you have read and agree to these Terms
                         and Conditions.
                     </p>
                 </li>
@@ -431,6 +432,10 @@ import { RippleModule } from 'primeng/ripple';
     </div> `
 })
 export class DesignerDemo {
+    DISCORD_URL = DISCORD_URL;
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+    PROJECT_NAME = PROJECT_NAME;
+
     configService: AppConfigService = inject(AppConfigService);
 
     termsVisible = signal<boolean>(false);

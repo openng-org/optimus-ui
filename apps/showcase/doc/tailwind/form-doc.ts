@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
     imports: [FormsModule, AppDocSectionText, AppCode, InputTextModule, SelectModule, DatePickerModule, TextareaModule],
     template: `
         <app-docsectiontext>
-            <p>Using Tailwind utilities for the responsive layout of a form with PrimeNG components.</p>
+            <p>Using Tailwind utilities for the responsive layout of a form with {{ PROJECT_NAME }} components.</p>
         </app-docsectiontext>
         <div class="card flex sm:justify-center">
             <div class="flex flex-col gap-6 w-full sm:w-auto">
@@ -62,6 +63,8 @@ import { TextareaModule } from 'primeng/textarea';
     `
 })
 export class FormDoc implements OnInit {
+    PROJECT_NAME = PROJECT_NAME;
+
     countries: any[] | undefined;
 
     selectedCountry: string | undefined;

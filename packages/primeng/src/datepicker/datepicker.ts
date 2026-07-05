@@ -56,6 +56,7 @@ import {
 import { ZIndexUtils } from 'primeng/utils';
 import { Subscription } from 'rxjs';
 import { DatePickerStyle } from './style/datepickerstyle';
+import { CalendarIcon, ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, TimesIcon } from 'primeng/icons';
 
 export const DATEPICKER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -72,7 +73,7 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
 @Component({
     selector: 'p-datepicker, p-date-picker',
     standalone: true,
-    imports: [NgTemplateOutlet, Button, Ripple, AutoFocus, InputText, SharedModule, BindModule, MotionModule],
+    imports: [NgTemplateOutlet, Button, Ripple, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, ChevronDownIcon, TimesIcon, CalendarIcon, AutoFocus, InputText, SharedModule, BindModule, MotionModule],
     hostDirectives: [Bind],
     template: `
         @if (!inline()) {

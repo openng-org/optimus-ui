@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -12,11 +13,11 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 <table class="doc-table">
                     <tbody>
                         <tr>
-                            <td>PrimeNG v18 and newer</td>
+                            <td>{{ PROJECT_NAME }} v18 and newer</td>
                             <td>PrimeFlex v4</td>
                         </tr>
                         <tr>
-                            <td>PrimeNG v17 and older</td>
+                            <td>{{ PROJECT_NAME }} v17 and older</td>
                             <td>PrimeFlex v3</td>
                         </tr>
                     </tbody>
@@ -25,4 +26,6 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         </app-docsectiontext>
     `
 })
-export class CompatibilityDoc {}
+export class CompatibilityDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule, Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, viewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -45,7 +46,7 @@ type PtTableData = PtOptionItem[] | DocData[];
             @if (showViewer() && isNestedData()) {
                 <app-docsectiontext>
                     <p>
-                        Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a PrimeNG component not a DOM element. Visit the
+                        Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a {{ PROJECT_NAME }} component not a DOM element. Visit the
                         <a routerLink="/passthrough">pass-through</a> documentation for more information.
                     </p>
                 </app-docsectiontext>
@@ -126,6 +127,8 @@ type PtTableData = PtOptionItem[] | DocData[];
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppDocPtTable {
+    PROJECT_NAME = PROJECT_NAME;
+
     private configService: AppConfigService = inject(AppConfigService);
     private location = inject(Location);
 

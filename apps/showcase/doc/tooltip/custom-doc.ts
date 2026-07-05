@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppCode } from '@/components/doc/app.code';
@@ -48,7 +49,7 @@ import { TooltipModule } from 'primeng/tooltip';
                             <path d="M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z" fill="var(--ground-background)" />
                             <path d="M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z" fill="var(--ground-background)" />
                         </svg>
-                        <span> <b>PrimeNG</b> rocks! </span>
+                        <span> <b>{{ PROJECT_NAME }}</b> rocks! </span>
                     </div>
                 </ng-template>
             </div>
@@ -56,4 +57,6 @@ import { TooltipModule } from 'primeng/tooltip';
         </app-demo-wrapper>
     `
 })
-export class CustomDoc {}
+export class CustomDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}
