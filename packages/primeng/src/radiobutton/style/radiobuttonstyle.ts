@@ -10,6 +10,21 @@ const style = /*css*/ `
     p-radiobutton.ng-invalid.ng-dirty .p-radiobutton-box {
         border-color: dt('radiobutton.invalid.border.color');
     }
+
+    .p-radiobutton-box {
+        position: relative;
+    }
+
+    .p-radiobutton-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) translateZ(0) scale(0.1);
+    }
+
+    .p-radiobutton-checked .p-radiobutton-box .p-radiobutton-icon {
+        transform: translate(-50%, -50%) translateZ(0) scale(1, 1);
+    }
 `;
 
 const classes = {
