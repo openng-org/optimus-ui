@@ -3759,3 +3759,76 @@ describe('MultiSelect Complex Edge Cases', () => {
         });
     });
 });
+
+describe('MultiSelect Selected Items On Top', () => {
+    let fixture: ComponentFixture<MultiSelect>;
+    let multiSelect: MultiSelect;
+
+    const options = [
+        { label: 'Option 1', value: 1 },
+        { label: 'Option 2', value: 2 },
+        { label: 'Option 3', value: 3 },
+        { label: 'Option 4', value: 4 }
+    ];
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [MultiSelectModule, FormsModule],
+            providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(MultiSelect);
+        multiSelect = fixture.componentInstance;
+        fixture.componentRef.setInput('options', options);
+        fixture.componentRef.setInput('optionLabel', 'label');
+        fixture.componentRef.setInput('optionValue', 'value');
+        fixture.detectChanges();
+    });
+
+    it('should keep the original order by default', () => {
+        multiSelect.writeValue([3]);
+        multiSelect.show();
+        fixture.detectChanges();
+
+        expect(multiSelect.visibleOptions().map((option: any) => option.value)).toEqual([1, 2, 3, 4]);
+    });
+
+    it('should display selected options on top when the overlay is opened', () => {
+        fixture.componentRef.setInput('selectedItemsOnTop', true);
+        multiSelect.writeValue([3]);
+        multiSelect.show();
+        fixture.detectChanges();
+
+        expect(multiSelect.visibleOptions().map((option: any) => option.value)).toEqual([3, 1, 2, 4]);
+    });
+
+    it('should keep selected options on top when filtering', () => {
+        fixture.componentRef.setInput('selectedItemsOnTop', true);
+        multiSelect.writeValue([3]);
+        multiSelect.show();
+        fixture.detectChanges();
+
+        multiSelect._filterValue.set('Option');
+        fixture.detectChanges();
+
+        expect(multiSelect.visibleOptions().map((option: any) => option.value)).toEqual([3, 1, 2, 4]);
+    });
+
+    it('should not reorder options while the overlay is open and reorder on next open', () => {
+        fixture.componentRef.setInput('selectedItemsOnTop', true);
+        multiSelect.writeValue([3]);
+        multiSelect.show();
+        fixture.detectChanges();
+
+        multiSelect.onOptionSelect({ originalEvent: new Event('click'), option: options[1] });
+        fixture.detectChanges();
+
+        expect(multiSelect.visibleOptions().map((option: any) => option.value)).toEqual([3, 1, 2, 4]);
+
+        multiSelect.hide();
+        multiSelect.show();
+        fixture.detectChanges();
+
+        expect(multiSelect.visibleOptions().map((option: any) => option.value)).toEqual([2, 3, 1, 4]);
+    });
+});
