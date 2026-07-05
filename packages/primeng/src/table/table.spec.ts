@@ -340,6 +340,30 @@ describe('Table', () => {
         });
     });
 
+    describe('Row Hover', () => {
+        it('should add hoverable class when selectionMode is set and rowHover is not set', () => {
+            fixture.componentRef.setInput('selectionMode', 'single');
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.classList.contains('p-datatable-hoverable')).toBe(true);
+        });
+
+        it('should not add hoverable class when rowHover is explicitly false even with selectionMode', () => {
+            fixture.componentRef.setInput('selectionMode', 'single');
+            fixture.componentRef.setInput('rowHover', false);
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.classList.contains('p-datatable-hoverable')).toBe(false);
+        });
+
+        it('should add hoverable class when rowHover is true without selectionMode', () => {
+            fixture.componentRef.setInput('rowHover', true);
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.classList.contains('p-datatable-hoverable')).toBe(true);
+        });
+    });
+
     describe('Sorting Functionality', () => {
         let testComponent: TestSortingTableComponent;
         let testFixture: ComponentFixture<TestSortingTableComponent>;

@@ -314,7 +314,7 @@ export class TableBody extends BaseComponent {
 
     dataP = computed(() => {
         return this.cn({
-            hoverable: this.dataTable.rowHover() || this.dataTable.selectionMode(),
+            hoverable: this.dataTable.rowHover() ?? this.dataTable.selectionMode(),
             frozen: this.frozen()
         });
     });
