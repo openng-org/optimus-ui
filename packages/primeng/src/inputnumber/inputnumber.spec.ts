@@ -589,6 +589,62 @@ describe('InputNumber', () => {
         });
     });
 
+    describe('Button Disabled Style', () => {
+        it('should style increment button as disabled when value reaches max', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 10;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+        });
+
+        it('should style decrement button as disabled when value reaches min', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 0;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+        });
+
+        it('should not style buttons as disabled when value is between min and max', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 5;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+        });
+
+        it('should style both buttons as disabled when the component is disabled', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('disabled', true);
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+        });
+    });
+
     describe('Clear Functionality', () => {
         let testComponent: TestBasicInputNumberComponent;
         let testFixture: ComponentFixture<TestBasicInputNumberComponent>;

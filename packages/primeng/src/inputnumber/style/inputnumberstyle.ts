@@ -43,13 +43,13 @@ const classes = {
     incrementButton: ({ instance }) => [
         'p-inputnumber-button p-inputnumber-increment-button',
         {
-            'p-disabled': instance.showButtons() && instance.max() != null && instance.$maxLength()
+            'p-disabled': instance.showButtons() && (instance.$disabled() || (instance.max() != null && instance.value != null && instance.value >= instance.max()))
         }
     ],
     decrementButton: ({ instance }) => [
         'p-inputnumber-button p-inputnumber-decrement-button',
         {
-            'p-disabled': instance.showButtons() && instance.min() != null && instance.$minLength()
+            'p-disabled': instance.showButtons() && (instance.$disabled() || (instance.min() != null && instance.value != null && instance.value <= instance.min()))
         }
     ],
     clearIcon: 'p-inputnumber-clear-icon'
