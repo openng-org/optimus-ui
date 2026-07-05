@@ -2,6 +2,65 @@ import { Injectable } from '@angular/core';
 import { style } from '@primeuix/styles/toast';
 import { BaseStyle } from 'primeng/base';
 
+const singleStyle = `
+    .p-toast:not(.p-toast-stacked) .p-toast-message {
+        position: static;
+        opacity: 1;
+        transform: none;
+        margin: 0 0 1rem 0;
+        display: grid;
+        grid-template-rows: 1fr;
+    }
+
+    .p-toast:not(.p-toast-stacked) .p-toast-message:not([data-expanded]):not([data-front]) {
+        overflow: visible;
+        height: auto;
+        transform: none;
+    }
+
+    .p-toast:not(.p-toast-stacked) .p-toast-message:not([data-visible]) {
+        opacity: 1;
+        pointer-events: auto;
+        user-select: auto;
+    }
+
+    .p-toast:not(.p-toast-stacked) .p-toast-message-enter-active {
+        animation: p-animate-toast-enter 300ms ease-out;
+    }
+
+    .p-toast:not(.p-toast-stacked) .p-toast-message-leave-active {
+        animation: p-animate-toast-leave 250ms ease-in;
+    }
+
+    .p-toast:not(.p-toast-stacked) .p-toast-message-leave-to .p-toast-message-content {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    @keyframes p-animate-toast-enter {
+        from {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+        to {
+            opacity: 1;
+            grid-template-rows: 1fr;
+        }
+    }
+
+    @keyframes p-animate-toast-leave {
+        from {
+            opacity: 1;
+        }
+        to {
+            opacity: 0;
+            margin-bottom: 0;
+            grid-template-rows: 0fr;
+            transform: translateY(-100%) scale(0.6);
+        }
+    }
+`;
+
 const stackStyle = `
     /* pMotion enter */
     .p-toast-stack-enter-from {
@@ -124,7 +183,7 @@ const classes = {
 export class ToastStyle extends BaseStyle {
     name = 'toast';
 
-    style = style + stackStyle;
+    style = style + singleStyle + stackStyle;
 
     classes = classes;
 
