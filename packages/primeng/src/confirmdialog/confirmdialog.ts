@@ -529,19 +529,28 @@ export class ConfirmDialog extends BaseComponent<ConfirmDialogPassThrough> {
     }
 
     close() {
-        this.confirmation()?.rejectEvent?.emit(ConfirmEventType.CANCEL);
-        this.hide(ConfirmEventType.CANCEL);
+        const confirmation = this.confirmation();
+        confirmation?.rejectEvent?.emit(ConfirmEventType.CANCEL);
+        this.hide(ConfirmEventType.CANCEL, confirmation);
     }
 
-    hide(type?: ConfirmEventType) {
+    hide(type?: ConfirmEventType, confirmation: Nullable<Confirmation> = this.confirmation()) {
         this.onHide.emit(type);
+        // A new confirmation may have been requested within the accept/reject callback, keep the dialog visible for it and only clean up the closed one.
+        if (confirmation !== this.confirmation()) {
+            confirmation?.acceptEvent?.unsubscribe();
+            confirmation?.rejectEvent?.unsubscribe();
+            return;
+        }
         this.visible.set(false);
         // Unsubscribe from confirmation events when the dialogue is closed, because events are created when the dialogue is opened.
         this.unsubscribeConfirmationEvents();
     }
 
     onDialogHide() {
-        this.confirmation.set(null);
+        if (!this.visible()) {
+            this.confirmation.set(null);
+        }
     }
 
     destroyStyle() {
@@ -572,13 +581,15 @@ export class ConfirmDialog extends BaseComponent<ConfirmDialogPassThrough> {
     }
 
     onAccept() {
-        this.confirmation()?.acceptEvent?.emit();
-        this.hide(ConfirmEventType.ACCEPT);
+        const confirmation = this.confirmation();
+        confirmation?.acceptEvent?.emit();
+        this.hide(ConfirmEventType.ACCEPT, confirmation);
     }
 
     onReject() {
-        this.confirmation()?.rejectEvent?.emit(ConfirmEventType.REJECT);
-        this.hide(ConfirmEventType.REJECT);
+        const confirmation = this.confirmation();
+        confirmation?.rejectEvent?.emit(ConfirmEventType.REJECT);
+        this.hide(ConfirmEventType.REJECT, confirmation);
     }
 
     unsubscribeConfirmationEvents() {
