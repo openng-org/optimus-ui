@@ -35,7 +35,7 @@ const classes = {
             'p-inputnumber-horizontal': instance.showButtons() && instance.buttonLayout() === 'horizontal',
             'p-inputnumber-vertical': instance.showButtons() && instance.buttonLayout() === 'vertical',
             'p-inputnumber-fluid': instance.hasFluid,
-            'p-invalid': instance.invalid()
+            'p-invalid': instance.$invalid()
         }
     ],
     pcInputText: 'p-inputnumber-input',

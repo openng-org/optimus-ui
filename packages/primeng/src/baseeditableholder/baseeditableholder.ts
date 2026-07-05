@@ -55,6 +55,13 @@ export class BaseEditableHolder<PT = any> extends BaseModelHolder<PT> implements
 
     $disabled = computed(() => this.disabled() || this._disabled());
 
+    /**
+     * Invalid state used for styling. With classic manual bindings (`[invalid]="expr"`, no `touched`),
+     * `touched()` is undefined so this equals `invalid()`. With signal forms, `[formField]` binds
+     * `touched`, so the invalid styling is deferred until the field has been touched.
+     */
+    $invalid = computed(() => this.invalid() && (this.touched() ?? true));
+
     onModelChange: Function = () => {};
 
     onModelTouched: Function = () => {};

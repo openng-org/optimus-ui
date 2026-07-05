@@ -162,7 +162,7 @@ export class SelectButton extends BaseEditableHolder<SelectButtonPassThrough> {
 
     dataP = computed(() =>
         this.cn({
-            invalid: this.invalid()
+            invalid: this.$invalid()
         })
     );
 

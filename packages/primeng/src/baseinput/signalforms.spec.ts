@@ -133,6 +133,28 @@ describe('Signal Forms integration', () => {
             expect(host.f.name().invalid()).toBe(true);
             expect(directive.invalid()).toBe(true);
         });
+
+        it('should not apply invalid styling until the field is touched', async () => {
+            const directive = fixture.debugElement.query(By.directive(InputText)).injector.get(InputText);
+            host.f.name().value.set('');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            // invalid but untouched: raw invalid input is true, but styling is gated
+            expect(directive.invalid()).toBe(true);
+            expect(directive.$invalid()).toBe(false);
+            expect(inputEl.getAttribute('data-p') ?? '').not.toContain('invalid');
+
+            // focus + blur marks the field as touched
+            inputEl.dispatchEvent(new Event('focus'));
+            inputEl.dispatchEvent(new Event('blur'));
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(host.f.name().touched()).toBe(true);
+            expect(directive.$invalid()).toBe(true);
+            expect(inputEl.getAttribute('data-p') ?? '').toContain('invalid');
+        });
     });
 
     describe('checkbox host (FormCheckboxControl-style value via CVA)', () => {

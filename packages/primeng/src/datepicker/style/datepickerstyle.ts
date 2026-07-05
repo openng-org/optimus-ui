@@ -19,7 +19,7 @@ const classes = {
     root: ({ instance }) => [
         'p-datepicker p-component p-inputwrapper',
         {
-            'p-invalid': instance.invalid(),
+            'p-invalid': instance.$invalid(),
             'p-datepicker-fluid': instance.hasFluid,
             'p-inputwrapper-filled': instance.$filled(),
             'p-variant-filled': instance.$variant() === 'filled',

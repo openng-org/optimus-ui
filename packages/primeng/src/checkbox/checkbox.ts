@@ -241,7 +241,7 @@ export class Checkbox extends BaseEditableHolder<CheckboxPassThrough> {
 
     dataP = computed(() => {
         return this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             checked: this.checked(),
             disabled: this.$disabled(),
             filled: this.$variant() === 'filled',

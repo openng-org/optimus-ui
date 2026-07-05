@@ -1903,7 +1903,7 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
 
     get containerDataP() {
         return this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             disabled: this.$disabled(),
             focus: this.focused(),
             fluid: this.hasFluid,
