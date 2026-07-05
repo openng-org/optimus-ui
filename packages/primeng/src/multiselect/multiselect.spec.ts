@@ -644,6 +644,24 @@ describe('MultiSelect', () => {
             expect(multiSelect.modelValue()).toBeDefined();
         });
 
+        it('should deselect all options when toggle all is triggered while all options are selected', async () => {
+            const toggleAllEvent = () => ({
+                originalEvent: { preventDefault: () => {}, stopPropagation: () => {} },
+                checked: true
+            });
+
+            multiSelect.onToggleAll(toggleAllEvent());
+            await fixture.whenStable();
+
+            expect(multiSelect.modelValue().length).toBe(5);
+            expect(multiSelect.allSelected()).toBe(true);
+
+            multiSelect.onToggleAll(toggleAllEvent());
+            await fixture.whenStable();
+
+            expect(multiSelect.modelValue().length).toBe(0);
+        });
+
         it('should remove option when chip is clicked', async () => {
             component.display = 'chip';
             component.selectedCities = [component.options[0], component.options[1]];

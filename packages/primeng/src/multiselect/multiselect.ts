@@ -685,7 +685,7 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
      * Whether all data is selected.
      * @group Props
      */
-    selectAll = input<boolean | null>();
+    selectAll = input<boolean | null>(null);
     /**
      * Indicates whether to focus on options when hovering over them, defaults to optionLabel.
      * @group Props
