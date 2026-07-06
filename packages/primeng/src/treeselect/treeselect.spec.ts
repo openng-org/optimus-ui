@@ -47,40 +47,42 @@ const mockTreeNodes: TreeNode[] = [
 ];
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TreeSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-treeselect
-            [(ngModel)]="selectedValue"
-            [options]="options"
-            [placeholder]="placeholder"
-            [disabled]="disabled"
-            [selectionMode]="selectionMode"
-            [display]="display"
-            [metaKeySelection]="metaKeySelection"
-            [showClear]="showClear"
-            [filter]="filter"
-            [filterBy]="filterBy"
-            [filterMode]="filterMode"
-            [filterPlaceholder]="filterPlaceholder"
-            [emptyMessage]="emptyMessage"
-            [scrollHeight]="scrollHeight"
-            [virtualScroll]="virtualScroll"
-            [virtualScrollItemSize]="virtualScrollItemSize"
-            [virtualScrollOptions]="virtualScrollOptions"
-            [propagateSelectionDown]="propagateSelectionDown"
-            [propagateSelectionUp]="propagateSelectionUp"
-            [resetFilterOnHide]="resetFilterOnHide"
-            [loading]="loading"
-            [autofocus]="autofocus"
-            [tabindex]="tabindex"
-            [inputId]="inputId"
-            [ariaLabel]="ariaLabel"
-            [ariaLabelledBy]="ariaLabelledBy"
-            [panelClass]="panelClass"
-            [panelStyle]="panelStyle"
-            [labelStyle]="labelStyle"
-            [labelStyleClass]="labelStyleClass"
-            [appendTo]="appendTo"
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [options]="options()"
+            [placeholder]="placeholder()"
+            [disabled]="disabled()"
+            [selectionMode]="selectionMode()"
+            [display]="display()"
+            [metaKeySelection]="metaKeySelection()"
+            [showClear]="showClear()"
+            [filter]="filter()"
+            [filterBy]="filterBy()"
+            [filterMode]="filterMode()"
+            [filterPlaceholder]="filterPlaceholder()"
+            [emptyMessage]="emptyMessage()"
+            [scrollHeight]="scrollHeight()"
+            [virtualScroll]="virtualScroll()"
+            [virtualScrollItemSize]="virtualScrollItemSize()"
+            [virtualScrollOptions]="virtualScrollOptions()"
+            [propagateSelectionDown]="propagateSelectionDown()"
+            [propagateSelectionUp]="propagateSelectionUp()"
+            [resetFilterOnHide]="resetFilterOnHide()"
+            [loading]="loading()"
+            [autofocus]="autofocus()"
+            [tabindex]="tabindex()"
+            [inputId]="inputId()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [panelClass]="panelClass()"
+            [panelStyle]="panelStyle()"
+            [labelStyle]="labelStyle()"
+            [labelStyleClass]="labelStyleClass()"
+            [appendTo]="appendTo()"
             (onNodeSelect)="onNodeSelectEvent($event)"
             (onNodeUnselect)="onNodeUnselectEvent($event)"
             (onNodeExpand)="onNodeExpandEvent($event)"
@@ -95,9 +97,15 @@ const mockTreeNodes: TreeNode[] = [
             <!-- Value template -->
             <ng-template #value let-value let-placeholder="placeholder">
                 <div class="custom-value" data-testid="template-value">
-                    <span *ngIf="value && !isArray(value)">{{ value.label }} - Custom</span>
-                    <span *ngIf="value && isArray(value)">{{ value.length }} item(s) selected - Custom</span>
-                    <span *ngIf="!value">{{ placeholder }}</span>
+                    @if (value && !isArray(value)) {
+                        <span>{{ value.label }} - Custom</span>
+                    }
+                    @if (value && isArray(value)) {
+                        <span>{{ value.length }} item(s) selected - Custom</span>
+                    }
+                    @if (!value) {
+                        <span>{{ placeholder }}</span>
+                    }
                 </div>
             </ng-template>
 
@@ -154,58 +162,60 @@ const mockTreeNodes: TreeNode[] = [
         </p-treeselect>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-treeselect formControlName="selectedNodes" [options]="formOptions" [placeholder]="'Select nodes'" (onNodeSelect)="onFormNodeSelect($event)"> </p-treeselect>
-        </form>
+        @if (showReactiveForm()) {
+            <form [formGroup]="reactiveForm">
+                <p-treeselect formControlName="selectedNodes" [options]="formOptions()" [placeholder]="'Select nodes'" (onNodeSelect)="onFormNodeSelect($event)"> </p-treeselect>
+            </form>
+        }
     `
 })
 class TestTreeSelectComponent {
-    selectedValue: TreeNode | TreeNode[] | null = null as any;
-    options: TreeNode[] = [];
-    formOptions: TreeNode[] = [];
+    selectedValue = signal<TreeNode | TreeNode[] | null>(null as any);
+    options = signal<TreeNode[]>([]);
+    formOptions = signal<TreeNode[]>([]);
 
     // Basic properties
-    placeholder: string = 'Select a node';
-    disabled: boolean = false;
-    selectionMode: 'single' | 'multiple' | 'checkbox' = 'single';
-    display: 'comma' | 'chip' = 'comma';
-    metaKeySelection: boolean = false;
-    showClear: boolean = false;
+    placeholder = signal<string>('Select a node');
+    disabled = signal<boolean>(false);
+    selectionMode = signal<'single' | 'multiple' | 'checkbox'>('single');
+    display = signal<'comma' | 'chip'>('comma');
+    metaKeySelection = signal<boolean>(false);
+    showClear = signal<boolean>(false);
 
     // Filter properties
-    filter: boolean = false;
-    filterBy: string = 'label';
-    filterMode: 'lenient' | 'strict' = 'lenient';
-    filterPlaceholder: string = 'Filter nodes';
-    emptyMessage: string = 'No nodes found';
+    filter = signal<boolean>(false);
+    filterBy = signal<string>('label');
+    filterMode = signal<'lenient' | 'strict'>('lenient');
+    filterPlaceholder = signal<string>('Filter nodes');
+    emptyMessage = signal<string>('No nodes found');
 
     // Scroll properties
-    scrollHeight: string = '400px';
-    virtualScroll: boolean = false;
-    virtualScrollItemSize: number | undefined;
-    virtualScrollOptions: any;
+    scrollHeight = signal<string>('400px');
+    virtualScroll = signal<boolean>(false);
+    virtualScrollItemSize = signal<number | undefined>(undefined);
+    virtualScrollOptions = signal<any>(undefined);
 
     // Selection behavior
-    propagateSelectionDown: boolean = true;
-    propagateSelectionUp: boolean = true;
-    resetFilterOnHide: boolean = true;
+    propagateSelectionDown = signal<boolean>(true);
+    propagateSelectionUp = signal<boolean>(true);
+    resetFilterOnHide = signal<boolean>(true);
 
     // Loading and state
-    loading: boolean = false;
-    autofocus: boolean = false;
+    loading = signal<boolean>(false);
+    autofocus = signal<boolean>(false);
 
     // Form properties
-    tabindex: number = 0;
-    inputId: string | undefined;
-    ariaLabel: string = 'Test tree select';
-    ariaLabelledBy: string | undefined;
+    tabindex = signal<number>(0);
+    inputId = signal<string | undefined>(undefined);
+    ariaLabel = signal<string>('Test tree select');
+    ariaLabelledBy = signal<string | undefined>(undefined);
 
     // Styling
-    panelClass: string = '';
-    panelStyle: any = {};
-    labelStyle: any = {};
-    labelStyleClass: string = '';
-    appendTo: any;
+    panelClass = signal<string>('');
+    panelStyle = signal<any>({});
+    labelStyle = signal<any>({});
+    labelStyleClass = signal<string>('');
+    appendTo = signal<any>(undefined);
 
     // Event tracking
     nodeSelectEvent: any = null as any;
@@ -221,7 +231,7 @@ class TestTreeSelectComponent {
 
     // Form handling
     reactiveForm: FormGroup;
-    showReactiveForm: boolean = false;
+    showReactiveForm = signal<boolean>(false);
 
     // Dynamic data testing
     signalOptions = signal(mockTreeNodes.slice(0, 1));
@@ -283,7 +293,7 @@ class TestTreeSelectComponent {
     loadLateOptions(changeDetectorRef?: any) {
         setTimeout(() => {
             this.lateLoadedOptions = mockTreeNodes.slice(0, 1);
-            this.options = this.lateLoadedOptions;
+            this.options.set(this.lateLoadedOptions);
             if (changeDetectorRef) {
                 changeDetectorRef.markForCheck();
             }
@@ -328,15 +338,22 @@ class TestTreeSelectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TreeSelectModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-treeselect [(ngModel)]="selectedValue" [options]="options" [placeholder]="placeholder" [disabled]="disabled" [showClear]="showClear" [filter]="filter">
+        <p-treeselect [ngModel]="selectedValue()" (ngModelChange)="selectedValue.set($event)" [options]="options()" [placeholder]="placeholder()" [disabled]="disabled()" [showClear]="showClear()" [filter]="filter()">
             <!-- Value template -->
             <ng-template #value let-value let-placeholder="placeholder">
                 <div class="template-value" [attr.data-testid]="'template-value'">
-                    <span class="value-text" *ngIf="value && !isArrayValue(value)">{{ value.label }} - template</span>
-                    <span class="multi-value-text" *ngIf="value && isArrayValue(value)">{{ value.length }} selected - template</span>
-                    <span class="placeholder-text" *ngIf="!value">{{ placeholder }} (template)</span>
+                    @if (value && !isArrayValue(value)) {
+                        <span class="value-text">{{ value.label }} - template</span>
+                    }
+                    @if (value && isArrayValue(value)) {
+                        <span class="multi-value-text">{{ value.length }} selected - template</span>
+                    }
+                    @if (!value) {
+                        <span class="placeholder-text">{{ placeholder }} (template)</span>
+                    }
                 </div>
             </ng-template>
 
@@ -406,12 +423,12 @@ class TestTreeSelectComponent {
     `
 })
 class TestTemplateTreeSelectComponent {
-    selectedValue: TreeNode | TreeNode[] | null = null as any;
-    options: TreeNode[] = mockTreeNodes;
-    placeholder: string = 'Select Node';
-    disabled: boolean = false;
-    showClear: boolean = true;
-    filter: boolean = true;
+    selectedValue = signal<TreeNode | TreeNode[] | null>(null as any);
+    options = signal<TreeNode[]>(mockTreeNodes);
+    placeholder = signal<string>('Select Node');
+    disabled = signal<boolean>(false);
+    showClear = signal<boolean>(true);
+    filter = signal<boolean>(true);
 
     // Helper method for template
     isArrayValue(value: any): boolean {
@@ -429,8 +446,7 @@ describe('TreeSelect', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [TreeSelectModule, SharedModule, FormsModule, ReactiveFormsModule],
-            declarations: [TestTreeSelectComponent, TestTemplateTreeSelectComponent],
+            imports: [TreeSelectModule, SharedModule, FormsModule, ReactiveFormsModule, TestTreeSelectComponent, TestTemplateTreeSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -439,7 +455,7 @@ describe('TreeSelect', () => {
 
         testFixture = TestBed.createComponent(TestTreeSelectComponent);
         testComponent = testFixture.componentInstance;
-        testComponent.options = mockTreeNodes;
+        testComponent.options.set(mockTreeNodes);
         testFixture.detectChanges();
 
         templateFixture = TestBed.createComponent(TestTemplateTreeSelectComponent);
@@ -473,7 +489,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with simple TreeNode array', async () => {
-            testComponent.options = mockTreeNodes;
+            testComponent.options.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -488,7 +504,7 @@ describe('TreeSelect', () => {
                 { key: '1', label: 'Node 1' },
                 { key: '2', label: 'Node 2' }
             ];
-            testComponent.options = stringNodes;
+            testComponent.options.set(stringNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -499,7 +515,7 @@ describe('TreeSelect', () => {
 
         it('should work with number-based TreeNode array', async () => {
             const numberNodes = testComponent.numberOptions;
-            testComponent.options = numberNodes;
+            testComponent.options.set(numberNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -509,7 +525,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with getters and setters', async () => {
-            testComponent.options = testComponent.objectOptions;
+            testComponent.options.set(testComponent.objectOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -520,7 +536,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with signals', async () => {
-            testComponent.options = testComponent.signalOptions();
+            testComponent.options.set(testComponent.signalOptions());
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -532,7 +548,7 @@ describe('TreeSelect', () => {
 
         it('should work with observables and async pipe', async () => {
             testComponent.observableOptions$.subscribe((options) => {
-                testComponent.options = options;
+                testComponent.options.set(options);
             });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -561,7 +577,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with NgModel', async () => {
-            testComponent.selectedValue = mockTreeNodes[0];
+            testComponent.selectedValue.set(mockTreeNodes[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -573,11 +589,11 @@ describe('TreeSelect', () => {
         });
 
         it('should work with reactive forms', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
-            testComponent.formOptions = mockTreeNodes;
+            testComponent.formOptions.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -592,11 +608,11 @@ describe('TreeSelect', () => {
         });
 
         it('should handle form validation', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
-            testComponent.formOptions = mockTreeNodes;
+            testComponent.formOptions.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -611,11 +627,11 @@ describe('TreeSelect', () => {
         });
 
         it('should handle setValue and getValue operations', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
-            testComponent.formOptions = mockTreeNodes;
+            testComponent.formOptions.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -630,11 +646,11 @@ describe('TreeSelect', () => {
         });
 
         it('should handle form control state changes', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
-            testComponent.formOptions = mockTreeNodes;
+            testComponent.formOptions.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -658,7 +674,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with placeholder', async () => {
-            testComponent.placeholder = 'Choose a tree node';
+            testComponent.placeholder.set('Choose a tree node');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -668,7 +684,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with disabled state', async () => {
-            testComponent.disabled = true;
+            testComponent.disabled.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -678,7 +694,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with selectionMode', async () => {
-            testComponent.selectionMode = 'multiple';
+            testComponent.selectionMode.set('multiple');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -688,7 +704,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with display mode', async () => {
-            testComponent.display = 'chip';
+            testComponent.display.set('chip');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -698,10 +714,10 @@ describe('TreeSelect', () => {
         });
 
         it('should work with filter', async () => {
-            testComponent.filter = true;
-            testComponent.filterBy = 'label';
-            testComponent.filterMode = 'strict';
-            testComponent.filterPlaceholder = 'Search nodes';
+            testComponent.filter.set(true);
+            testComponent.filterBy.set('label');
+            testComponent.filterMode.set('strict');
+            testComponent.filterPlaceholder.set('Search nodes');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -714,7 +730,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with loading state', async () => {
-            testComponent.loading = true;
+            testComponent.loading.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -724,9 +740,9 @@ describe('TreeSelect', () => {
         });
 
         it('should work with virtualScroll', async () => {
-            testComponent.virtualScroll = true;
-            testComponent.virtualScrollItemSize = 35;
-            testComponent.scrollHeight = '300px';
+            testComponent.virtualScroll.set(true);
+            testComponent.virtualScrollItemSize.set(35);
+            testComponent.scrollHeight.set('300px');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -738,7 +754,7 @@ describe('TreeSelect', () => {
         });
 
         it('should work with appendTo', async () => {
-            testComponent.appendTo = 'body';
+            testComponent.appendTo.set('body');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -749,10 +765,10 @@ describe('TreeSelect', () => {
         });
 
         it('should work with styles and styleClass', async () => {
-            testComponent.labelStyle = { color: 'red', fontWeight: 'bold' };
-            testComponent.labelStyleClass = 'custom-label';
-            testComponent.panelClass = 'custom-panel';
-            testComponent.panelStyle = { backgroundColor: 'lightgray' };
+            testComponent.labelStyle.set({ color: 'red', fontWeight: 'bold' });
+            testComponent.labelStyleClass.set('custom-label');
+            testComponent.panelClass.set('custom-panel');
+            testComponent.panelStyle.set({ backgroundColor: 'lightgray' });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -771,7 +787,7 @@ describe('TreeSelect', () => {
         });
 
         it('should emit onNodeSelect event', async () => {
-            testComponent.selectedValue = null as any;
+            testComponent.selectedValue.set(null as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -783,7 +799,7 @@ describe('TreeSelect', () => {
             await testFixture.whenStable();
 
             // Set a value to trigger node selection event
-            testComponent.selectedValue = mockTreeNodes[0];
+            testComponent.selectedValue.set(mockTreeNodes[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -820,8 +836,8 @@ describe('TreeSelect', () => {
         });
 
         it('should emit onClear event', async () => {
-            testComponent.showClear = true;
-            testComponent.selectedValue = mockTreeNodes[0];
+            testComponent.showClear.set(true);
+            testComponent.selectedValue.set(mockTreeNodes[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -891,7 +907,7 @@ describe('TreeSelect', () => {
         describe('Value Template (_valueTemplate)', () => {
             it('should render #value with value and placeholder context', async () => {
                 // Test with no value (placeholder scenario)
-                templateComponent.selectedValue = null as any;
+                templateComponent.selectedValue.set(null as any);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -913,7 +929,7 @@ describe('TreeSelect', () => {
 
             it('should render #value with selected value context', async () => {
                 // Test with selected value
-                templateComponent.selectedValue = mockTreeNodes[0];
+                templateComponent.selectedValue.set(mockTreeNodes[0]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -1009,7 +1025,7 @@ describe('TreeSelect', () => {
 
         describe('Empty Template (_emptyTemplate)', () => {
             it('should render #empty when no options', async () => {
-                templateComponent.options = [];
+                templateComponent.options.set([]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -1062,8 +1078,8 @@ describe('TreeSelect', () => {
 
         describe('Clear Icon Template (_clearIconTemplate)', () => {
             it('should render #clearicon when showClear is enabled', async () => {
-                templateComponent.selectedValue = mockTreeNodes[0];
-                templateComponent.showClear = true;
+                templateComponent.selectedValue.set(mockTreeNodes[0]);
+                templateComponent.showClear.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -1109,8 +1125,8 @@ describe('TreeSelect', () => {
             });
 
             it('should handle context parameters correctly for all templates', async () => {
-                templateComponent.selectedValue = mockTreeNodes[0];
-                templateComponent.showClear = true;
+                templateComponent.selectedValue.set(mockTreeNodes[0]);
+                templateComponent.showClear.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -1182,9 +1198,9 @@ describe('TreeSelect', () => {
         });
 
         it('should have correct ARIA attributes', async () => {
-            testComponent.ariaLabel = 'Select tree node';
-            testComponent.ariaLabelledBy = 'tree-label';
-            testComponent.inputId = 'tree-input';
+            testComponent.ariaLabel.set('Select tree node');
+            testComponent.ariaLabelledBy.set('tree-label');
+            testComponent.inputId.set('tree-input');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1226,8 +1242,8 @@ describe('TreeSelect', () => {
         });
 
         it('should handle multiple selection mode', async () => {
-            testComponent.selectionMode = 'multiple';
-            testComponent.selectedValue = [mockTreeNodes[0], mockTreeNodes[1]];
+            testComponent.selectionMode.set('multiple');
+            testComponent.selectedValue.set([mockTreeNodes[0], mockTreeNodes[1]]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1243,9 +1259,9 @@ describe('TreeSelect', () => {
         });
 
         it('should handle checkbox selection mode', async () => {
-            testComponent.selectionMode = 'checkbox';
-            testComponent.propagateSelectionDown = true;
-            testComponent.propagateSelectionUp = true;
+            testComponent.selectionMode.set('checkbox');
+            testComponent.propagateSelectionDown.set(true);
+            testComponent.propagateSelectionUp.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1257,9 +1273,9 @@ describe('TreeSelect', () => {
         });
 
         it('should handle filter functionality', async () => {
-            testComponent.filter = true;
-            testComponent.filterBy = 'label';
-            testComponent.filterMode = 'lenient';
+            testComponent.filter.set(true);
+            testComponent.filterBy.set('label');
+            testComponent.filterMode.set('lenient');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1277,8 +1293,8 @@ describe('TreeSelect', () => {
         });
 
         it('should handle empty state properly', async () => {
-            testComponent.options = [];
-            testComponent.emptyMessage = 'No nodes available';
+            testComponent.options.set([]);
+            testComponent.emptyMessage.set('No nodes available');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1299,9 +1315,9 @@ describe('TreeSelect', () => {
                 });
             }
 
-            testComponent.options = largeDataset;
-            testComponent.virtualScroll = true;
-            testComponent.virtualScrollItemSize = 32;
+            testComponent.options.set(largeDataset);
+            testComponent.virtualScroll.set(true);
+            testComponent.virtualScrollItemSize.set(32);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1314,19 +1330,19 @@ describe('TreeSelect', () => {
 
         it('should handle dynamic option updates', async () => {
             // Start with empty options
-            testComponent.options = [];
+            testComponent.options.set([]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
 
             // Add options dynamically
-            testComponent.options = mockTreeNodes.slice(0, 1);
+            testComponent.options.set(mockTreeNodes.slice(0, 1));
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
 
             // Add more options
-            testComponent.options = mockTreeNodes;
+            testComponent.options.set(mockTreeNodes);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1342,8 +1358,8 @@ describe('TreeSelect', () => {
         });
 
         it('should handle showClear performance', async () => {
-            testComponent.showClear = true;
-            testComponent.selectedValue = mockTreeNodes[0];
+            testComponent.showClear.set(true);
+            testComponent.selectedValue.set(mockTreeNodes[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1358,7 +1374,7 @@ describe('TreeSelect', () => {
         });
 
         it('should handle tabindex configuration', async () => {
-            testComponent.tabindex = 5;
+            testComponent.tabindex.set(5);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -1368,7 +1384,7 @@ describe('TreeSelect', () => {
         });
 
         it('should handle autofocus functionality', async () => {
-            testComponent.autofocus = true;
+            testComponent.autofocus.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
