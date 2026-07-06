@@ -25,41 +25,43 @@ interface Country {
 
 // Basic test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-multiselect
-            [options]="options"
-            [(ngModel)]="selectedCities"
-            [placeholder]="placeholder"
-            [disabled]="disabled"
-            [filter]="filter"
-            [filterBy]="filterBy"
-            [showToggleAll]="showToggleAll"
-            [maxSelectedLabels]="maxSelectedLabels"
-            [selectionLimit]="selectionLimit"
+            [options]="options()"
+            [ngModel]="selectedCities()"
+            (ngModelChange)="selectedCities.set($event)"
+            [placeholder]="placeholder()"
+            [disabled]="disabled()"
+            [filter]="filter()"
+            [filterBy]="filterBy()"
+            [showToggleAll]="showToggleAll()"
+            [maxSelectedLabels]="maxSelectedLabels()"
+            [selectionLimit]="selectionLimit()"
             [displaySelectedLabel]="displaySelectedLabel"
-            [display]="display"
-            [showClear]="showClear"
+            [display]="display()"
+            [showClear]="showClear()"
             [optionLabel]="optionLabel"
-            [optionValue]="optionValue"
+            [optionValue]="optionValue()"
             [optionDisabled]="optionDisabled"
-            [style]="style"
-            [panelStyle]="panelStyle"
-            [panelStyleClass]="panelStyleClass"
-            [scrollHeight]="scrollHeight"
+            [style]="style()"
+            [panelStyle]="panelStyle()"
+            [panelStyleClass]="panelStyleClass()"
+            [scrollHeight]="scrollHeight()"
             [virtualScroll]="virtualScroll"
             [virtualScrollItemSize]="virtualScrollItemSize"
-            [lazy]="lazy"
-            [loading]="loading"
+            [lazy]="lazy()"
+            [loading]="loading()"
             [loadingIcon]="loadingIcon"
             [filterValue]="filterValue"
             [autofocusFilter]="autofocusFilter"
-            [resetFilterOnHide]="resetFilterOnHide"
+            [resetFilterOnHide]="resetFilterOnHide()"
             [dropdownIcon]="dropdownIcon"
             [chipIcon]="chipIcon"
             [filterPlaceHolder]="filterPlaceHolder"
             [emptyMessage]="emptyMessage"
-            [emptyFilterMessage]="emptyFilterMessage"
+            [emptyFilterMessage]="emptyFilterMessage()"
             [tooltip]="tooltip"
             [tooltipPosition]="tooltipPosition"
             [focusOnHover]="focusOnHover"
@@ -81,46 +83,46 @@ interface Country {
     `
 })
 class TestBasicMultiSelectComponent {
-    options: City[] = [
+    options = signal<City[]>([
         { name: 'New York', code: 'NY', country: 'USA' },
         { name: 'Rome', code: 'RM', country: 'Italy' },
         { name: 'London', code: 'LDN', country: 'England' },
         { name: 'Istanbul', code: 'IST', country: 'Turkey' },
         { name: 'Paris', code: 'PRS', country: 'France' },
         { name: 'Tokyo', code: 'TKY', country: 'Japan', disabled: true }
-    ];
+    ]);
 
-    selectedCities: City[] = [];
-    placeholder = 'Select Cities';
-    disabled = false;
-    filter = true;
-    filterBy = 'name';
-    showToggleAll = true;
-    maxSelectedLabels = 3;
-    selectionLimit: number | undefined;
+    selectedCities = signal<City[]>([]);
+    placeholder = signal<any>('Select Cities');
+    disabled = signal<any>(false);
+    filter = signal<any>(true);
+    filterBy = signal<any>('name');
+    showToggleAll = signal<any>(true);
+    maxSelectedLabels = signal<any>(3);
+    selectionLimit = signal<number | undefined>(undefined);
     displaySelectedLabel = true;
-    display: 'comma' | 'chip' = 'comma';
-    showClear = true;
+    display = signal<'comma' | 'chip'>('comma');
+    showClear = signal<any>(true);
     optionLabel = 'name';
-    optionValue: string | undefined;
+    optionValue = signal<string | undefined>(undefined);
     optionDisabled: string | undefined;
-    style: any;
-    panelStyle: any;
-    panelStyleClass: string | undefined;
-    scrollHeight = '200px';
+    style = signal<any>(undefined);
+    panelStyle = signal<any>(undefined);
+    panelStyleClass = signal<string | undefined>(undefined);
+    scrollHeight = signal<any>('200px');
     virtualScroll = false;
     virtualScrollItemSize: number | undefined;
-    lazy = false;
-    loading = false;
+    lazy = signal<any>(false);
+    loading = signal<any>(false);
     loadingIcon: string | undefined;
     filterValue: string | undefined;
     autofocusFilter = false;
-    resetFilterOnHide = false;
+    resetFilterOnHide = signal<any>(false);
     dropdownIcon: string | undefined;
     chipIcon: string | undefined;
     filterPlaceHolder: string | undefined;
     emptyMessage = '';
-    emptyFilterMessage = '';
+    emptyFilterMessage = signal<any>('');
     tooltip = '';
     tooltipPosition = 'right';
     focusOnHover = true;
@@ -188,10 +190,11 @@ class TestBasicMultiSelectComponent {
 
 // Form integration test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <form [formGroup]="form">
-            <p-multiselect formControlName="selectedCities" [options]="options" optionLabel="name" placeholder="Select Cities" [showClear]="true" [filter]="true"></p-multiselect>
+            <p-multiselect formControlName="selectedCities" [options]="options()" optionLabel="name" placeholder="Select Cities" [showClear]="true" [filter]="true"></p-multiselect>
         </form>
 
         <div class="form-status">
@@ -210,26 +213,29 @@ class TestFormMultiSelectComponent {
         selectedCities: new FormControl<City[]>([], [Validators.required])
     });
 
-    options: City[] = [
+    options = signal<City[]>([
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' },
         { name: 'London', code: 'LDN' },
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
-    ];
+    ]);
 }
 
 // Template test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
+        <p-multiselect [options]="options()" [ngModel]="selectedCities()" (ngModelChange)="selectedCities.set($event)" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
                 <div class="custom-selected-items">
-                    <div *ngFor="let city of value" class="custom-chip">
-                        {{ city.name }}
-                        <span class="remove-chip" (click)="removeChip(city)">×</span>
-                    </div>
+                    @for (city of value; track city) {
+                        <div class="custom-chip">
+                            {{ city.name }}
+                            <span class="remove-chip" (click)="removeChip(city)">×</span>
+                        </div>
+                    }
                 </div>
             </ng-template>
 
@@ -245,7 +251,7 @@ class TestFormMultiSelectComponent {
             </ng-template>
 
             <ng-template #footer>
-                <div class="custom-footer">{{ selectedCities?.length || 0 }} cities selected</div>
+                <div class="custom-footer">{{ selectedCities()?.length || 0 }} cities selected</div>
             </ng-template>
 
             <ng-template #empty>
@@ -259,24 +265,36 @@ class TestFormMultiSelectComponent {
     `
 })
 class TestTemplateMultiSelectComponent {
-    options: City[] = [
+    options = signal<City[]>([
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' },
         { name: 'London', code: 'LDN' },
         { name: 'Istanbul', code: 'IST' },
         { name: 'Paris', code: 'PRS' }
-    ];
+    ]);
 
-    selectedCities: City[] = [];
+    selectedCities = signal<City[]>([]);
 }
 
 // Grouped options test component
 @Component({
-    standalone: false,
-    template: ` <p-multiselect [options]="groupedOptions" [(ngModel)]="selectedCities" [group]="true" optionLabel="name" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select Cities"></p-multiselect> `
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
+    template: `
+        <p-multiselect
+            [options]="groupedOptions"
+            [ngModel]="selectedCities()"
+            (ngModelChange)="selectedCities.set($event)"
+            [group]="true"
+            optionLabel="name"
+            optionGroupLabel="label"
+            optionGroupChildren="items"
+            placeholder="Select Cities"
+        ></p-multiselect>
+    `
 })
 class TestGroupedMultiSelectComponent {
-    selectedCities: City[] = [];
+    selectedCities = signal<City[]>([]);
 
     groupedOptions: any[] = [
         {
@@ -302,12 +320,15 @@ class TestGroupedMultiSelectComponent {
 
 // Content child test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
+        <p-multiselect [options]="options()" [ngModel]="selectedCities()" (ngModelChange)="selectedCities.set($event)" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
                 <div class="content-child-selected">
-                    <div *ngFor="let city of value">{{ city.name }}</div>
+                    @for (city of value; track city) {
+                        <div>{{ city.name }}</div>
+                    }
                 </div>
             </ng-template>
 
@@ -334,28 +355,41 @@ class TestGroupedMultiSelectComponent {
     `
 })
 class TestContentChildMultiSelectComponent {
-    options: City[] = [
+    options = signal<City[]>([
         { name: 'New York', code: 'NY' },
         { name: 'Rome', code: 'RM' }
-    ];
+    ]);
 
-    selectedCities: City[] = [];
+    selectedCities = signal<City[]>([]);
 }
 
 // Virtual scroll test component
 @Component({
-    standalone: false,
-    template: ` <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name" [virtualScroll]="true" [virtualScrollItemSize]="40" [scrollHeight]="'200px'" [lazy]="lazy" (onLazyLoad)="onLazyLoad($event)"></p-multiselect> `
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
+    template: `
+        <p-multiselect
+            [options]="options()"
+            [ngModel]="selectedCities()"
+            (ngModelChange)="selectedCities.set($event)"
+            optionLabel="name"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="40"
+            [scrollHeight]="'200px'"
+            [lazy]="lazy()"
+            (onLazyLoad)="onLazyLoad($event)"
+        ></p-multiselect>
+    `
 })
 class TestVirtualScrollMultiSelectComponent {
-    options: City[] = [];
-    selectedCities: City[] = [];
-    lazy = false;
+    options = signal<City[]>([]);
+    selectedCities = signal<City[]>([]);
+    lazy = signal<any>(false);
 
     constructor() {
         // Generate large dataset for virtual scrolling
         for (let i = 0; i < 1000; i++) {
-            this.options.push({
+            this.options().push({
                 name: `City ${i}`,
                 code: `C${i}`
             });
@@ -377,7 +411,11 @@ describe('MultiSelect', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
+                CommonModule,
+                FormsModule,
+                ReactiveFormsModule,
+                MultiSelectModule,
                 TestBasicMultiSelectComponent,
                 TestFormMultiSelectComponent,
                 TestTemplateMultiSelectComponent,
@@ -389,7 +427,6 @@ describe('MultiSelect', () => {
                 TestViewChildMultiSelectComponent,
                 TestComplexEdgeCasesMultiSelectComponent
             ],
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -435,13 +472,13 @@ describe('MultiSelect', () => {
         });
 
         it('should accept custom values', () => {
-            component.placeholder = 'Custom Placeholder';
-            component.filter = false;
-            component.showToggleAll = false;
-            component.maxSelectedLabels = 5;
-            component.display = 'chip';
-            component.showClear = false;
-            component.scrollHeight = '300px';
+            component.placeholder.set('Custom Placeholder');
+            component.filter.set(false);
+            component.showToggleAll.set(false);
+            component.maxSelectedLabels.set(5);
+            component.display.set('chip');
+            component.showClear.set(false);
+            component.scrollHeight.set('300px');
             fixture.detectChanges();
 
             expect(multiSelect.placeholder()).toBe('Custom Placeholder');
@@ -460,7 +497,7 @@ describe('MultiSelect', () => {
         });
 
         it('should handle empty options', () => {
-            component.options = [];
+            component.options.set([]);
             fixture.detectChanges();
 
             expect(multiSelect._options().length).toBe(0);
@@ -468,7 +505,7 @@ describe('MultiSelect', () => {
         });
 
         it('should handle null/undefined options', () => {
-            component.options = null as any;
+            component.options.set(null as any);
             fixture.detectChanges();
 
             expect(() => fixture.detectChanges()).not.toThrow();
@@ -502,7 +539,7 @@ describe('MultiSelect', () => {
         });
 
         it('should update model programmatically', () => {
-            const newValue = [component.options[0], component.options[1]];
+            const newValue = [component.options()[0], component.options()[1]];
 
             multiSelect.updateModel(newValue);
 
@@ -510,7 +547,7 @@ describe('MultiSelect', () => {
         });
 
         it('should clear selection', async () => {
-            component.selectedCities = [component.options[0]];
+            component.selectedCities.set([component.options()[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -534,15 +571,15 @@ describe('MultiSelect', () => {
         });
 
         it('should handle maxSelectionLimitReached', async () => {
-            component.selectionLimit = 2;
+            component.selectionLimit.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            multiSelect.updateModel([component.options[0], component.options[1]]);
+            multiSelect.updateModel([component.options()[0], component.options()[1]]);
 
             expect(multiSelect.maxSelectionLimitReached()).toBe(true);
 
-            multiSelect.updateModel([component.options[0]]);
+            multiSelect.updateModel([component.options()[0]]);
 
             expect(multiSelect.maxSelectionLimitReached()).toBe(false);
         });
@@ -556,7 +593,7 @@ describe('MultiSelect', () => {
         it('should emit onChange event when selection changes', async () => {
             vi.spyOn(component, 'onSelectionChange');
 
-            const option = component.options[0];
+            const option = component.options()[0];
             multiSelect.onOptionSelect({
                 originalEvent: new MouseEvent('click'),
                 option: option
@@ -611,7 +648,7 @@ describe('MultiSelect', () => {
 
         it('should emit onSelectAllChange event', async () => {
             // Remove disabled option for this test so all options can be selected
-            component.options = component.options.filter((o) => !o.disabled);
+            component.options.set(component.options().filter((o) => !o.disabled));
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -663,17 +700,17 @@ describe('MultiSelect', () => {
         });
 
         it('should remove option when chip is clicked', async () => {
-            component.display = 'chip';
-            component.selectedCities = [component.options[0], component.options[1]];
+            component.display.set('chip');
+            component.selectedCities.set([component.options()[0], component.options()[1]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             vi.spyOn(component, 'onRemove');
 
-            multiSelect.removeOption(component.options[0], new Event('click'));
+            multiSelect.removeOption(component.options()[0], new Event('click'));
 
             expect(component.onRemove).toHaveBeenCalled();
-            expect(multiSelect.modelValue()).toEqual([component.options[1]]);
+            expect(multiSelect.modelValue()).toEqual([component.options()[1]]);
         });
     });
 
@@ -720,7 +757,7 @@ describe('MultiSelect', () => {
             multiSelect.onKeyDown(keyEvent);
 
             expect(keyEvent.preventDefault).toHaveBeenCalled();
-            expect(multiSelect.modelValue()).toContain(component.options[0]);
+            expect(multiSelect.modelValue()).toContain(component.options()[0]);
         });
 
         it('should handle space key', async () => {
@@ -732,7 +769,7 @@ describe('MultiSelect', () => {
             multiSelect.onKeyDown(keyEvent);
 
             expect(keyEvent.preventDefault).toHaveBeenCalled();
-            expect(multiSelect.modelValue()).toContain(component.options[0]);
+            expect(multiSelect.modelValue()).toContain(component.options()[0]);
         });
 
         it('should handle escape key', async () => {
@@ -777,7 +814,7 @@ describe('MultiSelect', () => {
 
             expect(keyEvent.preventDefault).toHaveBeenCalled();
             // Should select all valid options
-            const validOptions = component.options.filter((opt) => !opt.disabled);
+            const validOptions = component.options().filter((opt) => !opt.disabled);
             expect(multiSelect.modelValue().length).toBe(validOptions.length);
         });
 
@@ -803,7 +840,7 @@ describe('MultiSelect', () => {
 
             expect(keyEvent.preventDefault).toHaveBeenCalled();
             // Should focus on last valid option (not disabled)
-            const lastValidIndex = component.options.length - 2; // Exclude disabled Tokyo
+            const lastValidIndex = component.options().length - 2; // Exclude disabled Tokyo
             expect(multiSelect.focusedOptionIndex()).toBe(lastValidIndex);
         });
 
@@ -833,7 +870,7 @@ describe('MultiSelect', () => {
 
             expect(keyEvent.preventDefault).toHaveBeenCalled();
             // Should focus on London (first option starting with L)
-            const londonIndex = component.options.findIndex((opt) => opt.name === 'London');
+            const londonIndex = component.options().findIndex((opt) => opt.name === 'London');
             expect(multiSelect.focusedOptionIndex()).toBe(londonIndex);
         });
     });
@@ -891,7 +928,7 @@ describe('MultiSelect', () => {
             const hiddenInput = fixture.debugElement.query(By.css('.p-hidden-accessible input'));
             expect(hiddenInput.nativeElement.tabIndex).toBe(0);
 
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -901,7 +938,7 @@ describe('MultiSelect', () => {
 
     describe('Filtering', () => {
         beforeEach(async () => {
-            component.filter = true;
+            component.filter.set(true);
             fixture.detectChanges();
             multiSelect.show();
             await fixture.whenStable();
@@ -934,7 +971,7 @@ describe('MultiSelect', () => {
         });
 
         it('should filter options by custom field', async () => {
-            component.filterBy = 'code';
+            component.filterBy.set('code');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -962,7 +999,7 @@ describe('MultiSelect', () => {
         });
 
         it('should reset filter when hiding panel', async () => {
-            component.resetFilterOnHide = true;
+            component.resetFilterOnHide.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -991,8 +1028,8 @@ describe('MultiSelect', () => {
         });
 
         it('should show empty filter message', async () => {
-            component.emptyFilterMessage = 'No results found';
-            component.filter = true;
+            component.emptyFilterMessage.set('No results found');
+            component.filter.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1032,16 +1069,16 @@ describe('MultiSelect', () => {
         });
 
         it('should apply custom styles', () => {
-            component.style = { border: '2px solid red', padding: '10px' };
+            component.style.set({ border: '2px solid red', padding: '10px' });
             fixture.detectChanges();
 
-            expect(component.style).toEqual({ border: '2px solid red', padding: '10px' });
+            expect(component.style()).toEqual({ border: '2px solid red', padding: '10px' });
 
             // Simulate ngStyle behavior
             const element = fixture.debugElement.query(By.css('p-multiselect')).nativeElement;
-            if (component.style) {
-                Object.keys(component.style).forEach((key) => {
-                    element.style[key] = component.style[key];
+            if (component.style()) {
+                Object.keys(component.style()).forEach((key) => {
+                    element.style[key] = component.style()[key];
                 });
             }
 
@@ -1050,8 +1087,8 @@ describe('MultiSelect', () => {
         });
 
         it('should apply panel style classes', async () => {
-            component.panelStyleClass = 'custom-panel';
-            component.panelStyle = { width: '300px' };
+            component.panelStyleClass.set('custom-panel');
+            component.panelStyle.set({ width: '300px' });
             fixture.detectChanges();
 
             multiSelect.show();
@@ -1063,7 +1100,7 @@ describe('MultiSelect', () => {
         });
 
         it('should show loading icon when loading', () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.detectChanges();
 
             const loadingIcon = fixture.debugElement.query(By.css('.p-multiselect-loading-icon'));
@@ -1071,7 +1108,7 @@ describe('MultiSelect', () => {
         });
 
         it('should apply disabled state classes', () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.detectChanges();
 
             const multiSelectElement = fixture.debugElement.query(By.css('p-multiselect'));
@@ -1079,8 +1116,8 @@ describe('MultiSelect', () => {
         });
 
         it('should show clear icon when showClear is true and has value', () => {
-            component.showClear = true;
-            component.selectedCities = [component.options[0]];
+            component.showClear.set(true);
+            component.selectedCities.set([component.options()[0]]);
             fixture.detectChanges();
 
             const clearIcon = fixture.debugElement.query(By.css('.p-multiselect-clear-icon'));
@@ -1089,14 +1126,14 @@ describe('MultiSelect', () => {
         });
 
         it('should display selected items as comma-separated list', async () => {
-            component.display = 'comma';
-            component.selectedCities = [component.options[0], component.options[1]];
+            component.display.set('comma');
+            component.selectedCities.set([component.options()[0], component.options()[1]]);
             fixture.detectChanges();
             await fixture.whenStable(); // Allow ngModel binding to process
             fixture.detectChanges();
 
             // Check if model value was updated
-            expect(multiSelect.modelValue()).toEqual([component.options[0], component.options[1]]);
+            expect(multiSelect.modelValue()).toEqual([component.options()[0], component.options()[1]]);
 
             const label = fixture.debugElement.query(By.css('.p-multiselect-label'));
             if (label?.nativeElement) {
@@ -1106,30 +1143,30 @@ describe('MultiSelect', () => {
                 expect(labelText).toContain('Rome');
             } else {
                 // If label element not found, at least verify selection is set
-                expect(component.selectedCities).toEqual([component.options[0], component.options[1]]);
+                expect(component.selectedCities()).toEqual([component.options()[0], component.options()[1]]);
             }
         });
 
         it('should display selected items as chips', async () => {
-            component.display = 'chip';
-            component.selectedCities = [component.options[0]];
+            component.display.set('chip');
+            component.selectedCities.set([component.options()[0]]);
             fixture.detectChanges();
             await fixture.whenStable(); // Allow ngModel binding to process
             fixture.detectChanges();
 
             // Verify model value is set
-            expect(multiSelect.modelValue()).toEqual([component.options[0]]);
+            expect(multiSelect.modelValue()).toEqual([component.options()[0]]);
 
             const chip = fixture.debugElement.query(By.css('p-chip'));
             // Chip might not be rendered or use different selector
-            expect(chip || fixture.debugElement.query(By.css('.p-multiselect-chip')) || component.display === 'chip').toBeTruthy();
+            expect(chip || fixture.debugElement.query(By.css('.p-multiselect-chip')) || component.display() === 'chip').toBeTruthy();
         });
     });
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values gracefully', () => {
-            component.options = null as any;
-            component.selectedCities = null as any;
+            component.options.set(null as any);
+            component.selectedCities.set(null as any);
 
             expect(() => {
                 fixture.detectChanges();
@@ -1137,15 +1174,15 @@ describe('MultiSelect', () => {
         });
 
         it('should handle empty arrays', () => {
-            component.options = [];
-            component.selectedCities = [];
+            component.options.set([]);
+            component.selectedCities.set([]);
             fixture.detectChanges();
 
             expect(multiSelect.isEmpty()).toBe(true);
         });
 
         it('should handle disabled state', () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.detectChanges();
 
             const clickEvent = new MouseEvent('click');
@@ -1173,24 +1210,24 @@ describe('MultiSelect', () => {
         });
 
         it('should handle selection limit', () => {
-            component.selectionLimit = 2;
+            component.selectionLimit.set(2);
             fixture.detectChanges();
 
-            multiSelect.updateModel([component.options[0], component.options[1]]);
+            multiSelect.updateModel([component.options()[0], component.options()[1]]);
 
             expect(multiSelect.maxSelectionLimitReached()).toBe(true);
 
             // Try to select another option
-            const thirdOption = component.options[2];
+            const thirdOption = component.options()[2];
             expect(multiSelect.isOptionDisabled(thirdOption)).toBe(true);
         });
 
         it('should handle options with special characters', () => {
-            component.options = [
+            component.options.set([
                 { name: 'Test <script>alert("xss")</script>', code: 'XSS' },
                 { name: 'Test "quotes"', code: 'QUOTES' },
                 { name: 'Test\nNewline', code: 'NL' }
-            ];
+            ]);
 
             expect(() => {
                 fixture.detectChanges();
@@ -1200,7 +1237,7 @@ describe('MultiSelect', () => {
         });
 
         it('should handle invalid option data', () => {
-            component.options = [{ name: 'Valid', code: 'V' }, null as any, undefined as any, { name: null, code: null } as any];
+            component.options.set([{ name: 'Valid', code: 'V' }, null as any, undefined as any, { name: null, code: null } as any]);
 
             expect(() => {
                 fixture.detectChanges();
@@ -1208,8 +1245,8 @@ describe('MultiSelect', () => {
         });
 
         it('should not display null label for selected values that do not match any option', async () => {
-            component.optionValue = 'code';
-            component.selectedCities = ['NY', 'INVALID'] as any;
+            component.optionValue.set('code');
+            component.selectedCities.set(['NY', 'INVALID'] as any);
             fixture.detectChanges();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1224,7 +1261,7 @@ describe('MultiSelect', () => {
             const circularOption: any = { name: 'Circular', code: 'C' };
             circularOption.self = circularOption;
 
-            component.options = [circularOption];
+            component.options.set([circularOption]);
 
             expect(() => {
                 fixture.detectChanges();
@@ -1240,8 +1277,7 @@ describe('MultiSelect Form Integration', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestFormMultiSelectComponent],
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule, TestFormMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1261,7 +1297,7 @@ describe('MultiSelect Form Integration', () => {
         expect(component.form.get('selectedCities')?.errors?.['required']).toBe(true);
 
         // Select a city
-        component.form.get('selectedCities')?.setValue([component.options[0]]);
+        component.form.get('selectedCities')?.setValue([component.options()[0]]);
         await fixture.whenStable();
 
         expect(component.form.get('selectedCities')?.valid).toBe(true);
@@ -1269,7 +1305,7 @@ describe('MultiSelect Form Integration', () => {
     });
 
     it('should update form control value when selection changes', async () => {
-        const selectedCity = component.options[0];
+        const selectedCity = component.options()[0];
 
         multiSelect.updateModel([selectedCity]);
         await fixture.whenStable();
@@ -1278,7 +1314,7 @@ describe('MultiSelect Form Integration', () => {
     });
 
     it('should handle form control setValue', async () => {
-        const selectedCities = [component.options[0], component.options[1]];
+        const selectedCities = [component.options()[0], component.options()[1]];
 
         component.form.get('selectedCities')?.setValue(selectedCities);
         fixture.changeDetectorRef.markForCheck();
@@ -1288,7 +1324,7 @@ describe('MultiSelect Form Integration', () => {
     });
 
     it('should handle form control patchValue', async () => {
-        const selectedCities = [component.options[2]];
+        const selectedCities = [component.options()[2]];
 
         component.form.patchValue({ selectedCities });
         fixture.changeDetectorRef.markForCheck();
@@ -1298,7 +1334,7 @@ describe('MultiSelect Form Integration', () => {
     });
 
     it('should handle form reset', async () => {
-        component.form.get('selectedCities')?.setValue([component.options[0]]);
+        component.form.get('selectedCities')?.setValue([component.options()[0]]);
         await fixture.whenStable();
 
         component.form.reset();
@@ -1329,7 +1365,7 @@ describe('MultiSelect Form Integration', () => {
         expect(control?.pristine).toBe(true);
         expect(control?.untouched).toBe(true);
 
-        control?.setValue([component.options[0]]);
+        control?.setValue([component.options()[0]]);
         control?.markAsTouched();
         control?.markAsDirty(); // Explicitly mark as dirty
         fixture.changeDetectorRef.markForCheck();
@@ -1348,8 +1384,7 @@ describe('MultiSelect Templates', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestTemplateMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestTemplateMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1360,7 +1395,7 @@ describe('MultiSelect Templates', () => {
     });
 
     it('should render custom selected items template', () => {
-        component.selectedCities = [component.options[0]];
+        component.selectedCities.set([component.options()[0]]);
         fixture.detectChanges();
 
         const customSelectedItems = fixture.debugElement.query(By.css('.custom-selected-items'));
@@ -1374,7 +1409,7 @@ describe('MultiSelect Templates', () => {
             }
         } else {
             // Template may not be rendered due to different conditions
-            expect(component.selectedCities.length).toBe(1);
+            expect(component.selectedCities().length).toBe(1);
         }
     });
 
@@ -1412,7 +1447,7 @@ describe('MultiSelect Templates', () => {
     });
 
     it('should render custom empty template', async () => {
-        component.options = [];
+        component.options.set([]);
         fixture.detectChanges();
 
         multiSelect.show();
@@ -1451,7 +1486,7 @@ describe('MultiSelect Templates', () => {
     });
 
     it('should handle chip removal through template', () => {
-        component.selectedCities = [component.options[0], component.options[1]];
+        component.selectedCities.set([component.options()[0], component.options()[1]]);
         fixture.detectChanges();
 
         vi.spyOn(multiSelect, 'removeOption');
@@ -1462,7 +1497,7 @@ describe('MultiSelect Templates', () => {
             expect(multiSelect.removeOption).toHaveBeenCalled();
         } else {
             // If no remove button found, at least verify the component exists and was configured
-            expect(component.selectedCities).toEqual([component.options[0], component.options[1]]);
+            expect(component.selectedCities()).toEqual([component.options()[0], component.options()[1]]);
         }
     });
 });
@@ -1474,8 +1509,7 @@ describe('MultiSelect Content Child Templates', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestContentChildMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestContentChildMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1512,17 +1546,17 @@ describe('MultiSelect Content Child Templates', () => {
     });
 
     it('should render content child selected items template', async () => {
-        component.selectedCities = [component.options[0]];
+        component.selectedCities.set([component.options()[0]]);
         fixture.changeDetectorRef.markForCheck();
         await fixture.whenStable();
         fixture.detectChanges();
 
         // Ensure modelValue is synchronized
-        expect(multiSelect.modelValue()).toEqual([component.options[0]]);
+        expect(multiSelect.modelValue()).toEqual([component.options()[0]]);
 
         const customSelected = fixture.debugElement.query(By.css('.content-child-selected'));
         // Content child templates might not be rendered immediately or use different selector
-        expect(customSelected || fixture.debugElement.query(By.css('[data-pc-section="selecteditems"]')) || component.selectedCities.length > 0).toBeTruthy();
+        expect(customSelected || fixture.debugElement.query(By.css('[data-pc-section="selecteditems"]')) || component.selectedCities().length > 0).toBeTruthy();
     });
 
     it('should render content child header template', async () => {
@@ -1548,7 +1582,7 @@ describe('MultiSelect Content Child Templates', () => {
     });
 
     it('should render content child empty template', async () => {
-        component.options = [];
+        component.options.set([]);
         fixture.detectChanges();
 
         multiSelect.show();
@@ -1599,8 +1633,7 @@ describe('MultiSelect Grouped Options', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestGroupedMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestGroupedMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1683,8 +1716,7 @@ describe('MultiSelect Virtual Scrolling', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestVirtualScrollMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestVirtualScrollMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1702,7 +1734,7 @@ describe('MultiSelect Virtual Scrolling', () => {
     });
 
     it('should handle large datasets', async () => {
-        expect(component.options.length).toBe(1000);
+        expect(component.options().length).toBe(1000);
 
         multiSelect.show();
         await fixture.whenStable();
@@ -1713,7 +1745,7 @@ describe('MultiSelect Virtual Scrolling', () => {
     });
 
     it('should handle lazy loading', async () => {
-        component.lazy = true;
+        component.lazy.set(true);
         fixture.detectChanges();
 
         vi.spyOn(component, 'onLazyLoad');
@@ -1735,7 +1767,7 @@ describe('MultiSelect Virtual Scrolling', () => {
     });
 
     it('should scroll to selected item', async () => {
-        component.selectedCities = [component.options[500]]; // Middle item
+        component.selectedCities.set([component.options()[500]]); // Middle item
         fixture.detectChanges();
 
         multiSelect.show();
@@ -1770,14 +1802,15 @@ describe('MultiSelect Virtual Scrolling', () => {
         } else {
             // Fallback: just verify that the component and virtual scrolling setup works
             expect(multiSelect).toBeDefined();
-            expect(component.selectedCities).toEqual([component.options[500]]);
+            expect(component.selectedCities()).toEqual([component.options()[500]]);
         }
     });
 });
 
 // Dynamic Data Sources Test Component - Tests signals, observables, getters, async pipes, late-loading
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="test-dynamic-data">
             <!-- Signal-based options -->
@@ -1820,7 +1853,15 @@ describe('MultiSelect Virtual Scrolling', () => {
             ></p-multiselect>
 
             <!-- Late-loaded data (simulating HTTP requests) -->
-            <p-multiselect #lateLoadMultiSelect [options]="lateLoadedOptions" [(ngModel)]="selectedCitiesLateLoad" optionLabel="name" [loading]="isLoadingLateData" [placeholder]="lateLoadPlaceholder" class="late-load-multiselect"></p-multiselect>
+            <p-multiselect
+                #lateLoadMultiSelect
+                [options]="lateLoadedOptions()"
+                [(ngModel)]="selectedCitiesLateLoad"
+                optionLabel="name"
+                [loading]="isLoadingLateData()"
+                [placeholder]="lateLoadPlaceholder()"
+                class="late-load-multiselect"
+            ></p-multiselect>
 
             <!-- Computed signal based on other signals -->
             <p-multiselect
@@ -1939,9 +1980,9 @@ class TestDynamicDataSourcesMultiSelectComponent {
     }
 
     // Late-loaded data (simulating HTTP requests)
-    lateLoadedOptions: City[] = [];
-    isLoadingLateData = true;
-    lateLoadPlaceholder = 'Loading...';
+    lateLoadedOptions = signal<City[]>([]);
+    isLoadingLateData = signal<any>(true);
+    lateLoadPlaceholder = signal<any>('Loading...');
 
     // Methods to update data dynamically
     updateSignalData(): void {
@@ -1972,13 +2013,13 @@ class TestDynamicDataSourcesMultiSelectComponent {
 
     simulateLateLoad(): void {
         setTimeout(() => {
-            this.lateLoadedOptions = [
+            this.lateLoadedOptions.set([
                 { name: 'Late Loaded City 1', code: 'LLC1' },
                 { name: 'Late Loaded City 2', code: 'LLC2' },
                 { name: 'Late Loaded City 3', code: 'LLC3' }
-            ];
-            this.isLoadingLateData = false;
-            this.lateLoadPlaceholder = 'Select cities';
+            ]);
+            this.isLoadingLateData.set(false);
+            this.lateLoadPlaceholder.set('Select cities');
         }, 100);
     }
 
@@ -2002,7 +2043,8 @@ class TestDynamicDataSourcesMultiSelectComponent {
 
 // Comprehensive Form Integration Test Component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="comprehensive-form-tests">
             <!-- Reactive Form with all Angular FormControl APIs -->
@@ -2016,7 +2058,8 @@ class TestDynamicDataSourcesMultiSelectComponent {
             <form #templateForm="ngForm" class="template-form">
                 <p-multiselect
                     #ngModelMultiSelect
-                    [(ngModel)]="ngModelValue"
+                    [ngModel]="ngModelValue()"
+                    (ngModelChange)="ngModelValue.set($event)"
                     name="templateCities"
                     [options]="allCities"
                     optionLabel="name"
@@ -2030,7 +2073,8 @@ class TestDynamicDataSourcesMultiSelectComponent {
 
                 <p-multiselect
                     #ngModelValidatedMultiSelect
-                    [(ngModel)]="ngModelValidatedValue"
+                    [ngModel]="ngModelValidatedValue()"
+                    (ngModelChange)="ngModelValidatedValue.set($event)"
                     name="validatedTemplateCities"
                     [options]="allCities"
                     optionLabel="name"
@@ -2062,7 +2106,7 @@ class TestDynamicDataSourcesMultiSelectComponent {
                 <div class="template-status">
                     <h4>Template Form Status</h4>
                     <div>Form Valid: {{ templateForm.valid }}</div>
-                    <div>NgModel Value: {{ ngModelValue | json }}</div>
+                    <div>NgModel Value: {{ ngModelValue() | json }}</div>
                     <div>NgModel Valid: {{ citiesModel?.valid }}</div>
                     <div>NgModel Errors: {{ citiesModel?.errors | json }}</div>
                 </div>
@@ -2101,8 +2145,8 @@ class TestComprehensiveFormMultiSelectComponent {
     });
 
     // NgModel values
-    ngModelValue: City[] = [];
-    ngModelValidatedValue: City[] = [];
+    ngModelValue = signal<City[]>([]);
+    ngModelValidatedValue = signal<City[]>([]);
 
     // Custom validators
     minItemsValidator(min: number) {
@@ -2161,19 +2205,21 @@ class TestComprehensiveFormMultiSelectComponent {
 
 // ViewChild Properties Test Component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="viewchild-tests">
             <p-multiselect
                 #mainMultiSelect
                 [options]="cities"
-                [(ngModel)]="selectedCities"
+                [ngModel]="selectedCities()"
+                (ngModelChange)="selectedCities.set($event)"
                 optionLabel="name"
                 placeholder="Test ViewChild properties"
                 [showClear]="true"
                 [filter]="true"
                 [virtualScroll]="false"
-                [selectionLimit]="selectionLimit"
+                [selectionLimit]="selectionLimit()"
                 class="main-multiselect"
             >
                 <ng-template #selecteditems let-value>
@@ -2208,8 +2254,8 @@ class TestViewChildMultiSelectComponent {
         { name: 'ViewChild City 3', code: 'VC3' }
     ];
 
-    selectedCities: City[] = [];
-    selectionLimit: number | undefined;
+    selectedCities = signal<City[]>([]);
+    selectionLimit = signal<number | undefined>(undefined);
 
     // Methods to test ViewChild properties
     getOverlayViewChild() {
@@ -2292,14 +2338,16 @@ class TestViewChildMultiSelectComponent {
 
 // Complex Edge Cases Test Component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="edge-cases-tests">
             <!-- Large dataset performance test -->
             <p-multiselect
                 #largeDataMultiSelect
                 [options]="largeDataset"
-                [(ngModel)]="selectedLargeData"
+                [ngModel]="selectedLargeData()"
+                (ngModelChange)="selectedLargeData.set($event)"
                 optionLabel="name"
                 [virtualScroll]="true"
                 [virtualScrollItemSize]="35"
@@ -2312,7 +2360,16 @@ class TestViewChildMultiSelectComponent {
             ></p-multiselect>
 
             <!-- Unicode and special characters test -->
-            <p-multiselect #unicodeMultiSelect [options]="unicodeOptions" [(ngModel)]="selectedUnicode" optionLabel="name" placeholder="Unicode & Special chars" [filter]="true" class="unicode-multiselect"></p-multiselect>
+            <p-multiselect
+                #unicodeMultiSelect
+                [options]="unicodeOptions"
+                [ngModel]="selectedUnicode()"
+                (ngModelChange)="selectedUnicode.set($event)"
+                optionLabel="name"
+                placeholder="Unicode & Special chars"
+                [filter]="true"
+                class="unicode-multiselect"
+            ></p-multiselect>
 
             <!-- XSS protection test -->
             <p-multiselect #xssMultiSelect [options]="xssTestOptions" [(ngModel)]="selectedXss" optionLabel="name" placeholder="XSS Protection Test" [filter]="true" class="xss-multiselect"></p-multiselect>
@@ -2334,7 +2391,15 @@ class TestViewChildMultiSelectComponent {
             <p-multiselect #nullHandlingMultiSelect [options]="nullTestOptions" [(ngModel)]="selectedNull" optionLabel="name" placeholder="Null handling test" class="null-handling-multiselect"></p-multiselect>
 
             <!-- Circular reference test -->
-            <p-multiselect #circularMultiSelect [options]="circularOptions" [(ngModel)]="selectedCircular" optionLabel="name" placeholder="Circular reference test" class="circular-multiselect"></p-multiselect>
+            <p-multiselect
+                #circularMultiSelect
+                [options]="circularOptions"
+                [ngModel]="selectedCircular()"
+                (ngModelChange)="selectedCircular.set($event)"
+                optionLabel="name"
+                placeholder="Circular reference test"
+                class="circular-multiselect"
+            ></p-multiselect>
         </div>
     `
 })
@@ -2348,7 +2413,7 @@ class TestComplexEdgeCasesMultiSelectComponent {
 
     // Large dataset for performance testing
     largeDataset: City[] = [];
-    selectedLargeData: City[] = [];
+    selectedLargeData = signal<City[]>([]);
 
     // Unicode and special characters
     unicodeOptions: City[] = [
@@ -2360,7 +2425,7 @@ class TestComplexEdgeCasesMultiSelectComponent {
         { name: 'Test\nNewline\tTab', code: 'WHITESPACE' }, // Whitespace
         { name: '"Quoted" & <Tagged>', code: 'QUOTES' }
     ];
-    selectedUnicode: City[] = [];
+    selectedUnicode = signal<City[]>([]);
 
     // XSS protection test
     xssTestOptions: City[] = [
@@ -2381,7 +2446,7 @@ class TestComplexEdgeCasesMultiSelectComponent {
 
     // Circular reference test
     circularOptions: any[] = [];
-    selectedCircular: any[] = [];
+    selectedCircular = signal<any[]>([]);
 
     constructor() {
         this.initializeLargeDataset();
@@ -2441,7 +2506,7 @@ class TestComplexEdgeCasesMultiSelectComponent {
         let count = 0;
         const interval = setInterval(() => {
             if (count < 100) {
-                this.selectedLargeData = [this.largeDataset[Math.floor(Math.random() * 100)]];
+                this.selectedLargeData.set([this.largeDataset[Math.floor(Math.random() * 100)]]);
                 count++;
             } else {
                 clearInterval(interval);
@@ -2483,16 +2548,16 @@ class TestComplexEdgeCasesMultiSelectComponent {
 
     clearLargeDataset(): void {
         this.largeDataset = [];
-        this.selectedLargeData = [];
+        this.selectedLargeData.set([]);
     }
 
     resetAllSelections(): void {
-        this.selectedLargeData = [];
-        this.selectedUnicode = [];
+        this.selectedLargeData.set([]);
+        this.selectedUnicode.set([]);
         this.selectedXss = [];
         this.selectedMemory = [];
         this.selectedNull = [];
-        this.selectedCircular = [];
+        this.selectedCircular.set([]);
     }
 }
 
@@ -2503,8 +2568,7 @@ describe('MultiSelect Dynamic Data Sources', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestDynamicDataSourcesMultiSelectComponent],
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule, TestDynamicDataSourcesMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2732,8 +2796,7 @@ describe('MultiSelect Comprehensive Form Integration', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestComprehensiveFormMultiSelectComponent],
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, ReactiveFormsModule, MultiSelectModule, TestComprehensiveFormMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2891,7 +2954,7 @@ describe('MultiSelect Comprehensive Form Integration', () => {
         it('should work with NgModel', async () => {
             expect(component.ngModelMultiSelect.modelValue()).toEqual([]);
 
-            component.ngModelValue = [component.allCities[0]];
+            component.ngModelValue.set([component.allCities[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -2907,7 +2970,7 @@ describe('MultiSelect Comprehensive Form Integration', () => {
             expect(component.citiesModel?.errors?.['required']).toBe(true);
 
             // Add a value
-            component.ngModelValue = [component.allCities[0]];
+            component.ngModelValue.set([component.allCities[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -2920,7 +2983,7 @@ describe('MultiSelect Comprehensive Form Integration', () => {
 
             expect(component.citiesModel?.hasError('required')).toBe(true);
 
-            component.ngModelValue = [component.allCities[0]];
+            component.ngModelValue.set([component.allCities[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -2935,8 +2998,8 @@ describe('MultiSelect Comprehensive Form Integration', () => {
             expect(component.templateForm?.valid).toBe(false);
 
             // Set both required fields
-            component.ngModelValue = [component.allCities[0]];
-            component.ngModelValidatedValue = [component.allCities[1]];
+            component.ngModelValue.set([component.allCities[0]]);
+            component.ngModelValidatedValue.set([component.allCities[1]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -2947,14 +3010,14 @@ describe('MultiSelect Comprehensive Form Integration', () => {
             // Check if valid or at least not still false due to async validation
             if (component.templateForm?.valid !== undefined) {
                 // Template form validation might be async, check that values are set at least
-                expect(component.ngModelValue.length).toBeGreaterThan(0);
-                expect(component.ngModelValidatedValue.length).toBeGreaterThan(0);
+                expect(component.ngModelValue().length).toBeGreaterThan(0);
+                expect(component.ngModelValidatedValue().length).toBeGreaterThan(0);
                 // Form validity depends on all controls being valid, just check it exists
                 expect(typeof component.templateForm.valid).toBe('boolean');
             } else {
                 // Fallback: just check that values are set
-                expect(component.ngModelValue.length).toBeGreaterThan(0);
-                expect(component.ngModelValidatedValue.length).toBeGreaterThan(0);
+                expect(component.ngModelValue().length).toBeGreaterThan(0);
+                expect(component.ngModelValidatedValue().length).toBeGreaterThan(0);
             }
         });
     });
@@ -2967,8 +3030,7 @@ describe('MultiSelect ViewChild Properties', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestViewChildMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestViewChildMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -3090,7 +3152,7 @@ describe('MultiSelect ViewChild Properties', () => {
             expect(limitResult).toBe(false);
 
             // Set selection limit via test component property
-            component.selectionLimit = 2;
+            component.selectionLimit.set(2);
             fixture.detectChanges();
             component.callUpdateModelMethod([component.cities[0], component.cities[1]]);
             await fixture.whenStable();
@@ -3098,7 +3160,7 @@ describe('MultiSelect ViewChild Properties', () => {
             expect(component.isMaxSelectionLimitReached()).toBe(true);
         } else {
             // Method doesn't exist, test selection limit directly
-            component.selectionLimit = 2;
+            component.selectionLimit.set(2);
             fixture.detectChanges();
             component.callUpdateModelMethod([component.cities[0], component.cities[1]]);
             await fixture.whenStable();
@@ -3117,8 +3179,7 @@ describe('MultiSelect Complex Edge Cases', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestComplexEdgeCasesMultiSelectComponent],
-            imports: [CommonModule, FormsModule, MultiSelectModule],
+            imports: [CommonModule, FormsModule, MultiSelectModule, TestComplexEdgeCasesMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -3151,7 +3212,7 @@ describe('MultiSelect Complex Edge Cases', () => {
             await fixture.whenStable();
 
             // Should not crash or cause performance issues
-            expect(component.selectedLargeData.length).toBe(1);
+            expect(component.selectedLargeData().length).toBe(1);
         });
 
         it('should handle memory leak prevention', async () => {
@@ -3298,7 +3359,7 @@ describe('MultiSelect Complex Edge Cases', () => {
             const circularOption = component.circularOptions[0];
 
             expect(() => {
-                component.selectedCircular = [circularOption];
+                component.selectedCircular.set([circularOption]);
             }).not.toThrow();
 
             fixture.changeDetectorRef.markForCheck();
@@ -3319,15 +3380,15 @@ describe('MultiSelect Complex Edge Cases', () => {
 
         it('should reset all selections without errors', () => {
             // Set some values first
-            component.selectedLargeData = [component.largeDataset[0]];
-            component.selectedUnicode = [component.unicodeOptions[0]];
+            component.selectedLargeData.set([component.largeDataset[0]]);
+            component.selectedUnicode.set([component.unicodeOptions[0]]);
 
             expect(() => {
                 component.resetAllSelections();
             }).not.toThrow();
 
-            expect(component.selectedLargeData.length).toBe(0);
-            expect(component.selectedUnicode.length).toBe(0);
+            expect(component.selectedLargeData().length).toBe(0);
+            expect(component.selectedUnicode().length).toBe(0);
         });
     });
 
@@ -3351,7 +3412,7 @@ describe('MultiSelect Complex Edge Cases', () => {
 
             // Simulate operations that might cause memory leaks
             for (let i = 0; i < 10; i++) {
-                component.selectedLargeData = [component.largeDataset[i]];
+                component.selectedLargeData.set([component.largeDataset[i]]);
                 fixture.detectChanges();
             }
 
@@ -3834,9 +3895,10 @@ describe('MultiSelect Selected Items On Top', () => {
 });
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MultiSelectModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-multiselect [options]="options" [(ngModel)]="selectedValues" optionLabel="name" optionValue="code">
+        <p-multiselect [options]="options()" [(ngModel)]="selectedValues" optionLabel="name" optionValue="code">
             <ng-template #selectedItems let-value>
                 <span class="alias-selected">{{ value?.length || 0 }} selected</span>
             </ng-template>
@@ -3844,10 +3906,10 @@ describe('MultiSelect Selected Items On Top', () => {
     `
 })
 class TestSelectedItemsAliasMultiSelectComponent {
-    options = [
+    options = signal<any>([
         { name: 'Option 1', code: 'o1' },
         { name: 'Option 2', code: 'o2' }
-    ];
+    ]);
     selectedValues: any[] = ['o1', 'o2'];
 }
 
@@ -3857,8 +3919,7 @@ describe('MultiSelect - selectedItems Template Alias', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [MultiSelectModule, FormsModule],
-            declarations: [TestSelectedItemsAliasMultiSelectComponent],
+            imports: [MultiSelectModule, FormsModule, TestSelectedItemsAliasMultiSelectComponent],
             providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         }).compileComponents();
 
