@@ -786,7 +786,8 @@ describe('Knob', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase1Component {
@@ -804,8 +805,7 @@ describe('Knob', () => {
             it('should apply simple string classes to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase1Component],
+                    imports: [Knob, FormsModule, TestPTCase1Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -843,7 +843,8 @@ describe('Knob', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase2Component {
@@ -867,8 +868,7 @@ describe('Knob', () => {
             it('should apply object properties to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase2Component],
+                    imports: [Knob, FormsModule, TestPTCase2Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -893,7 +893,8 @@ describe('Knob', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase3Component {
@@ -911,8 +912,7 @@ describe('Knob', () => {
             it('should apply mixed object and string values', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase3Component],
+                    imports: [Knob, FormsModule, TestPTCase3Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -934,7 +934,8 @@ describe('Knob', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [min]="0" [max]="100" [showValue]="true" [pt]="pt"></p-knob>`
             })
             class TestPTCase4Component {
@@ -958,8 +959,7 @@ describe('Knob', () => {
             it('should use instance variables in PT functions', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase4Component],
+                    imports: [Knob, FormsModule, TestPTCase4Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -984,7 +984,8 @@ describe('Knob', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase5Component {
@@ -1007,8 +1008,7 @@ describe('Knob', () => {
             it('should bind click events through PT', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase5Component],
+                    imports: [Knob, FormsModule, TestPTCase5Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1029,7 +1029,8 @@ describe('Knob', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: 'INLINE_HOST_CLASS', svg: 'INLINE_SVG_CLASS' }"></p-knob>`
             })
             class TestPTCase6InlineComponent {
@@ -1039,8 +1040,7 @@ describe('Knob', () => {
             it('should apply inline PT as string', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase6InlineComponent],
+                    imports: [Knob, FormsModule, TestPTCase6InlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1055,7 +1055,8 @@ describe('Knob', () => {
             });
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' }, svg: { class: 'SVG_INLINE_CLASS' } }"></p-knob>`
             })
             class TestPTCase6InlineObjectComponent {
@@ -1065,8 +1066,7 @@ describe('Knob', () => {
             it('should apply inline PT as object', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase6InlineObjectComponent],
+                    imports: [Knob, FormsModule, TestPTCase6InlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1083,7 +1083,8 @@ describe('Knob', () => {
 
         describe('Case 7: Global PT from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value"></p-knob>`
             })
             class TestPTCase7GlobalComponent {
@@ -1093,8 +1094,7 @@ describe('Knob', () => {
             it('should apply global PT from config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase7GlobalComponent],
+                    imports: [Knob, FormsModule, TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1121,7 +1121,8 @@ describe('Knob', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase8HooksComponent {
@@ -1145,8 +1146,7 @@ describe('Knob', () => {
             it('should call PT hooks', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase8HooksComponent],
+                    imports: [Knob, FormsModule, TestPTCase8HooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1164,7 +1164,8 @@ describe('Knob', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [showValue]="true" [pt]="pt"></p-knob>`
             })
             class TestPTCoverageComponent {
@@ -1182,8 +1183,7 @@ describe('Knob', () => {
             it('should apply PT to all sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCoverageComponent],
+                    imports: [Knob, FormsModule, TestPTCoverageComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
