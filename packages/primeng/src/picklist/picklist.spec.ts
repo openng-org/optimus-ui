@@ -1905,7 +1905,7 @@ describe('PickList', () => {
             const listboxes = vsFixture.debugElement.queryAll(By.directive(Listbox));
             expect(listboxes.length).toBe(2);
             listboxes.forEach((listbox) => {
-                expect(listbox.componentInstance.virtualScrollOptions()).toEqual({ showLoader: false });
+                expect(listbox.componentInstance.virtualScrollOptions()).toEqual({ autoSize: false, showLoader: false });
             });
         });
     });
