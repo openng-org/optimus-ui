@@ -1,7 +1,8 @@
-import { Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ViewChild, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TreeDragDropService, TreeNode } from 'primeng/api';
 import { Tree } from './tree';
@@ -9,7 +10,8 @@ import { UITreeNode } from './tree-node';
 
 // Test component for basic use cases
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree
             [value]="nodes"
@@ -56,41 +58,251 @@ import { UITreeNode } from './tree-node';
     `
 })
 class TestBasicTreeComponent {
-    nodes: TreeNode[] = [];
-    selectionMode: 'single' | 'multiple' | 'checkbox' | null = null as any;
-    loadingMode: 'mask' | 'icon' = 'mask';
-    selectedNodes: any;
-    styleClass: string | undefined;
-    contextMenu: any;
-    contextMenuSelectedNode: TreeNode | null = null;
-    draggableScope: any;
-    droppableScope: any;
-    draggableNodes: boolean = false;
-    droppableNodes: boolean = false;
-    metaKeySelection: boolean = false;
-    propagateSelectionUp: boolean = true;
-    propagateSelectionDown: boolean = true;
-    loading: boolean = false;
-    loadingIcon: string | undefined;
-    emptyMessage: string = '';
-    ariaLabel: string | undefined;
-    togglerAriaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    validateDrop: boolean = false;
-    filter: boolean = false;
-    filterInputAutoFocus: boolean = false;
-    filterBy: string = 'label';
-    filterMode: string = 'lenient';
-    filterPlaceholder: string | undefined;
-    filterLocale: string | undefined;
-    scrollHeight: string | undefined;
-    lazy: boolean = false;
-    virtualScroll: boolean = false;
-    virtualScrollItemSize: number | undefined;
-    virtualScrollOptions: any;
-    indentation: number = 1.5;
-    trackBy: Function = (index: number, item: any) => item;
-    highlightOnSelect: boolean = false;
+    private _nodes = signal<TreeNode[]>([]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
+    private _selectionMode = signal<'single' | 'multiple' | 'checkbox' | null>(null as any);
+    get selectionMode() {
+        return this._selectionMode();
+    }
+    set selectionMode(v: 'single' | 'multiple' | 'checkbox' | null) {
+        this._selectionMode.set(v);
+    }
+    private _loadingMode = signal<'mask' | 'icon'>('mask');
+    get loadingMode() {
+        return this._loadingMode();
+    }
+    set loadingMode(v: 'mask' | 'icon') {
+        this._loadingMode.set(v);
+    }
+    private _selectedNodes = signal<any>(undefined);
+    get selectedNodes() {
+        return this._selectedNodes();
+    }
+    set selectedNodes(v: any) {
+        this._selectedNodes.set(v);
+    }
+    private _styleClass = signal<string | undefined>(undefined);
+    get styleClass() {
+        return this._styleClass();
+    }
+    set styleClass(v: string | undefined) {
+        this._styleClass.set(v);
+    }
+    private _contextMenu = signal<any>(undefined);
+    get contextMenu() {
+        return this._contextMenu();
+    }
+    set contextMenu(v: any) {
+        this._contextMenu.set(v);
+    }
+    private _contextMenuSelectedNode = signal<TreeNode | null>(null);
+    get contextMenuSelectedNode() {
+        return this._contextMenuSelectedNode();
+    }
+    set contextMenuSelectedNode(v: TreeNode | null) {
+        this._contextMenuSelectedNode.set(v);
+    }
+    private _draggableScope = signal<any>(undefined);
+    get draggableScope() {
+        return this._draggableScope();
+    }
+    set draggableScope(v: any) {
+        this._draggableScope.set(v);
+    }
+    private _droppableScope = signal<any>(undefined);
+    get droppableScope() {
+        return this._droppableScope();
+    }
+    set droppableScope(v: any) {
+        this._droppableScope.set(v);
+    }
+    private _draggableNodes = signal<boolean>(false);
+    get draggableNodes() {
+        return this._draggableNodes();
+    }
+    set draggableNodes(v: boolean) {
+        this._draggableNodes.set(v);
+    }
+    private _droppableNodes = signal<boolean>(false);
+    get droppableNodes() {
+        return this._droppableNodes();
+    }
+    set droppableNodes(v: boolean) {
+        this._droppableNodes.set(v);
+    }
+    private _metaKeySelection = signal<boolean>(false);
+    get metaKeySelection() {
+        return this._metaKeySelection();
+    }
+    set metaKeySelection(v: boolean) {
+        this._metaKeySelection.set(v);
+    }
+    private _propagateSelectionUp = signal<boolean>(true);
+    get propagateSelectionUp() {
+        return this._propagateSelectionUp();
+    }
+    set propagateSelectionUp(v: boolean) {
+        this._propagateSelectionUp.set(v);
+    }
+    private _propagateSelectionDown = signal<boolean>(true);
+    get propagateSelectionDown() {
+        return this._propagateSelectionDown();
+    }
+    set propagateSelectionDown(v: boolean) {
+        this._propagateSelectionDown.set(v);
+    }
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _loadingIcon = signal<string | undefined>(undefined);
+    get loadingIcon() {
+        return this._loadingIcon();
+    }
+    set loadingIcon(v: string | undefined) {
+        this._loadingIcon.set(v);
+    }
+    private _emptyMessage = signal<string>('');
+    get emptyMessage() {
+        return this._emptyMessage();
+    }
+    set emptyMessage(v: string) {
+        this._emptyMessage.set(v);
+    }
+    private _ariaLabel = signal<string | undefined>(undefined);
+    get ariaLabel() {
+        return this._ariaLabel();
+    }
+    set ariaLabel(v: string | undefined) {
+        this._ariaLabel.set(v);
+    }
+    private _togglerAriaLabel = signal<string | undefined>(undefined);
+    get togglerAriaLabel() {
+        return this._togglerAriaLabel();
+    }
+    set togglerAriaLabel(v: string | undefined) {
+        this._togglerAriaLabel.set(v);
+    }
+    private _ariaLabelledBy = signal<string | undefined>(undefined);
+    get ariaLabelledBy() {
+        return this._ariaLabelledBy();
+    }
+    set ariaLabelledBy(v: string | undefined) {
+        this._ariaLabelledBy.set(v);
+    }
+    private _validateDrop = signal<boolean>(false);
+    get validateDrop() {
+        return this._validateDrop();
+    }
+    set validateDrop(v: boolean) {
+        this._validateDrop.set(v);
+    }
+    private _filter = signal<boolean>(false);
+    get filter() {
+        return this._filter();
+    }
+    set filter(v: boolean) {
+        this._filter.set(v);
+    }
+    private _filterInputAutoFocus = signal<boolean>(false);
+    get filterInputAutoFocus() {
+        return this._filterInputAutoFocus();
+    }
+    set filterInputAutoFocus(v: boolean) {
+        this._filterInputAutoFocus.set(v);
+    }
+    private _filterBy = signal<string>('label');
+    get filterBy() {
+        return this._filterBy();
+    }
+    set filterBy(v: string) {
+        this._filterBy.set(v);
+    }
+    private _filterMode = signal<string>('lenient');
+    get filterMode() {
+        return this._filterMode();
+    }
+    set filterMode(v: string) {
+        this._filterMode.set(v);
+    }
+    private _filterPlaceholder = signal<string | undefined>(undefined);
+    get filterPlaceholder() {
+        return this._filterPlaceholder();
+    }
+    set filterPlaceholder(v: string | undefined) {
+        this._filterPlaceholder.set(v);
+    }
+    private _filterLocale = signal<string | undefined>(undefined);
+    get filterLocale() {
+        return this._filterLocale();
+    }
+    set filterLocale(v: string | undefined) {
+        this._filterLocale.set(v);
+    }
+    private _scrollHeight = signal<string | undefined>(undefined);
+    get scrollHeight() {
+        return this._scrollHeight();
+    }
+    set scrollHeight(v: string | undefined) {
+        this._scrollHeight.set(v);
+    }
+    private _lazy = signal<boolean>(false);
+    get lazy() {
+        return this._lazy();
+    }
+    set lazy(v: boolean) {
+        this._lazy.set(v);
+    }
+    private _virtualScroll = signal<boolean>(false);
+    get virtualScroll() {
+        return this._virtualScroll();
+    }
+    set virtualScroll(v: boolean) {
+        this._virtualScroll.set(v);
+    }
+    private _virtualScrollItemSize = signal<number | undefined>(undefined);
+    get virtualScrollItemSize() {
+        return this._virtualScrollItemSize();
+    }
+    set virtualScrollItemSize(v: number | undefined) {
+        this._virtualScrollItemSize.set(v);
+    }
+    private _virtualScrollOptions = signal<any>(undefined);
+    get virtualScrollOptions() {
+        return this._virtualScrollOptions();
+    }
+    set virtualScrollOptions(v: any) {
+        this._virtualScrollOptions.set(v);
+    }
+    private _indentation = signal<number>(1.5);
+    get indentation() {
+        return this._indentation();
+    }
+    set indentation(v: number) {
+        this._indentation.set(v);
+    }
+    private _trackBy = signal<Function>((index: number, item: any) => item);
+    get trackBy() {
+        return this._trackBy();
+    }
+    set trackBy(v: Function) {
+        this._trackBy.set(v);
+    }
+    private _highlightOnSelect = signal<boolean>(false);
+    get highlightOnSelect() {
+        return this._highlightOnSelect();
+    }
+    set highlightOnSelect(v: boolean) {
+        this._highlightOnSelect.set(v);
+    }
 
     nodeSelectEvent: any;
     nodeUnselectEvent: any;
@@ -116,7 +328,8 @@ class TestBasicTreeComponent {
 
 // Test component for #template testing
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -159,8 +372,14 @@ class TestBasicTreeComponent {
     `
 })
 class TestTemplateTreeComponent {
-    loading = false;
-    nodes: TreeNode[] = [
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _nodes = signal<TreeNode[]>([
         {
             label: 'Root',
             type: 'default',
@@ -177,12 +396,19 @@ class TestTemplateTreeComponent {
                 }
             ]
         }
-    ];
+    ]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
 }
 
 // Test component for #template testing (new approach)
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -223,19 +449,32 @@ class TestTemplateTreeComponent {
     `
 })
 class TestTemplateRefTreeComponent {
-    loading = false;
-    nodes: TreeNode[] = [
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _nodes = signal<TreeNode[]>([
         {
             label: 'Template Root',
             expanded: false,
             children: [{ label: 'Template Child 1' }, { label: 'Template Child 2' }]
         }
-    ];
+    ]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
 }
 
 // Test component for context testing
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree [value]="nodes" [selectionMode]="'checkbox'">
             <ng-template #node let-node>
@@ -259,18 +498,25 @@ class TestTemplateRefTreeComponent {
     `
 })
 class TestContextTreeComponent {
-    nodes: TreeNode[] = [
+    private _nodes = signal<TreeNode[]>([
         {
             label: 'Context Root',
             expanded: false,
             children: [{ label: 'Context Child 1' }, { label: 'Context Child 2' }, { label: 'Context Child 3' }]
         }
-    ];
+    ]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
 }
 
 // Dedicated Template Test Components (originally in tree-templates.spec.ts)
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading" [selectionMode]="'checkbox'">
             <ng-template #node let-node>
@@ -301,8 +547,14 @@ class TestContextTreeComponent {
     `
 })
 class TestTemplateComponent {
-    loading = false;
-    nodes: TreeNode[] = [
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _nodes = signal<TreeNode[]>([
         {
             label: 'Root',
             type: 'default',
@@ -319,11 +571,18 @@ class TestTemplateComponent {
                 }
             ]
         }
-    ];
+    ]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -347,14 +606,26 @@ class TestTemplateComponent {
     `
 })
 class TestTemplateRefComponent {
-    loading = false;
-    nodes: TreeNode[] = [
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _nodes = signal<TreeNode[]>([
         {
             label: 'Template Root',
             expanded: false,
             children: [{ label: 'Template Child 1' }, { label: 'Template Child 2' }]
         }
-    ];
+    ]);
+    get nodes() {
+        return this._nodes();
+    }
+    set nodes(v: TreeNode[]) {
+        this._nodes.set(v);
+    }
 }
 
 describe('Tree', () => {
@@ -364,8 +635,7 @@ describe('Tree', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicTreeComponent, TestTemplateTreeComponent, TestTemplateRefTreeComponent, TestContextTreeComponent, TestTemplateComponent, TestTemplateRefComponent, TestDynamicTreeComponent],
-            imports: [Tree, UITreeNode, FormsModule],
+            imports: [Tree, UITreeNode, FormsModule, TestBasicTreeComponent, TestTemplateTreeComponent, TestTemplateRefTreeComponent, TestContextTreeComponent, TestTemplateComponent, TestTemplateRefComponent, TestDynamicTreeComponent],
             providers: [TreeDragDropService, provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2392,8 +2662,7 @@ describe('Tree', () => {
         beforeEach(async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                declarations: [TestBasicTreeComponent],
-                imports: [Tree, FormsModule],
+                imports: [Tree, FormsModule, TestBasicTreeComponent],
                 providers: [TreeDragDropService, provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -2737,7 +3006,8 @@ describe('Tree', () => {
 
 // Test component for dynamic values
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tree, UITreeNode, FormsModule, CommonModule],
     template: `
         <p-tree
             #tree
@@ -2762,27 +3032,111 @@ describe('Tree', () => {
 class TestDynamicTreeComponent {
     @ViewChild('tree') tree!: Tree;
 
-    value: TreeNode[] = [
+    private _value = signal<TreeNode[]>([
         {
             label: 'Root 1',
             expanded: false,
             children: [{ label: 'Child 1.1' }, { label: 'Child 1.2' }]
         },
         { label: 'Root 2' }
-    ];
-    selectionMode: 'single' | 'multiple' | 'checkbox' | null = 'single';
-    loading: boolean = false;
-    filter: boolean = false;
-    filterBy: string = 'label';
-    draggableNodes: boolean = false;
-    droppableNodes: boolean = false;
-    virtualScroll: boolean = false;
-    virtualScrollItemSize: number | undefined;
-    ariaLabel: string | undefined;
-    togglerAriaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    trackBy: Function = (index: number, item: any) => item;
-    indentation: number = 1.5;
+    ]);
+    get value() {
+        return this._value();
+    }
+    set value(v: TreeNode[]) {
+        this._value.set(v);
+    }
+    private _selectionMode = signal<'single' | 'multiple' | 'checkbox' | null>('single');
+    get selectionMode() {
+        return this._selectionMode();
+    }
+    set selectionMode(v: 'single' | 'multiple' | 'checkbox' | null) {
+        this._selectionMode.set(v);
+    }
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _filter = signal<boolean>(false);
+    get filter() {
+        return this._filter();
+    }
+    set filter(v: boolean) {
+        this._filter.set(v);
+    }
+    private _filterBy = signal<string>('label');
+    get filterBy() {
+        return this._filterBy();
+    }
+    set filterBy(v: string) {
+        this._filterBy.set(v);
+    }
+    private _draggableNodes = signal<boolean>(false);
+    get draggableNodes() {
+        return this._draggableNodes();
+    }
+    set draggableNodes(v: boolean) {
+        this._draggableNodes.set(v);
+    }
+    private _droppableNodes = signal<boolean>(false);
+    get droppableNodes() {
+        return this._droppableNodes();
+    }
+    set droppableNodes(v: boolean) {
+        this._droppableNodes.set(v);
+    }
+    private _virtualScroll = signal<boolean>(false);
+    get virtualScroll() {
+        return this._virtualScroll();
+    }
+    set virtualScroll(v: boolean) {
+        this._virtualScroll.set(v);
+    }
+    private _virtualScrollItemSize = signal<number | undefined>(undefined);
+    get virtualScrollItemSize() {
+        return this._virtualScrollItemSize();
+    }
+    set virtualScrollItemSize(v: number | undefined) {
+        this._virtualScrollItemSize.set(v);
+    }
+    private _ariaLabel = signal<string | undefined>(undefined);
+    get ariaLabel() {
+        return this._ariaLabel();
+    }
+    set ariaLabel(v: string | undefined) {
+        this._ariaLabel.set(v);
+    }
+    private _togglerAriaLabel = signal<string | undefined>(undefined);
+    get togglerAriaLabel() {
+        return this._togglerAriaLabel();
+    }
+    set togglerAriaLabel(v: string | undefined) {
+        this._togglerAriaLabel.set(v);
+    }
+    private _ariaLabelledBy = signal<string | undefined>(undefined);
+    get ariaLabelledBy() {
+        return this._ariaLabelledBy();
+    }
+    set ariaLabelledBy(v: string | undefined) {
+        this._ariaLabelledBy.set(v);
+    }
+    private _trackBy = signal<Function>((index: number, item: any) => item);
+    get trackBy() {
+        return this._trackBy();
+    }
+    set trackBy(v: Function) {
+        this._trackBy.set(v);
+    }
+    private _indentation = signal<number>(1.5);
+    get indentation() {
+        return this._indentation();
+    }
+    set indentation(v: number) {
+        this._indentation.set(v);
+    }
 
     updateValue(newValue: TreeNode[]) {
         this.value = newValue;
