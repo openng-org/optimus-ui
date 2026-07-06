@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -63,7 +63,7 @@ class TestBasicRatingComponent {
     imports: [Rating, ReactiveFormsModule],
     template: `
         <form [formGroup]="ratingForm">
-            <p-rating formControlName="rating" [stars]="5" [invalid]="isInvalid" />
+            <p-rating formControlName="rating" [stars]="5" [invalid]="isInvalid()" />
         </form>
     `
 })
@@ -72,7 +72,7 @@ class TestReactiveRatingComponent {
         rating: new FormControl<number | null>(null, [Validators.required, Validators.min(1)])
     });
 
-    isInvalid: boolean = false;
+    isInvalid = signal<boolean>(false);
 }
 
 // Template test component
@@ -120,7 +120,7 @@ class TestAdvancedRatingComponent {
     standalone: true,
     imports: [Rating, FormsModule, NgClass, SharedModule],
     template: `
-        <p-rating [(ngModel)]="value" [stars]="stars">
+        <p-rating [ngModel]="value()" (ngModelChange)="value.set($event)" [stars]="stars">
             <!-- On icon template with #template reference -->
             <ng-template #onicon let-value let-class="class">
                 <i class="pi pi-star-fill custom-on-icon" [attr.data-testid]="'ptemplate-onicon-' + value" [ngClass]="class" [title]="'Star ' + value + ' filled'"></i>
@@ -134,7 +134,7 @@ class TestAdvancedRatingComponent {
     `
 })
 class TestRatingTemplateComponent {
-    value: number = 3;
+    value = signal<number>(3);
     stars: number = 5;
 }
 
@@ -143,7 +143,7 @@ class TestRatingTemplateComponent {
     standalone: true,
     imports: [Rating, FormsModule, NgClass, SharedModule],
     template: `
-        <p-rating [(ngModel)]="value" [stars]="stars">
+        <p-rating [ngModel]="value()" (ngModelChange)="value.set($event)" [stars]="stars">
             <!-- On icon template with #template reference -->
             <ng-template #onicon let-value let-class="class">
                 <i class="pi pi-heart-fill custom-on-icon" [attr.data-testid]="'ref-onicon-' + value" [ngClass]="class" [title]="'Heart ' + value + ' filled'"></i>
@@ -157,7 +157,7 @@ class TestRatingTemplateComponent {
     `
 })
 class TestRatingRefTemplateComponent {
-    value: number = 3;
+    value = signal<number>(3);
     stars: number = 5;
 }
 
@@ -484,7 +484,7 @@ describe('Rating', () => {
         });
 
         it('should reflect invalid state', async () => {
-            component.isInvalid = true;
+            component.isInvalid.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -888,7 +888,7 @@ describe('Rating', () => {
 
         it('should pass context parameters to onicon template', async () => {
             // Set value to 3 - first 3 stars should show onicon
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -900,7 +900,7 @@ describe('Rating', () => {
 
         it('should pass context parameters to officon template', async () => {
             // Set value to 2 - last 3 stars should show officon
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -912,7 +912,7 @@ describe('Rating', () => {
 
         it('should update templates when value changes', async () => {
             // Initially 3 stars filled
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -920,7 +920,7 @@ describe('Rating', () => {
             expect(ratingInstance.value()).toBe(3 as any);
 
             // Change to 1 star filled
-            component.value = 1;
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -951,7 +951,7 @@ describe('Rating', () => {
         });
 
         it('should apply class context to templates', async () => {
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -993,7 +993,7 @@ describe('Rating', () => {
 
         it('should pass context parameters to onicon template', async () => {
             // Set value to 3 - first 3 hearts should be filled
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1005,7 +1005,7 @@ describe('Rating', () => {
 
         it('should pass context parameters to officon template', async () => {
             // Set value to 2 - last 3 hearts should be empty
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1017,7 +1017,7 @@ describe('Rating', () => {
 
         it('should update templates when value changes', async () => {
             // Initially 3 hearts filled
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1025,7 +1025,7 @@ describe('Rating', () => {
             expect(ratingInstance.value()).toBe(3 as any);
 
             // Change to 1 heart filled
-            component.value = 1;
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1056,7 +1056,7 @@ describe('Rating', () => {
         });
 
         it('should apply class context to templates', async () => {
-            component.value = 3;
+            component.value.set(3);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1070,7 +1070,8 @@ describe('Rating', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCase1Component {
@@ -1089,8 +1090,7 @@ describe('Rating', () => {
             it('should apply simple string classes to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase1Component],
+                    imports: [Rating, FormsModule, TestPTCase1Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1114,7 +1114,8 @@ describe('Rating', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCase2Component {
@@ -1135,8 +1136,7 @@ describe('Rating', () => {
             it('should apply object properties to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase2Component],
+                    imports: [Rating, FormsModule, TestPTCase2Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1156,7 +1156,8 @@ describe('Rating', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCase3Component {
@@ -1173,8 +1174,7 @@ describe('Rating', () => {
             it('should apply mixed object and string values', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase3Component],
+                    imports: [Rating, FormsModule, TestPTCase3Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1192,7 +1192,8 @@ describe('Rating', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [stars]="5" [pt]="pt"></p-rating>`
             })
             class TestPTCase4Component {
@@ -1216,8 +1217,7 @@ describe('Rating', () => {
             it('should use instance variables in PT functions', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase4Component],
+                    imports: [Rating, FormsModule, TestPTCase4Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1237,7 +1237,8 @@ describe('Rating', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCase5Component {
@@ -1260,8 +1261,7 @@ describe('Rating', () => {
             it('should bind click events through PT', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase5Component],
+                    imports: [Rating, FormsModule, TestPTCase5Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1283,7 +1283,8 @@ describe('Rating', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="{ host: 'INLINE_HOST_CLASS', option: 'INLINE_OPTION_CLASS' }"></p-rating>`
             })
             class TestPTCase6InlineComponent {
@@ -1293,8 +1294,7 @@ describe('Rating', () => {
             it('should apply inline PT as string', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase6InlineComponent],
+                    imports: [Rating, FormsModule, TestPTCase6InlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1310,7 +1310,8 @@ describe('Rating', () => {
             });
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' }, option: { class: 'OPTION_INLINE_CLASS' } }"></p-rating>`
             })
             class TestPTCase6InlineObjectComponent {
@@ -1320,8 +1321,7 @@ describe('Rating', () => {
             it('should apply inline PT as object', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase6InlineObjectComponent],
+                    imports: [Rating, FormsModule, TestPTCase6InlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1339,7 +1339,8 @@ describe('Rating', () => {
 
         describe('Case 7: Global PT from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value"></p-rating>`
             })
             class TestPTCase7GlobalComponent {
@@ -1349,8 +1350,7 @@ describe('Rating', () => {
             it('should apply global PT from config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase7GlobalComponent],
+                    imports: [Rating, FormsModule, TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1378,7 +1378,8 @@ describe('Rating', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCase8HooksComponent {
@@ -1402,8 +1403,7 @@ describe('Rating', () => {
             it('should call PT hooks', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCase8HooksComponent],
+                    imports: [Rating, FormsModule, TestPTCase8HooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1423,7 +1423,8 @@ describe('Rating', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Rating, FormsModule, ReactiveFormsModule],
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
             class TestPTCoverageComponent {
@@ -1442,8 +1443,7 @@ describe('Rating', () => {
             it('should apply PT to all sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Rating, FormsModule],
-                    declarations: [TestPTCoverageComponent],
+                    imports: [Rating, FormsModule, TestPTCoverageComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
