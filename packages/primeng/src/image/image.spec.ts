@@ -10,7 +10,8 @@ const mockImageSrc = 'https://primefaces.org/cdn/primeng/images/galleria/galleri
 const mockPreviewImageSrc = 'https://primefaces.org/cdn/primeng/images/galleria/galleria2.jpg';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageModule],
     template: ` <p-image [src]="src" [alt]="alt" [width]="width" [height]="height" [srcSet]="srcSet" [sizes]="sizes" [loading]="loading" [imageClass]="imageClass" [imageStyle]="imageStyle" (onImageError)="onImageError($event)"> </p-image> `
 })
 class TestBasicImageComponent {
@@ -31,7 +32,8 @@ class TestBasicImageComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageModule],
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true" [previewImageSrc]="previewImageSrc" [previewImageSrcSet]="previewImageSrcSet" [previewImageSizes]="previewImageSizes" (onShow)="onShow($event)" (onHide)="onHide($event)">
         </p-image>
@@ -57,7 +59,8 @@ class TestPreviewImageComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageModule],
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true">
             <ng-template #indicator>
@@ -100,8 +103,7 @@ describe('Image', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ImageModule, SharedModule],
-            declarations: [TestBasicImageComponent, TestPreviewImageComponent, TestTemplateImageComponent],
+            imports: [ImageModule, SharedModule, TestBasicImageComponent, TestPreviewImageComponent, TestTemplateImageComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -789,7 +791,8 @@ describe('Image', () => {
 
             it('should accept inline PT with string class', () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [ImageModule],
                     template: `<p-image [src]="src" [pt]="{ root: 'TEST_INLINE_CLASS' }" />`
                 })
                 class TestInlineComponent {
@@ -797,8 +800,7 @@ describe('Image', () => {
                 }
 
                 TestBed.configureTestingModule({
-                    imports: [ImageModule],
-                    declarations: [TestInlineComponent],
+                    imports: [ImageModule, TestInlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -811,7 +813,8 @@ describe('Image', () => {
 
             it('should accept inline PT with object class', () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [ImageModule],
                     template: `<p-image [src]="src" [pt]="{ root: { class: 'TEST_INLINE_OBJECT_CLASS' } }" />`
                 })
                 class TestInlineObjectComponent {
@@ -819,8 +822,7 @@ describe('Image', () => {
                 }
 
                 TestBed.configureTestingModule({
-                    imports: [ImageModule],
-                    declarations: [TestInlineObjectComponent],
+                    imports: [ImageModule, TestInlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -841,7 +843,8 @@ describe('Image', () => {
                 const { providePrimeNG } = await import('primeng/config');
 
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [ImageModule],
                     template: `
                         <p-image [src]="src1" />
                         <p-image [src]="src2" />
@@ -853,8 +856,7 @@ describe('Image', () => {
                 }
 
                 await TestBed.configureTestingModule({
-                    imports: [ImageModule],
-                    declarations: [TestGlobalPTComponent],
+                    imports: [ImageModule, TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
