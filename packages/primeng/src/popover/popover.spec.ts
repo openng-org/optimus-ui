@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { Component, ElementRef, provideZonelessChangeDetection, signal, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -19,21 +19,22 @@ import { Popover } from './popover';
 // }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Popover],
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
         <p-popover
             #popover
-            [dismissable]="dismissable"
-            [style]="style"
-            [styleClass]="styleClass"
-            [appendTo]="appendTo"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [focusOnShow]="focusOnShow"
-            [ariaLabel]="ariaLabel"
-            [ariaLabelledBy]="ariaLabelledBy"
-            [ariaCloseLabel]="ariaCloseLabel"
+            [dismissable]="dismissable()"
+            [style]="style()"
+            [styleClass]="styleClass()"
+            [appendTo]="appendTo()"
+            [autoZIndex]="autoZIndex()"
+            [baseZIndex]="baseZIndex()"
+            [focusOnShow]="focusOnShow()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [ariaCloseLabel]="ariaCloseLabel()"
             (onShow)="onShow($event)"
             (onHide)="onHide($event)"
         >
@@ -45,16 +46,16 @@ class TestBasicPopoverComponent {
     @ViewChild('popover') popover!: Popover;
     @ViewChild('targetButton', { read: ElementRef }) targetButton!: ElementRef;
 
-    dismissable = true;
-    style: { [klass: string]: any } | null = null as any;
-    styleClass: string | undefined;
-    appendTo: any = 'body';
-    autoZIndex = true;
-    baseZIndex = 0;
-    focusOnShow = true;
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    ariaCloseLabel: string | undefined;
+    dismissable = signal(true);
+    style = signal<{ [klass: string]: any } | null>(null as any);
+    styleClass = signal<string | undefined>(undefined);
+    appendTo = signal<any>('body');
+    autoZIndex = signal(true);
+    baseZIndex = signal(0);
+    focusOnShow = signal(true);
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
+    ariaCloseLabel = signal<string | undefined>(undefined);
 
     showEvent: any;
     hideEvent: any;
@@ -69,7 +70,8 @@ class TestBasicPopoverComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Popover],
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
         <p-popover #popover>
@@ -88,7 +90,8 @@ class TestTemplatePopoverComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Popover],
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
         <p-popover #popover>
@@ -107,10 +110,11 @@ class TestTemplatePopoverComponent2 {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Popover],
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
-        <p-popover #popover [focusOnShow]="true" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy">
+        <p-popover #popover [focusOnShow]="true" [ariaLabel]="ariaLabel()" [ariaLabelledBy]="ariaLabelledBy()">
             <input autofocus type="text" class="focus-input" />
             <button tabindex="0">Button</button>
             <div tabindex="0">Focusable div</div>
@@ -120,8 +124,8 @@ class TestTemplatePopoverComponent2 {
 class TestKeyboardNavigationComponent {
     @ViewChild('popover') popover!: Popover;
     @ViewChild('targetButton', { read: ElementRef }) targetButton!: ElementRef;
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
 }
 
 describe('Popover', () => {
@@ -134,8 +138,7 @@ describe('Popover', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [CommonModule, Popover],
-            declarations: [TestBasicPopoverComponent, TestTemplatePopoverComponent, TestTemplatePopoverComponent2, TestKeyboardNavigationComponent],
+            imports: [CommonModule, Popover, TestBasicPopoverComponent, TestTemplatePopoverComponent, TestTemplatePopoverComponent2, TestKeyboardNavigationComponent],
             providers: [provideZonelessChangeDetection(), { provide: OverlayService, useValue: overlayServiceSpy }]
         }).compileComponents();
 
@@ -170,13 +173,12 @@ describe('Popover', () => {
         });
 
         it('should accept custom values', async () => {
-            component.dismissable = false;
-            component.baseZIndex = 1000;
-            component.focusOnShow = false;
-            component.ariaLabel = 'Custom popover';
-            component.styleClass = 'custom-class';
-            component.style = { width: '300px', height: '200px' };
-            fixture.changeDetectorRef.markForCheck();
+            component.dismissable.set(false);
+            component.baseZIndex.set(1000);
+            component.focusOnShow.set(false);
+            component.ariaLabel.set('Custom popover');
+            component.styleClass.set('custom-class');
+            component.style.set({ width: '300px', height: '200px' });
             await fixture.whenStable();
 
             expect(popoverInstance.dismissable()).toBe(false);
@@ -295,11 +297,8 @@ describe('Popover', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            // Simulate animation start
-            // const animationEvent = createMockAnimationEvent('open');
-            // popoverInstance.onAnimationStart(animationEvent);
-
-            expect(component.showEvent).toBeUndefined();
+            // The overlay animation starts on show and emits onShow with a null payload
+            expect(component.showEvent).toBeNull();
         });
 
         it('should emit onHide event', async () => {
@@ -425,9 +424,8 @@ describe('Popover', () => {
             const mockEvent = new MouseEvent('click');
             const target = component.targetButton.nativeElement;
 
-            component.ariaLabel = 'Test popover';
-            component.ariaLabelledBy = 'test-label';
-            fixture.changeDetectorRef.markForCheck();
+            component.ariaLabel.set('Test popover');
+            component.ariaLabelledBy.set('test-label');
             await fixture.whenStable();
 
             popoverInstance.show(mockEvent, target);
@@ -499,8 +497,7 @@ describe('Popover', () => {
         });
 
         it('should apply styleClass correctly', async () => {
-            component.styleClass = 'custom-popover-class';
-            fixture.changeDetectorRef.markForCheck();
+            component.styleClass.set('custom-popover-class');
             await fixture.whenStable();
 
             const mockEvent = new MouseEvent('click');
@@ -520,8 +517,7 @@ describe('Popover', () => {
         });
 
         it('should apply custom styles', async () => {
-            component.style = { border: '2px solid red', padding: '10px' };
-            fixture.changeDetectorRef.markForCheck();
+            component.style.set({ border: '2px solid red', padding: '10px' });
             await fixture.whenStable();
 
             expect(popoverInstance.style()).toEqual({ border: '2px solid red', padding: '10px' });
@@ -678,8 +674,18 @@ describe('Popover', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            popoverInstance.onWindowResize();
-            expect(popoverInstance.overlayVisible()).toBe(false);
+            // jsdom exposes `ontouchstart`, so isTouchDevice() reports true; remove it to
+            // simulate a non-touch device for this scenario.
+            const hadTouch = 'ontouchstart' in window;
+            delete (window as any).ontouchstart;
+            try {
+                popoverInstance.onWindowResize();
+                expect(popoverInstance.overlayVisible()).toBe(false);
+            } finally {
+                if (hadTouch) {
+                    (window as any).ontouchstart = null;
+                }
+            }
         });
 
         it('should handle overlay clicks correctly', () => {
