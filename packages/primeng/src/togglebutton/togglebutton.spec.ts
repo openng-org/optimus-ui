@@ -9,7 +9,8 @@ import { ToggleButtonChangeEvent } from 'primeng/types/togglebutton';
 import { ToggleButton } from './togglebutton';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToggleButton, FormsModule],
     template: `
         <p-togglebutton
             [(ngModel)]="checked"
@@ -54,7 +55,8 @@ class TestBasicToggleButtonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToggleButton, ReactiveFormsModule],
     template: `
         <form [formGroup]="toggleForm">
             <p-togglebutton formControlName="toggle" [onLabel]="onLabel" [offLabel]="offLabel" (onChange)="onFormToggleChange($event)"> </p-togglebutton>
@@ -75,7 +77,8 @@ class TestReactiveToggleButtonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToggleButton, FormsModule],
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <ng-template #content let-checked>
@@ -89,7 +92,8 @@ class TestTemplateToggleButtonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToggleButton, FormsModule, CommonModule],
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <ng-template #icon let-checked>
@@ -103,7 +107,8 @@ class TestIconTemplateToggleButtonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToggleButton, FormsModule],
     template: ` <p-togglebutton [(ngModel)]="checked" [onIcon]="onIcon" [offIcon]="offIcon" [iconPos]="iconPos"> </p-togglebutton> `
 })
 class TestIconToggleButtonComponent {
@@ -162,8 +167,18 @@ describe('ToggleButton', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ToggleButton, FormsModule, ReactiveFormsModule, TestToggleButtonIconTemplateRefComponent, TestToggleButtonRefTemplateComponent],
-            declarations: [TestBasicToggleButtonComponent, TestReactiveToggleButtonComponent, TestTemplateToggleButtonComponent, TestIconTemplateToggleButtonComponent, TestIconToggleButtonComponent],
+            imports: [
+                ToggleButton,
+                FormsModule,
+                ReactiveFormsModule,
+                TestToggleButtonIconTemplateRefComponent,
+                TestToggleButtonRefTemplateComponent,
+                TestBasicToggleButtonComponent,
+                TestReactiveToggleButtonComponent,
+                TestTemplateToggleButtonComponent,
+                TestIconTemplateToggleButtonComponent,
+                TestIconToggleButtonComponent
+            ],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -783,21 +798,11 @@ describe('ToggleButton', () => {
 
         it('should update templates when checked state changes', async () => {
             // Initially unchecked
-            component.checked = false;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await fixture.whenStable();
-
             expect(toggleButtonInstance.checked()).toBe(false);
 
             // Change to checked
             component.checked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
             fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
             expect(toggleButtonInstance.checked()).toBe(true);
@@ -805,10 +810,7 @@ describe('ToggleButton', () => {
 
         it('should apply context to templates correctly', async () => {
             component.checked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
             fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
             // Verify that the toggle button component works correctly
@@ -857,19 +859,11 @@ describe('ToggleButton', () => {
 
         it('should pass context parameters to content template', async () => {
             // Initially unchecked
-            component.checked = false;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await fixture.whenStable();
+            expect(toggleButtonInstance.checked()).toBe(false);
 
             // Toggle to checked
             component.checked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
             fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
             // Verify that the toggle button component is working with the value
@@ -879,21 +873,11 @@ describe('ToggleButton', () => {
 
         it('should update templates when checked state changes', async () => {
             // Initially unchecked
-            component.checked = false;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
-            await fixture.whenStable();
-
             expect(toggleButtonInstance.checked()).toBe(false);
 
             // Change to checked
             component.checked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
             fixture.detectChanges();
-            await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
             expect(toggleButtonInstance.checked()).toBe(true);
