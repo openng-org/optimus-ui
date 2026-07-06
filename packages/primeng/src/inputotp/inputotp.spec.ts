@@ -333,7 +333,7 @@ describe('InputOtp', () => {
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             const firstInput = inputs[0].nativeElement;
 
-            const pasteEvent = new ClipboardEvent('paste');
+            const pasteEvent = new Event('paste');
             Object.defineProperty(pasteEvent, 'clipboardData', {
                 value: {
                     getData: () => '1234'
@@ -354,7 +354,7 @@ describe('InputOtp', () => {
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             const firstInput = inputs[0].nativeElement;
 
-            const pasteEvent = new ClipboardEvent('paste');
+            const pasteEvent = new Event('paste');
             Object.defineProperty(pasteEvent, 'clipboardData', {
                 value: {
                     getData: () => '123456789'
