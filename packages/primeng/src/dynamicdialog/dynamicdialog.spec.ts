@@ -10,7 +10,7 @@ import { DynamicDialogRef } from './dynamicdialog-ref';
 
 // Test components to be used in dynamic dialogs
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="test-component">
             <h3>Test Component Content</h3>
@@ -35,7 +35,7 @@ class TestDialogContentComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="nested-dialog-content">
             <h3>Nested Dialog</h3>
@@ -60,7 +60,7 @@ class NestedDialogContentComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="dialog-within-dialog-content">
             <h3>Dialog Within Dialog</h3>
@@ -77,13 +77,15 @@ class DialogWithinDialogComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="maximizable-content">
             <h3>Maximizable Dialog</h3>
             <p>This dialog can be maximized</p>
             <div style="height: 200px; overflow-y: auto;">
-                <p *ngFor="let item of items">{{ item }}</p>
+                @for (item of items; track item) {
+                    <p>{{ item }}</p>
+                }
             </div>
         </div>
     `
@@ -93,7 +95,7 @@ class MaximizableDialogComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="resizable-content">
             <h3>Resizable Dialog</h3>
@@ -105,7 +107,7 @@ class MaximizableDialogComponent {
 class ResizableDialogComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
     template: `
         <div class="draggable-content">
             <h3>Draggable Dialog</h3>
@@ -122,7 +124,13 @@ describe('DynamicDialog', () => {
     beforeEach(async () => {
         // Create spy objects
         mockDialogRef = {
-            close: vi.fn(), destroy: vi.fn(), dragStart: vi.fn(), dragEnd: vi.fn(), resizeInit: vi.fn(), resizeEnd: vi.fn(), maximize: vi.fn(),
+            close: vi.fn(),
+            destroy: vi.fn(),
+            dragStart: vi.fn(),
+            dragEnd: vi.fn(),
+            resizeInit: vi.fn(),
+            resizeEnd: vi.fn(),
+            maximize: vi.fn(),
             onClose: new Subject(),
             onDestroy: new Subject(),
             onDragStart: new Subject(),
@@ -136,8 +144,7 @@ describe('DynamicDialog', () => {
         mockConfig = new DynamicDialogConfig();
 
         await TestBed.configureTestingModule({
-            imports: [DynamicDialog],
-            declarations: [TestDialogContentComponent, NestedDialogContentComponent, DialogWithinDialogComponent, MaximizableDialogComponent, ResizableDialogComponent, DraggableDialogComponent],
+            imports: [DynamicDialog, TestDialogContentComponent, NestedDialogContentComponent, DialogWithinDialogComponent, MaximizableDialogComponent, ResizableDialogComponent, DraggableDialogComponent],
             providers: [{ provide: DynamicDialogRef, useValue: mockDialogRef }, { provide: DynamicDialogConfig, useValue: mockConfig }, provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -505,7 +512,7 @@ describe('DynamicDialog', () => {
             component.loadChildComponent(TestDialogContentComponent);
 
             expect(mockViewContainer.clear).toHaveBeenCalled();
-            expect(mockViewContainer.createComponent).toHaveBeenCalledWith(TestDialogContentComponent);
+            expect(mockViewContainer.createComponent).toHaveBeenCalledWith(TestDialogContentComponent, { bindings: [] });
         });
 
         it('should display header content', async () => {
