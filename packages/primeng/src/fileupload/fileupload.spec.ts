@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { HttpEventType } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { Component, provideZonelessChangeDetection } from '@angular/core';
@@ -7,6 +8,19 @@ import { By } from '@angular/platform-browser';
 import { MessageService } from 'primeng/api';
 import { BehaviorSubject, delay, of, timer } from 'rxjs';
 import { FileUpload } from './fileupload';
+
+// jsdom does not implement DragEvent; provide a minimal Event-based polyfill so
+// the drag-and-drop specs can construct and dispatch drag events under Vitest/jsdom.
+if (typeof (globalThis as any).DragEvent === 'undefined') {
+    class DragEventPolyfill extends Event {
+        dataTransfer: any;
+        constructor(type: string, init: any = {}) {
+            super(type, init);
+            this.dataTransfer = init.dataTransfer ?? { files: [], items: [], types: [] };
+        }
+    }
+    (globalThis as any).DragEvent = DragEventPolyfill;
+}
 
 describe('FileUpload', () => {
     let component: FileUpload;
@@ -720,7 +734,7 @@ describe('FileUpload', () => {
             const mockSubscription = { unsubscribe: vi.fn() };
             const mockListener = vi.fn();
 
-            component.translationSubscription = mockSubscription;
+            component.translationSubscription = mockSubscription as any;
             component.dragOverListener = mockListener;
 
             component.ngOnDestroy();
@@ -742,7 +756,8 @@ describe('FileUpload', () => {
 
 // Test Components for Template Testing
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -758,7 +773,8 @@ describe('FileUpload', () => {
 class TestTemplateHeaderComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -774,15 +790,18 @@ class TestTemplateHeaderComponent {}
 class TestHashHeaderComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback">
                 <div class="custom-content">
-                    <div *ngFor="let file of files; let i = index" class="file-item">
-                        <span>{{ file.name }}</span>
-                        <button (click)="removeFileCallback($event, i)" class="remove-btn">Remove</button>
-                    </div>
+                    @for (file of files; track $index; let i = $index) {
+                        <div class="file-item">
+                            <span>{{ file.name }}</span>
+                            <button (click)="removeFileCallback($event, i)" class="remove-btn">Remove</button>
+                        </div>
+                    }
                 </div>
             </ng-template>
         </p-fileupload>
@@ -791,15 +810,18 @@ class TestHashHeaderComponent {}
 class TestTemplateContentComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback">
                 <div class="custom-content">
-                    <div *ngFor="let file of files; let i = index" class="file-item">
-                        <span>{{ file.name }}</span>
-                        <button (click)="removeFileCallback($event, i)" class="remove-btn">Remove</button>
-                    </div>
+                    @for (file of files; track $index; let i = $index) {
+                        <div class="file-item">
+                            <span>{{ file.name }}</span>
+                            <button (click)="removeFileCallback($event, i)" class="remove-btn">Remove</button>
+                        </div>
+                    }
                 </div>
             </ng-template>
         </p-fileupload>
@@ -808,7 +830,8 @@ class TestTemplateContentComponent {}
 class TestHashContentComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #file let-file let-index="index">
@@ -822,7 +845,8 @@ class TestHashContentComponent {}
 class TestTemplateFileComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #empty>
@@ -834,7 +858,8 @@ class TestTemplateFileComponent {}
 class TestTemplateEmptyComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
             <ng-template #filelabel let-files>
@@ -848,7 +873,8 @@ class TestTemplateEmptyComponent {}
 class TestTemplateFileLabelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #chooseicon>
@@ -866,7 +892,8 @@ class TestTemplateFileLabelComponent {}
 class TestTemplateIconsComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #toolbar>
@@ -881,7 +908,8 @@ class TestTemplateIconsComponent {}
 class TestTemplateToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload, NgTemplateOutlet],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload" [files]="files">
             <ng-template #file let-file let-index="index">
@@ -905,7 +933,8 @@ class TestFileRemoveIconComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -934,7 +963,8 @@ class TestContextObjectsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback" let-progress="progress" let-messages="messages">
@@ -965,16 +995,21 @@ class TestContentContextComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FileUpload],
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
             <ng-template #filelabel let-files>
                 <div class="context-file-label">
                     <span [attr.data-files-array-length]="files?.length || 0">Files Array Length: {{ files?.length || 0 }}</span>
                     <span [attr.data-first-file-name]="files?.[0]?.name || 'none'">First File: {{ files?.[0]?.name || 'none' }}</span>
-                    <div class="file-details" *ngIf="files && files.length > 0">
-                        <div *ngFor="let file of files; let i = index" [attr.data-file-index]="i">{{ file.name }} ({{ file.size }} bytes)</div>
-                    </div>
+                    @if (files && files.length > 0) {
+                        <div class="file-details">
+                            @for (file of files; track $index; let i = $index) {
+                                <div [attr.data-file-index]="i">{{ file.name }} ({{ file.size }} bytes)</div>
+                            }
+                        </div>
+                    }
                 </div>
             </ng-template>
         </p-fileupload>
@@ -990,8 +1025,7 @@ describe('FileUpload Template Tests', () => {
     describe('#template Tests', () => {
         it('should render #header template with correct context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateHeaderComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateHeaderComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1018,8 +1052,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #content template with correct context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateContentComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateContentComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1044,8 +1077,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #file template with correct context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateFileComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateFileComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1065,8 +1097,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #empty template when no files', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateEmptyComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateEmptyComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1085,8 +1116,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #filelabel template in basic mode', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateFileLabelComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateFileLabelComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1104,8 +1134,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #template icons', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateIconsComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateIconsComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1123,8 +1152,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #toolbar template', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateToolbarComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateToolbarComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1147,8 +1175,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render fileRemoveIconTemplate with context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestFileRemoveIconComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestFileRemoveIconComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1176,8 +1203,7 @@ describe('FileUpload Template Tests', () => {
     describe('#template Tests', () => {
         it('should render #header template with correct context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestHashHeaderComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestHashHeaderComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1197,8 +1223,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should render #content template with correct context', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestHashContentComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestHashContentComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1218,8 +1243,7 @@ describe('FileUpload Template Tests', () => {
     describe('Comprehensive Context Object Testing', () => {
         it('should provide correct header context objects', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestContextObjectsComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestContextObjectsComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1255,8 +1279,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should provide correct content context objects', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestContentContextComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestContentContextComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1300,8 +1323,7 @@ describe('FileUpload Template Tests', () => {
 
         it('should provide correct file label context objects', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestFileLabelContextComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestFileLabelContextComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1343,8 +1365,7 @@ describe('FileUpload Template Tests', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestTemplateHeaderComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestTemplateHeaderComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1617,7 +1638,8 @@ describe('FileUpload Advanced Template Combinations', () => {
 
     describe('Mixed Template Usage', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [FileUpload],
             template: `
                 <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
                     <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -1633,26 +1655,36 @@ describe('FileUpload Advanced Template Combinations', () => {
 
                     <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-progress="progress">
                         <div class="mixed-content">
-                            <div class="upload-section" *ngIf="files?.length">
-                                <h4>Ready to Upload ({{ files.length }})</h4>
-                                <div class="file-grid">
-                                    <div *ngFor="let file of files; let i = index" class="file-card" [attr.data-file-index]="i">
-                                        <div class="file-name">{{ file.name }}</div>
-                                        <div class="file-size">{{ file.size }} bytes</div>
+                            @if (files?.length) {
+                                <div class="upload-section">
+                                    <h4>Ready to Upload ({{ files.length }})</h4>
+                                    <div class="file-grid">
+                                        @for (file of files; track $index; let i = $index) {
+                                            <div class="file-card" [attr.data-file-index]="i">
+                                                <div class="file-name">{{ file.name }}</div>
+                                                <div class="file-size">{{ file.size }} bytes</div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
-                            </div>
+                            }
 
-                            <div class="completed-section" *ngIf="uploadedFiles?.length">
-                                <h4>Uploaded Files ({{ uploadedFiles.length }})</h4>
-                                <div class="uploaded-list">
-                                    <div *ngFor="let file of uploadedFiles" class="uploaded-item">{{ file.name }}</div>
+                            @if (uploadedFiles?.length) {
+                                <div class="completed-section">
+                                    <h4>Uploaded Files ({{ uploadedFiles.length }})</h4>
+                                    <div class="uploaded-list">
+                                        @for (file of uploadedFiles; track $index) {
+                                            <div class="uploaded-item">{{ file.name }}</div>
+                                        }
+                                    </div>
                                 </div>
-                            </div>
+                            }
 
-                            <div class="progress-section" *ngIf="progress > 0">
-                                <div class="progress-bar" [style.width.%]="progress">{{ progress }}%</div>
-                            </div>
+                            @if (progress > 0) {
+                                <div class="progress-section">
+                                    <div class="progress-bar" [style.width.%]="progress">{{ progress }}%</div>
+                                </div>
+                            }
                         </div>
                     </ng-template>
 
@@ -1688,8 +1720,7 @@ describe('FileUpload Advanced Template Combinations', () => {
 
         it('should render all mixed templates correctly', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestMixedTemplatesComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestMixedTemplatesComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1732,8 +1763,7 @@ describe('FileUpload Advanced Template Combinations', () => {
 
         it('should handle mixed template interactions', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestMixedTemplatesComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestMixedTemplatesComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -1781,7 +1811,8 @@ describe('FileUpload Advanced Template Combinations', () => {
 
     describe('Template Context Validation', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [FileUpload],
             template: `
                 <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
                     <ng-template
@@ -1840,8 +1871,7 @@ describe('FileUpload Advanced Template Combinations', () => {
 
         it('should validate all content template context variables', async () => {
             await TestBed.configureTestingModule({
-                imports: [FileUpload, HttpClientTestingModule],
-                declarations: [TestAdvancedContextValidationComponent],
+                imports: [FileUpload, HttpClientTestingModule, TestAdvancedContextValidationComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -2686,7 +2716,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase1Component {
@@ -2704,8 +2735,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply simple string classes to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase1Component],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase1Component],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2731,7 +2761,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase2Component {
@@ -2755,8 +2786,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply object properties to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase2Component],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase2Component],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2786,7 +2816,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase3Component {
@@ -2804,8 +2835,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply mixed object and string values correctly', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase3Component],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase3Component],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2831,7 +2861,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" [name]="fileName" url="./upload" [disabled]="isDisabled"></p-fileupload>`
             })
             class TestPTCase4Component {
@@ -2856,8 +2887,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should use instance variables in PT functions', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase4Component],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase4Component],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2878,7 +2908,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase5Component {
@@ -2900,8 +2931,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should bind click events through PT', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase5Component],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase5Component],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2925,13 +2955,15 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="{ root: 'INLINE_ROOT_CLASS', header: 'INLINE_HEADER_CLASS' }" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase6InlineComponent {}
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, content: { class: 'INLINE_CONTENT_CLASS' } }" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase6InlineObjectComponent {}
@@ -2939,8 +2971,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply inline PT string classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineComponent],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase6InlineComponent],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2961,8 +2992,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply inline PT object classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineObjectComponent],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase6InlineObjectComponent],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -2983,7 +3013,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 7: Test from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `
                     <p-fileupload name="file1" url="./upload"></p-fileupload>
                     <p-fileupload name="file2" url="./upload"></p-fileupload>
@@ -2994,8 +3025,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should apply global PT configuration from PrimeNGConfig to multiple instances', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase7GlobalComponent],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase7GlobalComponent],
                     providers: [
                         MessageService,
                         {
@@ -3030,7 +3060,8 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [FileUpload],
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase8HooksComponent {
@@ -3057,8 +3088,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             it('should call PT hooks on Angular lifecycle events', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase8HooksComponent],
-                    imports: [FileUpload, HttpClientTestingModule],
+                    imports: [FileUpload, HttpClientTestingModule, TestPTCase8HooksComponent],
                     providers: [MessageService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
