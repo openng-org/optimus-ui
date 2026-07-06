@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { GalleryModule, Gallery } from './gallery';
 import { GalleryItem } from './gallery-item';
 import { GalleryPrev } from './gallery-prev';
@@ -57,7 +57,7 @@ import { GalleryThumbnailItem } from './gallery-thumbnail-item';
     `
 })
 class TestGalleryComponent {
-    activeIndex = 0;
+    activeIndex = signal(0);
     indexChangeEvent: any;
 
     onIndexChange(event: any) {
@@ -166,7 +166,7 @@ describe('Gallery', () => {
         });
 
         it('should navigate to previous item on pGalleryPrev click', async () => {
-            component.activeIndex = 1;
+            component.activeIndex.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -178,7 +178,7 @@ describe('Gallery', () => {
         });
 
         it('should wrap to first item when navigating next from last item', async () => {
-            component.activeIndex = 2;
+            component.activeIndex.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -218,7 +218,7 @@ describe('Gallery', () => {
         });
 
         it('should update data-active when activeIndex changes', async () => {
-            component.activeIndex = 1;
+            component.activeIndex.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
