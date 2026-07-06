@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, ViewChild, signal, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 import { DataView } from './dataview';
 import { SharedModule } from 'primeng/api';
 import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DataView, PaginatorModule, SharedModule],
     template: `
         <p-dataview
             [value]="products"
@@ -46,53 +46,231 @@ import { PaginatorModule } from 'primeng/paginator';
         >
             <ng-template #list let-items>
                 <div class="list-container">
-                    <div *ngFor="let item of items" class="list-item">{{ item.name }} - {{ item.price }}</div>
+                    @for (item of items; track item) {
+                        <div class="list-item">{{ item.name }} - {{ item.price }}</div>
+                    }
                 </div>
             </ng-template>
             <ng-template #grid let-items>
                 <div class="grid-container">
-                    <div *ngFor="let item of items" class="grid-item">{{ item.name }} - {{ item.price }}</div>
+                    @for (item of items; track item) {
+                        <div class="grid-item">{{ item.name }} - {{ item.price }}</div>
+                    }
                 </div>
             </ng-template>
         </p-dataview>
     `
 })
 class TestBasicDataViewComponent {
-    products = [
+    private _products = signal<any[]>([
         { id: 1, name: 'Product 1', price: 100, category: 'Category A', inventoryStatus: 'INSTOCK' },
         { id: 2, name: 'Product 2', price: 200, category: 'Category B', inventoryStatus: 'LOWSTOCK' },
         { id: 3, name: 'Product 3', price: 300, category: 'Category A', inventoryStatus: 'OUTOFSTOCK' },
         { id: 4, name: 'Product 4', price: 400, category: 'Category B', inventoryStatus: 'INSTOCK' },
         { id: 5, name: 'Product 5', price: 500, category: 'Category C', inventoryStatus: 'INSTOCK' }
-    ];
-    paginator = false;
-    rows = 3;
-    totalRecords: number | undefined;
-    pageLinks = 5;
-    rowsPerPageOptions: any[] = [3, 5, 10];
-    paginatorPosition: 'top' | 'bottom' | 'both' = 'bottom';
-    paginatorStyleClass: string | undefined;
-    alwaysShowPaginator = true;
-    paginatorDropdownAppendTo: any;
-    paginatorDropdownScrollHeight = '200px';
-    currentPageReportTemplate = '{currentPage} of {totalPages}';
-    showCurrentPageReport = false;
-    showJumpToPageDropdown = false;
-    showFirstLastIcon = true;
-    showPageLinks = true;
-    lazy = false;
-    lazyLoadOnInit = true;
-    emptyMessage = 'No products found';
-    gridStyleClass = '';
-    trackBy: Function = (index: number, item: any) => item;
-    filterBy = 'name,category';
-    filterLocale: string | undefined;
-    loading = false;
-    loadingIcon: string | undefined;
-    first = 0;
-    sortField: string | undefined;
-    sortOrder: number | undefined;
-    layout: 'list' | 'grid' = 'list';
+    ]);
+    get products() {
+        return this._products();
+    }
+    set products(v: any[]) {
+        this._products.set(v);
+    }
+    private _paginator = signal<boolean>(false);
+    get paginator() {
+        return this._paginator();
+    }
+    set paginator(v: boolean) {
+        this._paginator.set(v);
+    }
+    private _rows = signal<number>(3);
+    get rows() {
+        return this._rows();
+    }
+    set rows(v: number) {
+        this._rows.set(v);
+    }
+    private _totalRecords = signal<number | undefined>(undefined);
+    get totalRecords() {
+        return this._totalRecords();
+    }
+    set totalRecords(v: number | undefined) {
+        this._totalRecords.set(v);
+    }
+    private _pageLinks = signal<number>(5);
+    get pageLinks() {
+        return this._pageLinks();
+    }
+    set pageLinks(v: number) {
+        this._pageLinks.set(v);
+    }
+    private _rowsPerPageOptions = signal<any[]>([3, 5, 10]);
+    get rowsPerPageOptions() {
+        return this._rowsPerPageOptions();
+    }
+    set rowsPerPageOptions(v: any[]) {
+        this._rowsPerPageOptions.set(v);
+    }
+    private _paginatorPosition = signal<'top' | 'bottom' | 'both'>('bottom');
+    get paginatorPosition() {
+        return this._paginatorPosition();
+    }
+    set paginatorPosition(v: 'top' | 'bottom' | 'both') {
+        this._paginatorPosition.set(v);
+    }
+    private _paginatorStyleClass = signal<string | undefined>(undefined);
+    get paginatorStyleClass() {
+        return this._paginatorStyleClass();
+    }
+    set paginatorStyleClass(v: string | undefined) {
+        this._paginatorStyleClass.set(v);
+    }
+    private _alwaysShowPaginator = signal<boolean>(true);
+    get alwaysShowPaginator() {
+        return this._alwaysShowPaginator();
+    }
+    set alwaysShowPaginator(v: boolean) {
+        this._alwaysShowPaginator.set(v);
+    }
+    private _paginatorDropdownAppendTo = signal<any>(undefined);
+    get paginatorDropdownAppendTo() {
+        return this._paginatorDropdownAppendTo();
+    }
+    set paginatorDropdownAppendTo(v: any) {
+        this._paginatorDropdownAppendTo.set(v);
+    }
+    private _paginatorDropdownScrollHeight = signal<string>('200px');
+    get paginatorDropdownScrollHeight() {
+        return this._paginatorDropdownScrollHeight();
+    }
+    set paginatorDropdownScrollHeight(v: string) {
+        this._paginatorDropdownScrollHeight.set(v);
+    }
+    private _currentPageReportTemplate = signal<string>('{currentPage} of {totalPages}');
+    get currentPageReportTemplate() {
+        return this._currentPageReportTemplate();
+    }
+    set currentPageReportTemplate(v: string) {
+        this._currentPageReportTemplate.set(v);
+    }
+    private _showCurrentPageReport = signal<boolean>(false);
+    get showCurrentPageReport() {
+        return this._showCurrentPageReport();
+    }
+    set showCurrentPageReport(v: boolean) {
+        this._showCurrentPageReport.set(v);
+    }
+    private _showJumpToPageDropdown = signal<boolean>(false);
+    get showJumpToPageDropdown() {
+        return this._showJumpToPageDropdown();
+    }
+    set showJumpToPageDropdown(v: boolean) {
+        this._showJumpToPageDropdown.set(v);
+    }
+    private _showFirstLastIcon = signal<boolean>(true);
+    get showFirstLastIcon() {
+        return this._showFirstLastIcon();
+    }
+    set showFirstLastIcon(v: boolean) {
+        this._showFirstLastIcon.set(v);
+    }
+    private _showPageLinks = signal<boolean>(true);
+    get showPageLinks() {
+        return this._showPageLinks();
+    }
+    set showPageLinks(v: boolean) {
+        this._showPageLinks.set(v);
+    }
+    private _lazy = signal<boolean>(false);
+    get lazy() {
+        return this._lazy();
+    }
+    set lazy(v: boolean) {
+        this._lazy.set(v);
+    }
+    private _lazyLoadOnInit = signal<boolean>(true);
+    get lazyLoadOnInit() {
+        return this._lazyLoadOnInit();
+    }
+    set lazyLoadOnInit(v: boolean) {
+        this._lazyLoadOnInit.set(v);
+    }
+    private _emptyMessage = signal<string>('No products found');
+    get emptyMessage() {
+        return this._emptyMessage();
+    }
+    set emptyMessage(v: string) {
+        this._emptyMessage.set(v);
+    }
+    private _gridStyleClass = signal<string>('');
+    get gridStyleClass() {
+        return this._gridStyleClass();
+    }
+    set gridStyleClass(v: string) {
+        this._gridStyleClass.set(v);
+    }
+    private _trackBy = signal<Function>((index: number, item: any) => item);
+    get trackBy() {
+        return this._trackBy();
+    }
+    set trackBy(v: Function) {
+        this._trackBy.set(v);
+    }
+    private _filterBy = signal<string>('name,category');
+    get filterBy() {
+        return this._filterBy();
+    }
+    set filterBy(v: string) {
+        this._filterBy.set(v);
+    }
+    private _filterLocale = signal<string | undefined>(undefined);
+    get filterLocale() {
+        return this._filterLocale();
+    }
+    set filterLocale(v: string | undefined) {
+        this._filterLocale.set(v);
+    }
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _loadingIcon = signal<string | undefined>(undefined);
+    get loadingIcon() {
+        return this._loadingIcon();
+    }
+    set loadingIcon(v: string | undefined) {
+        this._loadingIcon.set(v);
+    }
+    private _first = signal<number>(0);
+    get first() {
+        return this._first();
+    }
+    set first(v: number) {
+        this._first.set(v);
+    }
+    private _sortField = signal<string | undefined>(undefined);
+    get sortField() {
+        return this._sortField();
+    }
+    set sortField(v: string | undefined) {
+        this._sortField.set(v);
+    }
+    private _sortOrder = signal<number | undefined>(undefined);
+    get sortOrder() {
+        return this._sortOrder();
+    }
+    set sortOrder(v: number | undefined) {
+        this._sortOrder.set(v);
+    }
+    private _layout = signal<'list' | 'grid'>('list');
+    get layout() {
+        return this._layout();
+    }
+    set layout(v: 'list' | 'grid') {
+        this._layout.set(v);
+    }
 
     lazyLoadEvent: any;
     pageEvent: any;
@@ -117,7 +295,8 @@ class TestBasicDataViewComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DataView, PaginatorModule, SharedModule],
     template: `
         <p-dataview [value]="products">
             <p-header>
@@ -125,9 +304,11 @@ class TestBasicDataViewComponent {
             </p-header>
             <ng-template #list let-items>
                 <div class="list-container">
-                    <div *ngFor="let item of items" class="list-item">
-                        {{ item.name }}
-                    </div>
+                    @for (item of items; track item) {
+                        <div class="list-item">
+                            {{ item.name }}
+                        </div>
+                    }
                 </div>
             </ng-template>
             <p-footer>
@@ -144,14 +325,17 @@ class TestHeaderFooterDataViewComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DataView, PaginatorModule, SharedModule],
     template: `
         <p-dataview [value]="products" [paginator]="true" [rows]="2">
             <ng-template #list let-items>
                 <div class="list-container">
-                    <div *ngFor="let item of items" class="list-item">
-                        {{ item.name }}
-                    </div>
+                    @for (item of items; track item) {
+                        <div class="list-item">
+                            {{ item.name }}
+                        </div>
+                    }
                 </div>
             </ng-template>
             <ng-template #header>
@@ -177,17 +361,22 @@ class TestTemplatesDataViewComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DataView, PaginatorModule, SharedModule],
     template: `
         <p-dataview [value]="products()" [layout]="layout">
             <ng-template #list let-items>
                 <div class="list-container">
-                    <div *ngFor="let item of items" class="list-item">List: {{ item.name }}</div>
+                    @for (item of items; track item) {
+                        <div class="list-item">List: {{ item.name }}</div>
+                    }
                 </div>
             </ng-template>
             <ng-template #grid let-items>
                 <div class="grid-container">
-                    <div *ngFor="let item of items" class="grid-item">Grid: {{ item.name }}</div>
+                    @for (item of items; track item) {
+                        <div class="grid-item">Grid: {{ item.name }}</div>
+                    }
                 </div>
             </ng-template>
         </p-dataview>
@@ -199,7 +388,13 @@ class TestLayoutDataViewComponent {
         { id: 2, name: 'Product 2' },
         { id: 3, name: 'Product 3' }
     ]);
-    layout: 'list' | 'grid' = 'list';
+    private _layout = signal<'list' | 'grid'>('list');
+    get layout() {
+        return this._layout();
+    }
+    set layout(v: 'list' | 'grid') {
+        this._layout.set(v);
+    }
 }
 
 describe('DataView', () => {
@@ -209,8 +404,7 @@ describe('DataView', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, DataView, PaginatorModule, SharedModule],
-            declarations: [TestBasicDataViewComponent, TestHeaderFooterDataViewComponent, TestTemplatesDataViewComponent, TestLayoutDataViewComponent, TestDynamicDataViewComponent],
+            imports: [DataView, PaginatorModule, SharedModule, TestBasicDataViewComponent, TestHeaderFooterDataViewComponent, TestTemplatesDataViewComponent, TestLayoutDataViewComponent, TestDynamicDataViewComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
         fixture = TestBed.createComponent(TestBasicDataViewComponent);
@@ -1606,7 +1800,8 @@ describe('DataView', () => {
 
 // Test component for dynamic values
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DataView, PaginatorModule, SharedModule],
     template: `
         <p-dataview
             #dataView
@@ -1625,12 +1820,16 @@ describe('DataView', () => {
         >
             <ng-template #list let-items>
                 <div class="dynamic-list-container">
-                    <div *ngFor="let item of items" class="dynamic-list-item">{{ item.name }} - {{ item.price }}</div>
+                    @for (item of items; track item) {
+                        <div class="dynamic-list-item">{{ item.name }} - {{ item.price }}</div>
+                    }
                 </div>
             </ng-template>
             <ng-template #grid let-items>
                 <div class="dynamic-grid-container">
-                    <div *ngFor="let item of items" class="dynamic-grid-item">{{ item.name }} - {{ item.price }}</div>
+                    @for (item of items; track item) {
+                        <div class="dynamic-grid-item">{{ item.name }} - {{ item.price }}</div>
+                    }
                 </div>
             </ng-template>
         </p-dataview>
@@ -1639,24 +1838,96 @@ describe('DataView', () => {
 class TestDynamicDataViewComponent {
     @ViewChild('dataView') dataView!: DataView;
 
-    value = [
+    private _value = signal<any[]>([
         { id: 1, name: 'Product 1', price: 100 },
         { id: 2, name: 'Product 2', price: 200 },
         { id: 3, name: 'Product 3', price: 300 },
         { id: 4, name: 'Product 4', price: 400 },
         { id: 5, name: 'Product 5', price: 500 }
-    ];
-    paginator = false;
-    rows = 3;
-    totalRecords: number | undefined;
-    layout: 'list' | 'grid' = 'list';
-    loading = false;
-    loadingIcon: string | undefined;
-    sortField: string | undefined;
-    sortOrder: number | undefined;
-    filterBy: string | undefined;
-    rowsPerPageOptions: any[] | undefined;
-    emptyMessage = 'No data available';
+    ]);
+    get value() {
+        return this._value();
+    }
+    set value(v: any[]) {
+        this._value.set(v);
+    }
+    private _paginator = signal<boolean>(false);
+    get paginator() {
+        return this._paginator();
+    }
+    set paginator(v: boolean) {
+        this._paginator.set(v);
+    }
+    private _rows = signal<number>(3);
+    get rows() {
+        return this._rows();
+    }
+    set rows(v: number) {
+        this._rows.set(v);
+    }
+    private _totalRecords = signal<number | undefined>(undefined);
+    get totalRecords() {
+        return this._totalRecords();
+    }
+    set totalRecords(v: number | undefined) {
+        this._totalRecords.set(v);
+    }
+    private _layout = signal<'list' | 'grid'>('list');
+    get layout() {
+        return this._layout();
+    }
+    set layout(v: 'list' | 'grid') {
+        this._layout.set(v);
+    }
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _loadingIcon = signal<string | undefined>(undefined);
+    get loadingIcon() {
+        return this._loadingIcon();
+    }
+    set loadingIcon(v: string | undefined) {
+        this._loadingIcon.set(v);
+    }
+    private _sortField = signal<string | undefined>(undefined);
+    get sortField() {
+        return this._sortField();
+    }
+    set sortField(v: string | undefined) {
+        this._sortField.set(v);
+    }
+    private _sortOrder = signal<number | undefined>(undefined);
+    get sortOrder() {
+        return this._sortOrder();
+    }
+    set sortOrder(v: number | undefined) {
+        this._sortOrder.set(v);
+    }
+    private _filterBy = signal<string | undefined>(undefined);
+    get filterBy() {
+        return this._filterBy();
+    }
+    set filterBy(v: string | undefined) {
+        this._filterBy.set(v);
+    }
+    private _rowsPerPageOptions = signal<any[] | undefined>(undefined);
+    get rowsPerPageOptions() {
+        return this._rowsPerPageOptions();
+    }
+    set rowsPerPageOptions(v: any[] | undefined) {
+        this._rowsPerPageOptions.set(v);
+    }
+    private _emptyMessage = signal<string>('No data available');
+    get emptyMessage() {
+        return this._emptyMessage();
+    }
+    set emptyMessage(v: string) {
+        this._emptyMessage.set(v);
+    }
 
     updateValue(newValue: any[]) {
         this.value = newValue;
