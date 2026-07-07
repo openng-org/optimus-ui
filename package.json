@@ -57,6 +57,7 @@
         "@angular/router": "catalog:angular22",
         "@commitlint/cli": "^19.6.1",
         "@commitlint/config-conventional": "^19.6.0",
+        "@types/node": "26.1.0",
         "@typescript-eslint/eslint-plugin": "^8.13.0",
         "cross-env": "^7.0.3",
         "eslint": "^9.14.0",
@@ -68,12 +69,14 @@
         "fs-extra": "^11.2.0",
         "glob": "^10.4.2",
         "husky": "^9.1.6",
+        "jsdom": "29.1.1",
         "lint-staged": "^12.0.0",
         "ng-packagr": "catalog:angular22",
         "pnpm": "^10.28.2",
         "prettier": "^3.0.0",
         "tsup": "^8.1.0",
-        "typescript": "catalog:angular22"
+        "typescript": "catalog:angular22",
+        "vitest": "4.1.10"
     },
     "publishConfig": {
         "access": "public"
