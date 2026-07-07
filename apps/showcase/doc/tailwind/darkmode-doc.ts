@@ -10,8 +10,8 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                In styled mode, {{ PROJECT_NAME }} uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, ensure that <i>darkModeSelector</i> is aligned with the Tailwind dark
-                variant for seamless integration. Note that, this particular configuration isn't required if you're utilizing the default system color scheme.
+                In styled mode, {{ PROJECT_NAME }} uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, ensure that <i>darkModeSelector</i> is aligned with the
+                Tailwind dark variant for seamless integration. Note that, this particular configuration isn't required if you're utilizing the default system color scheme.
             </p>
             <p>Suppose that, the darkModeSelector is set as <i>my-app-dark</i> in {{ PROJECT_NAME }}.</p>
             <app-code [code]="code1" [importCode]="true" [hideToggleCode]="true" [hideStackBlitz]="true" />

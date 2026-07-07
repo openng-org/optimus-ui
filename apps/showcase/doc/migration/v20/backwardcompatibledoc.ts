@@ -26,8 +26,8 @@ import { Component } from '@angular/core';
             <h4>PrimeUIX Themes</h4>
             <p>
                 PrimeUIX is a shared package between all Prime libraries, this shared approach allows PrimeTek teams to share theming and the Design team who is responsible for the Figma UI Kit to work on a single design file, which is the single
-                source of truth. Prior to v20, {{ PROJECT_NAME }} has its own fork in default styles and for the design tokens <i>{{ '@' }}primeng/themes</i> package is required. With v20, {{ PROJECT_NAME }} receives the styles from <i>{{ '@' }}primeuix/styles</i> under
-                the hood and the design tokens as theme presets are loaded from <i>{{ '@' }}primeuix/themes</i>.
+                source of truth. Prior to v20, {{ PROJECT_NAME }} has its own fork in default styles and for the design tokens <i>{{ '@' }}primeng/themes</i> package is required. With v20, {{ PROJECT_NAME }} receives the styles from
+                <i>{{ '@' }}primeuix/styles</i> under the hood and the design tokens as theme presets are loaded from <i>{{ '@' }}primeuix/themes</i>.
             </p>
             <p>
                 The components need to be adjusted to fit in the PrimeUIX theming by using the <i>host</i> element where applicable, as a result for the components that use host element (&lt;p-* /&gt;) as their main container, the

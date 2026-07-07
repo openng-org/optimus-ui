@@ -18,17 +18,17 @@ import { TagModule } from 'primeng/tag';
                     <i class="pi pi-github absolute text-surface-200 dark:text-surface-600" style="bottom: -50px; right: -50px; font-size: 200px; transform: rotateX(45deg) rotateY(0deg) rotateZ(-45deg)"></i>
                     <div class="text-xl text-surface-900 dark:text-surface-0 font-semibold mb-4 relative">Community Versions</div>
                     <p class="m-0 leading-normal relative text-surface-800 dark:text-surface-50">
-                        Angular is a fast paced technology with a new major version every 6 months. {{ PROJECT_NAME }} release cycle is aligned with Angular and every 6 months a new major {{ PROJECT_NAME }} version is released as open source that is compatible with the
-                        latest Angular core. The maintenance releases of the latest {{ PROJECT_NAME }} version are provided as free and open source for the following 6 months until the new major Angular version is ready.
+                        Angular is a fast paced technology with a new major version every 6 months. {{ PROJECT_NAME }} release cycle is aligned with Angular and every 6 months a new major {{ PROJECT_NAME }} version is released as open source that is
+                        compatible with the latest Angular core. The maintenance releases of the latest {{ PROJECT_NAME }} version are provided as free and open source for the following 6 months until the new major Angular version is ready.
                     </p>
                 </div>
                 <div class="card m-0 xl:w-9/12 text-white bg-cover" style="background-image: url('https://primefaces.org/cdn/primeng/images/lts/card-lts.jpg')">
                     <div class="text-xl font-semibold mb-4">LTS Versions</div>
                     <p class="m-0 leading-normal">
-                        Majority of the existing applications prefer to remain at a previous version due to stability requirements instead of upgrading to the latest version immediately. {{ PROJECT_NAME }} LTS is a support service to provide a license for the
-                        finest compatible version suited to you. LTS covers the prior two versions from the latest release, this means up to 18 months of almost bi-weekly releases to bring the latest defect fixes and security updates to your project.
-                        As an example, when {{ PROJECT_NAME }} moves to Angular 20, v19 and v18 will move to LTS support whereas STS (short term support) versions of {{ PROJECT_NAME }} 20 will be open source under MIT license for at least 6 months until Angular/{{ PROJECT_NAME }} 21
-                        is released.
+                        Majority of the existing applications prefer to remain at a previous version due to stability requirements instead of upgrading to the latest version immediately. {{ PROJECT_NAME }} LTS is a support service to provide a
+                        license for the finest compatible version suited to you. LTS covers the prior two versions from the latest release, this means up to 18 months of almost bi-weekly releases to bring the latest defect fixes and security updates
+                        to your project. As an example, when {{ PROJECT_NAME }} moves to Angular 20, v19 and v18 will move to LTS support whereas STS (short term support) versions of {{ PROJECT_NAME }} 20 will be open source under MIT license for at
+                        least 6 months until Angular/{{ PROJECT_NAME }} 21 is released.
                     </p>
                 </div>
             </div>
@@ -165,7 +165,8 @@ import { TagModule } from 'primeng/tag';
                             <span class="text-surface-900 dark:text-surface-0 font-semibold text-lg">Enhancements</span>
                         </div>
                         <p class="m-0 leading-normal mb-4 text-secondary text-surface-800 dark:text-surface-50">
-                            We are dedicated to continuously improving {{ PROJECT_NAME }} to meet the evolving needs of our users. As part of our long-term support, we will provide regular updates and enhancements to add new features and functionality.
+                            We are dedicated to continuously improving {{ PROJECT_NAME }} to meet the evolving needs of our users. As part of our long-term support, we will provide regular updates and enhancements to add new features and
+                            functionality.
                         </p>
                     </div>
                 </div>
@@ -315,8 +316,8 @@ import { TagModule } from 'primeng/tag';
 
                         <div class="text-surface-900 dark:text-surface-0 leading-normal mb-2 font-medium">What is the difference between LTS and PRO?</div>
                         <p class="mt-0 p-0 leading-normal text-surface-800 dark:text-surface-50">
-                            {{ PROJECT_NAME }} PRO is a premium support service delivered via an exclusive JIRA instance where support engineers of PrimeTek provide assistance within 1 business day to the raised tickets. LTS on the other hand provides a license
-                            to utilize the long term support versions.
+                            {{ PROJECT_NAME }} PRO is a premium support service delivered via an exclusive JIRA instance where support engineers of PrimeTek provide assistance within 1 business day to the raised tickets. LTS on the other hand
+                            provides a license to utilize the long term support versions.
                         </p>
                     </div>
                 </div>
