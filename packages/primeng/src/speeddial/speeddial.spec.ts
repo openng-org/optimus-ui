@@ -1,4 +1,4 @@
-import { Input, provideZonelessChangeDetection } from '@angular/core';
+import { Input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,30 +10,31 @@ import { Component } from '@angular/core';
 
 // Basic SpeedDial Test Component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: `
         <p-speeddial
-            [id]="id"
-            [model]="model"
-            [visible]="visible"
-            [direction]="direction"
-            [transitionDelay]="transitionDelay"
-            [type]="type"
-            [radius]="radius"
-            [mask]="mask"
-            [disabled]="disabled"
-            [hideOnClickOutside]="hideOnClickOutside"
-            [buttonStyle]="buttonStyle"
-            [buttonClassName]="buttonClassName"
-            [maskStyle]="maskStyle"
-            [maskClassName]="maskClassName"
-            [showIcon]="showIcon"
-            [hideIcon]="hideIcon"
-            [rotateAnimation]="rotateAnimation"
-            [ariaLabel]="ariaLabel"
-            [ariaLabelledBy]="ariaLabelledBy"
-            [tooltipOptions]="tooltipOptions"
-            [buttonProps]="buttonProps"
+            [id]="id()"
+            [model]="model()"
+            [visible]="visible()"
+            [direction]="direction()"
+            [transitionDelay]="transitionDelay()"
+            [type]="type()"
+            [radius]="radius()"
+            [mask]="mask()"
+            [disabled]="disabled()"
+            [hideOnClickOutside]="hideOnClickOutside()"
+            [buttonStyle]="buttonStyle()"
+            [buttonClassName]="buttonClassName()"
+            [maskStyle]="maskStyle()"
+            [maskClassName]="maskClassName()"
+            [showIcon]="showIcon()"
+            [hideIcon]="hideIcon()"
+            [rotateAnimation]="rotateAnimation()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [tooltipOptions]="tooltipOptions()"
+            [buttonProps]="buttonProps()"
             (onVisibleChange)="onVisibleChange($event)"
             (visibleChange)="onVisibleChangeV2($event)"
             (onClick)="onButtonClick($event)"
@@ -44,33 +45,33 @@ import { Component } from '@angular/core';
     `
 })
 class TestBasicSpeedDialComponent {
-    id: string | undefined;
-    model: MenuItem[] = [
+    id = signal<string | undefined>(undefined);
+    model = signal<MenuItem[]>([
         { label: 'Add', icon: 'pi pi-plus', command: () => (this.addClicked = true) },
         { label: 'Update', icon: 'pi pi-refresh', command: () => (this.updateClicked = true) },
         { label: 'Delete', icon: 'pi pi-trash', command: () => (this.deleteClicked = true) },
         { separator: true },
         { label: 'Upload', icon: 'pi pi-upload', routerLink: '/upload' }
-    ];
-    visible: boolean = false;
-    direction: 'up' | 'down' | 'left' | 'right' | 'up-left' | 'up-right' | 'down-left' | 'down-right' = 'up';
-    transitionDelay: number = 30;
-    type: 'linear' | 'circle' | 'semi-circle' | 'quarter-circle' = 'linear';
-    radius: number = 0;
-    mask: boolean = false;
-    disabled: boolean = false;
-    hideOnClickOutside: boolean = true;
-    buttonStyle: any = {};
-    buttonClassName: string | undefined;
-    maskStyle: any = {};
-    maskClassName: string | undefined;
-    showIcon: string | undefined;
-    hideIcon: string | undefined;
-    rotateAnimation: boolean = true;
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    tooltipOptions: any = {};
-    buttonProps: any;
+    ]);
+    visible = signal(false);
+    direction = signal<'up' | 'down' | 'left' | 'right' | 'up-left' | 'up-right' | 'down-left' | 'down-right'>('up');
+    transitionDelay = signal(30);
+    type = signal<'linear' | 'circle' | 'semi-circle' | 'quarter-circle'>('linear');
+    radius = signal(0);
+    mask = signal(false);
+    disabled = signal(false);
+    hideOnClickOutside = signal(true);
+    buttonStyle = signal<any>({});
+    buttonClassName = signal<string | undefined>(undefined);
+    maskStyle = signal<any>({});
+    maskClassName = signal<string | undefined>(undefined);
+    showIcon = signal<string | undefined>(undefined);
+    hideIcon = signal<string | undefined>(undefined);
+    rotateAnimation = signal(true);
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
+    tooltipOptions = signal<any>({});
+    buttonProps = signal<any>(undefined);
 
     // Event tracking
     visibleChangeEvent: boolean | undefined;
@@ -107,7 +108,8 @@ class TestBasicSpeedDialComponent {
 
 // SpeedDial with #template approach
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: `
         <p-speeddial [model]="model">
             <ng-template #button let-toggleCallback="toggleCallback">
@@ -136,7 +138,8 @@ class TestContentTemplateSpeedDialComponent {
 
 // SpeedDial Types Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: `
         <div class="speed-dial-types">
             <p-speeddial [model]="model" type="linear"></p-speeddial>
@@ -156,7 +159,8 @@ class TestSpeedDialTypesComponent {
 
 // SpeedDial Directions Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: `
         <div class="speed-dial-directions">
             <p-speeddial [model]="model" direction="up"></p-speeddial>
@@ -179,19 +183,21 @@ class TestSpeedDialDirectionsComponent {
 
 // SpeedDial with Mask
 @Component({
-    standalone: false,
-    template: ` <p-speeddial [model]="model" [mask]="true" [maskStyle]="maskStyle" [maskClassName]="maskClassName" [visible]="visible"> </p-speeddial> `
+    standalone: true,
+    imports: [SpeedDial],
+    template: ` <p-speeddial [model]="model" [mask]="true" [maskStyle]="maskStyle" [maskClassName]="maskClassName" [visible]="visible()"> </p-speeddial> `
 })
 class TestMaskSpeedDialComponent {
     model: MenuItem[] = [{ label: 'Action', icon: 'pi pi-plus' }];
-    visible = false;
+    visible = signal(false);
     maskStyle = { backgroundColor: 'rgba(0,0,0,0.5)' };
     maskClassName = 'custom-mask';
 }
 
 // Disabled SpeedDial Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: `
         <div class="disabled-speed-dials">
             <p-speeddial [model]="model" [disabled]="true"></p-speeddial>
@@ -213,7 +219,8 @@ class TestDisabledSpeedDialComponent {
 
 // SpeedDial with Router Links
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: ` <p-speeddial [model]="model"></p-speeddial> `
 })
 class TestRouterSpeedDialComponent {
@@ -232,7 +239,8 @@ class TestRouterSpeedDialComponent {
 
 // SpeedDial with Custom Icons
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: ` <p-speeddial [model]="model" [showIcon]="showIcon" [hideIcon]="hideIcon" [rotateAnimation]="rotateAnimation"> </p-speeddial> `
 })
 class TestIconSpeedDialComponent {
@@ -244,7 +252,8 @@ class TestIconSpeedDialComponent {
 
 // SpeedDial with Tooltip
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: ` <p-speeddial [model]="model" [tooltipOptions]="tooltipOptions"> </p-speeddial> `
 })
 class TestTooltipSpeedDialComponent {
@@ -260,7 +269,8 @@ class TestTooltipSpeedDialComponent {
 
 // SpeedDial Command Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SpeedDial],
     template: ` <p-speeddial [model]="model" [visible]="true"></p-speeddial> `
 })
 class TestCommandSpeedDialComponent {
@@ -289,8 +299,9 @@ class TestCommandSpeedDialComponent {
 
 // SpeedDial PT Test Components
 @Component({
-    standalone: false,
-    template: ` <p-speeddial [model]="model" [pt]="pt" [visible]="visible" [mask]="mask"></p-speeddial> `
+    standalone: true,
+    imports: [SpeedDial],
+    template: ` <p-speeddial [model]="model" [pt]="pt" [visible]="visible()" [mask]="mask"></p-speeddial> `
 })
 class TestPTSpeedDialComponent {
     @Input() mask: boolean = false;
@@ -300,7 +311,7 @@ class TestPTSpeedDialComponent {
         { label: 'Delete', icon: 'pi pi-trash' }
     ];
     @Input() pt: any = {};
-    @Input() visible: boolean = false;
+    visible = signal(false);
 }
 
 describe('SpeedDial', () => {
@@ -311,7 +322,9 @@ describe('SpeedDial', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
+                SpeedDial,
+                ButtonModule,
                 TestBasicSpeedDialComponent,
                 TestContentTemplateSpeedDialComponent,
                 TestSpeedDialTypesComponent,
@@ -322,11 +335,7 @@ describe('SpeedDial', () => {
                 TestIconSpeedDialComponent,
                 TestTooltipSpeedDialComponent,
                 TestCommandSpeedDialComponent,
-                TestPTSpeedDialComponent
-            ],
-            imports: [
-                SpeedDial,
-                ButtonModule,
+                TestPTSpeedDialComponent,
 
                 RouterTestingModule.withRoutes([
                     { path: 'home', component: TestBasicSpeedDialComponent },
@@ -388,7 +397,7 @@ describe('SpeedDial', () => {
     describe('Input Properties', () => {
         it('should update model property', async () => {
             const newModel = [{ label: 'New Action', icon: 'pi pi-new' }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -397,7 +406,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update visible property', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -406,7 +415,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update direction property', async () => {
-            component.direction = 'down';
+            component.direction.set('down');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -415,7 +424,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update type property', async () => {
-            component.type = 'circle';
+            component.type.set('circle');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -424,7 +433,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update transitionDelay property', async () => {
-            component.transitionDelay = 50;
+            component.transitionDelay.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -433,7 +442,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update radius property', async () => {
-            component.radius = 100;
+            component.radius.set(100);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -442,7 +451,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update mask property', async () => {
-            component.mask = true;
+            component.mask.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -451,7 +460,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update disabled property', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -460,7 +469,7 @@ describe('SpeedDial', () => {
         });
 
         it('should update hideOnClickOutside property', async () => {
-            component.hideOnClickOutside = false;
+            component.hideOnClickOutside.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -469,8 +478,8 @@ describe('SpeedDial', () => {
         });
 
         it('should update style properties', async () => {
-            component.buttonStyle = { backgroundColor: 'red' };
-            component.buttonClassName = 'custom-button';
+            component.buttonStyle.set({ backgroundColor: 'red' });
+            component.buttonClassName.set('custom-button');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -480,9 +489,9 @@ describe('SpeedDial', () => {
         });
 
         it('should update icon properties', async () => {
-            component.showIcon = 'pi pi-plus';
-            component.hideIcon = 'pi pi-times';
-            component.rotateAnimation = false;
+            component.showIcon.set('pi pi-plus');
+            component.hideIcon.set('pi pi-times');
+            component.rotateAnimation.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -493,8 +502,8 @@ describe('SpeedDial', () => {
         });
 
         it('should update accessibility properties', async () => {
-            component.ariaLabel = 'Speed Dial Menu';
-            component.ariaLabelledBy = 'speed-dial-label';
+            component.ariaLabel.set('Speed Dial Menu');
+            component.ariaLabelledBy.set('speed-dial-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -505,7 +514,7 @@ describe('SpeedDial', () => {
 
         it('should update tooltip options', async () => {
             const tooltipOptions = { tooltipPosition: 'bottom' };
-            component.tooltipOptions = tooltipOptions;
+            component.tooltipOptions.set(tooltipOptions);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -515,7 +524,7 @@ describe('SpeedDial', () => {
 
         it('should update button props', async () => {
             const buttonProps = { size: 'small' };
-            component.buttonProps = buttonProps;
+            component.buttonProps.set(buttonProps);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -527,7 +536,7 @@ describe('SpeedDial', () => {
     describe('Event Handling', () => {
         it('should emit onClick event when button is clicked', async () => {
             const button = fixture.debugElement.query(By.css('p-button button'));
-            const clickSpy = spyOn(component, 'onButtonClick');
+            const clickSpy = vi.spyOn(component, 'onButtonClick');
 
             button.nativeElement.click();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -537,8 +546,8 @@ describe('SpeedDial', () => {
         });
 
         it('should emit onVisibleChange and visibleChange events', async () => {
-            const visibleChangeSpy = spyOn(component, 'onVisibleChange');
-            const visibleChangeV2Spy = spyOn(component, 'onVisibleChangeV2');
+            const visibleChangeSpy = vi.spyOn(component, 'onVisibleChange');
+            const visibleChangeV2Spy = vi.spyOn(component, 'onVisibleChangeV2');
 
             speedDialInstance.show();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -556,7 +565,7 @@ describe('SpeedDial', () => {
         });
 
         it('should emit onShow event when shown', async () => {
-            const showSpy = spyOn(component, 'onShow');
+            const showSpy = vi.spyOn(component, 'onShow');
 
             speedDialInstance.show();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -566,7 +575,7 @@ describe('SpeedDial', () => {
         });
 
         it('should emit onHide event when hidden', async () => {
-            const hideSpy = spyOn(component, 'onHide');
+            const hideSpy = vi.spyOn(component, 'onHide');
 
             speedDialInstance.hide();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -594,8 +603,8 @@ describe('SpeedDial', () => {
         });
 
         it('should not emit events when disabled', async () => {
-            const clickSpy = spyOn(component, 'onButtonClick');
-            component.disabled = true;
+            const clickSpy = vi.spyOn(component, 'onButtonClick');
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -612,7 +621,7 @@ describe('SpeedDial', () => {
 
     describe('Menu Item Interaction', () => {
         it('should execute item commands', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -670,7 +679,7 @@ describe('SpeedDial', () => {
 
         it('should handle arrow down key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onArrowDown').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onArrowDown');
 
             list.triggerEventHandler('keydown', { code: 'ArrowDown', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -681,7 +690,7 @@ describe('SpeedDial', () => {
 
         it('should handle arrow up key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onArrowUp').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onArrowUp');
 
             list.triggerEventHandler('keydown', { code: 'ArrowUp', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -692,7 +701,7 @@ describe('SpeedDial', () => {
 
         it('should handle arrow left key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onArrowLeft').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onArrowLeft');
 
             list.triggerEventHandler('keydown', { code: 'ArrowLeft', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -703,7 +712,7 @@ describe('SpeedDial', () => {
 
         it('should handle arrow right key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onArrowRight').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onArrowRight');
 
             list.triggerEventHandler('keydown', { code: 'ArrowRight', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -714,7 +723,7 @@ describe('SpeedDial', () => {
 
         it('should handle enter key', async () => {
             // Mock onEnterKey to avoid DOM dependencies in test
-            const enterKeySpy = spyOn(speedDialInstance, 'onEnterKey').and.callFake(() => {
+            const enterKeySpy = vi.spyOn(speedDialInstance, 'onEnterKey').mockImplementation(() => {
                 // Simulate successful enter key handling
             });
 
@@ -728,7 +737,7 @@ describe('SpeedDial', () => {
 
         it('should handle escape key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onEscapeKey').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onEscapeKey');
 
             list.triggerEventHandler('keydown', { code: 'Escape', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -743,7 +752,7 @@ describe('SpeedDial', () => {
 
         it('should handle home key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onHomeKey').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onHomeKey');
 
             list.triggerEventHandler('keydown', { code: 'Home', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -754,7 +763,7 @@ describe('SpeedDial', () => {
 
         it('should handle end key', async () => {
             const list = fixture.debugElement.query(By.css('ul[role="menu"]'));
-            const keydownSpy = spyOn(speedDialInstance, 'onEndKey').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onEndKey');
 
             list.triggerEventHandler('keydown', { code: 'End', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -767,7 +776,7 @@ describe('SpeedDial', () => {
     describe('Toggler Keyboard Navigation', () => {
         it('should handle arrow down on toggler button', async () => {
             const pButton = fixture.debugElement.query(By.css('p-button'));
-            const keydownSpy = spyOn(speedDialInstance, 'onTogglerArrowDown').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onTogglerArrowDown');
 
             pButton.triggerEventHandler('keydown', { code: 'ArrowDown', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -779,7 +788,7 @@ describe('SpeedDial', () => {
 
         it('should handle arrow up on toggler button', async () => {
             const pButton = fixture.debugElement.query(By.css('p-button'));
-            const keydownSpy = spyOn(speedDialInstance, 'onTogglerArrowUp').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onTogglerArrowUp');
 
             pButton.triggerEventHandler('keydown', { code: 'ArrowUp', preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -789,14 +798,14 @@ describe('SpeedDial', () => {
             expect(speedDialInstance.visible()).toBe(true);
         });
 
-        xit('should handle escape on toggler button', async () => {
+        it.skip('should handle escape on toggler button', async () => {
             speedDialInstance.show();
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
             fixture.detectChanges();
 
             const button = fixture.debugElement.query(By.css('p-button button'));
-            const keydownSpy = spyOn(speedDialInstance, 'onEscapeKey').and.callThrough();
+            const keydownSpy = vi.spyOn(speedDialInstance, 'onEscapeKey');
 
             button.triggerEventHandler('keydown', { code: 'Escape', preventDefault: () => {} });
             fixture.detectChanges();
@@ -811,7 +820,7 @@ describe('SpeedDial', () => {
 
     describe('SpeedDial Types and Directions', () => {
         it('should handle linear type', async () => {
-            component.type = 'linear';
+            component.type.set('linear');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -820,8 +829,8 @@ describe('SpeedDial', () => {
         });
 
         it('should handle circle type with radius', async () => {
-            component.type = 'circle';
-            component.radius = 80;
+            component.type.set('circle');
+            component.radius.set(80);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -831,8 +840,8 @@ describe('SpeedDial', () => {
         });
 
         it('should handle semi-circle type', async () => {
-            component.type = 'semi-circle';
-            component.direction = 'up';
+            component.type.set('semi-circle');
+            component.direction.set('up');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -842,8 +851,8 @@ describe('SpeedDial', () => {
         });
 
         it('should handle quarter-circle type', async () => {
-            component.type = 'quarter-circle';
-            component.direction = 'up-right';
+            component.type.set('quarter-circle');
+            component.direction.set('up-right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -853,12 +862,12 @@ describe('SpeedDial', () => {
         });
 
         it('should calculate item styles for different types', async () => {
-            component.model = [
+            component.model.set([
                 { label: 'Item 1', icon: 'pi pi-plus' },
                 { label: 'Item 2', icon: 'pi pi-minus' }
-            ];
-            component.type = 'circle';
-            component.radius = 50;
+            ]);
+            component.type.set('circle');
+            component.radius.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -874,7 +883,7 @@ describe('SpeedDial', () => {
             maskFixture.detectChanges();
 
             const maskComponent = maskFixture.componentInstance;
-            maskComponent.visible = true;
+            maskComponent.visible.set(true);
             maskFixture.changeDetectorRef.markForCheck();
             await maskFixture.whenStable();
             maskFixture.detectChanges();
@@ -886,7 +895,7 @@ describe('SpeedDial', () => {
         it('should apply mask styles and classes', () => {
             const maskFixture = TestBed.createComponent(TestMaskSpeedDialComponent);
             const maskComponent = maskFixture.componentInstance;
-            maskComponent.visible = true;
+            maskComponent.visible.set(true);
             maskFixture.detectChanges();
 
             const sdInstance = maskFixture.debugElement.query(By.directive(SpeedDial)).componentInstance;
@@ -998,7 +1007,7 @@ describe('SpeedDial', () => {
 
     describe('Accessibility Tests', () => {
         it('should have proper ARIA attributes on button', async () => {
-            component.ariaLabel = 'Speed Dial Actions';
+            component.ariaLabel.set('Speed Dial Actions');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1033,7 +1042,7 @@ describe('SpeedDial', () => {
         });
 
         it('should have proper ARIA attributes on menu items', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1049,7 +1058,7 @@ describe('SpeedDial', () => {
         });
 
         it('should handle focus management', async () => {
-            const focusSpy = spyOn(speedDialInstance, 'onFocus').and.callThrough();
+            const focusSpy = vi.spyOn(speedDialInstance, 'onFocus');
             const menu = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menu.triggerEventHandler('focus', {});
@@ -1061,7 +1070,7 @@ describe('SpeedDial', () => {
         });
 
         it('should handle blur management', async () => {
-            const blurSpy = spyOn(speedDialInstance, 'onBlur').and.callThrough();
+            const blurSpy = vi.spyOn(speedDialInstance, 'onBlur');
             const menu = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menu.triggerEventHandler('focus', {});
@@ -1092,8 +1101,8 @@ describe('SpeedDial', () => {
 
     describe('CSS Classes and Styling', () => {
         it('should apply button styling', async () => {
-            component.buttonStyle = { backgroundColor: 'blue' };
-            component.buttonClassName = 'custom-button-class';
+            component.buttonStyle.set({ backgroundColor: 'blue' });
+            component.buttonClassName.set('custom-button-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1103,9 +1112,9 @@ describe('SpeedDial', () => {
         });
 
         it('should apply mask styling when enabled', async () => {
-            component.mask = true;
-            component.maskStyle = { backgroundColor: 'rgba(0,0,0,0.8)' };
-            component.maskClassName = 'custom-mask-class';
+            component.mask.set(true);
+            component.maskStyle.set({ backgroundColor: 'rgba(0,0,0,0.8)' });
+            component.maskClassName.set('custom-mask-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1115,9 +1124,9 @@ describe('SpeedDial', () => {
         });
 
         it('should have correct button icon class based on state', async () => {
-            component.showIcon = 'pi pi-plus';
-            component.hideIcon = undefined;
-            component.visible = false;
+            component.showIcon.set('pi pi-plus');
+            component.hideIcon.set(undefined);
+            component.visible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1125,8 +1134,8 @@ describe('SpeedDial', () => {
             expect(speedDialInstance.buttonIconClass()).toBe('pi pi-plus');
 
             // When visible and hideIcon is set
-            component.hideIcon = 'pi pi-times';
-            component.visible = true;
+            component.hideIcon.set('pi pi-times');
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1165,8 +1174,8 @@ describe('SpeedDial', () => {
         it('should compute maskVisible', async () => {
             expect(speedDialInstance.maskVisible()).toBeFalsy();
 
-            component.mask = true;
-            component.visible = true;
+            component.mask.set(true);
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1197,7 +1206,7 @@ describe('SpeedDial', () => {
         });
 
         it('should compute item tabindex based on disabled and visible state', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1205,7 +1214,7 @@ describe('SpeedDial', () => {
             expect(speedDialInstance.getItemTabindex({ label: 'Active' })).toBe('0');
             expect(speedDialInstance.getItemTabindex({ label: 'Disabled', disabled: true })).toBeNull();
 
-            component.visible = false;
+            component.visible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1224,7 +1233,7 @@ describe('SpeedDial', () => {
     });
 
     describe('Document Click Outside', () => {
-        xit('should hide when clicked outside if hideOnClickOutside is true', async () => {
+        it.skip('should hide when clicked outside if hideOnClickOutside is true', async () => {
             speedDialInstance.show();
             fixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -1240,7 +1249,7 @@ describe('SpeedDial', () => {
         });
 
         it('should not hide when hideOnClickOutside is false', async () => {
-            component.hideOnClickOutside = false;
+            component.hideOnClickOutside.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1256,7 +1265,7 @@ describe('SpeedDial', () => {
 
     describe('Edge Cases and Error Handling', () => {
         it('should handle empty model gracefully', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1266,7 +1275,7 @@ describe('SpeedDial', () => {
         });
 
         it('should handle null model', async () => {
-            component.model = null as any;
+            component.model.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1343,8 +1352,8 @@ describe('SpeedDial', () => {
         });
 
         it('should calculate transition delay correctly', async () => {
-            component.model = [{ label: 'Item 1' }, { label: 'Item 2' }, { label: 'Item 3' }];
-            component.transitionDelay = 50;
+            component.model.set([{ label: 'Item 1' }, { label: 'Item 2' }, { label: 'Item 3' }]);
+            component.transitionDelay.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1381,7 +1390,7 @@ describe('SpeedDial', () => {
             const routerItem = { routerLink: '/test', disabled: true };
             expect(speedDialInstance.isClickableRouterLink(routerItem)).toBe(false);
 
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1439,7 +1448,7 @@ describe('SpeedDial', () => {
 
     describe('Cleanup', () => {
         it('should cleanup document listeners on destroy', () => {
-            const unbindSpy = spyOn(speedDialInstance, 'unbindDocumentClickListener');
+            const unbindSpy = vi.spyOn(speedDialInstance, 'unbindDocumentClickListener');
             speedDialInstance.ngOnDestroy();
             expect(unbindSpy).toHaveBeenCalled();
         });
@@ -1449,7 +1458,7 @@ describe('SpeedDial', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            const unbindSpy = spyOn(speedDialInstance, 'unbindDocumentClickListener');
+            const unbindSpy = vi.spyOn(speedDialInstance, 'unbindDocumentClickListener');
             speedDialInstance.visible.set(false);
             fixture.detectChanges();
             await fixture.whenStable();
@@ -1466,7 +1475,7 @@ describe('SpeedDial', () => {
             ptFixture = TestBed.createComponent(TestPTSpeedDialComponent);
             ptComponent = ptFixture.componentInstance;
             ptSpeedDialInstance = ptFixture.debugElement.query(By.directive(SpeedDial)).componentInstance;
-            ptComponent.visible = true;
+            ptComponent.visible.set(true);
             ptFixture.detectChanges();
         });
 
@@ -1504,7 +1513,7 @@ describe('SpeedDial', () => {
             });
 
             it('should apply string class to item', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', { item: 'ITEM_CLASS' });
                 ptFixture.detectChanges();
                 await new Promise((resolve) => setTimeout(resolve, 100));
@@ -1517,7 +1526,7 @@ describe('SpeedDial', () => {
             });
 
             it('should apply string class to mask when visible', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', { mask: 'MASK_CLASS' });
                 ptFixture.componentRef.setInput('mask', true);
                 ptFixture.detectChanges();
@@ -1585,7 +1594,7 @@ describe('SpeedDial', () => {
             });
 
             it('should apply object to item elements', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', {
                     item: {
                         class: 'item-custom',
@@ -1606,7 +1615,7 @@ describe('SpeedDial', () => {
             });
 
             it('should apply object to mask element', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', {
                     mask: {
                         class: 'mask-custom',
@@ -1646,7 +1655,7 @@ describe('SpeedDial', () => {
             });
 
             it('should apply mixed PT with string for pcButton and object for item', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', {
                     pcButton: { root: 'BUTTON_STRING_CLASS' },
                     item: {
@@ -1759,7 +1768,7 @@ describe('SpeedDial', () => {
 
         describe('Case 5: Event binding via PT', () => {
             it('should handle onclick event via PT on root', () => {
-                let onclickHandler = jasmine.createSpy('onclick');
+                let onclickHandler = vi.fn();
 
                 ptFixture.componentRef.setInput('pt', {
                     root: {
@@ -1795,7 +1804,7 @@ describe('SpeedDial', () => {
             });
 
             it('should handle onmouseenter event via PT on list', () => {
-                let onmouseenterHandler = jasmine.createSpy('onmouseenter');
+                let onmouseenterHandler = vi.fn();
 
                 ptFixture.componentRef.setInput('pt', {
                     list: {
@@ -1841,8 +1850,7 @@ describe('SpeedDial', () => {
             it('should apply global PT configuration from PrimeNGConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTSpeedDialComponent],
-                    imports: [SpeedDial, ButtonModule, RouterTestingModule],
+                    imports: [SpeedDial, ButtonModule, RouterTestingModule, TestPTSpeedDialComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         {
@@ -1985,7 +1993,7 @@ describe('SpeedDial', () => {
 
         describe('PT Integration Tests', () => {
             it('should apply PT to all sections simultaneously', async () => {
-                ptComponent.visible = true;
+                ptComponent.visible.set(true);
                 ptFixture.componentRef.setInput('pt', {
                     host: 'HOST_ALL',
                     root: 'ROOT_ALL',

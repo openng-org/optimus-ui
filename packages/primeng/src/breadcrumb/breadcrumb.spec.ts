@@ -1,4 +1,4 @@
-import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,19 +8,20 @@ import { BreadcrumbItemClickEvent } from 'primeng/types/breadcrumb';
 import { Breadcrumb } from './breadcrumb';
 
 @Component({
-    standalone: false,
-    template: ` <p-breadcrumb [model]="model" [home]="home" [style]="style" [styleClass]="styleClass" [homeAriaLabel]="homeAriaLabel" (onItemClick)="onItemClick($event)"> </p-breadcrumb> `
+    standalone: true,
+    imports: [Breadcrumb],
+    template: ` <p-breadcrumb [model]="model()" [home]="home()" [style]="style()" [styleClass]="styleClass()" [homeAriaLabel]="homeAriaLabel()" (onItemClick)="onItemClick($event)"> </p-breadcrumb> `
 })
 class TestBasicBreadcrumbComponent {
-    model: MenuItem[] | undefined = [
+    model = signal<MenuItem[] | undefined>([
         { label: 'Electronics', url: '/electronics' },
         { label: 'Laptops', url: '/laptops' },
         { label: 'Accessories', url: '/accessories' }
-    ];
-    home: MenuItem | undefined = { icon: 'pi pi-home', routerLink: '/' };
-    style: { [key: string]: any } | undefined;
-    styleClass: string | undefined;
-    homeAriaLabel: string | undefined = 'Home';
+    ]);
+    home = signal<MenuItem | undefined>({ icon: 'pi pi-home', routerLink: '/' });
+    style = signal<{ [key: string]: any } | undefined>(undefined);
+    styleClass = signal<string | undefined>(undefined);
+    homeAriaLabel = signal<string | undefined>('Home');
     clickedItem: BreadcrumbItemClickEvent | undefined;
 
     onItemClick(event: BreadcrumbItemClickEvent) {
@@ -29,7 +30,8 @@ class TestBasicBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     selector: 'test-static-breadcrumb',
     template: ` <p-breadcrumb [model]="model" [home]="home"> </p-breadcrumb> `
 })
@@ -42,12 +44,15 @@ class TestStaticBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     template: `
         <p-breadcrumb [model]="model" [home]="home">
             <ng-template #item let-item>
                 <div class="custom-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>
@@ -63,7 +68,8 @@ class TestItemTemplateBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     template: `
         <p-breadcrumb [model]="model" [home]="home">
             <ng-template #separator>
@@ -78,7 +84,8 @@ class TestSeparatorTemplateBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     selector: 'test-router-breadcrumb',
     template: ` <p-breadcrumb [model]="routerModel" [home]="routerHome"> </p-breadcrumb> `
 })
@@ -91,7 +98,8 @@ class TestRouterBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     selector: 'test-styled-breadcrumb',
     template: ` <p-breadcrumb [style]="customStyle" styleClass="custom-breadcrumb"> </p-breadcrumb> `
 })
@@ -104,27 +112,29 @@ class TestStyledBreadcrumbComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     selector: 'test-minimal-breadcrumb',
     template: ` <p-breadcrumb></p-breadcrumb> `
 })
 class TestMinimalBreadcrumbComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Breadcrumb],
     selector: 'test-dynamic-breadcrumb',
-    template: ` <p-breadcrumb [model]="dynamicModel" [home]="dynamicHome"> </p-breadcrumb> `
+    template: ` <p-breadcrumb [model]="dynamicModel()" [home]="dynamicHome"> </p-breadcrumb> `
 })
 class TestDynamicBreadcrumbComponent {
-    dynamicModel: MenuItem[] = [];
+    dynamicModel = signal<MenuItem[]>([]);
     dynamicHome: MenuItem = { label: 'Dynamic Home' };
 
     addItem(item: MenuItem) {
-        this.dynamicModel.push(item);
+        this.dynamicModel.update((model) => [...model, item]);
     }
 
     clearItems() {
-        this.dynamicModel = [];
+        this.dynamicModel.set([]);
     }
 }
 
@@ -143,7 +153,7 @@ describe('Breadcrumb', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
                 TestBasicBreadcrumbComponent,
                 TestStaticBreadcrumbComponent,
                 TestItemTemplateBreadcrumbComponent,
@@ -151,9 +161,7 @@ describe('Breadcrumb', () => {
                 TestRouterBreadcrumbComponent,
                 TestStyledBreadcrumbComponent,
                 TestMinimalBreadcrumbComponent,
-                TestDynamicBreadcrumbComponent
-            ],
-            imports: [
+                TestDynamicBreadcrumbComponent,
                 Breadcrumb,
                 TestTargetComponent,
 
@@ -181,7 +189,7 @@ describe('Breadcrumb', () => {
 
         it('should have required dependencies injected', () => {
             expect(breadcrumbInstance._componentStyle).toBeTruthy();
-            expect(breadcrumbInstance.constructor.name).toBe('Breadcrumb');
+            expect(breadcrumbInstance.constructor.name).toBe('_Breadcrumb');
         });
 
         it('should have default values', () => {
@@ -201,10 +209,10 @@ describe('Breadcrumb', () => {
             const testModel: MenuItem[] = [{ label: 'Test', url: '/test' }];
             const testHome: MenuItem = { icon: 'pi pi-home', url: '/' };
 
-            component.model = testModel;
-            component.home = testHome;
-            component.styleClass = 'custom-class';
-            component.homeAriaLabel = 'Custom Home';
+            component.model.set(testModel);
+            component.home.set(testHome);
+            component.styleClass.set('custom-class');
+            component.homeAriaLabel.set('Custom Home');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -224,7 +232,7 @@ describe('Breadcrumb', () => {
     describe('Input Properties', () => {
         it('should update model input', async () => {
             const newModel: MenuItem[] = [{ label: 'New Item', url: '/new' }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -233,7 +241,7 @@ describe('Breadcrumb', () => {
 
         it('should update home input', async () => {
             const newHome: MenuItem = { label: 'Custom Home', icon: 'pi pi-star' };
-            component.home = newHome;
+            component.home.set(newHome);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -242,7 +250,7 @@ describe('Breadcrumb', () => {
 
         it('should update style input', async () => {
             const newStyle = { color: 'red', fontSize: '14px' };
-            component.style = newStyle;
+            component.style.set(newStyle);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -250,7 +258,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should update styleClass input', async () => {
-            component.styleClass = 'test-class';
+            component.styleClass.set('test-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -258,7 +266,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should update homeAriaLabel input', async () => {
-            component.homeAriaLabel = 'Go to home page';
+            component.homeAriaLabel.set('Go to home page');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -266,11 +274,11 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle undefined inputs', async () => {
-            component.model = undefined as any;
-            component.home = undefined as any;
-            component.style = undefined as any;
-            component.styleClass = undefined as any;
-            component.homeAriaLabel = undefined as any;
+            component.model.set(undefined as any);
+            component.home.set(undefined as any);
+            component.style.set(undefined as any);
+            component.styleClass.set(undefined as any);
+            component.homeAriaLabel.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -285,7 +293,7 @@ describe('Breadcrumb', () => {
 
     describe('Home Item Tests', () => {
         it('should display home item when provided', async () => {
-            component.home = { label: 'Home', icon: 'pi pi-home' };
+            component.home.set({ label: 'Home', icon: 'pi pi-home' });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -297,7 +305,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should not display home item when not provided', async () => {
-            component.home = undefined as any;
+            component.home.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -309,7 +317,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should display home icon when specified', async () => {
-            component.home = { icon: 'pi pi-home' };
+            component.home.set({ icon: 'pi pi-home' });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -326,7 +334,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should display default home icon when no icon specified', async () => {
-            component.home = { label: 'Home' };
+            component.home.set({ label: 'Home' });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -343,7 +351,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle home item with routerLink', async () => {
-            component.home = { label: 'Home', routerLink: '/' };
+            component.home.set({ label: 'Home', routerLink: '/' });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -360,7 +368,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle home item with url', async () => {
-            component.home = { label: 'Home', url: '/home' };
+            component.home.set({ label: 'Home', url: '/home' });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -376,8 +384,8 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle home aria label', async () => {
-            component.home = { label: 'Home' };
-            component.homeAriaLabel = 'Navigate to home';
+            component.home.set({ label: 'Home' });
+            component.homeAriaLabel.set('Navigate to home');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -393,7 +401,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle disabled home item', async () => {
-            component.home = { label: 'Home', disabled: true };
+            component.home.set({ label: 'Home', disabled: true });
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -411,10 +419,10 @@ describe('Breadcrumb', () => {
 
     describe('Breadcrumb Items Display', () => {
         it('should display breadcrumb items', async () => {
-            component.model = [
+            component.model.set([
                 { label: 'First', url: '/first' },
                 { label: 'Second', url: '/second' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -424,7 +432,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should display item labels', async () => {
-            component.model = [{ label: 'Test Item', url: '/test' }];
+            component.model.set([{ label: 'Test Item', url: '/test' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -434,7 +442,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should display item icons', async () => {
-            component.model = [{ label: 'Test Item', icon: 'pi pi-file' }];
+            component.model.set([{ label: 'Test Item', icon: 'pi pi-file' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -448,7 +456,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle items with routerLink', async () => {
-            component.model = [{ label: 'Router Item', routerLink: '/router' }];
+            component.model.set([{ label: 'Router Item', routerLink: '/router' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -457,10 +465,10 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle invisible items', async () => {
-            component.model = [
+            component.model.set([
                 { label: 'Visible', url: '/visible' },
                 { label: 'Hidden', url: '/hidden', visible: false }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -471,8 +479,8 @@ describe('Breadcrumb', () => {
         });
 
         it('should display separators between items', async () => {
-            component.model = [{ label: 'First' }, { label: 'Second' }];
-            component.home = { label: 'Home' };
+            component.model.set([{ label: 'First' }, { label: 'Second' }]);
+            component.home.set({ label: 'Home' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -483,7 +491,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle HTML labels with escape=false', async () => {
-            component.model = [{ label: '<b>Bold Item</b>', escape: false }];
+            component.model.set([{ label: '<b>Bold Item</b>', escape: false }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -495,13 +503,13 @@ describe('Breadcrumb', () => {
 
     describe('Navigation Tests', () => {
         it('should handle item click', async () => {
-            spyOn(breadcrumbInstance, 'onClick').and.callThrough();
-            component.model = [{ label: 'Clickable', url: '/click' }];
+            vi.spyOn(breadcrumbInstance, 'onClick');
+            component.model.set([{ label: 'Clickable', url: '/click' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const testItem = component.model[0];
+            const testItem = component.model()![0];
             const clickEvent = new MouseEvent('click');
             breadcrumbInstance.onClick(clickEvent, testItem);
 
@@ -509,7 +517,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should emit onItemClick event', () => {
-            spyOn(breadcrumbInstance.onItemClick, 'emit');
+            vi.spyOn(breadcrumbInstance.onItemClick, 'emit');
             const testItem: MenuItem = { label: 'Test', url: '/test' };
             const clickEvent = new MouseEvent('click');
 
@@ -522,7 +530,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should execute item command when clicked', () => {
-            const commandSpy = jasmine.createSpy('command');
+            const commandSpy = vi.fn();
             const testItem: MenuItem = { label: 'Command Item', command: commandSpy };
             const clickEvent = new MouseEvent('click');
 
@@ -536,7 +544,7 @@ describe('Breadcrumb', () => {
 
         it('should prevent default for disabled items', () => {
             const clickEvent = new MouseEvent('click');
-            spyOn(clickEvent, 'preventDefault');
+            vi.spyOn(clickEvent, 'preventDefault');
             const disabledItem: MenuItem = { label: 'Disabled', disabled: true };
 
             breadcrumbInstance.onClick(clickEvent, disabledItem);
@@ -546,7 +554,7 @@ describe('Breadcrumb', () => {
 
         it('should prevent default for items without url or routerLink', () => {
             const clickEvent = new MouseEvent('click');
-            spyOn(clickEvent, 'preventDefault');
+            vi.spyOn(clickEvent, 'preventDefault');
             const noLinkItem: MenuItem = { label: 'No Link' };
 
             breadcrumbInstance.onClick(clickEvent, noLinkItem);
@@ -556,7 +564,7 @@ describe('Breadcrumb', () => {
 
         it('should not prevent default for items with url', () => {
             const clickEvent = new MouseEvent('click');
-            spyOn(clickEvent, 'preventDefault');
+            vi.spyOn(clickEvent, 'preventDefault');
             const urlItem: MenuItem = { label: 'URL Item', url: '/url' };
 
             breadcrumbInstance.onClick(clickEvent, urlItem);
@@ -568,7 +576,7 @@ describe('Breadcrumb', () => {
             const homeItem: MenuItem = { label: 'Home', url: '/' };
             const clickEvent = new MouseEvent('click');
 
-            component.home = homeItem;
+            component.home.set(homeItem);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -641,7 +649,7 @@ describe('Breadcrumb', () => {
 
     describe('CSS Classes and Styling', () => {
         it('should apply styleClass to root element', async () => {
-            component.styleClass = 'custom-breadcrumb-class';
+            component.styleClass.set('custom-breadcrumb-class');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -680,7 +688,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should combine multiple CSS classes correctly', async () => {
-            component.styleClass = 'class1 class2';
+            component.styleClass.set('class1 class2');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -708,13 +716,13 @@ describe('Breadcrumb', () => {
         });
 
         it('should apply individual item styles', async () => {
-            component.model = [
+            component.model.set([
                 {
                     label: 'Styled Item',
                     style: { color: 'red', fontWeight: 'bold' },
                     styleClass: 'item-class'
                 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -728,8 +736,8 @@ describe('Breadcrumb', () => {
 
     describe('Accessibility Tests', () => {
         it('should have proper ARIA attributes on home link', async () => {
-            component.home = { label: 'Home' };
-            component.homeAriaLabel = 'Go to homepage';
+            component.home.set({ label: 'Home' });
+            component.homeAriaLabel.set('Go to homepage');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -745,7 +753,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle tabindex for disabled items', async () => {
-            component.model = [{ label: 'Disabled Item', disabled: true }];
+            component.model.set([{ label: 'Disabled Item', disabled: true }]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -756,7 +764,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle tabindex for enabled items', async () => {
-            component.model = [{ label: 'Enabled Item', disabled: false }];
+            component.model.set([{ label: 'Enabled Item', disabled: false }]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -767,8 +775,8 @@ describe('Breadcrumb', () => {
         });
 
         it('should support title attributes', async () => {
-            component.home = { label: 'Home', title: 'Home Page' };
-            component.model = [{ label: 'Item', title: 'Item Page' }];
+            component.home.set({ label: 'Home', title: 'Home Page' });
+            component.model.set([{ label: 'Item', title: 'Item Page' }]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -780,8 +788,8 @@ describe('Breadcrumb', () => {
         });
 
         it('should support tooltip options', async () => {
-            component.home = { label: 'Home', tooltipOptions: { tooltipLabel: 'Home tooltip' } };
-            component.model = [{ label: 'Item', tooltipOptions: { tooltipLabel: 'Item tooltip' } }];
+            component.home.set({ label: 'Home', tooltipOptions: { tooltipLabel: 'Home tooltip' } });
+            component.model.set([{ label: 'Item', tooltipOptions: { tooltipLabel: 'Item tooltip' } }]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -795,7 +803,7 @@ describe('Breadcrumb', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined model', async () => {
-            component.model = undefined as any;
+            component.model.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -807,7 +815,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle empty model array', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -819,7 +827,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle items without labels', async () => {
-            component.model = [{ url: '/no-label' }];
+            component.model.set([{ url: '/no-label' }]);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -842,7 +850,7 @@ describe('Breadcrumb', () => {
             ];
 
             for (const item of specialItems) {
-                component.model = [item];
+                component.model.set([item]);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -858,7 +866,7 @@ describe('Breadcrumb', () => {
                 longModel.push({ label: `Item ${i}`, url: `/item${i}` });
             }
 
-            component.model = longModel;
+            component.model.set(longModel);
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -874,8 +882,8 @@ describe('Breadcrumb', () => {
 
             for (let index = 0; index < models.length; index++) {
                 const model = models[index];
-                component.model = model;
-                component.styleClass = `class-${index}`;
+                component.model.set(model);
+                component.styleClass.set(`class-${index}`);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -899,14 +907,14 @@ describe('Breadcrumb', () => {
             const fixture1 = TestBed.createComponent(TestBasicBreadcrumbComponent);
             const fixture2 = TestBed.createComponent(TestBasicBreadcrumbComponent);
 
-            fixture1.componentInstance.model = [{ label: 'Breadcrumb 1' }];
-            fixture1.componentInstance.styleClass = 'breadcrumb-1';
+            fixture1.componentInstance.model.set([{ label: 'Breadcrumb 1' }]);
+            fixture1.componentInstance.styleClass.set('breadcrumb-1');
             fixture1.changeDetectorRef.markForCheck();
             await fixture1.whenStable();
             fixture1.detectChanges();
 
-            fixture2.componentInstance.model = [{ label: 'Breadcrumb 2' }];
-            fixture2.componentInstance.styleClass = 'breadcrumb-2';
+            fixture2.componentInstance.model.set([{ label: 'Breadcrumb 2' }]);
+            fixture2.componentInstance.styleClass.set('breadcrumb-2');
             fixture2.changeDetectorRef.markForCheck();
             await fixture2.whenStable();
             fixture2.detectChanges();
@@ -953,8 +961,8 @@ describe('Breadcrumb', () => {
         });
 
         it('should maintain state across property changes', async () => {
-            component.model = [{ label: 'Initial' }];
-            component.styleClass = 'initial-class';
+            component.model.set([{ label: 'Initial' }]);
+            component.styleClass.set('initial-class');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -964,8 +972,8 @@ describe('Breadcrumb', () => {
             expect(breadcrumbInstance.model()?.[0]?.label).toBe('Initial');
             expect(breadcrumbInstance.styleClass()).toBe('initial-class');
 
-            component.model = [{ label: 'Updated' }];
-            component.styleClass = 'updated-class';
+            component.model.set([{ label: 'Updated' }]);
+            component.styleClass.set('updated-class');
             fixture.changeDetectorRef.markForCheck();
 
             await fixture.whenStable();
@@ -1023,7 +1031,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should call onClick programmatically', () => {
-            spyOn(breadcrumbInstance.onItemClick, 'emit');
+            vi.spyOn(breadcrumbInstance.onItemClick, 'emit');
 
             const testItem: MenuItem = { label: 'Test', url: '/test' };
             const mockEvent = new MouseEvent('click');
@@ -1036,7 +1044,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should handle onClick with item command', () => {
-            const commandSpy = jasmine.createSpy('commandSpy');
+            const commandSpy = vi.fn();
             const testItem: MenuItem = { label: 'Command Item', command: commandSpy };
             const mockEvent = new MouseEvent('click');
 
@@ -1050,7 +1058,7 @@ describe('Breadcrumb', () => {
 
         it('should handle preventDefault in onClick for disabled items', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(mockEvent, 'preventDefault');
+            vi.spyOn(mockEvent, 'preventDefault');
             const disabledItem: MenuItem = { label: 'Disabled', disabled: true };
 
             breadcrumbInstance.onClick(mockEvent, disabledItem);
@@ -1059,7 +1067,7 @@ describe('Breadcrumb', () => {
         });
 
         it('should return early for disabled items in onClick', () => {
-            spyOn(breadcrumbInstance.onItemClick, 'emit');
+            vi.spyOn(breadcrumbInstance.onItemClick, 'emit');
             const mockEvent = new MouseEvent('click');
             const disabledItem: MenuItem = { label: 'Disabled', disabled: true };
 
@@ -1204,7 +1212,7 @@ describe('Breadcrumb', () => {
                 { label: 'Item 2', url: '/item2' }
             ];
 
-            spyOn(ptBreadcrumb, 'getPTOptions').and.callThrough();
+            vi.spyOn(ptBreadcrumb, 'getPTOptions');
             ptFixture.detectChanges();
 
             // Verify getPTOptions is called with correct parameters

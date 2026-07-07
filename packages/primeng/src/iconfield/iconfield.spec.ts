@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IconField } from './iconfield';
@@ -24,7 +24,7 @@ class TestBasicIconFieldComponent {
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
-        <p-iconfield [iconPosition]="position">
+        <p-iconfield [iconPosition]="position()">
             <p-inputicon class="pi pi-user" />
             <input type="text" [(ngModel)]="username" />
         </p-iconfield>
@@ -32,14 +32,14 @@ class TestBasicIconFieldComponent {
 })
 class TestPositionIconFieldComponent {
     username: string = '';
-    position: 'left' | 'right' = 'left';
+    position = signal<'left' | 'right'>('left');
 }
 
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
-        <p-iconfield [class]="customClass">
+        <p-iconfield [class]="customClass()">
             <input type="email" [(ngModel)]="email" />
             <p-inputicon class="pi pi-envelope" />
         </p-iconfield>
@@ -47,7 +47,7 @@ class TestPositionIconFieldComponent {
 })
 class TestStyledIconFieldComponent {
     email: string = '';
-    customClass: string = 'custom-icon-field';
+    customClass = signal<string>('custom-icon-field');
 }
 
 describe('IconField', () => {
@@ -108,7 +108,7 @@ describe('IconField', () => {
         });
 
         it('should apply iconPosition "right"', async () => {
-            component.position = 'right';
+            component.position.set('right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -119,13 +119,13 @@ describe('IconField', () => {
             const iconFieldElement = fixture.debugElement.query(By.directive(IconField));
 
             // Test 'left' position (default)
-            component.position = 'left';
+            component.position.set('left');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(iconFieldElement.nativeElement.classList.contains('p-iconfield-left')).toBe(true);
 
             // Test 'right' position
-            component.position = 'right';
+            component.position.set('right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(iconFieldElement.nativeElement.classList.contains('p-iconfield-right')).toBe(true);
@@ -153,7 +153,7 @@ describe('IconField', () => {
         });
 
         it('should update class dynamically', async () => {
-            component.customClass = 'new-custom-class';
+            component.customClass.set('new-custom-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -267,13 +267,12 @@ describe('IconField PassThrough Tests', () => {
     });
 
     describe('PT Case 4: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

@@ -1,4 +1,5 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, DebugElement, input, signal, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,7 +9,8 @@ import { ButtonModule } from 'primeng/button';
 import { Inplace, InplaceContent, InplaceDisplay, InplaceModule } from './inplace';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-basic-inplace',
     template: `
         <p-inplace>
@@ -24,7 +26,8 @@ import { Inplace, InplaceContent, InplaceDisplay, InplaceModule } from './inplac
 class TestBasicInplaceComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-with-events',
     template: `
         <p-inplace (onActivate)="onActivate($event)" (onDeactivate)="onDeactivate($event)">
@@ -51,10 +54,11 @@ class TestInplaceWithEventsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-disabled',
     template: `
-        <p-inplace [disabled]="disabled">
+        <p-inplace [disabled]="disabled()">
             <p-inplacedisplay pInplaceDisplay>
                 <span class="disabled-display">Disabled inplace</span>
             </p-inplacedisplay>
@@ -65,14 +69,15 @@ class TestInplaceWithEventsComponent {
     `
 })
 class TestInplaceDisabledComponent {
-    disabled = false;
+    disabled = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-prevent-click',
     template: `
-        <p-inplace [preventClick]="preventClick">
+        <p-inplace [preventClick]="preventClick()">
             <p-inplacedisplay pInplaceDisplay>
                 <span class="prevent-click-display">Prevent click test</span>
             </p-inplacedisplay>
@@ -83,11 +88,12 @@ class TestInplaceDisabledComponent {
     `
 })
 class TestInplacePreventClickComponent {
-    preventClick = false;
+    preventClick = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-active-state',
     template: `
         <p-inplace>
@@ -103,7 +109,8 @@ class TestInplacePreventClickComponent {
 class TestInplaceActiveStateComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-templates',
     template: `
         <p-inplace>
@@ -122,7 +129,8 @@ class TestInplaceActiveStateComponent {}
 class TestInplaceTemplatesComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-keyboard',
     template: `
         <p-inplace>
@@ -138,7 +146,8 @@ class TestInplaceTemplatesComponent {}
 class TestInplaceKeyboardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule, CommonModule],
     selector: 'test-inplace-complex-content',
     template: `
         <p-inplace>
@@ -176,31 +185,35 @@ class TestInplaceComplexContentComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InplaceModule, FormsModule],
     selector: 'test-inplace-dynamic',
     template: `
-        <p-inplace [disabled]="dynamicDisabled" [preventClick]="dynamicPreventClick">
+        <p-inplace [disabled]="dynamicDisabled()" [preventClick]="dynamicPreventClick()">
             <p-inplacedisplay pInplaceDisplay>
-                <span class="dynamic-display">Dynamic: {{ displayText }}</span>
+                <span class="dynamic-display">Dynamic: {{ displayText() }}</span>
             </p-inplacedisplay>
             <p-inplacecontent pInplaceContent>
-                <input type="text" class="dynamic-input" [value]="contentText" />
+                <input type="text" class="dynamic-input" [value]="contentText()" />
             </p-inplacecontent>
         </p-inplace>
     `
 })
 class TestInplaceDynamicComponent {
-    dynamicDisabled = false;
-    dynamicPreventClick = false;
-    displayText = 'Click to edit';
-    contentText = 'Edit this';
+    dynamicDisabled = signal(false);
+    dynamicPreventClick = signal(false);
+    displayText = signal('Click to edit');
+    contentText = signal('Edit this');
 }
 
 describe('Inplace', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [InplaceModule, SharedModule, ButtonModule, FormsModule],
-            declarations: [
+            imports: [
+                InplaceModule,
+                SharedModule,
+                ButtonModule,
+                FormsModule,
                 TestBasicInplaceComponent,
                 TestInplaceWithEventsComponent,
                 TestInplaceDisabledComponent,
@@ -336,7 +349,7 @@ describe('Inplace', () => {
         });
 
         it('should emit onActivate event', async () => {
-            spyOn(component, 'onActivate');
+            vi.spyOn(component, 'onActivate');
             const displayDiv = element.querySelector('div[role="button"]') as HTMLElement;
 
             displayDiv.click();
@@ -374,7 +387,7 @@ describe('Inplace', () => {
         });
 
         it('should emit onDeactivate event', async () => {
-            spyOn(component, 'onDeactivate');
+            vi.spyOn(component, 'onDeactivate');
 
             // Activate first
             inplaceComponent.activate();
@@ -407,7 +420,7 @@ describe('Inplace', () => {
         });
 
         it('should not activate when disabled', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -420,7 +433,7 @@ describe('Inplace', () => {
         });
 
         it('should apply disabled class when disabled', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -429,14 +442,14 @@ describe('Inplace', () => {
         });
 
         it('should remove disabled class when enabled', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const displayDiv = element.querySelector('div[role="button"]');
             expect(displayDiv?.classList.contains('p-disabled')).toBe(true);
 
-            component.disabled = false;
+            component.disabled.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -444,7 +457,7 @@ describe('Inplace', () => {
         });
 
         it('should not activate programmatically when disabled', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -463,7 +476,7 @@ describe('Inplace', () => {
             expect(inplaceComponent.active()).toBe(true);
 
             // Then disable and try to deactivate
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -493,7 +506,7 @@ describe('Inplace', () => {
         });
 
         it('should not activate when preventClick is true', async () => {
-            component.preventClick = true;
+            component.preventClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -506,7 +519,7 @@ describe('Inplace', () => {
         });
 
         it('should activate normally when preventClick is false', async () => {
-            component.preventClick = false;
+            component.preventClick.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -519,7 +532,7 @@ describe('Inplace', () => {
         });
 
         it('should allow programmatic activation even when preventClick is true', async () => {
-            component.preventClick = true;
+            component.preventClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -677,7 +690,7 @@ describe('Inplace', () => {
             const displayDiv = element.querySelector('div[role="button"]') as HTMLElement;
             if (displayDiv) {
                 const enterEvent = new KeyboardEvent('keydown', { code: 'Enter' });
-                spyOn(enterEvent, 'preventDefault');
+                vi.spyOn(enterEvent, 'preventDefault');
 
                 displayDiv.dispatchEvent(enterEvent);
 
@@ -806,7 +819,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             // Now disable and try to activate
-            component.dynamicDisabled = true;
+            component.dynamicDisabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -821,8 +834,8 @@ describe('Inplace', () => {
             const displaySpan = element.querySelector('.dynamic-display');
             expect(displaySpan?.textContent).toContain('Click to edit');
 
-            component.displayText = 'Updated display text';
-            component.contentText = 'Updated content';
+            component.displayText.set('Updated display text');
+            component.contentText.set('Updated content');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -841,12 +854,12 @@ describe('Inplace', () => {
         it('should handle rapid property changes', async () => {
             // Rapid changes
             inplaceComponent.activate();
-            component.dynamicDisabled = true;
+            component.dynamicDisabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             inplaceComponent.deactivate();
-            component.dynamicDisabled = false;
+            component.dynamicDisabled.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

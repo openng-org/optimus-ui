@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -6,20 +6,35 @@ import { providePrimeNG } from 'primeng/config';
 import { ColorPickerChangeEvent, ColorPickerFormat } from 'primeng/types/colorpicker';
 import { ColorPicker } from './colorpicker';
 
+// jsdom does not implement matchMedia, which the overlay relies on
+if (!window.matchMedia) {
+    window.matchMedia = ((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false
+    })) as any;
+}
+
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ColorPicker, FormsModule, ReactiveFormsModule],
     template: `
         <p-colorpicker
             [(ngModel)]="color"
-            [format]="format"
-            [inline]="inline"
-            [disabled]="disabled"
-            [tabindex]="tabindex"
-            [inputId]="inputId"
-            [autoZIndex]="autoZIndex"
-            [autofocus]="autofocus"
-            [defaultColor]="defaultColor"
-            [appendTo]="appendTo"
+            [format]="format()"
+            [inline]="inline()"
+            [disabled]="disabled()"
+            [tabindex]="tabindex()"
+            [inputId]="inputId()"
+            [autoZIndex]="autoZIndex()"
+            [autofocus]="autofocus()"
+            [defaultColor]="defaultColor()"
+            [appendTo]="appendTo()"
             (onChange)="onColorChange($event)"
             (onShow)="onShowEvent($event)"
             (onHide)="onHideEvent($event)"
@@ -29,15 +44,15 @@ import { ColorPicker } from './colorpicker';
 })
 class TestBasicColorPickerComponent {
     color: string | any = '#ff0000';
-    format: ColorPickerFormat = 'hex';
-    inline: boolean = false;
-    disabled: boolean = false;
-    tabindex: string = '0';
-    inputId: string | undefined;
-    autoZIndex: boolean = true;
-    autofocus: boolean = false;
-    defaultColor: string = 'ff0000';
-    appendTo: any = undefined as any;
+    format = signal<ColorPickerFormat>('hex');
+    inline = signal<boolean>(false);
+    disabled = signal<boolean>(false);
+    tabindex = signal<string>('0');
+    inputId = signal<string | undefined>(undefined);
+    autoZIndex = signal<boolean>(true);
+    autofocus = signal<boolean>(false);
+    defaultColor = signal<string>('ff0000');
+    appendTo = signal<any>(undefined as any);
 
     changeEvent: ColorPickerChangeEvent | undefined;
     showEvent: any;
@@ -57,10 +72,11 @@ class TestBasicColorPickerComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ColorPicker, FormsModule, ReactiveFormsModule],
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
-            <p-colorpicker formControlName="selectedColor" [format]="format" [defaultColor]="defaultColor" (onChange)="onColorChange($event)"> </p-colorpicker>
+            <p-colorpicker formControlName="selectedColor" [format]="format()" [defaultColor]="defaultColor()" (onChange)="onColorChange($event)"> </p-colorpicker>
         </form>
     `
 })
@@ -69,8 +85,8 @@ class TestReactiveFormColorPickerComponent {
         selectedColor: new FormControl<string | null>(null, [Validators.required])
     });
 
-    format: ColorPickerFormat = 'hex';
-    defaultColor: string = '989898';
+    format = signal<ColorPickerFormat>('hex');
+    defaultColor = signal<string>('989898');
 
     changeEvent: ColorPickerChangeEvent | undefined;
 
@@ -84,7 +100,8 @@ class TestReactiveFormColorPickerComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ColorPicker, FormsModule, ReactiveFormsModule],
     template: `
         <div>
             <p-colorpicker [(ngModel)]="hexColor" format="hex" inputId="hex-picker"> </p-colorpicker>
@@ -104,12 +121,13 @@ class TestFormatColorPickerComponent {
 }
 
 @Component({
-    standalone: false,
-    template: ` <p-colorpicker [(ngModel)]="color" [inline]="true" [disabled]="disabled" (onChange)="onColorChange($event)"> </p-colorpicker> `
+    standalone: true,
+    imports: [ColorPicker, FormsModule, ReactiveFormsModule],
+    template: ` <p-colorpicker [(ngModel)]="color" [inline]="true" [disabled]="disabled()" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
 class TestInlineColorPickerComponent {
     color: string = '#ff0000';
-    disabled: boolean = false;
+    disabled = signal<boolean>(false);
 
     changeEvent: ColorPickerChangeEvent | undefined;
 
@@ -119,16 +137,17 @@ class TestInlineColorPickerComponent {
 }
 
 @Component({
-    standalone: false,
-    template: ` <p-colorpicker [(ngModel)]="color" [disabled]="disabled" [autofocus]="autofocus" [inputId]="inputId" [tabindex]="tabindex" [defaultColor]="defaultColor" (onChange)="onColorChange($event)"> </p-colorpicker> `
+    standalone: true,
+    imports: [ColorPicker, FormsModule, ReactiveFormsModule],
+    template: ` <p-colorpicker [(ngModel)]="color" [disabled]="disabled()" [autofocus]="autofocus()" [inputId]="inputId()" [tabindex]="tabindex()" [defaultColor]="defaultColor()" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
 class TestStyledColorPickerComponent {
     color: string = '#ff0000';
-    disabled: boolean = false;
-    autofocus: boolean = false;
-    inputId: string = 'styled-colorpicker';
-    tabindex: string = '5';
-    defaultColor: string = '00ff00';
+    disabled = signal<boolean>(false);
+    autofocus = signal<boolean>(false);
+    inputId = signal<string>('styled-colorpicker');
+    tabindex = signal<string>('5');
+    defaultColor = signal<string>('00ff00');
 
     changeEvent: ColorPickerChangeEvent | undefined;
 
@@ -140,8 +159,7 @@ class TestStyledColorPickerComponent {
 describe('ColorPicker', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [FormsModule, ReactiveFormsModule, ColorPicker],
-            declarations: [TestBasicColorPickerComponent, TestReactiveFormColorPickerComponent, TestFormatColorPickerComponent, TestInlineColorPickerComponent, TestStyledColorPickerComponent],
+            imports: [FormsModule, ReactiveFormsModule, ColorPicker, TestBasicColorPickerComponent, TestReactiveFormColorPickerComponent, TestFormatColorPickerComponent, TestInlineColorPickerComponent, TestStyledColorPickerComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -174,11 +192,11 @@ describe('ColorPicker', () => {
         });
 
         it('should accept custom values', async () => {
-            testComponent.format = 'rgb';
-            testComponent.inline = true;
-            testComponent.disabled = true;
-            testComponent.autoZIndex = false;
-            testComponent.defaultColor = '00ff00';
+            testComponent.format.set('rgb');
+            testComponent.inline.set(true);
+            testComponent.disabled.set(true);
+            testComponent.autoZIndex.set(false);
+            testComponent.defaultColor.set('00ff00');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -205,7 +223,7 @@ describe('ColorPicker', () => {
         });
 
         it('should display color picker input when not inline', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -215,7 +233,7 @@ describe('ColorPicker', () => {
         });
 
         it('should not display input when inline', async () => {
-            testComponent.inline = true;
+            testComponent.inline.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -224,7 +242,7 @@ describe('ColorPicker', () => {
         });
 
         it('should open panel on input click', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -240,7 +258,7 @@ describe('ColorPicker', () => {
         });
 
         it('should handle input key events', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -344,7 +362,7 @@ describe('ColorPicker', () => {
         });
 
         it('should handle disabled state in inline mode', async () => {
-            testComponent.disabled = true;
+            testComponent.disabled.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -436,7 +454,7 @@ describe('ColorPicker', () => {
         });
 
         it('should emit onShow event', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -450,7 +468,7 @@ describe('ColorPicker', () => {
         });
 
         it('should emit onHide event', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -503,7 +521,7 @@ describe('ColorPicker', () => {
         });
 
         it('should handle disabled state', async () => {
-            testComponent.disabled = true;
+            testComponent.disabled.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -512,7 +530,7 @@ describe('ColorPicker', () => {
         });
 
         it('should handle autofocus', async () => {
-            testComponent.autofocus = true;
+            testComponent.autofocus.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -566,7 +584,7 @@ describe('ColorPicker', () => {
         });
 
         it('should handle rapid panel open/close', async () => {
-            testComponent.inline = false;
+            testComponent.inline.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -588,7 +606,7 @@ describe('ColorPicker', () => {
 
         it('should handle default color fallback', async () => {
             testComponent.color = '';
-            testComponent.defaultColor = '00ff00';
+            testComponent.defaultColor.set('00ff00');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 

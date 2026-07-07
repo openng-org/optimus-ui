@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TabList } from './tablist';
@@ -6,13 +6,14 @@ import { Tabs } from './tabs';
 import { TabsModule } from './tabs.module';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TabsModule],
     template: `
-        <p-tabs [(value)]="value" [scrollable]="scrollable" [lazy]="lazy" [selectOnFocus]="selectOnFocus" [showNavigators]="showNavigators" [tabindex]="tabindex">
+        <p-tabs [value]="value()" (valueChange)="value.set($event)" [scrollable]="scrollable()" [lazy]="lazy()" [selectOnFocus]="selectOnFocus()" [showNavigators]="showNavigators()" [tabindex]="tabindex()">
             <p-tablist>
                 <p-tab [value]="1">Tab 1</p-tab>
                 <p-tab [value]="2">Tab 2</p-tab>
-                <p-tab [value]="3" [disabled]="tab3Disabled">Tab 3</p-tab>
+                <p-tab [value]="3" [disabled]="tab3Disabled()">Tab 3</p-tab>
             </p-tablist>
             <p-tabpanels>
                 <p-tabpanel [value]="1">
@@ -29,17 +30,18 @@ import { TabsModule } from './tabs.module';
     `
 })
 class TestTabsComponent {
-    value: number | undefined = 1;
-    scrollable = false;
-    lazy = false;
-    selectOnFocus = false;
-    showNavigators = true;
-    tabindex = 0;
-    tab3Disabled = false;
+    value = signal<number | undefined>(1);
+    scrollable = signal(false);
+    lazy = signal(false);
+    selectOnFocus = signal(false);
+    showNavigators = signal(true);
+    tabindex = signal(0);
+    tab3Disabled = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TabsModule],
     template: `
         <p-tabs [(value)]="value" [scrollable]="true">
             <p-tablist>
@@ -84,9 +86,10 @@ class TestScrollableTabsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TabsModule],
     template: `
-        <p-tabs [(value)]="value" [lazy]="true">
+        <p-tabs [value]="value()" (valueChange)="value.set($event)" [lazy]="true">
             <p-tablist>
                 <p-tab [value]="1">Lazy Tab 1</p-tab>
                 <p-tab [value]="2">Lazy Tab 2</p-tab>
@@ -107,11 +110,12 @@ class TestScrollableTabsComponent {
     `
 })
 class TestLazyTabsComponent {
-    value = 1;
+    value = signal(1);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TabsModule],
     template: `
         <p-tabs [(value)]="value" [scrollable]="true">
             <p-tablist>
@@ -156,7 +160,8 @@ class TestContentChildIconsTabsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TabsModule],
     template: `
         <p-tabs [value]="1" [pt]="pt">
             <p-tablist>
@@ -186,8 +191,7 @@ describe('Tabs', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [TabsModule],
-            declarations: [TestTabsComponent, TestScrollableTabsComponent, TestLazyTabsComponent, TestContentChildIconsTabsComponent, TestPTTabsComponent],
+            imports: [TabsModule, TestTabsComponent, TestScrollableTabsComponent, TestLazyTabsComponent, TestContentChildIconsTabsComponent, TestPTTabsComponent],
             providers: [provideZonelessChangeDetection()]
         });
 
@@ -217,12 +221,12 @@ describe('Tabs', () => {
         });
 
         it('should accept custom values', async () => {
-            component.value = 2;
-            component.scrollable = true;
-            component.lazy = true;
-            component.selectOnFocus = true;
-            component.showNavigators = false;
-            component.tabindex = -1;
+            component.value.set(2);
+            component.scrollable.set(true);
+            component.lazy.set(true);
+            component.selectOnFocus.set(true);
+            component.showNavigators.set(false);
+            component.tabindex.set(-1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -289,7 +293,7 @@ describe('Tabs', () => {
         });
 
         it('should show active panel content', async () => {
-            component.value = 1;
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -300,7 +304,7 @@ describe('Tabs', () => {
         });
 
         it('should switch panel content on value change', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -327,11 +331,11 @@ describe('Tabs', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.value).toBe(2);
+            expect(component.value()).toBe(2);
         });
 
         it('should update active tab state', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -346,11 +350,11 @@ describe('Tabs', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.value).toBe(3);
+            expect(component.value()).toBe(3);
         });
 
         it('should check if tab is active', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -372,7 +376,7 @@ describe('Tabs', () => {
 
     describe('Disabled Tabs', () => {
         it('should disable specific tabs', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -382,23 +386,23 @@ describe('Tabs', () => {
         });
 
         it('should not activate disabled tabs', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const initialValue = component.value;
+            const initialValue = component.value();
             const tab3 = fixture.debugElement.queryAll(By.css('p-tab'))[2];
             tab3.nativeElement.click();
             await fixture.whenStable();
             fixture.detectChanges();
 
             // Value should remain unchanged when clicking disabled tab
-            expect(component.value).toBe(initialValue);
+            expect(component.value()).toBe(initialValue);
         });
 
         it('should set correct data attributes for disabled tabs', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -408,7 +412,7 @@ describe('Tabs', () => {
         });
 
         it('should set correct ARIA attributes for disabled tabs', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -436,7 +440,7 @@ describe('Tabs', () => {
 
         it('should handle right arrow key navigation', () => {
             const rightArrowEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
-            spyOn(rightArrowEvent, 'preventDefault');
+            vi.spyOn(rightArrowEvent, 'preventDefault');
 
             tabs[0].nativeElement.dispatchEvent(rightArrowEvent);
             fixture.detectChanges();
@@ -446,7 +450,7 @@ describe('Tabs', () => {
 
         it('should handle left arrow key navigation', () => {
             const leftArrowEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
-            spyOn(leftArrowEvent, 'preventDefault');
+            vi.spyOn(leftArrowEvent, 'preventDefault');
 
             tabs[1].nativeElement.focus();
             tabs[1].nativeElement.dispatchEvent(leftArrowEvent);
@@ -457,7 +461,7 @@ describe('Tabs', () => {
 
         it('should handle Home key navigation', () => {
             const homeEvent = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(homeEvent, 'preventDefault');
+            vi.spyOn(homeEvent, 'preventDefault');
 
             tabs[2].nativeElement.focus();
             tabs[2].nativeElement.dispatchEvent(homeEvent);
@@ -468,7 +472,7 @@ describe('Tabs', () => {
 
         it('should handle End key navigation', () => {
             const endEvent = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(endEvent, 'preventDefault');
+            vi.spyOn(endEvent, 'preventDefault');
 
             tabs[0].nativeElement.dispatchEvent(endEvent);
             fixture.detectChanges();
@@ -478,30 +482,30 @@ describe('Tabs', () => {
 
         it('should handle Enter key activation', () => {
             const enterEvent = new KeyboardEvent('keydown', { code: 'Enter' });
-            spyOn(enterEvent, 'preventDefault');
+            vi.spyOn(enterEvent, 'preventDefault');
 
             tabs[1].nativeElement.focus();
             tabs[1].nativeElement.dispatchEvent(enterEvent);
             fixture.detectChanges();
 
             expect(enterEvent.preventDefault).toHaveBeenCalled();
-            expect(component.value).toBe(2);
+            expect(component.value()).toBe(2);
         });
 
         it('should handle Space key activation', () => {
             const spaceEvent = new KeyboardEvent('keydown', { code: 'Space' });
-            spyOn(spaceEvent, 'preventDefault');
+            vi.spyOn(spaceEvent, 'preventDefault');
 
             tabs[1].nativeElement.focus();
             tabs[1].nativeElement.dispatchEvent(spaceEvent);
             fixture.detectChanges();
 
             expect(spaceEvent.preventDefault).toHaveBeenCalled();
-            expect(component.value).toBe(2);
+            expect(component.value()).toBe(2);
         });
 
         it('should skip disabled tabs in navigation', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -522,7 +526,7 @@ describe('Tabs', () => {
 
     describe('Select On Focus', () => {
         beforeEach(async () => {
-            component.selectOnFocus = true;
+            component.selectOnFocus.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -537,16 +541,16 @@ describe('Tabs', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.value).toBe(2);
+            expect(component.value()).toBe(2);
         });
 
         it('should not activate tab on focus when selectOnFocus is disabled', async () => {
-            component.selectOnFocus = false;
+            component.selectOnFocus.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const initialValue = component.value;
+            const initialValue = component.value();
             const tab2 = fixture.debugElement.queryAll(By.css('p-tab'))[1];
 
             tab2.nativeElement.focus();
@@ -554,7 +558,7 @@ describe('Tabs', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.value).toBe(initialValue);
+            expect(component.value()).toBe(initialValue);
         });
     });
 
@@ -592,7 +596,7 @@ describe('Tabs', () => {
 
         it('should handle previous button click', () => {
             const tabListComponent = scrollableFixture.debugElement.query(By.directive(TabList)).componentInstance;
-            spyOn(tabListComponent, 'onPrevButtonClick');
+            vi.spyOn(tabListComponent, 'onPrevButtonClick');
 
             const prevButton = scrollableFixture.debugElement.query(By.css('.p-tablist-prev-button'));
             if (prevButton) {
@@ -606,7 +610,7 @@ describe('Tabs', () => {
 
         it('should handle next button click', () => {
             const tabListComponent = scrollableFixture.debugElement.query(By.directive(TabList)).componentInstance;
-            spyOn(tabListComponent, 'onNextButtonClick');
+            vi.spyOn(tabListComponent, 'onNextButtonClick');
 
             const nextButton = scrollableFixture.debugElement.query(By.css('.p-tablist-next-button'));
             if (nextButton) {
@@ -839,7 +843,7 @@ describe('Tabs', () => {
         });
 
         it('should render content when tab becomes active', async () => {
-            lazyComponent.value = 2;
+            lazyComponent.value.set(2);
             lazyFixture.changeDetectorRef.markForCheck();
             await lazyFixture.whenStable();
             lazyFixture.detectChanges();
@@ -862,7 +866,7 @@ describe('Tabs', () => {
         });
 
         it('should set aria-selected for active tab', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -882,7 +886,7 @@ describe('Tabs', () => {
         });
 
         it('should update tabindex when active tab changes', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -905,7 +909,7 @@ describe('Tabs', () => {
         });
 
         it('should apply active state classes', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -918,7 +922,7 @@ describe('Tabs', () => {
         });
 
         it('should apply disabled state classes', async () => {
-            component.tab3Disabled = true;
+            component.tab3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -942,7 +946,7 @@ describe('Tabs', () => {
         });
 
         it('should update data attributes on state change', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -957,7 +961,7 @@ describe('Tabs', () => {
 
     describe('Edge Cases', () => {
         it('should handle undefined value', async () => {
-            component.value = undefined as any;
+            component.value.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1019,7 +1023,7 @@ describe('Tabs', () => {
             fixture.detectChanges();
 
             expect(tabs.value()).toBe(3);
-            expect(component.value).toBe(3);
+            expect(component.value()).toBe(3);
         });
     });
 

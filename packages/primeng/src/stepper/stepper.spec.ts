@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Stepper } from './stepper';
@@ -9,13 +9,14 @@ import { StepPanel } from './step-panel';
 import { StepPanels } from './step-panels';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
     template: `
-        <p-stepper [(value)]="value" [linear]="linear">
+        <p-stepper [(value)]="value" [linear]="linear()">
             <p-step-list>
                 <p-step [value]="1">Step 1</p-step>
                 <p-step [value]="2">Step 2</p-step>
-                <p-step [value]="3" [disabled]="step3Disabled">Step 3</p-step>
+                <p-step [value]="3" [disabled]="step3Disabled()">Step 3</p-step>
             </p-step-list>
             <p-step-panels>
                 <p-step-panel [value]="1">
@@ -32,13 +33,14 @@ import { StepPanels } from './step-panels';
     `
 })
 class TestStepperComponent {
-    value: number | undefined = 1;
-    linear = false;
-    step3Disabled = false;
+    value = signal<number | undefined>(1);
+    linear = signal(false);
+    step3Disabled = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
     template: `
         <p-stepper [value]="1">
             <p-step-item [value]="1">
@@ -61,7 +63,8 @@ class TestVerticalStepperComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
     template: `
         <p-stepper [(value)]="value">
             <p-step-list>
@@ -89,11 +92,12 @@ class TestVerticalStepperComponent {
     `
 })
 class TestTemplateStepperComponent {
-    value = 1;
+    value = signal(1);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
     template: `
         <p-stepper [value]="1" [pt]="pt">
             <p-step-list>
@@ -123,8 +127,7 @@ describe('Stepper', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
-            declarations: [TestStepperComponent, TestVerticalStepperComponent, TestTemplateStepperComponent, TestPTStepperComponent],
+            imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step, TestStepperComponent, TestVerticalStepperComponent, TestTemplateStepperComponent, TestPTStepperComponent],
             providers: [provideZonelessChangeDetection()]
         });
 
@@ -150,8 +153,8 @@ describe('Stepper', () => {
         });
 
         it('should accept custom values', async () => {
-            component.value = 2;
-            component.linear = true;
+            component.value.set(2);
+            component.linear.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -208,7 +211,7 @@ describe('Stepper', () => {
         });
 
         it('should render active panel content', async () => {
-            component.value = 1;
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -220,7 +223,7 @@ describe('Stepper', () => {
         });
 
         it('should switch panel content on value change', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -240,11 +243,11 @@ describe('Stepper', () => {
             step2Button.nativeElement.click();
             fixture.detectChanges();
 
-            expect(component.value).toBe(2);
+            expect(component.value()).toBe(2);
         });
 
         it('should update active step state', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -260,11 +263,11 @@ describe('Stepper', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.value).toBe(3);
+            expect(component.value()).toBe(3);
         });
 
         it('should check if step is active', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -276,8 +279,8 @@ describe('Stepper', () => {
 
     describe('Linear Navigation', () => {
         beforeEach(async () => {
-            component.linear = true;
-            component.value = 1;
+            component.linear.set(true);
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -305,7 +308,7 @@ describe('Stepper', () => {
 
     describe('Disabled Steps', () => {
         it('should disable specific steps', async () => {
-            component.step3Disabled = true;
+            component.step3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -315,7 +318,7 @@ describe('Stepper', () => {
         });
 
         it('should not activate disabled steps', async () => {
-            component.step3Disabled = true;
+            component.step3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -324,11 +327,11 @@ describe('Stepper', () => {
             step3Button.nativeElement.click();
             fixture.detectChanges();
 
-            expect(component.value).not.toBe(3);
+            expect(component.value()).not.toBe(3);
         });
 
         it('should set correct data attributes for disabled steps', async () => {
-            component.step3Disabled = true;
+            component.step3Disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -406,10 +409,10 @@ describe('Stepper', () => {
             if (nextButton) {
                 nextButton.nativeElement.click();
                 templateFixture.detectChanges();
-                expect(templateComponent.value).toBe(2);
+                expect(templateComponent.value()).toBe(2);
             } else {
                 // Template might not be rendered, check component state instead
-                expect(templateComponent.value).toBe(1);
+                expect(templateComponent.value()).toBe(1);
             }
         });
     });
@@ -434,7 +437,7 @@ describe('Stepper', () => {
         });
 
         it('should set aria-current for active step', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -445,8 +448,8 @@ describe('Stepper', () => {
         });
 
         it('should set correct tabindex for disabled steps', async () => {
-            component.linear = true;
-            component.value = 1;
+            component.linear.set(true);
+            component.value.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -464,7 +467,7 @@ describe('Stepper', () => {
             fixture.detectChanges();
 
             expect(stepper.value()).toBe(3);
-            expect(component.value).toBe(3);
+            expect(component.value()).toBe(3);
         });
 
         it('should check if step is active', async () => {
@@ -491,7 +494,7 @@ describe('Stepper', () => {
         });
 
         it('should apply active state classes', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -515,7 +518,7 @@ describe('Stepper', () => {
         });
 
         it('should update data attributes on state change', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -530,7 +533,7 @@ describe('Stepper', () => {
 
     describe('Edge Cases', () => {
         it('should handle undefined value', async () => {
-            component.value = undefined as any;
+            component.value.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -561,7 +564,7 @@ describe('Stepper', () => {
         });
 
         it('should handle boolean transform for linear input', async () => {
-            component.linear = 'true' as any;
+            component.linear.set('true' as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -628,7 +631,7 @@ describe('Stepper', () => {
 
     describe('Panel Visibility Logic', () => {
         it('should show active panel in horizontal layout', async () => {
-            component.value = 2;
+            component.value.set(2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();

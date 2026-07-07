@@ -1,31 +1,34 @@
-import { Component, DebugElement, provideZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Card, CardModule } from './card';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `<p-card></p-card>`
 })
 class TestBasicCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
-        <p-card [header]="header" [subheader]="subheader" [style]="style">
+        <p-card [header]="header()" [subheader]="subheader()" [style]="style()">
             <div class="card-content">Custom Card Content</div>
         </p-card>
     `
 })
 class TestCustomCardComponent {
-    header: string | undefined;
-    subheader: string | undefined;
-    style: { [key: string]: any } | undefined;
+    header = signal<string | undefined>(undefined);
+    subheader = signal<string | undefined>(undefined);
+    style = signal<{ [key: string]: any } | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card>
             <ng-template #header>
@@ -49,7 +52,8 @@ class TestCustomCardComponent {
 class TestTemplateCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card>
             <p-header>
@@ -65,7 +69,8 @@ class TestTemplateCardComponent {}
 class TestFacetCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card>
             <ng-template #header>
@@ -95,7 +100,8 @@ class TestContentChildCardComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card header="Simple Header" subheader="Simple Subheader">
             <div class="simple-content">Simple card content with just text properties</div>
@@ -105,23 +111,25 @@ class TestContentChildCardComponent {
 class TestSimpleTextCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
-        <p-card [header]="header" [subheader]="subheader">
-            <ng-container *ngIf="showContent">
+        <p-card [header]="header()" [subheader]="subheader()">
+            @if (showContent()) {
                 <div class="dynamic-content">Dynamic Content</div>
-            </ng-container>
+            }
         </p-card>
     `
 })
 class TestDynamicCardComponent {
-    header = 'Initial Header';
-    subheader = 'Initial Subheader';
-    showContent = true;
+    header = signal('Initial Header');
+    subheader = signal('Initial Subheader');
+    showContent = signal(true);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card>
             <ng-template #header>
@@ -150,7 +158,8 @@ class TestDynamicCardComponent {
 class TestComplexCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card header="Header Only">
             <div class="header-only-content">Content with header only</div>
@@ -160,7 +169,8 @@ class TestComplexCardComponent {}
 class TestHeaderOnlyCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card subheader="Subheader Only">
             <div class="subheader-only-content">Content with subheader only</div>
@@ -170,7 +180,8 @@ class TestHeaderOnlyCardComponent {}
 class TestSubheaderOnlyCardComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CardModule],
     template: `
         <p-card>
             <ng-template #footer>
@@ -190,8 +201,8 @@ describe('Card', () => {
 
     beforeEach(async () => {
         TestBed.configureTestingModule({
-            imports: [CardModule],
-            declarations: [
+            imports: [
+                CardModule,
                 TestBasicCardComponent,
                 TestCustomCardComponent,
                 TestTemplateCardComponent,
@@ -263,7 +274,7 @@ describe('Card', () => {
         });
 
         it('should render header when provided', async () => {
-            customComponent.header = 'Test Header';
+            customComponent.header.set('Test Header');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -273,25 +284,25 @@ describe('Card', () => {
         });
 
         it('should update header dynamically', async () => {
-            customComponent.header = 'Initial Header';
+            customComponent.header.set('Initial Header');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             let titleElement = customFixture.debugElement.query(By.css('.p-card-title'));
             expect(titleElement.nativeElement.textContent.trim()).toBe('Initial Header');
 
-            customComponent.header = 'Updated Header';
+            customComponent.header.set('Updated Header');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(titleElement.nativeElement.textContent.trim()).toBe('Updated Header');
         });
 
         it('should handle undefined header gracefully', async () => {
-            customComponent.header = 'Test Header';
+            customComponent.header.set('Test Header');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
-            customComponent.header = undefined as any;
+            customComponent.header.set(undefined as any);
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -316,7 +327,7 @@ describe('Card', () => {
         });
 
         it('should render subheader when provided', async () => {
-            customComponent.subheader = 'Test Subheader';
+            customComponent.subheader.set('Test Subheader');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -326,25 +337,25 @@ describe('Card', () => {
         });
 
         it('should update subheader dynamically', async () => {
-            customComponent.subheader = 'Initial Subheader';
+            customComponent.subheader.set('Initial Subheader');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             let subtitleElement = customFixture.debugElement.query(By.css('.p-card-subtitle'));
             expect(subtitleElement.nativeElement.textContent.trim()).toBe('Initial Subheader');
 
-            customComponent.subheader = 'Updated Subheader';
+            customComponent.subheader.set('Updated Subheader');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(subtitleElement.nativeElement.textContent.trim()).toBe('Updated Subheader');
         });
 
         it('should handle undefined subheader gracefully', async () => {
-            customComponent.subheader = 'Test Subheader';
+            customComponent.subheader.set('Test Subheader');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
-            customComponent.subheader = undefined as any;
+            customComponent.subheader.set(undefined as any);
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -363,7 +374,7 @@ describe('Card', () => {
         });
 
         it('should apply inline styles', async () => {
-            customComponent.style = { width: '300px', height: '200px' };
+            customComponent.style.set({ width: '300px', height: '200px' });
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -373,14 +384,14 @@ describe('Card', () => {
         });
 
         it('should update styles dynamically', async () => {
-            customComponent.style = { backgroundColor: 'red' };
+            customComponent.style.set({ backgroundColor: 'red' });
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             const cardElement = customFixture.debugElement.query(By.directive(Card));
             expect(cardElement.nativeElement.style.backgroundColor).toBe('red');
 
-            customComponent.style = { backgroundColor: 'blue' };
+            customComponent.style.set({ backgroundColor: 'blue' });
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(cardElement.nativeElement.style.backgroundColor).toBe('blue');
@@ -608,7 +619,7 @@ describe('Card', () => {
             let titleElement = dynamicFixture.debugElement.query(By.css('.p-card-title'));
             expect(titleElement.nativeElement.textContent.trim()).toBe('Initial Header');
 
-            dynamicComponent.header = 'Changed Header';
+            dynamicComponent.header.set('Changed Header');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(titleElement.nativeElement.textContent.trim()).toBe('Changed Header');
@@ -618,7 +629,7 @@ describe('Card', () => {
             let subtitleElement = dynamicFixture.debugElement.query(By.css('.p-card-subtitle'));
             expect(subtitleElement.nativeElement.textContent.trim()).toBe('Initial Subheader');
 
-            dynamicComponent.subheader = 'Changed Subheader';
+            dynamicComponent.subheader.set('Changed Subheader');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(subtitleElement.nativeElement.textContent.trim()).toBe('Changed Subheader');
@@ -628,13 +639,13 @@ describe('Card', () => {
             let dynamicContent = dynamicFixture.debugElement.query(By.css('.dynamic-content'));
             expect(dynamicContent).toBeTruthy();
 
-            dynamicComponent.showContent = false;
+            dynamicComponent.showContent.set(false);
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             dynamicContent = dynamicFixture.debugElement.query(By.css('.dynamic-content'));
             expect(dynamicContent).toBeFalsy();
 
-            dynamicComponent.showContent = true;
+            dynamicComponent.showContent.set(true);
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             dynamicContent = dynamicFixture.debugElement.query(By.css('.dynamic-content'));
@@ -810,7 +821,7 @@ describe('Card', () => {
 
             const cardInstance = templateFixture.debugElement.query(By.directive(Card)).componentInstance;
 
-            spyOn(cardInstance, 'ngAfterContentInit').and.callThrough();
+            vi.spyOn(cardInstance, 'ngAfterContentInit');
 
             // Trigger ngAfterContentInit manually
             cardInstance.ngAfterContentInit();
@@ -832,7 +843,7 @@ describe('Card', () => {
             let cardElement = customFixture.debugElement.query(By.directive(Card));
             expect(cardElement.nativeElement.getAttribute('data-pc-name')).toBe('card');
 
-            customComponent.header = 'Changed Header';
+            customComponent.header.set('Changed Header');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -845,9 +856,9 @@ describe('Card', () => {
             const customFixture = TestBed.createComponent(TestCustomCardComponent);
             const customComponent = customFixture.componentInstance;
 
-            customComponent.header = undefined as any;
-            customComponent.subheader = undefined as any;
-            customComponent.style = undefined as any;
+            customComponent.header.set(undefined as any);
+            customComponent.subheader.set(undefined as any);
+            customComponent.style.set(undefined as any);
 
             await expect(async () => {
                 customFixture.changeDetectorRef.markForCheck();
@@ -863,13 +874,13 @@ describe('Card', () => {
             const customComponent = customFixture.componentInstance;
             await customFixture.whenStable();
 
-            customComponent.header = 'Header 1';
-            customComponent.subheader = 'Subheader 1';
+            customComponent.header.set('Header 1');
+            customComponent.subheader.set('Subheader 1');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
-            customComponent.header = 'Header 2';
-            customComponent.subheader = 'Subheader 2';
+            customComponent.header.set('Header 2');
+            customComponent.subheader.set('Subheader 2');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -884,8 +895,8 @@ describe('Card', () => {
             const customFixture = TestBed.createComponent(TestCustomCardComponent);
             const customComponent = customFixture.componentInstance;
 
-            customComponent.header = '';
-            customComponent.subheader = '';
+            customComponent.header.set('');
+            customComponent.subheader.set('');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -1033,7 +1044,7 @@ describe('Card', () => {
         });
 
         describe('Case 2: Object Values with Attributes and Styles', () => {
-            xit('should apply PT object with class, style and data attributes to root', async () => {
+            it.skip('should apply PT object with class, style and data attributes to root', async () => {
                 // Skipped: PT style binding causes infinite loop with current implementation
                 const fixture = TestBed.createComponent(Card);
                 fixture.componentRef.setInput('pt', {
@@ -1051,7 +1062,7 @@ describe('Card', () => {
                 expect(hostElement.getAttribute('aria-label')).toBe('TEST_ARIA_LABEL');
             });
 
-            xit('should apply PT object with attributes to header', async () => {
+            it.skip('should apply PT object with attributes to header', async () => {
                 // Skipped: PT style binding causes infinite loop
                 const fixture = TestBed.createComponent(Card);
                 fixture.componentRef.setInput('header', 'Test');
@@ -1128,7 +1139,7 @@ describe('Card', () => {
             });
         });
 
-        xdescribe('Case 4: Instance-based Functions', () => {
+        describe.skip('Case 4: Instance-based Functions', () => {
             it('should apply PT function using instance header state', async () => {
                 const fixture = TestBed.createComponent(Card);
                 fixture.componentRef.setInput('header', 'Test Header');
@@ -1248,7 +1259,8 @@ describe('Card', () => {
         describe('PT with Footer Section', () => {
             it('should apply PT class to footer section when footer content exists', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `
                         <p-card [pt]="pt">
                             <ng-template #footer>
@@ -1263,8 +1275,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTFooterComponent],
+                    imports: [CardModule, TestPTFooterComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1278,7 +1289,8 @@ describe('Card', () => {
 
             it('should apply PT class to header section', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `
                         <p-card [pt]="pt">
                             <ng-template #header>
@@ -1293,8 +1305,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTHeaderComponent],
+                    imports: [CardModule, TestPTHeaderComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1310,7 +1321,8 @@ describe('Card', () => {
         describe('Case 7: Global PT from PrimeNGConfig', () => {
             it('should apply global PT configuration from PrimeNGConfig', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `
                         <p-card header="Card 1"></p-card>
                         <p-card header="Card 2"></p-card>
@@ -1320,8 +1332,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestGlobalPTComponent],
+                    imports: [CardModule, TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         {
@@ -1347,7 +1358,8 @@ describe('Card', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="localPt" header="Test"></p-card>`
                 })
                 class TestMergePTComponent {
@@ -1356,8 +1368,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestMergePTComponent],
+                    imports: [CardModule, TestMergePTComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1372,13 +1383,14 @@ describe('Card', () => {
             });
         });
 
-        xdescribe('Case 8: PT Hooks', () => {
+        describe.skip('Case 8: PT Hooks', () => {
             // Skipped: Card component hooks support needs to be verified
-            xit('should execute onAfterViewInit hook from PT', async () => {
+            it.skip('should execute onAfterViewInit hook from PT', async () => {
                 let hookExecuted = false;
 
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt"></p-card>`
                 })
                 class TestPTHooksComponent {
@@ -1394,8 +1406,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTHooksComponent],
+                    imports: [CardModule, TestPTHooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1405,11 +1416,12 @@ describe('Card', () => {
                 expect(hookExecuted).toBe(true);
             });
 
-            xit('should execute onBeforeMount hook from PT', async () => {
+            it.skip('should execute onBeforeMount hook from PT', async () => {
                 let beforeMountExecuted = false;
 
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt"></p-card>`
                 })
                 class TestPTBeforeMountComponent {
@@ -1424,8 +1436,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTBeforeMountComponent],
+                    imports: [CardModule, TestPTBeforeMountComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1435,11 +1446,12 @@ describe('Card', () => {
                 expect(beforeMountExecuted).toBe(true);
             });
 
-            xit('should execute onAfterContentInit hook from PT', async () => {
+            it.skip('should execute onAfterContentInit hook from PT', async () => {
                 let contentInitExecuted = false;
 
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt"></p-card>`
                 })
                 class TestPTContentInitComponent {
@@ -1454,8 +1466,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTContentInitComponent],
+                    imports: [CardModule, TestPTContentInitComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1465,11 +1476,12 @@ describe('Card', () => {
                 expect(contentInitExecuted).toBe(true);
             });
 
-            xit('should execute multiple lifecycle hooks from PT', async () => {
+            it.skip('should execute multiple lifecycle hooks from PT', async () => {
                 const executedHooks: string[] = [];
 
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt"></p-card>`
                 })
                 class TestMultiplePTHooksComponent {
@@ -1490,8 +1502,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestMultiplePTHooksComponent],
+                    imports: [CardModule, TestMultiplePTHooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1505,7 +1516,8 @@ describe('Card', () => {
         describe('Advanced PT Scenarios', () => {
             it('should apply PT with all sections', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `
                         <p-card [pt]="pt" [header]="'Test Header'" [subheader]="'Test Subheader'">
                             <ng-template #header>
@@ -1532,8 +1544,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestAllSectionsPTComponent],
+                    imports: [CardModule, TestAllSectionsPTComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1564,7 +1575,8 @@ describe('Card', () => {
 
             it('should handle PT with function returning classes based on instance', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt" [header]="header"></p-card>`
                 })
                 class TestPTFunctionComponent {
@@ -1578,8 +1590,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTFunctionComponent],
+                    imports: [CardModule, TestPTFunctionComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1592,17 +1603,17 @@ describe('Card', () => {
 
             it('should handle dynamic PT updates', async () => {
                 @Component({
-                    standalone: false,
-                    template: `<p-card [pt]="pt"></p-card>`
+                    standalone: true,
+                    imports: [CardModule],
+                    template: `<p-card [pt]="pt()"></p-card>`
                 })
                 class TestDynamicPTComponent {
-                    pt = { root: 'INITIAL_CLASS' };
+                    pt = signal<any>({ root: 'INITIAL_CLASS' });
                 }
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestDynamicPTComponent],
+                    imports: [CardModule, TestDynamicPTComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1613,7 +1624,7 @@ describe('Card', () => {
                 let cardEl = fixture.debugElement.query(By.css('p-card'));
                 expect(cardEl.nativeElement.className).toContain('INITIAL_CLASS');
 
-                component.pt = { root: 'UPDATED_CLASS' };
+                component.pt.set({ root: 'UPDATED_CLASS' });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
@@ -1682,7 +1693,8 @@ describe('Card', () => {
 
             it('should handle PT function with instance-based styles', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [CardModule],
                     template: `<p-card [pt]="pt" [header]="header" [subheader]="subheader"></p-card>`
                 })
                 class TestPTInstanceStyleComponent {
@@ -1699,8 +1711,7 @@ describe('Card', () => {
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [CardModule],
-                    declarations: [TestPTInstanceStyleComponent],
+                    imports: [CardModule, TestPTInstanceStyleComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 

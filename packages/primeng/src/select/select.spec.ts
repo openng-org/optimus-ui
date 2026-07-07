@@ -9,7 +9,8 @@ import { map, take } from 'rxjs/operators';
 import { Select } from './select';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-select
             [options]="options"
@@ -39,22 +40,94 @@ import { Select } from './select';
     `
 })
 class TestBasicSelectComponent {
-    options = [
+    private _options = signal<any[]>([
         { name: 'Option 1', code: 'opt1' },
         { name: 'Option 2', code: 'opt2' },
         { name: 'Option 3', code: 'opt3' }
-    ];
-    selectedValue: any;
-    placeholder = 'Select an option';
-    loading = false;
-    disabled = false;
-    filter = false;
-    showClear = false;
-    checkmark = false;
-    resetFilterOnHide = false;
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    autofocus = false;
+    ]);
+    get options() {
+        return this._options();
+    }
+    set options(v: any[]) {
+        this._options.set(v);
+    }
+    private _selectedValue = signal<any>(undefined);
+    get selectedValue() {
+        return this._selectedValue();
+    }
+    set selectedValue(v: any) {
+        this._selectedValue.set(v);
+    }
+    private _placeholder = signal<string>('Select an option');
+    get placeholder() {
+        return this._placeholder();
+    }
+    set placeholder(v: string) {
+        this._placeholder.set(v);
+    }
+    private _loading = signal<boolean>(false);
+    get loading() {
+        return this._loading();
+    }
+    set loading(v: boolean) {
+        this._loading.set(v);
+    }
+    private _disabled = signal<boolean>(false);
+    get disabled() {
+        return this._disabled();
+    }
+    set disabled(v: boolean) {
+        this._disabled.set(v);
+    }
+    private _filter = signal<boolean>(false);
+    get filter() {
+        return this._filter();
+    }
+    set filter(v: boolean) {
+        this._filter.set(v);
+    }
+    private _showClear = signal<boolean>(false);
+    get showClear() {
+        return this._showClear();
+    }
+    set showClear(v: boolean) {
+        this._showClear.set(v);
+    }
+    private _checkmark = signal<boolean>(false);
+    get checkmark() {
+        return this._checkmark();
+    }
+    set checkmark(v: boolean) {
+        this._checkmark.set(v);
+    }
+    private _resetFilterOnHide = signal<boolean>(false);
+    get resetFilterOnHide() {
+        return this._resetFilterOnHide();
+    }
+    set resetFilterOnHide(v: boolean) {
+        this._resetFilterOnHide.set(v);
+    }
+    private _ariaLabel = signal<string | undefined>(undefined);
+    get ariaLabel() {
+        return this._ariaLabel();
+    }
+    set ariaLabel(v: string | undefined) {
+        this._ariaLabel.set(v);
+    }
+    private _ariaLabelledBy = signal<string | undefined>(undefined);
+    get ariaLabelledBy() {
+        return this._ariaLabelledBy();
+    }
+    set ariaLabelledBy(v: string | undefined) {
+        this._ariaLabelledBy.set(v);
+    }
+    private _autofocus = signal<boolean>(false);
+    get autofocus() {
+        return this._autofocus();
+    }
+    set autofocus(v: boolean) {
+        this._autofocus.set(v);
+    }
 
     changeEvent: any;
     filterEvent: any;
@@ -99,7 +172,8 @@ class TestBasicSelectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <form [formGroup]="form">
             <p-select formControlName="selectedOption" [options]="options" optionLabel="name" optionValue="code" placeholder="Choose an option"> </p-select>
@@ -122,7 +196,8 @@ class TestReactiveFormSelectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: ` <p-select [options]="groupedOptions" [(ngModel)]="selectedCity" optionLabel="cname" optionValue="code" [group]="true" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select a city"> </p-select> `
 })
 class TestGroupedSelectComponent {
@@ -148,7 +223,8 @@ class TestGroupedSelectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with templates" [filter]="filter" [showClear]="showClear" [loading]="loading">
             <ng-template #item let-option>
@@ -214,7 +290,8 @@ class TestSelectTemplateRefComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with template refs" [filter]="filter" [showClear]="showClear" [loading]="loading">
             <ng-template #item let-option>
@@ -276,7 +353,8 @@ class TestSelectRefTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: ` <p-select [options]="dynamicOptions()" [(ngModel)]="selectedValue" optionLabel="label" optionValue="value" [placeholder]="dynamicPlaceholder()" [disabled]="dynamicDisabled()" [loading]="dynamicLoading()"> </p-select> `
 })
 class TestDynamicSelectComponent {
@@ -313,7 +391,8 @@ class TestDynamicSelectComponent {
 
 // Dynamic data sources test component (signals, observables, async pipes)
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="dynamic-test-container">
             <!-- Signal-based options -->
@@ -547,7 +626,8 @@ class TestDynamicDataSourcesComponent {
 
 // Comprehensive FormControl test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="form-test-container">
             <form [formGroup]="testForm">
@@ -662,7 +742,8 @@ class TestComprehensiveFormComponent {
 
 // Comprehensive ViewChild properties test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="viewchild-test-container">
             <p-select #testSelect [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="ViewChild test select" [filter]="true" [showClear]="true" [virtualScroll]="false"></p-select>
@@ -694,7 +775,8 @@ class TestViewChildComponent {
 
 // Complex edge cases test component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <div class="edge-cases-container">
             <!-- Rapid updates test -->
@@ -799,7 +881,8 @@ class TestComplexEdgeCasesComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-select
             [options]="options"
@@ -847,8 +930,11 @@ describe('Select', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [
+            imports: [
+                CommonModule,
+                FormsModule,
+                ReactiveFormsModule,
+                Select,
                 TestBasicSelectComponent,
                 TestReactiveFormSelectComponent,
                 TestGroupedSelectComponent,
@@ -1003,7 +1089,7 @@ describe('Select', () => {
         });
 
         // Skipped: This test requires TestGroupedSelectComponent fixture
-        xit('should display disabled grouped option label when set as initial value', async () => {
+        it.skip('should display disabled grouped option label when set as initial value', async () => {
             // This test needs a different fixture with group bindings
         });
     });
@@ -1048,7 +1134,7 @@ describe('Select', () => {
         });
 
         it('should focus programmatically', () => {
-            spyOn(selectInstance, 'applyFocus');
+            vi.spyOn(selectInstance, 'applyFocus');
             selectInstance.focus();
 
             expect(selectInstance.applyFocus).toHaveBeenCalled();
@@ -1071,8 +1157,8 @@ describe('Select', () => {
 
             const clickEvent = {
                 target: mockTarget,
-                preventDefault: jasmine.createSpy('preventDefault'),
-                stopPropagation: jasmine.createSpy('stopPropagation')
+                preventDefault: vi.fn(),
+                stopPropagation: vi.fn()
             } as any;
 
             selectInstance.onContainerClick(clickEvent);
@@ -1378,8 +1464,8 @@ describe('Select', () => {
 
             const clickEvent = {
                 target: mockTarget,
-                preventDefault: jasmine.createSpy('preventDefault'),
-                stopPropagation: jasmine.createSpy('stopPropagation')
+                preventDefault: vi.fn(),
+                stopPropagation: vi.fn()
             } as any;
 
             selectInstance.onContainerClick(clickEvent);
@@ -1436,7 +1522,7 @@ describe('Select', () => {
 
     describe('CSS Classes and Styling', () => {
         // Skipped: styleClass input was removed from Select component
-        xit('should apply custom style class', () => {
+        it.skip('should apply custom style class', () => {
             // styleClass is no longer an input
         });
 
@@ -1464,7 +1550,6 @@ describe('Select - Reactive Forms Integration', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestReactiveFormSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1546,7 +1631,6 @@ describe('Select - Grouped Options', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestGroupedSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1597,7 +1681,6 @@ describe('Select - Template Reference Content Projection', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestSelectTemplateRefComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1815,7 +1898,6 @@ describe('Select - #template Reference Content Projection', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestSelectRefTemplateComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1990,7 +2072,6 @@ describe('Select - Dynamic and Signal-based Properties', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestDynamicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2112,7 +2193,6 @@ describe('Select - Performance and Large Datasets', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestBasicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2179,7 +2259,6 @@ describe('Select Dynamic Data Sources', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestDynamicDataSourcesComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2396,7 +2475,6 @@ describe('Select Comprehensive Form Integration', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestComprehensiveFormComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2636,7 +2714,6 @@ describe('Select ViewChild Properties', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, Select],
-            declarations: [TestViewChildComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2737,7 +2814,6 @@ describe('Select Complex Edge Cases', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, Select],
-            declarations: [TestComplexEdgeCasesComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2977,7 +3053,6 @@ describe('Select Advanced Accessibility', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestBasicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -3089,7 +3164,7 @@ describe('Select Advanced Accessibility', () => {
             // Ensure overlay is open before testing close
 
             const escapeEvent = new KeyboardEvent('keydown', { code: 'Escape' });
-            spyOn(escapeEvent, 'preventDefault');
+            vi.spyOn(escapeEvent, 'preventDefault');
             selectInstance.onKeyDown(escapeEvent);
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
@@ -3238,24 +3313,108 @@ describe('Select PT (PassThrough)', () => {
         `
     })
     class TestPTSelectComponent {
-        options: any = [
+        private _options = signal<any>([
             { name: 'Option 1', code: 'opt1' },
             { name: 'Option 2', code: 'opt2' },
             { name: 'Option 3', code: 'opt3' }
-        ];
-        selectedValue: any;
-        pt: any;
-        filter = false;
-        showClear = false;
-        checkmark = false;
-        optionLabel: string | undefined;
-        optionValue: string | undefined;
-        optionGroupLabel: string | undefined;
-        optionGroupChildren: string | undefined;
-        group = false;
-        loading = false;
-        virtualScroll = false;
-        virtualScrollItemSize: number | undefined;
+        ]);
+        get options() {
+            return this._options();
+        }
+        set options(v: any) {
+            this._options.set(v);
+        }
+        private _selectedValue = signal<any>(undefined);
+        get selectedValue() {
+            return this._selectedValue();
+        }
+        set selectedValue(v: any) {
+            this._selectedValue.set(v);
+        }
+        private _pt = signal<any>(undefined);
+        get pt() {
+            return this._pt();
+        }
+        set pt(v: any) {
+            this._pt.set(v);
+        }
+        private _filter = signal<boolean>(false);
+        get filter() {
+            return this._filter();
+        }
+        set filter(v: boolean) {
+            this._filter.set(v);
+        }
+        private _showClear = signal<boolean>(false);
+        get showClear() {
+            return this._showClear();
+        }
+        set showClear(v: boolean) {
+            this._showClear.set(v);
+        }
+        private _checkmark = signal<boolean>(false);
+        get checkmark() {
+            return this._checkmark();
+        }
+        set checkmark(v: boolean) {
+            this._checkmark.set(v);
+        }
+        private _optionLabel = signal<string | undefined>(undefined);
+        get optionLabel() {
+            return this._optionLabel();
+        }
+        set optionLabel(v: string | undefined) {
+            this._optionLabel.set(v);
+        }
+        private _optionValue = signal<string | undefined>(undefined);
+        get optionValue() {
+            return this._optionValue();
+        }
+        set optionValue(v: string | undefined) {
+            this._optionValue.set(v);
+        }
+        private _optionGroupLabel = signal<string | undefined>(undefined);
+        get optionGroupLabel() {
+            return this._optionGroupLabel();
+        }
+        set optionGroupLabel(v: string | undefined) {
+            this._optionGroupLabel.set(v);
+        }
+        private _optionGroupChildren = signal<string | undefined>(undefined);
+        get optionGroupChildren() {
+            return this._optionGroupChildren();
+        }
+        set optionGroupChildren(v: string | undefined) {
+            this._optionGroupChildren.set(v);
+        }
+        private _group = signal<boolean>(false);
+        get group() {
+            return this._group();
+        }
+        set group(v: boolean) {
+            this._group.set(v);
+        }
+        private _loading = signal<boolean>(false);
+        get loading() {
+            return this._loading();
+        }
+        set loading(v: boolean) {
+            this._loading.set(v);
+        }
+        private _virtualScroll = signal<boolean>(false);
+        get virtualScroll() {
+            return this._virtualScroll();
+        }
+        set virtualScroll(v: boolean) {
+            this._virtualScroll.set(v);
+        }
+        private _virtualScrollItemSize = signal<number | undefined>(undefined);
+        get virtualScrollItemSize() {
+            return this._virtualScrollItemSize();
+        }
+        set virtualScrollItemSize(v: number | undefined) {
+            this._virtualScrollItemSize.set(v);
+        }
     }
 
     let fixture: ComponentFixture<TestPTSelectComponent>;
@@ -4461,7 +4620,6 @@ describe('Select Multiple Selection', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
-            declarations: [TestMultipleSelectComponent, TestBasicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -4628,3 +4786,22 @@ describe('Select Multiple Selection', () => {
         });
     });
 });
+
+@Component({
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
+    template: `
+        <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code">
+            <ng-template #selecteditem let-option>
+                <div class="alias-selected">Chosen: {{ option?.name }}</div>
+            </ng-template>
+        </p-select>
+    `
+})
+class TestSelectSelectedItemAliasComponent {
+    options = [
+        { name: 'Option 1', code: 'o1' },
+        { name: 'Option 2', code: 'o2' }
+    ];
+    selectedValue: any = 'o2';
+}

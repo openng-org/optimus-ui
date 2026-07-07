@@ -1,4 +1,4 @@
-import { Component, DebugElement, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, signal, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,21 +7,22 @@ import { MenuItem, SharedModule } from 'primeng/api';
 import { ContextMenu } from './contextmenu';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     template: `
         <p-contextmenu
-            [model]="model"
-            [target]="target"
-            [global]="global"
-            [style]="style"
-            [styleClass]="styleClass"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [breakpoint]="breakpoint"
-            [ariaLabel]="ariaLabel"
-            [ariaLabelledBy]="ariaLabelledBy"
-            [pressDelay]="pressDelay"
-            [triggerEvent]="triggerEvent"
+            [model]="model()"
+            [target]="target()"
+            [global]="global()"
+            [style]="style()"
+            [styleClass]="styleClass()"
+            [autoZIndex]="autoZIndex()"
+            [baseZIndex]="baseZIndex()"
+            [breakpoint]="breakpoint()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [pressDelay]="pressDelay()"
+            [triggerEvent]="triggerEvent()"
             (onShow)="onShow($event)"
             (onHide)="onHide($event)"
         >
@@ -29,18 +30,18 @@ import { ContextMenu } from './contextmenu';
     `
 })
 class TestBasicContextMenuComponent {
-    model: MenuItem[] | undefined = [{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }];
-    target: HTMLElement | string | undefined;
-    global: boolean = false;
-    style: { [klass: string]: any } | null | undefined;
-    styleClass: string | undefined;
-    autoZIndex: boolean = true;
-    baseZIndex: number = 0;
-    breakpoint: string = '960px';
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    pressDelay: number = 500;
-    triggerEvent: string = 'contextmenu';
+    model = signal<MenuItem[] | undefined>([{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }]);
+    target = signal<HTMLElement | string | undefined>(undefined);
+    global = signal<boolean>(false);
+    style = signal<{ [klass: string]: any } | null | undefined>(undefined);
+    styleClass = signal<string | undefined>(undefined);
+    autoZIndex = signal<boolean>(true);
+    baseZIndex = signal<number>(0);
+    breakpoint = signal<string>('960px');
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
+    pressDelay = signal<number>(500);
+    triggerEvent = signal<string>('contextmenu');
 
     showEvent: any;
     hideEvent: any;
@@ -55,7 +56,8 @@ class TestBasicContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-target-contextmenu',
     template: `
         <div #targetDiv id="target-div">Target Element</div>
@@ -72,7 +74,8 @@ class TestTargetContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-global-contextmenu',
     template: ` <p-contextmenu [model]="model" [global]="true"></p-contextmenu> `
 })
@@ -81,12 +84,15 @@ class TestGlobalContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     template: `
         <p-contextmenu [model]="nestedModel">
             <ng-template #item let-item>
                 <div class="custom-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>
@@ -108,7 +114,8 @@ class TestItemTemplateContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     template: `
         <p-contextmenu [model]="model">
             <ng-template #submenuicon>
@@ -127,7 +134,8 @@ class TestSubmenuIconTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-router-contextmenu',
     template: ` <p-contextmenu [model]="routerModel"></p-contextmenu> `
 })
@@ -144,7 +152,8 @@ class TestRouterContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-styled-contextmenu',
     template: ` <p-contextmenu [style]="customStyle" styleClass="custom-contextmenu"></p-contextmenu> `
 })
@@ -157,35 +166,38 @@ class TestStyledContextMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-minimal-contextmenu',
     template: `<p-contextmenu></p-contextmenu>`
 })
 class TestMinimalContextMenuComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-dynamic-contextmenu',
-    template: ` <p-contextmenu [model]="dynamicModel"></p-contextmenu> `
+    template: ` <p-contextmenu [model]="dynamicModel()"></p-contextmenu> `
 })
 class TestDynamicContextMenuComponent {
-    dynamicModel: MenuItem[] = [];
+    dynamicModel = signal<MenuItem[]>([]);
 
     addItem(item: MenuItem) {
-        this.dynamicModel.push(item);
+        this.dynamicModel.update((model) => [...model, item]);
     }
 
     clearItems() {
-        this.dynamicModel = [];
+        this.dynamicModel.set([]);
     }
 
     removeItem(index: number) {
-        this.dynamicModel.splice(index, 1);
+        this.dynamicModel.update((model) => model.filter((_, i) => i !== index));
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ContextMenu],
     selector: 'test-disabled-items-contextmenu',
     template: ` <p-contextmenu [model]="disabledModel"></p-contextmenu> `
 })
@@ -208,7 +220,7 @@ describe('ContextMenu', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
                 TestBasicContextMenuComponent,
                 TestTargetContextMenuComponent,
                 TestGlobalContextMenuComponent,
@@ -218,9 +230,7 @@ describe('ContextMenu', () => {
                 TestStyledContextMenuComponent,
                 TestMinimalContextMenuComponent,
                 TestDynamicContextMenuComponent,
-                TestDisabledItemsComponent
-            ],
-            imports: [
+                TestDisabledItemsComponent,
                 ContextMenu,
                 TestTargetComponent,
 
@@ -249,7 +259,7 @@ describe('ContextMenu', () => {
         it('should have required dependencies injected', () => {
             expect(contextMenuInstance.overlayService).toBeTruthy();
             expect(contextMenuInstance._componentStyle).toBeTruthy();
-            expect(contextMenuInstance.constructor.name).toBe('ContextMenu');
+            expect(contextMenuInstance.constructor.name).toBe('_ContextMenu');
         });
 
         it('should have default values', async () => {
@@ -270,13 +280,13 @@ describe('ContextMenu', () => {
 
         it('should accept custom values', async () => {
             const testModel: MenuItem[] = [{ label: 'Test Item' }];
-            component.model = testModel;
-            component.global = true;
-            component.triggerEvent = 'click';
-            component.autoZIndex = false;
-            component.baseZIndex = 100;
-            component.styleClass = 'custom-contextmenu';
-            component.ariaLabel = 'Custom Context Menu';
+            component.model.set(testModel);
+            component.global.set(true);
+            component.triggerEvent.set('click');
+            component.autoZIndex.set(false);
+            component.baseZIndex.set(100);
+            component.styleClass.set('custom-contextmenu');
+            component.ariaLabel.set('Custom Context Menu');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -311,7 +321,7 @@ describe('ContextMenu', () => {
     describe('Input Properties', () => {
         it('should update model input', async () => {
             const newModel = [{ label: 'New Item' }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -321,7 +331,7 @@ describe('ContextMenu', () => {
 
         it('should update target input', async () => {
             const targetElement = document.createElement('div');
-            component.target = targetElement;
+            component.target.set(targetElement);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -329,19 +339,19 @@ describe('ContextMenu', () => {
         });
 
         it('should update global input with booleanAttribute transform', async () => {
-            component.global = true;
+            component.global.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.global()).toBe(true);
 
-            component.global = false;
+            component.global.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.global()).toBe(false);
         });
 
         it('should update triggerEvent input', async () => {
-            component.triggerEvent = 'click';
+            component.triggerEvent.set('click');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.triggerEvent()).toBe('click');
@@ -349,8 +359,8 @@ describe('ContextMenu', () => {
 
         it('should update style and styleClass inputs', async () => {
             const customStyle = { color: 'red' };
-            component.style = customStyle;
-            component.styleClass = 'test-class';
+            component.style.set(customStyle);
+            component.styleClass.set('test-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -359,29 +369,29 @@ describe('ContextMenu', () => {
         });
 
         it('should update autoZIndex with booleanAttribute transform', async () => {
-            component.autoZIndex = false;
+            component.autoZIndex.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.autoZIndex()).toBe(false);
         });
 
         it('should update baseZIndex with numberAttribute transform', async () => {
-            component.baseZIndex = 1000;
+            component.baseZIndex.set(1000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.baseZIndex()).toBe(1000);
         });
 
         it('should update breakpoint input', async () => {
-            component.breakpoint = '768px';
+            component.breakpoint.set('768px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.breakpoint()).toBe('768px');
         });
 
         it('should update ariaLabel and ariaLabelledBy inputs', async () => {
-            component.ariaLabel = 'Test Menu';
-            component.ariaLabelledBy = 'menu-label';
+            component.ariaLabel.set('Test Menu');
+            component.ariaLabelledBy.set('menu-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -390,7 +400,7 @@ describe('ContextMenu', () => {
         });
 
         it('should update pressDelay with numberAttribute transform', async () => {
-            component.pressDelay = 1000;
+            component.pressDelay.set(1000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contextMenuInstance.pressDelay()).toBe(1000);
@@ -406,8 +416,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 100,
                 pageY: 150,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             contextMenuInstance.show(mockEvent);
@@ -430,8 +440,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 100,
                 pageY: 150,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             expect(contextMenuInstance.visible()).toBe(false);
@@ -444,13 +454,13 @@ describe('ContextMenu', () => {
         });
 
         it('should emit onShow when showing', () => {
-            spyOn(contextMenuInstance.onShow, 'emit');
+            vi.spyOn(contextMenuInstance.onShow, 'emit');
 
             const mockEvent = {
                 pageX: 100,
                 pageY: 150,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             contextMenuInstance.show(mockEvent);
@@ -459,7 +469,7 @@ describe('ContextMenu', () => {
         });
 
         it('should emit onHide when hiding', () => {
-            spyOn(contextMenuInstance.onHide, 'emit');
+            vi.spyOn(contextMenuInstance.onHide, 'emit');
             contextMenuInstance.visible.set(true);
 
             contextMenuInstance.hide();
@@ -471,8 +481,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 100,
                 pageY: 150,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             contextMenuInstance.show(mockEvent);
@@ -490,7 +500,7 @@ describe('ContextMenu', () => {
             const targetContextMenu = targetFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
             // Mock the bindTriggerEventListener BEFORE detecting changes
-            spyOn(targetContextMenu, 'bindTriggerEventListener');
+            vi.spyOn(targetContextMenu, 'bindTriggerEventListener').mockImplementation(() => {});
 
             // Now detect changes to trigger ngOnInit
             await targetFixture.whenStable();
@@ -510,7 +520,7 @@ describe('ContextMenu', () => {
         });
 
         it('should bind trigger event listener on init', () => {
-            spyOn(contextMenuInstance, 'bindTriggerEventListener');
+            vi.spyOn(contextMenuInstance, 'bindTriggerEventListener');
 
             contextMenuInstance.onInit();
 
@@ -562,7 +572,7 @@ describe('ContextMenu', () => {
                 }
             ];
 
-            component.model = model;
+            component.model.set(model);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -573,7 +583,7 @@ describe('ContextMenu', () => {
         });
 
         it('should handle empty model', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -581,7 +591,7 @@ describe('ContextMenu', () => {
         });
 
         it('should handle undefined model', async () => {
-            component.model = undefined as any;
+            component.model.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -591,7 +601,7 @@ describe('ContextMenu', () => {
         it('should handle items with separators', async () => {
             const modelWithSeparator = [{ label: 'Item 1' }, { separator: true }, { label: 'Item 2' }];
 
-            component.model = modelWithSeparator;
+            component.model.set(modelWithSeparator);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -618,10 +628,10 @@ describe('ContextMenu', () => {
 
         it('should handle arrow down key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             // Mock the changeFocusedItemIndex method to prevent rootmenu access errors
-            spyOn(contextMenuInstance, 'changeFocusedItemIndex');
+            vi.spyOn(contextMenuInstance, 'changeFocusedItemIndex');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -630,7 +640,7 @@ describe('ContextMenu', () => {
 
         it('should handle arrow up key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -639,8 +649,8 @@ describe('ContextMenu', () => {
 
         it('should handle escape key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Escape' });
-            spyOn(contextMenuInstance, 'hide');
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(contextMenuInstance, 'hide');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -650,10 +660,10 @@ describe('ContextMenu', () => {
 
         it('should handle enter key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Enter' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             // Mock the onEnterKey method to prevent rootmenu access errors
-            spyOn(contextMenuInstance, 'onEnterKey');
+            vi.spyOn(contextMenuInstance, 'onEnterKey');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -662,7 +672,7 @@ describe('ContextMenu', () => {
 
         it('should handle space key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Space' });
-            spyOn(contextMenuInstance, 'onEnterKey');
+            vi.spyOn(contextMenuInstance, 'onEnterKey');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -671,7 +681,7 @@ describe('ContextMenu', () => {
 
         it('should handle home key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -680,10 +690,10 @@ describe('ContextMenu', () => {
 
         it('should handle end key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             // Mock the onEndKey method to prevent rootmenu access errors
-            spyOn(contextMenuInstance, 'onEndKey');
+            vi.spyOn(contextMenuInstance, 'onEndKey');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -692,7 +702,7 @@ describe('ContextMenu', () => {
 
         it('should handle tab key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Tab' });
-            spyOn(contextMenuInstance, 'hide');
+            vi.spyOn(contextMenuInstance, 'hide');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -701,7 +711,7 @@ describe('ContextMenu', () => {
 
         it('should handle printable character search', () => {
             const keyEvent = new KeyboardEvent('keydown', { key: 'f' });
-            spyOn(contextMenuInstance, 'searchItems');
+            vi.spyOn(contextMenuInstance, 'searchItems');
 
             contextMenuInstance.onKeyDown(keyEvent);
 
@@ -711,7 +721,7 @@ describe('ContextMenu', () => {
 
     describe('CSS Classes and Styling', () => {
         it('should apply styleClass when visible', async () => {
-            component.styleClass = 'custom-contextmenu-class';
+            component.styleClass.set('custom-contextmenu-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -771,8 +781,8 @@ describe('ContextMenu', () => {
 
     describe('Accessibility Tests', () => {
         it('should have proper ARIA attributes', async () => {
-            component.ariaLabel = 'Context menu';
-            component.ariaLabelledBy = 'menu-title';
+            component.ariaLabel.set('Context menu');
+            component.ariaLabelledBy.set('menu-title');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -852,8 +862,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 250,
                 pageY: 300,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             contextMenuInstance.show(mockEvent);
@@ -865,7 +875,7 @@ describe('ContextMenu', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined model', async () => {
-            component.model = undefined as any;
+            component.model.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -877,7 +887,7 @@ describe('ContextMenu', () => {
         });
 
         it('should handle empty model array', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -889,7 +899,7 @@ describe('ContextMenu', () => {
         });
 
         it('should handle items without labels', async () => {
-            component.model = [{ icon: 'pi pi-file' }];
+            component.model.set([{ icon: 'pi pi-file' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -918,7 +928,7 @@ describe('ContextMenu', () => {
                 }
             ];
 
-            component.model = deeplyNestedModel;
+            component.model.set(deeplyNestedModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -930,8 +940,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 100,
                 pageY: 150,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             expect(() => {
@@ -956,13 +966,13 @@ describe('ContextMenu', () => {
             const fixture1 = TestBed.createComponent(TestBasicContextMenuComponent);
             const fixture2 = TestBed.createComponent(TestBasicContextMenuComponent);
 
-            fixture1.componentInstance.model = [{ label: 'Menu 1' }];
-            fixture1.componentInstance.styleClass = 'menu-1';
+            fixture1.componentInstance.model.set([{ label: 'Menu 1' }]);
+            fixture1.componentInstance.styleClass.set('menu-1');
             fixture1.changeDetectorRef.markForCheck();
             await fixture1.whenStable();
 
-            fixture2.componentInstance.model = [{ label: 'Menu 2' }];
-            fixture2.componentInstance.styleClass = 'menu-2';
+            fixture2.componentInstance.model.set([{ label: 'Menu 2' }]);
+            fixture2.componentInstance.styleClass.set('menu-2');
             fixture2.changeDetectorRef.markForCheck();
             await fixture2.whenStable();
 
@@ -1036,17 +1046,17 @@ describe('ContextMenu', () => {
         });
 
         it('should maintain state across property changes', async () => {
-            component.model = [{ label: 'Initial' }];
-            component.styleClass = 'initial-class';
+            component.model.set([{ label: 'Initial' }]);
+            component.styleClass.set('initial-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(contextMenuInstance.model()?.[0]?.label).toBe('Initial');
             expect(contextMenuInstance.styleClass()).toBe('initial-class');
 
-            component.model = [{ label: 'Updated' }];
-            component.styleClass = 'updated-class';
-            component.autoZIndex = false;
+            component.model.set([{ label: 'Updated' }]);
+            component.styleClass.set('updated-class');
+            component.autoZIndex.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1070,13 +1080,13 @@ describe('ContextMenu', () => {
         });
 
         it('should call show method programmatically', () => {
-            spyOn(contextMenuInstance.onShow, 'emit');
+            vi.spyOn(contextMenuInstance.onShow, 'emit');
 
             const mockEvent = {
                 pageX: 200,
                 pageY: 250,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             contextMenuInstance.show(mockEvent);
@@ -1086,7 +1096,7 @@ describe('ContextMenu', () => {
         });
 
         it('should call hide method programmatically', () => {
-            spyOn(contextMenuInstance.onHide, 'emit');
+            vi.spyOn(contextMenuInstance.onHide, 'emit');
             contextMenuInstance.visible.set(true);
 
             contextMenuInstance.hide();
@@ -1099,8 +1109,8 @@ describe('ContextMenu', () => {
             const mockEvent = {
                 pageX: 150,
                 pageY: 200,
-                stopPropagation: jasmine.createSpy(),
-                preventDefault: jasmine.createSpy()
+                stopPropagation: vi.fn(),
+                preventDefault: vi.fn()
             };
 
             expect(contextMenuInstance.visible()).toBe(false);

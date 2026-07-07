@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -20,27 +20,28 @@ const mockProducts = [
 
 // Test Components for different scenarios
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel
-            [value]="products"
-            [page]="page"
-            [numVisible]="numVisible"
-            [numScroll]="numScroll"
-            [responsiveOptions]="responsiveOptions"
-            [orientation]="orientation"
-            [verticalViewPortHeight]="verticalViewPortHeight"
-            [contentClass]="contentClass"
-            [indicatorsContentClass]="indicatorsContentClass"
-            [indicatorsContentStyle]="indicatorsContentStyle"
-            [indicatorStyleClass]="indicatorStyleClass"
-            [indicatorStyle]="indicatorStyle"
-            [circular]="circular"
-            [showIndicators]="showIndicators"
-            [showNavigators]="showNavigators"
-            [autoplayInterval]="autoplayInterval"
-            [prevButtonProps]="prevButtonProps"
-            [nextButtonProps]="nextButtonProps"
+            [value]="products()"
+            [page]="page()"
+            [numVisible]="numVisible()"
+            [numScroll]="numScroll()"
+            [responsiveOptions]="responsiveOptions()"
+            [orientation]="orientation()"
+            [verticalViewPortHeight]="verticalViewPortHeight()"
+            [contentClass]="contentClass()"
+            [indicatorsContentClass]="indicatorsContentClass()"
+            [indicatorsContentStyle]="indicatorsContentStyle()"
+            [indicatorStyleClass]="indicatorStyleClass()"
+            [indicatorStyle]="indicatorStyle()"
+            [circular]="circular()"
+            [showIndicators]="showIndicators()"
+            [showNavigators]="showNavigators()"
+            [autoplayInterval]="autoplayInterval()"
+            [prevButtonProps]="prevButtonProps()"
+            [nextButtonProps]="nextButtonProps()"
             (onPage)="onPage($event)"
         >
             <ng-template let-product #item>
@@ -54,24 +55,24 @@ const mockProducts = [
     `
 })
 class TestBasicCarouselComponent {
-    products: any[] = mockProducts;
-    page: number = 0;
-    numVisible: number = 3;
-    numScroll: number = 1;
-    responsiveOptions: CarouselResponsiveOptions[] | undefined = undefined as any;
-    orientation: 'horizontal' | 'vertical' = 'horizontal';
-    verticalViewPortHeight: string = '300px';
-    contentClass: string = '';
-    indicatorsContentClass: string = '';
-    indicatorsContentStyle: { [klass: string]: any } | null | undefined;
-    indicatorStyleClass: string = '';
-    indicatorStyle: { [klass: string]: any } | null | undefined;
-    circular: boolean = false;
-    showIndicators: boolean = true;
-    showNavigators: boolean = true;
-    autoplayInterval: number = 0;
-    prevButtonProps: any = {};
-    nextButtonProps: any = {};
+    products = signal<any[]>(mockProducts);
+    page = signal<number>(0);
+    numVisible = signal<number>(3);
+    numScroll = signal<number>(1);
+    responsiveOptions = signal<CarouselResponsiveOptions[] | undefined>(undefined as any);
+    orientation = signal<'horizontal' | 'vertical'>('horizontal');
+    verticalViewPortHeight = signal<string>('300px');
+    contentClass = signal<string>('');
+    indicatorsContentClass = signal<string>('');
+    indicatorsContentStyle = signal<{ [klass: string]: any } | null | undefined>(undefined);
+    indicatorStyleClass = signal<string>('');
+    indicatorStyle = signal<{ [klass: string]: any } | null | undefined>(undefined);
+    circular = signal<boolean>(false);
+    showIndicators = signal<boolean>(true);
+    showNavigators = signal<boolean>(true);
+    autoplayInterval = signal<number>(0);
+    prevButtonProps = signal<any>({});
+    nextButtonProps = signal<any>({});
 
     // Event handler
     pageEvent: CarouselPageEvent | undefined;
@@ -82,7 +83,8 @@ class TestBasicCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products" [numVisible]="3" [numScroll]="1" [circular]="true">
             <ng-template let-product #item>
@@ -96,7 +98,8 @@ class TestCircularCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products" [orientation]="'vertical'" [verticalViewPortHeight]="'400px'">
             <ng-template let-product #item>
@@ -110,7 +113,8 @@ class TestVerticalCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products" [responsiveOptions]="responsiveOptions">
             <ng-template let-product #item>
@@ -129,7 +133,8 @@ class TestResponsiveCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products" [autoplayInterval]="1000">
             <ng-template let-product #item>
@@ -143,7 +148,8 @@ class TestAutoplayCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products" [numVisible]="3">
             <ng-template #header>
@@ -163,7 +169,8 @@ class TestTemplateCarouselComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Carousel],
     template: `
         <p-carousel [value]="products">
             <ng-template #header>
@@ -192,8 +199,19 @@ describe('Carousel', () => {
         });
 
         await TestBed.configureTestingModule({
-            imports: [CommonModule, Carousel, SharedModule, ButtonModule],
-            declarations: [TestBasicCarouselComponent, TestCircularCarouselComponent, TestVerticalCarouselComponent, TestResponsiveCarouselComponent, TestAutoplayCarouselComponent, TestTemplateCarouselComponent, TestTemplateCarouselComponent2],
+            imports: [
+                CommonModule,
+                Carousel,
+                SharedModule,
+                ButtonModule,
+                TestBasicCarouselComponent,
+                TestCircularCarouselComponent,
+                TestVerticalCarouselComponent,
+                TestResponsiveCarouselComponent,
+                TestAutoplayCarouselComponent,
+                TestTemplateCarouselComponent,
+                TestTemplateCarouselComponent2
+            ],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -230,12 +248,12 @@ describe('Carousel', () => {
         });
 
         it('should accept input values', async () => {
-            component.page = 1;
-            component.numVisible = 2;
-            component.numScroll = 2;
-            component.circular = true;
-            component.orientation = 'vertical';
-            component.autoplayInterval = 2000;
+            component.page.set(1);
+            component.numVisible.set(2);
+            component.numScroll.set(2);
+            component.circular.set(true);
+            component.orientation.set('vertical');
+            component.autoplayInterval.set(2000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -280,7 +298,7 @@ describe('Carousel', () => {
         it('should check if carousel is vertical', async () => {
             expect(carouselInstance.isVertical()).toBe(false);
 
-            component.orientation = 'vertical';
+            component.orientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(carouselInstance.isVertical()).toBe(true);
@@ -289,7 +307,7 @@ describe('Carousel', () => {
         it('should check if carousel is circular', async () => {
             expect(carouselInstance.isCircular()).toBe(false);
 
-            component.circular = true;
+            component.circular.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(carouselInstance.isCircular()).toBe(true);
@@ -298,7 +316,7 @@ describe('Carousel', () => {
         it('should check if autoplay is enabled', async () => {
             expect(carouselInstance.isAutoplay()).toBeFalsy();
 
-            component.autoplayInterval = 1000;
+            component.autoplayInterval.set(1000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             carouselInstance.allowAutoplay.set(true);
@@ -308,12 +326,12 @@ describe('Carousel', () => {
         it('should check if carousel is empty', async () => {
             expect(carouselInstance.isEmpty()).toBe(false);
 
-            component.products = [];
+            component.products.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(carouselInstance.isEmpty()).toBe(true);
 
-            component.products = null as any;
+            component.products.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(carouselInstance.isEmpty()).toBe(true);
@@ -340,8 +358,8 @@ describe('Carousel', () => {
         beforeEach(async () => {
             fixture = TestBed.createComponent(TestBasicCarouselComponent);
             component = fixture.componentInstance;
-            component.numVisible = 2; // Show 2 items to have multiple pages
-            component.numScroll = 1;
+            component.numVisible.set(2); // Show 2 items to have multiple pages
+            component.numScroll.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -351,7 +369,7 @@ describe('Carousel', () => {
 
         it('should navigate forward', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(component, 'onPage');
+            vi.spyOn(component, 'onPage');
 
             carouselInstance.navForward(mockEvent);
 
@@ -360,7 +378,7 @@ describe('Carousel', () => {
 
         it('should navigate backward', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(component, 'onPage');
+            vi.spyOn(component, 'onPage');
 
             // Move to page 1 first
             carouselInstance._page.set(1);
@@ -371,7 +389,7 @@ describe('Carousel', () => {
 
         it('should handle dot click navigation', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(carouselInstance, 'navForward');
+            vi.spyOn(carouselInstance, 'navForward');
 
             carouselInstance.onDotClick(mockEvent, 1);
 
@@ -380,7 +398,7 @@ describe('Carousel', () => {
 
         it('should prevent default on navigation events', () => {
             const mockEvent = {
-                preventDefault: jasmine.createSpy('preventDefault'),
+                preventDefault: vi.fn(),
                 cancelable: true
             } as any;
 
@@ -485,7 +503,7 @@ describe('Carousel', () => {
         });
 
         it('should bind document listeners for responsive mode', () => {
-            spyOn(carouselInstance, 'bindDocumentListeners').and.callThrough();
+            vi.spyOn(carouselInstance, 'bindDocumentListeners');
 
             carouselInstance.ngAfterContentInit();
 
@@ -634,7 +652,7 @@ describe('Carousel', () => {
         it('should handle touch move event', () => {
             const mockTouchEvent = {
                 cancelable: true,
-                preventDefault: jasmine.createSpy('preventDefault')
+                preventDefault: vi.fn()
             } as any;
 
             carouselInstance.onTouchMove(mockTouchEvent);
@@ -650,7 +668,7 @@ describe('Carousel', () => {
                 changedTouches: [{ pageX: 50, pageY: 50 }]
             } as any;
 
-            spyOn(carouselInstance, 'changePageOnTouch');
+            vi.spyOn(carouselInstance, 'changePageOnTouch');
 
             carouselInstance.onTouchEnd(mockTouchEvent);
 
@@ -678,7 +696,7 @@ describe('Carousel', () => {
                 code: 'ArrowRight'
             } as KeyboardEvent;
 
-            spyOn(carouselInstance, 'onRightKey');
+            vi.spyOn(carouselInstance, 'onRightKey');
 
             carouselInstance.onIndicatorKeydown(mockKeyboardEvent);
 
@@ -690,7 +708,7 @@ describe('Carousel', () => {
                 code: 'ArrowLeft'
             } as KeyboardEvent;
 
-            spyOn(carouselInstance, 'onLeftKey');
+            vi.spyOn(carouselInstance, 'onLeftKey');
 
             carouselInstance.onIndicatorKeydown(mockKeyboardEvent);
 
@@ -713,8 +731,8 @@ describe('Carousel', () => {
         });
 
         it('should apply custom style classes', async () => {
-            component.contentClass = 'custom-content-class';
-            component.indicatorsContentClass = 'custom-indicators-class';
+            component.contentClass.set('custom-content-class');
+            component.indicatorsContentClass.set('custom-indicators-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -723,8 +741,8 @@ describe('Carousel', () => {
         });
 
         it('should apply custom styles', async () => {
-            component.indicatorsContentStyle = { marginTop: '10px' };
-            component.indicatorStyle = { backgroundColor: 'red' };
+            component.indicatorsContentStyle.set({ marginTop: '10px' });
+            component.indicatorStyle.set({ backgroundColor: 'red' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -755,7 +773,7 @@ describe('Carousel', () => {
         beforeEach(async () => {
             fixture = TestBed.createComponent(TestBasicCarouselComponent);
             component = fixture.componentInstance;
-            component.numVisible = 2; // To enable pagination
+            component.numVisible.set(2); // To enable pagination
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -764,7 +782,7 @@ describe('Carousel', () => {
         });
 
         it('should emit onPage event when page changes', () => {
-            spyOn(component, 'onPage');
+            vi.spyOn(component, 'onPage');
 
             carouselInstance.onPage.emit({ page: 1 });
 
@@ -772,7 +790,7 @@ describe('Carousel', () => {
         });
 
         it('should emit onPage event with correct parameters during navigation', () => {
-            spyOn(carouselInstance.onPage, 'emit');
+            vi.spyOn(carouselInstance.onPage, 'emit');
 
             carouselInstance.step(-1, 1);
 
@@ -846,7 +864,7 @@ describe('Carousel', () => {
         });
 
         it('should cleanup document listeners on destroy', () => {
-            spyOn(carouselInstance, 'unbindDocumentListeners');
+            vi.spyOn(carouselInstance, 'unbindDocumentListeners');
 
             carouselInstance.ngOnDestroy();
 
@@ -887,7 +905,7 @@ describe('Carousel', () => {
         });
 
         it('should handle empty products array', async () => {
-            component.products = [];
+            component.products.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -896,7 +914,7 @@ describe('Carousel', () => {
         });
 
         it('should handle null products', async () => {
-            component.products = null as any;
+            component.products.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -904,7 +922,7 @@ describe('Carousel', () => {
         });
 
         it('should handle single item', async () => {
-            component.products = [mockProducts[0]];
+            component.products.set([mockProducts[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -917,7 +935,7 @@ describe('Carousel', () => {
             const initialPage = carouselInstance.page();
 
             // Try to set page beyond bounds
-            component.page = 999;
+            component.page.set(999);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -925,7 +943,7 @@ describe('Carousel', () => {
         });
 
         it('should handle step with different directions', () => {
-            spyOn(carouselInstance.onPage, 'emit');
+            vi.spyOn(carouselInstance.onPage, 'emit');
 
             carouselInstance.step(1); // Backward
             expect(carouselInstance.onPage.emit).toHaveBeenCalled();
@@ -935,8 +953,8 @@ describe('Carousel', () => {
         });
 
         it('should handle button props configuration', async () => {
-            component.prevButtonProps = { severity: 'primary', icon: 'pi-custom' };
-            component.nextButtonProps = { severity: 'secondary', text: false };
+            component.prevButtonProps.set({ severity: 'primary', icon: 'pi-custom' });
+            component.nextButtonProps.set({ severity: 'secondary', text: false });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

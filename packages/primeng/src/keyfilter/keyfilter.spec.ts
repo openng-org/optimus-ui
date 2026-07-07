@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { PLATFORM_ID } from '@angular/core';
@@ -8,13 +8,14 @@ import { CommonModule } from '@angular/common';
 
 // Test Components
 @Component({
-    standalone: false,
-    template: ` <input type="text" [(ngModel)]="value" [pKeyFilter]="pattern" [pValidateOnly]="validateOnly" (ngModelChange)="onModelChange($event)" #inputEl /> `
+    standalone: true,
+    imports: [KeyFilterModule, FormsModule],
+    template: ` <input type="text" [(ngModel)]="value" [pKeyFilter]="pattern()" [pValidateOnly]="validateOnly()" (ngModelChange)="onModelChange($event)" #inputEl /> `
 })
 class TestBasicKeyFilterComponent {
     value: string = '';
-    pattern: RegExp | KeyFilterPattern | null | undefined = null as any;
-    validateOnly: boolean = false;
+    pattern = signal<RegExp | KeyFilterPattern | null | undefined>(null as any);
+    validateOnly = signal<boolean>(false);
 
     onModelChange(event: any) {
         // Callback for testing
@@ -22,10 +23,11 @@ class TestBasicKeyFilterComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [KeyFilterModule, ReactiveFormsModule],
     template: `
         <form [formGroup]="form">
-            <input type="text" formControlName="testField" [pKeyFilter]="pattern" [pValidateOnly]="validateOnly" />
+            <input type="text" formControlName="testField" [pKeyFilter]="pattern()" [pValidateOnly]="validateOnly()" />
         </form>
     `
 })
@@ -33,8 +35,8 @@ class TestFormKeyFilterComponent {
     form = new FormGroup({
         testField: new FormControl('', [Validators.required])
     });
-    pattern: RegExp | KeyFilterPattern | null | undefined = null as any;
-    validateOnly: boolean = false;
+    pattern = signal<RegExp | KeyFilterPattern | null | undefined>(null as any);
+    validateOnly = signal<boolean>(false);
 }
 
 describe('KeyFilter', () => {
@@ -45,8 +47,7 @@ describe('KeyFilter', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [KeyFilterModule, FormsModule, ReactiveFormsModule, CommonModule],
-            declarations: [TestBasicKeyFilterComponent, TestFormKeyFilterComponent],
+            imports: [KeyFilterModule, FormsModule, ReactiveFormsModule, CommonModule, TestBasicKeyFilterComponent, TestFormKeyFilterComponent],
             providers: [provideZonelessChangeDetection(), { provide: PLATFORM_ID, useValue: 'browser' }]
         }).compileComponents();
 
@@ -81,7 +82,7 @@ describe('KeyFilter', () => {
     describe('Pattern Setting and Recognition', () => {
         it('should set regex pattern directly', () => {
             const customRegex = /[a-z]/;
-            testComponent.pattern = customRegex;
+            testComponent.pattern.set(customRegex);
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe(customRegex);
@@ -89,7 +90,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize pint pattern', () => {
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('pint');
@@ -97,7 +98,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize int pattern', () => {
-            testComponent.pattern = 'int';
+            testComponent.pattern.set('int');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('int');
@@ -105,7 +106,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize pnum pattern', () => {
-            testComponent.pattern = 'pnum';
+            testComponent.pattern.set('pnum');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('pnum');
@@ -113,7 +114,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize money pattern', () => {
-            testComponent.pattern = 'money';
+            testComponent.pattern.set('money');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('money');
@@ -121,7 +122,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize num pattern', () => {
-            testComponent.pattern = 'num';
+            testComponent.pattern.set('num');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('num');
@@ -129,7 +130,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize hex pattern', () => {
-            testComponent.pattern = 'hex';
+            testComponent.pattern.set('hex');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('hex');
@@ -137,7 +138,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize email pattern', () => {
-            testComponent.pattern = 'email';
+            testComponent.pattern.set('email');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('email');
@@ -145,7 +146,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize alpha pattern', () => {
-            testComponent.pattern = 'alpha';
+            testComponent.pattern.set('alpha');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('alpha');
@@ -153,7 +154,7 @@ describe('KeyFilter', () => {
         });
 
         it('should recognize alphanum pattern', () => {
-            testComponent.pattern = 'alphanum';
+            testComponent.pattern.set('alphanum');
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe('alphanum');
@@ -161,14 +162,14 @@ describe('KeyFilter', () => {
         });
 
         it('should use default regex for unknown pattern', () => {
-            testComponent.pattern = 'unknown' as KeyFilterPattern;
+            testComponent.pattern.set('unknown' as KeyFilterPattern);
             fixture.detectChanges();
 
             expect(directive.regex.toString()).toBe('/./');
         });
 
         it('should handle null pattern', () => {
-            testComponent.pattern = null as any;
+            testComponent.pattern.set(null as any);
             fixture.detectChanges();
 
             expect(directive.pattern()).toBe(null);
@@ -223,7 +224,7 @@ describe('KeyFilter', () => {
 
     describe('String Validation Methods', () => {
         beforeEach(() => {
-            testComponent.pattern = 'pint'; // positive integers only
+            testComponent.pattern.set('pint'); // positive integers only
             fixture.detectChanges();
         });
 
@@ -257,7 +258,7 @@ describe('KeyFilter', () => {
 
         beforeEach(() => {
             inputElement = inputEl.nativeElement;
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             fixture.detectChanges();
         });
 
@@ -279,7 +280,7 @@ describe('KeyFilter', () => {
             directive.isAndroid = true;
             directive.lastValue = '123';
             inputElement.value = '123a';
-            spyOn(directive.ngModelChange, 'emit');
+            vi.spyOn(directive.ngModelChange, 'emit');
 
             const inputEvent = new Event('input');
             inputElement.dispatchEvent(inputEvent);
@@ -294,7 +295,7 @@ describe('KeyFilter', () => {
             directive.isAndroid = true;
             directive.lastValue = '';
             inputElement.value = 'abc123'; // pasted mixed content
-            spyOn(directive.ngModelChange, 'emit');
+            vi.spyOn(directive.ngModelChange, 'emit');
 
             const inputEvent = new Event('input');
             inputElement.dispatchEvent(inputEvent);
@@ -322,16 +323,16 @@ describe('KeyFilter', () => {
 
         beforeEach(() => {
             inputElement = inputEl.nativeElement;
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             directive.isAndroid = false; // Ensure we're not on Android
-            testComponent.validateOnly = false;
+            testComponent.validateOnly.set(false);
             fixture.detectChanges();
         });
 
         it('should allow valid characters', () => {
             inputElement.value = '123';
             const keyEvent = new KeyboardEvent('keypress', { keyCode: 52, charCode: 52 }); // '4'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -341,7 +342,7 @@ describe('KeyFilter', () => {
         it('should prevent invalid characters', () => {
             inputElement.value = '123';
             const keyEvent = new KeyboardEvent('keypress', { keyCode: 97, charCode: 97 }); // 'a'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -350,7 +351,7 @@ describe('KeyFilter', () => {
 
         it('should allow navigation keys', () => {
             const enterEvent = new KeyboardEvent('keypress', { keyCode: 13 });
-            spyOn(enterEvent, 'preventDefault');
+            vi.spyOn(enterEvent, 'preventDefault');
 
             inputElement.dispatchEvent(enterEvent);
 
@@ -359,7 +360,7 @@ describe('KeyFilter', () => {
 
         it('should allow ctrl+key combinations', () => {
             const ctrlAEvent = new KeyboardEvent('keypress', { keyCode: 97, ctrlKey: true });
-            spyOn(ctrlAEvent, 'preventDefault');
+            vi.spyOn(ctrlAEvent, 'preventDefault');
 
             inputElement.dispatchEvent(ctrlAEvent);
 
@@ -369,7 +370,7 @@ describe('KeyFilter', () => {
         it('should skip processing on Android', () => {
             directive.isAndroid = true;
             const keyEvent = new KeyboardEvent('keypress', { keyCode: 97, charCode: 97 }); // 'a'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -377,12 +378,12 @@ describe('KeyFilter', () => {
         });
 
         it('should skip processing when validateOnly is true', async () => {
-            testComponent.validateOnly = true;
+            testComponent.validateOnly.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const keyEvent = new KeyboardEvent('keypress', { keyCode: 97, charCode: 97 }); // 'a'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -395,19 +396,19 @@ describe('KeyFilter', () => {
 
         beforeEach(() => {
             inputElement = inputEl.nativeElement;
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             fixture.detectChanges();
         });
 
         it('should allow valid pasted content', () => {
             // Mock clipboard data
             const mockClipboardData = {
-                getData: jasmine.createSpy('getData').and.returnValue('12345')
+                getData: vi.fn().mockReturnValue('12345')
             };
 
             const pasteEvent = new Event('paste') as any;
             pasteEvent.clipboardData = mockClipboardData;
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
 
             inputElement.dispatchEvent(pasteEvent);
 
@@ -417,12 +418,12 @@ describe('KeyFilter', () => {
         it('should prevent invalid pasted content', () => {
             // Mock clipboard data with invalid content
             const mockClipboardData = {
-                getData: jasmine.createSpy('getData').and.returnValue('123abc')
+                getData: vi.fn().mockReturnValue('123abc')
             };
 
             const pasteEvent = new Event('paste') as any;
             pasteEvent.clipboardData = mockClipboardData;
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
 
             inputElement.dispatchEvent(pasteEvent);
 
@@ -430,17 +431,17 @@ describe('KeyFilter', () => {
         });
 
         it('should handle complex regex patterns for paste', async () => {
-            testComponent.pattern = /^\d{3}$/; // exactly 3 digits
+            testComponent.pattern.set(/^\d{3}$/); // exactly 3 digits
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const mockClipboardData = {
-                getData: jasmine.createSpy('getData').and.returnValue('123')
+                getData: vi.fn().mockReturnValue('123')
             };
 
             const pasteEvent = new Event('paste') as any;
             pasteEvent.clipboardData = mockClipboardData;
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
 
             inputElement.dispatchEvent(pasteEvent);
 
@@ -448,17 +449,17 @@ describe('KeyFilter', () => {
         });
 
         it('should prevent invalid content with complex regex', async () => {
-            testComponent.pattern = /^\d{3}$/; // exactly 3 digits
+            testComponent.pattern.set(/^\d{3}$/); // exactly 3 digits
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const mockClipboardData = {
-                getData: jasmine.createSpy('getData').and.returnValue('1234') // too many digits
+                getData: vi.fn().mockReturnValue('1234') // too many digits
             };
 
             const pasteEvent = new Event('paste') as any;
             pasteEvent.clipboardData = mockClipboardData;
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
 
             inputElement.dispatchEvent(pasteEvent);
 
@@ -473,8 +474,8 @@ describe('KeyFilter', () => {
         beforeEach(async () => {
             formFixture = TestBed.createComponent(TestFormKeyFilterComponent);
             formComponent = formFixture.componentInstance;
-            formComponent.pattern = 'pint';
-            formComponent.validateOnly = true;
+            formComponent.pattern.set('pint');
+            formComponent.validateOnly.set(true);
             formFixture.detectChanges();
         });
 
@@ -495,7 +496,7 @@ describe('KeyFilter', () => {
         });
 
         it('should not validate when validateOnly is false', async () => {
-            formComponent.validateOnly = false;
+            formComponent.validateOnly.set(false);
             formFixture.changeDetectorRef.markForCheck();
             await formFixture.whenStable();
 
@@ -528,7 +529,7 @@ describe('KeyFilter', () => {
             // Test each pattern individually by setting it on the main test component
 
             // Test pint pattern
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('12345')).toBe(true);
@@ -536,7 +537,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('-123')).toBe(false);
 
             // Test int pattern
-            testComponent.pattern = 'int';
+            testComponent.pattern.set('int');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('12345')).toBe(true);
@@ -544,7 +545,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('123abc')).toBe(false);
 
             // Test email pattern
-            testComponent.pattern = 'email';
+            testComponent.pattern.set('email');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('test@example.com')).toBe(true);
@@ -552,7 +553,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('invalid email!')).toBe(false);
 
             // Test hex pattern
-            testComponent.pattern = 'hex';
+            testComponent.pattern.set('hex');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('ff00aa')).toBe(true);
@@ -560,7 +561,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('xyz')).toBe(false);
 
             // Test alpha pattern
-            testComponent.pattern = 'alpha';
+            testComponent.pattern.set('alpha');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('abcdef')).toBe(true);
@@ -568,7 +569,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('abc123')).toBe(false);
 
             // Test alphanum pattern
-            testComponent.pattern = 'alphanum';
+            testComponent.pattern.set('alphanum');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('abc123')).toBe(true);
@@ -576,7 +577,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('test-value')).toBe(false);
 
             // Test pnum pattern
-            testComponent.pattern = 'pnum';
+            testComponent.pattern.set('pnum');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('123.45')).toBe(true);
@@ -584,7 +585,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('-123')).toBe(false);
 
             // Test money pattern
-            testComponent.pattern = 'money';
+            testComponent.pattern.set('money');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('123.45')).toBe(true);
@@ -593,7 +594,7 @@ describe('KeyFilter', () => {
             expect(directive.isValidString('abc')).toBe(false);
 
             // Test num pattern
-            testComponent.pattern = 'num';
+            testComponent.pattern.set('num');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(directive.isValidString('123.45')).toBe(true);
@@ -606,7 +607,7 @@ describe('KeyFilter', () => {
         it('should handle empty clipboard data', () => {
             const pasteEvent = new Event('paste') as any;
             pasteEvent.clipboardData = null as any;
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
 
             expect(() => {
                 inputEl.nativeElement.dispatchEvent(pasteEvent);
@@ -623,7 +624,7 @@ describe('KeyFilter', () => {
 
         it('should handle very long strings', () => {
             const longString = 'a'.repeat(10000);
-            testComponent.pattern = 'alpha';
+            testComponent.pattern.set('alpha');
             fixture.detectChanges();
 
             expect(() => {
@@ -632,7 +633,7 @@ describe('KeyFilter', () => {
         });
 
         it('should handle special characters in patterns', () => {
-            testComponent.pattern = /[!@#$%^&*()]/;
+            testComponent.pattern.set(/[!@#$%^&*()]/);
             fixture.detectChanges();
 
             expect(directive.isValidChar('!')).toBe(true);
@@ -640,7 +641,7 @@ describe('KeyFilter', () => {
         });
 
         it('should handle Unicode characters', () => {
-            testComponent.pattern = /[àáâãäåæçèéêë]/;
+            testComponent.pattern.set(/[àáâãäåæçèéêë]/);
             fixture.detectChanges();
 
             expect(directive.isValidChar('é')).toBe(true);
@@ -663,8 +664,7 @@ describe('KeyFilter', () => {
             // Create directive with server platform
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [KeyFilterModule, FormsModule, ReactiveFormsModule, CommonModule],
-                declarations: [TestBasicKeyFilterComponent],
+                imports: [KeyFilterModule, FormsModule, ReactiveFormsModule, CommonModule, TestBasicKeyFilterComponent],
                 providers: [provideZonelessChangeDetection(), { provide: PLATFORM_ID, useValue: 'server' }]
             });
 
@@ -683,7 +683,7 @@ describe('KeyFilter', () => {
 
     describe('Event Integration Tests', () => {
         it('should integrate all events correctly', async () => {
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             testComponent.value = '';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
@@ -692,14 +692,14 @@ describe('KeyFilter', () => {
 
             // Test valid keypress
             const validKeyEvent = new KeyboardEvent('keypress', { keyCode: 53, charCode: 53 }); // '5'
-            spyOn(validKeyEvent, 'preventDefault');
+            vi.spyOn(validKeyEvent, 'preventDefault');
             inputElement.dispatchEvent(validKeyEvent);
 
             expect(validKeyEvent.preventDefault).not.toHaveBeenCalled();
 
             // Test invalid keypress
             const invalidKeyEvent = new KeyboardEvent('keypress', { keyCode: 97, charCode: 97 }); // 'a'
-            spyOn(invalidKeyEvent, 'preventDefault');
+            vi.spyOn(invalidKeyEvent, 'preventDefault');
             inputElement.dispatchEvent(invalidKeyEvent);
 
             expect(invalidKeyEvent.preventDefault).toHaveBeenCalled();
@@ -707,7 +707,7 @@ describe('KeyFilter', () => {
             // Test valid paste
             const validPasteEvent = new Event('paste') as any;
             validPasteEvent.clipboardData = { getData: () => '123' };
-            spyOn(validPasteEvent, 'preventDefault');
+            vi.spyOn(validPasteEvent, 'preventDefault');
             inputElement.dispatchEvent(validPasteEvent);
 
             expect(validPasteEvent.preventDefault).not.toHaveBeenCalled();
@@ -719,10 +719,10 @@ describe('KeyFilter', () => {
     describe('Model Change Events', () => {
         it('should emit ngModelChange on Android input correction', async () => {
             directive.isAndroid = true;
-            spyOn(testComponent, 'onModelChange');
-            spyOn(directive.ngModelChange, 'emit');
+            vi.spyOn(testComponent, 'onModelChange');
+            vi.spyOn(directive.ngModelChange, 'emit');
 
-            testComponent.pattern = 'pint';
+            testComponent.pattern.set('pint');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

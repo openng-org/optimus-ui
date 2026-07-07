@@ -4,13 +4,15 @@ import { By } from '@angular/platform-browser';
 import { Ripple } from './ripple';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Ripple],
     template: `<button pRipple class="test-button">Click me</button>`
 })
 class TestBasicRippleComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Ripple],
     template: `<div pRipple class="test-div" [style]="style">Ripple Div</div>`
 })
 class TestStyledRippleComponent {
@@ -18,7 +20,8 @@ class TestStyledRippleComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Ripple],
     template: `
         <div pRipple class="multiple-ripple-1">First</div>
         <div pRipple class="multiple-ripple-2">Second</div>
@@ -28,7 +31,8 @@ class TestStyledRippleComponent {
 class TestMultipleRippleComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Ripple],
     template: `
         <div pRipple class="nested-container">
             <span>Nested content</span>
@@ -39,7 +43,8 @@ class TestMultipleRippleComponent {}
 class TestNestedRippleComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Ripple],
     template: `<div pRipple [style]="style" [class]="styleClass">Custom Styled Ripple</div>`
 })
 class TestCustomStyledComponent {
@@ -55,8 +60,7 @@ describe('Ripple', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicRippleComponent, TestStyledRippleComponent, TestMultipleRippleComponent, TestNestedRippleComponent, TestCustomStyledComponent],
-            imports: [Ripple],
+            imports: [Ripple, TestBasicRippleComponent, TestStyledRippleComponent, TestMultipleRippleComponent, TestNestedRippleComponent, TestCustomStyledComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -79,19 +83,19 @@ describe('Ripple', () => {
         it('should have required dependencies injected', () => {
             expect(rippleInstance).toBeTruthy();
             // Dependencies are injected but may not be directly accessible in test environment
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should initialize correctly', () => {
             expect(rippleInstance).toBeTruthy();
             // Listeners are private and not directly testable
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should initialize properly', () => {
             expect(rippleInstance).toBeTruthy();
             // Timeout property may not be directly accessible in test environment
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
     });
 
@@ -203,7 +207,7 @@ describe('Ripple', () => {
             // Each instance should be unique
             instances.forEach((instance, index) => {
                 expect(instance).toBeTruthy();
-                expect(instance.constructor.name).toBe('Ripple');
+                expect(instance instanceof Ripple).toBe(true);
 
                 // Instances should be different objects
                 instances.forEach((otherInstance, otherIndex) => {
@@ -218,17 +222,17 @@ describe('Ripple', () => {
     describe('Component State Tests', () => {
         it('should maintain consistent state across lifecycle', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should be properly instantiated', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should be an instance of Ripple', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
     });
 
@@ -435,28 +439,28 @@ describe('Ripple', () => {
     describe('Directive Properties', () => {
         it('should have expected directive structure', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
             // Properties are injected but may not be directly accessible in test
         });
 
         it('should be properly configured', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should be a valid directive instance', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should initialize correctly as directive', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
 
         it('should have proper directive structure', () => {
             expect(rippleInstance).toBeTruthy();
-            expect(rippleInstance.constructor.name).toBe('Ripple');
+            expect(rippleInstance instanceof Ripple).toBe(true);
         });
     });
 });

@@ -133,7 +133,7 @@ describe('Knob', () => {
             expect(knobInstance.size()).toBe(100);
             expect(knobInstance.strokeWidth()).toBe(14);
             expect(knobInstance.showValue()).toBe(true);
-            expect(knobInstance.readonly()).toBe(false);
+            expect(knobInstance.readonly()).toBeFalsy();
             expect(knobInstance.valueTemplate()).toBe('{value}');
         });
 
@@ -200,7 +200,7 @@ describe('Knob', () => {
         });
 
         it('should handle click interaction', () => {
-            spyOn(knobInstance, 'updateValue');
+            vi.spyOn(knobInstance, 'updateValue');
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const clickEvent = new MouseEvent('click', {
@@ -216,7 +216,7 @@ describe('Knob', () => {
         });
 
         it('should emit onChange event', async () => {
-            spyOn(knobInstance.onChange, 'emit');
+            vi.spyOn(knobInstance.onChange, 'emit');
 
             knobInstance.updateModelValue(80);
             fixture.changeDetectorRef.markForCheck();
@@ -245,14 +245,14 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const upEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
-            spyOn(upEvent, 'preventDefault');
+            vi.spyOn(upEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(upEvent);
 
             expect(upEvent.preventDefault).toHaveBeenCalled();
             expect(knobInstance.value()).toBe(51);
 
             const rightEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
-            spyOn(rightEvent, 'preventDefault');
+            vi.spyOn(rightEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(rightEvent);
 
             expect(rightEvent.preventDefault).toHaveBeenCalled();
@@ -263,14 +263,14 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const downEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(downEvent, 'preventDefault');
+            vi.spyOn(downEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(downEvent);
 
             expect(downEvent.preventDefault).toHaveBeenCalled();
             expect(knobInstance.value()).toBe(49);
 
             const leftEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
-            spyOn(leftEvent, 'preventDefault');
+            vi.spyOn(leftEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(leftEvent);
 
             expect(leftEvent.preventDefault).toHaveBeenCalled();
@@ -281,14 +281,14 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const homeEvent = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(homeEvent, 'preventDefault');
+            vi.spyOn(homeEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(homeEvent);
 
             expect(homeEvent.preventDefault).toHaveBeenCalled();
             expect(knobInstance.value()).toBe(0);
 
             const endEvent = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(endEvent, 'preventDefault');
+            vi.spyOn(endEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(endEvent);
 
             expect(endEvent.preventDefault).toHaveBeenCalled();
@@ -299,14 +299,14 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const pageUpEvent = new KeyboardEvent('keydown', { code: 'PageUp' });
-            spyOn(pageUpEvent, 'preventDefault');
+            vi.spyOn(pageUpEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(pageUpEvent);
 
             expect(pageUpEvent.preventDefault).toHaveBeenCalled();
             expect(knobInstance.value()).toBe(60);
 
             const pageDownEvent = new KeyboardEvent('keydown', { code: 'PageDown' });
-            spyOn(pageDownEvent, 'preventDefault');
+            vi.spyOn(pageDownEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(pageDownEvent);
 
             expect(pageDownEvent.preventDefault).toHaveBeenCalled();
@@ -333,7 +333,7 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const mouseDownEvent = new MouseEvent('mousedown');
-            spyOn(mouseDownEvent, 'preventDefault');
+            vi.spyOn(mouseDownEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(mouseDownEvent);
 
             expect(mouseDownEvent.preventDefault).toHaveBeenCalled();
@@ -348,7 +348,7 @@ describe('Knob', () => {
             svgElement.nativeElement.dispatchEvent(new MouseEvent('mousedown'));
 
             const mouseUpEvent = new MouseEvent('mouseup');
-            spyOn(mouseUpEvent, 'preventDefault');
+            vi.spyOn(mouseUpEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(mouseUpEvent);
 
             expect(mouseUpEvent.preventDefault).toHaveBeenCalled();
@@ -374,7 +374,7 @@ describe('Knob', () => {
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const touchStartEvent = new TouchEvent('touchstart');
-            spyOn(touchStartEvent, 'preventDefault');
+            vi.spyOn(touchStartEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(touchStartEvent);
 
             expect(touchStartEvent.preventDefault).toHaveBeenCalled();
@@ -389,7 +389,7 @@ describe('Knob', () => {
             svgElement.nativeElement.dispatchEvent(new TouchEvent('touchstart'));
 
             const touchEndEvent = new TouchEvent('touchend');
-            spyOn(touchEndEvent, 'preventDefault');
+            vi.spyOn(touchEndEvent, 'preventDefault');
             svgElement.nativeElement.dispatchEvent(touchEndEvent);
 
             expect(touchEndEvent.preventDefault).toHaveBeenCalled();
@@ -492,7 +492,7 @@ describe('Knob', () => {
             expect(svgElement.nativeElement.getAttribute('tabindex')).toBe('-1');
 
             // Test that click is ignored in readonly mode
-            spyOn(knobInstance, 'updateValue');
+            vi.spyOn(knobInstance, 'updateValue');
             const clickEvent = new MouseEvent('click');
             Object.defineProperty(clickEvent, 'offsetX', { value: 50 });
             Object.defineProperty(clickEvent, 'offsetY', { value: 50 });
@@ -671,9 +671,9 @@ describe('Knob', () => {
 
         it('should prevent interaction when disabled', () => {
             // Mock disabled state
-            spyOn(knobInstance, '$disabled').and.returnValue(true);
+            vi.spyOn(knobInstance, '$disabled').mockReturnValue(true);
 
-            spyOn(knobInstance, 'updateValue');
+            vi.spyOn(knobInstance, 'updateValue');
             const svgElement = fixture.debugElement.query(By.css('svg'));
 
             const clickEvent = new MouseEvent('click');
@@ -786,7 +786,8 @@ describe('Knob', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase1Component {
@@ -804,8 +805,7 @@ describe('Knob', () => {
             it('should apply simple string classes to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase1Component],
+                    imports: [Knob, FormsModule, TestPTCase1Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -843,7 +843,8 @@ describe('Knob', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase2Component {
@@ -867,8 +868,7 @@ describe('Knob', () => {
             it('should apply object properties to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase2Component],
+                    imports: [Knob, FormsModule, TestPTCase2Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -893,7 +893,8 @@ describe('Knob', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase3Component {
@@ -911,8 +912,7 @@ describe('Knob', () => {
             it('should apply mixed object and string values', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase3Component],
+                    imports: [Knob, FormsModule, TestPTCase3Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -934,7 +934,8 @@ describe('Knob', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [min]="0" [max]="100" [showValue]="true" [pt]="pt"></p-knob>`
             })
             class TestPTCase4Component {
@@ -958,8 +959,7 @@ describe('Knob', () => {
             it('should use instance variables in PT functions', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase4Component],
+                    imports: [Knob, FormsModule, TestPTCase4Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -984,7 +984,8 @@ describe('Knob', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase5Component {
@@ -1007,8 +1008,7 @@ describe('Knob', () => {
             it('should bind click events through PT', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase5Component],
+                    imports: [Knob, FormsModule, TestPTCase5Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1029,7 +1029,8 @@ describe('Knob', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: 'INLINE_HOST_CLASS', svg: 'INLINE_SVG_CLASS' }"></p-knob>`
             })
             class TestPTCase6InlineComponent {
@@ -1039,8 +1040,7 @@ describe('Knob', () => {
             it('should apply inline PT as string', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase6InlineComponent],
+                    imports: [Knob, FormsModule, TestPTCase6InlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1055,7 +1055,8 @@ describe('Knob', () => {
             });
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' }, svg: { class: 'SVG_INLINE_CLASS' } }"></p-knob>`
             })
             class TestPTCase6InlineObjectComponent {
@@ -1065,8 +1066,7 @@ describe('Knob', () => {
             it('should apply inline PT as object', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase6InlineObjectComponent],
+                    imports: [Knob, FormsModule, TestPTCase6InlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1083,7 +1083,8 @@ describe('Knob', () => {
 
         describe('Case 7: Global PT from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value"></p-knob>`
             })
             class TestPTCase7GlobalComponent {
@@ -1093,8 +1094,7 @@ describe('Knob', () => {
             it('should apply global PT from config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase7GlobalComponent],
+                    imports: [Knob, FormsModule, TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1121,7 +1121,8 @@ describe('Knob', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
             class TestPTCase8HooksComponent {
@@ -1145,8 +1146,7 @@ describe('Knob', () => {
             it('should call PT hooks', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCase8HooksComponent],
+                    imports: [Knob, FormsModule, TestPTCase8HooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1164,7 +1164,8 @@ describe('Knob', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Knob, FormsModule, ReactiveFormsModule],
                 template: `<p-knob [(ngModel)]="value" [showValue]="true" [pt]="pt"></p-knob>`
             })
             class TestPTCoverageComponent {
@@ -1182,8 +1183,7 @@ describe('Knob', () => {
             it('should apply PT to all sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [Knob, FormsModule],
-                    declarations: [TestPTCoverageComponent],
+                    imports: [Knob, FormsModule, TestPTCoverageComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroupAddon } from './inputgroupaddon';
@@ -19,11 +19,11 @@ class TestBasicInputGroupAddonComponent {}
 @Component({
     standalone: true,
     imports: [InputGroupAddon, FormsModule],
-    template: ` <p-inputgroup-addon [style]="addonStyle" [class]="addonClass"> $ </p-inputgroup-addon> `
+    template: ` <p-inputgroup-addon [style]="addonStyle()" [class]="addonClass()"> $ </p-inputgroup-addon> `
 })
 class TestStyledInputGroupAddonComponent {
-    addonStyle: { [key: string]: any } = { 'background-color': '#f0f0f0' };
-    addonClass: string = 'custom-addon';
+    addonStyle = signal<{ [key: string]: any }>({ 'background-color': '#f0f0f0' });
+    addonClass = signal<string>('custom-addon');
 }
 
 describe('InputGroupAddon', () => {
@@ -89,9 +89,8 @@ describe('InputGroupAddon', () => {
         });
 
         it('should update addon styles dynamically', async () => {
-            component.addonStyle = { color: 'red' };
-            component.addonClass = 'updated-addon';
-            fixture.changeDetectorRef.markForCheck();
+            component.addonStyle.set({ color: 'red' });
+            component.addonClass.set('updated-addon');
             await fixture.whenStable();
 
             const addonElement = fixture.debugElement.query(By.directive(InputGroupAddon));
@@ -202,13 +201,12 @@ describe('InputGroupAddon PassThrough Tests', () => {
     });
 
     describe('PT Case 5: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

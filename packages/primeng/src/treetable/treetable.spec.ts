@@ -1,4 +1,4 @@
-import { Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ViewChild, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -28,8 +28,7 @@ describe('TreeTable', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicTreeTableComponent, TestTemplatesTreeTableComponent, TestDynamicTreeTableComponent],
-            imports: [FormsModule, TreeTableModule],
+            imports: [FormsModule, TreeTableModule, TestBasicTreeTableComponent, TestTemplatesTreeTableComponent, TestDynamicTreeTableComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -181,7 +180,7 @@ describe('TreeTable', () => {
         });
 
         it('should reset scroll position', async () => {
-            spyOn(treetable, 'resetScrollTop');
+            vi.spyOn(treetable, 'resetScrollTop');
 
             treetable.resetScrollTop();
 
@@ -220,7 +219,7 @@ describe('TreeTable', () => {
         });
 
         it('should handle page change event', async () => {
-            spyOn(treetable.onPage, 'emit');
+            vi.spyOn(treetable.onPage, 'emit');
 
             const paginatorEvent = {
                 first: 1,
@@ -245,7 +244,7 @@ describe('TreeTable', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            spyOn(treetable.onLazyLoad, 'emit');
+            vi.spyOn(treetable.onLazyLoad, 'emit');
 
             treetable.onPageChange({ first: 2, rows: 1, page: 2, pageCount: 4 });
             await fixture.whenStable();
@@ -300,7 +299,7 @@ describe('TreeTable', () => {
         });
 
         it('should emit onSort event', async () => {
-            spyOn(treetable.onSort, 'emit');
+            vi.spyOn(treetable.onSort, 'emit');
 
             const sortEvent = {
                 field: 'name',
@@ -341,7 +340,7 @@ describe('TreeTable', () => {
             const node = basicTreeData[0];
             const mockTarget = {
                 nodeName: 'TD',
-                closest: jasmine.createSpy('closest').and.returnValue(null)
+                closest: vi.fn().mockReturnValue(null)
             };
             const mockEvent = {
                 originalEvent: {
@@ -351,7 +350,7 @@ describe('TreeTable', () => {
                 rowNode: { node }
             };
 
-            spyOn(treetable.selectionChange, 'emit');
+            vi.spyOn(treetable.selectionChange, 'emit');
             treetable.handleRowClick(mockEvent);
 
             expect(treetable.selectionChange.emit).toHaveBeenCalled();
@@ -368,7 +367,7 @@ describe('TreeTable', () => {
 
             const mockTarget1 = {
                 nodeName: 'TD',
-                closest: jasmine.createSpy('closest').and.returnValue(null)
+                closest: vi.fn().mockReturnValue(null)
             };
             const mockEvent1 = {
                 originalEvent: {
@@ -381,7 +380,7 @@ describe('TreeTable', () => {
 
             const mockTarget2 = {
                 nodeName: 'TD',
-                closest: jasmine.createSpy('closest').and.returnValue(null)
+                closest: vi.fn().mockReturnValue(null)
             };
             const mockEvent2 = {
                 originalEvent: {
@@ -392,20 +391,58 @@ describe('TreeTable', () => {
                 rowNode: { node: node2 }
             };
 
-            spyOn(treetable.selectionChange, 'emit');
+            vi.spyOn(treetable.selectionChange, 'emit');
             treetable.handleRowClick(mockEvent1);
             treetable.handleRowClick(mockEvent2);
 
             expect(treetable.selectionChange.emit).toHaveBeenCalled();
         });
 
+        it('should select range of nodes with shift key in multiple selection mode', async () => {
+            const ttFixture = TestBed.createComponent(TreeTable);
+            const tt = ttFixture.componentInstance;
+            ttFixture.componentRef.setInput('value', basicTreeData);
+            ttFixture.componentRef.setInput('selectionMode', 'multiple');
+            await ttFixture.whenStable();
+            ttFixture.detectChanges();
+
+            const node1 = basicTreeData[0];
+            const node2 = basicTreeData[1];
+
+            const mockTarget = {
+                nodeName: 'TD',
+                closest: vi.fn().mockReturnValue(null)
+            };
+
+            tt.handleRowClick({
+                originalEvent: {
+                    target: mockTarget,
+                    button: 0
+                } as any,
+                rowNode: { node: node1 }
+            });
+
+            tt.handleRowClick({
+                originalEvent: {
+                    target: mockTarget,
+                    button: 0,
+                    shiftKey: true
+                } as any,
+                rowNode: { node: node2 }
+            });
+
+            expect(tt._selection.length).toBe(2);
+            expect(tt._selection).toContain(node1);
+            expect(tt._selection).toContain(node2);
+        });
+
         it('should emit selection change event', async () => {
-            spyOn(treetable.selectionChange, 'emit');
+            vi.spyOn(treetable.selectionChange, 'emit');
 
             const node = basicTreeData[0];
             const mockTarget = {
                 nodeName: 'TD',
-                closest: jasmine.createSpy('closest').and.returnValue(null)
+                closest: vi.fn().mockReturnValue(null)
             };
             const mockEvent = {
                 originalEvent: {
@@ -421,8 +458,8 @@ describe('TreeTable', () => {
         });
 
         it('should handle context menu selection', async () => {
-            spyOn(treetable.contextMenuSelectionChange, 'emit');
-            spyOn(treetable.onContextMenuSelect, 'emit');
+            vi.spyOn(treetable.contextMenuSelectionChange, 'emit');
+            vi.spyOn(treetable.onContextMenuSelect, 'emit');
 
             // Simply test that the events can be emitted directly
             treetable.onContextMenuSelect.emit({
@@ -443,7 +480,7 @@ describe('TreeTable', () => {
         });
 
         it('should emit node expand event', async () => {
-            spyOn(treetable.onNodeExpand, 'emit');
+            vi.spyOn(treetable.onNodeExpand, 'emit');
 
             // Simulate node expansion by directly calling the emit
             treetable.onNodeExpand.emit({
@@ -452,13 +489,13 @@ describe('TreeTable', () => {
             });
 
             expect(treetable.onNodeExpand.emit).toHaveBeenCalledWith({
-                originalEvent: jasmine.any(MouseEvent),
+                originalEvent: expect.any(MouseEvent),
                 node: basicTreeData[0]
             });
         });
 
         it('should emit node collapse event', async () => {
-            spyOn(treetable.onNodeCollapse, 'emit');
+            vi.spyOn(treetable.onNodeCollapse, 'emit');
 
             // Simulate node collapse by directly calling the emit
             treetable.onNodeCollapse.emit({
@@ -467,7 +504,7 @@ describe('TreeTable', () => {
             });
 
             expect(treetable.onNodeCollapse.emit).toHaveBeenCalledWith({
-                originalEvent: jasmine.any(MouseEvent),
+                originalEvent: expect.any(MouseEvent),
                 node: basicTreeData[0]
             });
         });
@@ -522,7 +559,7 @@ describe('TreeTable', () => {
         });
 
         it('should emit filter event', async () => {
-            spyOn(treetable.onFilter, 'emit');
+            vi.spyOn(treetable.onFilter, 'emit');
 
             treetable.filterGlobal('File', 'contains');
 
@@ -544,7 +581,7 @@ describe('TreeTable', () => {
             await fixture.whenStable();
 
             expect(treetable.filters['type']).toEqual(
-                jasmine.objectContaining({
+                expect.objectContaining({
                     value: 'File',
                     matchMode: 'contains'
                 })
@@ -624,7 +661,7 @@ describe('TreeTable', () => {
         });
 
         it('should emit lazy load event on initialization', async () => {
-            spyOn(treetable.onLazyLoad, 'emit');
+            vi.spyOn(treetable.onLazyLoad, 'emit');
 
             treetable.ngOnInit();
             await fixture.whenStable();
@@ -640,7 +677,7 @@ describe('TreeTable', () => {
             newFixture.detectChanges();
 
             const newTreetable = newFixture.debugElement.query(By.directive(TreeTable)).componentInstance;
-            spyOn(newTreetable.onLazyLoad, 'emit');
+            vi.spyOn(newTreetable.onLazyLoad, 'emit');
 
             newTreetable.ngOnInit();
             await fixture.whenStable();
@@ -706,7 +743,7 @@ describe('TreeTable', () => {
 
             const mockTarget = {
                 nodeName: 'TD',
-                closest: jasmine.createSpy('closest').and.returnValue(null)
+                closest: vi.fn().mockReturnValue(null)
             };
             const mockEvent = {
                 originalEvent: {
@@ -2722,7 +2759,7 @@ describe('TreeTable', () => {
                             dynamicFixture.detectChanges();
                             await dynamicFixture.whenStable();
                         } catch (error) {
-                            fail(`Should not throw for valid edge case: ${JSON.stringify(data)}`);
+                            throw new Error(`Should not throw for valid edge case: ${JSON.stringify(data)}`);
                         }
                     }
 
@@ -2836,7 +2873,8 @@ describe('TreeTable', () => {
 // Test Components
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TreeTableModule, FormsModule],
     template: `
         <p-treetable
             [columns]="columns"
@@ -2926,70 +2964,430 @@ class TestBasicTreeTableComponent {
     @ViewChild('treetable') treetable!: TreeTable;
 
     // Input Properties
-    columns: any[] = [
+    private _columns = signal<any[]>([
         { field: 'name', header: 'Name' },
         { field: 'size', header: 'Size' },
         { field: 'type', header: 'Type' }
-    ];
-    value: TreeNode[] = [];
-    autoLayout: boolean | undefined;
-    tableStyle: { [klass: string]: any } | null | undefined;
-    tableStyleClass: string | undefined;
-    lazy: boolean = false;
-    lazyLoadOnInit: boolean = true;
-    paginator: boolean | undefined;
-    rows: number | undefined;
-    first: number = 0;
-    totalRecords: number = 0;
-    pageLinks: number = 5;
-    rowsPerPageOptions: any[] | undefined;
-    alwaysShowPaginator: boolean = true;
-    paginatorPosition: 'top' | 'bottom' | 'both' = 'bottom';
-    paginatorStyleClass: string | undefined;
-    paginatorDropdownAppendTo: any;
-    currentPageReportTemplate: string = '{currentPage} of {totalPages}';
-    showCurrentPageReport: boolean | undefined;
-    showJumpToPageDropdown: boolean | undefined;
-    showFirstLastIcon: boolean = true;
-    showPageLinks: boolean = true;
-    defaultSortOrder: number = 1;
-    sortMode: 'single' | 'multiple' = 'single';
-    resetPageOnSort: boolean = true;
-    customSort: boolean | undefined;
-    selectionMode: TreeTableSelectionMode | undefined;
-    selection: any;
-    contextMenuSelection: any;
-    dataKey: string | undefined;
-    metaKeySelection: boolean = false;
-    compareSelectionBy: string = 'deepEquals';
-    rowHover: boolean | undefined;
-    loading: boolean | undefined;
-    loadingIcon: string | undefined;
-    showLoader: boolean = true;
-    scrollable: boolean | undefined;
-    scrollHeight: string | undefined;
-    virtualScroll: boolean | undefined;
-    virtualScrollItemSize: number | undefined;
-    virtualScrollOptions: any;
-    virtualScrollDelay: number = 150;
-    frozenWidth: string | undefined;
-    frozenColumns: any;
-    resizableColumns: boolean | undefined;
-    columnResizeMode: string = 'fit';
-    reorderableColumns: boolean | undefined;
-    contextMenu: any;
-    rowTrackBy: Function = (index: number, item: any) => item;
-    filters: any = {};
-    globalFilterFields: string[] | undefined;
-    filterDelay: number = 300;
-    filterMode: string = 'lenient';
-    filterLocale: string | undefined;
-    paginatorLocale: string | undefined;
-    sortField: string | undefined | null;
-    sortOrder: number = 1;
-    multiSortMeta: any;
-    selectionKeys: any;
-    showGridlines: boolean = false;
+    ]);
+    get columns(): any[] {
+        return this._columns();
+    }
+    set columns(v: any[]) {
+        this._columns.set(v);
+    }
+    private _value = signal<TreeNode[]>([]);
+    get value(): TreeNode[] {
+        return this._value();
+    }
+    set value(v: TreeNode[]) {
+        this._value.set(v);
+    }
+    private _autoLayout = signal<boolean | undefined>(undefined);
+    get autoLayout(): boolean | undefined {
+        return this._autoLayout();
+    }
+    set autoLayout(v: boolean | undefined) {
+        this._autoLayout.set(v);
+    }
+    private _tableStyle = signal<{ [klass: string]: any } | null | undefined>(undefined);
+    get tableStyle(): { [klass: string]: any } | null | undefined {
+        return this._tableStyle();
+    }
+    set tableStyle(v: { [klass: string]: any } | null | undefined) {
+        this._tableStyle.set(v);
+    }
+    private _tableStyleClass = signal<string | undefined>(undefined);
+    get tableStyleClass(): string | undefined {
+        return this._tableStyleClass();
+    }
+    set tableStyleClass(v: string | undefined) {
+        this._tableStyleClass.set(v);
+    }
+    private _lazy = signal<boolean>(false);
+    get lazy(): boolean {
+        return this._lazy();
+    }
+    set lazy(v: boolean) {
+        this._lazy.set(v);
+    }
+    private _lazyLoadOnInit = signal<boolean>(true);
+    get lazyLoadOnInit(): boolean {
+        return this._lazyLoadOnInit();
+    }
+    set lazyLoadOnInit(v: boolean) {
+        this._lazyLoadOnInit.set(v);
+    }
+    private _paginator = signal<boolean | undefined>(undefined);
+    get paginator(): boolean | undefined {
+        return this._paginator();
+    }
+    set paginator(v: boolean | undefined) {
+        this._paginator.set(v);
+    }
+    private _rows = signal<number | undefined>(undefined);
+    get rows(): number | undefined {
+        return this._rows();
+    }
+    set rows(v: number | undefined) {
+        this._rows.set(v);
+    }
+    private _first = signal<number>(0);
+    get first(): number {
+        return this._first();
+    }
+    set first(v: number) {
+        this._first.set(v);
+    }
+    private _totalRecords = signal<number>(0);
+    get totalRecords(): number {
+        return this._totalRecords();
+    }
+    set totalRecords(v: number) {
+        this._totalRecords.set(v);
+    }
+    private _pageLinks = signal<number>(5);
+    get pageLinks(): number {
+        return this._pageLinks();
+    }
+    set pageLinks(v: number) {
+        this._pageLinks.set(v);
+    }
+    private _rowsPerPageOptions = signal<any[] | undefined>(undefined);
+    get rowsPerPageOptions(): any[] | undefined {
+        return this._rowsPerPageOptions();
+    }
+    set rowsPerPageOptions(v: any[] | undefined) {
+        this._rowsPerPageOptions.set(v);
+    }
+    private _alwaysShowPaginator = signal<boolean>(true);
+    get alwaysShowPaginator(): boolean {
+        return this._alwaysShowPaginator();
+    }
+    set alwaysShowPaginator(v: boolean) {
+        this._alwaysShowPaginator.set(v);
+    }
+    private _paginatorPosition = signal<'top' | 'bottom' | 'both'>('bottom');
+    get paginatorPosition(): 'top' | 'bottom' | 'both' {
+        return this._paginatorPosition();
+    }
+    set paginatorPosition(v: 'top' | 'bottom' | 'both') {
+        this._paginatorPosition.set(v);
+    }
+    private _paginatorStyleClass = signal<string | undefined>(undefined);
+    get paginatorStyleClass(): string | undefined {
+        return this._paginatorStyleClass();
+    }
+    set paginatorStyleClass(v: string | undefined) {
+        this._paginatorStyleClass.set(v);
+    }
+    private _paginatorDropdownAppendTo = signal<any>(undefined);
+    get paginatorDropdownAppendTo(): any {
+        return this._paginatorDropdownAppendTo();
+    }
+    set paginatorDropdownAppendTo(v: any) {
+        this._paginatorDropdownAppendTo.set(v);
+    }
+    private _currentPageReportTemplate = signal<string>('{currentPage} of {totalPages}');
+    get currentPageReportTemplate(): string {
+        return this._currentPageReportTemplate();
+    }
+    set currentPageReportTemplate(v: string) {
+        this._currentPageReportTemplate.set(v);
+    }
+    private _showCurrentPageReport = signal<boolean | undefined>(undefined);
+    get showCurrentPageReport(): boolean | undefined {
+        return this._showCurrentPageReport();
+    }
+    set showCurrentPageReport(v: boolean | undefined) {
+        this._showCurrentPageReport.set(v);
+    }
+    private _showJumpToPageDropdown = signal<boolean | undefined>(undefined);
+    get showJumpToPageDropdown(): boolean | undefined {
+        return this._showJumpToPageDropdown();
+    }
+    set showJumpToPageDropdown(v: boolean | undefined) {
+        this._showJumpToPageDropdown.set(v);
+    }
+    private _showFirstLastIcon = signal<boolean>(true);
+    get showFirstLastIcon(): boolean {
+        return this._showFirstLastIcon();
+    }
+    set showFirstLastIcon(v: boolean) {
+        this._showFirstLastIcon.set(v);
+    }
+    private _showPageLinks = signal<boolean>(true);
+    get showPageLinks(): boolean {
+        return this._showPageLinks();
+    }
+    set showPageLinks(v: boolean) {
+        this._showPageLinks.set(v);
+    }
+    private _defaultSortOrder = signal<number>(1);
+    get defaultSortOrder(): number {
+        return this._defaultSortOrder();
+    }
+    set defaultSortOrder(v: number) {
+        this._defaultSortOrder.set(v);
+    }
+    private _sortMode = signal<'single' | 'multiple'>('single');
+    get sortMode(): 'single' | 'multiple' {
+        return this._sortMode();
+    }
+    set sortMode(v: 'single' | 'multiple') {
+        this._sortMode.set(v);
+    }
+    private _resetPageOnSort = signal<boolean>(true);
+    get resetPageOnSort(): boolean {
+        return this._resetPageOnSort();
+    }
+    set resetPageOnSort(v: boolean) {
+        this._resetPageOnSort.set(v);
+    }
+    private _customSort = signal<boolean | undefined>(undefined);
+    get customSort(): boolean | undefined {
+        return this._customSort();
+    }
+    set customSort(v: boolean | undefined) {
+        this._customSort.set(v);
+    }
+    private _selectionMode = signal<TreeTableSelectionMode | undefined>(undefined);
+    get selectionMode(): TreeTableSelectionMode | undefined {
+        return this._selectionMode();
+    }
+    set selectionMode(v: TreeTableSelectionMode | undefined) {
+        this._selectionMode.set(v);
+    }
+    private _selection = signal<any>(undefined);
+    get selection(): any {
+        return this._selection();
+    }
+    set selection(v: any) {
+        this._selection.set(v);
+    }
+    private _contextMenuSelection = signal<any>(undefined);
+    get contextMenuSelection(): any {
+        return this._contextMenuSelection();
+    }
+    set contextMenuSelection(v: any) {
+        this._contextMenuSelection.set(v);
+    }
+    private _dataKey = signal<string | undefined>(undefined);
+    get dataKey(): string | undefined {
+        return this._dataKey();
+    }
+    set dataKey(v: string | undefined) {
+        this._dataKey.set(v);
+    }
+    private _metaKeySelection = signal<boolean>(false);
+    get metaKeySelection(): boolean {
+        return this._metaKeySelection();
+    }
+    set metaKeySelection(v: boolean) {
+        this._metaKeySelection.set(v);
+    }
+    private _compareSelectionBy = signal<string>('deepEquals');
+    get compareSelectionBy(): string {
+        return this._compareSelectionBy();
+    }
+    set compareSelectionBy(v: string) {
+        this._compareSelectionBy.set(v);
+    }
+    private _rowHover = signal<boolean | undefined>(undefined);
+    get rowHover(): boolean | undefined {
+        return this._rowHover();
+    }
+    set rowHover(v: boolean | undefined) {
+        this._rowHover.set(v);
+    }
+    private _loading = signal<boolean | undefined>(undefined);
+    get loading(): boolean | undefined {
+        return this._loading();
+    }
+    set loading(v: boolean | undefined) {
+        this._loading.set(v);
+    }
+    private _loadingIcon = signal<string | undefined>(undefined);
+    get loadingIcon(): string | undefined {
+        return this._loadingIcon();
+    }
+    set loadingIcon(v: string | undefined) {
+        this._loadingIcon.set(v);
+    }
+    private _showLoader = signal<boolean>(true);
+    get showLoader(): boolean {
+        return this._showLoader();
+    }
+    set showLoader(v: boolean) {
+        this._showLoader.set(v);
+    }
+    private _scrollable = signal<boolean | undefined>(undefined);
+    get scrollable(): boolean | undefined {
+        return this._scrollable();
+    }
+    set scrollable(v: boolean | undefined) {
+        this._scrollable.set(v);
+    }
+    private _scrollHeight = signal<string | undefined>(undefined);
+    get scrollHeight(): string | undefined {
+        return this._scrollHeight();
+    }
+    set scrollHeight(v: string | undefined) {
+        this._scrollHeight.set(v);
+    }
+    private _virtualScroll = signal<boolean | undefined>(undefined);
+    get virtualScroll(): boolean | undefined {
+        return this._virtualScroll();
+    }
+    set virtualScroll(v: boolean | undefined) {
+        this._virtualScroll.set(v);
+    }
+    private _virtualScrollItemSize = signal<number | undefined>(undefined);
+    get virtualScrollItemSize(): number | undefined {
+        return this._virtualScrollItemSize();
+    }
+    set virtualScrollItemSize(v: number | undefined) {
+        this._virtualScrollItemSize.set(v);
+    }
+    private _virtualScrollOptions = signal<any>(undefined);
+    get virtualScrollOptions(): any {
+        return this._virtualScrollOptions();
+    }
+    set virtualScrollOptions(v: any) {
+        this._virtualScrollOptions.set(v);
+    }
+    private _virtualScrollDelay = signal<number>(150);
+    get virtualScrollDelay(): number {
+        return this._virtualScrollDelay();
+    }
+    set virtualScrollDelay(v: number) {
+        this._virtualScrollDelay.set(v);
+    }
+    private _frozenWidth = signal<string | undefined>(undefined);
+    get frozenWidth(): string | undefined {
+        return this._frozenWidth();
+    }
+    set frozenWidth(v: string | undefined) {
+        this._frozenWidth.set(v);
+    }
+    private _frozenColumns = signal<any>(undefined);
+    get frozenColumns(): any {
+        return this._frozenColumns();
+    }
+    set frozenColumns(v: any) {
+        this._frozenColumns.set(v);
+    }
+    private _resizableColumns = signal<boolean | undefined>(undefined);
+    get resizableColumns(): boolean | undefined {
+        return this._resizableColumns();
+    }
+    set resizableColumns(v: boolean | undefined) {
+        this._resizableColumns.set(v);
+    }
+    private _columnResizeMode = signal<string>('fit');
+    get columnResizeMode(): string {
+        return this._columnResizeMode();
+    }
+    set columnResizeMode(v: string) {
+        this._columnResizeMode.set(v);
+    }
+    private _reorderableColumns = signal<boolean | undefined>(undefined);
+    get reorderableColumns(): boolean | undefined {
+        return this._reorderableColumns();
+    }
+    set reorderableColumns(v: boolean | undefined) {
+        this._reorderableColumns.set(v);
+    }
+    private _contextMenu = signal<any>(undefined);
+    get contextMenu(): any {
+        return this._contextMenu();
+    }
+    set contextMenu(v: any) {
+        this._contextMenu.set(v);
+    }
+    private _rowTrackBy = signal<Function>((index: number, item: any) => item);
+    get rowTrackBy(): Function {
+        return this._rowTrackBy();
+    }
+    set rowTrackBy(v: Function) {
+        this._rowTrackBy.set(v);
+    }
+    private _filters = signal<any>({});
+    get filters(): any {
+        return this._filters();
+    }
+    set filters(v: any) {
+        this._filters.set(v);
+    }
+    private _globalFilterFields = signal<string[] | undefined>(undefined);
+    get globalFilterFields(): string[] | undefined {
+        return this._globalFilterFields();
+    }
+    set globalFilterFields(v: string[] | undefined) {
+        this._globalFilterFields.set(v);
+    }
+    private _filterDelay = signal<number>(300);
+    get filterDelay(): number {
+        return this._filterDelay();
+    }
+    set filterDelay(v: number) {
+        this._filterDelay.set(v);
+    }
+    private _filterMode = signal<string>('lenient');
+    get filterMode(): string {
+        return this._filterMode();
+    }
+    set filterMode(v: string) {
+        this._filterMode.set(v);
+    }
+    private _filterLocale = signal<string | undefined>(undefined);
+    get filterLocale(): string | undefined {
+        return this._filterLocale();
+    }
+    set filterLocale(v: string | undefined) {
+        this._filterLocale.set(v);
+    }
+    private _paginatorLocale = signal<string | undefined>(undefined);
+    get paginatorLocale(): string | undefined {
+        return this._paginatorLocale();
+    }
+    set paginatorLocale(v: string | undefined) {
+        this._paginatorLocale.set(v);
+    }
+    private _sortField = signal<string | undefined | null>(undefined);
+    get sortField(): string | undefined | null {
+        return this._sortField();
+    }
+    set sortField(v: string | undefined | null) {
+        this._sortField.set(v);
+    }
+    private _sortOrder = signal<number>(1);
+    get sortOrder(): number {
+        return this._sortOrder();
+    }
+    set sortOrder(v: number) {
+        this._sortOrder.set(v);
+    }
+    private _multiSortMeta = signal<any>(undefined);
+    get multiSortMeta(): any {
+        return this._multiSortMeta();
+    }
+    set multiSortMeta(v: any) {
+        this._multiSortMeta.set(v);
+    }
+    private _selectionKeys = signal<any>(undefined);
+    get selectionKeys(): any {
+        return this._selectionKeys();
+    }
+    set selectionKeys(v: any) {
+        this._selectionKeys.set(v);
+    }
+    private _showGridlines = signal<boolean>(false);
+    get showGridlines(): boolean {
+        return this._showGridlines();
+    }
+    set showGridlines(v: boolean) {
+        this._showGridlines.set(v);
+    }
 
     // Event handlers
     onSelectionChange(event: any) {
@@ -3018,26 +3416,35 @@ class TestBasicTreeTableComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TreeTableModule, FormsModule],
     template: `
         <p-treetable [value]="value" [columns]="columns">
             <ng-template #caption>Custom TreeTable Caption</ng-template>
             <ng-template #header let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">{{ col.header }}</th>
+                    @for (col of columns; track col.field) {
+                        <th>{{ col.header }}</th>
+                    }
                 </tr>
             </ng-template>
             <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
                 <tr [ttRow]="rowNode">
-                    <td *ngFor="let col of columns; let i = index" [ttEditableColumn]="rowData" [ttEditableColumnField]="col.field">
-                        <p-treetable-toggler [rowNode]="rowNode" *ngIf="i == 0"></p-treetable-toggler>
-                        {{ rowData[col.field] }}
-                    </td>
+                    @for (col of columns; track col.field; let i = $index) {
+                        <td [ttEditableColumn]="rowData" [ttEditableColumnField]="col.field">
+                            @if (i == 0) {
+                                <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
+                            }
+                            {{ rowData[col.field] }}
+                        </td>
+                    }
                 </tr>
             </ng-template>
             <ng-template #footer let-columns>
                 <tr>
-                    <td *ngFor="let col of columns">Footer for {{ col.header }}</td>
+                    @for (col of columns; track col.field) {
+                        <td>Footer for {{ col.header }}</td>
+                    }
                 </tr>
             </ng-template>
             <ng-template #summary>Custom TreeTable Summary</ng-template>
@@ -3055,7 +3462,8 @@ class TestTemplatesTreeTableComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TreeTableModule, FormsModule],
     template: `
         <p-treetable
             #treetable
@@ -3098,49 +3506,241 @@ class TestTemplatesTreeTableComponent {
 class TestDynamicTreeTableComponent {
     @ViewChild('treetable') treetable!: TreeTable;
 
-    value: TreeNode[] = [
+    private _value = signal<TreeNode[]>([
         {
             data: { name: 'Root', size: '100KB', type: 'Folder' },
             children: [{ data: { name: 'Child', size: '50KB', type: 'File' } }]
         }
-    ];
+    ]);
+    get value(): TreeNode[] {
+        return this._value();
+    }
+    set value(v: TreeNode[]) {
+        this._value.set(v);
+    }
 
-    columns = [
+    private _columns = signal<any[]>([
         { field: 'name', header: 'Name' },
         { field: 'size', header: 'Size' },
         { field: 'type', header: 'Type' }
-    ];
+    ]);
+    get columns(): any[] {
+        return this._columns();
+    }
+    set columns(v: any[]) {
+        this._columns.set(v);
+    }
 
-    autoLayout: boolean | undefined;
-    paginator: boolean | undefined;
-    rows: number | undefined;
-    first: number = 0;
-    lazy: boolean = false;
-    loading: boolean | undefined;
-    scrollable: boolean | undefined;
-    virtualScroll: boolean | undefined;
-    selectionMode: TreeTableSelectionMode | undefined;
-    sortMode: 'single' | 'multiple' = 'single';
-    filterMode: string = 'lenient';
-    showGridlines: boolean = false;
-    pageLinks: number = 5;
-    filterDelay: number = 300;
-    virtualScrollDelay: number = 150;
-    tableStyleClass: string | undefined;
-    columnResizeMode: string = 'fit';
-    tableStyle: any;
-    rowsPerPageOptions: any[] | undefined;
-    globalFilterFields: string[] | undefined;
-    defaultSortOrder: number = 1;
-    virtualScrollItemSize: number | undefined;
-    virtualScrollOptions: any;
-    scrollHeight: string | undefined;
-    sortField: string | null | undefined;
-    sortOrder: number = 1;
-    multiSortMeta: any;
-    selection: any;
-    selectionKeys: any;
-    filters: any = {};
+    private _autoLayout = signal<boolean | undefined>(undefined);
+    get autoLayout(): boolean | undefined {
+        return this._autoLayout();
+    }
+    set autoLayout(v: boolean | undefined) {
+        this._autoLayout.set(v);
+    }
+    private _paginator = signal<boolean | undefined>(undefined);
+    get paginator(): boolean | undefined {
+        return this._paginator();
+    }
+    set paginator(v: boolean | undefined) {
+        this._paginator.set(v);
+    }
+    private _rows = signal<number | undefined>(undefined);
+    get rows(): number | undefined {
+        return this._rows();
+    }
+    set rows(v: number | undefined) {
+        this._rows.set(v);
+    }
+    private _first = signal<number>(0);
+    get first(): number {
+        return this._first();
+    }
+    set first(v: number) {
+        this._first.set(v);
+    }
+    private _lazy = signal<boolean>(false);
+    get lazy(): boolean {
+        return this._lazy();
+    }
+    set lazy(v: boolean) {
+        this._lazy.set(v);
+    }
+    private _loading = signal<boolean | undefined>(undefined);
+    get loading(): boolean | undefined {
+        return this._loading();
+    }
+    set loading(v: boolean | undefined) {
+        this._loading.set(v);
+    }
+    private _scrollable = signal<boolean | undefined>(undefined);
+    get scrollable(): boolean | undefined {
+        return this._scrollable();
+    }
+    set scrollable(v: boolean | undefined) {
+        this._scrollable.set(v);
+    }
+    private _virtualScroll = signal<boolean | undefined>(undefined);
+    get virtualScroll(): boolean | undefined {
+        return this._virtualScroll();
+    }
+    set virtualScroll(v: boolean | undefined) {
+        this._virtualScroll.set(v);
+    }
+    private _selectionMode = signal<TreeTableSelectionMode | undefined>(undefined);
+    get selectionMode(): TreeTableSelectionMode | undefined {
+        return this._selectionMode();
+    }
+    set selectionMode(v: TreeTableSelectionMode | undefined) {
+        this._selectionMode.set(v);
+    }
+    private _sortMode = signal<'single' | 'multiple'>('single');
+    get sortMode(): 'single' | 'multiple' {
+        return this._sortMode();
+    }
+    set sortMode(v: 'single' | 'multiple') {
+        this._sortMode.set(v);
+    }
+    private _filterMode = signal<string>('lenient');
+    get filterMode(): string {
+        return this._filterMode();
+    }
+    set filterMode(v: string) {
+        this._filterMode.set(v);
+    }
+    private _showGridlines = signal<boolean>(false);
+    get showGridlines(): boolean {
+        return this._showGridlines();
+    }
+    set showGridlines(v: boolean) {
+        this._showGridlines.set(v);
+    }
+    private _pageLinks = signal<number>(5);
+    get pageLinks(): number {
+        return this._pageLinks();
+    }
+    set pageLinks(v: number) {
+        this._pageLinks.set(v);
+    }
+    private _filterDelay = signal<number>(300);
+    get filterDelay(): number {
+        return this._filterDelay();
+    }
+    set filterDelay(v: number) {
+        this._filterDelay.set(v);
+    }
+    private _virtualScrollDelay = signal<number>(150);
+    get virtualScrollDelay(): number {
+        return this._virtualScrollDelay();
+    }
+    set virtualScrollDelay(v: number) {
+        this._virtualScrollDelay.set(v);
+    }
+    private _tableStyleClass = signal<string | undefined>(undefined);
+    get tableStyleClass(): string | undefined {
+        return this._tableStyleClass();
+    }
+    set tableStyleClass(v: string | undefined) {
+        this._tableStyleClass.set(v);
+    }
+    private _columnResizeMode = signal<string>('fit');
+    get columnResizeMode(): string {
+        return this._columnResizeMode();
+    }
+    set columnResizeMode(v: string) {
+        this._columnResizeMode.set(v);
+    }
+    private _tableStyle = signal<any>(undefined);
+    get tableStyle(): any {
+        return this._tableStyle();
+    }
+    set tableStyle(v: any) {
+        this._tableStyle.set(v);
+    }
+    private _rowsPerPageOptions = signal<any[] | undefined>(undefined);
+    get rowsPerPageOptions(): any[] | undefined {
+        return this._rowsPerPageOptions();
+    }
+    set rowsPerPageOptions(v: any[] | undefined) {
+        this._rowsPerPageOptions.set(v);
+    }
+    private _globalFilterFields = signal<string[] | undefined>(undefined);
+    get globalFilterFields(): string[] | undefined {
+        return this._globalFilterFields();
+    }
+    set globalFilterFields(v: string[] | undefined) {
+        this._globalFilterFields.set(v);
+    }
+    private _defaultSortOrder = signal<number>(1);
+    get defaultSortOrder(): number {
+        return this._defaultSortOrder();
+    }
+    set defaultSortOrder(v: number) {
+        this._defaultSortOrder.set(v);
+    }
+    private _virtualScrollItemSize = signal<number | undefined>(undefined);
+    get virtualScrollItemSize(): number | undefined {
+        return this._virtualScrollItemSize();
+    }
+    set virtualScrollItemSize(v: number | undefined) {
+        this._virtualScrollItemSize.set(v);
+    }
+    private _virtualScrollOptions = signal<any>(undefined);
+    get virtualScrollOptions(): any {
+        return this._virtualScrollOptions();
+    }
+    set virtualScrollOptions(v: any) {
+        this._virtualScrollOptions.set(v);
+    }
+    private _scrollHeight = signal<string | undefined>(undefined);
+    get scrollHeight(): string | undefined {
+        return this._scrollHeight();
+    }
+    set scrollHeight(v: string | undefined) {
+        this._scrollHeight.set(v);
+    }
+    private _sortField = signal<string | null | undefined>(undefined);
+    get sortField(): string | null | undefined {
+        return this._sortField();
+    }
+    set sortField(v: string | null | undefined) {
+        this._sortField.set(v);
+    }
+    private _sortOrder = signal<number>(1);
+    get sortOrder(): number {
+        return this._sortOrder();
+    }
+    set sortOrder(v: number) {
+        this._sortOrder.set(v);
+    }
+    private _multiSortMeta = signal<any>(undefined);
+    get multiSortMeta(): any {
+        return this._multiSortMeta();
+    }
+    set multiSortMeta(v: any) {
+        this._multiSortMeta.set(v);
+    }
+    private _selection = signal<any>(undefined);
+    get selection(): any {
+        return this._selection();
+    }
+    set selection(v: any) {
+        this._selection.set(v);
+    }
+    private _selectionKeys = signal<any>(undefined);
+    get selectionKeys(): any {
+        return this._selectionKeys();
+    }
+    set selectionKeys(v: any) {
+        this._selectionKeys.set(v);
+    }
+    private _filters = signal<any>({});
+    get filters(): any {
+        return this._filters();
+    }
+    set filters(v: any) {
+        this._filters.set(v);
+    }
 
     updateValue(newValue: TreeNode[]) {
         this.value = newValue;
@@ -3293,7 +3893,7 @@ describe('TreeTable PT', () => {
             expect(tfoot?.classList.contains('TFOOT_CLASS')).toBe(true);
         });
 
-        xit('should apply string class to header', async () => {
+        it.skip('should apply string class to header', async () => {
             fixture.componentRef.setInput('pt', { header: 'HEADER_CLASS' });
             // Create a mock TemplateRef with proper EmbeddedViewRef
             const mockViewRef = {
@@ -3320,7 +3920,7 @@ describe('TreeTable PT', () => {
             expect(header?.classList.contains('HEADER_CLASS')).toBe(true);
         });
 
-        xit('should apply string class to footer', async () => {
+        it.skip('should apply string class to footer', async () => {
             fixture.componentRef.setInput('pt', { footer: 'FOOTER_CLASS' });
             // Create a mock TemplateRef with proper EmbeddedViewRef
             const mockViewRef = {
@@ -3409,7 +4009,7 @@ describe('TreeTable PT', () => {
 
     // Case 3: Mixed object and string values
     describe('Case 3: Mixed object and string values', () => {
-        xit('should apply mixed PT values', async () => {
+        it.skip('should apply mixed PT values', async () => {
             fixture.componentRef.setInput('scrollable', true);
             fixture.componentRef.setInput('scrollHeight', '200px');
             fixture.componentRef.setInput('pt', {
@@ -3438,7 +4038,7 @@ describe('TreeTable PT', () => {
     // Case 4: Use variables from instance
     // TODO: feature works, test throws error, will be debugged
     // describe('Case 4: Use variables from instance', () => {
-    //     xit('should use instance properties in PT functions', async () => {
+    //     it.skip('should use instance properties in PT functions', async () => {
     //         fixture.componentRef.setInput('scrollable', true);
     //         fixture.componentRef.setInput('scrollHeight', '200px');
     //         fixture.componentRef.setInput('pt', {
@@ -3555,7 +4155,7 @@ describe('TreeTable PT', () => {
 
     // Case 7: Test with scrollable mode
     describe('Scrollable mode PT', () => {
-        xit('should apply PT to scrollable elements', async () => {
+        it.skip('should apply PT to scrollable elements', async () => {
             fixture.componentRef.setInput('scrollable', true);
             fixture.componentRef.setInput('scrollHeight', '400px');
             fixture.componentRef.setInput('pt', {
@@ -3577,7 +4177,7 @@ describe('TreeTable PT', () => {
             expect(scrollableBody?.classList.contains('SCROLLABLE_BODY_CLASS')).toBe(true);
         });
 
-        xit('should apply PT to scrollable header table', async () => {
+        it.skip('should apply PT to scrollable header table', async () => {
             fixture.componentRef.setInput('scrollable', true);
             fixture.componentRef.setInput('pt', {
                 scrollableHeaderTable: 'SCROLLABLE_HEADER_TABLE_CLASS',
@@ -3594,7 +4194,7 @@ describe('TreeTable PT', () => {
             expect(headerBox?.classList.contains('SCROLLABLE_HEADER_BOX_CLASS')).toBe(true);
         });
 
-        xit('should apply PT to scrollable footer elements', async () => {
+        it.skip('should apply PT to scrollable footer elements', async () => {
             fixture.componentRef.setInput('scrollable', true);
             // Create a mock TemplateRef with proper EmbeddedViewRef
             const mockViewRef = {
@@ -3671,7 +4271,7 @@ describe('TreeTable PT', () => {
 
     // Case 10: Test PT hooks
     describe('Case 10: PT Hooks', () => {
-        xit('should execute onAfterViewInit hook', async (done) => {
+        it.skip('should execute onAfterViewInit hook', async () => {
             let hookCalled = false;
 
             fixture.componentRef.setInput('pt', {
@@ -3679,7 +4279,6 @@ describe('TreeTable PT', () => {
                 hooks: {
                     onAfterContentInit: () => {
                         hookCalled = true;
-                        done();
                     }
                 }
             });
@@ -3731,7 +4330,7 @@ describe('TreeTable Global PT', () => {
         expect(wrapper?.classList.contains('GLOBAL_WRAPPER_CLASS')).toBe(true);
     });
 
-    xit('should merge local PT with global PT', async () => {
+    it.skip('should merge local PT with global PT', async () => {
         fixture.componentRef.setInput('pt', {
             host: 'LOCAL_HOST_CLASS',
             scrollableWrapper: 'LOCAL_WRAPPER_CLASS'

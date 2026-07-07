@@ -53,28 +53,30 @@ const mockCountries = [
 ];
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CascadeSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-cascadeselect
-            [(ngModel)]="selectedValue"
-            [options]="options"
-            [optionLabel]="optionLabel"
-            [optionValue]="optionValue"
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [options]="options()"
+            [optionLabel]="optionLabel()"
+            [optionValue]="optionValue()"
             [optionGroupLabel]="optionGroupLabel"
             [optionGroupChildren]="optionGroupChildren"
-            [placeholder]="placeholder"
-            [disabled]="disabled"
-            [panelStyle]="panelStyle"
-            [panelStyleClass]="panelStyleClass"
-            [showClear]="showClear"
+            [placeholder]="placeholder()"
+            [disabled]="disabled()"
+            [panelStyle]="panelStyle()"
+            [panelStyleClass]="panelStyleClass()"
+            [showClear]="showClear()"
             [dataKey]="dataKey"
             [inputId]="inputId"
-            [tabindex]="tabindex"
+            [tabindex]="tabindex()"
             [ariaLabelledBy]="ariaLabelledBy"
             [ariaLabel]="ariaLabel"
-            [loading]="loading"
-            [loadingIcon]="loadingIcon"
-            [appendTo]="appendTo"
+            [loading]="loading()"
+            [loadingIcon]="loadingIcon()"
+            [appendTo]="appendTo()"
             (onChange)="onSelectionChange($event)"
             (onShow)="onPanelShow($event)"
             (onHide)="onPanelHide($event)"
@@ -87,17 +89,27 @@ const mockCountries = [
             <!-- Value template -->
             <ng-template #value let-value let-placeholder="placeholder">
                 <div class="custom-value" data-testid="template-value">
-                    <span *ngIf="value">{{ value.cname || value.name }} - Custom</span>
-                    <span *ngIf="!value">{{ placeholder }}</span>
+                    @if (value) {
+                        <span>{{ value.cname || value.name }} - Custom</span>
+                    }
+                    @if (!value) {
+                        <span>{{ placeholder }}</span>
+                    }
                 </div>
             </ng-template>
 
             <!-- Option template -->
             <ng-template #option let-option let-level="level">
                 <div class="custom-option" data-testid="template-option">
-                    <i class="pi pi-map-marker" *ngIf="level === 0"></i>
-                    <i class="pi pi-building" *ngIf="level === 1"></i>
-                    <i class="pi pi-home" *ngIf="level === 2"></i>
+                    @if (level === 0) {
+                        <i class="pi pi-map-marker"></i>
+                    }
+                    @if (level === 1) {
+                        <i class="pi pi-building"></i>
+                    }
+                    @if (level === 2) {
+                        <i class="pi pi-home"></i>
+                    }
                     <span>{{ option.name || option.cname }}</span>
                 </div>
             </ng-template>
@@ -139,38 +151,40 @@ const mockCountries = [
         </p-cascadeselect>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-cascadeselect formControlName="selectedItems" [options]="formOptions" [optionLabel]="'cname'" [optionGroupLabel]="'name'" [optionGroupChildren]="['states', 'cities']" (onChange)="onFormChange($event)"> </p-cascadeselect>
-        </form>
+        @if (showReactiveForm()) {
+            <form [formGroup]="reactiveForm">
+                <p-cascadeselect formControlName="selectedItems" [options]="formOptions" [optionLabel]="'cname'" [optionGroupLabel]="'name'" [optionGroupChildren]="['states', 'cities']" (onChange)="onFormChange($event)"> </p-cascadeselect>
+            </form>
+        }
     `
 })
 class TestCascadeSelectComponent {
-    selectedValue: any = null as any;
-    options: any[] = [];
+    selectedValue = signal<any>(null as any);
+    options = signal<any[]>([]);
     formOptions: any[] = [];
 
     // Options configuration
-    optionLabel: string | ((item: any) => string) = 'cname';
-    optionValue: string | ((item: any) => any) | undefined;
+    optionLabel = signal<string | ((item: any) => string)>('cname');
+    optionValue = signal<string | ((item: any) => any) | undefined>(undefined);
     optionGroupLabel: string = 'name';
     optionGroupChildren: string[] = ['states', 'cities'];
 
     // Behavior
-    disabled: boolean = false;
-    placeholder: string = 'Select a City';
-    showClear: boolean = false;
+    disabled = signal<boolean>(false);
+    placeholder = signal<string>('Select a City');
+    showClear = signal<boolean>(false);
     dataKey: string | undefined;
     inputId: string | undefined;
-    tabindex: number = 0;
+    tabindex = signal<number>(0);
     ariaLabelledBy: string | undefined;
     ariaLabel: string = 'Test cascade select';
-    loading: boolean = false;
-    loadingIcon: string | undefined;
-    appendTo: any;
+    loading = signal<boolean>(false);
+    loadingIcon = signal<string | undefined>(undefined);
+    appendTo = signal<any>(undefined);
 
     // Styling
-    panelStyle: any = {};
-    panelStyleClass: string = '';
+    panelStyle = signal<any>({});
+    panelStyleClass = signal<string>('');
 
     // Event tracking
     changeEvent: CascadeSelectChangeEvent | null = null as any;
@@ -184,7 +198,7 @@ class TestCascadeSelectComponent {
 
     // Form handling
     reactiveForm: FormGroup;
-    showReactiveForm: boolean = false;
+    showReactiveForm = signal<boolean>(false);
 
     // Dynamic data testing
     signalOptions = signal(mockCountries.slice(0, 1));
@@ -226,7 +240,7 @@ class TestCascadeSelectComponent {
         this.blurEvent = event;
     }
 
-    onClearEvent() {
+    onClearEvent(event?: any) {
         this.clearEvent = true;
     }
 
@@ -238,7 +252,7 @@ class TestCascadeSelectComponent {
     loadLateOptions() {
         setTimeout(() => {
             this.lateLoadedOptions = mockCountries.slice(0, 1);
-            this.options = this.lateLoadedOptions;
+            this.options.set(this.lateLoadedOptions);
         }, 100);
     }
 
@@ -270,33 +284,45 @@ class TestCascadeSelectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CascadeSelectModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-cascadeselect
-            [(ngModel)]="selectedValue"
-            [options]="options"
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [options]="options()"
             [optionLabel]="'cname'"
             [optionGroupLabel]="'name'"
             [optionGroupChildren]="['states', 'cities']"
-            [placeholder]="placeholder"
-            [disabled]="disabled"
-            [loading]="loading"
-            [showClear]="showClear"
+            [placeholder]="placeholder()"
+            [disabled]="disabled()"
+            [loading]="loading()"
+            [showClear]="showClear()"
         >
             <!-- Value template with #value -->
             <ng-template #value let-value let-placeholder="placeholder">
                 <div class="template-value" [attr.data-testid]="'template-value'">
-                    <span class="value-text" *ngIf="value">{{ value.cname || value.name }} - #template</span>
-                    <span class="placeholder-text" *ngIf="!value">{{ placeholder }} (#template)</span>
+                    @if (value) {
+                        <span class="value-text">{{ value.cname || value.name }} - #template</span>
+                    }
+                    @if (!value) {
+                        <span class="placeholder-text">{{ placeholder }} (#template)</span>
+                    }
                 </div>
             </ng-template>
 
             <!-- Option template with #option -->
             <ng-template #option let-option let-level="level">
                 <div class="template-option" [attr.data-testid]="'template-option'" [attr.data-level]="level">
-                    <i class="pi pi-flag" *ngIf="level === 0"></i>
-                    <i class="pi pi-map" *ngIf="level === 1"></i>
-                    <i class="pi pi-building" *ngIf="level === 2"></i>
+                    @if (level === 0) {
+                        <i class="pi pi-flag"></i>
+                    }
+                    @if (level === 1) {
+                        <i class="pi pi-map"></i>
+                    }
+                    @if (level === 2) {
+                        <i class="pi pi-building"></i>
+                    }
                     <span class="option-text">{{ option.name || option.cname }} (Level {{ level }})</span>
                 </div>
             </ng-template>
@@ -306,7 +332,7 @@ class TestCascadeSelectComponent {
                 <div class="template-header" [attr.data-testid]="'template-header'">
                     <i class="pi pi-search"></i>
                     <h4 class="header-title">Select Location (#template)</h4>
-                    <span class="header-subtitle">Available: {{ options.length }} countries</span>
+                    <span class="header-subtitle">Available: {{ options().length }} countries</span>
                 </div>
             </ng-template>
 
@@ -347,12 +373,12 @@ class TestCascadeSelectComponent {
     `
 })
 class TestTemplateCascadeSelectComponent {
-    selectedValue: any = null as any;
-    options: any[] = mockCountries;
-    placeholder: string = 'Select Location';
-    disabled: boolean = false;
-    loading: boolean = false;
-    showClear: boolean = true;
+    selectedValue = signal<any>(null as any);
+    options = signal<any[]>(mockCountries);
+    placeholder = signal<string>('Select Location');
+    disabled = signal<boolean>(false);
+    loading = signal<boolean>(false);
+    showClear = signal<boolean>(true);
 }
 
 describe('CascadeSelect', () => {
@@ -365,8 +391,7 @@ describe('CascadeSelect', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CascadeSelectModule, SharedModule, FormsModule, ReactiveFormsModule],
-            declarations: [TestCascadeSelectComponent, TestTemplateCascadeSelectComponent],
+            imports: [CascadeSelectModule, SharedModule, FormsModule, ReactiveFormsModule, TestCascadeSelectComponent, TestTemplateCascadeSelectComponent],
             providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
         }).compileComponents();
 
@@ -411,16 +436,16 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with simple array', async () => {
-            testComponent.options = testComponent.stringOptions;
+            testComponent.options.set(testComponent.stringOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(3);
-            expect(testComponent.options[0]).toBe('Option 1');
+            expect(testComponent.options().length).toBe(3);
+            expect(testComponent.options()[0]).toBe('Option 1');
         });
 
         it('should work with string array', async () => {
-            testComponent.options = testComponent.stringOptions;
+            testComponent.options.set(testComponent.stringOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -429,7 +454,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with number array', async () => {
-            testComponent.options = testComponent.numberOptions;
+            testComponent.options.set(testComponent.numberOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -438,8 +463,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with object array', async () => {
-            testComponent.options = testComponent.objectOptions;
-            testComponent.optionLabel = 'name';
+            testComponent.options.set(testComponent.objectOptions);
+            testComponent.optionLabel.set('name');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -458,39 +483,39 @@ describe('CascadeSelect', () => {
                 }
             });
 
-            testComponent.options = (testComponent as any).dynamicOptions;
+            testComponent.options.set((testComponent as any).dynamicOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(2);
+            expect(testComponent.options().length).toBe(2);
         });
 
         it('should work with signals', async () => {
-            testComponent.options = testComponent.signalOptions();
+            testComponent.options.set(testComponent.signalOptions());
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(1);
-            expect(testComponent.options[0].name).toBe('Australia');
+            expect(testComponent.options().length).toBe(1);
+            expect(testComponent.options()[0].name).toBe('Australia');
         });
 
         it('should work with observables and async pipe', async () => {
             testComponent.observableOptions$.subscribe((options) => {
-                testComponent.options = options;
+                testComponent.options.set(options);
                 testFixture.changeDetectorRef.markForCheck();
             });
 
             await testFixture.whenStable();
-            expect(testComponent.options.length).toBe(1);
-            expect(testComponent.options[0].name).toBe('Australia');
+            expect(testComponent.options().length).toBe(1);
+            expect(testComponent.options()[0].name).toBe('Australia');
         });
 
         it('should work with late-loaded values (HTTP/setTimeout)', async () => {
             testComponent.loadLateOptions();
             await new Promise((resolve) => setTimeout(resolve, 150));
 
-            expect(testComponent.options.length).toBe(1);
-            expect(testComponent.options[0].name).toBe('Australia');
+            expect(testComponent.options().length).toBe(1);
+            expect(testComponent.options()[0].name).toBe('Australia');
         });
     });
 
@@ -500,7 +525,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with ReactiveFormsModule', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -512,7 +537,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with NgModel two-way binding', async () => {
-            testComponent.selectedValue = mockCountries[0].states[0].cities[0];
+            testComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -521,7 +546,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle FormControl states (pristine, dirty, touched, valid, invalid)', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -543,7 +568,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle setValue and getValue operations', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -558,7 +583,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle updateOn configurations', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -573,8 +598,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with optionLabel as string', async () => {
-            testComponent.optionLabel = 'name';
-            testComponent.options = testComponent.objectOptions;
+            testComponent.optionLabel.set('name');
+            testComponent.options.set(testComponent.objectOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -583,8 +608,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with optionLabel as function', async () => {
-            testComponent.optionLabel = testComponent.getLabelFunction();
-            testComponent.options = [{ customName: 'Custom Australia', name: 'Australia' }];
+            testComponent.optionLabel.set(testComponent.getLabelFunction());
+            testComponent.options.set([{ customName: 'Custom Australia', name: 'Australia' }]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -593,8 +618,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with optionValue as string', async () => {
-            testComponent.optionValue = 'code';
-            testComponent.options = testComponent.objectOptions;
+            testComponent.optionValue.set('code');
+            testComponent.options.set(testComponent.objectOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -603,8 +628,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with optionValue as function', async () => {
-            testComponent.optionValue = testComponent.getValueFunction();
-            testComponent.options = [{ customValue: 'CUSTOM_AU', code: 'AU', name: 'Australia' }];
+            testComponent.optionValue.set(testComponent.getValueFunction());
+            testComponent.options.set([{ customValue: 'CUSTOM_AU', code: 'AU', name: 'Australia' }]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -613,22 +638,22 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with dynamic updated values', async () => {
-            testComponent.options = [mockCountries[0]];
+            testComponent.options.set([mockCountries[0]]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(1);
+            expect(testComponent.options().length).toBe(1);
 
             // Update dynamically
-            testComponent.options = mockCountries;
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(2);
+            expect(testComponent.options().length).toBe(2);
         });
 
         it('should work with placeholder', async () => {
-            testComponent.placeholder = 'Custom placeholder';
+            testComponent.placeholder.set('Custom placeholder');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -637,7 +662,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with loading state', async () => {
-            testComponent.loading = true;
+            testComponent.loading.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -646,7 +671,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with appendTo', async () => {
-            testComponent.appendTo = 'body';
+            testComponent.appendTo.set('body');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -662,8 +687,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should work with panelStyle and panelStyleClass', async () => {
-            testComponent.panelStyle = { background: 'lightgray' };
-            testComponent.panelStyleClass = 'custom-panel';
+            testComponent.panelStyle.set({ background: 'lightgray' });
+            testComponent.panelStyleClass.set('custom-panel');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -675,7 +700,7 @@ describe('CascadeSelect', () => {
 
     describe('Output Event Emitters', () => {
         beforeEach(async () => {
-            testComponent.options = mockCountries;
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
         });
@@ -714,8 +739,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should emit onClear event', async () => {
-            testComponent.showClear = true;
-            testComponent.selectedValue = mockCountries[0].states[0].cities[0];
+            testComponent.showClear.set(true);
+            testComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -741,7 +766,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle #template with context parameters', async () => {
-            testComponent.options = mockCountries;
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -801,7 +826,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should update aria-expanded when panel is opened', async () => {
-            testComponent.options = mockCountries;
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             testFixture.detectChanges();
@@ -849,28 +874,28 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle empty options gracefully', async () => {
-            testComponent.options = [];
+            testComponent.options.set([]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(0);
+            expect(testComponent.options().length).toBe(0);
             expect(() => testFixture.changeDetectorRef.markForCheck()).not.toThrow();
         });
 
         it('should handle null/undefined values', async () => {
-            testComponent.selectedValue = null as any;
+            testComponent.selectedValue.set(null as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(() => testFixture.changeDetectorRef.markForCheck()).not.toThrow();
 
-            testComponent.selectedValue = undefined as any;
+            testComponent.selectedValue.set(undefined as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(() => testFixture.changeDetectorRef.markForCheck()).not.toThrow();
         });
 
         it('should handle hierarchical option navigation', async () => {
-            testComponent.options = mockCountries;
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -891,7 +916,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle disabled state', async () => {
-            testComponent.disabled = true;
+            testComponent.disabled.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -900,8 +925,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle loading state with custom icon', async () => {
-            testComponent.loading = true;
-            testComponent.loadingIcon = 'pi pi-spin pi-cog';
+            testComponent.loading.set(true);
+            testComponent.loadingIcon.set('pi pi-spin pi-cog');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -935,17 +960,17 @@ describe('CascadeSelect', () => {
             }
 
             const startTime = performance.now();
-            testComponent.options = largeData;
+            testComponent.options.set(largeData);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             const endTime = performance.now();
 
             expect(endTime - startTime).toBeLessThan(1000);
-            expect(testComponent.options.length).toBe(100);
+            expect(testComponent.options().length).toBe(100);
         });
 
         it('should handle special characters and unicode', async () => {
-            testComponent.options = [
+            testComponent.options.set([
                 {
                     name: "Côte d'Ivoire",
                     code: 'CI',
@@ -956,16 +981,16 @@ describe('CascadeSelect', () => {
                         }
                     ]
                 }
-            ];
+            ]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options[0].name).toBe("Côte d'Ivoire");
-            expect(testComponent.options[0].states[0].cities[0].cname).toBe('Ville avec accents éàü');
+            expect(testComponent.options()[0].name).toBe("Côte d'Ivoire");
+            expect(testComponent.options()[0].states[0].cities[0].cname).toBe('Ville avec accents éàü');
         });
 
         it('should handle malformed option data gracefully', async () => {
-            testComponent.options = [
+            testComponent.options.set([
                 {
                     name: 'Valid Country',
                     code: 'VC',
@@ -976,12 +1001,12 @@ describe('CascadeSelect', () => {
                     code: 'AC',
                     states: [] as any[] // Empty states array
                 }
-            ];
+            ]);
 
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.options.length).toBe(2);
+            expect(testComponent.options().length).toBe(2);
         });
     });
 
@@ -998,8 +1023,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle invalid option configuration', async () => {
-            testComponent.optionLabel = 'nonexistent';
-            testComponent.options = mockCountries;
+            testComponent.optionLabel.set('nonexistent');
+            testComponent.options.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1017,8 +1042,8 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle showClear performance', async () => {
-            testComponent.showClear = true;
-            testComponent.selectedValue = mockCountries[0].states[0].cities[0];
+            testComponent.showClear.set(true);
+            testComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1032,7 +1057,7 @@ describe('CascadeSelect', () => {
         });
 
         it('should handle tabindex configuration', async () => {
-            testComponent.tabindex = 5;
+            testComponent.tabindex.set(5);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1049,7 +1074,7 @@ describe('CascadeSelect', () => {
         describe('Value Template (valueTemplate)', () => {
             it('should render #value with value and placeholder context', async () => {
                 // Test with no value (placeholder scenario)
-                templateComponent.selectedValue = null as any;
+                templateComponent.selectedValue.set(null as any);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1065,7 +1090,7 @@ describe('CascadeSelect', () => {
 
             it('should render #value with selected value context', async () => {
                 // Test with selected value
-                templateComponent.selectedValue = mockCountries[0].states[0].cities[0];
+                templateComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1214,7 +1239,7 @@ describe('CascadeSelect', () => {
 
         describe('Loading Icon Template (loadingIconTemplate)', () => {
             it('should render #loadingicon during loading state', async () => {
-                templateComponent.loading = true;
+                templateComponent.loading.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1262,8 +1287,8 @@ describe('CascadeSelect', () => {
 
         describe('Clear Icon Template (clearIconTemplate)', () => {
             it('should render #clearicon when showClear is enabled', async () => {
-                templateComponent.selectedValue = mockCountries[0].states[0].cities[0];
-                templateComponent.showClear = true;
+                templateComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
+                templateComponent.showClear.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1279,8 +1304,8 @@ describe('CascadeSelect', () => {
             });
 
             it('should handle clear icon click functionality', async () => {
-                templateComponent.selectedValue = mockCountries[0].states[0].cities[0];
-                templateComponent.showClear = true;
+                templateComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
+                templateComponent.showClear.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1317,9 +1342,9 @@ describe('CascadeSelect', () => {
             });
 
             it('should handle context parameters correctly for all templates', async () => {
-                templateComponent.selectedValue = mockCountries[0].states[0].cities[0];
-                templateComponent.loading = true;
-                templateComponent.showClear = true;
+                templateComponent.selectedValue.set(mockCountries[0].states[0].cities[0]);
+                templateComponent.loading.set(true);
+                templateComponent.showClear.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1398,7 +1423,7 @@ describe('CascadeSelect', () => {
 
             it('should handle template context data binding correctly', async () => {
                 // Test complex data binding scenarios in templates
-                templateComponent.options = [
+                templateComponent.options.set([
                     {
                         name: 'Test Country',
                         code: 'TC',
@@ -1409,7 +1434,7 @@ describe('CascadeSelect', () => {
                             }
                         ]
                     }
-                ];
+                ]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 

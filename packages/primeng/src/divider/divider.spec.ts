@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,27 +6,30 @@ import { providePrimeNG } from 'primeng/config';
 import { Divider, DividerModule } from './divider';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: ` <p-divider></p-divider> `
 })
 class TestBasicDividerComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: `
-        <p-divider [layout]="layout" [type]="type" [align]="align">
+        <p-divider [layout]="layout()" [type]="type()" [align]="align()">
             <div class="custom-content">Custom Divider Content</div>
         </p-divider>
     `
 })
 class TestCustomDividerComponent {
-    layout: 'horizontal' | 'vertical' | undefined = 'horizontal';
-    type: 'solid' | 'dashed' | 'dotted' | undefined = 'solid';
-    align: 'left' | 'center' | 'right' | 'top' | 'bottom' | undefined;
+    layout = signal<'horizontal' | 'vertical' | undefined>('horizontal');
+    type = signal<'solid' | 'dashed' | 'dotted' | undefined>('solid');
+    align = signal<'left' | 'center' | 'right' | 'top' | 'bottom' | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: `
         <p-divider layout="horizontal" type="solid" align="left">
             <b>Left Aligned</b>
@@ -42,7 +45,8 @@ class TestCustomDividerComponent {
 class TestHorizontalDividerComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: `
         <div style="height: 200px; display: flex;">
             <div>Left Content</div>
@@ -64,7 +68,8 @@ class TestHorizontalDividerComponent {}
 class TestVerticalDividerComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: `
         <p-divider>
             <div class="content-with-icon">
@@ -78,17 +83,18 @@ class TestVerticalDividerComponent {}
 class TestComplexContentDividerComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DividerModule],
     template: `
-        <p-divider [layout]="layout" [type]="type" [align]="align">
+        <p-divider [layout]="layout()" [type]="type()" [align]="align()">
             <span>Dynamic Content</span>
         </p-divider>
     `
 })
 class TestDynamicDividerComponent {
-    layout: 'horizontal' | 'vertical' = 'horizontal';
-    type: 'solid' | 'dashed' | 'dotted' = 'solid';
-    align: 'left' | 'center' | 'right' | 'top' | 'bottom' | undefined = 'center';
+    layout = signal<'horizontal' | 'vertical'>('horizontal');
+    type = signal<'solid' | 'dashed' | 'dotted'>('solid');
+    align = signal<'left' | 'center' | 'right' | 'top' | 'bottom' | undefined>('center');
 }
 
 describe('Divider', () => {
@@ -99,8 +105,7 @@ describe('Divider', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DividerModule],
-            declarations: [TestBasicDividerComponent, TestCustomDividerComponent, TestHorizontalDividerComponent, TestVerticalDividerComponent, TestComplexContentDividerComponent, TestDynamicDividerComponent],
+            imports: [DividerModule, TestBasicDividerComponent, TestCustomDividerComponent, TestHorizontalDividerComponent, TestVerticalDividerComponent, TestComplexContentDividerComponent, TestDynamicDividerComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -162,7 +167,7 @@ describe('Divider', () => {
         });
 
         it('should apply vertical layout when specified', async () => {
-            customComponent.layout = 'vertical';
+            customComponent.layout.set('vertical');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -180,7 +185,7 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.className).toContain('p-divider-horizontal');
 
             // Change to vertical
-            customComponent.layout = 'vertical';
+            customComponent.layout.set('vertical');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -207,7 +212,7 @@ describe('Divider', () => {
         });
 
         it('should apply dashed type when specified', async () => {
-            customComponent.type = 'dashed';
+            customComponent.type.set('dashed');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -217,7 +222,7 @@ describe('Divider', () => {
         });
 
         it('should apply dotted type when specified', async () => {
-            customComponent.type = 'dotted';
+            customComponent.type.set('dotted');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -234,13 +239,13 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.className).toContain('p-divider-solid');
 
             // Change to dashed
-            customComponent.type = 'dashed';
+            customComponent.type.set('dashed');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dashed');
 
             // Change to dotted
-            customComponent.type = 'dotted';
+            customComponent.type.set('dotted');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dotted');
@@ -258,7 +263,7 @@ describe('Divider', () => {
 
         describe('Horizontal Alignment', () => {
             it('should default to left alignment for horizontal layout', async () => {
-                customComponent.layout = 'horizontal';
+                customComponent.layout.set('horizontal');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -267,8 +272,8 @@ describe('Divider', () => {
             });
 
             it('should apply left alignment for horizontal layout', async () => {
-                customComponent.layout = 'horizontal';
-                customComponent.align = 'left';
+                customComponent.layout.set('horizontal');
+                customComponent.align.set('left');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -277,8 +282,8 @@ describe('Divider', () => {
             });
 
             it('should apply center alignment for horizontal layout', async () => {
-                customComponent.layout = 'horizontal';
-                customComponent.align = 'center';
+                customComponent.layout.set('horizontal');
+                customComponent.align.set('center');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -287,8 +292,8 @@ describe('Divider', () => {
             });
 
             it('should apply right alignment for horizontal layout', async () => {
-                customComponent.layout = 'horizontal';
-                customComponent.align = 'right';
+                customComponent.layout.set('horizontal');
+                customComponent.align.set('right');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -299,7 +304,7 @@ describe('Divider', () => {
 
         describe('Vertical Alignment', () => {
             it('should default to center alignment for vertical layout', async () => {
-                customComponent.layout = 'vertical';
+                customComponent.layout.set('vertical');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -308,8 +313,8 @@ describe('Divider', () => {
             });
 
             it('should apply top alignment for vertical layout', async () => {
-                customComponent.layout = 'vertical';
-                customComponent.align = 'top';
+                customComponent.layout.set('vertical');
+                customComponent.align.set('top');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -318,8 +323,8 @@ describe('Divider', () => {
             });
 
             it('should apply center alignment for vertical layout', async () => {
-                customComponent.layout = 'vertical';
-                customComponent.align = 'center';
+                customComponent.layout.set('vertical');
+                customComponent.align.set('center');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -328,8 +333,8 @@ describe('Divider', () => {
             });
 
             it('should apply bottom alignment for vertical layout', async () => {
-                customComponent.layout = 'vertical';
-                customComponent.align = 'bottom';
+                customComponent.layout.set('vertical');
+                customComponent.align.set('bottom');
                 customFixture.changeDetectorRef.markForCheck();
                 await customFixture.whenStable();
                 const dividerElement = customFixture.debugElement.query(By.directive(Divider));
@@ -339,8 +344,8 @@ describe('Divider', () => {
         });
 
         it('should have correct inline styles for alignment', async () => {
-            customComponent.layout = 'horizontal';
-            customComponent.align = 'left';
+            customComponent.layout.set('horizontal');
+            customComponent.align.set('left');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -396,7 +401,7 @@ describe('Divider', () => {
         it('should have correct aria-orientation for horizontal layout', async () => {
             const customFixture = TestBed.createComponent(TestCustomDividerComponent);
             const customComponent = customFixture.componentInstance;
-            customComponent.layout = 'horizontal';
+            customComponent.layout.set('horizontal');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -407,7 +412,7 @@ describe('Divider', () => {
         it('should have correct aria-orientation for vertical layout', async () => {
             const customFixture = TestBed.createComponent(TestCustomDividerComponent);
             const customComponent = customFixture.componentInstance;
-            customComponent.layout = 'vertical';
+            customComponent.layout.set('vertical');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -427,7 +432,7 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.getAttribute('aria-orientation')).toBe('horizontal');
 
             // Change to vertical
-            customComponent.layout = 'vertical';
+            customComponent.layout.set('vertical');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.getAttribute('aria-orientation')).toBe('vertical');
@@ -494,7 +499,7 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.getAttribute('aria-orientation')).toBe('horizontal');
 
             // Change to vertical
-            dynamicComponent.layout = 'vertical';
+            dynamicComponent.layout.set('vertical');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
@@ -510,14 +515,14 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.className).toContain('p-divider-solid');
 
             // Change to dashed
-            dynamicComponent.type = 'dashed';
+            dynamicComponent.type.set('dashed');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dashed');
             expect(dividerElement.nativeElement.className).not.toContain('p-divider-solid');
 
             // Change to dotted
-            dynamicComponent.type = 'dotted';
+            dynamicComponent.type.set('dotted');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dotted');
@@ -531,14 +536,14 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.className).toContain('p-divider-center');
 
             // Change to left
-            dynamicComponent.align = 'left';
+            dynamicComponent.align.set('left');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-left');
             expect(dividerElement.nativeElement.className).not.toContain('p-divider-center');
 
             // Change to right
-            dynamicComponent.align = 'right';
+            dynamicComponent.align.set('right');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-right');
@@ -553,8 +558,8 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.className).toContain('p-divider-center');
 
             // Change to vertical layout with top alignment
-            dynamicComponent.layout = 'vertical';
-            dynamicComponent.align = 'top';
+            dynamicComponent.layout.set('vertical');
+            dynamicComponent.align.set('top');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
@@ -579,7 +584,7 @@ describe('Divider', () => {
             // Test vertical
             const customFixture = TestBed.createComponent(TestCustomDividerComponent);
             const customComponent = customFixture.componentInstance;
-            customComponent.layout = 'vertical';
+            customComponent.layout.set('vertical');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -592,20 +597,20 @@ describe('Divider', () => {
             const customComponent = customFixture.componentInstance;
 
             // Test solid
-            customComponent.type = 'solid';
+            customComponent.type.set('solid');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             let dividerElement = customFixture.debugElement.query(By.directive(Divider));
             expect(dividerElement.nativeElement.className).toContain('p-divider-solid');
 
             // Test dashed
-            customComponent.type = 'dashed';
+            customComponent.type.set('dashed');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dashed');
 
             // Test dotted
-            customComponent.type = 'dotted';
+            customComponent.type.set('dotted');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-dotted');
@@ -616,36 +621,36 @@ describe('Divider', () => {
             const customComponent = customFixture.componentInstance;
 
             // Test horizontal alignments
-            customComponent.layout = 'horizontal';
-            customComponent.align = 'left';
+            customComponent.layout.set('horizontal');
+            customComponent.align.set('left');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             let dividerElement = customFixture.debugElement.query(By.directive(Divider));
             expect(dividerElement.nativeElement.className).toContain('p-divider-left');
 
-            customComponent.align = 'center';
+            customComponent.align.set('center');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-center');
 
-            customComponent.align = 'right';
+            customComponent.align.set('right');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-right');
 
             // Test vertical alignments
-            customComponent.layout = 'vertical';
-            customComponent.align = 'top';
+            customComponent.layout.set('vertical');
+            customComponent.align.set('top');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-top');
 
-            customComponent.align = 'center';
+            customComponent.align.set('center');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-center');
 
-            customComponent.align = 'bottom';
+            customComponent.align.set('bottom');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('p-divider-bottom');
@@ -667,8 +672,8 @@ describe('Divider', () => {
             expect(dividerElement.nativeElement.getAttribute('data-pc-name')).toBe('divider');
 
             // Change properties
-            customComponent.layout = 'vertical';
-            customComponent.type = 'dashed';
+            customComponent.layout.set('vertical');
+            customComponent.type.set('dashed');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -682,9 +687,9 @@ describe('Divider', () => {
             const customFixture = TestBed.createComponent(TestCustomDividerComponent);
             const customComponent = customFixture.componentInstance;
 
-            customComponent.layout = undefined as any;
-            customComponent.type = undefined as any;
-            customComponent.align = undefined as any;
+            customComponent.layout.set(undefined as any);
+            customComponent.type.set(undefined as any);
+            customComponent.align.set(undefined as any);
 
             expect(async () => {
                 customFixture.changeDetectorRef.markForCheck();
@@ -702,15 +707,15 @@ describe('Divider', () => {
             await customFixture.whenStable();
 
             // Rapid changes
-            customComponent.layout = 'vertical';
-            customComponent.type = 'dashed';
-            customComponent.align = 'top';
+            customComponent.layout.set('vertical');
+            customComponent.type.set('dashed');
+            customComponent.align.set('top');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
-            customComponent.layout = 'horizontal';
-            customComponent.type = 'dotted';
-            customComponent.align = 'right';
+            customComponent.layout.set('horizontal');
+            customComponent.type.set('dotted');
+            customComponent.align.set('right');
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -1027,15 +1032,15 @@ describe('Divider', () => {
         describe('Case 6: Inline test', () => {
             it('should apply inline PT with string class', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [DividerModule],
                     template: `<p-divider [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-divider>`
                 })
                 class TestInlinePTStringComponent {}
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [DividerModule],
-                    declarations: [TestInlinePTStringComponent],
+                    imports: [DividerModule, TestInlinePTStringComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1049,15 +1054,15 @@ describe('Divider', () => {
 
             it('should apply inline PT with object class', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [DividerModule],
                     template: `<p-divider [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }"></p-divider>`
                 })
                 class TestInlinePTObjectComponent {}
 
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [DividerModule],
-                    declarations: [TestInlinePTObjectComponent],
+                    imports: [DividerModule, TestInlinePTObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 
@@ -1072,7 +1077,8 @@ describe('Divider', () => {
 
         describe('Case 7: Test from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [DividerModule],
                 template: `
                     <p-divider></p-divider>
                     <p-divider></p-divider>
@@ -1083,8 +1089,7 @@ describe('Divider', () => {
             beforeEach(() => {
                 TestBed.resetTestingModule();
                 TestBed.configureTestingModule({
-                    imports: [DividerModule],
-                    declarations: [TestGlobalPTComponent],
+                    imports: [DividerModule, TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1125,13 +1130,14 @@ describe('Divider', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
-                    standalone: false,
+                    standalone: true,
+                    imports: [DividerModule],
                     template: `<p-divider [pt]="{ root: { class: 'LOCAL_CLASS' } }"></p-divider>`
                 })
                 class TestMergedPTComponent {}
 
                 TestBed.configureTestingModule({
-                    declarations: [TestMergedPTComponent],
+                    imports: [TestMergedPTComponent],
                     providers: [provideZonelessChangeDetection()]
                 });
 

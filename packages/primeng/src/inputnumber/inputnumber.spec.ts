@@ -10,7 +10,8 @@ import { InputNumber, InputNumberModule } from './inputnumber';
 
 // Test Components
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-inputnumber
             [(ngModel)]="value"
@@ -99,7 +100,8 @@ class TestBasicInputNumberComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <form [formGroup]="form">
             <p-inputnumber formControlName="numberField" [showButtons]="showButtons" [min]="min" [max]="max" [step]="step"></p-inputnumber>
@@ -118,7 +120,8 @@ class TestFormInputNumberComponent {
 
 // InputNumber #template component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
             <!-- Clear icon template with #template reference -->
@@ -147,7 +150,8 @@ class TestInputNumberTemplateComponent {
 
 // InputNumber #template reference component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
             <!-- Clear icon template with #template reference -->
@@ -180,8 +184,7 @@ describe('InputNumber', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
-            declarations: [TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberTemplateComponent, TestInputNumberRefTemplateComponent],
+            imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule, TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberTemplateComponent, TestInputNumberRefTemplateComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -356,7 +359,7 @@ describe('InputNumber', () => {
         // }));
 
         it('should handle focus events', async () => {
-            spyOn(testComponent, 'onFocusChange');
+            vi.spyOn(testComponent, 'onFocusChange');
 
             inputElement.dispatchEvent(new Event('focus'));
             testFixture.changeDetectorRef.markForCheck();
@@ -366,7 +369,7 @@ describe('InputNumber', () => {
         });
 
         it('should handle blur events', async () => {
-            spyOn(testComponent, 'onBlurChange');
+            vi.spyOn(testComponent, 'onBlurChange');
 
             inputElement.dispatchEvent(new Event('blur'));
             testFixture.changeDetectorRef.markForCheck();
@@ -415,7 +418,7 @@ describe('InputNumber', () => {
         });
 
         it('should handle Enter key', async () => {
-            spyOn(testComponent, 'onKeyDownChange');
+            vi.spyOn(testComponent, 'onKeyDownChange');
 
             const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
             inputElement.dispatchEvent(keyEvent);
@@ -427,7 +430,7 @@ describe('InputNumber', () => {
 
         it('should allow valid numeric characters in keypress', () => {
             const keyEvent = new KeyboardEvent('keypress', { charCode: 53, which: 53 }); // '5'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -437,7 +440,7 @@ describe('InputNumber', () => {
 
         it('should prevent invalid characters in keypress', () => {
             const keyEvent = new KeyboardEvent('keypress', { charCode: 97 }); // 'a'
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             inputElement.dispatchEvent(keyEvent);
 
@@ -549,6 +552,58 @@ describe('InputNumber', () => {
 
             const buttons = testFixture.debugElement.queryAll(By.css('button'));
             expect(buttons.length).toBe(2); // Should still have buttons but in different layout
+        });
+    });
+
+    describe('Spin with maxlength', () => {
+
+        it('should not spin beyond maxlength', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('maxlength', 3);
+            fixture.detectChanges();
+
+            component.input().nativeElement.value = '999';
+            component.spin(new Event('mousedown'), 1);
+
+            expect(component.value).toBeUndefined();
+            expect(component.input().nativeElement.value).toBe('999');
+        });
+    });
+
+    describe('Button Disabled Style', () => {
+
+        it('should not style buttons as disabled when value is between min and max', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 5;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+        });
+    });
+
+    describe('Leading Zero', () => {
+        const pressBackspaceAt = (inputEl: HTMLInputElement, position: number) => {
+            inputEl.setSelectionRange(position, position);
+            inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+        };
+
+        it('should remove leading zeros while editing by default', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.detectChanges();
+
+            const inputEl = component.input().nativeElement;
+            inputEl.value = '305.00';
+            pressBackspaceAt(inputEl, 1);
+
+            expect(inputEl.value).toBe('5.00');
+            expect(component.value).toBe(5);
         });
     });
 
@@ -1079,7 +1134,8 @@ describe('InputNumber', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase1Component {
@@ -1096,8 +1152,7 @@ describe('InputNumber', () => {
             it('should apply simple string classes to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase1Component],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase1Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1124,7 +1179,8 @@ describe('InputNumber', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase2Component {
@@ -1152,8 +1208,7 @@ describe('InputNumber', () => {
             it('should apply object properties to PT sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase2Component],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase2Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1179,7 +1234,8 @@ describe('InputNumber', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase3Component {
@@ -1198,8 +1254,7 @@ describe('InputNumber', () => {
             it('should apply mixed object and string values correctly', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase3Component],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase3Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1217,7 +1272,8 @@ describe('InputNumber', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase4Component {
@@ -1241,8 +1297,7 @@ describe('InputNumber', () => {
             it('should use instance variables in PT functions', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase4Component],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase4Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1261,7 +1316,8 @@ describe('InputNumber', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase5Component {
@@ -1286,8 +1342,7 @@ describe('InputNumber', () => {
             it('should bind click events through PT', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase5Component],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase5Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1308,7 +1363,8 @@ describe('InputNumber', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [pt]="{ root: 'INLINE_ROOT_CLASS', pcInputText: { root: 'INLINE_INPUT_CLASS' } }" [showButtons]="true"></p-inputnumber>`
             })
             class TestPTCase6InlineComponent {
@@ -1316,7 +1372,8 @@ describe('InputNumber', () => {
             }
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, pcInputText: { root: { class: 'INLINE_INPUT_OBJECT_CLASS' } } }" [showButtons]="true"></p-inputnumber>`
             })
             class TestPTCase6InlineObjectComponent {
@@ -1326,8 +1383,7 @@ describe('InputNumber', () => {
             it('should apply inline PT string classes', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase6InlineComponent],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase6InlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1345,8 +1401,7 @@ describe('InputNumber', () => {
             it('should apply inline PT object classes', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase6InlineObjectComponent],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase6InlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1364,7 +1419,8 @@ describe('InputNumber', () => {
 
         describe('Case 7: Global PT from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `
                     <p-inputnumber [(ngModel)]="value1" [showButtons]="true"></p-inputnumber>
                     <p-inputnumber [(ngModel)]="value2" [showButtons]="true"></p-inputnumber>
@@ -1378,8 +1434,7 @@ describe('InputNumber', () => {
             it('should apply global PT configuration from PrimeNGConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase7GlobalComponent],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1408,7 +1463,8 @@ describe('InputNumber', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCase8HooksComponent {
@@ -1436,8 +1492,7 @@ describe('InputNumber', () => {
             it('should call PT hooks on Angular lifecycle events', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCase8HooksComponent],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCase8HooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1457,7 +1512,8 @@ describe('InputNumber', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
                 template: `<p-inputnumber [(ngModel)]="value" [showButtons]="true" [pt]="pt"></p-inputnumber>`
             })
             class TestPTCoveragComponent {
@@ -1474,8 +1530,7 @@ describe('InputNumber', () => {
             it('should apply PT to all main sections', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [InputNumberModule, FormsModule, CommonModule],
-                    declarations: [TestPTCoveragComponent],
+                    imports: [InputNumberModule, FormsModule, CommonModule, TestPTCoveragComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 

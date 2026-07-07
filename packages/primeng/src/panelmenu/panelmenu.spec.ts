@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,12 +7,13 @@ import { MenuItem, SharedModule } from 'primeng/api';
 import { PanelMenu } from './panelmenu';
 
 @Component({
-    standalone: false,
-    template: ` <p-panelmenu [id]="id" [model]="model" [multiple]="multiple" [tabindex]="tabindex"> </p-panelmenu> `
+    standalone: true,
+    imports: [PanelMenu],
+    template: ` <p-panelmenu [id]="id()" [model]="model()" [multiple]="multiple()" [tabindex]="tabindex()"> </p-panelmenu> `
 })
 class TestBasicPanelMenuComponent {
-    id: string | undefined;
-    model: MenuItem[] | undefined = [
+    id = signal<string | undefined>(undefined);
+    model = signal<MenuItem[] | undefined>([
         {
             label: 'Documents',
             icon: 'pi pi-file',
@@ -31,13 +32,14 @@ class TestBasicPanelMenuComponent {
                 { label: 'Privacy', icon: 'pi pi-shield' }
             ]
         }
-    ];
-    multiple: boolean | undefined;
-    tabindex: number | undefined;
+    ]);
+    multiple = signal<boolean | undefined>(undefined);
+    tabindex = signal<number | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-multiple-panelmenu',
     template: ` <p-panelmenu [model]="model" [multiple]="true"> </p-panelmenu> `
 })
@@ -57,7 +59,8 @@ class TestMultiplePanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     template: `
         <p-panelmenu [model]="model">
             <ng-template #item let-item>
@@ -76,7 +79,8 @@ class TestTemplatePanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     template: `
         <p-panelmenu [model]="model">
             <ng-template #headericon>
@@ -98,13 +102,16 @@ class TestIconTemplatePanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     template: `
         <p-panelmenu [model]="model">
             <ng-template #item let-item>
                 <div class="content-template-item">
                     <span class="item-label">{{ item.label }}</span>
-                    <span class="custom-badge" *ngIf="item.badge">{{ item.badge }}</span>
+                    @if (item.badge) {
+                        <span class="custom-badge">{{ item.badge }}</span>
+                    }
                 </div>
             </ng-template>
         </p-panelmenu>
@@ -120,7 +127,8 @@ class TestContentItemTemplatePanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-router-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
 })
@@ -144,7 +152,8 @@ class TestRouterPanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-disabled-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
 })
@@ -164,7 +173,8 @@ class TestDisabledPanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-styled-panelmenu',
     template: ` <p-panelmenu [model]="model" class="custom-panel"> </p-panelmenu> `
 })
@@ -179,32 +189,59 @@ class TestStyledPanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-empty-panelmenu',
     template: ` <p-panelmenu [model]="[]"> </p-panelmenu> `
 })
 class TestEmptyPanelMenuComponent {}
 
 @Component({
-    standalone: false,
-    selector: 'test-dynamic-panelmenu',
+    standalone: true,
+    imports: [PanelMenu],
+    selector: 'test-separator-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
 })
+class TestSeparatorPanelMenuComponent {
+    model: MenuItem[] = [
+        {
+            label: 'Panel',
+            expanded: true,
+            items: [
+                { label: 'Item 1' },
+                { separator: true },
+                {
+                    label: 'Group',
+                    expanded: true,
+                    items: [{ label: 'Sub Item 1' }, { separator: true }, { label: 'Sub Item 2' }]
+                }
+            ]
+        }
+    ];
+}
+
+@Component({
+    standalone: true,
+    imports: [PanelMenu],
+    selector: 'test-dynamic-panelmenu',
+    template: ` <p-panelmenu [model]="model()"> </p-panelmenu> `
+})
 class TestDynamicPanelMenuComponent {
-    model: MenuItem[] = [];
+    model = signal<MenuItem[]>([]);
 
     updateModel() {
-        this.model = [
+        this.model.set([
             {
                 label: 'Dynamic Panel',
                 items: [{ label: 'Dynamic Item' }]
             }
-        ];
+        ]);
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-command-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
 })
@@ -228,7 +265,8 @@ class TestCommandPanelMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PanelMenu],
     selector: 'test-keyboard-panelmenu',
     template: ` <p-panelmenu [model]="model" [tabindex]="0"> </p-panelmenu> `
 })
@@ -249,7 +287,7 @@ describe('PanelMenu', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
                 TestBasicPanelMenuComponent,
                 TestMultiplePanelMenuComponent,
                 TestTemplatePanelMenuComponent,
@@ -259,11 +297,14 @@ describe('PanelMenu', () => {
                 TestDisabledPanelMenuComponent,
                 TestStyledPanelMenuComponent,
                 TestEmptyPanelMenuComponent,
+                TestSeparatorPanelMenuComponent,
                 TestDynamicPanelMenuComponent,
                 TestCommandPanelMenuComponent,
-                TestKeyboardPanelMenuComponent
+                TestKeyboardPanelMenuComponent,
+                PanelMenu,
+                SharedModule,
+                RouterTestingModule
             ],
-            imports: [PanelMenu, SharedModule, RouterTestingModule],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -294,7 +335,7 @@ describe('PanelMenu', () => {
         });
 
         it('should use custom id when provided', async () => {
-            component.id = 'custom_panel_menu';
+            component.id.set('custom_panel_menu');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -302,7 +343,7 @@ describe('PanelMenu', () => {
         });
 
         it('should initialize with provided model', () => {
-            expect(panelMenuInstance.model()).toEqual(component.model);
+            expect(panelMenuInstance.model()).toEqual(component.model());
             expect(panelMenuInstance.model()!.length).toBe(2);
         });
 
@@ -317,7 +358,7 @@ describe('PanelMenu', () => {
         it('should update model property', async () => {
             const newModel: MenuItem[] = [{ label: 'New Panel', items: [{ label: 'New Item' }] }];
 
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -325,7 +366,7 @@ describe('PanelMenu', () => {
         });
 
         it('should update multiple property', async () => {
-            component.multiple = true;
+            component.multiple.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -333,7 +374,7 @@ describe('PanelMenu', () => {
         });
 
         it('should update tabindex property', async () => {
-            component.tabindex = 1;
+            component.tabindex.set(1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -341,7 +382,7 @@ describe('PanelMenu', () => {
         });
 
         it('should handle undefined model', async () => {
-            component.model = undefined as any;
+            component.model.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -349,7 +390,7 @@ describe('PanelMenu', () => {
         });
 
         it('should handle empty model', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -365,11 +406,11 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.model![0].expanded).toBe(true);
+            expect(component.model()![0].expanded).toBe(true);
         });
 
         it('should collapse expanded panel on header click', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -378,11 +419,11 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.model![0].expanded).toBe(false);
+            expect(component.model()![0].expanded).toBe(false);
         });
 
         it('should collapse other panels in single mode', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -392,8 +433,8 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.model![0].expanded).toBe(false);
-            expect(component.model![1].expanded).toBe(true);
+            expect(component.model()![0].expanded).toBe(false);
+            expect(component.model()![1].expanded).toBe(true);
         });
 
         it('should allow multiple panels expanded in multiple mode', async () => {
@@ -419,7 +460,7 @@ describe('PanelMenu', () => {
         });
 
         it('should show panel content when expanded', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -428,7 +469,7 @@ describe('PanelMenu', () => {
         });
 
         it('should hide panel content when collapsed', () => {
-            component.model![0].expanded = false;
+            component.model()![0].expanded = false;
             fixture.detectChanges();
 
             const toggleableContent = fixture.debugElement.query(By.css('[data-pc-section="toggleablecontent"]'));
@@ -446,7 +487,7 @@ describe('PanelMenu', () => {
 
     describe('Menu Items Display', () => {
         beforeEach(async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.detectChanges();
             await fixture.whenStable();
         });
@@ -482,11 +523,11 @@ describe('PanelMenu', () => {
                 }
             ];
 
-            component.model = nestedModel;
+            component.model.set(nestedModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(component.model[0].items![0].items).toBeTruthy();
+            expect(component.model()![0].items![0].items).toBeTruthy();
         });
 
         it('should handle item separators', async () => {
@@ -498,12 +539,24 @@ describe('PanelMenu', () => {
                 }
             ];
 
-            component.model = modelWithSeparator;
+            component.model.set(modelWithSeparator);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const separators = fixture.debugElement.queryAll(By.css('li[role="separator"]'));
             expect(separators.length).toBe(1);
+        });
+
+        it('should render separators inside submenu items', async () => {
+            const separatorFixture = TestBed.createComponent(TestSeparatorPanelMenuComponent);
+            separatorFixture.detectChanges();
+            await separatorFixture.whenStable();
+
+            const separators = separatorFixture.debugElement.queryAll(By.css('li[role="separator"]'));
+            expect(separators.length).toBe(2);
+            separators.forEach((separator) => {
+                expect(separator.nativeElement.classList.contains('p-menuitem-separator')).toBe(true);
+            });
         });
     });
 
@@ -613,7 +666,7 @@ describe('PanelMenu', () => {
         });
 
         it('should have proper ARIA attributes on panel content', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -624,7 +677,7 @@ describe('PanelMenu', () => {
         });
 
         it('should have proper ARIA attributes on menu items', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -673,7 +726,7 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.model![0].expanded).toBe(true);
+            expect(component.model()![0].expanded).toBe(true);
         });
 
         it('should handle Space key on panel header', async () => {
@@ -687,7 +740,7 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.model![0].expanded).toBe(true);
+            expect(component.model()![0].expanded).toBe(true);
         });
 
         it('should handle Arrow Down key navigation', () => {
@@ -904,7 +957,7 @@ describe('PanelMenu', () => {
                 }
             ];
 
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -915,16 +968,16 @@ describe('PanelMenu', () => {
         });
 
         it('should preserve expansion state during model updates', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             // Update the same model reference
-            component.model![0].label = 'Updated Documents';
+            component.model()![0].label = 'Updated Documents';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(component.model![0].expanded).toBe(true);
+            expect(component.model()![0].expanded).toBe(true);
         });
     });
 
@@ -941,7 +994,7 @@ describe('PanelMenu', () => {
         });
 
         it('should handle null/undefined model items gracefully', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -950,12 +1003,12 @@ describe('PanelMenu', () => {
         });
 
         it('should handle items without labels', async () => {
-            component.model = [
+            component.model.set([
                 {
                     // No label provided
                     items: [{ label: 'Sub Item' }]
                 } as MenuItem
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -981,7 +1034,7 @@ describe('PanelMenu', () => {
         });
 
         it('should handle panels without items', async () => {
-            component.model = [{ label: 'Panel without items' }];
+            component.model.set([{ label: 'Panel without items' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1012,27 +1065,27 @@ describe('PanelMenu', () => {
                 }
             ];
 
-            component.model = deepModel;
+            component.model.set(deepModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(component.model[0].items![0].items![0].items).toBeTruthy();
+            expect(component.model()![0].items![0].items![0].items).toBeTruthy();
         });
     });
 
     describe('Public Methods', () => {
         it('should collapse all panels with collapseAll method', async () => {
-            component.model![0].expanded = true;
+            component.model()![0].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.model![1].expanded = true;
+            component.model()![1].expanded = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             panelMenuInstance.collapseAll();
 
-            expect(component.model![0].expanded).toBe(false);
-            expect(component.model![1].expanded).toBe(false);
+            expect(component.model()![0].expanded).toBe(false);
+            expect(component.model()![1].expanded).toBe(false);
         });
 
         it('should handle command execution on panel click', async () => {
@@ -1049,7 +1102,7 @@ describe('PanelMenu', () => {
         });
 
         it('should get proper panel IDs', () => {
-            const panelId = panelMenuInstance.getPanelId(0, component.model![0]);
+            const panelId = panelMenuInstance.getPanelId(0, component.model()![0]);
             expect(panelId).toBeTruthy();
 
             const headerIdWithoutId = panelMenuInstance.getHeaderId({}, 0);

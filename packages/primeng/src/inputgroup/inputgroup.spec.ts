@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroup } from './inputgroup';
@@ -14,28 +14,28 @@ import { providePrimeNG } from 'primeng/config';
             <p-inputgroup-addon>
                 <i class="pi pi-user"></i>
             </p-inputgroup-addon>
-            <input type="text" [(ngModel)]="username" placeholder="Username" />
+            <input type="text" [ngModel]="username()" (ngModelChange)="username.set($event)" placeholder="Username" />
         </p-inputgroup>
     `
 })
 class TestBasicInputGroupComponent {
-    username: string = '';
+    username = signal<string>('');
 }
 
 @Component({
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
     template: `
-        <p-inputgroup [class]="customClass">
+        <p-inputgroup [class]="customClass()">
             <p-inputgroup-addon>$</p-inputgroup-addon>
-            <input type="number" [(ngModel)]="price" placeholder="Price" />
+            <input type="number" [ngModel]="price()" (ngModelChange)="price.set($event)" placeholder="Price" />
             <p-inputgroup-addon>.00</p-inputgroup-addon>
         </p-inputgroup>
     `
 })
 class TestStyledInputGroupComponent {
-    price: number | null = null as any;
-    customClass: string = 'custom-input-group';
+    price = signal<number | null>(null as any);
+    customClass = signal<string>('custom-input-group');
 }
 
 @Component({
@@ -43,15 +43,15 @@ class TestStyledInputGroupComponent {
     imports: [InputGroup, InputGroupAddon, FormsModule],
     template: `
         <p-inputgroup>
-            <p-inputgroup-addon [style]="addonStyle" [class]="addonClass"> www </p-inputgroup-addon>
-            <input type="text" [(ngModel)]="website" placeholder="Website" />
+            <p-inputgroup-addon [style]="addonStyle()" [class]="addonClass()"> www </p-inputgroup-addon>
+            <input type="text" [ngModel]="website()" (ngModelChange)="website.set($event)" placeholder="Website" />
         </p-inputgroup>
     `
 })
 class TestAddonStyledComponent {
-    website: string = '';
-    addonStyle: { [key: string]: any } = { 'background-color': '#f0f0f0' };
-    addonClass: string = 'custom-addon';
+    website = signal<string>('');
+    addonStyle = signal<{ [key: string]: any }>({ 'background-color': '#f0f0f0' });
+    addonClass = signal<string>('custom-addon');
 }
 
 describe('InputGroup', () => {
@@ -133,8 +133,7 @@ describe('InputGroup', () => {
         });
 
         it('should update class dynamically', async () => {
-            component.customClass = 'new-custom-class';
-            fixture.changeDetectorRef.markForCheck();
+            component.customClass.set('new-custom-class');
             await fixture.whenStable();
 
             const inputGroupElement = fixture.debugElement.query(By.directive(InputGroup));
@@ -170,9 +169,8 @@ describe('InputGroup', () => {
         });
 
         it('should update addon styles dynamically', async () => {
-            component.addonStyle = { color: 'red' };
-            component.addonClass = 'updated-addon';
-            fixture.changeDetectorRef.markForCheck();
+            component.addonStyle.set({ color: 'red' });
+            component.addonClass.set('updated-addon');
             await fixture.whenStable();
 
             const addonElement = fixture.debugElement.query(By.directive(InputGroupAddon));
@@ -203,8 +201,7 @@ describe('InputGroup', () => {
         });
 
         it('should update input value when model changes', async () => {
-            component.username = 'testuser';
-            fixture.changeDetectorRef.markForCheck();
+            component.username.set('testuser');
             await fixture.whenStable();
 
             const inputElement = fixture.debugElement.query(By.css('input'));
@@ -358,13 +355,12 @@ describe('InputGroup PassThrough Tests', () => {
     });
 
     describe('PT Case 5: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

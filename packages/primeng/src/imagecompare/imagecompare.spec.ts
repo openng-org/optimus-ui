@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ImageCompare, ImageCompareModule } from './imagecompare';
 import { SharedModule } from 'primeng/api';
 
@@ -11,9 +11,10 @@ const mockImages = {
 };
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageCompareModule],
     template: `
-        <p-imagecompare [tabindex]="tabindex" [ariaLabel]="ariaLabel" [ariaLabelledby]="ariaLabelledby">
+        <p-imagecompare [tabindex]="tabindex()" [ariaLabel]="ariaLabel()" [ariaLabelledby]="ariaLabelledby()">
             <ng-template #left>
                 <img [src]="leftImage" [alt]="leftImageAlt" class="left-image" />
             </ng-template>
@@ -28,13 +29,14 @@ class TestBasicImageCompareComponent {
     rightImage: string = mockImages.rightImage;
     leftImageAlt: string = 'Left Image';
     rightImageAlt: string = 'Right Image';
-    tabindex: number | undefined = 0;
-    ariaLabel: string | undefined = 'Image Compare';
-    ariaLabelledby: string | undefined;
+    tabindex = signal<number | undefined>(0);
+    ariaLabel = signal<string | undefined>('Image Compare');
+    ariaLabelledby = signal<string | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageCompareModule],
     template: `
         <div dir="rtl">
             <p-imagecompare>
@@ -56,7 +58,8 @@ class TestRTLImageCompareComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageCompareModule],
     template: `
         <p-imagecompare class="responsive-container">
             <ng-template #left>
@@ -73,9 +76,10 @@ class TestCustomContentImageCompareComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ImageCompareModule],
     template: `
-        <p-imagecompare [pt]="pt" [tabindex]="tabindex" [ariaLabel]="ariaLabel">
+        <p-imagecompare [pt]="pt()" [tabindex]="tabindex()" [ariaLabel]="ariaLabel()">
             <ng-template #left>
                 <img [src]="leftImage" alt="Left Image" />
             </ng-template>
@@ -88,12 +92,12 @@ class TestCustomContentImageCompareComponent {
 class TestPTImageCompareComponent {
     leftImage: string = mockImages.leftImage;
     rightImage: string = mockImages.rightImage;
-    tabindex: number | undefined;
-    ariaLabel: string | undefined;
-    pt: any = {
+    tabindex = signal<number | undefined>(undefined);
+    ariaLabel = signal<string | undefined>(undefined);
+    pt = signal<any>({
         root: { class: 'custom-root-class' },
         slider: { class: 'custom-slider-class' }
-    };
+    });
 }
 
 describe('ImageCompare', () => {
@@ -102,8 +106,7 @@ describe('ImageCompare', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ImageCompareModule, SharedModule],
-            declarations: [TestBasicImageCompareComponent, TestRTLImageCompareComponent, TestCustomContentImageCompareComponent, TestPTImageCompareComponent],
+            imports: [ImageCompareModule, SharedModule, TestBasicImageCompareComponent, TestRTLImageCompareComponent, TestCustomContentImageCompareComponent, TestPTImageCompareComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -184,7 +187,7 @@ describe('ImageCompare', () => {
 
         it('should handle slider input event', () => {
             const imageCompareInstance = testFixture.debugElement.query(By.directive(ImageCompare)).componentInstance;
-            spyOn(imageCompareInstance, 'onSlide').and.callThrough();
+            vi.spyOn(imageCompareInstance, 'onSlide');
 
             slider.nativeElement.value = '75';
             slider.nativeElement.dispatchEvent(new Event('input'));
@@ -243,7 +246,7 @@ describe('ImageCompare', () => {
         });
 
         it('should setup mutation observer for direction changes', () => {
-            spyOn(imageCompareInstance, 'updateDirection');
+            vi.spyOn(imageCompareInstance, 'updateDirection');
 
             // Just test that the method exists and can be called
             expect(imageCompareInstance.observeDirectionChanges).toBeDefined();
@@ -274,7 +277,7 @@ describe('ImageCompare', () => {
 
         it('should set aria-labelledby attribute when provided', async () => {
             const testComponent = testFixture.componentInstance;
-            testComponent.ariaLabelledby = 'label-id';
+            testComponent.ariaLabelledby.set('label-id');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -322,8 +325,8 @@ describe('ImageCompare', () => {
         });
 
         it('should initialize direction detection on ngOnInit', () => {
-            spyOn(imageCompareInstance, 'updateDirection');
-            spyOn(imageCompareInstance, 'observeDirectionChanges');
+            vi.spyOn(imageCompareInstance, 'updateDirection');
+            vi.spyOn(imageCompareInstance, 'observeDirectionChanges');
 
             imageCompareInstance.ngOnInit();
 
@@ -333,7 +336,7 @@ describe('ImageCompare', () => {
 
         it('should cleanup mutation observer on ngOnDestroy', () => {
             const mockMutationObserver = {
-                disconnect: jasmine.createSpy('disconnect')
+                disconnect: vi.fn()
             };
             imageCompareInstance.mutationObserver = mockMutationObserver as any;
 
@@ -343,7 +346,7 @@ describe('ImageCompare', () => {
         });
 
         it('should call super.ngOnDestroy', () => {
-            spyOn(Object.getPrototypeOf(Object.getPrototypeOf(imageCompareInstance)), 'ngOnDestroy');
+            vi.spyOn(Object.getPrototypeOf(Object.getPrototypeOf(imageCompareInstance)), 'ngOnDestroy');
 
             imageCompareInstance.ngOnDestroy();
 
@@ -363,26 +366,30 @@ describe('ImageCompare', () => {
 
         it('should updateDirection method work correctly', () => {
             // Test LTR
-            spyOn(imageCompareInstance.el.nativeElement, 'closest').and.returnValue(null);
+            vi.spyOn(imageCompareInstance.el.nativeElement, 'closest').mockReturnValue(null);
             imageCompareInstance.updateDirection();
             expect(imageCompareInstance.isRTL).toBe(false);
 
             // Test RTL
-            (imageCompareInstance.el.nativeElement.closest as jasmine.Spy).and.returnValue({ dir: 'rtl' });
+            (imageCompareInstance.el.nativeElement.closest as any).mockReturnValue({ dir: 'rtl' });
             imageCompareInstance.updateDirection();
             expect(imageCompareInstance.isRTL).toBe(true);
         });
 
         it('should observeDirectionChanges method setup mutation observer correctly', () => {
-            const mockMutationObserver = jasmine.createSpy('MutationObserver').and.returnValue({
-                observe: jasmine.createSpy('observe'),
-                disconnect: jasmine.createSpy('disconnect')
+            const originalMutationObserver = (window as any).MutationObserver;
+            const mockMutationObserver = vi.fn(function (this: any) {
+                this.observe = vi.fn();
+                this.disconnect = vi.fn();
             });
             (window as any).MutationObserver = mockMutationObserver;
 
-            imageCompareInstance.observeDirectionChanges();
-
-            expect(mockMutationObserver).toHaveBeenCalled();
+            try {
+                imageCompareInstance.observeDirectionChanges();
+                expect(mockMutationObserver).toHaveBeenCalled();
+            } finally {
+                (window as any).MutationObserver = originalMutationObserver;
+            }
         });
     });
 
@@ -436,7 +443,7 @@ describe('ImageCompare', () => {
             });
 
             it('should apply string class to root element', () => {
-                testComponent.pt = { root: 'ROOT_CLASS' };
+                testComponent.pt.set({ root: 'ROOT_CLASS' });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -444,7 +451,7 @@ describe('ImageCompare', () => {
             });
 
             it('should apply string class to slider element', () => {
-                testComponent.pt = { slider: 'SLIDER_CLASS' };
+                testComponent.pt.set({ slider: 'SLIDER_CLASS' });
                 testFixture.detectChanges();
 
                 const sliderElement = testFixture.debugElement.query(By.css('input[type="range"]'));
@@ -452,10 +459,10 @@ describe('ImageCompare', () => {
             });
 
             it('should apply string classes to all sections', () => {
-                testComponent.pt = {
+                testComponent.pt.set({
                     root: 'ROOT_CLASS',
                     slider: 'SLIDER_CLASS'
-                };
+                });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -476,14 +483,14 @@ describe('ImageCompare', () => {
             });
 
             it('should apply object with class to root element', () => {
-                testComponent.pt = {
+                testComponent.pt.set({
                     root: {
                         class: 'ROOT_OBJECT_CLASS',
                         style: { 'background-color': 'red' },
                         'data-p-test': true,
                         'aria-label': 'TEST_ROOT_ARIA_LABEL'
                     }
-                };
+                });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -494,14 +501,14 @@ describe('ImageCompare', () => {
             });
 
             it('should apply object with class to slider element', () => {
-                testComponent.pt = {
+                testComponent.pt.set({
                     slider: {
                         class: 'SLIDER_OBJECT_CLASS',
                         style: { border: '1px solid blue' },
                         'data-p-slider': true,
                         'aria-label': 'TEST_SLIDER_ARIA_LABEL'
                     }
-                };
+                });
                 testFixture.detectChanges();
 
                 const sliderElement = testFixture.debugElement.query(By.css('input[type="range"]'));
@@ -522,12 +529,12 @@ describe('ImageCompare', () => {
             });
 
             it('should apply mixed PT values', () => {
-                testComponent.pt = {
+                testComponent.pt.set({
                     root: {
                         class: 'ROOT_MIXED_CLASS'
                     },
                     slider: 'SLIDER_STRING_CLASS'
-                };
+                });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -548,18 +555,18 @@ describe('ImageCompare', () => {
             });
 
             it('should support PT functions with instance parameter', async () => {
-                testComponent.tabindex = 5;
+                testComponent.tabindex.set(5);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
-                testComponent.pt = {
+                testComponent.pt.set({
                     root: ({ instance }) => {
                         // Instance parameter is available in PT functions
                         return {
                             class: instance?.tabindex() ? 'HAS_TAB_VALUE' : 'NO_TAB_VALUE'
                         };
                     }
-                };
+                });
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -574,7 +581,7 @@ describe('ImageCompare', () => {
                 const imageCompareInstance = testFixture.debugElement.query(By.directive(ImageCompare)).componentInstance;
                 imageCompareInstance.isRTL = true;
 
-                testComponent.pt = {
+                testComponent.pt.set({
                     slider: ({ instance }) => {
                         return {
                             style: {
@@ -582,7 +589,7 @@ describe('ImageCompare', () => {
                             }
                         };
                     }
-                };
+                });
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -591,18 +598,18 @@ describe('ImageCompare', () => {
             });
 
             it('should support dynamic PT functions', async () => {
-                testComponent.ariaLabel = 'Compare Images';
+                testComponent.ariaLabel.set('Compare Images');
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
-                testComponent.pt = {
+                testComponent.pt.set({
                     root: ({ instance }) => {
                         // PT functions can access instance and return dynamic values
                         return {
                             class: 'DYNAMIC_PT_CLASS'
                         };
                     }
-                };
+                });
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -623,13 +630,13 @@ describe('ImageCompare', () => {
             it('should handle onclick event in PT', () => {
                 let clicked = false;
 
-                testComponent.pt = {
+                testComponent.pt.set({
                     slider: {
                         onclick: () => {
                             clicked = true;
                         }
                     }
-                };
+                });
                 testFixture.detectChanges();
 
                 const sliderElement = testFixture.debugElement.query(By.css('input[type="range"]'));
@@ -641,8 +648,8 @@ describe('ImageCompare', () => {
             it('should access instance in onclick event', () => {
                 let instanceTabindex: number | undefined;
 
-                testComponent.tabindex = 10;
-                testComponent.pt = {
+                testComponent.tabindex.set(10);
+                testComponent.pt.set({
                     root: ({ instance }) => {
                         return {
                             onclick: () => {
@@ -650,7 +657,7 @@ describe('ImageCompare', () => {
                             }
                         };
                     }
-                };
+                });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -662,7 +669,7 @@ describe('ImageCompare', () => {
 
         describe('Case 6: Inline PT', () => {
             it('should apply inline PT with string value', () => {
-                testComponent.pt = { root: 'INLINE_ROOT_CLASS' };
+                testComponent.pt.set({ root: 'INLINE_ROOT_CLASS' });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -670,7 +677,7 @@ describe('ImageCompare', () => {
             });
 
             it('should apply inline PT with object value', () => {
-                testComponent.pt = { root: { class: 'INLINE_ROOT_OBJECT_CLASS' } };
+                testComponent.pt.set({ root: { class: 'INLINE_ROOT_OBJECT_CLASS' } });
                 testFixture.detectChanges();
 
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
@@ -705,14 +712,14 @@ describe('ImageCompare', () => {
 
                 // Setting PT with hooks should not throw an error
                 expect(() => {
-                    testComponent.pt = {
+                    testComponent.pt.set({
                         root: 'HOOK_ROOT_CLASS',
                         hooks: {
                             onMounted: () => {
                                 hookExecuted = true;
                             }
                         }
-                    };
+                    });
                     testFixture.detectChanges();
                 }).not.toThrow();
 

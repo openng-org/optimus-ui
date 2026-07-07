@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -9,18 +9,19 @@ import type { EditorBlurEvent, EditorChangeEvent, EditorFocusEvent, EditorInitEv
 import { Editor } from './editor';
 // Test Components for different scenarios
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Editor, FormsModule],
     template: `
         <p-editor
             [(ngModel)]="text"
-            [style]="style"
-            [placeholder]="placeholder"
-            [readonly]="readonly"
-            [formats]="formats"
-            [modules]="modules"
-            [bounds]="bounds"
-            [scrollingContainer]="scrollingContainer"
-            [debug]="debug"
+            [style]="style()"
+            [placeholder]="placeholder()"
+            [readonly]="readonly()"
+            [formats]="formats()"
+            [modules]="modules()"
+            [bounds]="bounds()"
+            [scrollingContainer]="scrollingContainer()"
+            [debug]="debug()"
             (onInit)="onInit($event)"
             (onTextChange)="onTextChange($event)"
             (onSelectionChange)="onSelectionChange($event)"
@@ -33,14 +34,14 @@ import { Editor } from './editor';
 })
 class TestBasicEditorComponent {
     text: string = '<div>Initial content</div>';
-    style: { [key: string]: any } | undefined;
-    placeholder: string = 'Enter text here...';
-    readonly: boolean = false;
-    formats: string[] | undefined;
-    modules: object | undefined;
-    bounds: HTMLElement | string | undefined;
-    scrollingContainer: HTMLElement | string | undefined;
-    debug: string | undefined;
+    style = signal<{ [key: string]: any } | undefined>(undefined);
+    placeholder = signal<string>('Enter text here...');
+    readonly = signal<boolean>(false);
+    formats = signal<string[] | undefined>(undefined);
+    modules = signal<object | undefined>(undefined);
+    bounds = signal<HTMLElement | string | undefined>(undefined);
+    scrollingContainer = signal<HTMLElement | string | undefined>(undefined);
+    debug = signal<string | undefined>(undefined);
 
     // Event handlers
     initEvent: EditorInitEvent | undefined;
@@ -76,7 +77,8 @@ class TestBasicEditorComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Editor, FormsModule],
     template: `
         <p-editor [(ngModel)]="text">
             <ng-template #header>
@@ -93,7 +95,8 @@ class TestCustomToolbarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Editor, FormsModule],
     template: ` <p-editor [(ngModel)]="text" [readonly]="true"> </p-editor> `
 })
 class TestReadonlyComponent {
@@ -101,7 +104,8 @@ class TestReadonlyComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Editor, FormsModule],
     template: ` <p-editor [(ngModel)]="text" [modules]="customModules" [formats]="customFormats"> </p-editor> `
 })
 class TestCustomConfigurationComponent {
@@ -161,8 +165,7 @@ describe('Editor', () => {
         };
 
         await TestBed.configureTestingModule({
-            imports: [Editor, SharedModule, FormsModule],
-            declarations: [TestBasicEditorComponent, TestCustomToolbarComponent, TestReadonlyComponent, TestCustomConfigurationComponent],
+            imports: [Editor, SharedModule, FormsModule, TestBasicEditorComponent, TestCustomToolbarComponent, TestReadonlyComponent, TestCustomConfigurationComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -196,9 +199,9 @@ describe('Editor', () => {
         });
 
         it('should accept input values', async () => {
-            component.placeholder = 'Custom placeholder';
-            component.readonly = true;
-            component.formats = ['bold', 'italic'];
+            component.placeholder.set('Custom placeholder');
+            component.readonly.set(true);
+            component.formats.set(['bold', 'italic']);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -242,13 +245,13 @@ describe('Editor', () => {
         });
 
         it('should handle readonly mode toggle', async () => {
-            component.readonly = true;
+            component.readonly.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(editorInstance.readonly()).toBe(true);
 
-            component.readonly = false;
+            component.readonly.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -272,7 +275,7 @@ describe('Editor', () => {
         });
 
         it('should emit onInit event', () => {
-            spyOn(component, 'onInit');
+            vi.spyOn(component, 'onInit');
 
             editorInstance.onEditorInit.emit({
                 editor: editorInstance.quill
@@ -282,7 +285,7 @@ describe('Editor', () => {
         });
 
         it('should emit onTextChange event with correct parameters', () => {
-            spyOn(component, 'onTextChange');
+            vi.spyOn(component, 'onTextChange');
 
             const testEvent: EditorTextChangeEvent = {
                 htmlValue: '<div>New text</div>',
@@ -297,7 +300,7 @@ describe('Editor', () => {
         });
 
         it('should emit onSelectionChange event with correct parameters', () => {
-            spyOn(component, 'onSelectionChange');
+            vi.spyOn(component, 'onSelectionChange');
 
             const testEvent: EditorSelectionChangeEvent = {
                 range: { index: 0, length: 5 },
@@ -311,7 +314,7 @@ describe('Editor', () => {
         });
 
         it('should emit onEditorChange event with correct parameters', () => {
-            spyOn(component, 'onEditorChange');
+            vi.spyOn(component, 'onEditorChange');
 
             const testEvent: EditorChangeEvent = {
                 eventName: 'text-change',
@@ -324,7 +327,7 @@ describe('Editor', () => {
         });
 
         it('should emit onFocus event', () => {
-            spyOn(component, 'onFocus');
+            vi.spyOn(component, 'onFocus');
 
             const testEvent: EditorFocusEvent = {
                 source: 'user'
@@ -336,7 +339,7 @@ describe('Editor', () => {
         });
 
         it('should emit onBlur event', () => {
-            spyOn(component, 'onBlur');
+            vi.spyOn(component, 'onBlur');
 
             const testEvent: EditorBlurEvent = {
                 source: 'user'
@@ -394,7 +397,7 @@ describe('Editor', () => {
         });
 
         it('should apply custom styles', async () => {
-            component.style = { border: '2px solid red', padding: '10px' };
+            component.style.set({ border: '2px solid red', padding: '10px' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -565,7 +568,7 @@ describe('Editor', () => {
         it('should cleanup event listeners on destroy', () => {
             if (editorInstance.quill && editorInstance.quill.root) {
                 const mockElement = {
-                    removeEventListener: jasmine.createSpy('removeEventListener')
+                    removeEventListener: vi.fn()
                 };
 
                 // Mock the quill root element
@@ -619,15 +622,15 @@ describe('Editor', () => {
         });
 
         it('should handle rapid property changes', async () => {
-            component.placeholder = 'First placeholder';
+            component.placeholder.set('First placeholder');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.placeholder = 'Second placeholder';
+            component.placeholder.set('Second placeholder');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.placeholder = 'Third placeholder';
+            component.placeholder.set('Third placeholder');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -635,8 +638,8 @@ describe('Editor', () => {
         });
 
         it('should handle invalid configuration gracefully', async () => {
-            component.formats = [];
-            component.modules = {};
+            component.formats.set([]);
+            component.modules.set({});
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -647,8 +650,8 @@ describe('Editor', () => {
         });
 
         it('should handle bounds and scrollingContainer settings', async () => {
-            component.bounds = 'body';
-            component.scrollingContainer = '#container';
+            component.bounds.set('body');
+            component.scrollingContainer.set('#container');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

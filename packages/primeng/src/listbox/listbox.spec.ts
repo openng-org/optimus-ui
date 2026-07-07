@@ -10,29 +10,31 @@ import { BehaviorSubject, Observable, delay, of } from 'rxjs';
 import { Listbox } from './listbox';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Listbox, FormsModule, ReactiveFormsModule],
     template: `
         <p-listbox
-            [(ngModel)]="selectedValue"
-            [options]="options"
-            [optionLabel]="optionLabel"
-            [optionValue]="optionValue"
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [options]="options()"
+            [optionLabel]="optionLabel()"
+            [optionValue]="optionValue()"
             [optionGroupLabel]="optionGroupLabel"
-            [optionDisabled]="optionDisabled"
-            [multiple]="multiple"
-            [filter]="filter"
-            [checkbox]="checkbox"
-            [disabled]="disabled"
+            [optionDisabled]="optionDisabled()"
+            [multiple]="multiple()"
+            [filter]="filter()"
+            [checkbox]="checkbox()"
+            [disabled]="disabled()"
             [ariaLabel]="ariaLabel"
-            [virtualScroll]="virtualScroll"
-            [lazy]="lazy"
-            [scrollHeight]="scrollHeight"
-            [listStyle]="style"
-            [metaKeySelection]="metaKeySelection"
-            [readonly]="readonly"
-            [filterMatchMode]="filterMatchMode"
-            [showToggleAll]="showToggleAll"
-            [emptyMessage]="emptyMessage"
+            [virtualScroll]="virtualScroll()"
+            [lazy]="lazy()"
+            [scrollHeight]="scrollHeight()"
+            [listStyle]="style()"
+            [metaKeySelection]="metaKeySelection()"
+            [readonly]="readonly()"
+            [filterMatchMode]="filterMatchMode()"
+            [showToggleAll]="showToggleAll()"
+            [emptyMessage]="emptyMessage()"
             (onChange)="onSelectionChange($event)"
             (onFocus)="onFocus($event)"
             (onBlur)="onBlur($event)"
@@ -42,37 +44,39 @@ import { Listbox } from './listbox';
         ></p-listbox>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-listbox formControlName="selectedItems" [options]="formOptions" [multiple]="true"> </p-listbox>
-        </form>
+        @if (showReactiveForm()) {
+            <form [formGroup]="reactiveForm">
+                <p-listbox formControlName="selectedItems" [options]="formOptions" [multiple]="true"> </p-listbox>
+            </form>
+        }
     `
 })
 class TestListboxComponent {
-    selectedValue: any = null as any;
-    options: any[] = [
+    selectedValue = signal<any>(null as any);
+    options = signal<any[]>([
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' },
         { label: 'Option 3', value: 'option3' }
-    ];
-    optionLabel: string | ((item: any) => string) = 'label';
-    optionValue: string | ((item: any) => string) = 'value';
+    ]);
+    optionLabel = signal<string | ((item: any) => string)>('label');
+    optionValue = signal<string | ((item: any) => string)>('value');
     optionGroupLabel: string = 'label';
-    optionDisabled: string | ((item: any) => boolean) = 'disabled';
-    multiple: boolean = false;
-    filter: boolean = false;
-    checkbox: boolean = false;
-    disabled: boolean = false;
+    optionDisabled = signal<string | ((item: any) => boolean)>('disabled');
+    multiple = signal<boolean>(false);
+    filter = signal<boolean>(false);
+    checkbox = signal<boolean>(false);
+    disabled = signal<boolean>(false);
     ariaLabel: string = 'test-label';
-    virtualScroll: boolean = false;
-    lazy: boolean = false;
-    scrollHeight: string = '200px';
-    style: any = null as any;
-    metaKeySelection: boolean = false;
-    readonly: boolean = false;
-    filterMatchMode: string = 'contains';
-    showToggleAll: boolean = true;
-    emptyMessage: string = '';
-    showReactiveForm: boolean = false;
+    virtualScroll = signal<boolean>(false);
+    lazy = signal<boolean>(false);
+    scrollHeight = signal<string>('200px');
+    style = signal<any>(null as any);
+    metaKeySelection = signal<boolean>(false);
+    readonly = signal<boolean>(false);
+    filterMatchMode = signal<string>('contains');
+    showToggleAll = signal<boolean>(true);
+    emptyMessage = signal<string>('');
+    showReactiveForm = signal<boolean>(false);
 
     // Signal-based properties
     signalOptions = signal([
@@ -101,11 +105,11 @@ class TestListboxComponent {
 
     // Getters
     get getterOptions() {
-        return this.options;
+        return this.options();
     }
 
     get getterOptionLabel(): string {
-        return typeof this.optionLabel === 'string' ? this.optionLabel : 'label';
+        return typeof this.optionLabel() === 'string' ? (this.optionLabel() as string) : 'label';
     }
 
     onSelectionChange(event: ListboxChangeEvent) {}
@@ -133,9 +137,8 @@ describe('Listbox', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Listbox, FormsModule, ReactiveFormsModule, CommonModule],
-            providers: [provideZonelessChangeDetection(), provideNoopAnimations()],
-            declarations: [TestListboxComponent]
+            imports: [Listbox, FormsModule, ReactiveFormsModule, CommonModule, TestListboxComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(Listbox);
@@ -168,7 +171,7 @@ describe('Listbox', () => {
         });
 
         it('should handle option selection', async () => {
-            spyOn(testComponent, 'onSelectionChange');
+            vi.spyOn(testComponent, 'onSelectionChange');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             firstOption.nativeElement.click();
@@ -181,7 +184,7 @@ describe('Listbox', () => {
 
     describe('Multiple Selection', () => {
         beforeEach(() => {
-            testComponent.multiple = true;
+            testComponent.multiple.set(true);
             testFixture.detectChanges();
         });
 
@@ -218,7 +221,7 @@ describe('Listbox', () => {
 
     describe('Filter Functionality', () => {
         beforeEach(() => {
-            testComponent.filter = true;
+            testComponent.filter.set(true);
             testFixture.detectChanges();
         });
 
@@ -247,8 +250,8 @@ describe('Listbox', () => {
 
     describe('Checkbox Selection', () => {
         beforeEach(() => {
-            testComponent.checkbox = true;
-            testComponent.multiple = true;
+            testComponent.checkbox.set(true);
+            testComponent.multiple.set(true);
             testFixture.detectChanges();
         });
 
@@ -260,7 +263,7 @@ describe('Listbox', () => {
 
     describe('Disabled State', () => {
         beforeEach(() => {
-            testComponent.disabled = true;
+            testComponent.disabled.set(true);
             testFixture.detectChanges();
         });
 
@@ -270,7 +273,7 @@ describe('Listbox', () => {
         });
 
         it('should not respond to clicks when disabled', async () => {
-            spyOn(testComponent, 'onSelectionChange');
+            vi.spyOn(testComponent, 'onSelectionChange');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             firstOption.nativeElement.click();
@@ -333,7 +336,7 @@ describe('Listbox', () => {
         });
 
         it('should emit onChange event when selection changes', async () => {
-            spyOn(testComponent, 'onSelectionChange');
+            vi.spyOn(testComponent, 'onSelectionChange');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             firstOption.nativeElement.click();
@@ -350,7 +353,7 @@ describe('Listbox', () => {
         });
 
         it('should apply custom listStyle', async () => {
-            testComponent.style = { height: '300px' };
+            testComponent.style.set({ height: '300px' });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -366,7 +369,7 @@ describe('Listbox', () => {
 
         it('should handle touch events', async () => {
             const listboxComponent = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
-            spyOn(listboxComponent, 'onOptionTouchEnd').and.callThrough();
+            vi.spyOn(listboxComponent, 'onOptionTouchEnd');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             if (firstOption) {
@@ -381,8 +384,8 @@ describe('Listbox', () => {
 
     describe('Meta Key Selection', () => {
         beforeEach(async () => {
-            testComponent.multiple = false;
-            testComponent.metaKeySelection = false;
+            testComponent.multiple.set(false);
+            testComponent.metaKeySelection.set(false);
             testFixture.detectChanges();
             await testFixture.whenStable();
         });
@@ -401,7 +404,7 @@ describe('Listbox', () => {
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).not.toBe('option1');
+                expect(testComponent.selectedValue()).not.toBe('option1');
             }
         });
     });
@@ -413,8 +416,8 @@ describe('Listbox', () => {
 
         it('should emit onDblClick event', async () => {
             const listboxComponent = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
-            spyOn(listboxComponent.onDblClick, 'emit');
-            spyOn(listboxComponent, 'onOptionDoubleClick').and.callThrough();
+            vi.spyOn(listboxComponent.onDblClick, 'emit');
+            vi.spyOn(listboxComponent, 'onOptionDoubleClick');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             if (firstOption) {
@@ -434,8 +437,8 @@ describe('Listbox', () => {
 
     describe('Filter with Match Modes', () => {
         beforeEach(() => {
-            testComponent.filter = true;
-            testComponent.filterMatchMode = 'startsWith';
+            testComponent.filter.set(true);
+            testComponent.filterMatchMode.set('startsWith');
             testFixture.detectChanges();
         });
 
@@ -449,19 +452,19 @@ describe('Listbox', () => {
                 await testFixture.whenStable();
 
                 const visibleOptions = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
-                expect(visibleOptions.length).toBeLessThanOrEqual(testComponent.options.length);
+                expect(visibleOptions.length).toBeLessThanOrEqual(testComponent.options().length);
             }
         });
     });
 
     describe('Readonly Mode', () => {
         beforeEach(() => {
-            testComponent.readonly = true;
+            testComponent.readonly.set(true);
             testFixture.detectChanges();
         });
 
         it('should not allow selection in readonly mode', async () => {
-            spyOn(testComponent, 'onSelectionChange');
+            vi.spyOn(testComponent, 'onSelectionChange');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             if (firstOption) {
@@ -475,7 +478,7 @@ describe('Listbox', () => {
 
         it('should not handle touch events in readonly mode', async () => {
             const listboxComponent = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
-            spyOn(listboxComponent, 'onOptionTouchEnd').and.callThrough();
+            vi.spyOn(listboxComponent, 'onOptionTouchEnd');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             if (firstOption) {
@@ -492,9 +495,9 @@ describe('Listbox', () => {
 
     describe('Advanced Multiple Selection', () => {
         beforeEach(() => {
-            testComponent.multiple = true;
-            testComponent.checkbox = true;
-            testComponent.metaKeySelection = false;
+            testComponent.multiple.set(true);
+            testComponent.checkbox.set(true);
+            testComponent.metaKeySelection.set(false);
             testFixture.detectChanges();
         });
 
@@ -515,17 +518,17 @@ describe('Listbox', () => {
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
-                expect(Array.isArray(testComponent.selectedValue)).toBe(true);
+                expect(Array.isArray(testComponent.selectedValue())).toBe(true);
             }
         });
     });
 
     describe('Select All with Filtering', () => {
         beforeEach(() => {
-            testComponent.multiple = true;
-            testComponent.checkbox = true;
-            testComponent.filter = true;
-            testComponent.showToggleAll = true;
+            testComponent.multiple.set(true);
+            testComponent.checkbox.set(true);
+            testComponent.filter.set(true);
+            testComponent.showToggleAll.set(true);
             testFixture.detectChanges();
         });
 
@@ -547,7 +550,7 @@ describe('Listbox', () => {
                     await testFixture.whenStable();
 
                     // Check if selectedValue is an array (multiple selection mode)
-                    expect(testComponent.selectedValue == null || Array.isArray(testComponent.selectedValue)).toBe(true);
+                    expect(testComponent.selectedValue() == null || Array.isArray(testComponent.selectedValue())).toBe(true);
                 }
             } else {
                 // If filter input is not found, test should pass
@@ -602,7 +605,7 @@ describe('Listbox', () => {
 
     describe('Options Data Types', () => {
         it('should work with simple array', () => {
-            testComponent.options = ['simple1', 'simple2', 'simple3'];
+            testComponent.options.set(['simple1', 'simple2', 'simple3']);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -610,9 +613,9 @@ describe('Listbox', () => {
         });
 
         it('should work with string array', () => {
-            testComponent.options = ['string1', 'string2', 'string3'];
-            testComponent.optionLabel = undefined as any;
-            testComponent.optionValue = undefined as any;
+            testComponent.options.set(['string1', 'string2', 'string3']);
+            testComponent.optionLabel.set(undefined as any);
+            testComponent.optionValue.set(undefined as any);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -620,9 +623,9 @@ describe('Listbox', () => {
         });
 
         it('should work with number array', () => {
-            testComponent.options = [1, 2, 3, 4, 5];
-            testComponent.optionLabel = undefined as any;
-            testComponent.optionValue = undefined as any;
+            testComponent.options.set([1, 2, 3, 4, 5]);
+            testComponent.optionLabel.set(undefined as any);
+            testComponent.optionValue.set(undefined as any);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -630,8 +633,8 @@ describe('Listbox', () => {
         });
 
         it('should work with getters', () => {
-            testComponent.options = testComponent.getterOptions;
-            testComponent.optionLabel = testComponent.getterOptionLabel;
+            testComponent.options.set(testComponent.getterOptions);
+            testComponent.optionLabel.set(testComponent.getterOptionLabel);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -640,7 +643,7 @@ describe('Listbox', () => {
 
         it('should work with signals', () => {
             // Set template options directly to signal data
-            testComponent.options = testComponent.signalOptions();
+            testComponent.options.set(testComponent.signalOptions());
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -650,7 +653,7 @@ describe('Listbox', () => {
         it('should work with observables', async () => {
             // Set template options directly to observable data
             testComponent.optionsObservable.subscribe((options) => {
-                testComponent.options = options;
+                testComponent.options.set(options);
                 testFixture.changeDetectorRef.markForCheck();
             });
 
@@ -664,7 +667,7 @@ describe('Listbox', () => {
             await new Promise((resolve) => setTimeout(resolve, 150));
 
             // Set template options directly to loaded data
-            testComponent.options = testComponent.lateLoadedOptions;
+            testComponent.options.set(testComponent.lateLoadedOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -675,7 +678,7 @@ describe('Listbox', () => {
 
     describe('Angular FormControl Integration', () => {
         it('should work with ReactiveFormsModule', () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.detectChanges();
             const form = testComponent.reactiveForm;
 
@@ -684,7 +687,7 @@ describe('Listbox', () => {
         });
 
         it('should handle form validation', () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.detectChanges();
             const form = testComponent.reactiveForm;
             const control = form.get('selectedItems');
@@ -696,7 +699,7 @@ describe('Listbox', () => {
         });
 
         it('should respond to programmatic form changes', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             const form = testComponent.reactiveForm;
@@ -710,7 +713,7 @@ describe('Listbox', () => {
         });
 
         it('should handle form disable/enable', () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.detectChanges();
             const form = testComponent.reactiveForm;
             const control = form.get('selectedItems');
@@ -725,8 +728,8 @@ describe('Listbox', () => {
 
     describe('Vital Input Properties', () => {
         it('should handle optionLabel as function', () => {
-            testComponent.optionLabel = (item: any) => item.name || item.label;
-            testComponent.options = [{ name: 'Custom Name 1' }, { name: 'Custom Name 2' }];
+            testComponent.optionLabel.set((item: any) => item.name || item.label);
+            testComponent.options.set([{ name: 'Custom Name 1' }, { name: 'Custom Name 2' }]);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -734,11 +737,11 @@ describe('Listbox', () => {
         });
 
         it('should handle optionValue as function', () => {
-            testComponent.optionValue = (item: any) => item.id || item.value;
-            testComponent.options = [
+            testComponent.optionValue.set((item: any) => item.id || item.value);
+            testComponent.options.set([
                 { label: 'Option 1', id: 'custom1' },
                 { label: 'Option 2', id: 'custom2' }
-            ];
+            ]);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -746,11 +749,11 @@ describe('Listbox', () => {
         });
 
         it('should handle optionDisabled as function', () => {
-            testComponent.optionDisabled = (item: any) => item.disabled === true;
-            testComponent.options = [
+            testComponent.optionDisabled.set((item: any) => item.disabled === true);
+            testComponent.options.set([
                 { label: 'Enabled', value: 'enabled' },
                 { label: 'Disabled', value: 'disabled', disabled: true }
-            ];
+            ]);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -758,8 +761,8 @@ describe('Listbox', () => {
         });
 
         it('should handle virtual scroll properties', () => {
-            testComponent.virtualScroll = true;
-            testComponent.scrollHeight = '300px';
+            testComponent.virtualScroll.set(true);
+            testComponent.scrollHeight.set('300px');
             testFixture.detectChanges();
 
             const listbox = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
@@ -768,7 +771,7 @@ describe('Listbox', () => {
         });
 
         it('should handle lazy loading', () => {
-            testComponent.lazy = true;
+            testComponent.lazy.set(true);
             testFixture.detectChanges();
 
             const listbox = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
@@ -776,7 +779,7 @@ describe('Listbox', () => {
         });
 
         it('should handle emptyMessage property', () => {
-            testComponent.emptyMessage = 'No items available';
+            testComponent.emptyMessage.set('No items available');
             testFixture.detectChanges();
 
             const listbox = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
@@ -784,7 +787,7 @@ describe('Listbox', () => {
         });
 
         it('should handle dynamic style updates', async () => {
-            testComponent.style = { border: '1px solid red' };
+            testComponent.style.set({ border: '1px solid red' });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -799,7 +802,7 @@ describe('Listbox', () => {
         });
 
         it('should emit onChange event', async () => {
-            spyOn(testComponent, 'onSelectionChange');
+            vi.spyOn(testComponent, 'onSelectionChange');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             firstOption?.nativeElement.click();
@@ -810,7 +813,7 @@ describe('Listbox', () => {
         });
 
         it('should emit onFocus event', async () => {
-            spyOn(testComponent, 'onFocus');
+            vi.spyOn(testComponent, 'onFocus');
 
             const listbox = testFixture.debugElement.query(By.css('[role="listbox"]'));
             listbox?.nativeElement.dispatchEvent(new FocusEvent('focus'));
@@ -821,7 +824,7 @@ describe('Listbox', () => {
         });
 
         it('should emit onBlur event', async () => {
-            spyOn(testComponent, 'onBlur');
+            vi.spyOn(testComponent, 'onBlur');
 
             const listbox = testFixture.debugElement.query(By.css('[role="listbox"]'));
             listbox?.nativeElement.dispatchEvent(new FocusEvent('blur'));
@@ -832,10 +835,10 @@ describe('Listbox', () => {
         });
 
         it('should emit onFilter event', async () => {
-            testComponent.filter = true;
+            testComponent.filter.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
-            spyOn(testComponent, 'onFilter');
+            vi.spyOn(testComponent, 'onFilter');
 
             const filterInput = testFixture.debugElement.query(By.css('input[pInputText]'));
             if (filterInput) {
@@ -849,7 +852,7 @@ describe('Listbox', () => {
         });
 
         it('should emit onDblClick event', async () => {
-            spyOn(testComponent, 'onDblClick');
+            vi.spyOn(testComponent, 'onDblClick');
 
             const firstOption = testFixture.debugElement.query(By.css('.p-listbox-option'));
             if (firstOption) {
@@ -887,7 +890,7 @@ describe('Listbox', () => {
         });
 
         it('should handle aria-multiselectable for multiple selection', async () => {
-            testComponent.multiple = true;
+            testComponent.multiple.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -896,7 +899,7 @@ describe('Listbox', () => {
         });
 
         it('should support screen reader announcements', async () => {
-            testComponent.multiple = true;
+            testComponent.multiple.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -952,7 +955,7 @@ describe('Listbox', () => {
         });
 
         it('should handle Ctrl+A for select all in multiple mode', async () => {
-            testComponent.multiple = true;
+            testComponent.multiple.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -979,7 +982,7 @@ describe('Listbox', () => {
 
     describe('Edge Cases', () => {
         it('should handle empty options array', () => {
-            testComponent.options = [];
+            testComponent.options.set([]);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -987,7 +990,7 @@ describe('Listbox', () => {
         });
 
         it('should handle null options', () => {
-            testComponent.options = null as any;
+            testComponent.options.set(null as any);
             testFixture.detectChanges();
 
             // Should not throw error
@@ -995,7 +998,7 @@ describe('Listbox', () => {
         });
 
         it('should handle invalid selectedValue', () => {
-            testComponent.selectedValue = 'invalid-value';
+            testComponent.selectedValue.set('invalid-value');
             testFixture.detectChanges();
 
             // Should not throw error
@@ -1003,8 +1006,8 @@ describe('Listbox', () => {
         });
 
         it('should handle disabled filter input when component is disabled', () => {
-            testComponent.filter = true;
-            testComponent.disabled = true;
+            testComponent.filter.set(true);
+            testComponent.disabled.set(true);
             const listboxComponent = testFixture.debugElement.query(By.css('p-listbox')).componentInstance;
             // Use signal API for disabled state
             if (listboxComponent.setDisabledState) {
@@ -1021,7 +1024,7 @@ describe('Listbox', () => {
         it('should handle circular option references', () => {
             const circularOption: any = { label: 'Circular', value: 'circular' };
             circularOption.self = circularOption;
-            testComponent.options = [circularOption];
+            testComponent.options.set([circularOption]);
             testFixture.detectChanges();
 
             expect(true).toBe(true); // Should not throw error
@@ -1029,8 +1032,8 @@ describe('Listbox', () => {
 
         it('should handle very large datasets', async () => {
             const largeOptions = Array.from({ length: 10000 }, (_, i) => ({ label: `Option ${i}`, value: i }));
-            testComponent.options = largeOptions;
-            testComponent.virtualScroll = true;
+            testComponent.options.set(largeOptions);
+            testComponent.virtualScroll.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1038,11 +1041,11 @@ describe('Listbox', () => {
         });
 
         it('should handle options with special characters', () => {
-            testComponent.options = [
+            testComponent.options.set([
                 { label: 'Option with <script>', value: 'script' },
                 { label: 'Option with "quotes"', value: 'quotes' },
                 { label: 'Option with & ampersand', value: 'ampersand' }
-            ];
+            ]);
             testFixture.detectChanges();
 
             const listItems = testFixture.debugElement.queryAll(By.css('.p-listbox-option'));
@@ -1053,9 +1056,10 @@ describe('Listbox', () => {
 
 // Template test component using #template references with enhanced features
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Listbox, FormsModule],
     template: `
-        <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
+        <p-listbox [(ngModel)]="selectedValues" [options]="items()" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
             <!-- Item template with context parameters -->
             <ng-template #item let-option let-selected="selected" let-index="index">
                 <div class="custom-item" data-testid="template-item" [attr.data-selected]="selected" [attr.data-index]="index">
@@ -1128,8 +1132,12 @@ describe('Listbox', () => {
             <!-- Checkmark template -->
             <ng-template #checkmark let-selected="selected">
                 <span class="custom-checkmark" data-testid="template-checkmark" [attr.data-selected]="selected">
-                    <i class="pi pi-check-circle" *ngIf="selected"></i>
-                    <i class="pi pi-circle" *ngIf="!selected"></i>
+                    @if (selected) {
+                        <i class="pi pi-check-circle"></i>
+                    }
+                    @if (!selected) {
+                        <i class="pi pi-circle"></i>
+                    }
                 </span>
             </ng-template>
 
@@ -1145,7 +1153,7 @@ describe('Listbox', () => {
 })
 class TestListboxTemplateComponent {
     selectedValues: any[] = [];
-    items: any[] = [
+    items = signal<any[]>([
         {
             label: 'Group 1',
             value: 'group1',
@@ -1162,14 +1170,15 @@ class TestListboxTemplateComponent {
                 { label: 'Item 2.2', value: 'item2_2' }
             ]
         }
-    ];
+    ]);
 }
 
 // Template test component using #template references with enhanced context testing
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Listbox, FormsModule],
     template: `
-        <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
+        <p-listbox [(ngModel)]="selectedValues" [options]="items()" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
             <!-- Item template with context parameters -->
             <ng-template #item let-option let-selected="selected" let-index="index">
                 <div class="custom-item" data-testid="ref-item" [attr.data-selected]="selected" [attr.data-index]="index">
@@ -1242,8 +1251,12 @@ class TestListboxTemplateComponent {
             <!-- Checkmark template -->
             <ng-template #checkmark let-selected="selected">
                 <span class="custom-checkmark" data-testid="ref-checkmark" [attr.data-selected]="selected">
-                    <i class="pi pi-check-circle" *ngIf="selected"></i>
-                    <i class="pi pi-circle" *ngIf="!selected"></i>
+                    @if (selected) {
+                        <i class="pi pi-check-circle"></i>
+                    }
+                    @if (!selected) {
+                        <i class="pi pi-circle"></i>
+                    }
                 </span>
             </ng-template>
 
@@ -1259,7 +1272,7 @@ class TestListboxTemplateComponent {
 })
 class TestListboxRefTemplateComponent {
     selectedValues: any[] = [];
-    items: any[] = [
+    items = signal<any[]>([
         {
             label: 'Group 1',
             value: 'group1',
@@ -1276,7 +1289,7 @@ class TestListboxRefTemplateComponent {
                 { label: 'Item 2.2', value: 'item2_2' }
             ]
         }
-    ];
+    ]);
 }
 
 describe('Listbox #template Tests', () => {
@@ -1286,9 +1299,8 @@ describe('Listbox #template Tests', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Listbox, FormsModule, CommonModule],
-            providers: [provideZonelessChangeDetection(), provideNoopAnimations()],
-            declarations: [TestListboxTemplateComponent]
+            imports: [Listbox, FormsModule, CommonModule, TestListboxTemplateComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TestListboxTemplateComponent);
@@ -1428,7 +1440,7 @@ describe('Listbox #template Tests', () => {
         });
 
         it('should handle empty state with empty #template', () => {
-            component.items = [];
+            component.items.set([]);
             fixture.detectChanges();
 
             const emptyTemplate = fixture.debugElement.query(By.css('[data-testid="template-empty"]'));
@@ -1466,9 +1478,8 @@ describe('Listbox #template Reference Tests', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Listbox, FormsModule, CommonModule],
-            providers: [provideZonelessChangeDetection(), provideNoopAnimations()],
-            declarations: [TestListboxRefTemplateComponent]
+            imports: [Listbox, FormsModule, CommonModule, TestListboxRefTemplateComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TestListboxRefTemplateComponent);
@@ -1608,7 +1619,7 @@ describe('Listbox #template Reference Tests', () => {
         });
 
         it('should handle empty state with empty #template', () => {
-            component.items = [];
+            component.items.set([]);
             fixture.detectChanges();
 
             const emptyTemplate = fixture.debugElement.query(By.css('[data-testid="ref-empty"]'));
@@ -1654,13 +1665,14 @@ describe('Listbox #template Reference Tests', () => {
 
 // Additional comprehensive test component for ViewChild properties and complex scenarios
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Listbox, FormsModule],
     template: `
         <p-listbox
             #listboxRef
             [(ngModel)]="selectedValues"
-            [options]="options"
-            [dragdrop]="dragdrop"
+            [options]="options()"
+            [dragdrop]="dragdrop()"
             [optionLabel]="optionLabelFunction"
             [optionValue]="optionValueFunction"
             [optionDisabled]="optionDisabledFunction"
@@ -1683,12 +1695,12 @@ class TestListboxViewChildComponent {
     dynamicStyle: any = null as any;
 
     // Drag drop properties
-    dragdrop: boolean = false;
-    options: any[] = [
+    dragdrop = signal<boolean>(false);
+    options = signal<any[]>([
         { name: 'Item 1', id: 'item1', active: true },
         { name: 'Item 2', id: 'item2', active: true },
         { name: 'Item 3', id: 'item3', active: true }
-    ];
+    ]);
 
     // Signal-based scroll height
     scrollHeightSignal = signal('400px');
@@ -1739,9 +1751,8 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Listbox, FormsModule, CommonModule],
-            providers: [provideZonelessChangeDetection(), provideNoopAnimations()],
-            declarations: [TestListboxViewChildComponent]
+            imports: [Listbox, FormsModule, CommonModule, TestListboxViewChildComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
         }).compileComponents();
 
         fixture = TestBed.createComponent(TestListboxViewChildComponent);
@@ -1890,11 +1901,11 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
 
     describe('All Event Emitters Comprehensive Test', () => {
         it('should emit all events with proper data', async () => {
-            spyOn(component, 'onChangeHandler');
-            spyOn(component, 'onFilterHandler');
-            spyOn(component, 'onFocusHandler');
-            spyOn(component, 'onBlurHandler');
-            spyOn(component, 'onDblClickHandler');
+            vi.spyOn(component, 'onChangeHandler');
+            vi.spyOn(component, 'onFilterHandler');
+            vi.spyOn(component, 'onFocusHandler');
+            vi.spyOn(component, 'onBlurHandler');
+            vi.spyOn(component, 'onDblClickHandler');
 
             // Set options manually since async may not load in test
             const listboxComponent = listboxElement.componentInstance;
@@ -1959,12 +1970,12 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
         });
 
         it('should automatically reorder items when dragdrop is enabled', async () => {
-            component.dragdrop = true;
-            component.options = [
+            component.dragdrop.set(true);
+            component.options.set([
                 { label: 'Item 1', value: 'item1' },
                 { label: 'Item 2', value: 'item2' },
                 { label: 'Item 3', value: 'item3' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1974,7 +1985,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
             expect(listboxComponent.dragdrop()).toBe(true);
 
             // Verify options are set correctly
-            expect(listboxComponent._options()).toEqual(component.options);
+            expect(listboxComponent._options()).toEqual(component.options());
 
             // Since drag drop testing is complex and requires CDK setup,
             // we'll just verify the dragdrop property is working
@@ -1982,22 +1993,22 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
         });
 
         it('should not reorder when dragdrop is disabled', async () => {
-            component.dragdrop = false;
-            component.options = [
+            component.dragdrop.set(false);
+            component.options.set([
                 { label: 'Item 1', value: 'item1' },
                 { label: 'Item 2', value: 'item2' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            const originalOptions = [...component.options];
+            const originalOptions = [...component.options()];
 
             const dragDropEvent: any = {
-                previousContainer: { data: component.options },
-                container: { data: component.options },
+                previousContainer: { data: component.options() },
+                container: { data: component.options() },
                 previousIndex: 0,
                 currentIndex: 1,
-                item: { data: component.options[0] }
+                item: { data: component.options()[0] }
             };
 
             const listboxComponent = fixture.debugElement.query(By.directive(Listbox)).componentInstance;
@@ -2007,8 +2018,8 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
             await fixture.whenStable();
 
             // Check that items were NOT reordered
-            expect(component.options[0]).toBe(originalOptions[0]);
-            expect(component.options[1]).toBe(originalOptions[1]);
+            expect(component.options()[0]).toBe(originalOptions[0]);
+            expect(component.options()[1]).toBe(originalOptions[1]);
         });
     });
 

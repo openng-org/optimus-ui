@@ -1,69 +1,74 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, signal, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from 'primeng/api';
 import { Badge, BadgeModule } from './badge';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-basic-badge',
     template: `<p-badge></p-badge>`
 })
 class TestBasicBadgeComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-value-badge',
-    template: `<p-badge [value]="value"></p-badge>`
+    template: `<p-badge [value]="value()"></p-badge>`
 })
 class TestValueBadgeComponent {
-    value: string | number | null = '2';
+    value = signal<string | number | null>('2');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-size-badge',
-    template: `<p-badge [badgeSize]="badgeSize" value="1"></p-badge>`
+    template: `<p-badge [badgeSize]="badgeSize()" value="1"></p-badge>`
 })
 class TestSizeBadgeComponent {
-    badgeSize: 'small' | 'large' | 'xlarge' | null = null as any;
+    badgeSize = signal<'small' | 'large' | 'xlarge' | null>(null as any);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-severity-badge',
-    template: `<p-badge [severity]="severity" value="1"></p-badge>`
+    template: `<p-badge [severity]="severity()" value="1"></p-badge>`
 })
 class TestSeverityBadgeComponent {
-    severity: 'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null = null as any;
+    severity = signal<'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null>(null as any);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-disabled-badge',
-    template: `<p-badge [badgeDisabled]="disabled" value="1"></p-badge>`
+    template: `<p-badge [badgeDisabled]="disabled()" value="1"></p-badge>`
 })
 class TestDisabledBadgeComponent {
-    disabled = false;
+    disabled = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [BadgeModule],
     selector: 'test-dynamic-badge',
-    template: ` <p-badge [value]="value" [badgeSize]="badgeSize" [severity]="severity" [badgeDisabled]="disabled"> </p-badge> `
+    template: ` <p-badge [value]="value()" [badgeSize]="badgeSize()" [severity]="severity()" [badgeDisabled]="disabled()"> </p-badge> `
 })
 class TestDynamicBadgeComponent {
-    value: string | number | null = '1';
-    badgeSize: 'small' | 'large' | 'xlarge' | null = null as any;
-    severity: 'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null = null as any;
-    disabled = false;
+    value = signal<string | number | null>('1');
+    badgeSize = signal<'small' | 'large' | 'xlarge' | null>(null as any);
+    severity = signal<'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null>(null as any);
+    disabled = signal(false);
 }
 
 describe('Badge', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [BadgeModule, SharedModule],
-            declarations: [TestBasicBadgeComponent, TestValueBadgeComponent, TestSizeBadgeComponent, TestSeverityBadgeComponent, TestDisabledBadgeComponent, TestDynamicBadgeComponent],
+            imports: [BadgeModule, SharedModule, TestBasicBadgeComponent, TestValueBadgeComponent, TestSizeBadgeComponent, TestSeverityBadgeComponent, TestDisabledBadgeComponent, TestDynamicBadgeComponent],
             providers: [provideZonelessChangeDetection()]
         });
     });
@@ -127,16 +132,14 @@ describe('Badge', () => {
             });
 
             it('should display numeric value', async () => {
-                component.value = 10;
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set(10);
                 await fixture.whenStable();
 
                 expect(element.textContent?.trim()).toBe('10');
             });
 
             it('should apply circle class for single character', async () => {
-                component.value = '1';
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set('1');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-circle')).toBe(true);
@@ -144,8 +147,7 @@ describe('Badge', () => {
             });
 
             it('should not apply circle class for multiple characters', async () => {
-                component.value = '10';
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set('10');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-circle')).toBe(false);
@@ -153,8 +155,7 @@ describe('Badge', () => {
             });
 
             it('should apply dot class when value is null', async () => {
-                component.value = null as any;
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set(null as any);
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-dot')).toBe(true);
@@ -163,8 +164,7 @@ describe('Badge', () => {
             });
 
             it('should handle zero value', async () => {
-                component.value = 0;
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set(0);
                 await fixture.whenStable();
 
                 expect(element.textContent?.trim()).toBe('0');
@@ -172,8 +172,7 @@ describe('Badge', () => {
             });
 
             it('should handle empty string', async () => {
-                component.value = '';
-                fixture.changeDetectorRef.markForCheck();
+                component.value.set('');
                 await fixture.whenStable();
 
                 expect(element.textContent?.trim()).toBe('' as any);
@@ -195,37 +194,32 @@ describe('Badge', () => {
             });
 
             it('should apply small size class', async () => {
-                component.badgeSize = 'small';
-                fixture.changeDetectorRef.markForCheck();
+                component.badgeSize.set('small');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-sm')).toBe(true);
             });
 
             it('should apply large size class', async () => {
-                component.badgeSize = 'large';
-                fixture.changeDetectorRef.markForCheck();
+                component.badgeSize.set('large');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-lg')).toBe(true);
             });
 
             it('should apply xlarge size class', async () => {
-                component.badgeSize = 'xlarge';
-                fixture.changeDetectorRef.markForCheck();
+                component.badgeSize.set('xlarge');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-xl')).toBe(true);
             });
 
             it('should change size dynamically', async () => {
-                component.badgeSize = 'large';
-                fixture.changeDetectorRef.markForCheck();
+                component.badgeSize.set('large');
                 await fixture.whenStable();
                 expect(element.classList.contains('p-badge-lg')).toBe(true);
 
-                component.badgeSize = 'small';
-                fixture.changeDetectorRef.markForCheck();
+                component.badgeSize.set('small');
                 await fixture.whenStable();
                 expect(element.classList.contains('p-badge-lg')).toBe(false);
                 expect(element.classList.contains('p-badge-sm')).toBe(true);
@@ -246,61 +240,53 @@ describe('Badge', () => {
             });
 
             it('should apply info severity class', async () => {
-                component.severity = 'info';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('info');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-info')).toBe(true);
             });
 
             it('should apply success severity class', async () => {
-                component.severity = 'success';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('success');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-success')).toBe(true);
             });
 
             it('should apply warn severity class', async () => {
-                component.severity = 'warn';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('warn');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-warn')).toBe(true);
             });
 
             it('should apply danger severity class', async () => {
-                component.severity = 'danger';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('danger');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-danger')).toBe(true);
             });
 
             it('should apply secondary severity class', async () => {
-                component.severity = 'secondary';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('secondary');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-secondary')).toBe(true);
             });
 
             it('should apply contrast severity class', async () => {
-                component.severity = 'contrast';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('contrast');
                 await fixture.whenStable();
 
                 expect(element.classList.contains('p-badge-contrast')).toBe(true);
             });
 
             it('should change severity dynamically', async () => {
-                component.severity = 'info';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('info');
                 await fixture.whenStable();
                 expect(element.classList.contains('p-badge-info')).toBe(true);
 
-                component.severity = 'danger';
-                fixture.changeDetectorRef.markForCheck();
+                component.severity.set('danger');
                 await fixture.whenStable();
                 expect(element.classList.contains('p-badge-info')).toBe(false);
                 expect(element.classList.contains('p-badge-danger')).toBe(true);
@@ -325,21 +311,18 @@ describe('Badge', () => {
             });
 
             it('should be hidden when disabled', async () => {
-                component.disabled = true;
-                fixture.changeDetectorRef.markForCheck();
+                component.disabled.set(true);
                 await fixture.whenStable();
 
                 expect(element.style.display).toBe('none');
             });
 
             it('should toggle visibility dynamically', async () => {
-                component.disabled = true;
-                fixture.changeDetectorRef.markForCheck();
+                component.disabled.set(true);
                 await fixture.whenStable();
                 expect(element.style.display).toBe('none');
 
-                component.disabled = false;
-                fixture.changeDetectorRef.markForCheck();
+                component.disabled.set(false);
                 await fixture.whenStable();
                 expect(element.style.display).toBe('' as any);
             });
@@ -360,10 +343,9 @@ describe('Badge', () => {
         });
 
         it('should handle combined property changes', async () => {
-            component.value = '99';
-            component.badgeSize = 'large';
-            component.severity = 'danger';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('99');
+            component.badgeSize.set('large');
+            component.severity.set('danger');
             await fixture.whenStable();
 
             expect(element.textContent?.trim()).toBe('99');
@@ -373,57 +355,48 @@ describe('Badge', () => {
 
         it('should handle transitions between different states', async () => {
             // Start with single character (circle)
-            component.value = '1';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('1');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-circle')).toBe(true);
 
             // Change to multiple characters (no circle)
-            component.value = '99';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('99');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-circle')).toBe(false);
 
             // Change to null (dot)
-            component.value = null as any;
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set(null as any);
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-dot')).toBe(true);
             expect(element.classList.contains('p-badge-circle')).toBe(false);
         });
 
         it('should handle severity transitions', async () => {
-            component.severity = 'info';
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set('info');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-info')).toBe(true);
 
-            component.severity = 'success';
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set('success');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-info')).toBe(false);
             expect(element.classList.contains('p-badge-success')).toBe(true);
 
-            component.severity = null as any;
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set(null as any);
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-success')).toBe(false);
         });
 
         it('should handle size transitions', async () => {
-            component.badgeSize = 'large';
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set('large');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-lg')).toBe(true);
 
-            component.badgeSize = 'xlarge';
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set('xlarge');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-lg')).toBe(false);
             expect(element.classList.contains('p-badge-xl')).toBe(true);
 
-            component.badgeSize = null as any;
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set(null as any);
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-xl')).toBe(false);
             expect(element.classList.contains('p-badge-lg')).toBe(false);
@@ -434,8 +407,7 @@ describe('Badge', () => {
         it('should handle numeric zero value correctly', async () => {
             const fixture = TestBed.createComponent(TestValueBadgeComponent);
             const component = fixture.componentInstance;
-            component.value = 0;
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set(0);
             await fixture.whenStable();
 
             const element = fixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -447,8 +419,7 @@ describe('Badge', () => {
         it('should handle negative numbers', async () => {
             const fixture = TestBed.createComponent(TestValueBadgeComponent);
             const component = fixture.componentInstance;
-            component.value = -5;
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set(-5);
             await fixture.whenStable();
 
             const element = fixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -459,8 +430,7 @@ describe('Badge', () => {
         it('should handle special characters in value', async () => {
             const fixture = TestBed.createComponent(TestValueBadgeComponent);
             const component = fixture.componentInstance;
-            component.value = '!';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('!');
             await fixture.whenStable();
 
             const element = fixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -471,8 +441,7 @@ describe('Badge', () => {
         it('should handle very long values', async () => {
             const fixture = TestBed.createComponent(TestValueBadgeComponent);
             const component = fixture.componentInstance;
-            component.value = '999999999';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('999999999');
             await fixture.whenStable();
 
             const element = fixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -484,8 +453,7 @@ describe('Badge', () => {
         it('should handle whitespace in value', async () => {
             const fixture = TestBed.createComponent(TestValueBadgeComponent);
             const component = fixture.componentInstance;
-            component.value = '  ';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('  ');
             await fixture.whenStable();
 
             const element = fixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -509,10 +477,9 @@ describe('Badge', () => {
         });
 
         it('should maintain base classes with all variants', async () => {
-            component.value = '1';
-            component.badgeSize = 'large';
-            component.severity = 'danger';
-            fixture.changeDetectorRef.markForCheck();
+            component.value.set('1');
+            component.badgeSize.set('large');
+            component.severity.set('danger');
             await fixture.whenStable();
 
             // Base classes
@@ -526,38 +493,32 @@ describe('Badge', () => {
         });
 
         it('should handle conflicting size classes correctly', async () => {
-            component.badgeSize = 'small';
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set('small');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-sm')).toBe(true);
 
-            component.badgeSize = 'large';
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set('large');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-sm')).toBe(false);
             expect(element.classList.contains('p-badge-lg')).toBe(true);
 
-            component.badgeSize = 'xlarge';
-            fixture.changeDetectorRef.markForCheck();
+            component.badgeSize.set('xlarge');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-lg')).toBe(false);
             expect(element.classList.contains('p-badge-xl')).toBe(true);
         });
 
         it('should handle conflicting severity classes correctly', async () => {
-            component.severity = 'info';
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set('info');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-info')).toBe(true);
 
-            component.severity = 'success';
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set('success');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-info')).toBe(false);
             expect(element.classList.contains('p-badge-success')).toBe(true);
 
-            component.severity = 'warn';
-            fixture.changeDetectorRef.markForCheck();
+            component.severity.set('warn');
             await fixture.whenStable();
             expect(element.classList.contains('p-badge-success')).toBe(false);
             expect(element.classList.contains('p-badge-warn')).toBe(true);
@@ -589,7 +550,6 @@ describe('Badge', () => {
 
             it('should apply string class to host section', async () => {
                 fixture.componentRef.setInput('pt', { host: 'HOST_CLASS' });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('HOST_CLASS')).toBe(true);
@@ -597,7 +557,6 @@ describe('Badge', () => {
 
             it('should apply string class to root section', async () => {
                 fixture.componentRef.setInput('pt', { root: 'ROOT_CLASS' });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('ROOT_CLASS')).toBe(true);
@@ -623,7 +582,6 @@ describe('Badge', () => {
                         'aria-label': 'TEST_ARIA_LABEL'
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('ROOT_OBJECT_CLASS')).toBe(true);
@@ -641,7 +599,6 @@ describe('Badge', () => {
                         'aria-hidden': 'true'
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('HOST_OBJECT_CLASS')).toBe(true);
@@ -668,7 +625,6 @@ describe('Badge', () => {
                     },
                     host: 'HOST_MIXED_CLASS'
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('ROOT_MIXED_CLASS')).toBe(true);
@@ -688,7 +644,6 @@ describe('Badge', () => {
 
             it('should use instance value in pt function for root', async () => {
                 fixture.componentRef.setInput('value', '5');
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 fixture.componentRef.setInput('pt', {
@@ -698,7 +653,6 @@ describe('Badge', () => {
                         };
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.classList.contains('HAS_VALUE')).toBe(true);
@@ -706,7 +660,6 @@ describe('Badge', () => {
 
             it('should use instance severity in pt function for root', async () => {
                 fixture.componentRef.setInput('severity', 'success');
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 fixture.componentRef.setInput('pt', {
@@ -718,7 +671,6 @@ describe('Badge', () => {
                         };
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.style.borderColor).toBe('green');
@@ -726,7 +678,6 @@ describe('Badge', () => {
 
             it('should use instance badgeSize in pt function for host', async () => {
                 fixture.componentRef.setInput('badgeSize', 'large');
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 fixture.componentRef.setInput('pt', {
@@ -736,7 +687,6 @@ describe('Badge', () => {
                         };
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(element.getAttribute('data-size')).toBe('large');
@@ -762,7 +712,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 element.click();
@@ -780,7 +729,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 element.click();
@@ -793,7 +741,6 @@ describe('Badge', () => {
             it('should apply inline pt with string class', async () => {
                 const inlineFixture = TestBed.createComponent(TestPTBadgeComponent);
                 inlineFixture.componentRef.setInput('pt', { root: 'INLINE_TEST_CLASS' });
-                inlineFixture.changeDetectorRef.markForCheck();
                 await inlineFixture.whenStable();
 
                 const element = inlineFixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -803,7 +750,6 @@ describe('Badge', () => {
             it('should apply inline pt with object class', async () => {
                 const inlineFixture = TestBed.createComponent(TestPTBadgeComponent);
                 inlineFixture.componentRef.setInput('pt', { root: { class: 'INLINE_OBJECT_CLASS' } });
-                inlineFixture.changeDetectorRef.markForCheck();
                 await inlineFixture.whenStable();
 
                 const element = inlineFixture.debugElement.query(By.directive(Badge)).nativeElement;
@@ -827,7 +773,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(hookCalled).toBe(true);
@@ -842,7 +787,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(hookCalled).toBe(true);
@@ -857,7 +801,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 
                 expect(checkCount).toBeGreaterThan(0);
@@ -872,7 +815,6 @@ describe('Badge', () => {
                         }
                     }
                 });
-                fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.destroy();
 

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { FloatLabel } from './floatlabel';
@@ -10,28 +10,28 @@ import { providePrimeNG } from 'primeng/config';
     imports: [FloatLabel, FormsModule],
     template: `
         <p-floatlabel>
-            <input id="username" [(ngModel)]="value" />
+            <input id="username" [ngModel]="value()" (ngModelChange)="value.set($event)" />
             <label for="username">Username</label>
         </p-floatlabel>
     `
 })
 class TestBasicFloatLabelComponent {
-    value: string = '';
+    value = signal<string>('');
 }
 
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `
-        <p-floatlabel [variant]="variant">
-            <input id="test-input" [(ngModel)]="value" />
+        <p-floatlabel [variant]="variant()">
+            <input id="test-input" [ngModel]="value()" (ngModelChange)="value.set($event)" />
             <label for="test-input">Test Label</label>
         </p-floatlabel>
     `
 })
 class TestVariantFloatLabelComponent {
-    value: string = '';
-    variant: 'in' | 'over' | 'on' = 'over';
+    value = signal<string>('');
+    variant = signal<'in' | 'over' | 'on'>('over');
 }
 
 describe('FloatLabel', () => {
@@ -94,7 +94,7 @@ describe('FloatLabel', () => {
         });
 
         it('should apply variant "in"', async () => {
-            component.variant = 'in';
+            component.variant.set('in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -102,7 +102,7 @@ describe('FloatLabel', () => {
         });
 
         it('should apply variant "on"', async () => {
-            component.variant = 'on';
+            component.variant.set('on');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -113,19 +113,19 @@ describe('FloatLabel', () => {
             const floatLabelElement = fixture.debugElement.query(By.directive(FloatLabel));
 
             // Test 'in' variant
-            component.variant = 'in';
+            component.variant.set('in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-in')).toBe(true);
 
             // Test 'on' variant
-            component.variant = 'on';
+            component.variant.set('on');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-on')).toBe(true);
 
             // Test 'over' variant (default)
-            component.variant = 'over';
+            component.variant.set('over');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-over')).toBe(true);
@@ -154,7 +154,7 @@ describe('FloatLabel', () => {
         });
 
         it('should update input value when model changes', async () => {
-            component.value = 'test value';
+            component.value.set('test value');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -316,13 +316,12 @@ describe('FloatLabel PassThrough Tests', () => {
     });
 
     describe('PT Case 5: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

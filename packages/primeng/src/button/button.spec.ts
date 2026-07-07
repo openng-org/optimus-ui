@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,31 +6,32 @@ import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from './button';
 
 // Basic Button Component Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
         <p-button
-            [label]="label"
-            [icon]="icon"
-            [iconPos]="iconPos"
-            [type]="type"
-            [style]="style"
-            [styleClass]="styleClass"
-            [disabled]="disabled"
-            [loading]="loading"
-            [loadingIcon]="loadingIcon"
-            [raised]="raised"
-            [rounded]="rounded"
-            [text]="text"
-            [outlined]="outlined"
-            [size]="size"
-            [plain]="plain"
-            [severity]="severity"
-            [badge]="badge"
-            [badgeSeverity]="badgeSeverity"
-            [ariaLabel]="ariaLabel"
-            [autofocus]="autofocus"
-            [tabindex]="tabindex"
-            [fluid]="fluid"
+            [label]="label()"
+            [icon]="icon()"
+            [iconPos]="iconPos()"
+            [type]="type()"
+            [style]="style()"
+            [styleClass]="styleClass()"
+            [disabled]="disabled()"
+            [loading]="loading()"
+            [loadingIcon]="loadingIcon()"
+            [raised]="raised()"
+            [rounded]="rounded()"
+            [text]="text()"
+            [outlined]="outlined()"
+            [size]="size()"
+            [plain]="plain()"
+            [severity]="severity()"
+            [badge]="badge()"
+            [badgeSeverity]="badgeSeverity()"
+            [ariaLabel]="ariaLabel()"
+            [autofocus]="autofocus()"
+            [tabindex]="tabindex()"
+            [fluid]="fluid()"
             (onClick)="onButtonClick($event)"
             (onFocus)="onButtonFocus($event)"
             (onBlur)="onButtonBlur($event)"
@@ -39,28 +40,28 @@ import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from './button';
     `
 })
 class TestBasicButtonComponent {
-    label: string | undefined = 'Click Me';
-    icon: string | undefined;
-    iconPos: 'left' | 'right' | 'top' | 'bottom' = 'left';
-    type: string = 'button';
-    style: any = {};
-    styleClass: string | undefined;
-    disabled: boolean = false;
-    loading: boolean = false;
-    loadingIcon: string | undefined;
-    raised: boolean = false;
-    rounded: boolean = false;
-    text: boolean = false;
-    outlined: boolean = false;
-    size: 'small' | 'large' | undefined | null = null as any;
-    plain: boolean = false;
-    severity: any;
-    badge: string | undefined;
-    badgeSeverity: any;
-    ariaLabel: string | undefined;
-    autofocus: boolean = false;
-    tabindex: number | undefined;
-    fluid: boolean = false;
+    label = signal<string | undefined>('Click Me');
+    icon = signal<string | undefined>(undefined);
+    iconPos = signal<'left' | 'right' | 'top' | 'bottom'>('left');
+    type = signal<string>('button');
+    style = signal<any>({});
+    styleClass = signal<string | undefined>(undefined);
+    disabled = signal(false);
+    loading = signal(false);
+    loadingIcon = signal<string | undefined>(undefined);
+    raised = signal(false);
+    rounded = signal(false);
+    text = signal(false);
+    outlined = signal(false);
+    size = signal<'small' | 'large' | undefined | null>(null as any);
+    plain = signal(false);
+    severity = signal<any>(undefined);
+    badge = signal<string | undefined>(undefined);
+    badgeSeverity = signal<any>(undefined);
+    ariaLabel = signal<string | undefined>(undefined);
+    autofocus = signal(false);
+    tabindex = signal<number | undefined>(undefined);
+    fluid = signal(false);
 
     clickEvent: Event | undefined;
     focusEvent: Event | undefined;
@@ -81,9 +82,10 @@ class TestBasicButtonComponent {
 
 // Button with Templates
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
-        <p-button [loading]="loading">
+        <p-button [loading]="loading()">
             <ng-template #content>
                 <div class="custom-content">
                     <span class="custom-icon">🎯</span>
@@ -100,11 +102,12 @@ class TestBasicButtonComponent {
     `
 })
 class TestTemplatePButtonComponent {
-    loading: boolean = false;
+    loading = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
         <p-button>
             <ng-template #content>
@@ -126,40 +129,41 @@ class TestContentTemplateButtonComponent {}
 
 // Button Directive Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ButtonDirective],
     template: `
         <button
             pButton
-            [severity]="severity"
-            [raised]="raised"
-            [rounded]="rounded"
-            [text]="text"
-            [outlined]="outlined"
-            [size]="size"
-            [plain]="plain"
-            [loading]="loading"
-            [disabled]="disabled"
-            [fluid]="fluid"
+            [severity]="severity()"
+            [raised]="raised()"
+            [rounded]="rounded()"
+            [text]="text()"
+            [outlined]="outlined()"
+            [size]="size()"
+            [plain]="plain()"
+            [loading]="loading()"
+            [disabled]="disabled()"
+            [fluid]="fluid()"
             (click)="onDirectiveClick($event)"
             class="test-button"
         >
-            {{ label }}
+            {{ label() }}
         </button>
     `
 })
 class TestButtonDirectiveComponent {
-    icon: string | undefined;
-    label: string | undefined = 'Directive Button';
-    severity: any;
-    raised: boolean = false;
-    rounded: boolean = false;
-    text: boolean = false;
-    outlined: boolean = false;
-    size: 'small' | 'large' | undefined | null = null as any;
-    plain: boolean = false;
-    loading: boolean = false;
-    disabled: boolean = false;
-    fluid: boolean = false;
+    icon = signal<string | undefined>(undefined);
+    label = signal<string | undefined>('Directive Button');
+    severity = signal<any>(undefined);
+    raised = signal(false);
+    rounded = signal(false);
+    text = signal(false);
+    outlined = signal(false);
+    size = signal<'small' | 'large' | undefined | null>(null as any);
+    plain = signal(false);
+    loading = signal(false);
+    disabled = signal(false);
+    fluid = signal(false);
 
     clickEvent: Event | undefined;
 
@@ -170,7 +174,8 @@ class TestButtonDirectiveComponent {
 
 // Button with pButtonIcon and pButtonLabel directives
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ButtonDirective, ButtonIcon, ButtonLabel],
     template: `
         <button pButton>
             <span pButtonIcon class="pi pi-check"></span>
@@ -180,24 +185,38 @@ class TestButtonDirectiveComponent {
 })
 class TestButtonWithIconLabelDirectiveComponent {}
 
+// Button directive with dynamic properties
+@Component({
+    standalone: true,
+    imports: [ButtonDirective],
+    template: ` <button pButton [outlined]="outlined()" [rounded]="rounded()" [severity]="severity()">Dynamic Button</button> `
+})
+class TestDynamicButtonDirectiveComponent {
+    outlined = signal(false);
+    rounded = signal(false);
+    severity = signal<any>(undefined);
+}
+
 // Loading Button Test
 @Component({
-    standalone: false,
-    template: ` <p-button [label]="label" [loading]="loading" [loadingIcon]="loadingIcon" (onClick)="toggleLoading()"> </p-button> `
+    standalone: true,
+    imports: [Button],
+    template: ` <p-button [label]="label()" [loading]="loading()" [loadingIcon]="loadingIcon()" (onClick)="toggleLoading()"> </p-button> `
 })
 class TestLoadingButtonComponent {
-    label = 'Load Data';
-    loading = false;
-    loadingIcon: string | undefined;
+    label = signal('Load Data');
+    loading = signal(false);
+    loadingIcon = signal<string | undefined>(undefined);
 
     toggleLoading() {
-        this.loading = !this.loading;
+        this.loading.set(!this.loading());
     }
 }
 
 // Severity Button Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
         <div class="button-group">
             <p-button label="Primary" severity="primary"></p-button>
@@ -215,7 +234,8 @@ class TestSeverityButtonComponent {}
 
 // Button Variants Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
         <div class="variant-buttons">
             <p-button label="Raised" [raised]="true"></p-button>
@@ -233,7 +253,8 @@ class TestButtonVariantsComponent {}
 
 // Badge Button Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: ` <p-button label="Messages" icon="pi pi-envelope" [badge]="badge" [badgeSeverity]="badgeSeverity"> </p-button> `
 })
 class TestBadgeButtonComponent {
@@ -243,7 +264,8 @@ class TestBadgeButtonComponent {
 
 // Icon Button Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Button],
     template: `
         <div class="icon-buttons">
             <p-button icon="pi pi-search" [iconPos]="iconPos"></p-button>
@@ -266,7 +288,11 @@ describe('Button', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
+                Button,
+                ButtonDirective,
+                ButtonIcon,
+                ButtonLabel,
                 TestBasicButtonComponent,
                 TestTemplatePButtonComponent,
                 TestContentTemplateButtonComponent,
@@ -278,7 +304,6 @@ describe('Button', () => {
                 TestBadgeButtonComponent,
                 TestIconButtonComponent
             ],
-            imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -323,7 +348,7 @@ describe('Button', () => {
 
     describe('Input Properties', () => {
         it('should update label property', async () => {
-            component.label = 'Updated Label';
+            component.label.set('Updated Label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -334,7 +359,7 @@ describe('Button', () => {
         });
 
         it('should update icon property', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -345,7 +370,7 @@ describe('Button', () => {
         });
 
         it('should update disabled property', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -355,7 +380,7 @@ describe('Button', () => {
         });
 
         it('should update loading property', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -366,7 +391,7 @@ describe('Button', () => {
         });
 
         it('should update type property', async () => {
-            component.type = 'submit';
+            component.type.set('submit');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -376,7 +401,7 @@ describe('Button', () => {
         });
 
         it('should update styleClass property', async () => {
-            component.styleClass = 'custom-button';
+            component.styleClass.set('custom-button');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -385,7 +410,7 @@ describe('Button', () => {
         });
 
         it('should update style property', async () => {
-            component.style = { backgroundColor: 'red', color: 'white' };
+            component.style.set({ backgroundColor: 'red', color: 'white' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -407,7 +432,7 @@ describe('Button', () => {
         });
 
         it('should update ariaLabel property', async () => {
-            component.ariaLabel = 'Custom Button Label';
+            component.ariaLabel.set('Custom Button Label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -417,7 +442,7 @@ describe('Button', () => {
         });
 
         it('should update tabindex property', async () => {
-            component.tabindex = 5;
+            component.tabindex.set(5);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -429,7 +454,7 @@ describe('Button', () => {
 
     describe('Event Handling', () => {
         it('should emit onClick event', async () => {
-            const clickSpy = spyOn(component, 'onButtonClick');
+            const clickSpy = vi.spyOn(component, 'onButtonClick');
 
             buttonElement.click();
             await fixture.whenStable();
@@ -439,7 +464,7 @@ describe('Button', () => {
         });
 
         it('should emit onFocus event', async () => {
-            const focusSpy = spyOn(component, 'onButtonFocus');
+            const focusSpy = vi.spyOn(component, 'onButtonFocus');
 
             buttonElement.dispatchEvent(new FocusEvent('focus'));
             await fixture.whenStable();
@@ -449,7 +474,7 @@ describe('Button', () => {
         });
 
         it('should emit onBlur event', async () => {
-            const blurSpy = spyOn(component, 'onButtonBlur');
+            const blurSpy = vi.spyOn(component, 'onButtonBlur');
 
             buttonElement.dispatchEvent(new FocusEvent('blur'));
             await fixture.whenStable();
@@ -459,8 +484,8 @@ describe('Button', () => {
         });
 
         it('should not emit events when disabled', async () => {
-            const clickSpy = spyOn(component, 'onButtonClick');
-            component.disabled = true;
+            const clickSpy = vi.spyOn(component, 'onButtonClick');
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -475,7 +500,7 @@ describe('Button', () => {
 
     describe('Button Variants', () => {
         it('should apply raised styling', async () => {
-            component.raised = true;
+            component.raised.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -485,7 +510,7 @@ describe('Button', () => {
         });
 
         it('should apply rounded styling', async () => {
-            component.rounded = true;
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -495,7 +520,7 @@ describe('Button', () => {
         });
 
         it('should apply text styling', async () => {
-            component.text = true;
+            component.text.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -505,7 +530,7 @@ describe('Button', () => {
         });
 
         it('should apply outlined styling', async () => {
-            component.outlined = true;
+            component.outlined.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -515,7 +540,7 @@ describe('Button', () => {
         });
 
         it('should apply plain styling', async () => {
-            component.plain = true;
+            component.plain.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -527,7 +552,7 @@ describe('Button', () => {
 
         it('should apply size variations', async () => {
             // Small size
-            component.size = 'small';
+            component.size.set('small');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -535,7 +560,7 @@ describe('Button', () => {
             expect(buttonInstance.size()).toBe('small');
 
             // Large size
-            component.size = 'large';
+            component.size.set('large');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -544,7 +569,7 @@ describe('Button', () => {
         });
 
         it('should apply fluid styling', async () => {
-            component.fluid = true;
+            component.fluid.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -556,7 +581,7 @@ describe('Button', () => {
 
     describe('Button Severities', () => {
         it('should apply primary severity', async () => {
-            component.severity = 'primary';
+            component.severity.set('primary');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -566,7 +591,7 @@ describe('Button', () => {
         });
 
         it('should apply secondary severity', async () => {
-            component.severity = 'secondary';
+            component.severity.set('secondary');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -576,7 +601,7 @@ describe('Button', () => {
         });
 
         it('should apply success severity', async () => {
-            component.severity = 'success';
+            component.severity.set('success');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -586,7 +611,7 @@ describe('Button', () => {
         });
 
         it('should apply danger severity', async () => {
-            component.severity = 'danger';
+            component.severity.set('danger');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -598,7 +623,7 @@ describe('Button', () => {
 
     describe('Icon Functionality', () => {
         it('should display icon', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -608,10 +633,10 @@ describe('Button', () => {
         });
 
         it('should handle different icon positions', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
 
             // Left position
-            component.iconPos = 'left';
+            component.iconPos.set('left');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -620,7 +645,7 @@ describe('Button', () => {
             expect(iconElement).toBeTruthy();
 
             // Right position
-            component.iconPos = 'right';
+            component.iconPos.set('right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -630,12 +655,12 @@ describe('Button', () => {
         });
 
         it('should show icon-only button when no label', async () => {
-            component.label = undefined as any;
+            component.label.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -650,7 +675,7 @@ describe('Button', () => {
             const loadingComponent = loadingFixture.componentInstance;
             loadingFixture.detectChanges();
 
-            loadingComponent.loading = true;
+            loadingComponent.loading.set(true);
             loadingFixture.changeDetectorRef.markForCheck();
             await loadingFixture.whenStable();
             loadingFixture.detectChanges();
@@ -660,7 +685,7 @@ describe('Button', () => {
         });
 
         it('should disable button when loading', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -669,12 +694,12 @@ describe('Button', () => {
         });
 
         it('should use custom loading icon', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spin pi-cog';
+            component.loadingIcon.set('pi pi-spin pi-cog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -770,7 +795,7 @@ describe('Button', () => {
             it('should render custom loading icon template', async () => {
                 const templateFixture = TestBed.createComponent(TestTemplatePButtonComponent);
                 const templateComponent = templateFixture.componentInstance;
-                templateComponent.loading = true;
+                templateComponent.loading.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
                 templateFixture.detectChanges();
@@ -820,7 +845,7 @@ describe('Button', () => {
 
     describe('Accessibility Tests', () => {
         it('should have proper ARIA attributes', async () => {
-            component.ariaLabel = 'Click this button';
+            component.ariaLabel.set('Click this button');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -831,12 +856,12 @@ describe('Button', () => {
         });
 
         it('should handle aria-hidden for icons', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = undefined as any; // Icon only
+            component.label.set(undefined as any); // Icon only
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -847,7 +872,7 @@ describe('Button', () => {
         });
 
         it('should handle tabindex correctly', async () => {
-            component.tabindex = 0;
+            component.tabindex.set(0);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -857,7 +882,7 @@ describe('Button', () => {
         });
 
         it('should be focusable when not disabled', async () => {
-            component.disabled = false;
+            component.disabled.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -868,7 +893,7 @@ describe('Button', () => {
         });
 
         it('should not be focusable when disabled', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -885,7 +910,7 @@ describe('Button', () => {
 
         it('should apply correct classes based on state', async () => {
             // Test loading state
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -893,12 +918,12 @@ describe('Button', () => {
             expect(buttonInstance.loading()).toBe(true);
 
             // Test disabled state
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -907,7 +932,7 @@ describe('Button', () => {
         });
 
         it('should apply custom styleClass', async () => {
-            component.styleClass = 'my-custom-button';
+            component.styleClass.set('my-custom-button');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -918,12 +943,12 @@ describe('Button', () => {
 
     describe('LoadingIcon and Icon Edge Cases', () => {
         it('should show regular icon when loading is false and icon is provided', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -939,12 +964,12 @@ describe('Button', () => {
         });
 
         it('should show default spinner when loading is true and no loadingIcon is provided', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = undefined as any;
+            component.loadingIcon.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -962,12 +987,12 @@ describe('Button', () => {
         });
 
         it('should show custom loadingIcon when loading is true and loadingIcon is provided', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -984,12 +1009,12 @@ describe('Button', () => {
         });
 
         it('should apply pi-spin class to custom loadingIcon for animation', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-cog';
+            component.loadingIcon.set('pi pi-cog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1002,17 +1027,17 @@ describe('Button', () => {
         });
 
         it('should switch from icon to loadingIcon when loading state changes', async () => {
-            component.icon = 'pi pi-play';
+            component.icon.set('pi pi-play');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1024,7 +1049,7 @@ describe('Button', () => {
             expect(loadingIcon).toBeFalsy();
 
             // Switch to loading state
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1039,12 +1064,12 @@ describe('Button', () => {
         });
 
         it('should handle complex loadingIcon classes', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spin pi-cog custom-class';
+            component.loadingIcon.set('pi pi-spin pi-cog custom-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1058,12 +1083,12 @@ describe('Button', () => {
         });
 
         it('should handle empty loadingIcon string', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = '';
+            component.loadingIcon.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1078,22 +1103,22 @@ describe('Button', () => {
         });
 
         it('should handle icon only button with loading state', async () => {
-            component.icon = 'pi pi-save';
+            component.icon.set('pi pi-save');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = undefined as any;
+            component.label.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1105,7 +1130,7 @@ describe('Button', () => {
             expect(iconElement).toBeTruthy();
 
             // Switch to loading
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1118,22 +1143,22 @@ describe('Button', () => {
         });
 
         it('should handle loading state with label but no icons', async () => {
-            component.icon = undefined as any;
+            component.icon.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = undefined as any;
+            component.loadingIcon.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = 'Submit';
+            component.label.set('Submit');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1151,27 +1176,27 @@ describe('Button', () => {
         });
 
         it('should preserve icon position classes during loading state transitions', async () => {
-            component.icon = 'pi pi-search';
+            component.icon.set('pi pi-search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = 'Search';
+            component.label.set('Search');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.iconPos = 'right';
+            component.iconPos.set('right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1181,7 +1206,7 @@ describe('Button', () => {
             expect(iconElement).toBeTruthy();
 
             // Switch to loading
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1191,7 +1216,7 @@ describe('Button', () => {
             expect(loadingIcon).toBeTruthy();
 
             // Switch back to non-loading
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1202,18 +1227,18 @@ describe('Button', () => {
         });
 
         it('should handle rapid loading state changes with different icons', async () => {
-            component.icon = 'pi pi-play';
+            component.icon.set('pi pi-play');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             // Multiple rapid state changes
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1221,7 +1246,7 @@ describe('Button', () => {
             let loadingIcon = buttonElement.querySelector('[data-pc-section="loadingicon"]');
             expect(loadingIcon).toBeTruthy();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1230,12 +1255,12 @@ describe('Button', () => {
             expect(regularIcon).toBeTruthy();
 
             // Change loadingIcon and switch again
-            component.loadingIcon = 'pi pi-cog';
+            component.loadingIcon.set('pi pi-cog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1247,22 +1272,22 @@ describe('Button', () => {
         });
 
         it('should maintain accessibility attributes during icon state changes', async () => {
-            component.icon = 'pi pi-download';
+            component.icon.set('pi pi-download');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = 'Download';
+            component.label.set('Download');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1272,7 +1297,7 @@ describe('Button', () => {
             expect(iconElement?.getAttribute('aria-hidden')).toBeNull(); // Icon elements don't always have aria-hidden in this implementation
 
             // Switch to loading
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1282,28 +1307,28 @@ describe('Button', () => {
         });
 
         it('should handle iconClass method correctly for different states', async () => {
-            component.icon = 'pi pi-home';
+            component.icon.set('pi pi-home');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loadingIcon = 'pi pi-spinner';
+            component.loadingIcon.set('pi pi-spinner');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.label = 'Home';
+            component.label.set('Home');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.iconPos = 'left';
+            component.iconPos.set('left');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             // Test non-loading state
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1315,7 +1340,7 @@ describe('Button', () => {
             expect(icon?.classList.contains('pi-home')).toBeTruthy();
 
             // Test loading state
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1331,7 +1356,7 @@ describe('Button', () => {
 
     describe('Edge Cases and Error Handling', () => {
         it('should handle empty label gracefully', async () => {
-            component.label = '';
+            component.label.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1341,7 +1366,7 @@ describe('Button', () => {
         });
 
         it('should handle undefined label', async () => {
-            component.label = undefined as any;
+            component.label.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1350,7 +1375,7 @@ describe('Button', () => {
         });
 
         it('should handle invalid icon gracefully', async () => {
-            component.icon = '';
+            component.icon.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1360,18 +1385,18 @@ describe('Button', () => {
 
         it('should handle rapid state changes', async () => {
             // Rapid loading state changes
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            component.loading = false;
+            component.loading.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             expect(async () => {
-                component.loading = true;
+                component.loading.set(true);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -1388,8 +1413,7 @@ describe('ButtonDirective', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent],
-            imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
+            imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel, TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent, TestDynamicButtonDirectiveComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1414,7 +1438,7 @@ describe('ButtonDirective', () => {
 
     describe('Directive Properties', () => {
         it('should update severity', async () => {
-            component.severity = 'success';
+            component.severity.set('success');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1424,7 +1448,7 @@ describe('ButtonDirective', () => {
         });
 
         it('should handle loading state', async () => {
-            component.loading = true;
+            component.loading.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1434,7 +1458,7 @@ describe('ButtonDirective', () => {
         });
 
         it('should apply variant styles', async () => {
-            component.raised = true;
+            component.raised.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();

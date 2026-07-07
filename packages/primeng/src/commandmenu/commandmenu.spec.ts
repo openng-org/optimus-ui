@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -7,54 +7,56 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { CommandMenu } from './commandmenu';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommandMenu],
     template: `
         <p-commandmenu
-            [options]="options"
-            [group]="group"
-            [optionLabel]="optionLabel"
-            [optionValue]="optionValue"
-            [optionDisabled]="optionDisabled"
-            [optionGroupLabel]="optionGroupLabel"
-            [optionGroupChildren]="optionGroupChildren"
-            [optionKeywords]="optionKeywords"
-            [placeholder]="placeholder"
-            [ariaLabel]="ariaLabel"
-            [multiple]="multiple"
-            [readonly]="readonly"
-            [emptyMessage]="emptyMessage"
-            [filter]="filter"
+            [options]="options()"
+            [group]="group()"
+            [optionLabel]="optionLabel()"
+            [optionValue]="optionValue()"
+            [optionDisabled]="optionDisabled()"
+            [optionGroupLabel]="optionGroupLabel()"
+            [optionGroupChildren]="optionGroupChildren()"
+            [optionKeywords]="optionKeywords()"
+            [placeholder]="placeholder()"
+            [ariaLabel]="ariaLabel()"
+            [multiple]="multiple()"
+            [readonly]="readonly()"
+            [emptyMessage]="emptyMessage()"
+            [filter]="filter()"
             (onItemSelect)="onItemSelect($event)"
             (onSearchChange)="onSearchChange($event)"
         ></p-commandmenu>
     `
 })
 class TestCommandMenuComponent {
-    options: any[] = [
+    options = signal<any[]>([
         { label: 'Option 1', value: 'opt1' },
         { label: 'Option 2', value: 'opt2' },
         { label: 'Option 3', value: 'opt3' }
-    ];
-    group: boolean = false;
-    optionLabel: string | undefined;
-    optionValue: string | undefined;
-    optionDisabled: string | ((item: any) => boolean) | undefined;
-    optionGroupLabel: string = 'label';
-    optionGroupChildren: string = 'items';
-    optionKeywords: string | undefined;
-    placeholder: string | undefined;
-    ariaLabel: string | undefined;
-    multiple: boolean = false;
-    readonly: boolean = false;
-    emptyMessage: string = 'No results found';
-    filter: ((label: string, search: string, keywords?: string[]) => number) | undefined;
+    ]);
+    group = signal<boolean>(false);
+    optionLabel = signal<string | undefined>(undefined);
+    optionValue = signal<string | undefined>(undefined);
+    optionDisabled = signal<string | ((item: any) => boolean) | undefined>(undefined);
+    optionGroupLabel = signal<string>('label');
+    optionGroupChildren = signal<string>('items');
+    optionKeywords = signal<string | undefined>(undefined);
+    placeholder = signal<string | undefined>(undefined);
+    ariaLabel = signal<string | undefined>(undefined);
+    multiple = signal<boolean>(false);
+    readonly = signal<boolean>(false);
+    emptyMessage = signal<string>('No results found');
+    filter = signal<((label: string, search: string, keywords?: string[]) => number) | undefined>(undefined);
 
     onItemSelect(_event: any) {}
     onSearchChange(_event: any) {}
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommandMenu],
     template: `
         <p-commandmenu [options]="options">
             <ng-template #header let-search>
@@ -80,7 +82,8 @@ class TestCommandMenuTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [CommandMenu],
     template: `
         <p-commandmenu [options]="options" [group]="true" [optionGroupLabel]="'label'" [optionGroupChildren]="'items'">
             <ng-template #group let-group>
@@ -103,8 +106,7 @@ class TestCommandMenuGroupTemplateComponent {
 
 async function createFixture<T>(component: new (...args: any[]) => T): Promise<ComponentFixture<T>> {
     await TestBed.configureTestingModule({
-        imports: [CommandMenu, FormsModule, CommonModule],
-        declarations: [component],
+        imports: [CommandMenu, FormsModule, CommonModule, component],
         providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
     }).compileComponents();
 
@@ -181,8 +183,8 @@ describe('CommandMenu', () => {
         });
 
         it('should display grouped options with group headers', async () => {
-            fixture.componentInstance.group = true;
-            fixture.componentInstance.options = [
+            fixture.componentInstance.group.set(true);
+            fixture.componentInstance.options.set([
                 {
                     label: 'Group A',
                     items: [
@@ -194,7 +196,7 @@ describe('CommandMenu', () => {
                     label: 'Group B',
                     items: [{ label: 'Item B1', value: 'b1' }]
                 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -208,11 +210,11 @@ describe('CommandMenu', () => {
         });
 
         it('should resolve option labels via optionLabel', async () => {
-            fixture.componentInstance.optionLabel = 'name';
-            fixture.componentInstance.options = [
+            fixture.componentInstance.optionLabel.set('name');
+            fixture.componentInstance.options.set([
                 { name: 'First', id: 1 },
                 { name: 'Second', id: 2 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -222,12 +224,12 @@ describe('CommandMenu', () => {
         });
 
         it('should resolve option values via optionValue', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
-            fixture.componentInstance.optionValue = 'id';
-            fixture.componentInstance.options = [
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
+            fixture.componentInstance.optionValue.set('id');
+            fixture.componentInstance.options.set([
                 { label: 'Item 1', id: 100 },
                 { label: 'Item 2', id: 200 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -236,7 +238,7 @@ describe('CommandMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(fixture.componentInstance.onItemSelect).toHaveBeenCalledWith(jasmine.objectContaining({ value: 100 }));
+            expect(fixture.componentInstance.onItemSelect).toHaveBeenCalledWith(expect.objectContaining({ value: 100 }));
         });
     });
 
@@ -257,16 +259,16 @@ describe('CommandMenu', () => {
         });
 
         it('should emit onSearchChange when typing', async () => {
-            spyOn(fixture.componentInstance, 'onSearchChange');
+            vi.spyOn(fixture.componentInstance, 'onSearchChange');
 
             await typeSearch(fixture, 'test');
 
-            expect(fixture.componentInstance.onSearchChange).toHaveBeenCalledWith(jasmine.objectContaining({ query: 'test' }));
+            expect(fixture.componentInstance.onSearchChange).toHaveBeenCalledWith(expect.objectContaining({ query: 'test' }));
         });
 
         it('should filter grouped options and remove empty groups', async () => {
-            fixture.componentInstance.group = true;
-            fixture.componentInstance.options = [
+            fixture.componentInstance.group.set(true);
+            fixture.componentInstance.options.set([
                 {
                     label: 'Fruits',
                     items: [
@@ -278,7 +280,7 @@ describe('CommandMenu', () => {
                     label: 'Vegetables',
                     items: [{ label: 'Carrot', value: 'carrot' }]
                 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -294,17 +296,17 @@ describe('CommandMenu', () => {
         });
 
         it('should sort results by relevance score', async () => {
-            fixture.componentInstance.filter = (label: string, search: string) => {
+            fixture.componentInstance.filter.set((label: string, search: string) => {
                 if (label.toLowerCase() === search.toLowerCase()) return 10;
                 if (label.toLowerCase().startsWith(search.toLowerCase())) return 5;
                 if (label.toLowerCase().includes(search.toLowerCase())) return 1;
                 return 0;
-            };
-            fixture.componentInstance.options = [
+            });
+            fixture.componentInstance.options.set([
                 { label: 'Something Else Test', value: '1' },
                 { label: 'Test', value: '2' },
                 { label: 'Testing', value: '3' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -329,10 +331,10 @@ describe('CommandMenu', () => {
         });
 
         it('should use custom filter function when provided', async () => {
-            const customFilter = jasmine.createSpy('customFilter').and.callFake((label: string, search: string) => {
+            const customFilter = vi.fn().mockImplementation((label: string, search: string) => {
                 return label.startsWith(search) ? 1 : 0;
             });
-            fixture.componentInstance.filter = customFilter;
+            fixture.componentInstance.filter.set(customFilter);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -344,12 +346,12 @@ describe('CommandMenu', () => {
         });
 
         it('should filter using keywords (optionKeywords)', async () => {
-            fixture.componentInstance.optionKeywords = 'tags';
-            fixture.componentInstance.options = [
+            fixture.componentInstance.optionKeywords.set('tags');
+            fixture.componentInstance.options.set([
                 { label: 'Save', value: 'save', tags: ['persist', 'store'] },
                 { label: 'Delete', value: 'delete', tags: ['remove'] },
                 { label: 'Open', value: 'open', tags: ['load'] }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -408,7 +410,7 @@ describe('CommandMenu', () => {
         });
 
         it('should select focused option with Enter', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
 
             dispatchKeydown(fixture, 'ArrowDown');
             fixture.changeDetectorRef.markForCheck();
@@ -440,12 +442,12 @@ describe('CommandMenu', () => {
         });
 
         it('should skip disabled options during navigation', async () => {
-            fixture.componentInstance.optionDisabled = 'disabled';
-            fixture.componentInstance.options = [
+            fixture.componentInstance.optionDisabled.set('disabled');
+            fixture.componentInstance.options.set([
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2', disabled: true },
                 { label: 'Option 3', value: 'opt3' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -476,7 +478,7 @@ describe('CommandMenu', () => {
         });
 
         it('should emit onItemSelect on option click', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
 
             const options = getOptions(fixture);
             options[0].click();
@@ -484,15 +486,15 @@ describe('CommandMenu', () => {
             await fixture.whenStable();
 
             expect(fixture.componentInstance.onItemSelect).toHaveBeenCalledWith(
-                jasmine.objectContaining({
-                    option: jasmine.objectContaining({ label: 'Option 1' })
+                expect.objectContaining({
+                    option: expect.objectContaining({ label: 'Option 1' })
                 })
             );
         });
 
         it('should emit correct value using optionValue', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
-            fixture.componentInstance.optionValue = 'value';
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
+            fixture.componentInstance.optionValue.set('value');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -501,16 +503,16 @@ describe('CommandMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(fixture.componentInstance.onItemSelect).toHaveBeenCalledWith(jasmine.objectContaining({ value: 'opt2' }));
+            expect(fixture.componentInstance.onItemSelect).toHaveBeenCalledWith(expect.objectContaining({ value: 'opt2' }));
         });
 
         it('should not emit onItemSelect for disabled options', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
-            fixture.componentInstance.optionDisabled = 'disabled';
-            fixture.componentInstance.options = [
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
+            fixture.componentInstance.optionDisabled.set('disabled');
+            fixture.componentInstance.options.set([
                 { label: 'Enabled', value: 'e' },
                 { label: 'Disabled', value: 'd', disabled: true }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -523,8 +525,8 @@ describe('CommandMenu', () => {
         });
 
         it('should invoke option.command callback on selection', async () => {
-            const commandSpy = jasmine.createSpy('command');
-            fixture.componentInstance.options = [{ label: 'With Command', value: 'cmd', command: commandSpy }];
+            const commandSpy = vi.fn();
+            fixture.componentInstance.options.set([{ label: 'With Command', value: 'cmd', command: commandSpy }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -537,8 +539,8 @@ describe('CommandMenu', () => {
         });
 
         it('should not select when readonly', async () => {
-            spyOn(fixture.componentInstance, 'onItemSelect');
-            fixture.componentInstance.readonly = true;
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
+            fixture.componentInstance.readonly.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -557,13 +559,13 @@ describe('CommandMenu', () => {
 
         beforeEach(async () => {
             fixture = await createFixture(TestCommandMenuComponent);
-            spyOn(fixture.componentInstance, 'onItemSelect');
-            fixture.componentInstance.optionDisabled = 'disabled';
-            fixture.componentInstance.options = [
+            vi.spyOn(fixture.componentInstance, 'onItemSelect');
+            fixture.componentInstance.optionDisabled.set('disabled');
+            fixture.componentInstance.options.set([
                 { label: 'Enabled', value: 'e' },
                 { label: 'Disabled', value: 'd', disabled: true },
                 { label: 'Also Enabled', value: 'ae' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -683,7 +685,7 @@ describe('CommandMenu', () => {
         });
 
         it('should set aria-label when provided', async () => {
-            fixture.componentInstance.ariaLabel = 'Command palette';
+            fixture.componentInstance.ariaLabel.set('Command palette');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -708,7 +710,7 @@ describe('CommandMenu', () => {
         it('should focus input via focusInput() method', () => {
             const commandMenu = fixture.debugElement.query(By.directive(CommandMenu)).componentInstance as CommandMenu;
             const input = getSearchInput(fixture);
-            spyOn(input, 'focus');
+            vi.spyOn(input, 'focus');
 
             commandMenu.focusInput();
 
@@ -716,7 +718,7 @@ describe('CommandMenu', () => {
         });
 
         it('should support placeholder prop', async () => {
-            fixture.componentInstance.placeholder = 'Type a command...';
+            fixture.componentInstance.placeholder.set('Type a command...');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

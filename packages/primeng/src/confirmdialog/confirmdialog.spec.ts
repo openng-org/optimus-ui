@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,75 +9,76 @@ import { ConfirmDialog } from './confirmdialog';
 
 // Basic ConfirmDialog Component Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: `
         <p-confirmdialog
-            [header]="header"
-            [icon]="icon"
-            [message]="message"
-            [style]="style"
-            [styleClass]="styleClass"
-            [maskStyleClass]="maskStyleClass"
-            [acceptIcon]="acceptIcon"
-            [acceptLabel]="acceptLabel"
-            [closeAriaLabel]="closeAriaLabel"
-            [acceptAriaLabel]="acceptAriaLabel"
-            [acceptVisible]="acceptVisible"
-            [rejectIcon]="rejectIcon"
-            [rejectLabel]="rejectLabel"
-            [rejectAriaLabel]="rejectAriaLabel"
-            [rejectVisible]="rejectVisible"
-            [acceptButtonStyleClass]="acceptButtonStyleClass"
-            [rejectButtonStyleClass]="rejectButtonStyleClass"
-            [closeOnEscape]="closeOnEscape"
-            [dismissableMask]="dismissableMask"
-            [blockScroll]="blockScroll"
-            [rtl]="rtl"
-            [closable]="closable"
-            [appendTo]="appendTo"
-            [breakpoints]="breakpoints"
-            [defaultFocus]="defaultFocus"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [visible]="visible"
-            [position]="position"
-            [draggable]="draggable"
+            [header]="header()"
+            [icon]="icon()"
+            [message]="message()"
+            [style]="style()"
+            [styleClass]="styleClass()"
+            [maskStyleClass]="maskStyleClass()"
+            [acceptIcon]="acceptIcon()"
+            [acceptLabel]="acceptLabel()"
+            [closeAriaLabel]="closeAriaLabel()"
+            [acceptAriaLabel]="acceptAriaLabel()"
+            [acceptVisible]="acceptVisible()"
+            [rejectIcon]="rejectIcon()"
+            [rejectLabel]="rejectLabel()"
+            [rejectAriaLabel]="rejectAriaLabel()"
+            [rejectVisible]="rejectVisible()"
+            [acceptButtonStyleClass]="acceptButtonStyleClass()"
+            [rejectButtonStyleClass]="rejectButtonStyleClass()"
+            [closeOnEscape]="closeOnEscape()"
+            [dismissableMask]="dismissableMask()"
+            [blockScroll]="blockScroll()"
+            [rtl]="rtl()"
+            [closable]="closable()"
+            [appendTo]="appendTo()"
+            [breakpoints]="breakpoints()"
+            [defaultFocus]="defaultFocus()"
+            [autoZIndex]="autoZIndex()"
+            [baseZIndex]="baseZIndex()"
+            [visible]="visible()"
+            [position]="position()"
+            [draggable]="draggable()"
             (onHide)="onHide($event)"
         >
         </p-confirmdialog>
     `
 })
 class TestBasicConfirmDialogComponent {
-    header: string | undefined = 'Confirmation';
-    icon: string | undefined = 'pi pi-exclamation-triangle';
-    message: string | undefined = 'Are you sure?';
-    style: any = {};
-    styleClass: string | undefined;
-    maskStyleClass: string | undefined;
-    acceptIcon: string | undefined;
-    acceptLabel: string | undefined = 'Yes';
-    closeAriaLabel: string | undefined;
-    acceptAriaLabel: string | undefined;
-    acceptVisible: boolean = true;
-    rejectIcon: string | undefined;
-    rejectLabel: string | undefined = 'No';
-    rejectAriaLabel: string | undefined;
-    rejectVisible: boolean = true;
-    acceptButtonStyleClass: string | undefined;
-    rejectButtonStyleClass: string | undefined;
-    closeOnEscape: boolean = true;
-    dismissableMask: boolean | undefined;
-    blockScroll: boolean = true;
-    rtl: boolean = false;
-    closable: boolean = true;
-    appendTo: any;
-    breakpoints: any;
-    defaultFocus: string = 'accept';
-    autoZIndex: boolean = true;
-    baseZIndex: number = 0;
-    visible: boolean = false;
-    position: 'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright' = 'center';
-    draggable: boolean = true;
+    header = signal<string | undefined>('Confirmation');
+    icon = signal<string | undefined>('pi pi-exclamation-triangle');
+    message = signal<string | undefined>('Are you sure?');
+    style = signal<any>({});
+    styleClass = signal<string | undefined>(undefined);
+    maskStyleClass = signal<string | undefined>(undefined);
+    acceptIcon = signal<string | undefined>(undefined);
+    acceptLabel = signal<string | undefined>('Yes');
+    closeAriaLabel = signal<string | undefined>(undefined);
+    acceptAriaLabel = signal<string | undefined>(undefined);
+    acceptVisible = signal<boolean>(true);
+    rejectIcon = signal<string | undefined>(undefined);
+    rejectLabel = signal<string | undefined>('No');
+    rejectAriaLabel = signal<string | undefined>(undefined);
+    rejectVisible = signal<boolean>(true);
+    acceptButtonStyleClass = signal<string | undefined>(undefined);
+    rejectButtonStyleClass = signal<string | undefined>(undefined);
+    closeOnEscape = signal<boolean>(true);
+    dismissableMask = signal<boolean | undefined>(undefined);
+    blockScroll = signal<boolean>(true);
+    rtl = signal<boolean>(false);
+    closable = signal<boolean>(true);
+    appendTo = signal<any>(undefined);
+    breakpoints = signal<any>(undefined);
+    defaultFocus = signal<string>('accept');
+    autoZIndex = signal<boolean>(true);
+    baseZIndex = signal<number>(0);
+    visible = signal<boolean>(false);
+    position = signal<'center' | 'top' | 'bottom' | 'left' | 'right' | 'topleft' | 'topright' | 'bottomleft' | 'bottomright'>('center');
+    draggable = signal<boolean>(true);
 
     hideEvent: any;
 
@@ -88,7 +89,8 @@ class TestBasicConfirmDialogComponent {
 
 // ConfirmDialog with #template Templates
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: `
         <p-confirmdialog>
             <ng-template #header>
@@ -134,7 +136,8 @@ class TestTemplatePConfirmDialogComponent {}
 
 // ConfirmDialog with #template Templates
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: `
         <p-confirmdialog>
             <ng-template #header>
@@ -179,7 +182,8 @@ class TestContentTemplateConfirmDialogComponent {}
 
 // ConfirmDialog Position Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: ` <p-confirmdialog [position]="position" [visible]="visible"> </p-confirmdialog> `
 })
 class TestPositionConfirmDialogComponent {
@@ -189,7 +193,8 @@ class TestPositionConfirmDialogComponent {
 
 // ConfirmDialog with ConfirmationService
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: `
         <p-confirmdialog></p-confirmdialog>
         <button (click)="confirm()" class="confirm-btn">Confirm</button>
@@ -199,8 +204,23 @@ class TestPositionConfirmDialogComponent {
 class TestConfirmationServiceComponent {
     acceptClicked = false;
     rejectClicked = false;
+    secondAcceptClicked = false;
 
     constructor(private confirmationService: ConfirmationService) {}
+
+    confirmChained() {
+        this.confirmationService.confirm({
+            message: 'First confirmation',
+            accept: () => {
+                this.confirmationService.confirm({
+                    message: 'Second confirmation',
+                    accept: () => {
+                        this.secondAcceptClicked = true;
+                    }
+                });
+            }
+        });
+    }
 
     confirm() {
         this.confirmationService.confirm({
@@ -228,7 +248,8 @@ class TestConfirmationServiceComponent {
 
 // ConfirmDialog Accessibility Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: ` <p-confirmdialog [visible]="true" [acceptAriaLabel]="acceptAriaLabel" [rejectAriaLabel]="rejectAriaLabel" [closeAriaLabel]="closeAriaLabel" header="Accessibility Test" message="Test message"> </p-confirmdialog> `
 })
 class TestAccessibilityConfirmDialogComponent {
@@ -239,7 +260,8 @@ class TestAccessibilityConfirmDialogComponent {
 
 // ConfirmDialog Button Properties Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: `
         <p-confirmdialog
             [visible]="visible"
@@ -265,7 +287,8 @@ class TestButtonPropertiesComponent {
 
 // ConfirmDialog Events Test
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ConfirmDialog],
     template: ` <p-confirmdialog [visible]="visible" (onHide)="onHide($event)"> </p-confirmdialog> `
 })
 class TestEventsConfirmDialogComponent {
@@ -284,7 +307,10 @@ describe('ConfirmDialog', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
+                ConfirmDialog,
+                Dialog,
+                Button,
                 TestBasicConfirmDialogComponent,
                 TestTemplatePConfirmDialogComponent,
                 TestContentTemplateConfirmDialogComponent,
@@ -294,7 +320,6 @@ describe('ConfirmDialog', () => {
                 TestButtonPropertiesComponent,
                 TestEventsConfirmDialogComponent
             ],
-            imports: [ConfirmDialog, Dialog, Button],
             providers: [ConfirmationService, provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -332,7 +357,7 @@ describe('ConfirmDialog', () => {
 
     describe('Input Properties', () => {
         it('should update header property', async () => {
-            component.header = 'Updated Header';
+            component.header.set('Updated Header');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -340,7 +365,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update message property', async () => {
-            component.message = 'Updated message';
+            component.message.set('Updated message');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -348,7 +373,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update icon property', async () => {
-            component.icon = 'pi pi-info';
+            component.icon.set('pi pi-info');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -356,7 +381,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update visible property', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -364,7 +389,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update position property', async () => {
-            component.position = 'top';
+            component.position.set('top');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -372,8 +397,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update style and styleClass properties', async () => {
-            component.style = { width: '400px' };
-            component.styleClass = 'custom-dialog';
+            component.style.set({ width: '400px' });
+            component.styleClass.set('custom-dialog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -382,10 +407,10 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update button properties', async () => {
-            component.acceptLabel = 'Accept';
-            component.rejectLabel = 'Reject';
-            component.acceptIcon = 'pi pi-check';
-            component.rejectIcon = 'pi pi-times';
+            component.acceptLabel.set('Accept');
+            component.rejectLabel.set('Reject');
+            component.acceptIcon.set('pi pi-check');
+            component.rejectIcon.set('pi pi-times');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -396,8 +421,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update button visibility properties', async () => {
-            component.acceptVisible = false;
-            component.rejectVisible = false;
+            component.acceptVisible.set(false);
+            component.rejectVisible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -406,8 +431,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update button style class properties', async () => {
-            component.acceptButtonStyleClass = 'custom-accept';
-            component.rejectButtonStyleClass = 'custom-reject';
+            component.acceptButtonStyleClass.set('custom-accept');
+            component.rejectButtonStyleClass.set('custom-reject');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -416,9 +441,9 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update accessibility properties', async () => {
-            component.acceptAriaLabel = 'Accept action';
-            component.rejectAriaLabel = 'Reject action';
-            component.closeAriaLabel = 'Close dialog';
+            component.acceptAriaLabel.set('Accept action');
+            component.rejectAriaLabel.set('Reject action');
+            component.closeAriaLabel.set('Close dialog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -428,10 +453,10 @@ describe('ConfirmDialog', () => {
         });
 
         it('should update behavior properties', async () => {
-            component.closeOnEscape = false;
-            component.dismissableMask = true;
-            component.blockScroll = false;
-            component.draggable = false;
+            component.closeOnEscape.set(false);
+            component.dismissableMask.set(true);
+            component.blockScroll.set(false);
+            component.draggable.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -444,7 +469,7 @@ describe('ConfirmDialog', () => {
 
     describe('Event Handling', () => {
         it('should emit onHide event', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -457,7 +482,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle accept action', async () => {
-            const acceptSpy = spyOn(confirmDialogInstance, 'onAccept').and.callThrough();
+            const acceptSpy = vi.spyOn(confirmDialogInstance, 'onAccept');
 
             confirmDialogInstance.onAccept();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -466,7 +491,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle reject action', async () => {
-            const rejectSpy = spyOn(confirmDialogInstance, 'onReject').and.callThrough();
+            const rejectSpy = vi.spyOn(confirmDialogInstance, 'onReject');
 
             confirmDialogInstance.onReject();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -477,8 +502,8 @@ describe('ConfirmDialog', () => {
 
     describe('Button Functionality', () => {
         it('should display accept button when acceptVisible is true', async () => {
-            component.visible = true;
-            component.acceptVisible = true;
+            component.visible.set(true);
+            component.acceptVisible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -489,8 +514,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should hide accept button when acceptVisible is false', async () => {
-            component.visible = true;
-            component.acceptVisible = false;
+            component.visible.set(true);
+            component.acceptVisible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -502,8 +527,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should display reject button when rejectVisible is true', async () => {
-            component.visible = true;
-            component.rejectVisible = true;
+            component.visible.set(true);
+            component.rejectVisible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -514,8 +539,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should hide reject button when rejectVisible is false', async () => {
-            component.visible = true;
-            component.rejectVisible = false;
+            component.visible.set(true);
+            component.rejectVisible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -860,8 +885,8 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle focus management', async () => {
-            component.visible = true;
-            component.defaultFocus = 'accept';
+            component.visible.set(true);
+            component.defaultFocus.set('accept');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -872,7 +897,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should have proper focus trap behavior', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -885,7 +910,7 @@ describe('ConfirmDialog', () => {
 
     describe('CSS Classes and Styling', () => {
         it('should apply correct default classes', async () => {
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -895,7 +920,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should apply custom styleClass', async () => {
-            component.styleClass = 'my-custom-dialog';
+            component.styleClass.set('my-custom-dialog');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -916,9 +941,9 @@ describe('ConfirmDialog', () => {
 
     describe('Dialog Integration', () => {
         it('should pass properties to underlying dialog', async () => {
-            component.visible = true;
-            component.draggable = false;
-            component.blockScroll = false;
+            component.visible.set(true);
+            component.draggable.set(false);
+            component.blockScroll.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -929,7 +954,7 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle dialog visibility changes', async () => {
-            const visibilityChangeSpy = spyOn(confirmDialogInstance, 'onVisibleChange').and.callThrough();
+            const visibilityChangeSpy = vi.spyOn(confirmDialogInstance, 'onVisibleChange');
 
             confirmDialogInstance.onVisibleChange(true);
             await new Promise((resolve) => setTimeout(resolve, 0));
@@ -948,9 +973,9 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle empty string properties', async () => {
-            component.header = '';
-            component.message = '';
-            component.icon = '';
+            component.header.set('');
+            component.message.set('');
+            component.icon.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -960,9 +985,9 @@ describe('ConfirmDialog', () => {
         });
 
         it('should handle undefined properties gracefully', async () => {
-            component.header = undefined as any;
-            component.message = undefined as any;
-            component.icon = undefined as any;
+            component.header.set(undefined as any);
+            component.message.set(undefined as any);
+            component.icon.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -973,18 +998,18 @@ describe('ConfirmDialog', () => {
 
         it('should handle rapid visibility changes', async () => {
             // Rapid visibility state changes
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
 
-            component.visible = false;
+            component.visible.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
 
             expect(() => {
-                component.visible = true;
+                component.visible.set(true);
                 fixture.changeDetectorRef.markForCheck();
             }).not.toThrow();
         });
@@ -1038,7 +1063,8 @@ describe('ConfirmDialog', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1067,8 +1093,7 @@ describe('ConfirmDialog', () => {
             it('should apply simple string classes to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase1Component],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase1Component],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1091,7 +1116,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1128,8 +1154,7 @@ describe('ConfirmDialog', () => {
             it('should apply object properties to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase2Component],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase2Component],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1153,7 +1178,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1184,8 +1210,7 @@ describe('ConfirmDialog', () => {
             it('should apply mixed object and string values correctly', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase3Component],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase3Component],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1208,7 +1233,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test" [visible]="isVisible"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1245,8 +1271,7 @@ describe('ConfirmDialog', () => {
             it('should use instance variables in PT functions', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase4Component],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase4Component],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1268,7 +1293,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1303,8 +1329,7 @@ describe('ConfirmDialog', () => {
             it('should bind click events through PT', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase5Component],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase5Component],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1328,7 +1353,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="{ pcDialog: 'INLINE_DIALOG_CLASS', message: 'INLINE_MESSAGE_CLASS' }" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1347,7 +1373,8 @@ describe('ConfirmDialog', () => {
             }
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="{ pcDialog: { class: 'INLINE_DIALOG_OBJECT_CLASS' }, icon: { class: 'INLINE_ICON_CLASS' } }" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1368,8 +1395,7 @@ describe('ConfirmDialog', () => {
             it('should apply inline PT string classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineComponent],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase6InlineComponent],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1392,8 +1418,7 @@ describe('ConfirmDialog', () => {
             it('should apply inline PT object classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineObjectComponent],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase6InlineObjectComponent],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1424,7 +1449,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 7: Test from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog key="test1"></p-confirmdialog>
                     <button (click)="confirm('test1')">Confirm 1</button>
@@ -1447,8 +1473,7 @@ describe('ConfirmDialog', () => {
             it('should apply global PT configuration from PrimeNGConfig', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase7GlobalComponent],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase7GlobalComponent],
                     providers: [
                         ConfirmationService,
                         provideZonelessChangeDetection(),
@@ -1477,7 +1502,8 @@ describe('ConfirmDialog', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [ConfirmDialog],
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
                     <button (click)="confirm()">Confirm</button>
@@ -1517,8 +1543,7 @@ describe('ConfirmDialog', () => {
             it('should call PT hooks on Angular lifecycle events', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase8HooksComponent],
-                    imports: [ConfirmDialog, Dialog, Button],
+                    imports: [ConfirmDialog, Dialog, Button, TestPTCase8HooksComponent],
                     providers: [ConfirmationService, provideZonelessChangeDetection()]
                 }).compileComponents();
 
