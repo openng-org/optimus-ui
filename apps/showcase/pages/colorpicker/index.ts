@@ -6,6 +6,7 @@ import { UsageDoc } from '@/doc/colorpicker/usage-doc';
 import { InlineDoc } from '@/doc/colorpicker/inline-doc';
 import { PTComponent } from '@/doc/colorpicker/pt/PTComponent';
 import { ReactiveFormsDoc } from '@/doc/colorpicker/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/colorpicker/signalforms-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/colorpicker/templatedrivenforms-doc';
 import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
@@ -47,7 +48,8 @@ export class ColorPickerDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

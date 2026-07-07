@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-07-01T15:48:08.070Z",
-  "totalDemos": 831,
+  "generatedAt": "2026-07-07T22:12:24.889Z",
+  "totalDemos": 855,
   "demos": {
     "Image-template-demo": {
       "key": "Image-template-demo",
@@ -297,6 +297,25 @@
         "imports": [
           "AutoCompleteModule",
           "FormsModule"
+        ]
+      }
+    },
+    "autocomplete-signal-forms-demo": {
+      "key": "autocomplete-signal-forms-demo",
+      "selector": "autocomplete-signal-forms-demo",
+      "component": "autocomplete",
+      "section": "signal-forms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { AutoCompleteModule } from 'primeng/autocomplete';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex justify-center flex-col gap-4 md:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-autocomplete [formField]=\"exampleForm.value\" [suggestions]=\"items\" (completeMethod)=\"search($event)\" fluid />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, AutoCompleteModule, MessageModule, ButtonModule]\n})\nexport class AutoCompleteSignalFormsDemo {\n    messageService = inject(MessageService);\n    items: string[] = [];\n    formSubmitted = signal(false);\n    model = signal({ value: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Value is required.' });\n    });\n\n    search(event: AutoCompleteCompleteEvent) {\n        this.items = [...Array(10).keys()].map((item) => event.query + '-' + item);\n    }\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ value: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "AutoCompleteModule",
+          "MessageModule",
+          "ButtonModule"
         ]
       }
     },
@@ -1530,6 +1549,25 @@
         ]
       }
     },
+    "cascadeselect-signal-forms-demo": {
+      "key": "cascadeselect-signal-forms-demo",
+      "selector": "cascadeselect-signal-forms-demo",
+      "component": "cascadeselect",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { CascadeSelectModule } from 'primeng/cascadeselect';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\ninterface City {\n    cname: string;\n    code: string;\n}\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-cascadeselect\n                        [formField]=\"exampleForm.selectedCity\"\n                        [options]=\"countries\"\n                        optionLabel=\"cname\"\n                        optionGroupLabel=\"name\"\n                        [optionGroupChildren]=\"['states', 'cities']\"\n                        [style]=\"{ minWidth: '14rem' }\"\n                        placeholder=\"Select a City\"\n                    />\n                    @if (isInvalid(exampleForm.selectedCity)) {\n                        @for (error of exampleForm.selectedCity().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, CascadeSelectModule, MessageModule, ButtonModule]\n})\nexport class CascadeSelectSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    countries: any[] = [\n        {\n            name: 'Australia',\n            code: 'AU',\n            states: [\n                {\n                    name: 'New South Wales',\n                    cities: [\n                        { cname: 'Sydney', code: 'A-SY' },\n                        { cname: 'Newcastle', code: 'A-NE' },\n                        { cname: 'Wollongong', code: 'A-WO' }\n                    ]\n                },\n                {\n                    name: 'Queensland',\n                    cities: [\n                        { cname: 'Brisbane', code: 'A-BR' },\n                        { cname: 'Townsville', code: 'A-TO' }\n                    ]\n                }\n            ]\n        },\n        {\n            name: 'Canada',\n            code: 'CA',\n            states: [\n                {\n                    name: 'Quebec',\n                    cities: [\n                        { cname: 'Montreal', code: 'C-MO' },\n                        { cname: 'Quebec City', code: 'C-QU' }\n                    ]\n                },\n                {\n                    name: 'Ontario',\n                    cities: [\n                        { cname: 'Ottawa', code: 'C-OT' },\n                        { cname: 'Toronto', code: 'C-TO' }\n                    ]\n                }\n            ]\n        },\n        {\n            name: 'United States',\n            code: 'US',\n            states: [\n                {\n                    name: 'California',\n                    cities: [\n                        { cname: 'Los Angeles', code: 'US-LA' },\n                        { cname: 'San Diego', code: 'US-SD' },\n                        { cname: 'San Francisco', code: 'US-SF' }\n                    ]\n                },\n                {\n                    name: 'Florida',\n                    cities: [\n                        { cname: 'Jacksonville', code: 'US-JA' },\n                        { cname: 'Miami', code: 'US-MI' },\n                        { cname: 'Tampa', code: 'US-TA' },\n                        { cname: 'Orlando', code: 'US-OR' }\n                    ]\n                },\n                {\n                    name: 'Texas',\n                    cities: [\n                        { cname: 'Austin', code: 'US-AU' },\n                        { cname: 'Dallas', code: 'US-DA' },\n                        { cname: 'Houston', code: 'US-HO' }\n                    ]\n                }\n            ]\n        }\n    ];\n    model = signal<{ selectedCity: City | null }>({ selectedCity: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.selectedCity, { message: 'City is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ selectedCity: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<City | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "CascadeSelectModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "cascadeselect-reactive-forms-demo": {
       "key": "cascadeselect-reactive-forms-demo",
       "selector": "cascadeselect-reactive-forms-demo",
@@ -2014,6 +2052,25 @@
         ]
       }
     },
+    "checkbox-signal-forms-demo": {
+      "key": "checkbox-signal-forms-demo",
+      "selector": "checkbox-signal-forms-demo",
+      "component": "checkbox",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, validate } from '@angular/forms/signals';\nimport { CheckboxModule } from 'primeng/checkbox';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-wrap gap-4\">\n                    <div class=\"flex items-center gap-2\">\n                        <p-checkbox [formField]=\"exampleForm.cheese\" [binary]=\"true\" inputId=\"cheese\" />\n                        <label for=\"cheese\" class=\"text-sm\">Cheese</label>\n                    </div>\n                    <div class=\"flex items-center gap-2\">\n                        <p-checkbox [formField]=\"exampleForm.mushroom\" [binary]=\"true\" inputId=\"mushroom\" />\n                        <label for=\"mushroom\" class=\"text-sm\">Mushroom</label>\n                    </div>\n                    <div class=\"flex items-center gap-2\">\n                        <p-checkbox [formField]=\"exampleForm.pepper\" [binary]=\"true\" inputId=\"pepper\" />\n                        <label for=\"pepper\" class=\"text-sm\">Pepper</label>\n                    </div>\n                    <div class=\"flex items-center gap-2\">\n                        <p-checkbox [formField]=\"exampleForm.onion\" [binary]=\"true\" inputId=\"onion\" />\n                        <label for=\"onion\" class=\"text-sm\">Onion</label>\n                    </div>\n                </div>\n                @if (isInvalid()) {\n                    @for (error of exampleForm().errors(); track error.kind) {\n                        <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                    }\n                }\n                <button pButton severity=\"secondary\" type=\"submit\">\n                    <span pButtonLabel>Submit</span>\n                </button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, CheckboxModule, MessageModule, ButtonModule]\n})\nexport class CheckboxSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ cheese: false, mushroom: false, pepper: false, onion: false });\n    exampleForm = form(this.model, (path) => {\n        validate(path, ({ value }) => {\n            const anySelected = Object.values(value()).some((selected) => selected === true);\n\n            return anySelected ? undefined : { kind: 'atLeastOneRequired', message: 'At least one ingredient must be selected.' };\n        });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ cheese: false, mushroom: false, pepper: false, onion: false });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid() {\n        const state = this.exampleForm();\n        \n        return state.invalid() && this.formSubmitted();\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "CheckboxModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "checkbox-reactive-forms-demo": {
       "key": "checkbox-reactive-forms-demo",
       "selector": "checkbox-reactive-forms-demo",
@@ -2308,6 +2365,25 @@
           "MessageModule",
           "ButtonModule",
           "FormsModule"
+        ]
+      }
+    },
+    "colorpicker-signal-forms-demo": {
+      "key": "colorpicker-signal-forms-demo",
+      "selector": "colorpicker-signal-forms-demo",
+      "component": "colorpicker",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { ColorPickerModule } from 'primeng/colorpicker';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col items-center gap-2\">\n                    <p-colorpicker [formField]=\"exampleForm.color\" defaultColor=\"989898\" />\n                    @if (isInvalid(exampleForm.color)) {\n                        @for (error of exampleForm.color().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, ColorPickerModule, MessageModule, ButtonModule]\n})\nexport class ColorPickerSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ color: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.color, { message: 'Color is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ color: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "ColorPickerModule",
+          "MessageModule",
+          "ButtonModule"
         ]
       }
     },
@@ -3165,6 +3241,25 @@
         ]
       }
     },
+    "datepicker-signal-forms-demo": {
+      "key": "datepicker-signal-forms-demo",
+      "selector": "datepicker-signal-forms-demo",
+      "component": "datepicker",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { DatePickerModule } from 'primeng/datepicker';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-datepicker [formField]=\"exampleForm.selectedDate\" />\n                    @if (isInvalid(exampleForm.selectedDate)) {\n                        @for (error of exampleForm.selectedDate().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, DatePickerModule, MessageModule, ButtonModule]\n})\nexport class DatePickerSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal<{ selectedDate: Date | null }>({ selectedDate: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.selectedDate, { message: 'Date is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ selectedDate: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<Date | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "DatePickerModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "datepicker-reactive-forms-demo": {
       "key": "datepicker-reactive-forms-demo",
       "selector": "datepicker-reactive-forms-demo",
@@ -3922,7 +4017,7 @@
       "component": "dock",
       "section": "advanced",
       "code": {
-        "typescript": "import { Component, OnInit, inject } from '@angular/core';\nimport { DialogModule } from 'primeng/dialog';\nimport { DockModule } from 'primeng/dock';\nimport { GalleriaModule } from 'primeng/galleria';\nimport { MenubarModule } from 'primeng/menubar';\nimport { TerminalModule } from 'primeng/terminal';\nimport { ToastModule } from 'primeng/toast';\nimport { TreeModule } from 'primeng/tree';\nimport { TooltipModule } from 'primeng/tooltip';\nimport { NodeService } from '@/service/nodeservice';\nimport { PhotoService } from '@/service/photoservice';\nimport { MenuItem, MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"dock-demo\">\n            <p-menubar [model]=\"menubarItems\">\n                <ng-template #start>\n                    <i class=\"pi pi-apple px-2\"></i>\n                </ng-template>\n                <ng-template #end>\n                    <i class=\"pi pi-video px-2\"></i>\n                    <i class=\"pi pi-wifi px-2\"></i>\n                    <i class=\"pi pi-volume-up px-2\"></i>\n                    <span class=\"px-2 text-sm\">Fri 13:07</span>\n                    <i class=\"pi pi-search px-2\"></i>\n                    <i class=\"pi pi-bars px-2\"></i>\n                </ng-template>\n            </p-menubar>\n            <div class=\"dock-window\">\n                <p-dock [model]=\"dockItems\" position=\"bottom\">\n                    <ng-template #item let-item>\n                        <a [pTooltip]=\"item.label\" tooltipPosition=\"top\" class=\"p-dock-item-link\">\n                            <img [alt]=\"item.label\" [src]=\"item.icon\" style=\"width: 100%\" />\n                        </a>\n                    </ng-template>\n                </p-dock>\n                <p-toast position=\"top-center\" key=\"tc\" />\n                <p-dialog [(visible)]=\"displayFinder\" [breakpoints]=\"{ '960px': '50vw' }\" [style]=\"{ width: '30vw', height: '18rem' }\" [draggable]=\"false\" [resizable]=\"false\" header=\"Finder\">\n                    <p-tree [value]=\"nodes\" />\n                </p-dialog>\n                <p-dialog [maximizable]=\"true\" [(visible)]=\"displayTerminal\" [breakpoints]=\"{ '960px': '50vw' }\" [style]=\"{ width: '30vw' }\" [draggable]=\"false\" [resizable]=\"false\" header=\"Terminal\">\n                    <p-terminal welcomeMessage=\"Welcome to PrimeNG (cmd: 'date', 'greet {0}', 'random')\" prompt=\"primeng $\" />\n                </p-dialog>\n                <p-galleria\n                    [(value)]=\"images\"\n                    [showThumbnails]=\"false\"\n                    [showThumbnailNavigators]=\"false\"\n                    [showItemNavigators]=\"true\"\n                    [(visible)]=\"displayGalleria\"\n                    [circular]=\"true\"\n                    [responsiveOptions]=\"responsiveOptions\"\n                    [circular]=\"true\"\n                    [fullScreen]=\"true\"\n                    [containerStyle]=\"{ width: '400px' }\"\n                >\n                    <ng-template #item let-item>\n                        <img [src]=\"item.itemImageSrc\" style=\"width: 100%; display: block;\" />\n                    </ng-template>\n                </p-galleria>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: [DialogModule, DockModule, GalleriaModule, MenubarModule, TerminalModule, ToastModule, TreeModule, TooltipModule],\n    providers: [NodeService, PhotoService, MessageService]\n})\nexport class DockAdvancedDemo implements OnInit {\n    private nodeService = inject(NodeService);\n    private photoService = inject(PhotoService);\n    private messageService = inject(MessageService);\n    displayTerminal: boolean | undefined;\n    displayFinder: boolean | undefined;\n    displayGalleria: boolean | undefined;\n    dockItems: MenuItem[] | undefined;\n    menubarItems: any[] | undefined;\n    responsiveOptions: any[] | undefined;\n    images: any[] | undefined;\n    nodes: any[] | undefined;\n    subscription: Subscription | undefined;\n\n    ngOnInit() {\n        this.dockItems = [\n            {\n                label: 'Finder',\n                tooltipOptions: {\n                    tooltipLabel: 'Finder',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg',\n                command: () => {\n                    this.displayFinder = true;\n                }\n            },\n            {\n                label: 'Terminal',\n                tooltipOptions: {\n                    tooltipLabel: 'Terminal',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/terminal.svg',\n                command: () => {\n                    this.displayTerminal = true;\n                }\n            },\n            {\n                label: 'App Store',\n                tooltipOptions: {\n                    tooltipLabel: 'App Store',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg',\n                url: 'https://www.apple.com/app-store/'\n            },\n            {\n                label: 'Safari',\n                tooltipOptions: {\n                    tooltipLabel: 'Safari',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/safari.svg'\n            },\n            {\n                label: 'Photos',\n                tooltipOptions: {\n                    tooltipLabel: 'Photos',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg',\n                command: () => {\n                    this.displayGalleria = true;\n                }\n            },\n            {\n                label: 'GitHub',\n                tooltipOptions: {\n                    tooltipLabel: 'GitHub',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',\n                url: 'https://github.com/primefaces/primeng'\n            },\n            {\n                label: 'Trash',\n                tooltipOptions: {\n                    tooltipLabel: 'Trash',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png',\n                command: () => {\n                    this.messageService.add({ severity: 'info', summary: 'Trash is empty', key: 'tc' });\n                }\n            }\n        ];\n        this.menubarItems = [\n            {\n                label: 'Finder',\n                styleClass: 'menubar-root'\n            },\n            {\n                label: 'File',\n                items: [\n                    {\n                        label: 'New',\n                        icon: 'pi pi-fw pi-plus',\n                        items: [\n                            {\n                                label: 'Bookmark',\n                                icon: 'pi pi-fw pi-bookmark'\n                            },\n                            {\n                                label: 'Video',\n                                icon: 'pi pi-fw pi-video'\n                            }\n                        ]\n                    },\n                    {\n                        label: 'Delete',\n                        icon: 'pi pi-fw pi-trash'\n                    },\n                    {\n                        separator: true\n                    },\n                    {\n                        label: 'Export',\n                        icon: 'pi pi-fw pi-external-link'\n                    }\n                ]\n            },\n            {\n                label: 'Edit',\n                items: [\n                    {\n                        label: 'Left',\n                        icon: 'pi pi-fw pi-align-left'\n                    },\n                    {\n                        label: 'Right',\n                        icon: 'pi pi-fw pi-align-right'\n                    },\n                    {\n                        label: 'Center',\n                        icon: 'pi pi-fw pi-align-center'\n                    },\n                    {\n                        label: 'Justify',\n                        icon: 'pi pi-fw pi-align-justify'\n                    }\n                ]\n            },\n            {\n                label: 'Users',\n                items: [\n                    {\n                        label: 'New',\n                        icon: 'pi pi-fw pi-user-plus'\n                    },\n                    {\n                        label: 'Delete',\n                        icon: 'pi pi-fw pi-user-minus'\n                    },\n                    {\n                        label: 'Search',\n                        icon: 'pi pi-fw pi-users',\n                        items: [\n                            {\n                                label: 'Filter',\n                                icon: 'pi pi-fw pi-filter',\n                                items: [\n                                    {\n                                        label: 'Print',\n                                        icon: 'pi pi-fw pi-print'\n                                    }\n                                ]\n                            },\n                            {\n                                icon: 'pi pi-fw pi-bars',\n                                label: 'List'\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                label: 'Events',\n                items: [\n                    {\n                        label: 'Edit',\n                        icon: 'pi pi-fw pi-pencil',\n                        items: [\n                            {\n                                label: 'Save',\n                                icon: 'pi pi-fw pi-calendar-plus'\n                            },\n                            {\n                                label: 'Delete',\n                                icon: 'pi pi-fw pi-calendar-minus'\n                            }\n                        ]\n                    },\n                    {\n                        label: 'Archieve',\n                        icon: 'pi pi-fw pi-calendar-times',\n                        items: [\n                            {\n                                label: 'Remove',\n                                icon: 'pi pi-fw pi-calendar-minus'\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                label: 'Quit'\n            }\n        ];\n        this.responsiveOptions = [\n            {\n                breakpoint: '1024px',\n                numVisible: 3\n            },\n            {\n                breakpoint: '768px',\n                numVisible: 2\n            },\n            {\n                breakpoint: '560px',\n                numVisible: 1\n            }\n        ];\n        this.subscription = this.terminalService.commandHandler.subscribe((command) => this.commandHandler(command));\n        this.galleriaService.getImages().then((data) => (this.images = data));\n        this.nodeService.getFiles().then((data) => (this.nodes = data));\n    }\n\n    commandHandler(text: any) {\n        let response;\n        let argsIndex = text.indexOf(' ');\n        let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;\n        \n        switch (command) {\n            case 'date':\n                response = 'Today is ' + new Date().toDateString();\n                break;\n        \n            case 'greet':\n                response = 'Hola ' + text.substring(argsIndex + 1) + '!';\n                break;\n        \n            case 'random':\n                response = Math.floor(Math.random() * 100);\n                break;\n        \n            default:\n                response = 'Unknown command: ' + command;\n                break;\n        }\n        \n        if (response) {\n            this.terminalService.sendResponse(response as string);\n        }\n    }\n\n    ngOnDestroy() {\n        if (this.subscription) {\n            this.subscription.unsubscribe();\n        }\n    }\n}"
+        "typescript": "import { Component, OnInit, inject } from '@angular/core';\nimport { DialogModule } from 'primeng/dialog';\nimport { DockModule } from 'primeng/dock';\nimport { GalleriaModule } from 'primeng/galleria';\nimport { MenubarModule } from 'primeng/menubar';\nimport { TerminalModule } from 'primeng/terminal';\nimport { ToastModule } from 'primeng/toast';\nimport { TreeModule } from 'primeng/tree';\nimport { TooltipModule } from 'primeng/tooltip';\nimport { NodeService } from '@/service/nodeservice';\nimport { PhotoService } from '@/service/photoservice';\nimport { MenuItem, MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"dock-demo\">\n            <p-menubar [model]=\"menubarItems\">\n                <ng-template #start>\n                    <i class=\"pi pi-apple px-2\"></i>\n                </ng-template>\n                <ng-template #end>\n                    <i class=\"pi pi-video px-2\"></i>\n                    <i class=\"pi pi-wifi px-2\"></i>\n                    <i class=\"pi pi-volume-up px-2\"></i>\n                    <span class=\"px-2 text-sm\">Fri 13:07</span>\n                    <i class=\"pi pi-search px-2\"></i>\n                    <i class=\"pi pi-bars px-2\"></i>\n                </ng-template>\n            </p-menubar>\n            <div class=\"dock-window\">\n                <p-dock [model]=\"dockItems\" position=\"bottom\">\n                    <ng-template #item let-item>\n                        <a [pTooltip]=\"item.label\" tooltipPosition=\"top\" class=\"p-dock-item-link\">\n                            <img [alt]=\"item.label\" [src]=\"item.icon\" style=\"width: 100%\" />\n                        </a>\n                    </ng-template>\n                </p-dock>\n                <p-toast position=\"top-center\" key=\"tc\" />\n                <p-dialog [(visible)]=\"displayFinder\" [breakpoints]=\"{ '960px': '50vw' }\" [style]=\"{ width: '30vw', height: '18rem' }\" [draggable]=\"false\" [resizable]=\"false\" header=\"Finder\">\n                    <p-tree [value]=\"nodes\" />\n                </p-dialog>\n                <p-dialog [maximizable]=\"true\" [(visible)]=\"displayTerminal\" [breakpoints]=\"{ '960px': '50vw' }\" [style]=\"{ width: '30vw' }\" [draggable]=\"false\" [resizable]=\"false\" header=\"Terminal\">\n                    <p-terminal welcomeMessage=\"Welcome to {{ PROJECT_NAME }} (cmd: 'date', 'greet {0}', 'random')\" prompt=\"primeng $\" />\n                </p-dialog>\n                <p-galleria\n                    [(value)]=\"images\"\n                    [showThumbnails]=\"false\"\n                    [showThumbnailNavigators]=\"false\"\n                    [showItemNavigators]=\"true\"\n                    [(visible)]=\"displayGalleria\"\n                    [circular]=\"true\"\n                    [responsiveOptions]=\"responsiveOptions\"\n                    [circular]=\"true\"\n                    [fullScreen]=\"true\"\n                    [containerStyle]=\"{ width: '400px' }\"\n                >\n                    <ng-template #item let-item>\n                        <img [src]=\"item.itemImageSrc\" style=\"width: 100%; display: block;\" />\n                    </ng-template>\n                </p-galleria>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: [DialogModule, DockModule, GalleriaModule, MenubarModule, TerminalModule, ToastModule, TreeModule, TooltipModule],\n    providers: [NodeService, PhotoService, MessageService]\n})\nexport class DockAdvancedDemo implements OnInit {\n    private nodeService = inject(NodeService);\n    private photoService = inject(PhotoService);\n    private messageService = inject(MessageService);\n    PROJECT_NAME: any = PROJECT_NAME;\n    GITHUB_REPO_URL: any = GITHUB_REPO_URL;\n    displayTerminal: boolean | undefined;\n    displayFinder: boolean | undefined;\n    displayGalleria: boolean | undefined;\n    dockItems: MenuItem[] | undefined;\n    menubarItems: any[] | undefined;\n    responsiveOptions: any[] | undefined;\n    images: any[] | undefined;\n    nodes: any[] | undefined;\n    subscription: Subscription | undefined;\n\n    ngOnInit() {\n        this.dockItems = [\n            {\n                label: 'Finder',\n                tooltipOptions: {\n                    tooltipLabel: 'Finder',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg',\n                command: () => {\n                    this.displayFinder = true;\n                }\n            },\n            {\n                label: 'Terminal',\n                tooltipOptions: {\n                    tooltipLabel: 'Terminal',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/terminal.svg',\n                command: () => {\n                    this.displayTerminal = true;\n                }\n            },\n            {\n                label: 'App Store',\n                tooltipOptions: {\n                    tooltipLabel: 'App Store',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg',\n                url: 'https://www.apple.com/app-store/'\n            },\n            {\n                label: 'Safari',\n                tooltipOptions: {\n                    tooltipLabel: 'Safari',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/safari.svg'\n            },\n            {\n                label: 'Photos',\n                tooltipOptions: {\n                    tooltipLabel: 'Photos',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg',\n                command: () => {\n                    this.displayGalleria = true;\n                }\n            },\n            {\n                label: 'GitHub',\n                tooltipOptions: {\n                    tooltipLabel: 'GitHub',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',\n                url: GITHUB_REPO_URL\n            },\n            {\n                label: 'Trash',\n                tooltipOptions: {\n                    tooltipLabel: 'Trash',\n                    tooltipPosition: 'top',\n                    positionTop: -15,\n                    positionLeft: 15,\n                    showDelay: 1000\n                },\n                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png',\n                command: () => {\n                    this.messageService.add({ severity: 'info', summary: 'Trash is empty', key: 'tc' });\n                }\n            }\n        ];\n        this.menubarItems = [\n            {\n                label: 'Finder',\n                styleClass: 'menubar-root'\n            },\n            {\n                label: 'File',\n                items: [\n                    {\n                        label: 'New',\n                        icon: 'pi pi-fw pi-plus',\n                        items: [\n                            {\n                                label: 'Bookmark',\n                                icon: 'pi pi-fw pi-bookmark'\n                            },\n                            {\n                                label: 'Video',\n                                icon: 'pi pi-fw pi-video'\n                            }\n                        ]\n                    },\n                    {\n                        label: 'Delete',\n                        icon: 'pi pi-fw pi-trash'\n                    },\n                    {\n                        separator: true\n                    },\n                    {\n                        label: 'Export',\n                        icon: 'pi pi-fw pi-external-link'\n                    }\n                ]\n            },\n            {\n                label: 'Edit',\n                items: [\n                    {\n                        label: 'Left',\n                        icon: 'pi pi-fw pi-align-left'\n                    },\n                    {\n                        label: 'Right',\n                        icon: 'pi pi-fw pi-align-right'\n                    },\n                    {\n                        label: 'Center',\n                        icon: 'pi pi-fw pi-align-center'\n                    },\n                    {\n                        label: 'Justify',\n                        icon: 'pi pi-fw pi-align-justify'\n                    }\n                ]\n            },\n            {\n                label: 'Users',\n                items: [\n                    {\n                        label: 'New',\n                        icon: 'pi pi-fw pi-user-plus'\n                    },\n                    {\n                        label: 'Delete',\n                        icon: 'pi pi-fw pi-user-minus'\n                    },\n                    {\n                        label: 'Search',\n                        icon: 'pi pi-fw pi-users',\n                        items: [\n                            {\n                                label: 'Filter',\n                                icon: 'pi pi-fw pi-filter',\n                                items: [\n                                    {\n                                        label: 'Print',\n                                        icon: 'pi pi-fw pi-print'\n                                    }\n                                ]\n                            },\n                            {\n                                icon: 'pi pi-fw pi-bars',\n                                label: 'List'\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                label: 'Events',\n                items: [\n                    {\n                        label: 'Edit',\n                        icon: 'pi pi-fw pi-pencil',\n                        items: [\n                            {\n                                label: 'Save',\n                                icon: 'pi pi-fw pi-calendar-plus'\n                            },\n                            {\n                                label: 'Delete',\n                                icon: 'pi pi-fw pi-calendar-minus'\n                            }\n                        ]\n                    },\n                    {\n                        label: 'Archieve',\n                        icon: 'pi pi-fw pi-calendar-times',\n                        items: [\n                            {\n                                label: 'Remove',\n                                icon: 'pi pi-fw pi-calendar-minus'\n                            }\n                        ]\n                    }\n                ]\n            },\n            {\n                label: 'Quit'\n            }\n        ];\n        this.responsiveOptions = [\n            {\n                breakpoint: '1024px',\n                numVisible: 3\n            },\n            {\n                breakpoint: '768px',\n                numVisible: 2\n            },\n            {\n                breakpoint: '560px',\n                numVisible: 1\n            }\n        ];\n        this.subscription = this.terminalService.commandHandler.subscribe((command) => this.commandHandler(command));\n        this.galleriaService.getImages().then((data) => (this.images = data));\n        this.nodeService.getFiles().then((data) => (this.nodes = data));\n    }\n\n    commandHandler(text: any) {\n        let response;\n        let argsIndex = text.indexOf(' ');\n        let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;\n        \n        switch (command) {\n            case 'date':\n                response = 'Today is ' + new Date().toDateString();\n                break;\n        \n            case 'greet':\n                response = 'Hola ' + text.substring(argsIndex + 1) + '!';\n                break;\n        \n            case 'random':\n                response = Math.floor(Math.random() * 100);\n                break;\n        \n            default:\n                response = 'Unknown command: ' + command;\n                break;\n        }\n        \n        if (response) {\n            this.terminalService.sendResponse(response as string);\n        }\n    }\n\n    ngOnDestroy() {\n        if (this.subscription) {\n            this.subscription.unsubscribe();\n        }\n    }\n}"
       },
       "metadata": {
         "services": [
@@ -4218,6 +4313,25 @@
         ]
       }
     },
+    "editor-signal-forms-demo": {
+      "key": "editor-signal-forms-demo",
+      "selector": "editor-signal-forms-demo",
+      "component": "editor",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { EditorModule } from 'primeng/editor';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n            <div class=\"flex flex-col gap-1\">\n                <p-editor [formField]=\"exampleForm.text\" [style]=\"{ height: '320px' }\" />\n                @if (isInvalid(exampleForm.text)) {\n                    @for (error of exampleForm.text().errors(); track error.kind) {\n                        <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                    }\n                }\n            </div>\n            <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n        </form>\n    `,\n    standalone: true,\n    imports: [FormField, EditorModule, MessageModule, ButtonModule]\n})\nexport class EditorSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ text: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.text, { message: 'Content is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ text: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "EditorModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "editor-readonly-demo": {
       "key": "editor-readonly-demo",
       "selector": "editor-readonly-demo",
@@ -4501,21 +4615,6 @@
         "imports": [
           "TableModule"
         ]
-      }
-    },
-    "filterservice-custom-constraints-demo": {
-      "key": "filterservice-custom-constraints-demo",
-      "selector": "filterservice-custom-constraints-demo",
-      "component": "filterservice",
-      "section": "customconstraints",
-      "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { FilterService } from 'primeng/api';\n\n@Component({\n    template: `\n        <app-docsectiontext>\n            <p>FilterService can be extended by adding new constraints using the <span>register</span> function.</p></app-docsectiontext\n        >\n    `,\n    standalone: true,\n    imports: []\n})\nexport class FilterServiceCustomConstraintsDemo {}"
-      },
-      "metadata": {
-        "services": [],
-        "primeNGServices": [],
-        "extFiles": [],
-        "imports": []
       }
     },
     "filterservice-built-in-constraints-demo": {
@@ -5051,7 +5150,7 @@
       "component": "guides",
       "section": "configuration",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\n\n@Component({\n    template: `\n        <div class=\"doc-section-description font-bold mb-4\">With Markup</div>\n        <div class=\"doc-section-description my-4 font-bold\">With CSS</div>\n    `,\n    standalone: true,\n    imports: []\n})\nexport class GuidesConfigurationDemo {\n    markupCode: Code = {\n        html: `<html dir=\"rtl\">`\n    };\n    cssCode: Code = {\n        scss: `html {\n    direction: rtl\n}`\n    };\n}"
+        "typescript": "import { Component } from '@angular/core';\n\n@Component({\n    template: `\n        <div class=\"doc-section-description font-bold mb-4\">With Markup</div>\n        <div class=\"doc-section-description my-4 font-bold\">With CSS</div>\n    `,\n    standalone: true,\n    imports: []\n})\nexport class GuidesConfigurationDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n    markupCode: Code = {\n        html: `<html dir=\"rtl\">`\n    };\n    cssCode: Code = {\n        scss: `html {\n    direction: rtl\n}`\n    };\n}"
       },
       "metadata": {
         "services": [],
@@ -5066,7 +5165,7 @@
       "component": "guides",
       "section": "pcprefix",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\n\n@Component({\n    template: `\n        <div class=\"card flex justify-center\">\n            <p-button\n                type=\"button\"\n                label=\"Messages\"\n                icon=\"pi pi-inbox\"\n                badge=\"2\"\n                variant=\"outlined\"\n                severity=\"secondary\"\n                [pt]=\"{\n                    root: 'px-3! py-2!',\n                    icon: 'text-lg! text-violet-500! dark:text-violet-400!',\n                    label: 'text-violet-500! dark:text-violet-400!',\n                    pcBadge: {\n                        root: 'bg-violet-500! dark:bg-violet-400! text-white! dark:text-black!'\n                    }\n                }\"\n            />\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule]\n})\nexport class GuidesPcPrefixDemo {}"
+        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\n\n@Component({\n    template: `\n        <div class=\"card flex justify-center\">\n            <p-button\n                type=\"button\"\n                label=\"Messages\"\n                icon=\"pi pi-inbox\"\n                badge=\"2\"\n                variant=\"outlined\"\n                severity=\"secondary\"\n                [pt]=\"{\n                    root: 'px-3! py-2!',\n                    icon: 'text-lg! text-violet-500! dark:text-violet-400!',\n                    label: 'text-violet-500! dark:text-violet-400!',\n                    pcBadge: {\n                        root: 'bg-violet-500! dark:bg-violet-400! text-white! dark:text-black!'\n                    }\n                }\"\n            />\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule]\n})\nexport class GuidesPcPrefixDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n}"
       },
       "metadata": {
         "services": [],
@@ -5083,7 +5182,7 @@
       "component": "guides",
       "section": "introduction",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { PanelModule } from 'primeng/panel';\n\n@Component({\n    template: `\n        <div class=\"card\">\n            <p-panel header=\"PT Panel\" [pt]=\"pt\">\n                <p class=\"m-0 text-sm\">\n                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n                </p>\n            </p-panel>\n        </div>\n    `,\n    standalone: true,\n    imports: [PanelModule]\n})\nexport class GuidesIntroductionDemo {}"
+        "typescript": "import { Component } from '@angular/core';\nimport { PanelModule } from 'primeng/panel';\n\n@Component({\n    template: `\n        <div class=\"card\">\n            <p-panel header=\"PT Panel\" [pt]=\"pt\">\n                <p class=\"m-0 text-sm\">\n                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo\n                    consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n                </p>\n            </p-panel>\n        </div>\n    `,\n    standalone: true,\n    imports: [PanelModule]\n})\nexport class GuidesIntroductionDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n}"
       },
       "metadata": {
         "services": [],
@@ -5450,6 +5549,24 @@
         ]
       }
     },
+    "inputcolor-signal-forms-demo": {
+      "key": "inputcolor-signal-forms-demo",
+      "selector": "inputcolor-signal-forms-demo",
+      "component": "inputcolor",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col items-center gap-2\">\n                    <p-inputcolor [formField]=\"exampleForm.color\" class=\"w-80 space-y-3\">\n                        <p-inputcolor-area>\n                            <p-inputcolor-area-background />\n                            <p-inputcolor-area-thumb />\n                        </p-inputcolor-area>\n                        <div class=\"flex items-center gap-2\">\n                            <div class=\"flex-1 space-y-1 mr-1\">\n                                <p-inputcolor-slider>\n                                    <p-inputcolor-transparency-grid />\n                                    <p-inputcolor-slider-track />\n                                    <p-inputcolor-slider-thumb />\n                                </p-inputcolor-slider>\n                            </div>\n                            <p-inputcolor-swatch class=\"shrink-0\">\n                                <p-inputcolor-transparency-grid />\n                                <p-inputcolor-swatch-background />\n                            </p-inputcolor-swatch>\n                        </div>\n                        <input pInputColorInput [fluid]=\"true\" channel=\"hex\" />\n                    </p-inputcolor>\n                    @if (isInvalid(exampleForm.color)) {\n                        @for (error of exampleForm.color().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ButtonModule]\n})\nexport class InputColorSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ color: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.color, { message: 'Color is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ color: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "inputcolor-reactive-forms-demo": {
       "key": "inputcolor-reactive-forms-demo",
       "selector": "inputcolor-reactive-forms-demo",
@@ -5752,6 +5869,26 @@
         ]
       }
     },
+    "inputmask-signal-forms-demo": {
+      "key": "inputmask-signal-forms-demo",
+      "selector": "inputmask-signal-forms-demo",
+      "component": "inputmask",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { InputMaskModule } from 'primeng/inputmask';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 sm:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <input pInputText pInputMask=\"99-999999\" placeholder=\"99-999999\" [formField]=\"exampleForm.value\" fluid />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ButtonModule, InputTextModule, InputMaskModule]\n})\nexport class InputMaskSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ value: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Serial number is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ value: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ButtonModule",
+          "InputTextModule",
+          "InputMaskModule"
+        ]
+      }
+    },
     "inputmask-reactive-forms-demo": {
       "key": "inputmask-reactive-forms-demo",
       "selector": "inputmask-reactive-forms-demo",
@@ -6032,6 +6169,25 @@
         "imports": [
           "InputNumberModule",
           "FormsModule"
+        ]
+      }
+    },
+    "inputnumber-signal-forms-demo": {
+      "key": "inputnumber-signal-forms-demo",
+      "selector": "inputnumber-signal-forms-demo",
+      "component": "inputnumber",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { InputNumberModule } from 'primeng/inputnumber';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-inputnumber inputId=\"integeronly\" [formField]=\"exampleForm.value\" />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, InputNumberModule, MessageModule, ButtonModule]\n})\nexport class InputNumberSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ value: null as number | null });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Number is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ value: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<number | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "InputNumberModule",
+          "MessageModule",
+          "ButtonModule"
         ]
       }
     },
@@ -6344,6 +6500,25 @@
         ]
       }
     },
+    "inputotp-signal-forms-demo": {
+      "key": "inputotp-signal-forms-demo",
+      "selector": "inputotp-signal-forms-demo",
+      "component": "inputotp",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, minLength, required, type FieldTree } from '@angular/forms/signals';\nimport { InputOtpModule } from 'primeng/inputotp';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-inputotp [formField]=\"exampleForm.value\" />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, InputOtpModule, MessageModule, ButtonModule]\n})\nexport class InputOtpSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ value: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Passcode is required.' });\n        minLength(path.value, 4, { message: 'Passcode must be at least 4 characters.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ value: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "InputOtpModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "inputotp-sample-demo": {
       "key": "inputotp-sample-demo",
       "selector": "inputotp-sample-demo",
@@ -6487,6 +6662,25 @@
         "imports": [
           "InputTextModule",
           "FormsModule"
+        ]
+      }
+    },
+    "inputtext-signal-forms-demo": {
+      "key": "inputtext-signal-forms-demo",
+      "selector": "inputtext-signal-forms-demo",
+      "component": "inputtext",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { email, form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 w-full sm:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <input pInputText type=\"text\" id=\"username\" placeholder=\"Username\" [formField]=\"exampleForm.username\" />\n                    @if (isInvalid(exampleForm.username)) {\n                        @for (error of exampleForm.username().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <div class=\"flex flex-col gap-1\">\n                    <input pInputText type=\"email\" id=\"email\" placeholder=\"Email\" [formField]=\"exampleForm.email\" />\n                    @if (isInvalid(exampleForm.email)) {\n                        @for (error of exampleForm.email().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ButtonModule, InputTextModule]\n})\nexport class InputTextSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ username: '', email: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.username, { message: 'Username is required.' });\n        required(path.email, { message: 'Email is required.' });\n        email(path.email, { message: 'Please enter a valid email.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ username: '', email: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ButtonModule",
+          "InputTextModule"
         ]
       }
     },
@@ -6848,6 +7042,25 @@
         ]
       }
     },
+    "knob-signal-forms-demo": {
+      "key": "knob-signal-forms-demo",
+      "selector": "knob-signal-forms-demo",
+      "component": "knob",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, max, min, type FieldTree } from '@angular/forms/signals';\nimport { KnobModule } from 'primeng/knob';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col items-center gap-4\">\n                <div class=\"flex flex-col items-center gap-1\">\n                    <p-knob [formField]=\"exampleForm.value\" />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, KnobModule, MessageModule, ButtonModule]\n})\nexport class KnobSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ value: 15 });\n    exampleForm = form(this.model, (path) => {\n        min(path.value, 25, { message: 'Value must be greater than 15.' });\n        max(path.value, 75, { message: 'Must be less than 75.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ value: 15 });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<number>) {\n        const state = field();\n        \n        return state.invalid() && (state.dirty() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "KnobModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "knob-readonly-demo": {
       "key": "knob-readonly-demo",
       "selector": "knob-readonly-demo",
@@ -7050,6 +7263,25 @@
         "imports": [
           "ListboxModule",
           "FormsModule"
+        ]
+      }
+    },
+    "listbox-signal-forms-demo": {
+      "key": "listbox-signal-forms-demo",
+      "selector": "listbox-signal-forms-demo",
+      "component": "listbox",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { ListboxModule } from 'primeng/listbox';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\ninterface City {\n    name: string;\n    code: string;\n}\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 sm:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-listbox [options]=\"cities\" [formField]=\"exampleForm.selectedCity\" optionLabel=\"name\" class=\"w-full md:w-56\" />\n                    @if (isInvalid(exampleForm.selectedCity)) {\n                        @for (error of exampleForm.selectedCity().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, ListboxModule, MessageModule, ButtonModule]\n})\nexport class ListboxSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    cities: City[] = [\n        { name: 'New York', code: 'NY' },\n        { name: 'Rome', code: 'RM' },\n        { name: 'London', code: 'LDN' },\n        { name: 'Istanbul', code: 'IST' },\n        { name: 'Paris', code: 'PRS' }\n    ];\n    model = signal<{ selectedCity: City | null }>({ selectedCity: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.selectedCity, { message: 'City is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ selectedCity: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<City | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "ListboxModule",
+          "MessageModule",
+          "ButtonModule"
         ]
       }
     },
@@ -7610,6 +7842,25 @@
         ]
       }
     },
+    "message-signal-forms-demo": {
+      "key": "message-signal-forms-demo",
+      "selector": "message-signal-forms-demo",
+      "component": "message",
+      "section": "signal-forms",
+      "code": {
+        "typescript": "import { Component, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { InputMaskModule } from 'primeng/inputmask';\nimport { MessageModule } from 'primeng/message';\nimport { InputTextModule } from 'primeng/inputtext';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <div class=\"flex flex-col gap-4\">\n                <p-message severity=\"error\" icon=\"pi pi-times-circle\" class=\"mb-2\">Validation Failed</p-message>\n                <div class=\"flex flex-col gap-1\">\n                    <input pInputText placeholder=\"Username\" aria-label=\"username\" [formField]=\"exampleForm.username\" />\n                    @if (isInvalid(exampleForm.username)) {\n                        @for (error of exampleForm.username().errors(); track error.kind) {\n                            <p-message severity=\"error\" variant=\"simple\" size=\"small\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <div class=\"flex flex-col gap-1\">\n                    <p-inputmask mask=\"(999) 999-9999\" placeholder=\"Phone\" [formField]=\"exampleForm.phone\" />\n                    @if (isInvalid(exampleForm.phone)) {\n                        @for (error of exampleForm.phone().errors(); track error.kind) {\n                            <p-message severity=\"error\" variant=\"simple\" size=\"small\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, InputMaskModule, MessageModule, InputTextModule]\n})\nexport class MessageSignalFormsDemo {\n    model = signal({ username: '', phone: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.username, { message: 'Username is required' });\n        required(path.phone, { message: 'Phone number is required' });\n    });\n\n    isInvalid(field: FieldTree<string>) {\n        return field().invalid();\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "InputMaskModule",
+          "MessageModule",
+          "InputTextModule"
+        ]
+      }
+    },
     "message-severity-demo": {
       "key": "message-severity-demo",
       "selector": "message-severity-demo",
@@ -7953,6 +8204,27 @@
         "imports": [
           "MultiSelectModule",
           "FormsModule"
+        ]
+      }
+    },
+    "multiselect-signal-forms-demo": {
+      "key": "multiselect-signal-forms-demo",
+      "selector": "multiselect-signal-forms-demo",
+      "component": "multiselect",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { MultiSelectModule } from 'primeng/multiselect';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\ninterface City {\n    name: string;\n    code: string;\n}\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex justify-center flex-col gap-4 w-full md:w-80\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-multiselect [options]=\"cities\" [formField]=\"exampleForm.city\" optionLabel=\"name\" placeholder=\"Select Cities\" [maxSelectedLabels]=\"3\" [fluid]=\"true\" />\n                    @if (isInvalid(exampleForm.city)) {\n                        @for (error of exampleForm.city().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, MultiSelectModule, ButtonModule],\n    providers: [MessageService]\n})\nexport class MultiSelectSignalFormsDemo {\n    private messageService = inject(MessageService);\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    cities: City[] = [\n        { name: 'New York', code: 'NY' },\n        { name: 'Rome', code: 'RM' },\n        { name: 'London', code: 'LDN' },\n        { name: 'Istanbul', code: 'IST' },\n        { name: 'Paris', code: 'PRS' }\n    ];\n    model = signal<{ city: City[] | null }>({ city: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.city, { message: 'City is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ city: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<City[] | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [
+          "MessageService"
+        ],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "MultiSelectModule",
+          "ButtonModule"
         ]
       }
     },
@@ -8892,6 +9164,27 @@
         ]
       }
     },
+    "password-signal-forms-demo": {
+      "key": "password-signal-forms-demo",
+      "selector": "password-signal-forms-demo",
+      "component": "password",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { PasswordModule } from 'primeng/password';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 sm:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-password [formField]=\"exampleForm.value\" [feedback]=\"false\" autocomplete=\"off\" fluid />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, PasswordModule, ButtonModule],\n    providers: [MessageService]\n})\nexport class PasswordSignalFormsDemo {\n    private messageService = inject(MessageService);\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ value: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Password is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ value: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [
+          "MessageService"
+        ],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "PasswordModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "password-reactive-forms-demo": {
       "key": "password-reactive-forms-demo",
       "selector": "password-reactive-forms-demo",
@@ -9490,6 +9783,25 @@
         ]
       }
     },
+    "radiobutton-signal-forms-demo": {
+      "key": "radiobutton-signal-forms-demo",
+      "selector": "radiobutton-signal-forms-demo",
+      "component": "radiobutton",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { RadioButtonModule } from 'primeng/radiobutton';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-wrap gap-4\">\n                    @for (category of categories; track category.key) {\n                        <div class=\"flex items-center gap-2\">\n                            <p-radiobutton [formField]=\"exampleForm.selectedCategory\" name=\"selectedCategory\" [inputId]=\"category.key\" [value]=\"category.key\" />\n                            <label [for]=\"category.key\" class=\"text-sm\"> {{ category.name }} </label>\n                        </div>\n                    }\n                </div>\n                @if (isInvalid(exampleForm.selectedCategory)) {\n                    @for (error of exampleForm.selectedCategory().errors(); track error.kind) {\n                        <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                    }\n                }\n                <button pButton severity=\"secondary\" type=\"submit\">\n                    <span pButtonLabel>Submit</span>\n                </button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, RadioButtonModule, ButtonModule]\n})\nexport class RadioButtonSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    categories: any[] = [\n        { name: 'Cheese', key: 'C' },\n        { name: 'Mushroom', key: 'M' },\n        { name: 'Pepper', key: 'P' },\n        { name: 'Onion', key: 'O' }\n    ];\n    model = signal({ selectedCategory: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.selectedCategory, { message: 'At least one ingredient must be selected.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ selectedCategory: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "RadioButtonModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "radiobutton-reactive-forms-demo": {
       "key": "radiobutton-reactive-forms-demo",
       "selector": "radiobutton-reactive-forms-demo",
@@ -9672,6 +9984,27 @@
         "imports": [
           "RatingModule",
           "FormsModule"
+        ]
+      }
+    },
+    "rating-signal-forms-demo": {
+      "key": "rating-signal-forms-demo",
+      "selector": "rating-signal-forms-demo",
+      "component": "rating",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { RatingModule } from 'primeng/rating';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 w-40\">\n                <div class=\"flex flex-col items-center gap-2\">\n                    <p-rating [formField]=\"exampleForm.ratingValue\" />\n                    @if (isInvalid(exampleForm.ratingValue)) {\n                        @for (error of exampleForm.ratingValue().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, RatingModule, ButtonModule],\n    providers: [MessageService]\n})\nexport class RatingSignalFormsDemo {\n    private messageService = inject(MessageService);\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal<{ ratingValue: number | null }>({ ratingValue: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.ratingValue, { message: 'Value is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ ratingValue: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<number | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [
+          "MessageService"
+        ],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "RatingModule",
+          "ButtonModule"
         ]
       }
     },
@@ -10138,6 +10471,25 @@
         ]
       }
     },
+    "select-signal-forms-demo": {
+      "key": "select-signal-forms-demo",
+      "selector": "select-signal-forms-demo",
+      "component": "select",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { SelectModule } from 'primeng/select';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\ninterface City {\n    name: string;\n    code: string;\n}\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 w-full sm:w-56\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-select [formField]=\"exampleForm.city\" [options]=\"cities\" optionLabel=\"name\" placeholder=\"Select a City\" class=\"w-full md:w-56\" />\n                    @if (isInvalid(exampleForm.city)) {\n                        @for (error of exampleForm.city().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, SelectModule, MessageModule, ButtonModule]\n})\nexport class SelectSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    cities: City[] = [\n        { name: 'New York', code: 'NY' },\n        { name: 'Rome', code: 'RM' },\n        { name: 'London', code: 'LDN' },\n        { name: 'Istanbul', code: 'IST' },\n        { name: 'Paris', code: 'PRS' }\n    ];\n    model = signal<{ city: City | null }>({ city: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.city, { message: 'City is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ city: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<City | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "SelectModule",
+          "MessageModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "select-reactive-forms-demo": {
       "key": "select-reactive-forms-demo",
       "selector": "select-reactive-forms-demo",
@@ -10570,6 +10922,25 @@
         ]
       }
     },
+    "selectbutton-signal-forms-demo": {
+      "key": "selectbutton-signal-forms-demo",
+      "selector": "selectbutton-signal-forms-demo",
+      "component": "selectbutton",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { SelectButtonModule } from 'primeng/selectbutton';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-selectbutton [options]=\"stateOptions\" [formField]=\"exampleForm.value\" optionLabel=\"label\" optionValue=\"value\" />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, SelectButtonModule, ButtonModule]\n})\nexport class SelectButtonSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    stateOptions: any[] = [\n        { label: 'One-Way', value: 'one-way' },\n        { label: 'Return', value: 'return' }\n    ];\n    model = signal({ value: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Selection is required' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ value: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "SelectButtonModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "selectbutton-reactive-forms-demo": {
       "key": "selectbutton-reactive-forms-demo",
       "selector": "selectbutton-reactive-forms-demo",
@@ -10832,6 +11203,25 @@
         "imports": [
           "SliderModule",
           "FormsModule"
+        ]
+      }
+    },
+    "slider-signal-forms-demo": {
+      "key": "slider-signal-forms-demo",
+      "selector": "slider-signal-forms-demo",
+      "component": "slider",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { SliderModule } from 'primeng/slider';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-4\">\n                    <p-slider [formField]=\"exampleForm.value\" class=\"w-56\" />\n                    @if (isInvalid(exampleForm.value)) {\n                        @for (error of exampleForm.value().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, SliderModule, ButtonModule]\n})\nexport class SliderSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal<{ value: number | null }>({ value: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.value, { message: 'Must be greater than 25.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ value: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<number | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "SliderModule",
+          "ButtonModule"
         ]
       }
     },
@@ -11118,7 +11508,7 @@
       "component": "splitbutton",
       "section": "template",
       "code": {
-        "typescript": "import { Component, inject } from '@angular/core';\nimport { SplitButtonModule } from 'primeng/splitbutton';\nimport { MenuItem, MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <p-splitbutton (onClick)=\"save()\" severity=\"contrast\" [model]=\"items\">\n                <ng-template #content>\n                    <span class=\"flex items-center font-bold\">\n                        <img alt=\"logo\" src=\"https://primefaces.org/cdn/primeng/images/logo.svg\" style=\"height: 1rem; margin-right: 0.5rem\" />\n                        <span>PrimeNG</span>\n                    </span>\n                </ng-template>\n            </p-splitbutton>\n        </div>\n    `,\n    standalone: true,\n    imports: [SplitButtonModule],\n    providers: [MessageService]\n})\nexport class SplitButtonTemplateDemo {\n    private messageService = inject(MessageService);\n    items: MenuItem[];\n\n    constructor() {\n        this.items = [\n                    {\n                        label: 'Update',\n                        command: () => {\n                            this.update();\n                        }\n                    },\n                    {\n                        label: 'Delete',\n                        command: () => {\n                            this.delete();\n                        }\n                    },\n                    { label: 'Angular.dev', url: 'https://angular.dev' },\n                    { separator: true },\n                    { label: 'Upload', routerLink: ['/fileupload'] }\n                ];\n    }\n\n    save() {\n        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Data Saved' });\n    }\n\n    update() {\n        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated' });\n    }\n\n    delete() {\n        this.messageService.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted' });\n    }\n}"
+        "typescript": "import { Component, inject } from '@angular/core';\nimport { SplitButtonModule } from 'primeng/splitbutton';\nimport { MenuItem, MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <p-splitbutton (onClick)=\"save()\" severity=\"contrast\" [model]=\"items\">\n                <ng-template #content>\n                    <span class=\"flex items-center font-bold\">\n                        <img alt=\"logo\" src=\"https://primefaces.org/cdn/primeng/images/logo.svg\" style=\"height: 1rem; margin-right: 0.5rem\" />\n                        <span>{{ PROJECT_NAME }}</span>\n                    </span>\n                </ng-template>\n            </p-splitbutton>\n        </div>\n    `,\n    standalone: true,\n    imports: [SplitButtonModule],\n    providers: [MessageService]\n})\nexport class SplitButtonTemplateDemo {\n    private messageService = inject(MessageService);\n    PROJECT_NAME: any = PROJECT_NAME;\n    items: MenuItem[];\n\n    constructor() {\n        this.items = [\n                    {\n                        label: 'Update',\n                        command: () => {\n                            this.update();\n                        }\n                    },\n                    {\n                        label: 'Delete',\n                        command: () => {\n                            this.delete();\n                        }\n                    },\n                    { label: 'Angular.dev', url: 'https://angular.dev' },\n                    { separator: true },\n                    { label: 'Upload', routerLink: ['/fileupload'] }\n                ];\n    }\n\n    save() {\n        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Data Saved' });\n    }\n\n    update() {\n        this.messageService.add({ severity: 'success', summary: 'Updated', detail: 'Data Updated' });\n    }\n\n    delete() {\n        this.messageService.add({ severity: 'warn', summary: 'Delete', detail: 'Data Deleted' });\n    }\n}"
       },
       "metadata": {
         "services": [],
@@ -13077,7 +13467,7 @@
       "component": "tailwind",
       "section": "headless",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\nimport { DialogModule } from 'primeng/dialog';\nimport { InputTextModule } from 'primeng/inputtext';\n\n@Component({\n    template: `\n        <div class=\"card flex justify-center\">\n            <p-button (click)=\"showDialog()\" icon=\"pi pi-user\" label=\"Login\" />\n            <p-dialog maskStyleClass=\"backdrop-blur-xs\" [(visible)]=\"visible\" styleClass=\"border-0! bg-transparent!\">\n                <ng-template #headless>\n                    <div class=\"flex flex-col px-8 py-8 gap-6 rounded-2xl\" style=\"border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))\">\n                        <svg width=\"31\" height=\"33\" viewBox=\"0 0 31 33\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"block mx-auto\">\n                            <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--p-primary-color)\" />\n                            <mask id=\"mask0_1_52\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"31\" height=\"33\">\n                                <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--ground-background)\" />\n                            </mask>\n                            <g mask=\"url(#mask0_1_52)\">\n                                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z\" fill=\"var(--p-primary-color)\" />\n                            </g>\n                            <path d=\"M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z\" fill=\"var(--ground-background)\" />\n                            <path\n                                fill-rule=\"evenodd\"\n                                clip-rule=\"evenodd\"\n                                d=\"M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z\"\n                                fill=\"var(--ground-background)\"\n                            />\n                            <path d=\"M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                            <path\n                                fill-rule=\"evenodd\"\n                                clip-rule=\"evenodd\"\n                                d=\"M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z\"\n                                fill=\"var(--ground-background)\"\n                            />\n                            <path d=\"M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z\" fill=\"var(--ground-background)\" />\n                        </svg>\n                        <div class=\"inline-flex flex-col gap-2\">\n                            <label for=\"username\" class=\"text-primary-50 font-semibold\">Username</label>\n                            <input pInputText id=\"username\" class=\"bg-white/20! border-0! p-4! text-primary-50! w-80\" />\n                        </div>\n                        <div class=\"inline-flex flex-col gap-2\">\n                            <label for=\"password\" class=\"text-primary-50 font-semibold\">Password</label>\n                            <input pInputText id=\"password\" class=\"bg-white/20! border-0! p-4! text-primary-50! w-80\" type=\"password\" />\n                        </div>\n                        <div class=\"flex items-center gap-4\">\n                            <p-button label=\"Cancel\" (click)=\"closeDialog()\" [text]=\"true\" styleClass=\"p-4! w-full text-primary-50! border! border-white/30! hover:bg-white/10!\" class=\"w-full\" />\n                            <p-button label=\"Sign-In\" (click)=\"closeDialog()\" [text]=\"true\" styleClass=\"p-4! w-full text-primary-50! border! border-white/30! hover:bg-white/10!\" class=\"w-full\" />\n                        </div>\n                    </div>\n                </ng-template>\n            </p-dialog>\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule, DialogModule, InputTextModule]\n})\nexport class TailwindHeadlessDemo {\n    visible: boolean = false;\n\n    showDialog() {\n        this.visible = true;\n    }\n\n    closeDialog() {\n        this.visible = false;\n    }\n}"
+        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\nimport { DialogModule } from 'primeng/dialog';\nimport { InputTextModule } from 'primeng/inputtext';\n\n@Component({\n    template: `\n        <div class=\"card flex justify-center\">\n            <p-button (click)=\"showDialog()\" icon=\"pi pi-user\" label=\"Login\" />\n            <p-dialog maskStyleClass=\"backdrop-blur-xs\" [(visible)]=\"visible\" styleClass=\"border-0! bg-transparent!\">\n                <ng-template #headless>\n                    <div class=\"flex flex-col px-8 py-8 gap-6 rounded-2xl\" style=\"border-radius: 12px; background-image: radial-gradient(circle at left top, var(--p-primary-400), var(--p-primary-700))\">\n                        <svg width=\"31\" height=\"33\" viewBox=\"0 0 31 33\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"block mx-auto\">\n                            <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--p-primary-color)\" />\n                            <mask id=\"mask0_1_52\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"31\" height=\"33\">\n                                <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--ground-background)\" />\n                            </mask>\n                            <g mask=\"url(#mask0_1_52)\">\n                                <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z\" fill=\"var(--p-primary-color)\" />\n                            </g>\n                            <path d=\"M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z\" fill=\"var(--ground-background)\" />\n                            <path\n                                fill-rule=\"evenodd\"\n                                clip-rule=\"evenodd\"\n                                d=\"M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z\"\n                                fill=\"var(--ground-background)\"\n                            />\n                            <path d=\"M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                            <path\n                                fill-rule=\"evenodd\"\n                                clip-rule=\"evenodd\"\n                                d=\"M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z\"\n                                fill=\"var(--ground-background)\"\n                            />\n                            <path d=\"M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z\" fill=\"var(--ground-background)\" />\n                            <path d=\"M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z\" fill=\"var(--ground-background)\" />\n                        </svg>\n                        <div class=\"inline-flex flex-col gap-2\">\n                            <label for=\"username\" class=\"text-primary-50 font-semibold\">Username</label>\n                            <input pInputText id=\"username\" class=\"bg-white/20! border-0! p-4! text-primary-50! w-80\" />\n                        </div>\n                        <div class=\"inline-flex flex-col gap-2\">\n                            <label for=\"password\" class=\"text-primary-50 font-semibold\">Password</label>\n                            <input pInputText id=\"password\" class=\"bg-white/20! border-0! p-4! text-primary-50! w-80\" type=\"password\" />\n                        </div>\n                        <div class=\"flex items-center gap-4\">\n                            <p-button label=\"Cancel\" (click)=\"closeDialog()\" [text]=\"true\" styleClass=\"p-4! w-full text-primary-50! border! border-white/30! hover:bg-white/10!\" class=\"w-full\" />\n                            <p-button label=\"Sign-In\" (click)=\"closeDialog()\" [text]=\"true\" styleClass=\"p-4! w-full text-primary-50! border! border-white/30! hover:bg-white/10!\" class=\"w-full\" />\n                        </div>\n                    </div>\n                </ng-template>\n            </p-dialog>\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule, DialogModule, InputTextModule]\n})\nexport class TailwindHeadlessDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n    visible: boolean = false;\n\n    showDialog() {\n        this.visible = true;\n    }\n\n    closeDialog() {\n        this.visible = false;\n    }\n}"
       },
       "metadata": {
         "services": [],
@@ -13096,7 +13486,7 @@
       "component": "tailwind",
       "section": "form",
       "code": {
-        "typescript": "import { Component, OnInit } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DatePickerModule } from 'primeng/datepicker';\nimport { SelectModule } from 'primeng/select';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { Country } from '@/domain/customer';\n\n@Component({\n    template: `\n        <div class=\"card flex sm:justify-center\">\n            <div class=\"flex flex-col gap-6 w-full sm:w-auto\">\n                <div class=\"flex flex-col sm:flex-row sm:items-center gap-6\">\n                    <div class=\"flex-auto\">\n                        <label for=\"firstname\" class=\"block font-semibold mb-2\">Firstname</label>\n                        <input type=\"text\" pInputText id=\"firstname\" class=\"w-full\" />\n                    </div>\n                    <div class=\"flex-auto\">\n                        <label for=\"lastname\" class=\"block font-semibold mb-2\">Lastname</label>\n                        <input type=\"text\" pInputText id=\"lastname\" class=\"w-full\" />\n                    </div>\n                </div>\n                <div class=\"flex flex-col sm:flex-row sm:items-center gap-6\">\n                    <div class=\"flex-1\">\n                        <label for=\"date\" class=\"block font-semibold mb-2\">Date</label>\n                        <p-datepicker inputId=\"date\" class=\"w-full\" />\n                    </div>\n                    <div class=\"flex-1\">\n                        <label for=\"country\" class=\"block font-semibold mb-2\">Country</label>\n                        <p-select [options]=\"countries\" [(ngModel)]=\"selectedCountry\" optionLabel=\"name\" [showClear]=\"true\" placeholder=\"Select a Country\">\n                            <ng-template #selectedItem>\n                                @if (selectedCountry) {\n                                    <div class=\"flex items-center gap-2\">\n                                        <img src=\"https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png\" [class]=\"'flag flag-' + selectedCountry.code.toLowerCase()\" style=\"width: 18px\" />\n                                        <div>{{ selectedCountry.name }}</div>\n                                    </div>\n                                }\n                            </ng-template>\n                            <ng-template #item let-country>\n                                <div class=\"flex items-center gap-2\">\n                                    <img src=\"https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png\" [class]=\"'flag flag-' + country.code.toLowerCase()\" style=\"width: 18px\" />\n                                    <div>{{ country.name }}</div>\n                                </div>\n                            </ng-template>\n                        </p-select>\n                    </div>\n                </div>\n                <div class=\"flex-auto\">\n                    <label for=\"message\" class=\"block font-semibold mb-2\">Message</label>\n                    <textarea pTextarea id=\"message\" class=\"w-full\" rows=\"4\"></textarea>\n                </div>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: [DatePickerModule, SelectModule, InputTextModule, FormsModule]\n})\nexport class TailwindFormDemo implements OnInit {\n    countries: any[] | undefined;\n    selectedCountry: string | undefined;\n\n    ngOnInit() {\n        this.countries = [\n            { name: 'Australia', code: 'AU' },\n            { name: 'Brazil', code: 'BR' },\n            { name: 'China', code: 'CN' },\n            { name: 'Egypt', code: 'EG' },\n            { name: 'France', code: 'FR' },\n            { name: 'Germany', code: 'DE' },\n            { name: 'India', code: 'IN' },\n            { name: 'Japan', code: 'JP' },\n            { name: 'Spain', code: 'ES' },\n            { name: 'United States', code: 'US' }\n        ];\n    }\n}"
+        "typescript": "import { Component, OnInit } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\nimport { DatePickerModule } from 'primeng/datepicker';\nimport { SelectModule } from 'primeng/select';\nimport { InputTextModule } from 'primeng/inputtext';\nimport { Country } from '@/domain/customer';\n\n@Component({\n    template: `\n        <div class=\"card flex sm:justify-center\">\n            <div class=\"flex flex-col gap-6 w-full sm:w-auto\">\n                <div class=\"flex flex-col sm:flex-row sm:items-center gap-6\">\n                    <div class=\"flex-auto\">\n                        <label for=\"firstname\" class=\"block font-semibold mb-2\">Firstname</label>\n                        <input type=\"text\" pInputText id=\"firstname\" class=\"w-full\" />\n                    </div>\n                    <div class=\"flex-auto\">\n                        <label for=\"lastname\" class=\"block font-semibold mb-2\">Lastname</label>\n                        <input type=\"text\" pInputText id=\"lastname\" class=\"w-full\" />\n                    </div>\n                </div>\n                <div class=\"flex flex-col sm:flex-row sm:items-center gap-6\">\n                    <div class=\"flex-1\">\n                        <label for=\"date\" class=\"block font-semibold mb-2\">Date</label>\n                        <p-datepicker inputId=\"date\" class=\"w-full\" />\n                    </div>\n                    <div class=\"flex-1\">\n                        <label for=\"country\" class=\"block font-semibold mb-2\">Country</label>\n                        <p-select [options]=\"countries\" [(ngModel)]=\"selectedCountry\" optionLabel=\"name\" [showClear]=\"true\" placeholder=\"Select a Country\">\n                            <ng-template #selectedItem>\n                                @if (selectedCountry) {\n                                    <div class=\"flex items-center gap-2\">\n                                        <img src=\"https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png\" [class]=\"'flag flag-' + selectedCountry.code.toLowerCase()\" style=\"width: 18px\" />\n                                        <div>{{ selectedCountry.name }}</div>\n                                    </div>\n                                }\n                            </ng-template>\n                            <ng-template #item let-country>\n                                <div class=\"flex items-center gap-2\">\n                                    <img src=\"https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png\" [class]=\"'flag flag-' + country.code.toLowerCase()\" style=\"width: 18px\" />\n                                    <div>{{ country.name }}</div>\n                                </div>\n                            </ng-template>\n                        </p-select>\n                    </div>\n                </div>\n                <div class=\"flex-auto\">\n                    <label for=\"message\" class=\"block font-semibold mb-2\">Message</label>\n                    <textarea pTextarea id=\"message\" class=\"w-full\" rows=\"4\"></textarea>\n                </div>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: [DatePickerModule, SelectModule, InputTextModule, FormsModule]\n})\nexport class TailwindFormDemo implements OnInit {\n    PROJECT_NAME: any = PROJECT_NAME;\n    countries: any[] | undefined;\n    selectedCountry: string | undefined;\n\n    ngOnInit() {\n        this.countries = [\n            { name: 'Australia', code: 'AU' },\n            { name: 'Brazil', code: 'BR' },\n            { name: 'China', code: 'CN' },\n            { name: 'Egypt', code: 'EG' },\n            { name: 'France', code: 'FR' },\n            { name: 'Germany', code: 'DE' },\n            { name: 'India', code: 'IN' },\n            { name: 'Japan', code: 'JP' },\n            { name: 'Spain', code: 'ES' },\n            { name: 'United States', code: 'US' }\n        ];\n    }\n}"
       },
       "metadata": {
         "services": [],
@@ -13121,7 +13511,7 @@
       "component": "tailwind",
       "section": "colorpalette",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\n\n@Component({\n    template: `\n        <div class=\"card\">\n            <div class=\"flex flex-col gap-12\">\n                <ul class=\"p-0 m-0 list-none flex sm:flex-col gap-4 flex-wrap sm:flex-nowrap\">\n                    @for (color of colors; track color) {\n                        <li [ngStyle]=\"{ 'min-width': '6rem' }\" class=\"flex-auto\">\n                            <span class=\"font-medium capitalize block mb-2 text-center sm:text-left\">{{ color }}</span>\n                            <div class=\"flex gap-4 flex-auto flex-col sm:flex-row\">\n                                @for (shade of shades; track shade) {\n                                    <div [ngClass]=\"{ invisible: color === 'primary' && shade === 0 }\" class=\"flex flex-col items-center gap-1 flex-1\">\n                                        <div class=\"rounded-sm h-8 w-full\" [ngStyle]=\"{ 'background-color': 'var(--p-' + color + '-' + shade + ')' }\"></div>\n                                        <span class=\"text-sm text-surface-500 dark:text-surface-400 font-medium\">{{ shade }}</span>\n                                    </div>\n                                }\n                            </div>\n                        </li>\n                    }\n                </ul>\n                <div class=\"flex gap-6 flex-wrap\">\n                    <div class=\"rounded-border p-4 border border-transparent flex items-center justify-center bg-primary hover:bg-primary-emphasis text-primary-contrast font-medium flex-auto transition-colors\">primary</div>\n                    <div class=\"rounded-border p-4 border border-transparent flex items-center justify-center bg-highlight hover:bg-highlight-emphasis font-medium flex-auto transition-colors\">highlight</div>\n                    <div class=\"rounded-border p-4 border border-surface flex items-center justify-center text-muted-color hover:text-color hover:bg-emphasis font-medium flex-auto transition-colors\">box</div>\n                </div>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: []\n})\nexport class TailwindColorPaletteDemo {\n    shades: number[] = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];\n    colors: string[] = ['primary', 'surface'];\n}"
+        "typescript": "import { Component } from '@angular/core';\n\n@Component({\n    template: `\n        <div class=\"card\">\n            <div class=\"flex flex-col gap-12\">\n                <ul class=\"p-0 m-0 list-none flex sm:flex-col gap-4 flex-wrap sm:flex-nowrap\">\n                    @for (color of colors; track color) {\n                        <li [ngStyle]=\"{ 'min-width': '6rem' }\" class=\"flex-auto\">\n                            <span class=\"font-medium capitalize block mb-2 text-center sm:text-left\">{{ color }}</span>\n                            <div class=\"flex gap-4 flex-auto flex-col sm:flex-row\">\n                                @for (shade of shades; track shade) {\n                                    <div [ngClass]=\"{ invisible: color === 'primary' && shade === 0 }\" class=\"flex flex-col items-center gap-1 flex-1\">\n                                        <div class=\"rounded-sm h-8 w-full\" [ngStyle]=\"{ 'background-color': 'var(--p-' + color + '-' + shade + ')' }\"></div>\n                                        <span class=\"text-sm text-surface-500 dark:text-surface-400 font-medium\">{{ shade }}</span>\n                                    </div>\n                                }\n                            </div>\n                        </li>\n                    }\n                </ul>\n                <div class=\"flex gap-6 flex-wrap\">\n                    <div class=\"rounded-border p-4 border border-transparent flex items-center justify-center bg-primary hover:bg-primary-emphasis text-primary-contrast font-medium flex-auto transition-colors\">primary</div>\n                    <div class=\"rounded-border p-4 border border-transparent flex items-center justify-center bg-highlight hover:bg-highlight-emphasis font-medium flex-auto transition-colors\">highlight</div>\n                    <div class=\"rounded-border p-4 border border-surface flex items-center justify-center text-muted-color hover:text-color hover:bg-emphasis font-medium flex-auto transition-colors\">box</div>\n                </div>\n            </div>\n        </div>\n    `,\n    standalone: true,\n    imports: []\n})\nexport class TailwindColorPaletteDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n    shades: number[] = [0, 50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];\n    colors: string[] = ['primary', 'surface'];\n}"
       },
       "metadata": {
         "services": [],
@@ -13157,7 +13547,7 @@
       "component": "terminal",
       "section": "basic",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { TerminalModule } from 'primeng/terminal';\n\n@Component({\n    template: `\n        <p>Enter \"<strong>date</strong>\" to display the current date, \"<strong>greet &#123;0&#125;</strong>\" for a message and \"<strong>random</strong>\" to get a random number.</p>\n        <p-terminal welcomeMessage=\"Welcome to PrimeNG\" prompt=\"primeng $\" />\n    `,\n    standalone: true,\n    imports: [TerminalModule]\n})\nexport class TerminalBasicDemo {\n    subscription: Subscription;\n\n    constructor() {\n        this.subscription = this.terminalService.commandHandler.subscribe((text) => {\n                    let response;\n                    let argsIndex = text.indexOf(' ');\n                    let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;\n                    switch (command) {\n                        case 'date':\n                            response = 'Today is ' + new Date().toDateString();\n                            break;\n                        case 'greet':\n                            response = 'Hola ' + text.substring(argsIndex + 1);\n                            break;\n                        case 'random':\n                            response = Math.floor(Math.random() * 100);\n                            break;\n                        default:\n                            response = 'Unknown command: ' + command;\n                    }\n                    this.terminalService.sendResponse(response);\n                });\n    }\n\n    ngOnDestroy() {\n        if (this.subscription) {\n            this.subscription.unsubscribe();\n        }\n    }\n}"
+        "typescript": "import { Component } from '@angular/core';\nimport { TerminalModule } from 'primeng/terminal';\n\n@Component({\n    template: `\n        <p>Enter \"<strong>date</strong>\" to display the current date, \"<strong>greet &#123;0&#125;</strong>\" for a message and \"<strong>random</strong>\" to get a random number.</p>\n        <p-terminal welcomeMessage=\"Welcome to {{ PROJECT_NAME }}\" prompt=\"primeng $\" />\n    `,\n    standalone: true,\n    imports: [TerminalModule]\n})\nexport class TerminalBasicDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n    subscription: Subscription;\n\n    constructor() {\n        this.subscription = this.terminalService.commandHandler.subscribe((text) => {\n                    let response;\n                    let argsIndex = text.indexOf(' ');\n                    let command = argsIndex !== -1 ? text.substring(0, argsIndex) : text;\n                    switch (command) {\n                        case 'date':\n                            response = 'Today is ' + new Date().toDateString();\n                            break;\n                        case 'greet':\n                            response = 'Hola ' + text.substring(argsIndex + 1);\n                            break;\n                        case 'random':\n                            response = Math.floor(Math.random() * 100);\n                            break;\n                        default:\n                            response = 'Unknown command: ' + command;\n                    }\n                    this.terminalService.sendResponse(response);\n                });\n    }\n\n    ngOnDestroy() {\n        if (this.subscription) {\n            this.subscription.unsubscribe();\n        }\n    }\n}"
       },
       "metadata": {
         "services": [],
@@ -13216,6 +13606,24 @@
         "extFiles": [],
         "imports": [
           "FormsModule"
+        ]
+      }
+    },
+    "textarea-signal-forms-demo": {
+      "key": "textarea-signal-forms-demo",
+      "selector": "textarea-signal-forms-demo",
+      "component": "textarea",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4\">\n                <div class=\"flex flex-col gap-1\">\n                    <textarea rows=\"5\" cols=\"30\" pTextarea [formField]=\"exampleForm.address\"></textarea>\n                    @if (isInvalid(exampleForm.address)) {\n                        @for (error of exampleForm.address().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ButtonModule]\n})\nexport class TextareaSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ address: '' });\n    exampleForm = form(this.model, (path) => {\n        required(path.address, { message: 'Address is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ address: '' });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<string>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ButtonModule"
         ]
       }
     },
@@ -13878,6 +14286,25 @@
         ]
       }
     },
+    "togglebutton-signal-forms-demo": {
+      "key": "togglebutton-signal-forms-demo",
+      "selector": "togglebutton-signal-forms-demo",
+      "component": "togglebutton",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ToggleButtonModule } from 'primeng/togglebutton';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col items-center gap-4\">\n                <div class=\"flex flex-col items-center gap-1\">\n                    <p-togglebutton name=\"consent\" [formField]=\"exampleForm.checked\" onLabel=\"Accept All\" offLabel=\"Reject All\" class=\"min-w-40\" />\n                    @if (isInvalid(exampleForm.checked)) {\n                        @for (error of exampleForm.checked().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ToggleButtonModule, ButtonModule]\n})\nexport class ToggleButtonSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ checked: false });\n    exampleForm = form(this.model, (path) => {\n        required(path.checked, { message: 'Consent is mandatory.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ checked: false });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<boolean>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ToggleButtonModule",
+          "ButtonModule"
+        ]
+      }
+    },
     "togglebutton-reactive-forms-demo": {
       "key": "togglebutton-reactive-forms-demo",
       "selector": "togglebutton-reactive-forms-demo",
@@ -14039,6 +14466,25 @@
           "ToggleSwitchModule",
           "FormsModule",
           "CommonModule"
+        ]
+      }
+    },
+    "toggleswitch-signal-forms-demo": {
+      "key": "toggleswitch-signal-forms-demo",
+      "selector": "toggleswitch-signal-forms-demo",
+      "component": "toggleswitch",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { ToggleSwitchModule } from 'primeng/toggleswitch';\nimport { ButtonModule } from 'primeng/button';\nimport { MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 w-48\">\n                <div class=\"flex flex-col items-center gap-2\">\n                    <p-toggleswitch name=\"activation\" [formField]=\"exampleForm.activation\" />\n                    @if (isInvalid(exampleForm.activation)) {\n                        @for (error of exampleForm.activation().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, ToggleSwitchModule, ButtonModule]\n})\nexport class ToggleSwitchSignalFormsDemo {\n    messageService = inject(MessageService);\n    formSubmitted = signal(false);\n    model = signal({ activation: false });\n    exampleForm = form(this.model, (path) => {\n        required(path.activation, { message: 'Activation is required.' });\n    });\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form Submitted', life: 3000 });\n            this.model.set({ activation: false });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<boolean>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "ToggleSwitchModule",
+          "ButtonModule"
         ]
       }
     },
@@ -14283,7 +14729,7 @@
       "component": "tooltip",
       "section": "custom",
       "code": {
-        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\nimport { TooltipModule } from 'primeng/tooltip';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <p-button [pTooltip]=\"tooltipContent\" severity=\"secondary\" tooltipPosition=\"bottom\" label=\"Button\" />\n            <ng-template #tooltipContent>\n                <div class=\"flex items-center\">\n                    <svg width=\"31\" height=\"33\" viewBox=\"0 0 31 33\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"mr-2\">\n                        <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--p-primary-color)\" />\n                        <mask id=\"mask0_1_52\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"31\" height=\"33\">\n                            <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--ground-background)\" />\n                        </mask>\n                        <g mask=\"url(#mask0_1_52)\">\n                            <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z\" fill=\"var(--p-primary-color)\" />\n                        </g>\n                        <path d=\"M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z\" fill=\"var(--ground-background)\" />\n                        <path\n                            fill-rule=\"evenodd\"\n                            clip-rule=\"evenodd\"\n                            d=\"M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z\"\n                            fill=\"var(--ground-background)\"\n                        />\n                        <path d=\"M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                        <path\n                            fill-rule=\"evenodd\"\n                            clip-rule=\"evenodd\"\n                            d=\"M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z\"\n                            fill=\"var(--ground-background)\"\n                        />\n                        <path d=\"M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z\" fill=\"var(--ground-background)\" />\n                    </svg>\n                    <span> <b>PrimeNG</b> rocks! </span>\n                </div>\n            </ng-template>\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule, TooltipModule]\n})\nexport class TooltipCustomDemo {}"
+        "typescript": "import { Component } from '@angular/core';\nimport { ButtonModule } from 'primeng/button';\nimport { TooltipModule } from 'primeng/tooltip';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <p-button [pTooltip]=\"tooltipContent\" severity=\"secondary\" tooltipPosition=\"bottom\" label=\"Button\" />\n            <ng-template #tooltipContent>\n                <div class=\"flex items-center\">\n                    <svg width=\"31\" height=\"33\" viewBox=\"0 0 31 33\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\" class=\"mr-2\">\n                        <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--p-primary-color)\" />\n                        <mask id=\"mask0_1_52\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"0\" y=\"0\" width=\"31\" height=\"33\">\n                            <path d=\"M15.1934 0V0V0L0.0391235 5.38288L2.35052 25.3417L15.1934 32.427V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1934 0Z\" fill=\"var(--ground-background)\" />\n                        </mask>\n                        <g mask=\"url(#mask0_1_52)\">\n                            <path fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M15.1935 0V3.5994V3.58318V20.0075V20.0075V32.427V32.427L28.0364 25.3417L30.3478 5.38288L15.1935 0Z\" fill=\"var(--p-primary-color)\" />\n                        </g>\n                        <path d=\"M19.6399 15.3776L18.1861 15.0547L19.3169 16.6695V21.6755L23.1938 18.4458V12.9554L21.4169 13.6013L19.6399 15.3776Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M10.5936 15.3776L12.0474 15.0547L10.9166 16.6695V21.6755L7.03966 18.4458V12.9554L8.81661 13.6013L10.5936 15.3776Z\" fill=\"var(--ground-background)\" />\n                        <path\n                            fill-rule=\"evenodd\"\n                            clip-rule=\"evenodd\"\n                            d=\"M11.3853 16.9726L12.6739 15.0309L13.4793 15.5163H16.7008L17.5061 15.0309L18.7947 16.9726V24.254L17.8283 25.7103L16.7008 26.843H13.4793L12.3518 25.7103L11.3853 24.254V16.9726Z\"\n                            fill=\"var(--ground-background)\"\n                        />\n                        <path d=\"M19.3168 24.7437L21.4168 22.6444V20.5451L19.3168 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M10.9166 24.7437L8.81662 22.6444V20.5451L10.9166 22.3214V24.7437Z\" fill=\"var(--ground-background)\" />\n                        <path\n                            fill-rule=\"evenodd\"\n                            clip-rule=\"evenodd\"\n                            d=\"M13.0167 5.68861L11.7244 8.7568L13.8244 14.8932H14.7936V5.68861H13.0167ZM15.4397 5.68861V14.8932H16.5706L18.5091 8.7568L17.2167 5.68861H15.4397Z\"\n                            fill=\"var(--ground-background)\"\n                        />\n                        <path d=\"M13.8244 14.8932L6.87813 12.3094L5.90888 8.27235L11.8859 8.7568L13.9859 14.8932H13.8244Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M16.5706 14.8932L23.5169 12.3094L24.4861 8.27235L18.3476 8.7568L16.4091 14.8932H16.5706Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M18.8321 8.27235L22.2245 7.94938L19.9629 5.68861H17.7013L18.8321 8.27235Z\" fill=\"var(--ground-background)\" />\n                        <path d=\"M11.4013 8.27235L8.00893 7.94938L10.2705 5.68861H12.5321L11.4013 8.27235Z\" fill=\"var(--ground-background)\" />\n                    </svg>\n                    <span> <b>{{ PROJECT_NAME }}</b> rocks! </span>\n                </div>\n            </ng-template>\n        </div>\n    `,\n    standalone: true,\n    imports: [ButtonModule, TooltipModule]\n})\nexport class TooltipCustomDemo {\n    PROJECT_NAME: any = PROJECT_NAME;\n}"
       },
       "metadata": {
         "services": [],
@@ -14663,6 +15109,27 @@
         "imports": [
           "TreeSelectModule",
           "FormsModule"
+        ]
+      }
+    },
+    "treeselect-signal-forms-demo": {
+      "key": "treeselect-signal-forms-demo",
+      "selector": "treeselect-signal-forms-demo",
+      "component": "treeselect",
+      "section": "signalforms",
+      "code": {
+        "typescript": "import { Component, OnInit, inject, signal } from '@angular/core';\nimport { form, FormField, required, type FieldTree } from '@angular/forms/signals';\nimport { MessageModule } from 'primeng/message';\nimport { TreeSelectModule } from 'primeng/treeselect';\nimport { ButtonModule } from 'primeng/button';\nimport { NodeService } from '@/service/nodeservice';\nimport { TreeNode, MessageService } from 'primeng/api';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <form (submit)=\"onSubmit($event)\" class=\"flex flex-col gap-4 w-full md:w-80\">\n                <div class=\"flex flex-col gap-1\">\n                    <p-treeselect class=\"md:w-80 w-full\" [formField]=\"exampleForm.selectedNodes\" [options]=\"nodes\" placeholder=\"Select Item\" />\n                    @if (isInvalid(exampleForm.selectedNodes)) {\n                        @for (error of exampleForm.selectedNodes().errors(); track error.kind) {\n                            <p-message severity=\"error\" size=\"small\" variant=\"simple\">{{ error.message }}</p-message>\n                        }\n                    }\n                </div>\n                <button pButton severity=\"secondary\" type=\"submit\"><span pButtonLabel>Submit</span></button>\n            </form>\n        </div>\n    `,\n    standalone: true,\n    imports: [FormField, MessageModule, TreeSelectModule, ButtonModule],\n    providers: [NodeService]\n})\nexport class TreeSelectSignalFormsDemo implements OnInit {\n    private nodeService = inject(NodeService);\n    messageService = inject(MessageService);\n    nodeService = inject(NodeService);\n    formSubmitted = signal(false);\n    nodes!: any[];\n    model = signal<{ selectedNodes: TreeNode | null }>({ selectedNodes: null });\n    exampleForm = form(this.model, (path) => {\n        required(path.selectedNodes, { message: 'Selection is required.' });\n    });\n\n    constructor() {\n        this.nodeService.getFiles().then((files) => (this.nodes = files));\n    }\n\n    ngOnInit() {\n    }\n\n    onSubmit(event: Event) {\n        event.preventDefault();\n        this.formSubmitted.set(true);\n        \n        if (this.exampleForm().valid()) {\n            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });\n            this.model.set({ selectedNodes: null });\n            this.formSubmitted.set(false);\n        }\n    }\n\n    isInvalid(field: FieldTree<TreeNode | null>) {\n        const state = field();\n        \n        return state.invalid() && (state.touched() || this.formSubmitted());\n    }\n}"
+      },
+      "metadata": {
+        "services": [
+          "NodeService"
+        ],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
+          "MessageModule",
+          "TreeSelectModule",
+          "ButtonModule"
         ]
       }
     },

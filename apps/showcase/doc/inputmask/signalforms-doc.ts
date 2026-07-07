@@ -1,0 +1,68 @@
+import { Component, inject, signal } from '@angular/core';
+import { MessageService } from 'primeng/api';
+import { form, FormField, required, type FieldTree } from '@angular/forms/signals';
+import { InputMaskModule } from 'primeng/inputmask';
+import { InputText } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
+import { MessageModule } from 'primeng/message';
+import { FluidModule } from 'primeng/fluid';
+import { AppCodeModule } from '@/components/doc/app.code';
+import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
+import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+
+@Component({
+    selector: 'signal-forms-doc',
+    standalone: true,
+    imports: [FormField, InputMaskModule, InputText, ButtonModule, ToastModule, MessageModule, FluidModule, AppCodeModule, AppDemoWrapper, AppDocSectionText],
+    template: `
+        <app-docsectiontext>
+            <p>InputMask can also be used with Angular Signal Forms. In this case, the <i>formField</i> directive is used to bind the component to a field.</p>
+        </app-docsectiontext>
+        <p-toast />
+        <app-demo-wrapper>
+            <div class="flex justify-center">
+                <form (submit)="onSubmit($event)" class="flex flex-col gap-4 sm:w-56">
+                    <div class="flex flex-col gap-1">
+                        <input pInputText pInputMask="99-999999" placeholder="99-999999" [formField]="exampleForm.value" fluid />
+                        @if (isInvalid(exampleForm.value)) {
+                            @for (error of exampleForm.value().errors(); track error.kind) {
+                                <p-message severity="error" size="small" variant="simple">{{ error.message }}</p-message>
+                            }
+                        }
+                    </div>
+                    <button pButton severity="secondary" type="submit"><span pButtonLabel>Submit</span></button>
+                </form>
+            </div>
+            <app-code></app-code>
+        </app-demo-wrapper>
+    `
+})
+export class SignalFormsDoc {
+    messageService = inject(MessageService);
+
+    formSubmitted = signal(false);
+
+    model = signal({ value: '' });
+
+    exampleForm = form(this.model, (path) => {
+        required(path.value, { message: 'Serial number is required.' });
+    });
+
+    onSubmit(event: Event) {
+        event.preventDefault();
+        this.formSubmitted.set(true);
+
+        if (this.exampleForm().valid()) {
+            this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Form is submitted', life: 3000 });
+            this.model.set({ value: '' });
+            this.formSubmitted.set(false);
+        }
+    }
+
+    isInvalid(field: FieldTree<string>) {
+        const state = field();
+
+        return state.invalid() && (state.touched() || this.formSubmitted());
+    }
+}

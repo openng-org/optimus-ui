@@ -4,6 +4,7 @@ import { ControlledDoc } from '@/doc/inputcolor/controlled-doc';
 import { VerticalSliderDoc } from '@/doc/inputcolor/verticalslider-doc';
 import { PopoverDoc } from '@/doc/inputcolor/popover-doc';
 import { ReactiveFormsDoc } from '@/doc/inputcolor/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/inputcolor/signalforms-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/inputcolor/templatedrivenforms-doc';
 import { ColorManagerDoc } from '@/doc/inputcolor/colormanager-doc';
 import { AccessibilityDoc } from '@/doc/inputcolor/accessibility-doc';
@@ -70,7 +71,8 @@ export class InputColorDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

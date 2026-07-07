@@ -12,6 +12,7 @@ import { InvalidDoc } from '@/doc/listbox/invalid-doc';
 import { MultipleDoc } from '@/doc/listbox/multiple-doc';
 import { PTComponent } from '@/doc/listbox/pt/PTComponent';
 import { ReactiveFormsDoc } from '@/doc/listbox/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/listbox/signalforms-doc';
 import { TemplateDoc } from '@/doc/listbox/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/listbox/templatedrivenforms-doc';
 import { VirtualScrollDoc } from '@/doc/listbox/virtualscroll-doc';
@@ -104,7 +105,8 @@ export class ListboxDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

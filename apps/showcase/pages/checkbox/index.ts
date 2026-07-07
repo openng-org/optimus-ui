@@ -9,6 +9,7 @@ import { InvalidDoc } from '@/doc/checkbox/invalid-doc';
 import { MultipleDoc } from '@/doc/checkbox/multiple-doc';
 import { PTComponent } from '@/doc/checkbox/pt/PTComponent';
 import { ReactiveFormsDoc } from '@/doc/checkbox/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/checkbox/signalforms-doc';
 import { SizesDoc } from '@/doc/checkbox/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/checkbox/templatedrivenforms-doc';
 import { AppDoc } from '@/components/doc/app.doc';
@@ -57,7 +58,8 @@ export class CheckboxDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

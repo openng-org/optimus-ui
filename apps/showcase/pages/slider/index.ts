@@ -6,6 +6,7 @@ import { InputDoc } from '@/doc/slider/input-doc';
 import { PTComponent } from '@/doc/slider/pt/PTComponent';
 import { RangeDoc } from '@/doc/slider/range-doc';
 import { ReactiveFormsDoc } from '@/doc/slider/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/slider/signalforms-doc';
 import { StepDoc } from '@/doc/slider/step-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/slider/templatedrivenforms-doc';
 import { VerticalDoc } from '@/doc/slider/vertical-doc';
@@ -75,7 +76,8 @@ export class SliderDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

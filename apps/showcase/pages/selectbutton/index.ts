@@ -5,6 +5,7 @@ import { UsageDoc } from '@/doc/selectbutton/usage-doc';
 import { InvalidDoc } from '@/doc/selectbutton/invalid-doc';
 import { MultipleDoc } from '@/doc/selectbutton/multiple-doc';
 import { ReactiveFormsDoc } from '@/doc/selectbutton/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/selectbutton/signalforms-doc';
 import { SizesDoc } from '@/doc/selectbutton/sizes-doc';
 import { TemplateDoc } from '@/doc/selectbutton/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/selectbutton/templatedrivenforms-doc';
@@ -82,7 +83,8 @@ export class SelectButtonDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

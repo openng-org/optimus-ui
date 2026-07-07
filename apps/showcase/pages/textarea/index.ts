@@ -8,6 +8,7 @@ import { IftaLabelDoc } from '@/doc/textarea/iftalabel-doc';
 import { UsageDoc } from '@/doc/textarea/usage-doc';
 import { InvalidDoc } from '@/doc/textarea/invalid-doc';
 import { ReactiveFormsDoc } from '@/doc/textarea/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/textarea/signalforms-doc';
 import { SizesDoc } from '@/doc/textarea/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/textarea/templatedrivenforms-doc';
 import { FluidDoc } from '@/doc/textarea/fluid-doc';
@@ -92,7 +93,8 @@ export class TextareaDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]
