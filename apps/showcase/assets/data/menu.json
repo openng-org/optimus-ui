@@ -555,24 +555,6 @@
             ]
         },
         {
-            "name": "Figma UI Kit",
-            "icon": "pi pi-pencil",
-            "children": [
-                {
-                    "name": "Overview",
-                    "routerLink": "/uikit"
-                },
-               {
-                    "name": "Guide v4",
-                    "routerLink": "/uikit/guide/v4"
-                },
-                {
-                    "name": "Guide v3",
-                    "routerLink": "/uikit/guide/v3"
-                }
-            ]
-        },
-        {
             "name": "Migration",
             "icon": "pi pi-arrow-up",
             "children": [
