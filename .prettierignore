@@ -12,3 +12,5 @@ node_modules
 *.yml
 /tsconfig.json
 *.json
+packages/optimauix-themes/tokens
+packages/optimauix-themes/umd

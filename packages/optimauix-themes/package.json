@@ -1,0 +1,78 @@
+{
+    "name": "@openng/optimauix-themes",
+    "version": "2.0.3",
+    "author": "PrimeTek Informatics",
+    "description": "Themes for PrimeUI Libraries",
+    "keywords": [
+        "themes",
+        "css",
+        "style utilities",
+        "primeng",
+        "primereact",
+        "primevue",
+        "primeuix"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/primefaces/primeuix.git",
+        "directory": "packages/themes"
+    },
+    "bugs": {
+        "url": "https://github.com/primefaces/primeuix/issues"
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.mjs"
+        },
+        "./types": {
+            "types": "./types/index.d.ts"
+        },
+        "./types/*": {
+            "types": "./types/*/index.d.ts"
+        },
+        "./tokens": {
+            "types": "./tokens/index.d.ts",
+            "import": "./tokens/index.mjs",
+            "default": "./tokens/index.mjs"
+        },
+        "./*": {
+            "types": "./dist/*/index.d.ts",
+            "import": "./dist/*/index.mjs",
+            "default": "./dist/*/index.mjs"
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "files": [
+        "dist",
+        "umd",
+        "tokens",
+        "types",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
+        "build:package": "pnpm run type:check && pnpm run build:tokens && tsup && pnpm run build:postbuild",
+        "build:dev:package": "pnpm run build:tokens && tsup --watch && pnpm run build:postbuild",
+        "build:postbuild": "node ./scripts/postbuild.mjs",
+        "build:tokens": "node ./scripts/build-tokens.mjs",
+        "type:check": "tsc --noEmit",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "dependencies": {
+        "@primeuix/styled": "workspace:@openng/optimauix-styled@*"
+    },
+    "devDependencies": {
+        "typedoc": "0.27.6"
+    }
+}

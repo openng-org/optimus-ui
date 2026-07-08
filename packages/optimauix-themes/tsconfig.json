@@ -1,0 +1,58 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "baseUrl": ".",
+        "paths": {
+            "@primeuix/utils": [
+                "../optimauix-utils/src"
+            ],
+            "@primeuix/utils/*": [
+                "../optimauix-utils/src/*"
+            ],
+            "@primeuix/styled": [
+                "../optimauix-styled/src"
+            ],
+            "@primeuix/styled/*": [
+                "../optimauix-styled/src/*"
+            ],
+            "@primeuix/styles": [
+                "../optimauix-styles/src"
+            ],
+            "@primeuix/styles/*": [
+                "../optimauix-styles/src/*"
+            ],
+            "@primeuix/motion": [
+                "../optimauix-motion/src"
+            ],
+            "@primeuix/motion/*": [
+                "../optimauix-motion/src/*",
+                "../optimauix-motion/types/*"
+            ],
+            "@primeuix/mcp/*": [
+                "../optimauix-mcp/src/*"
+            ],
+            "@primeuix/themes": [
+                "../optimauix-themes/src"
+            ],
+            "@primeuix/themes/types": [
+                "../optimauix-themes/types"
+            ],
+            "@primeuix/themes/types/*": [
+                "../optimauix-themes/types/*"
+            ],
+            "@primeuix/themes/*": [
+                "../optimauix-themes/src/*",
+                "../optimauix-themes/src/presets/*",
+                "../optimauix-themes/types/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*",
+        "types/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
