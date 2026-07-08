@@ -1354,20 +1354,20 @@ describe('SpeedDial', () => {
         });
 
         it('should handle rapid show/hide operations', async () => {
-            expect(async () => {
-                speedDialInstance.show();
-                await new Promise((resolve) => setTimeout(resolve, 100));
-                await fixture.whenStable();
-                speedDialInstance.hide();
-                await new Promise((resolve) => setTimeout(resolve, 100));
-                await fixture.whenStable();
-                speedDialInstance.show();
-                await new Promise((resolve) => setTimeout(resolve, 100));
-                await fixture.whenStable();
-                speedDialInstance.hide();
-                await new Promise((resolve) => setTimeout(resolve, 100));
-                await fixture.whenStable();
-            }).not.toThrow();
+            speedDialInstance.show();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            speedDialInstance.hide();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            speedDialInstance.show();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            speedDialInstance.hide();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+
+            expect(speedDialInstance.visible).toBe(false);
         });
 
         it('should handle missing container element gracefully', () => {
