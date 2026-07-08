@@ -1,0 +1,44 @@
+{
+    "name": "@openng/optimauix-styled",
+    "version": "0.7.4",
+    "author": "PrimeTek Informatics",
+    "description": "Styled utilities for PrimeUI Libraries",
+    "keywords": ["styled", "css", "style utilities", "primeng", "primereact", "primevue", "primeuix"],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/primefaces/primeuix.git",
+        "directory": "packages/styled"
+    },
+    "bugs": {
+        "url": "https://github.com/primefaces/primeuix/issues"
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.mjs"
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "files": ["dist", "README.md", "LICENSE"],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
+        "build:package": "tsup",
+        "build:dev:package": "tsup --watch",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "dependencies": {
+        "@primeuix/utils": "workspace:@openng/optimauix-utils@*"
+    },
+    "engines": {
+        "node": ">=12.11.0"
+    }
+}
