@@ -304,7 +304,6 @@ export const routes: Routes = [
                 path: 'bind',
                 loadChildren: () => import('@/pages/bind/routes')
             },
-            { path: 'templates', loadChildren: () => import('@/pages/templates/templates.module').then((m) => m.TemplatesModule) },
             { path: 'guides', loadChildren: () => import('@/pages/guides/routes') },
             { path: 'llms', loadChildren: () => import('@/pages/llms/routes') },
             { path: 'mcp', loadChildren: () => import('@/pages/mcp/routes') },
