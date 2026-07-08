@@ -21,7 +21,6 @@ export const routes: Routes = [
                 loadChildren: () => import('@/pages/configuration/routes')
             },
             { path: 'playground', loadChildren: () => import('@/pages/playground/routes') },
-            { path: 'roadmap', loadChildren: () => import('@/pages/roadmap/routes') },
             {
                 path: 'theming',
                 loadChildren: () => import('@/pages/theming/routes')
