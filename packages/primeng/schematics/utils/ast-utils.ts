@@ -7,17 +7,17 @@ export function addImportToModule(tree: Tree, filePath: string, importStatement:
         throw new SchematicsException(`File ${filePath} does not exist.`);
     }
     const sourceText = fileContent.toString('utf-8');
-    
+
     // Simple check to avoid duplicates
     if (sourceText.includes(importStatement)) {
         return;
     }
 
     const sourceFile = ts.createSourceFile(filePath, sourceText, ts.ScriptTarget.Latest, true);
-    
+
     // Find the last import declaration
     let lastImportEnd = 0;
-    ts.forEachChild(sourceFile, node => {
+    ts.forEachChild(sourceFile, (node) => {
         if (ts.isImportDeclaration(node)) {
             lastImportEnd = node.getEnd();
         }
