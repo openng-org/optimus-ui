@@ -22,7 +22,7 @@ import { Tag } from 'primeng/tag';
             <p class="section-detail">The most complete UI component library for Angular based on a design-agnostic infrastructure.</p>
             <div class="themes-main flex mt-14 justify-center px-7 lg:px-20">
                 <div class="box overflow-hidden z-10 p-7 table-container">
-                    <p-table #dt [value]="customers" [(selection)]="selectedCustomers" dataKey="id" [rowHover]="true" [rows]="5" [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
+                    <p-table #dt [value]="customers" [(selection)]="selectedCustomers" dataKey="id" [rowHover]="true" [rows]="5" [paginator]="true" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
                         <ng-template #caption>
                             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                                 <span class="text-lg font-bold">Customers</span>
@@ -151,21 +151,16 @@ export class ThemeSectionComponent {
 
     @ViewChild('dt') table: Table;
 
-    customers: Customer[];
+    customers: Customer[] = [];
 
-    selectedCustomers: Customer[];
-
-    loading: boolean = true;
+    selectedCustomers: Customer[] = [];
 
     get isDarkMode() {
         return this.configService.appState().darkTheme;
     }
 
     ngOnInit() {
-        this.customerService.getCustomersLarge().then((customers) => {
-            this.customers = customers;
-            this.loading = false;
-        });
+        this.customers = this.customerService.getData();
     }
 
     getSeverity(status) {
