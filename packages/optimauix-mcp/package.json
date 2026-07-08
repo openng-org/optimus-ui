@@ -1,0 +1,46 @@
+{
+    "name": "@openng/optimauix-mcp",
+    "version": "1.0.1",
+    "author": "PrimeTek Informatics",
+    "description": "Model Context Protocol (MCP) server for PrimeUI Libraries",
+    "keywords": ["mcp", "model-context-protocol", "claude", "ai", "llm", "primeng", "primereact", "primevue", "primeuix"],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/primefaces/primeuix.git",
+        "directory": "packages/mcp"
+    },
+    "bugs": {
+        "url": "https://github.com/primefaces/primeuix/issues"
+    },
+    "type": "module",
+    "main": "./dist/index.js",
+    "module": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js",
+            "default": "./dist/index.js"
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "files": ["dist", "README.md", "LICENSE"],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
+        "build:package": "tsup",
+        "build:dev:package": "tsup --watch",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.25.2",
+        "zod": "^3.25.76"
+    },
+    "engines": {
+        "node": ">=12.11.0"
+    }
+}
