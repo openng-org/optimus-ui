@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
         <div class="layout-footer">
             <div>
                 <span>{{ PROJECT_NAME }} {{ version }} by </span>
-                <a href="https://www.primetek.com.tr">PrimeTek</a>
+                <a href="https://www.openng.org">OpenNG</a>
             </div>
         </div>
     `
