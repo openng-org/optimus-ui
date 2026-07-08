@@ -64,24 +64,6 @@ catalogs:
       specifier: 5.9.3
       version: 5.9.3
   default:
-    '@primeuix/mcp':
-      specifier: ^1.0.0
-      version: 1.0.1
-    '@primeuix/motion':
-      specifier: ^0.0.10
-      version: 0.0.10
-    '@primeuix/styled':
-      specifier: ^0.7.4
-      version: 0.7.4
-    '@primeuix/styles':
-      specifier: ^2.0.3
-      version: 2.0.3
-    '@primeuix/themes':
-      specifier: ^2.0.3
-      version: 2.0.3
-    '@primeuix/utils':
-      specifier: ^0.7.2
-      version: 0.7.2
     primeicons:
       specifier: ^7.0.0
       version: 7.0.0
@@ -150,6 +132,24 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.6.0
         version: 19.8.1
+      '@primeuix/mcp':
+        specifier: workspace:@openng/optimauix-mcp@*
+        version: link:packages/optimauix-mcp
+      '@primeuix/motion':
+        specifier: workspace:@openng/optimauix-motion@*
+        version: link:packages/optimauix-motion
+      '@primeuix/styled':
+        specifier: workspace:@openng/optimauix-styled@*
+        version: link:packages/optimauix-styled
+      '@primeuix/styles':
+        specifier: workspace:@openng/optimauix-styles@*
+        version: link:packages/optimauix-styles
+      '@primeuix/themes':
+        specifier: workspace:@openng/optimauix-themes@*
+        version: link:packages/optimauix-themes
+      '@primeuix/utils':
+        specifier: workspace:@openng/optimauix-utils@*
+        version: link:packages/optimauix-utils
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.13.0
         version: 8.59.3(@typescript-eslint/parser@8.59.3(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3))(eslint@9.39.4(jiti@2.7.0))(typescript@5.9.3)
@@ -233,8 +233,8 @@ importers:
         specifier: ^3.3.4
         version: 3.9.0(@algolia/client-search@4.27.0)(@types/react@18.3.28)(search-insights@2.17.3)
       '@primeuix/themes':
-        specifier: 'catalog:'
-        version: 2.0.3
+        specifier: workspace:@openng/optimauix-themes@*
+        version: link:../../packages/optimauix-themes
       '@stackblitz/sdk':
         specifier: 1.9.0
         version: 1.9.0
@@ -308,12 +308,58 @@ importers:
   packages/mcp:
     dependencies:
       '@primeuix/mcp':
-        specifier: 'catalog:'
-        version: 1.0.1
+        specifier: workspace:@openng/optimauix-mcp@*
+        version: link:../optimauix-mcp
     devDependencies:
       tsup:
         specifier: ^8.1.0
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.14)(typescript@5.9.3)(yaml@2.9.0)
+
+  packages/optimauix-mcp:
+    dependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.25.2
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
+
+  packages/optimauix-motion:
+    dependencies:
+      '@primeuix/utils':
+        specifier: workspace:@openng/optimauix-utils@*
+        version: link:../optimauix-utils
+
+  packages/optimauix-styled:
+    dependencies:
+      '@primeuix/utils':
+        specifier: workspace:@openng/optimauix-utils@*
+        version: link:../optimauix-utils
+
+  packages/optimauix-styles:
+    dependencies:
+      '@primeuix/styled':
+        specifier: workspace:@openng/optimauix-styled@*
+        version: link:../optimauix-styled
+    devDependencies:
+      known-css-properties:
+        specifier: ^0.37.0
+        version: 0.37.0
+      postcss:
+        specifier: ^8.4.31
+        version: 8.5.14
+
+  packages/optimauix-themes:
+    dependencies:
+      '@primeuix/styled':
+        specifier: workspace:@openng/optimauix-styled@*
+        version: link:../optimauix-styled
+    devDependencies:
+      typedoc:
+        specifier: 0.27.6
+        version: 0.27.6(typescript@5.9.3)
+
+  packages/optimauix-utils: {}
 
   packages/primeng:
     dependencies:
@@ -336,17 +382,17 @@ importers:
         specifier: catalog:angular21
         version: 21.2.13(@angular/common@21.2.13(@angular/core@21.2.13(@angular/compiler@21.2.13)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.13(@angular/compiler@21.2.13)(rxjs@7.8.2))(@angular/platform-browser@21.2.13(@angular/animations@21.0.0(@angular/core@21.2.13(@angular/compiler@21.2.13)(rxjs@7.8.2)))(@angular/common@21.2.13(@angular/core@21.2.13(@angular/compiler@21.2.13)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@21.2.13(@angular/compiler@21.2.13)(rxjs@7.8.2)))(rxjs@7.8.2)
       '@primeuix/motion':
-        specifier: 'catalog:'
-        version: 0.0.10
+        specifier: workspace:@openng/optimauix-motion@*
+        version: link:../optimauix-motion
       '@primeuix/styled':
-        specifier: 'catalog:'
-        version: 0.7.4
+        specifier: workspace:@openng/optimauix-styled@*
+        version: link:../optimauix-styled
       '@primeuix/styles':
-        specifier: 'catalog:'
-        version: 2.0.3
+        specifier: workspace:@openng/optimauix-styles@*
+        version: link:../optimauix-styles
       '@primeuix/utils':
-        specifier: 'catalog:'
-        version: 0.7.2
+        specifier: workspace:@openng/optimauix-utils@*
+        version: link:../optimauix-utils
       rxjs:
         specifier: ^6.0.0 || ^7.8.1
         version: 7.8.2
@@ -374,11 +420,11 @@ importers:
   packages/themes:
     dependencies:
       '@primeuix/styled':
-        specifier: 'catalog:'
-        version: 0.7.4
+        specifier: workspace:@openng/optimauix-styled@*
+        version: link:../optimauix-styled
       '@primeuix/themes':
-        specifier: 'catalog:'
-        version: 2.0.3
+        specifier: workspace:@openng/optimauix-themes@*
+        version: link:../optimauix-themes
     publishDirectory: dist
 
 packages:
@@ -1937,6 +1983,9 @@ packages:
     resolution: {integrity: sha512-GmzA9ckNokPypTg10pgpeHNQe7ph+iIKKmhKu3Ob9ANkswreCx7R3cKmY781K8QK3AqVL3xVh9A42JvIAbkkSA==}
     engines: {node: ^20.17.0 || >=22.9.0}
 
+  '@gerrit0/mini-shiki@1.27.2':
+    resolution: {integrity: sha512-GeWyHz8ao2gBiUW4OJnQDxXQnFgZQwwQk05t/CVVgNBN7/rK8XZ7xY6YhLVv9tH3VppWWmr9DCl3MwemB/i+Og==}
+
   '@gerrit0/mini-shiki@3.23.0':
     resolution: {integrity: sha512-bEMORlG0cqdjVyCEuU0cDQbORWX+kYCeo0kV1lbxF5bt4r7SID2l9bqsxJEM0zndaxpOUT7riCyIVEuqq/Ynxg==}
 
@@ -2666,32 +2715,6 @@ packages:
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
 
-  '@primeuix/mcp@1.0.1':
-    resolution: {integrity: sha512-TSaakkktu2Yt5HnD2q9HucxpXt6LawodBntjsXlhgZlMSLK1vo647A7lgW1hztsZuzQl1zlk8A+6OMmGY8Xnfg==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/motion@0.0.10':
-    resolution: {integrity: sha512-PsZwOPq79Scp7/ionshRcQ5xKVf9+zuLcyY5mf6onK8chHT5C9JGphmcIZ4CzcqxuGEpsm8AIbTGy+zS3RtzLA==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/styled@0.7.4':
-    resolution: {integrity: sha512-QSO/NpOQg8e9BONWRBx9y8VGMCMYz0J/uKfNJEya/RGEu7ARx0oYW0ugI1N3/KB1AAvyGxzKBzGImbwg0KUiOQ==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/styles@2.0.3':
-    resolution: {integrity: sha512-2ykAB6BaHzR/6TwF8ShpJTsZrid6cVIEBVlookSdvOdmlWuevGu5vWOScgIwqWwlZcvkFYAGR/SUV3OHCTBMdw==}
-
-  '@primeuix/themes@2.0.3':
-    resolution: {integrity: sha512-3fS1883mtCWhgUgNf/feiaaDSOND4EBIOu9tZnzJlJ8QtYyL6eFLcA6V3ymCWqLVXQ1+lTVEZv1gl47FIdXReg==}
-
-  '@primeuix/utils@0.6.4':
-    resolution: {integrity: sha512-pZ5f+vj7wSzRhC7KoEQRU5fvYAe+RP9+m39CTscZ3UywCD1Y2o6Fe1rRgklMPSkzUcty2jzkA0zMYkiJBD1hgg==}
-    engines: {node: '>=12.11.0'}
-
-  '@primeuix/utils@0.7.2':
-    resolution: {integrity: sha512-pmEbSfP0Phf9W9RweiM66zXnkn73ZeKyYINElbX3uZ2+stzzaba2svLAl3B1pHVcRw5t43O0VciaGe4ye2EXKw==}
-    engines: {node: '>=12.11.0'}
-
   '@rolldown/binding-android-arm64@1.0.0-rc.4':
     resolution: {integrity: sha512-vRq9f4NzvbdZavhQbjkJBx7rRebDKYR9zHfO/Wg486+I7bSecdUapzCm5cyXoK+LHokTxgSq7A5baAXUZkIz0w==}
     engines: {node: ^20.19.0 || >=22.12.0}
@@ -2927,6 +2950,9 @@ packages:
     resolution: {integrity: sha512-EqH12Fr3vaWFpsilFDFXkxwMIidEDZr5cGl0w2hDRG7DjXE2oRB/VXix8xmpuHkzJ40Jgew6hIc+bfbwQhFK1A==}
     engines: {node: ^20.19.0 || ^22.12.0 || >=24.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
+  '@shikijs/engine-oniguruma@1.29.2':
+    resolution: {integrity: sha512-7iiOx3SG8+g1MnlzZVDYiaeHe7Ez2Kf2HrJzdmGwkRisT7r4rak0e655AcM/tF9JG/kg5fMNYlLLKglbN7gBqA==}
+
   '@shikijs/engine-oniguruma@3.23.0':
     resolution: {integrity: sha512-1nWINwKXxKKLqPibT5f4pAFLej9oZzQTsby8942OTlsJzOBZ0MWKiwzMsd+jhzu8YPCHAswGnnN1YtQfirL35g==}
 
@@ -2935,6 +2961,9 @@ packages:
 
   '@shikijs/themes@3.23.0':
     resolution: {integrity: sha512-5qySYa1ZgAT18HR/ypENL9cUSGOeI2x+4IvYJu4JgVJdizn6kG4ia5Q1jDEOi7gTbN4RbuYtmHh0W3eccOrjMA==}
+
+  '@shikijs/types@1.29.2':
+    resolution: {integrity: sha512-VJjK0eIijTZf0QSTODEXCqinjBn0joAHQ+aPSBzrv4O2d/QSbsMw+ZeSRx03kV34Hy7NzUvV/7NqfYGRLrASmw==}
 
   '@shikijs/types@3.23.0':
     resolution: {integrity: sha512-3JZ5HXOZfYjsYSk0yPwBrkupyYSLpAE26Qc0HLghhZNGTZg/SKxXIIgoxOpmmeQP0RRSDJTk1/vPfw9tbw+jSQ==}
@@ -5237,6 +5266,9 @@ packages:
     resolution: {integrity: sha512-dcS1ul+9tmeD95T+x28/ehLgd9mENa3LsvDTtzm3vyBEO7RPptvAD+t44WVXaUjTBRcrpFeFlC8WCruUR456hw==}
     engines: {node: '>=0.10.0'}
 
+  known-css-properties@0.37.0:
+    resolution: {integrity: sha512-JCDrsP4Z1Sb9JwG0aJ8Eo2r7k4Ou5MwmThS/6lcIe1ICyb7UBJKGRIUUdqc2ASdE/42lgz6zFUnzAIhtXnBVrQ==}
+
   launch-editor@2.13.2:
     resolution: {integrity: sha512-4VVDnbOpLXy/s8rdRCSXb+zfMeFR0WlJWpET1iA9CQdlZDfwyLjUuGQzXU4VeOoey6AicSAluWan7Etga6Kcmg==}
 
@@ -6967,6 +6999,13 @@ packages:
   typed-assert@1.0.9:
     resolution: {integrity: sha512-KNNZtayBCtmnNmbo5mG47p1XsCyrx6iVqomjcZnec/1Y5GGARaxPs6r49RnSPeUP3YjNYiU9sQHAtY4BBvnZwg==}
 
+  typedoc@0.27.6:
+    resolution: {integrity: sha512-oBFRoh2Px6jFx366db0lLlihcalq/JzyCVp7Vaq1yphL/tbgx2e+bkpkCgJPunaPvPwoTOXSwasfklWHm7GfAw==}
+    engines: {node: '>= 18'}
+    hasBin: true
+    peerDependencies:
+      typescript: 5.0.x || 5.1.x || 5.2.x || 5.3.x || 5.4.x || 5.5.x || 5.6.x || 5.7.x
+
   typedoc@0.28.5:
     resolution: {integrity: sha512-5PzUddaA9FbaarUzIsEc4wNXCiO4Ot3bJNeMF2qKpYlTmM9TTaSHQ7162w756ERCkXER/+o2purRG6YOAv6EMA==}
     engines: {node: '>= 18', pnpm: '>= 10'}
@@ -7599,7 +7638,7 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@angular-devkit/architect': 0.2102.11
-      '@angular-devkit/build-webpack': 0.2102.11(webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)))(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
+      '@angular-devkit/build-webpack': 0.2102.11(webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12)))(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
       '@angular-devkit/core': 21.2.11
       '@angular/build': 21.2.11(d6prqqhreybhnu34jkyvnbruoa)
       '@angular/compiler-cli': 21.2.13(@angular/compiler@21.2.13)(typescript@5.9.3)
@@ -7649,8 +7688,8 @@ snapshots:
       tslib: 2.8.1
       typescript: 5.9.3
       webpack: 5.105.2(esbuild@0.27.3)(postcss@8.5.12)
-      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
-      webpack-dev-server: 5.2.3(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
+      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12))
+      webpack-dev-server: 5.2.3(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12))
       webpack-merge: 6.0.1
       webpack-subresource-integrity: 5.1.0(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
     optionalDependencies:
@@ -7694,12 +7733,12 @@ snapshots:
       - webpack-cli
       - yaml
 
-  '@angular-devkit/build-webpack@0.2102.11(webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)))(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))':
+  '@angular-devkit/build-webpack@0.2102.11(webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12)))(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))':
     dependencies:
       '@angular-devkit/architect': 0.2102.11
       rxjs: 7.8.2
       webpack: 5.105.2(esbuild@0.27.3)(postcss@8.5.12)
-      webpack-dev-server: 5.2.3(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
+      webpack-dev-server: 5.2.3(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12))
     transitivePeerDependencies:
       - chokidar
 
@@ -9089,6 +9128,12 @@ snapshots:
 
   '@gar/promise-retry@1.0.3': {}
 
+  '@gerrit0/mini-shiki@1.27.2':
+    dependencies:
+      '@shikijs/engine-oniguruma': 1.29.2
+      '@shikijs/types': 1.29.2
+      '@shikijs/vscode-textmate': 10.0.2
+
   '@gerrit0/mini-shiki@3.23.0':
     dependencies:
       '@shikijs/engine-oniguruma': 3.23.0
@@ -9843,34 +9888,6 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@primeuix/mcp@1.0.1':
-    dependencies:
-      '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - supports-color
-
-  '@primeuix/motion@0.0.10':
-    dependencies:
-      '@primeuix/utils': 0.6.4
-
-  '@primeuix/styled@0.7.4':
-    dependencies:
-      '@primeuix/utils': 0.6.4
-
-  '@primeuix/styles@2.0.3':
-    dependencies:
-      '@primeuix/styled': 0.7.4
-
-  '@primeuix/themes@2.0.3':
-    dependencies:
-      '@primeuix/styled': 0.7.4
-
-  '@primeuix/utils@0.6.4': {}
-
-  '@primeuix/utils@0.7.2': {}
-
   '@rolldown/binding-android-arm64@1.0.0-rc.4':
     optional: true
 
@@ -10022,6 +10039,11 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
+  '@shikijs/engine-oniguruma@1.29.2':
+    dependencies:
+      '@shikijs/types': 1.29.2
+      '@shikijs/vscode-textmate': 10.0.2
+
   '@shikijs/engine-oniguruma@3.23.0':
     dependencies:
       '@shikijs/types': 3.23.0
@@ -10034,6 +10056,11 @@ snapshots:
   '@shikijs/themes@3.23.0':
     dependencies:
       '@shikijs/types': 3.23.0
+
+  '@shikijs/types@1.29.2':
+    dependencies:
+      '@shikijs/vscode-textmate': 10.0.2
+      '@types/hast': 3.0.4
 
   '@shikijs/types@3.23.0':
     dependencies:
@@ -10738,9 +10765,9 @@ snapshots:
       domhandler: 5.0.3
       htmlparser2: 10.1.0
       picocolors: 1.1.1
-      postcss: 8.5.12
+      postcss: 8.5.14
       postcss-media-query-parser: 0.2.3
-      postcss-safe-parser: 7.0.1(postcss@8.5.12)
+      postcss-safe-parser: 7.0.1(postcss@8.5.14)
 
   big.js@5.2.2: {}
 
@@ -11138,12 +11165,12 @@ snapshots:
 
   css-loader@7.1.3(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.12)
-      postcss: 8.5.12
-      postcss-modules-extract-imports: 3.1.0(postcss@8.5.12)
-      postcss-modules-local-by-default: 4.2.0(postcss@8.5.12)
-      postcss-modules-scope: 3.2.1(postcss@8.5.12)
-      postcss-modules-values: 4.0.0(postcss@8.5.12)
+      icss-utils: 5.1.0(postcss@8.5.14)
+      postcss: 8.5.14
+      postcss-modules-extract-imports: 3.1.0(postcss@8.5.14)
+      postcss-modules-local-by-default: 4.2.0(postcss@8.5.14)
+      postcss-modules-scope: 3.2.1(postcss@8.5.14)
+      postcss-modules-values: 4.0.0(postcss@8.5.14)
       postcss-value-parser: 4.2.0
       semver: 7.7.4
     optionalDependencies:
@@ -12262,9 +12289,9 @@ snapshots:
     dependencies:
       safer-buffer: 2.1.2
 
-  icss-utils@5.1.0(postcss@8.5.12):
+  icss-utils@5.1.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.12
+      postcss: 8.5.14
 
   ignore-walk@8.0.0:
     dependencies:
@@ -12729,6 +12756,8 @@ snapshots:
       json-buffer: 3.0.1
 
   kind-of@6.0.3: {}
+
+  known-css-properties@0.37.0: {}
 
   launch-editor@2.13.2:
     dependencies:
@@ -13649,35 +13678,35 @@ snapshots:
 
   postcss-media-query-parser@0.2.3: {}
 
-  postcss-modules-extract-imports@3.1.0(postcss@8.5.12):
+  postcss-modules-extract-imports@3.1.0(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.12
+      postcss: 8.5.14
 
-  postcss-modules-local-by-default@4.2.0(postcss@8.5.12):
+  postcss-modules-local-by-default@4.2.0(postcss@8.5.14):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.12)
-      postcss: 8.5.12
+      icss-utils: 5.1.0(postcss@8.5.14)
+      postcss: 8.5.14
       postcss-selector-parser: 7.1.1
       postcss-value-parser: 4.2.0
 
-  postcss-modules-scope@3.2.1(postcss@8.5.12):
+  postcss-modules-scope@3.2.1(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.12
+      postcss: 8.5.14
       postcss-selector-parser: 7.1.1
 
-  postcss-modules-values@4.0.0(postcss@8.5.12):
+  postcss-modules-values@4.0.0(postcss@8.5.14):
     dependencies:
-      icss-utils: 5.1.0(postcss@8.5.12)
-      postcss: 8.5.12
+      icss-utils: 5.1.0(postcss@8.5.14)
+      postcss: 8.5.14
 
   postcss-nested@6.2.0(postcss@8.5.14):
     dependencies:
       postcss: 8.5.14
       postcss-selector-parser: 6.1.2
 
-  postcss-safe-parser@7.0.1(postcss@8.5.12):
+  postcss-safe-parser@7.0.1(postcss@8.5.14):
     dependencies:
-      postcss: 8.5.12
+      postcss: 8.5.14
 
   postcss-selector-parser@6.1.2:
     dependencies:
@@ -13889,7 +13918,7 @@ snapshots:
       adjust-sourcemap-loader: 4.0.0
       convert-source-map: 1.9.0
       loader-utils: 2.0.4
-      postcss: 8.5.12
+      postcss: 8.5.14
       source-map: 0.6.1
 
   resolve@1.22.12:
@@ -14542,7 +14571,7 @@ snapshots:
       minizlib: 3.1.0
       yallist: 5.0.0
 
-  terser-webpack-plugin@5.6.0(esbuild@0.27.3)(postcss@8.5.12)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)):
+  terser-webpack-plugin@5.6.0(esbuild@0.27.3)(postcss@8.5.12)(webpack@5.105.2(postcss@8.5.12)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       jest-worker: 27.5.1
@@ -14777,6 +14806,15 @@ snapshots:
 
   typed-assert@1.0.9: {}
 
+  typedoc@0.27.6(typescript@5.9.3):
+    dependencies:
+      '@gerrit0/mini-shiki': 1.27.2
+      lunr: 2.3.9
+      markdown-it: 14.1.1
+      minimatch: 9.0.9
+      typescript: 5.9.3
+      yaml: 2.9.0
+
   typedoc@0.28.5(typescript@5.9.3):
     dependencies:
       '@gerrit0/mini-shiki': 3.23.0
@@ -14863,7 +14901,7 @@ snapshots:
       esbuild: 0.27.3
       fdir: 6.5.0(picomatch@4.0.4)
       picomatch: 4.0.4
-      postcss: 8.5.12
+      postcss: 8.5.14
       rollup: 4.60.4
       tinyglobby: 0.2.15
     optionalDependencies:
@@ -14889,7 +14927,7 @@ snapshots:
   weak-lru-cache@1.2.2:
     optional: true
 
-  webpack-dev-middleware@7.4.5(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)):
+  webpack-dev-middleware@7.4.5(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12)):
     dependencies:
       colorette: 2.0.20
       memfs: 4.57.2(tslib@2.8.1)
@@ -14902,7 +14940,7 @@ snapshots:
     transitivePeerDependencies:
       - tslib
 
-  webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12)):
+  webpack-dev-server@5.2.3(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12)):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -14930,7 +14968,7 @@ snapshots:
       serve-index: 1.9.2
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
+      webpack-dev-middleware: 7.4.5(tslib@2.8.1)(webpack@5.105.2(postcss@8.5.12))
       ws: 8.20.1
     optionalDependencies:
       webpack: 5.105.2(esbuild@0.27.3)(postcss@8.5.12)
@@ -14978,7 +15016,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 4.3.3
       tapable: 2.3.3
-      terser-webpack-plugin: 5.6.0(esbuild@0.27.3)(postcss@8.5.12)(webpack@5.105.2(esbuild@0.27.3)(postcss@8.5.12))
+      terser-webpack-plugin: 5.6.0(esbuild@0.27.3)(postcss@8.5.12)(webpack@5.105.2(postcss@8.5.12))
       watchpack: 2.5.1
       webpack-sources: 3.4.1
     transitivePeerDependencies:

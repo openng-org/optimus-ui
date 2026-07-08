@@ -21,7 +21,8 @@
         "release:rc": "pnpm run build && pnpm recursive publish --filter './packages/*' --no-git-checks --report-summary --tag rc",
         "build": "cross-env NODE_ENV=production pnpm run build:check && pnpm run build:packages",
         "build:check": "pnpm run format:check && pnpm run security:check",
-        "build:packages": "pnpm run build:lib && pnpm run build:themes && pnpm run build:mcp && pnpm run build:docs && pnpm run build:showcase",
+        "build:packages": "pnpm run build:optimauix && pnpm run build:lib && pnpm run build:themes && pnpm run build:mcp && pnpm run build:docs && pnpm run build:showcase",
+        "build:optimauix": "pnpm --filter './packages/optimauix-*' build",
         "build:lib": "pnpm --filter primeng build",
         "build:themes": "pnpm --filter themes build",
         "build:mcp": "pnpm --filter mcp build",
@@ -44,19 +45,25 @@
         "@angular-eslint/schematics": "catalog:angular21",
         "@angular-eslint/template-parser": "catalog:angular21",
         "@angular/animations": "21.0.0",
+        "@angular/cdk": "catalog:angular21",
         "@angular/cli": "catalog:angular21",
         "@angular/common": "catalog:angular21",
         "@angular/compiler": "catalog:angular21",
         "@angular/compiler-cli": "catalog:angular21",
         "@angular/core": "catalog:angular21",
         "@angular/forms": "catalog:angular21",
-        "@angular/cdk": "catalog:angular21",
         "@angular/platform-browser": "catalog:angular21",
         "@angular/platform-browser-dynamic": "catalog:angular21",
         "@angular/platform-server": "catalog:angular21",
         "@angular/router": "catalog:angular21",
         "@commitlint/cli": "^19.6.1",
         "@commitlint/config-conventional": "^19.6.0",
+        "@primeuix/mcp": "workspace:@openng/optimauix-mcp@*",
+        "@primeuix/motion": "workspace:@openng/optimauix-motion@*",
+        "@primeuix/styled": "workspace:@openng/optimauix-styled@*",
+        "@primeuix/styles": "workspace:@openng/optimauix-styles@*",
+        "@primeuix/themes": "workspace:@openng/optimauix-themes@*",
+        "@primeuix/utils": "workspace:@openng/optimauix-utils@*",
         "@typescript-eslint/eslint-plugin": "^8.13.0",
         "cross-env": "^7.0.3",
         "eslint": "^9.14.0",
@@ -80,7 +87,11 @@
     },
     "packageManager": "pnpm@9.6.0",
     "lint-staged": {
-        "packages/**/*.{js,mjs,ts,mts,d.ts,html}": ["prettier --write"],
-        "apps/**/*.{js,mjs,ts,mts,d.ts,html}": ["prettier --write"]
+        "packages/**/*.{js,mjs,ts,mts,d.ts,html}": [
+            "prettier --write"
+        ],
+        "apps/**/*.{js,mjs,ts,mts,d.ts,html}": [
+            "prettier --write"
+        ]
     }
 }

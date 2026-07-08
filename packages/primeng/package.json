@@ -57,9 +57,9 @@
         "rxjs": "^6.0.0 || ^7.8.1"
     },
     "dependencies": {
-        "@primeuix/styled": "catalog:",
-        "@primeuix/utils": "catalog:",
-        "@primeuix/styles": "catalog:",
-        "@primeuix/motion": "catalog:"
+        "@primeuix/styled": "workspace:@openng/optimauix-styled@*",
+        "@primeuix/utils": "workspace:@openng/optimauix-utils@*",
+        "@primeuix/styles": "workspace:@openng/optimauix-styles@*",
+        "@primeuix/motion": "workspace:@openng/optimauix-motion@*"
     }
 }

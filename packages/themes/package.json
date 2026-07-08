@@ -4,7 +4,7 @@
     "author": "PrimeTek Informatics",
     "description": "",
     "homepage": "https://primeng.org/",
-    "license": "SEE LICENSE IN LICENSE.md",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/primefaces/primeng.git",
@@ -49,7 +49,7 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {
-        "@primeuix/styled": "catalog:",
-        "@primeuix/themes": "catalog:"
+        "@primeuix/styled": "workspace:@openng/optimauix-styled@*",
+        "@primeuix/themes": "workspace:@openng/optimauix-themes@*"
     }
 }

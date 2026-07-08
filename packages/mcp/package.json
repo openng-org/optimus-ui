@@ -4,7 +4,7 @@
     "author": "PrimeTek Informatics",
     "description": "Model Context Protocol (MCP) server for PrimeNg component library",
     "homepage": "https://primeng.org/",
-    "license": "SEE LICENSE IN LICENSE.md",
+    "license": "MIT",
     "repository": {
         "type": "git",
         "url": "https://github.com/primefaces/primeng.git",
@@ -51,7 +51,7 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {
-        "@primeuix/mcp": "catalog:"
+        "@primeuix/mcp": "workspace:@openng/optimauix-mcp@*"
     },
     "devDependencies": {
         "tsup": "^8.1.0"
