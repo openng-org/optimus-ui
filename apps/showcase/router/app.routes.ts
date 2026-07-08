@@ -10,7 +10,6 @@ export const routes: Routes = [
         children: [
             { path: 'accessibility', redirectTo: 'guides/accessibility', pathMatch: 'full' },
             { path: 'theming', redirectTo: 'theming/styled', pathMatch: 'full' },
-            { path: 'uikit/guide', redirectTo: 'uikit/guide/v3', pathMatch: 'full' },
             { path: 'autocomplete', loadChildren: () => import('@/pages/autocomplete/routes') },
             {
                 path: 'installation',
@@ -285,7 +284,6 @@ export const routes: Routes = [
                 path: 'virtualscroller',
                 loadChildren: () => import('@/pages/scroller/routes')
             },
-            { path: 'uikit', loadChildren: () => import('@/pages/uikit/routes') },
             { path: 'autofocus', loadChildren: () => import('@/pages/autofocus/routes') },
             { path: 'overlay', loadChildren: () => import('@/pages/overlay/routes') },
             {
