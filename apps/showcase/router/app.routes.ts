@@ -245,7 +245,6 @@ export const routes: Routes = [
                 loadChildren: () => import('@/pages/splitter/routes')
             },
             { path: 'stepper', loadChildren: () => import('@/pages/stepper/routes') },
-            { path: 'support', loadChildren: () => import('@/pages/support/routes') },
             {
                 path: 'styleclass',
                 loadChildren: () => import('@/pages/styleclass/routes')
