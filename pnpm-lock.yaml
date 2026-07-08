@@ -9,6 +9,12 @@ catalogs:
     '@angular-devkit/build-angular':
       specifier: ^22.0.0
       version: 22.0.4
+    '@angular-devkit/core':
+      specifier: ^22.0.0
+      version: 22.0.4
+    '@angular-devkit/schematics':
+      specifier: ^22.0.0
+      version: 22.0.4
     '@angular-eslint/eslint-plugin':
       specifier: ^22.0.0
       version: 22.0.0
@@ -357,6 +363,12 @@ importers:
         specifier: ^6.0.0 || ^7.8.1
         version: 7.8.2
     devDependencies:
+      '@angular-devkit/core':
+        specifier: catalog:angular22
+        version: 22.0.4(chokidar@5.0.0)
+      '@angular-devkit/schematics':
+        specifier: catalog:angular22
+        version: 22.0.4(chokidar@5.0.0)
       karma:
         specifier: ~6.4.4
         version: 6.4.4
