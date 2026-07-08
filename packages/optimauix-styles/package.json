@@ -1,0 +1,64 @@
+{
+    "name": "@openng/optimauix-styles",
+    "version": "2.0.3",
+    "author": "PrimeTek Informatics",
+    "description": "Styles utilities for PrimeUI Libraries",
+    "keywords": [
+        "styles",
+        "css",
+        "style utilities",
+        "primeng",
+        "primereact",
+        "primevue",
+        "primeuix"
+    ],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/primefaces/primeuix.git",
+        "directory": "packages/styles"
+    },
+    "bugs": {
+        "url": "https://github.com/primefaces/primeuix/issues"
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.mjs"
+        },
+        "./*": {
+            "types": "./dist/types.d.mts",
+            "import": "./dist/*/index.mjs",
+            "default": "./dist/*/index.mjs"
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "files": [
+        "dist",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
+        "build:package": "pnpm run build:prebuild && tsup",
+        "build:dev:package": "pnpm run build:prebuild && tsup --watch",
+        "build:prebuild": "node ./scripts/prebuild.mjs",
+        "type:check": "tsc --noEmit",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "dependencies": {
+        "@primeuix/styled": "workspace:@openng/optimauix-styled@*"
+    },
+    "devDependencies": {
+        "known-css-properties": "^0.37.0",
+        "postcss": "^8.4.31"
+    }
+}
