@@ -1,0 +1,47 @@
+{
+    "name": "@openng/optimauix-utils",
+    "version": "0.7.2",
+    "author": "PrimeTek Informatics",
+    "description": "Utility functions and helpers for PrimeUI Libraries",
+    "keywords": ["utilities", "helpers", "primeng", "primereact", "primevue", "primeuix"],
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/primefaces/primeuix.git",
+        "directory": "packages/utils"
+    },
+    "bugs": {
+        "url": "https://github.com/primefaces/primeuix/issues"
+    },
+    "main": "./dist/index.mjs",
+    "module": "./dist/index.mjs",
+    "types": "./dist/index.d.mts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.mts",
+            "import": "./dist/index.mjs",
+            "default": "./dist/index.mjs"
+        },
+        "./*": {
+            "types": "./dist/*/index.d.mts",
+            "import": "./dist/*/index.mjs",
+            "default": "./dist/*/index.mjs"
+        }
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "sideEffects": false,
+    "files": ["dist", "README.md", "LICENSE"],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
+        "build:package": "pnpm run build:prebuild && tsup",
+        "build:dev:package": "pnpm run build:prebuild && tsup --watch",
+        "build:prebuild": "node ./scripts/prebuild.mjs",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "engines": {
+        "node": ">=12.11.0"
+    }
+}
