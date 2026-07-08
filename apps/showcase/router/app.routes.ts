@@ -67,7 +67,6 @@ export const routes: Routes = [
                 path: 'contextmenu',
                 loadChildren: () => import('@/pages/contextmenu/routes')
             },
-            { path: 'contribution', loadChildren: () => import('@/pages/contribution/routes') },
             {
                 path: 'dataview',
                 loadChildren: () => import('@/pages/dataview/routes')
