@@ -64,9 +64,6 @@ catalogs:
       specifier: 5.9.3
       version: 5.9.3
   default:
-    '@primeuix/mcp':
-      specifier: ^1.0.0
-      version: 1.0.1
     primeicons:
       specifier: ^7.0.0
       version: 7.0.0
@@ -135,6 +132,9 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^19.6.0
         version: 19.8.1
+      '@primeuix/mcp':
+        specifier: workspace:@openng/optimus-ui-mcp@*
+        version: link:packages/optimus-ui-mcp
       '@primeuix/motion':
         specifier: workspace:@openng/optimus-ui-motion@*
         version: link:packages/optimus-ui-motion
@@ -308,12 +308,21 @@ importers:
   packages/mcp:
     dependencies:
       '@primeuix/mcp':
-        specifier: 'catalog:'
-        version: 1.0.1
+        specifier: workspace:@openng/optimus-ui-mcp@*
+        version: link:../optimus-ui-mcp
     devDependencies:
       tsup:
         specifier: ^8.1.0
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.14)(typescript@5.9.3)(yaml@2.9.0)
+
+  packages/optimus-ui-mcp:
+    dependencies:
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.25.2
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.25.76
+        version: 3.25.76
 
   packages/optimus-ui-motion:
     dependencies:
@@ -2705,10 +2714,6 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
-
-  '@primeuix/mcp@1.0.1':
-    resolution: {integrity: sha512-TSaakkktu2Yt5HnD2q9HucxpXt6LawodBntjsXlhgZlMSLK1vo647A7lgW1hztsZuzQl1zlk8A+6OMmGY8Xnfg==}
-    engines: {node: '>=12.11.0'}
 
   '@rolldown/binding-android-arm64@1.0.0-rc.4':
     resolution: {integrity: sha512-vRq9f4NzvbdZavhQbjkJBx7rRebDKYR9zHfO/Wg486+I7bSecdUapzCm5cyXoK+LHokTxgSq7A5baAXUZkIz0w==}
@@ -9882,14 +9887,6 @@ snapshots:
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
-
-  '@primeuix/mcp@1.0.1':
-    dependencies:
-      '@modelcontextprotocol/sdk': 1.29.0(zod@3.25.76)
-      zod: 3.25.76
-    transitivePeerDependencies:
-      - '@cfworker/json-schema'
-      - supports-color
 
   '@rolldown/binding-android-arm64@1.0.0-rc.4':
     optional: true

@@ -51,7 +51,7 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {
-        "@primeuix/mcp": "catalog:"
+        "@primeuix/mcp": "workspace:@openng/optimus-ui-mcp@*"
     },
     "devDependencies": {
         "tsup": "^8.1.0"
