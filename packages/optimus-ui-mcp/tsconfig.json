@@ -1,0 +1,58 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "target": "es2016",
+        "baseUrl": ".",
+        "paths": {
+            "@primeuix/utils": [
+                "../optimus-ui-utils/src"
+            ],
+            "@primeuix/utils/*": [
+                "../optimus-ui-utils/src/*"
+            ],
+            "@primeuix/styled": [
+                "../optimus-ui-styled/src"
+            ],
+            "@primeuix/styled/*": [
+                "../optimus-ui-styled/src/*"
+            ],
+            "@primeuix/styles": [
+                "../optimus-ui-styles/src"
+            ],
+            "@primeuix/styles/*": [
+                "../optimus-ui-styles/src/*"
+            ],
+            "@primeuix/motion": [
+                "../optimus-ui-motion/src"
+            ],
+            "@primeuix/motion/*": [
+                "../optimus-ui-motion/src/*",
+                "../optimus-ui-motion/types/*"
+            ],
+            "@primeuix/mcp/*": [
+                "../optimus-ui-mcp/src/*"
+            ],
+            "@primeuix/themes": [
+                "../optimus-ui-themes/src"
+            ],
+            "@primeuix/themes/types": [
+                "../optimus-ui-themes/types"
+            ],
+            "@primeuix/themes/types/*": [
+                "../optimus-ui-themes/types/*"
+            ],
+            "@primeuix/themes/*": [
+                "../optimus-ui-themes/src/*",
+                "../optimus-ui-themes/src/presets/*",
+                "../optimus-ui-themes/types/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
+}
