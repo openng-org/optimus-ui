@@ -4,6 +4,7 @@ import { FilterDoc } from '@/doc/picklist/filter-doc';
 import { UsageDoc } from '@/doc/picklist/usage-doc';
 import { PTComponent } from '@/doc/picklist/pt/PTComponent';
 import { TemplateDoc } from '@/doc/picklist/template-doc';
+import { VirtualScrollDoc } from '@/doc/picklist/virtualscroll-doc';
 import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
@@ -49,6 +50,11 @@ export class PickListDemo {
                     id: 'template',
                     label: 'Template',
                     component: TemplateDoc
+                },
+                {
+                    id: 'virtualscroll',
+                    label: 'Virtual Scroll',
+                    component: VirtualScrollDoc
                 }
             ]
         },

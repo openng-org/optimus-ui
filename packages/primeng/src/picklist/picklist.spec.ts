@@ -14,6 +14,7 @@ import {
     PickListTargetReorderEvent,
     PickListTargetSelectEvent
 } from 'primeng/types/picklist';
+import { Listbox } from 'primeng/listbox';
 import { PickList } from './picklist';
 
 @Component({
@@ -1853,6 +1854,58 @@ describe('PickList', () => {
                     expect(listbox.nativeElement.getAttribute('data-testid')).toBe('picklist-listbox');
                     expect(listbox.nativeElement.getAttribute('aria-label')).toBe('Picklist Listbox');
                 });
+            });
+        });
+    });
+
+    describe('VirtualScroll', () => {
+        @Component({
+            standalone: true,
+            imports: [PickList],
+            template: `<p-picklist [source]="source" [target]="target" [virtualScroll]="virtualScroll" [virtualScrollItemSize]="virtualScrollItemSize" [virtualScrollOptions]="virtualScrollOptions" scrollHeight="200px" />`
+        })
+        class VirtualScrollTestComponent {
+            source = Array.from({ length: 1000 }, (_, i) => ({ id: i, name: `Item ${i}` }));
+            target = Array.from({ length: 1000 }, (_, i) => ({ id: 1000 + i, name: `Item ${1000 + i}` }));
+            virtualScroll = true;
+            virtualScrollItemSize = 40;
+            virtualScrollOptions: any;
+        }
+
+        it('should not render a scroller by default', () => {
+            const scrollers = fixture.debugElement.queryAll(By.css('p-scroller'));
+            expect(scrollers.length).toBe(0);
+        });
+
+        it('should propagate virtual scroll settings to both listboxes', () => {
+            const vsFixture = TestBed.createComponent(VirtualScrollTestComponent);
+            vsFixture.detectChanges();
+
+            const listboxes = vsFixture.debugElement.queryAll(By.directive(Listbox));
+            expect(listboxes.length).toBe(2);
+            listboxes.forEach((listbox) => {
+                expect(listbox.componentInstance.virtualScroll()).toBe(true);
+                expect(listbox.componentInstance.virtualScrollItemSize()).toBe(40);
+            });
+        });
+
+        it('should render a scroller in both lists when virtualScroll is enabled', () => {
+            const vsFixture = TestBed.createComponent(VirtualScrollTestComponent);
+            vsFixture.detectChanges();
+
+            const scrollers = vsFixture.debugElement.queryAll(By.css('p-scroller'));
+            expect(scrollers.length).toBe(2);
+        });
+
+        it('should pass virtualScrollOptions to both listboxes', () => {
+            const vsFixture = TestBed.createComponent(VirtualScrollTestComponent);
+            vsFixture.componentInstance.virtualScrollOptions = { showLoader: false };
+            vsFixture.detectChanges();
+
+            const listboxes = vsFixture.debugElement.queryAll(By.directive(Listbox));
+            expect(listboxes.length).toBe(2);
+            listboxes.forEach((listbox) => {
+                expect(listbox.componentInstance.virtualScrollOptions()).toEqual({ autoSize: false, showLoader: false });
             });
         });
     });

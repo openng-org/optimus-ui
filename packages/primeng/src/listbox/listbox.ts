@@ -946,7 +946,10 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
     listContainerStyle = computed(() => {
         const listStyle = this.listStyle();
         const maxHeight = this.virtualScroll() ? 'auto' : this.scrollHeight() || 'auto';
-        return { ...listStyle, 'max-height': maxHeight };
+        // With virtual scrolling the inner scroller owns the scroll; suppressing the
+        // container's own overflow avoids a second, redundant scrollbar.
+        const overflow = this.virtualScroll() ? 'hidden' : undefined;
+        return { ...listStyle, 'max-height': maxHeight, overflow };
     });
 
     focusedOptionId = computed(() => (this.focusedOptionIndex() !== -1 ? `${this.$id()}_${this.focusedOptionIndex()}` : null));

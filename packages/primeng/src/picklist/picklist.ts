@@ -23,7 +23,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { find, findIndexInList, isEmpty, setAttribute, uuid } from '@primeuix/utils';
-import { FilterMatchModeType, FilterService } from 'primeng/api';
+import { FilterMatchModeType, FilterService, ScrollerOptions } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
 import { Button } from 'primeng/button';
@@ -141,7 +141,7 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     </p-button>
                 </div>
             }
-            <div [class]="cx('sourceListContainer')" [attr.data-pc-group-section]="'listcontainer'" [pBind]="ptm('sourceListContainer')">
+            <div [class]="cx('sourceListContainer')" [style.height]="virtualScroll() ? scrollHeight() : null" [attr.data-pc-group-section]="'listcontainer'" [pBind]="ptm('sourceListContainer')">
                 <p-listbox
                     #sourcelist
                     [ariaLabel]="sourceAriaLabel()"
@@ -161,6 +161,9 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [optionDisabled]="sourceOptionDisabled()"
                     [metaKeySelection]="metaKeySelection()"
                     [scrollHeight]="scrollHeight()"
+                    [virtualScroll]="virtualScroll()"
+                    [virtualScrollItemSize]="virtualScrollItemSize()"
+                    [virtualScrollOptions]="$virtualScrollOptions()"
                     [autoOptionFocus]="autoOptionFocus()"
                     [filter]="filterBy() && showSourceFilter()"
                     [filterBy]="filterBy()"
@@ -280,7 +283,7 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     </ng-template>
                 </p-button>
             </div>
-            <div [class]="cx('targetListContainer')" [attr.data-pc-group-section]="'listcontainer'" [pBind]="ptm('targetListContainer')">
+            <div [class]="cx('targetListContainer')" [style.height]="virtualScroll() ? scrollHeight() : null" [attr.data-pc-group-section]="'listcontainer'" [pBind]="ptm('targetListContainer')">
                 <p-listbox
                     #targetlist
                     [ariaLabel]="targetAriaLabel()"
@@ -300,6 +303,9 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [optionDisabled]="targetOptionDisabled()"
                     [metaKeySelection]="metaKeySelection()"
                     [scrollHeight]="scrollHeight()"
+                    [virtualScroll]="virtualScroll()"
+                    [virtualScrollItemSize]="virtualScrollItemSize()"
+                    [virtualScrollOptions]="$virtualScrollOptions()"
                     [autoOptionFocus]="autoOptionFocus()"
                     [filter]="filterBy() && showTargetFilter()"
                     [filterBy]="filterBy()"
@@ -653,6 +659,27 @@ export class PickList extends BaseComponent<PickListPassThrough> {
      * @group Props
      */
     scrollHeight = input('14rem');
+    /**
+     * Whether the data should be loaded on demand during scroll.
+     * @group Props
+     */
+    virtualScroll = input(undefined, { transform: booleanAttribute });
+    /**
+     * Height of an item in the list for VirtualScrolling.
+     * @group Props
+     */
+    virtualScrollItemSize = input(undefined, { transform: numberAttribute });
+    /**
+     * Whether to use the scroller feature. The properties of scroller component can be used like an object in it.
+     * @group Props
+     */
+    virtualScrollOptions = input<ScrollerOptions>();
+    /**
+     * Scroller options forwarded to the inner lists. autoSize is disabled by default so the
+     * lists keep a fixed scrollHeight instead of shrinking to their content, which would
+     * collapse an empty list and make the scrollbar flicker while scrolling.
+     */
+    $virtualScrollOptions = computed<ScrollerOptions>(() => ({ autoSize: false, ...this.virtualScrollOptions() }));
     /**
      * Whether to focus on the first visible or selected element.
      * @group Props
