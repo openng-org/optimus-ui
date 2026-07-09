@@ -783,7 +783,7 @@ export class Menubar extends BaseComponent<MenubarPassThrough> {
     onEnterKey(event: KeyboardEvent) {
         if (this.focusedItemInfo().index !== -1) {
             const element = findSingle(this.rootmenu()?.el.nativeElement, `li[id="${`${this.focusedItemId}`}"]`) as HTMLElement | null;
-            const anchorElement = element && ((findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button')) as HTMLElement | null);
+            const anchorElement = element && ((findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button') || findSingle(element, '[data-pc-section="itemcontent"]')) as HTMLElement | null);
 
             anchorElement ? anchorElement.click() : element && element.click();
         }
