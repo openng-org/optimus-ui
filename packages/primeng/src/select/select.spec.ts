@@ -4628,3 +4628,51 @@ describe('Select Multiple Selection', () => {
         });
     });
 });
+
+@Component({
+    standalone: true,
+    imports: [Select, CommonModule, FormsModule, ReactiveFormsModule],
+    template: `
+        <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code">
+            <ng-template #selecteditem let-option>
+                <div class="alias-selected">Chosen: {{ option?.name }}</div>
+            </ng-template>
+        </p-select>
+    `
+})
+class TestSelectSelectedItemAliasComponent {
+    options = [
+        { name: 'Option 1', code: 'o1' },
+        { name: 'Option 2', code: 'o2' }
+    ];
+    selectedValue: any = 'o2';
+}
+
+describe('Select - selecteditem Template Alias', () => {
+    let fixture: ComponentFixture<TestSelectSelectedItemAliasComponent>;
+    let selectInstance: Select;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CommonModule, FormsModule, Select],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestSelectSelectedItemAliasComponent);
+        selectInstance = fixture.debugElement.query(By.css('p-select')).componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should resolve the lowercase #selecteditem template name', () => {
+        expect(selectInstance.selectedItemTemplate()).toBeTruthy();
+    });
+
+    it('should render the aliased selected item template', async () => {
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        const selected = fixture.debugElement.query(By.css('.alias-selected'));
+        expect(selected).toBeTruthy();
+        expect(selected.nativeElement.textContent).toContain('Option 2');
+    });
+});

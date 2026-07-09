@@ -720,11 +720,15 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
      */
     loaderTemplate = contentChild<TemplateRef<SelectLoaderTemplateContext>>('loader', { descendants: false });
 
+    _selectedItemTemplate = contentChild<TemplateRef<SelectSelectedItemTemplateContext>>('selectedItem', { descendants: false });
+
+    _selectedItemTemplateAlias = contentChild<TemplateRef<SelectSelectedItemTemplateContext>>('selecteditem', { descendants: false });
+
     /**
-     * Custom selected item template.
+     * Custom selected item template. Accepts both the `selectedItem` and `selecteditem` template names for consistency with MultiSelect and AutoComplete.
      * @group Templates
      */
-    selectedItemTemplate = contentChild<TemplateRef<SelectSelectedItemTemplateContext>>('selectedItem', { descendants: false });
+    selectedItemTemplate = computed(() => this._selectedItemTemplate() ?? this._selectedItemTemplateAlias());
 
     /**
      * Custom header template.
