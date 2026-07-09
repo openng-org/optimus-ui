@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, forwardRef, HostListener, inject, InjectionToken, input, NgModule, numberAttribute, output, Provider, signal, TemplateRef } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, forwardRef, inject, InjectionToken, input, NgModule, numberAttribute, output, Provider, signal, TemplateRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import { PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -36,7 +36,9 @@ export const TOGGLEBUTTON_VALUE_ACCESSOR: Provider = {
         '[attr.data-pc-name]': "'togglebutton'",
         '[attr.data-p-checked]': 'active()',
         '[attr.data-p-disabled]': '$disabled()',
-        '[attr.data-p]': 'dataP()'
+        '[attr.data-p]': 'dataP()',
+        '(keydown)': 'onKeyDown($event)',
+        '(click)': 'toggle($event)'
     },
     template: `<span [class]="cx('content')" [pBind]="ptm('content')" [attr.data-p]="dataP()">
         <ng-container *ngTemplateOutlet="contentTemplate(); context: getTemplateContext()"></ng-container>
@@ -184,7 +186,6 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
         this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
     }
 
-    @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'Enter':
@@ -198,7 +199,6 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
         }
     }
 
-    @HostListener('click', ['$event'])
     toggle(event: Event) {
         if (!this.$disabled() && !(this.allowEmpty() === false && this.checked())) {
             this.checked.set(!this.checked());

@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input, signal } from '@angular/core';
+import { booleanAttribute, Directive, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { clearSelection } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
@@ -14,7 +14,9 @@ import type { TreeTable } from './treetable';
         '[class]': 'cx("sortableColumn")',
         '[tabindex]': 'hostTabindex',
         role: 'columnheader',
-        '[attr.aria-sort]': 'ariaSorted'
+        '[attr.aria-sort]': 'ariaSorted',
+        '(click)': 'onClick($event)',
+        '(keydown.enter)': 'onEnterKey($event)'
     },
     providers: [TreeTableStyle],
     hostDirectives: [Bind]
@@ -65,7 +67,6 @@ export class TTSortableColumn extends BaseComponent {
         this.sorted.set(this.tt.isSorted(<string>this.field()) as boolean);
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: MouseEvent) {
         if (this.isEnabled()) {
             this.updateSortState();
@@ -78,7 +79,6 @@ export class TTSortableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.enter', ['$event'])
     onEnterKey(event: MouseEvent) {
         this.onClick(event);
     }

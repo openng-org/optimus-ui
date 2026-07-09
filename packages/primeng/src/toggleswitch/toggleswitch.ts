@@ -7,7 +7,6 @@ import {
     contentChild,
     ElementRef,
     forwardRef,
-    HostListener,
     inject,
     InjectionToken,
     input,
@@ -81,7 +80,8 @@ export const TOGGLESWITCH_VALUE_ACCESSOR: Provider = {
         '[style]': "sx('root')",
         '[attr.data-p-checked]': '$checked()',
         '[attr.data-p-disabled]': '$disabled()',
-        '[attr.data-p]': 'dataP()'
+        '[attr.data-p]': 'dataP()',
+        '(click)': 'onHostClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -176,7 +176,6 @@ export class ToggleSwitch extends BaseEditableHolder<ToggleSwitchPassThrough> {
         this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
     }
 
-    @HostListener('click', ['$event'])
     onHostClick(event: MouseEvent) {
         this.onClick(event);
     }

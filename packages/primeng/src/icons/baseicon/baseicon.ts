@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { cn } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { BaseIconStyle } from './style/baseiconstyle';
@@ -19,13 +19,13 @@ import { BaseIconStyle } from './style/baseiconstyle';
     }
 })
 export class BaseIcon extends BaseComponent {
-    @Input({ transform: booleanAttribute }) spin: boolean = false;
+    spin = input(false, { transform: booleanAttribute });
 
     _componentStyle = inject(BaseIconStyle);
 
     getClassNames() {
         return cn('p-icon', {
-            'p-icon-spin': this.spin
+            'p-icon-spin': this.spin()
         });
     }
 }

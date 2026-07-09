@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, inject, input, linkedSignal, model, numberAttribute, output, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, model, numberAttribute, output, viewChild } from '@angular/core';
 import { uuid } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
@@ -80,7 +80,8 @@ import { GalleriaStyle } from './style/galleriastyle';
         '[attr.id]': 'id()',
         '[attr.role]': '"region"',
         '[style]': 'hostStyle()',
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '(document:fullscreenchange)': 'handleFullscreenChange()'
     },
     hostDirectives: [Bind]
 })
@@ -135,7 +136,6 @@ export class GalleriaContent extends BaseComponent<GalleriaPassThrough> {
     });
 
     // For custom fullscreen
-    @HostListener('document:fullscreenchange')
     handleFullscreenChange() {
         if (document?.fullscreenElement === this.el.nativeElement?.children[0]) {
             this.fullScreen.set(true);

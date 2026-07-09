@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, contentChild, HostListener, inject, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChild, inject, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { findSingle, focus, getAttribute } from '@primeuix/utils';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
@@ -53,7 +53,10 @@ import { AccordionStyle } from './style/accordionstyle';
         '[attr.data-p-active]': 'active()',
         '[attr.data-p-disabled]': 'disabled()',
         '[style.user-select]': '"none"',
-        '[attr.data-p]': 'dataP()'
+        '[attr.data-p]': 'dataP()',
+        '(click)': 'onClick($event)',
+        '(focus)': 'onFocus()',
+        '(keydown)': 'onKeydown($event)'
     },
     hostDirectives: [Ripple, Bind],
     providers: [AccordionStyle, { provide: ACCORDION_HEADER_INSTANCE, useExisting: AccordionHeader }, { provide: PARENT_INSTANCE, useExisting: AccordionHeader }]
@@ -96,7 +99,7 @@ export class AccordionHeader extends BaseComponent<AccordionHeaderPassThrough> {
 
     toggleIconContext = computed<AccordionToggleIconTemplateContext>(() => ({ active: this.active() }));
 
-    @HostListener('click', ['$event']) onClick(event?: MouseEvent | KeyboardEvent) {
+    onClick(event?: MouseEvent | KeyboardEvent) {
         if (this.disabled()) {
             return;
         }
@@ -115,13 +118,13 @@ export class AccordionHeader extends BaseComponent<AccordionHeaderPassThrough> {
         }
     }
 
-    @HostListener('focus') onFocus() {
+    onFocus() {
         if (!this.disabled() && this.pcAccordion.selectOnFocus()) {
             this.changeActiveValue();
         }
     }
 
-    @HostListener('keydown', ['$event']) onKeydown(event: KeyboardEvent) {
+    onKeydown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowDown':
                 this.arrowDownKey(event);

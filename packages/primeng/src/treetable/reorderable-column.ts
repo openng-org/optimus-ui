@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { findSingle } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { VoidListener } from 'primeng/ts-helpers';
@@ -8,7 +8,10 @@ import type { TreeTable } from './treetable';
 
 @Directive({
     selector: '[ttReorderableColumn]',
-    standalone: true
+    standalone: true,
+    host: {
+        '(drop)': 'onDrop($event)'
+    }
 })
 export class TTReorderableColumn extends BaseComponent {
     hostName = 'TreeTable';
@@ -88,7 +91,6 @@ export class TTReorderableColumn extends BaseComponent {
         this.tt.onColumnDragLeave(event);
     }
 
-    @HostListener('drop', ['$event'])
     onDrop(event: DragEvent) {
         if (this.isEnabled()) {
             this.tt.onColumnDrop(event, this.el.nativeElement);

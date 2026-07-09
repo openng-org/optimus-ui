@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { find } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { DomHandler } from 'primeng/dom';
@@ -14,7 +14,10 @@ import type { Table } from './table';
     host: {
         '[class]': "cx('selectableRow')",
         '[tabindex]': 'setRowTabIndex()',
-        '[attr.data-p-selectable-row]': 'true'
+        '[attr.data-p-selectable-row]': 'true',
+        '(click)': 'onClick($event)',
+        '(touchend)': 'onTouchEnd($event)',
+        '(keydown)': 'onKeyDown($event)'
     },
     providers: [TableStyle]
 })
@@ -54,7 +57,6 @@ export class SelectableRow extends BaseComponent {
         }
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: Event) {
         if (this.isEnabled()) {
             this.dataTable.handleRowClick({
@@ -65,14 +67,12 @@ export class SelectableRow extends BaseComponent {
         }
     }
 
-    @HostListener('touchend', ['$event'])
     onTouchEnd(event: Event) {
         if (this.isEnabled()) {
             this.dataTable.handleRowTouchEnd(event);
         }
     }
 
-    @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowDown':

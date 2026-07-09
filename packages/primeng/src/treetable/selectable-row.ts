@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input, signal } from '@angular/core';
+import { booleanAttribute, Directive, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponent } from 'primeng/basecomponent';
 import { TreeTableStyle } from './style/treetablestyle';
@@ -10,7 +10,10 @@ import type { TreeTable } from './treetable';
     standalone: true,
     host: {
         '[class]': 'cx("row")',
-        '[attr.aria-selected]': 'selected()'
+        '[attr.aria-selected]': 'selected()',
+        '(click)': 'onClick($event)',
+        '(keydown)': 'onKeyDown($event)',
+        '(touchend)': 'onTouchEnd($event)'
     },
     providers: [TreeTableStyle]
 })
@@ -38,7 +41,6 @@ export class TTSelectableRow extends BaseComponent {
         }
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: Event) {
         if (this.isEnabled()) {
             this.tt.handleRowClick({
@@ -48,7 +50,6 @@ export class TTSelectableRow extends BaseComponent {
         }
     }
 
-    @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'Enter':
@@ -61,7 +62,6 @@ export class TTSelectableRow extends BaseComponent {
         }
     }
 
-    @HostListener('touchend', ['$event'])
     onTouchEnd(event: Event) {
         if (this.isEnabled()) {
             this.tt.handleRowTouchEnd(event);

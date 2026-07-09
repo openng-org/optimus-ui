@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, effect, HostListener, inject, input, untracked } from '@angular/core';
+import { booleanAttribute, Directive, effect, inject, input, untracked } from '@angular/core';
 import { findSingle, setAttribute } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { DomHandler } from 'primeng/dom';
@@ -9,7 +9,17 @@ import type { Table } from './table';
     selector: '[pEditableColumn]',
     standalone: true,
     host: {
-        '[attr.data-p-editable-column]': 'true'
+        '[attr.data-p-editable-column]': 'true',
+        '(click)': 'onClick($event)',
+        '(keydown.enter)': 'onEnterKeyDown($event)',
+        '(keydown.tab)': 'onTabKeyDown($event)',
+        '(keydown.escape)': 'onEscapeKeyDown($event)',
+        '(keydown.shift.tab)': 'onShiftKeyDown($event)',
+        '(keydown.meta.tab)': 'onShiftKeyDown($event)',
+        '(keydown.arrowdown)': 'onArrowDown($event)',
+        '(keydown.arrowup)': 'onArrowUp($event)',
+        '(keydown.arrowleft)': 'onArrowLeft($event)',
+        '(keydown.arrowright)': 'onArrowRight($event)'
     }
 })
 export class EditableColumn extends BaseComponent {
@@ -48,7 +58,6 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: MouseEvent) {
         if (this.isEnabled()) {
             this.dataTable.selfClick = true;
@@ -128,7 +137,6 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.enter', ['$event'])
     onEnterKeyDown(event: KeyboardEvent) {
         if (this.isEnabled() && !event.shiftKey) {
             if (this.dataTable.isEditingCellValid()) {
@@ -139,7 +147,6 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.tab', ['$event'])
     onTabKeyDown(event: KeyboardEvent) {
         if (this.isEnabled()) {
             if (this.dataTable.isEditingCellValid()) {
@@ -147,10 +154,11 @@ export class EditableColumn extends BaseComponent {
             }
 
             event.preventDefault();
+            // A plain Tab also advances to the next editable cell (previously handled by a second keydown.tab listener).
+            this.moveToNextCell(event);
         }
     }
 
-    @HostListener('keydown.escape', ['$event'])
     onEscapeKeyDown(event: KeyboardEvent) {
         if (this.isEnabled()) {
             if (this.dataTable.isEditingCellValid()) {
@@ -161,9 +169,6 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.tab', ['$event'])
-    @HostListener('keydown.shift.tab', ['$event'])
-    @HostListener('keydown.meta.tab', ['$event'])
     onShiftKeyDown(event: KeyboardEvent) {
         if (this.isEnabled()) {
             if (event.shiftKey) this.moveToPreviousCell(event);
@@ -172,7 +177,6 @@ export class EditableColumn extends BaseComponent {
             }
         }
     }
-    @HostListener('keydown.arrowdown', ['$event'])
     onArrowDown(event: KeyboardEvent) {
         if (this.isEnabled()) {
             let currentCell = this.findCell(event.target);
@@ -194,7 +198,6 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.arrowup', ['$event'])
     onArrowUp(event: KeyboardEvent) {
         if (this.isEnabled()) {
             let currentCell = this.findCell(event.target);
@@ -216,14 +219,12 @@ export class EditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.arrowleft', ['$event'])
     onArrowLeft(event: KeyboardEvent) {
         if (this.isEnabled()) {
             this.moveToPreviousCell(event);
         }
     }
 
-    @HostListener('keydown.arrowright', ['$event'])
     onArrowRight(event: KeyboardEvent) {
         if (this.isEnabled()) {
             this.moveToNextCell(event);

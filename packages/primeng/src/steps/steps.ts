@@ -1,11 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, Input, NgModule, numberAttribute, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, input, NgModule, numberAttribute, output, viewChild, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { find, findSingle } from '@primeuix/utils';
 import { MenuItem, SharedModule } from 'primeng/api';
 import { BaseComponent } from 'primeng/basecomponent';
 import { TooltipModule } from 'primeng/tooltip';
-import { Nullable } from 'primeng/ts-helpers';
 import { Subscription } from 'rxjs';
 import { StepsStyle } from './style/stepsstyle';
 
@@ -16,67 +14,74 @@ import { StepsStyle } from './style/stepsstyle';
 @Component({
     selector: 'p-steps',
     standalone: true,
-    imports: [CommonModule, RouterModule, TooltipModule, SharedModule],
+    imports: [RouterModule, TooltipModule, SharedModule],
     template: `
-        <nav [class]="cn(cx('root'), styleClass)" [ngStyle]="style" [attr.data-pc-name]="'steps'">
+        <nav [class]="cn(cx('root'), styleClass())" [style]="style()" [attr.data-pc-name]="'steps'">
             <ul #list [attr.data-pc-section]="'menu'" [class]="cx('list')">
-                @for (item of model; track item.label; let i = $index) {
-                    <li
-                        *ngIf="item.visible !== false"
-                        [class]="cx('item', { item, index: i })"
-                        #menuitem
-                        [ngStyle]="item.style"
-                        [attr.aria-current]="isActive(item, i) ? 'step' : undefined"
-                        [attr.id]="item.id"
-                        pTooltip
-                        [tooltipOptions]="item.tooltipOptions"
-                        [pTooltipUnstyled]="unstyled()"
-                        [attr.data-pc-section]="'menuitem'"
-                    >
-                        <a
-                            role="link"
-                            *ngIf="isClickableRouterLink(item); else elseBlock"
-                            [routerLink]="item.routerLink"
-                            [queryParams]="item.queryParams"
-                            [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
-                            [class]="cx('itemLink')"
-                            (click)="onItemClick($event, item, i)"
-                            (keydown)="onItemKeydown($event, item, i)"
-                            [target]="item.target"
-                            [attr.tabindex]="getItemTabIndex(item, i)"
-                            [attr.aria-expanded]="i === activeIndex"
-                            [attr.aria-disabled]="item.disabled || (readonly && i !== activeIndex)"
-                            [fragment]="item.fragment"
-                            [queryParamsHandling]="item.queryParamsHandling"
-                            [preserveFragment]="item.preserveFragment"
-                            [skipLocationChange]="item.skipLocationChange"
-                            [replaceUrl]="item.replaceUrl"
-                            [state]="item.state"
-                            [attr.ariaCurrentWhenActive]="exact ? 'step' : undefined"
+                @for (item of model(); track item.label; let i = $index) {
+                    @if (item.visible !== false) {
+                        <li
+                            [class]="cx('item', { item, index: i })"
+                            #menuitem
+                            [style]="item.style"
+                            [attr.aria-current]="isActive(item, i) ? 'step' : undefined"
+                            [attr.id]="item.id"
+                            pTooltip
+                            [tooltipOptions]="item.tooltipOptions"
+                            [pTooltipUnstyled]="unstyled()"
+                            [attr.data-pc-section]="'menuitem'"
                         >
-                            <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
-                            <span [class]="cx('itemLabel')" *ngIf="item.escape !== false; else htmlLabel">{{ item.label }}</span>
-                            <ng-template #htmlLabel><span [class]="cx('itemLabel')" [innerHTML]="item.label"></span></ng-template>
-                        </a>
-                        <ng-template #elseBlock>
-                            <a
-                                role="link"
-                                [attr.href]="item.url"
-                                [class]="cx('itemLink')"
-                                (click)="onItemClick($event, item, i)"
-                                (keydown)="onItemKeydown($event, item, i)"
-                                [target]="item.target"
-                                [attr.tabindex]="getItemTabIndex(item, i)"
-                                [attr.aria-expanded]="i === activeIndex"
-                                [attr.aria-disabled]="item.disabled || (readonly && i !== activeIndex)"
-                                [attr.ariaCurrentWhenActive]="exact && (!item.disabled || readonly) ? 'step' : undefined"
-                            >
-                                <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
-                                <span [class]="cx('itemLabel')" *ngIf="item.escape !== false; else htmlRouteLabel">{{ item.label }}</span>
-                                <ng-template #htmlRouteLabel><span [class]="cx('itemLabel')" [innerHTML]="item.label"></span></ng-template>
-                            </a>
-                        </ng-template>
-                    </li>
+                            @if (isClickableRouterLink(item)) {
+                                <a
+                                    role="link"
+                                    [routerLink]="item.routerLink"
+                                    [queryParams]="item.queryParams"
+                                    [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
+                                    [class]="cx('itemLink')"
+                                    (click)="onItemClick($event, item, i)"
+                                    (keydown)="onItemKeydown($event, item, i)"
+                                    [target]="item.target"
+                                    [attr.tabindex]="getItemTabIndex(item, i)"
+                                    [attr.aria-expanded]="i === activeIndex()"
+                                    [attr.aria-disabled]="item.disabled || (readonly() && i !== activeIndex())"
+                                    [fragment]="item.fragment"
+                                    [queryParamsHandling]="item.queryParamsHandling"
+                                    [preserveFragment]="item.preserveFragment"
+                                    [skipLocationChange]="item.skipLocationChange"
+                                    [replaceUrl]="item.replaceUrl"
+                                    [state]="item.state"
+                                    [attr.ariaCurrentWhenActive]="exact() ? 'step' : undefined"
+                                >
+                                    <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
+                                    @if (item.escape !== false) {
+                                        <span [class]="cx('itemLabel')">{{ item.label }}</span>
+                                    } @else {
+                                        <span [class]="cx('itemLabel')" [innerHTML]="item.label"></span>
+                                    }
+                                </a>
+                            } @else {
+                                <a
+                                    role="link"
+                                    [attr.href]="item.url"
+                                    [class]="cx('itemLink')"
+                                    (click)="onItemClick($event, item, i)"
+                                    (keydown)="onItemKeydown($event, item, i)"
+                                    [target]="item.target"
+                                    [attr.tabindex]="getItemTabIndex(item, i)"
+                                    [attr.aria-expanded]="i === activeIndex()"
+                                    [attr.aria-disabled]="item.disabled || (readonly() && i !== activeIndex())"
+                                    [attr.ariaCurrentWhenActive]="exact() && (!item.disabled || readonly()) ? 'step' : undefined"
+                                >
+                                    <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
+                                    @if (item.escape !== false) {
+                                        <span [class]="cx('itemLabel')">{{ item.label }}</span>
+                                    } @else {
+                                        <span [class]="cx('itemLabel')" [innerHTML]="item.label"></span>
+                                    }
+                                </a>
+                            }
+                        </li>
+                    }
                 }
             </ul>
         </nav>
@@ -91,40 +96,40 @@ export class Steps extends BaseComponent {
      * Index of the active item.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) activeIndex: number = 0;
+    activeIndex = input(0, { transform: numberAttribute });
     /**
      * An array of menu items.
      * @group Props
      */
-    @Input() model: MenuItem[] | undefined;
+    model = input<MenuItem[] | undefined>();
     /**
      * Whether the items are clickable or not.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) readonly: boolean = true;
+    readonly = input(true, { transform: booleanAttribute });
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    style = input<{ [klass: string]: any } | null | undefined>();
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    styleClass = input<string | undefined>();
     /**
      * Whether to apply 'router-link-active-exact' class if route exactly matches the item path.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) exact: boolean = true;
+    exact = input(true, { transform: booleanAttribute });
     /**
      * Callback to invoke when the new step is selected.
      * @param {number} number - current index.
      * @group Emits
      */
-    @Output() activeIndexChange: EventEmitter<number> = new EventEmitter<number>();
+    activeIndexChange = output<number>();
 
-    @ViewChild('list', { static: false }) listViewChild: Nullable<ElementRef>;
+    listViewChild = viewChild<ElementRef>('list');
 
     router = inject(Router);
 
@@ -139,7 +144,7 @@ export class Steps extends BaseComponent {
     }
 
     onItemClick(event: Event, item: MenuItem, i: number) {
-        if (this.readonly || item.disabled) {
+        if (this.readonly() || item.disabled) {
             event.preventDefault();
             return;
         }
@@ -186,10 +191,10 @@ export class Steps extends BaseComponent {
             }
 
             case 'Tab':
-                if (i !== (this.activeIndex ?? -1)) {
-                    const siblings = <any>find(this.listViewChild?.nativeElement, '[data-pc-section="menuitem"]');
+                if (i !== (this.activeIndex() ?? -1)) {
+                    const siblings = <any>find(this.listViewChild()?.nativeElement, '[data-pc-section="menuitem"]');
                     siblings[i].children[0].tabIndex = '-1';
-                    siblings[this.activeIndex ?? 0].children[0].tabIndex = '0';
+                    siblings[this.activeIndex() ?? 0].children[0].tabIndex = '0';
                 }
                 break;
 
@@ -242,13 +247,13 @@ export class Steps extends BaseComponent {
     }
 
     findFirstItem() {
-        const firstSibling = findSingle(this.listViewChild?.nativeElement, '[data-pc-section="menuitem"]');
+        const firstSibling = findSingle(this.listViewChild()?.nativeElement, '[data-pc-section="menuitem"]');
 
         return firstSibling ? firstSibling.children[0] : null;
     }
 
     findLastItem() {
-        const siblings = find(this.listViewChild?.nativeElement, '[data-pc-section="menuitem"]');
+        const siblings = find(this.listViewChild()?.nativeElement, '[data-pc-section="menuitem"]');
 
         return siblings ? siblings[siblings.length - 1].children[0] : null;
     }
@@ -260,11 +265,11 @@ export class Steps extends BaseComponent {
     }
 
     isClickableRouterLink(item: MenuItem) {
-        return item.routerLink && !this.readonly && !item.disabled;
+        return item.routerLink && !this.readonly() && !item.disabled;
     }
 
     isItemDisabled(item: MenuItem, index: number): boolean {
-        return item.disabled || (this.readonly && !this.isActive(item, index));
+        return item.disabled || (this.readonly() && !this.isActive(item, index));
     }
 
     isActive(item: MenuItem, index: number) {
@@ -274,7 +279,7 @@ export class Steps extends BaseComponent {
             return this.router.isActive(this.router.createUrlTree(routerLink, { relativeTo: this.route }).toString(), false);
         }
 
-        return index === this.activeIndex;
+        return index === this.activeIndex();
     }
 
     getItemTabIndex(item: MenuItem, index: number): string {
@@ -282,7 +287,7 @@ export class Steps extends BaseComponent {
             return '-1';
         }
 
-        if (!item.disabled && this.activeIndex === index) {
+        if (!item.disabled && this.activeIndex() === index) {
             return item.tabindex || '0';
         }
 

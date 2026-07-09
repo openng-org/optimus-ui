@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject, input } from '@angular/core';
+import { Directive, inject, input } from '@angular/core';
 import { find, findSingle, focus, getAttribute, getIndex, isNotEmpty } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -14,7 +14,8 @@ import type { TreeTable } from './treetable';
         '[tabindex]': "'0'",
         '[attr.aria-expanded]': 'expanded',
         '[attr.aria-level]': 'level',
-        role: 'row'
+        role: 'row',
+        '(keydown)': 'onKeyDown($event)'
     },
     providers: [TreeTableStyle],
     hostDirectives: [Bind]
@@ -46,7 +47,6 @@ export class TTRow extends BaseComponent {
 
     _componentStyle = inject(TreeTableStyle);
 
-    @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowDown':

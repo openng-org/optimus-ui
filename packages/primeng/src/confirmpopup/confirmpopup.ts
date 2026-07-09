@@ -1,22 +1,18 @@
-import { DOCUMENT, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
-    ChangeDetectorRef,
     Component,
     computed,
     contentChild,
     effect,
     ElementRef,
     EventEmitter,
-    HostListener,
-    Inject,
     inject,
     InjectionToken,
     input,
     NgModule,
     numberAttribute,
-    Renderer2,
     signal,
     TemplateRef,
     untracked,
@@ -51,6 +47,9 @@ const CONFIRMPOPUP_INSTANCE = new InjectionToken<ConfirmPopup>('CONFIRMPOPUP_INS
     imports: [NgTemplateOutlet, SharedModule, ButtonModule, FocusTrap, Bind, MotionModule],
     providers: [ConfirmPopupStyle, { provide: CONFIRMPOPUP_INSTANCE, useExisting: ConfirmPopup }, { provide: PARENT_INSTANCE, useExisting: ConfirmPopup }],
     hostDirectives: [Bind],
+    host: {
+        '(document:keydown.Escape)': 'onEscapeKeydown($event)'
+    },
     template: `
         @if (render()) {
             <div
@@ -263,14 +262,11 @@ export class ConfirmPopup extends BaseComponent<ConfirmPopupPassThrough> {
 
     _componentStyle = inject(ConfirmPopupStyle);
 
-    constructor(
-        public el: ElementRef,
-        private confirmationService: ConfirmationService,
-        public renderer: Renderer2,
-        public cd: ChangeDetectorRef,
-        public overlayService: OverlayService,
-        @Inject(DOCUMENT) public document: Document
-    ) {
+    private confirmationService = inject(ConfirmationService);
+
+    overlayService = inject(OverlayService);
+
+    constructor() {
         super();
         this.window = this.document.defaultView as Window;
         this.subscription = this.confirmationService.requireConfirmation$.subscribe((confirmation) => {
@@ -327,7 +323,6 @@ export class ConfirmPopup extends BaseComponent<ConfirmPopupPassThrough> {
         return undefined;
     }
 
-    @HostListener('document:keydown.Escape', ['$event'])
     onEscapeKeydown(event: KeyboardEvent) {
         const confirmation = this.confirmation();
         if (confirmation && confirmation.closeOnEscape !== false) {

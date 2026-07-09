@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableStyle } from './style/tablestyle';
@@ -9,7 +9,8 @@ import type { Table } from './table';
     selector: '[pSelectableRowDblClick]',
     standalone: true,
     host: {
-        '[class]': 'cx("selectableRow")'
+        '[class]': 'cx("selectableRow")',
+        '(dblclick)': 'onClick($event)'
     },
     providers: [TableStyle]
 })
@@ -43,7 +44,6 @@ export class SelectableRowDblClick extends BaseComponent {
         }
     }
 
-    @HostListener('dblclick', ['$event'])
     onClick(event: Event) {
         if (this.isEnabled()) {
             this.dataTable.handleRowClick({

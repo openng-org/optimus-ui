@@ -9,7 +9,6 @@ import {
     effect,
     ElementRef,
     forwardRef,
-    HostListener,
     inject,
     InjectionToken,
     input,
@@ -61,7 +60,11 @@ type Meter = {
     selector: '[pPassword]',
     standalone: true,
     host: {
-        '[class]': "cx('rootDirective')"
+        '[class]': "cx('rootDirective')",
+        '(input)': 'onInput($event)',
+        '(focus)': 'onFocus()',
+        '(blur)': 'onBlur()',
+        '(keyup)': 'onKeyup($event)'
     },
     providers: [PasswordStyle, { provide: PASSWORD_DIRECTIVE_INSTANCE, useExisting: PasswordDirective }, { provide: PARENT_INSTANCE, useExisting: PasswordDirective }],
     hostDirectives: [Bind]
@@ -182,7 +185,6 @@ export class PasswordDirective extends BaseEditableHolder {
         });
     }
 
-    @HostListener('input', ['$event'])
     onInput(e: Event) {
         this.writeModelValue(this.el.nativeElement.value);
     }
@@ -246,19 +248,16 @@ export class PasswordDirective extends BaseEditableHolder {
         }
     }
 
-    @HostListener('focus')
     onFocus() {
         this.showOverlay();
     }
 
-    @HostListener('blur')
     onBlur() {
         this.hideOverlay();
     }
 
     labelSignal = signal('');
 
-    @HostListener('keyup', ['$event'])
     onKeyup(e: Event) {
         if (this.feedback()) {
             let value = (e.target as HTMLInputElement).value,

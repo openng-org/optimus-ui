@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, effect, ElementRef, HostListener, inject, InjectionToken, input, NgModule, viewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, effect, ElementRef, inject, InjectionToken, input, NgModule, viewChild, ViewEncapsulation } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
@@ -40,7 +40,8 @@ const TERMINAL_INSTANCE = new InjectionToken<Terminal>('TERMINAL_INSTANCE');
     encapsulation: ViewEncapsulation.None,
     providers: [TerminalStyle, { provide: TERMINAL_INSTANCE, useExisting: Terminal }, { provide: PARENT_INSTANCE, useExisting: Terminal }],
     host: {
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '(click)': 'onHostClick()'
     },
     hostDirectives: [Bind]
 })
@@ -85,7 +86,6 @@ export class Terminal extends BaseComponent<TerminalPassThrough> implements Afte
 
     inputRef = viewChild.required<ElementRef<HTMLInputElement>>('in');
 
-    @HostListener('click')
     onHostClick() {
         this.focus(this.inputRef()?.nativeElement);
     }

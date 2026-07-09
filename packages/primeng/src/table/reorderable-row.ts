@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
 import { VoidListener } from 'primeng/ts-helpers';
@@ -8,7 +8,10 @@ import type { Table } from './table';
 @Directive({
     selector: '[pReorderableRow]',
     standalone: true,
-    hostDirectives: [Bind]
+    hostDirectives: [Bind],
+    host: {
+        '(drop)': 'onDrop($event)'
+    }
 })
 export class ReorderableRow extends BaseComponent {
     hostName = 'Table';
@@ -123,7 +126,6 @@ export class ReorderableRow extends BaseComponent {
         return this.pReorderableRowDisabled() !== true;
     }
 
-    @HostListener('drop', ['$event'])
     onDrop(event: DragEvent) {
         if (this.isEnabled() && this.dataTable.rowDragging) {
             this.dataTable.onRowDrop(event, this.el.nativeElement);

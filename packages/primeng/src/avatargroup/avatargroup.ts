@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, InjectionToken, input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -22,7 +22,8 @@ const AVATARGROUP_INSTANCE = new InjectionToken<AvatarGroup>('AVATARGROUP_INSTAN
     encapsulation: ViewEncapsulation.None,
     providers: [AvatarGroupStyle, { provide: AVATARGROUP_INSTANCE, useExisting: AvatarGroup }, { provide: PARENT_INSTANCE, useExisting: AvatarGroup }],
     host: {
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '[style]': 'style()'
     },
     hostDirectives: [Bind]
 })
@@ -41,11 +42,7 @@ export class AvatarGroup extends BaseComponent<AvatarGroupPassThrough> {
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: CSSProperties;
-
-    @HostBinding('style') get hostStyle() {
-        return this.style;
-    }
+    style = input<CSSProperties>();
 
     _componentStyle = inject(AvatarGroupStyle);
 }

@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, Directive, HostListener, inject, input, signal } from '@angular/core';
+import { booleanAttribute, computed, Directive, inject, input, signal } from '@angular/core';
 import { getAttribute } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { DomHandler } from 'primeng/dom';
@@ -14,7 +14,10 @@ import type { Table } from './table';
         '[class]': "cx('sortableColumn')",
         '[tabindex]': '$tabindex()',
         role: 'columnheader',
-        '[attr.aria-sort]': 'ariaSort()'
+        '[attr.aria-sort]': 'ariaSort()',
+        '(click)': 'onClick($event)',
+        '(keydown.space)': 'onEnterKey($event)',
+        '(keydown.enter)': 'onEnterKey($event)'
     },
     providers: [TableStyle]
 })
@@ -73,7 +76,6 @@ export class SortableColumn extends BaseComponent {
         this.sortOrder.set(sortOrder);
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: MouseEvent) {
         if (this.isEnabled() && !this.isFilterElement(<HTMLElement>event.target)) {
             this.updateSortState();
@@ -86,8 +88,6 @@ export class SortableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('keydown.space', ['$event'])
-    @HostListener('keydown.enter', ['$event'])
     onEnterKey(event: MouseEvent) {
         this.onClick(event);
 

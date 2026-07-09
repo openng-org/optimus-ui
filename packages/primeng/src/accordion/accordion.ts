@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, HostListener, inject, input, model, NgModule, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, model, NgModule, output, signal } from '@angular/core';
 import { MotionOptions } from '@primeuix/motion';
 import { findSingle, focus, getAttribute, uuid } from '@primeuix/utils';
 import { BlockableUI, SharedModule } from 'primeng/api';
@@ -22,7 +22,8 @@ import { AccordionStyle } from './style/accordionstyle';
     imports: [SharedModule, BindModule],
     template: ` <ng-content />`,
     host: {
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '(keydown)': 'onKeydown($event)'
     },
     hostDirectives: [Bind],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -97,7 +98,6 @@ export class Accordion extends BaseComponent<AccordionPassThrough> implements Bl
 
     _componentStyle = inject(AccordionStyle);
 
-    @HostListener('keydown', ['$event'])
     onKeydown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowDown':

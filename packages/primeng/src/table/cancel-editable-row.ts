@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { EditableRow } from './editable-row';
 import { TableStyle } from './style/tablestyle';
@@ -9,7 +9,8 @@ import type { Table } from './table';
     selector: '[pCancelEditableRow]',
     standalone: true,
     host: {
-        '[class]': "cx('rowEditorCancel')"
+        '[class]': "cx('rowEditorCancel')",
+        '(click)': 'onClick($event)'
     },
     providers: [TableStyle]
 })
@@ -20,7 +21,6 @@ export class CancelEditableRow extends BaseComponent {
 
     _componentStyle = inject(TableStyle);
 
-    @HostListener('click', ['$event'])
     onClick(event: Event) {
         this.dataTable.cancelRowEdit(this.editableRow.data());
         event.preventDefault();

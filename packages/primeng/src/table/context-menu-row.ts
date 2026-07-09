@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TableStyle } from './style/tablestyle';
@@ -10,7 +10,8 @@ import type { Table } from './table';
     standalone: true,
     host: {
         '[class]': 'cx("contextMenuRowSelected")',
-        '[attr.tabindex]': 'isEnabled() ? 0 : undefined'
+        '[attr.tabindex]': 'isEnabled() ? 0 : undefined',
+        '(contextmenu)': 'onContextMenu($event)'
     },
     providers: [TableStyle]
 })
@@ -38,7 +39,6 @@ export class ContextMenuRow extends BaseComponent {
         }
     }
 
-    @HostListener('contextmenu', ['$event'])
     onContextMenu(event: Event) {
         if (this.isEnabled()) {
             this.dataTable.handleRowRightClick({

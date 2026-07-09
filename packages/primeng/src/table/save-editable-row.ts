@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { TableStyle } from './style/tablestyle';
 import { EditableRow } from './editable-row';
@@ -10,7 +10,8 @@ import type { Table } from './table';
     standalone: true,
     providers: [TableStyle],
     host: {
-        '[class]': 'cx("pcRowEditorSave")'
+        '[class]': 'cx("pcRowEditorSave")',
+        '(click)': 'onClick($event)'
     }
 })
 export class SaveEditableRow extends BaseComponent {
@@ -22,7 +23,6 @@ export class SaveEditableRow extends BaseComponent {
 
     public editableRow = inject(EditableRow);
 
-    @HostListener('click', ['$event'])
     onClick(event: Event) {
         this.dataTable.saveRowEdit(this.editableRow.data(), this.editableRow.el.nativeElement);
         event.preventDefault();

@@ -1,4 +1,4 @@
-import { Directive, HostListener, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { EditableRow } from './editable-row';
 import { TABLE_INSTANCE } from './table-service';
@@ -8,7 +8,8 @@ import type { Table } from './table';
     selector: '[pInitEditableRow]',
     standalone: true,
     host: {
-        class: 'p-datatable-row-editor-init'
+        class: 'p-datatable-row-editor-init',
+        '(click)': 'onClick($event)'
     }
 })
 export class InitEditableRow extends BaseComponent {
@@ -16,7 +17,6 @@ export class InitEditableRow extends BaseComponent {
 
     public editableRow = inject(EditableRow);
 
-    @HostListener('click', ['$event'])
     onClick(event: Event) {
         this.dataTable.initRowEdit(this.editableRow.data());
         event.preventDefault();

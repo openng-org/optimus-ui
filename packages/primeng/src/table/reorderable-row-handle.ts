@@ -1,4 +1,4 @@
-import { Directive, ElementRef, inject } from '@angular/core';
+import { Directive, inject } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
 import { TableStyle } from './style/tablestyle';
@@ -22,12 +22,4 @@ export class ReorderableRowHandle extends BaseComponent {
     }
 
     _componentStyle = inject(TableStyle);
-
-    constructor(public el: ElementRef) {
-        super();
-    }
-
-    onAfterViewInit() {
-        // DomHandler.addClass(this.el.nativeElement, 'p-datatable-reorderable-row-handle');
-    }
 }

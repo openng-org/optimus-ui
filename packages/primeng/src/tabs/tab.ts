@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, HostListener, inject, InjectionToken, input, model, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, InjectionToken, input, model, ViewEncapsulation } from '@angular/core';
 import { equals, focus, getAttribute } from '@primeuix/utils';
 import { SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -32,7 +32,10 @@ const TAB_INSTANCE = new InjectionToken<Tab>('TAB_INSTANCE');
         '[attr.aria-disabled]': 'disabled()',
         '[attr.data-p-disabled]': 'disabled()',
         '[attr.data-p-active]': 'active()',
-        '[attr.tabindex]': 'tabindex()'
+        '[attr.tabindex]': 'tabindex()',
+        '(focus)': 'onFocus($event)',
+        '(click)': 'onClick($event)',
+        '(keydown)': 'onKeyDown($event)'
     },
     hostDirectives: [Ripple, Bind],
     providers: [TabStyle, { provide: TAB_INSTANCE, useExisting: Tab }, { provide: PARENT_INSTANCE, useExisting: Tab }]
@@ -81,19 +84,19 @@ export class Tab extends BaseComponent<TabPassThrough> {
 
     mutationObserver: MutationObserver | undefined;
 
-    @HostListener('focus', ['$event']) onFocus(event: FocusEvent) {
+    onFocus(event: FocusEvent) {
         if (!this.disabled()) {
             this.pcTabs.selectOnFocus() && this.changeActiveValue();
         }
     }
 
-    @HostListener('click', ['$event']) onClick(event: MouseEvent) {
+    onClick(event: MouseEvent) {
         if (!this.disabled()) {
             this.changeActiveValue();
         }
     }
 
-    @HostListener('keydown', ['$event']) onKeyDown(event: KeyboardEvent) {
+    onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowRight':
                 this.onArrowRightKey(event);

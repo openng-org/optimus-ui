@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, ElementRef, HostListener, inject, input, NgModule, OnDestroy, Renderer2 } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, input, NgModule, OnDestroy, Renderer2 } from '@angular/core';
 import { addClass, getTargetElement, hasClass, isElement, removeClass } from '@primeuix/utils';
 import { VoidListener } from 'primeng/ts-helpers';
 
@@ -8,7 +8,10 @@ import { VoidListener } from 'primeng/ts-helpers';
  */
 @Directive({
     selector: '[pStyleClass]',
-    standalone: true
+    standalone: true,
+    host: {
+        '(click)': 'clickListener()'
+    }
 })
 export class StyleClass implements OnDestroy {
     el = inject(ElementRef);
@@ -111,7 +114,6 @@ export class StyleClass implements OnDestroy {
 
     _resizeTarget: any;
 
-    @HostListener('click')
     clickListener() {
         this.target ||= getTargetElement(this.selector(), this.el.nativeElement) as HTMLElement;
 

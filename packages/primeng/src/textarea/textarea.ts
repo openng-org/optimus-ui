@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, DestroyRef, Directive, effect, HostListener, inject, InjectionToken, input, NgModule, output } from '@angular/core';
+import { booleanAttribute, computed, DestroyRef, Directive, effect, inject, InjectionToken, input, NgModule, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { NgControl } from '@angular/forms';
 import { PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -19,7 +19,8 @@ const TEXTAREA_INSTANCE = new InjectionToken<Textarea>('TEXTAREA_INSTANCE');
     selector: '[pTextarea], [pInputTextarea]',
     standalone: true,
     host: {
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '(input)': 'onInput($event)'
     },
     providers: [TextareaStyle, { provide: TEXTAREA_INSTANCE, useExisting: Textarea }, { provide: PARENT_INSTANCE, useExisting: Textarea }],
     hostDirectives: [Bind]
@@ -127,7 +128,6 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
         this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
     }
 
-    @HostListener('input', ['$event'])
     onInput(e: Event) {
         this.writeModelValue((e.target as HTMLTextAreaElement)?.value);
         this.updateState();

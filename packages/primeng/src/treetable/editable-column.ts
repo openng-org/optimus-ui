@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { addClass, findSingle, invokeElementMethod, removeClass } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { TREETABLE_INSTANCE } from './treetable-service';
@@ -6,7 +6,11 @@ import type { TreeTable } from './treetable';
 
 @Directive({
     selector: '[ttEditableColumn]',
-    standalone: true
+    standalone: true,
+    host: {
+        '(click)': 'onClick($event)',
+        '(keydown)': 'onKeyDown($event)'
+    }
 })
 export class TTEditableColumn extends BaseComponent {
     data = input<any>(undefined, { alias: 'ttEditableColumn' });
@@ -24,7 +28,6 @@ export class TTEditableColumn extends BaseComponent {
         }
     }
 
-    @HostListener('click', ['$event'])
     onClick(event: MouseEvent) {
         if (this.isEnabled()) {
             this.tt.editingCellClick = true;
@@ -64,7 +67,6 @@ export class TTEditableColumn extends BaseComponent {
         this.tt.unbindDocumentEditListener();
     }
 
-    @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
         if (this.isEnabled()) {
             //enter

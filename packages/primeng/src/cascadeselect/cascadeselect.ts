@@ -8,7 +8,6 @@ import {
     effect,
     ElementRef,
     forwardRef,
-    HostListener,
     inject,
     input,
     NgModule,
@@ -196,7 +195,8 @@ export const CASCADESELECT_VALUE_ACCESSOR: Provider = {
     encapsulation: ViewEncapsulation.None,
     host: {
         '[class]': "cx('root')",
-        '[style]': "sx('root')"
+        '[style]': "sx('root')",
+        '(mousedown)': 'onHostClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -574,7 +574,6 @@ export class CascadeSelect extends BaseEditableHolder<CascadeSelectPassThrough> 
         return this.fluid() ?? !!this.pcFluid;
     }
 
-    @HostListener('mousedown', ['$event'])
     onHostClick(event: MouseEvent) {
         this.onContainerClick(event);
     }

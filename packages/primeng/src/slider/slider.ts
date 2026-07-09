@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, HostListener, inject, InjectionToken, input, NgModule, numberAttribute, output, Provider, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, InjectionToken, input, NgModule, numberAttribute, output, Provider, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { addClass, getWindowScrollLeft, getWindowScrollTop, isRTL, removeClass } from '@primeuix/utils';
 import { SharedModule } from 'primeng/api';
@@ -106,7 +106,8 @@ export const SLIDER_VALUE_ACCESSOR: Provider = {
         '[attr.data-pc-section]': "'root'",
         '[class]': "cx('root')",
         '[attr.data-p]': 'dataP()',
-        '[attr.data-p-sliding]': 'false'
+        '[attr.data-p-sliding]': 'false',
+        '(click)': 'onHostClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -228,7 +229,6 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
 
     public starty: Nullable<number>;
 
-    @HostListener('click', ['$event'])
     onHostClick(event: MouseEvent) {
         this.onBarClick(event);
     }

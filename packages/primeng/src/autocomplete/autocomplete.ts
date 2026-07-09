@@ -8,7 +8,6 @@ import {
     effect,
     ElementRef,
     forwardRef,
-    HostListener,
     inject,
     InjectionToken,
     input,
@@ -350,7 +349,8 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR = {
     host: {
         '[class]': "cx('root')",
         '[style]': "sx('root')",
-        '[attr.data-p]': 'containerDataP'
+        '[attr.data-p]': 'containerDataP',
+        '(click)': 'onHostClick($event)'
     },
     hostDirectives: [Bind]
 })
@@ -810,7 +810,6 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      */
     dropdownIconTemplate = contentChild<TemplateRef<void>>('dropdownicon', { descendants: false });
 
-    @HostListener('click', ['$event'])
     onHostClick(event: MouseEvent) {
         this.onContainerClick(event);
     }

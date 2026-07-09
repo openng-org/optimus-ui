@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, HostListener, inject, input, signal } from '@angular/core';
+import { booleanAttribute, Directive, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponent } from 'primeng/basecomponent';
 import { TreeTableStyle } from './style/treetablestyle';
@@ -9,7 +9,8 @@ import type { TreeTable } from './treetable';
     selector: '[ttSelectableRowDblClick]',
     standalone: true,
     host: {
-        '[class]': 'cx("row")'
+        '[class]': 'cx("row")',
+        '(dblclick)': 'onClick($event)'
     },
     providers: [TreeTableStyle]
 })
@@ -37,7 +38,6 @@ export class TTSelectableRowDblClick extends BaseComponent {
         }
     }
 
-    @HostListener('dblclick', ['$event'])
     onClick(event: Event) {
         if (this.isEnabled()) {
             this.tt.handleRowClick({

@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, ElementRef, HostListener, inject, InjectionToken, input, NgModule, numberAttribute, output, signal, TemplateRef, ViewEncapsulation, ViewRef } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, ElementRef, inject, InjectionToken, input, NgModule, numberAttribute, output, signal, TemplateRef, ViewEncapsulation, ViewRef } from '@angular/core';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
 import { $dt } from '@primeuix/styled';
 import { absolutePosition, addClass, appendChild, findSingle, getOffset, isIOS, isTouchDevice } from '@primeuix/utils';
@@ -27,6 +27,9 @@ const POPOVER_INSTANCE = new InjectionToken<Popover>('POPOVER_INSTANCE');
     imports: [NgTemplateOutlet, SharedModule, Bind, MotionModule],
     providers: [PopoverStyle, { provide: POPOVER_INSTANCE, useExisting: Popover }, { provide: PARENT_INSTANCE, useExisting: Popover }],
     hostDirectives: [Bind],
+    host: {
+        '(document:keydown.escape)': 'onEscapeKeydown($event)'
+    },
     template: `
         @if (render()) {
             <div
@@ -381,7 +384,6 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
         event.preventDefault();
     }
 
-    @HostListener('document:keydown.escape', ['$event'])
     onEscapeKeydown(_event: KeyboardEvent) {
         this.hide();
     }

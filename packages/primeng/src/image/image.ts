@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, ElementRef, HostListener, inject, InjectionToken, input, NgModule, output, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, ElementRef, inject, InjectionToken, input, NgModule, output, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { SafeUrl } from '@angular/platform-browser';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
 import { appendChild, focus } from '@primeuix/utils';
@@ -131,7 +131,8 @@ const IMAGE_INSTANCE = new InjectionToken<Image>('IMAGE_INSTANCE');
     encapsulation: ViewEncapsulation.None,
     providers: [ImageStyle, { provide: IMAGE_INSTANCE, useExisting: Image }, { provide: PARENT_INSTANCE, useExisting: Image }],
     host: {
-        '[class]': "cx('root')"
+        '[class]': "cx('root')",
+        '(document:keydown.escape)': 'onKeydownHandler()'
     },
     hostDirectives: [Bind]
 })
@@ -540,7 +541,7 @@ export class Image extends BaseComponent<ImagePassThrough> {
         return this.aria?.close;
     }
 
-    @HostListener('document:keydown.escape') onKeydownHandler() {
+    onKeydownHandler() {
         if (this.previewVisible) {
             this.closePreview();
         }

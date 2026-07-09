@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, Directive, HostListener, inject, input } from '@angular/core';
+import { booleanAttribute, Directive, inject, input } from '@angular/core';
 import { findSingle } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { VoidListener } from 'primeng/ts-helpers';
@@ -11,7 +11,8 @@ import type { Table } from './table';
     selector: '[pReorderableColumn]',
     standalone: true,
     host: {
-        '[class]': "cx('reorderableColumn')"
+        '[class]': "cx('reorderableColumn')",
+        '(drop)': 'onDrop($event)'
     },
     providers: [TableStyle]
 })
@@ -100,7 +101,6 @@ export class ReorderableColumn extends BaseComponent {
         this.dataTable.onColumnDragLeave(event);
     }
 
-    @HostListener('drop', ['$event'])
     onDrop(event: any) {
         if (this.isEnabled()) {
             this.dataTable.onColumnDrop(event, this.el.nativeElement);
