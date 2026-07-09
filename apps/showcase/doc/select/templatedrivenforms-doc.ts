@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -19,6 +19,7 @@ interface City {
     selector: 'template-driven-forms-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, SelectModule, ToastModule, MessageModule, ButtonModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext> </app-docsectiontext>
         <p-toast />

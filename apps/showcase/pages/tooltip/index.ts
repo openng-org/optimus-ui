@@ -8,7 +8,7 @@ import { OptionsDoc } from '@/doc/tooltip/options-doc';
 import { PositionDoc } from '@/doc/tooltip/position-doc';
 import { UsageDoc } from '@/doc/tooltip/usage-doc';
 import { PTComponent } from '@/doc/tooltip/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -23,6 +23,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class TooltipDemo {

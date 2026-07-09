@@ -137,7 +137,7 @@ import { MenuStyle } from './style/menustyle';
                                     }
                                 } @else {
                                     <li
-                                        [class]="cn(cx('item', { item, id: menuitemId(item, parentId, i) }), item?.styleClass)"
+                                        [class]="cn(cx('item', { item, id: menuitemId(item, parentId, i) }), $safeNavigationMigration(item?.styleClass))"
                                         [pBind]="ptm('item')"
                                         [pMenuItemContent]="item"
                                         [itemTemplate]="itemTemplate()"

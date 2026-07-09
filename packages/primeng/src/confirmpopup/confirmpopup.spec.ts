@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { ConfirmPopup } from './confirmpopup';
 // Basic ConfirmPopup Component Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup [key]="key" [defaultFocus]="defaultFocus" [autoZIndex]="autoZIndex" [baseZIndex]="baseZIndex" [style]="style" [styleClass]="styleClass" [visible]="visible"> </p-confirmpopup>
         <button #triggerBtn (click)="confirm($event)" class="trigger-btn">Trigger</button>
@@ -47,6 +48,7 @@ class TestBasicConfirmPopupComponent {
 // ConfirmPopup with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup>
             <ng-template #content let-message>
@@ -90,6 +92,7 @@ class TestTemplateConfirmPopupComponent {
 // ConfirmPopup with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup>
             <ng-template #content let-message>
@@ -133,6 +136,7 @@ class TestContentTemplateConfirmPopupComponent {
 // ConfirmPopup with Multiple Keys
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup key="popup1"></p-confirmpopup>
         <p-confirmpopup key="popup2"></p-confirmpopup>
@@ -172,6 +176,7 @@ class TestMultipleKeysComponent {
 // ConfirmPopup Focus Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup [defaultFocus]="defaultFocus"></p-confirmpopup>
         <button (click)="confirm($event)" class="trigger-btn">Trigger</button>
@@ -194,6 +199,7 @@ class TestFocusConfirmPopupComponent {
 @Component({
     standalone: false,
     selector: 'test-button-properties-confirmpopup',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup></p-confirmpopup>
         <button (click)="confirm($event)" class="trigger-btn">Trigger</button>
@@ -219,6 +225,7 @@ class TestButtonPropertiesComponent {
 // ConfirmPopup Position Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup></p-confirmpopup>
         <div style="height: 400px; display: flex; align-items: center; justify-content: center;">
@@ -241,6 +248,7 @@ class TestPositionConfirmPopupComponent {
 @Component({
     standalone: false,
     selector: 'test-accessibility-confirmpopup',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmpopup></p-confirmpopup>
         <button (click)="confirm($event)" class="trigger-btn">Trigger</button>

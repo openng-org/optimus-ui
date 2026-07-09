@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 
 @Component({
     selector: 'lazy-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TabsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

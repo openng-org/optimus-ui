@@ -2,12 +2,13 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'color-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Icon color is defined with the <i>color</i> property which is inherited from parent by default.</p>

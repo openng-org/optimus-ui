@@ -49,7 +49,7 @@ import { TemplateDoc } from '@/doc/table/template-doc';
 import { VerticalScrollDoc } from '@/doc/table/verticalscroll-doc';
 import { VirtualScrollDoc } from '@/doc/table/virtualscroll-doc';
 import { VirtualScrollLazyDoc } from '@/doc/table/virtualscrolllazy-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -64,6 +64,7 @@ import { Component } from '@angular/core';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './tabledemo.scss'
 })
 export class TableDemo {

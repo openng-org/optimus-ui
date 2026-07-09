@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TreeNode } from 'primeng/api';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -11,6 +11,7 @@ import { NodeService } from '@/service/nodeservice';
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, TreeSelectModule, FormsModule],
     providers: [NodeService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-treeselect [(ngModel)]="selectedNodes" [options]="nodes" selectionMode="checkbox" [filter]="true" [showClear]="true" placeholder="Select Item" class="md:w-80 w-full"> </p-treeselect>

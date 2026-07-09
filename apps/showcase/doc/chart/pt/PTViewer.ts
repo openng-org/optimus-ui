@@ -2,7 +2,7 @@ import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { AppConfigService } from '@/service/appconfigservice';
 import { DesignerService } from '@/service/designerservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ChartModule } from 'primeng/chart';
 
@@ -10,6 +10,7 @@ import { ChartModule } from 'primeng/chart';
     selector: 'chart-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, FormsModule, ChartModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-chart type="bar" [data]="basicData" [options]="basicOptions" class="w-full md:w-120" />

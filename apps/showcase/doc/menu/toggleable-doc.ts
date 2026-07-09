@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'toggleable-doc',
     standalone: true,
     imports: [MenuModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Nested submenus are toggleable by default. Use <i>expanded</i> to control the initial state and <i>toggleable</i> to override the default behavior per item.</p>

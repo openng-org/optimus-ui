@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ImageCompareModule } from 'primeng/imagecompare';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'basic-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, ImageCompareModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Images are defined using templating with <i>left</i> and <i>right</i> templates. Use the <i>style</i> or <i>class</i> properties to define the size of the container.</p>

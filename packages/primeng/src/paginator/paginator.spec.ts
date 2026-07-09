@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Paginator, PaginatorModule } from './paginator';
@@ -11,6 +11,7 @@ import { PaginatorState } from 'primeng/types/paginator';
 // Test component for basic paginator functionality
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-paginator
             [rows]="rows"
@@ -79,6 +80,7 @@ class TestBasicPaginatorComponent {
 // Test component for ContentChild template references
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-paginator [rows]="10" [totalRecords]="100" [first]="0" [rowsPerPageOptions]="[5, 10, 20]">
             <ng-template #dropdownicon>
@@ -110,6 +112,7 @@ class TestContentChildPaginatorComponent {
 // Test component for jump to page and dropdown templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-paginator [rows]="10" [totalRecords]="100" [first]="0" [showJumpToPageDropdown]="true" [jumpToPageItemTemplate]="jumpTemplate" [dropdownItemTemplate]="dropdownTemplate" [rowsPerPageOptions]="rowsPerPageOptions">
             <ng-template #jumpTemplate let-item>
@@ -129,6 +132,7 @@ class TestDropdownPaginatorComponent {
 // Test component for dynamic values
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-paginator
             #paginator

@@ -1,11 +1,12 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'users-section',
     standalone: true,
     imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-users py-20 px-3.5 lg:px-20">
             <div class="section-header">Who Uses</div>

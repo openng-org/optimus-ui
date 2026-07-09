@@ -7,12 +7,13 @@ import { QuillDoc } from '@/doc/editor/quill-doc';
 import { ReactiveFormsDoc } from '@/doc/editor/reactiveforms-doc';
 import { ReadOnlyDoc } from '@/doc/editor/readonly-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/editor/templatedrivenforms-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc docTitle="Angular Editor Component" header="Editor" description="Editor is rich text editor component based on Quill." [docs]="docs" [heroDoc]="heroDoc" [apiDocs]="['Editor']" [ptDocs]="ptComponent" themeDocs="editor"></app-doc>
     `

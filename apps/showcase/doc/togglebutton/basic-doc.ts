@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ToggleButtonModule } from 'primeng/togglebutton';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'basic-doc',
     standalone: true,
     imports: [FormsModule, ToggleButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Two-way binding to a boolean property is defined using the standard <i>ngModel</i> directive.</p>

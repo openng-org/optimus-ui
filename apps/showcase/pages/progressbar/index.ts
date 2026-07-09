@@ -5,7 +5,7 @@ import { UsageDoc } from '@/doc/progressbar/usage-doc';
 import { IndeterminateDoc } from '@/doc/progressbar/indeterminate-doc';
 import { PTComponent } from '@/doc/progressbar/pt/PTComponent';
 import { TemplateDoc } from '@/doc/progressbar/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -20,6 +20,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         themeDocs="progressbar"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ProgressBarDemo {

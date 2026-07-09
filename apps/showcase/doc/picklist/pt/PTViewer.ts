@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PickListModule } from 'primeng/picklist';
 
 interface Product {
@@ -20,6 +20,7 @@ interface Product {
     selector: 'picklist-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, PickListModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-picklist [source]="products[0]" [target]="products[1]" dataKey="id" [breakpoint]="'1400px'" [sourceStyle]="{ width: '200px' }" [targetStyle]="{ width: '200px' }">

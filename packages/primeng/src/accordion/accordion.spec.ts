@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Accordion } from './accordion';
@@ -10,6 +10,7 @@ import type { AccordionTabCloseEvent, AccordionTabOpenEvent } from 'primeng/type
 @Component({
     standalone: true,
     imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-accordion [(value)]="value" [multiple]="multiple" [selectOnFocus]="selectOnFocus" [expandIcon]="expandIcon" [collapseIcon]="collapseIcon" [motionOptions]="motionOptions" (onOpen)="onOpen($event)" (onClose)="onClose($event)">
             <p-accordion-panel [value]="'tab1'" [disabled]="tab1Disabled">
@@ -67,6 +68,7 @@ class TestAccordionComponent {
 @Component({
     standalone: true,
     imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-accordion [(value)]="value" [multiple]="true">
             @for (tab of tabs; track tab.id) {
@@ -90,6 +92,7 @@ class TestDynamicAccordionComponent {
 @Component({
     standalone: true,
     imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-accordion [(value)]="value">
             <p-accordion-panel value="custom">
@@ -111,6 +114,7 @@ class TestCustomIconAccordionComponent {
 @Component({
     standalone: true,
     imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-accordion [value]="'tab1'" [pt]="pt">
             <p-accordion-panel [value]="'tab1'">

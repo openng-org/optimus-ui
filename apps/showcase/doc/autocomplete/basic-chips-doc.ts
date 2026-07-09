@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 
@@ -9,6 +9,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     selector: 'basic-chips-doc',
     standalone: true,
     imports: [FormsModule, AutoCompleteModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>With <i>⁠multiple</i> enabled, the AutoComplete component behaves like a chips or tags input. Use <i>addOnBlur</i>, <i>⁠addOnTab</i>, and <i>⁠separator</i> properties to customize the keystroke behavior for adding items.</p>
         </app-docsectiontext>

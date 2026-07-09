@@ -43,7 +43,7 @@ const DOCK_INSTANCE = new InjectionToken<Dock>('DOCK_INSTANCE');
                     @if (item.visible !== false) {
                         <li
                             [attr.id]="getItemId(item, i)"
-                            [class]="cn(cx('item', { item, id: getItemId(item, i) }), item?.styleClass)"
+                            [class]="cn(cx('item', { item, id: getItemId(item, i) }), $safeNavigationMigration(item?.styleClass))"
                             [style]="item.style"
                             role="menuitem"
                             [attr.aria-label]="item.label"
@@ -60,7 +60,7 @@ const DOCK_INSTANCE = new InjectionToken<Dock>('DOCK_INSTANCE');
                                         pRipple
                                         [routerLink]="item.routerLink"
                                         [queryParams]="item.queryParams"
-                                        [class]="cn(cx('itemLink'), item?.linkClass)"
+                                        [class]="cn(cx('itemLink'), $safeNavigationMigration(item?.linkClass))"
                                         [style]="item?.linkStyle"
                                         routerLinkActive="router-link-active"
                                         [routerLinkActiveOptions]="getRouterLinkActiveOptions(item)"
@@ -91,7 +91,7 @@ const DOCK_INSTANCE = new InjectionToken<Dock>('DOCK_INSTANCE');
                                     <a
                                         [tooltipPosition]="item.tooltipPosition"
                                         [attr.href]="getItemUrl(item)"
-                                        [class]="cn(cx('itemLink'), item?.linkClass)"
+                                        [class]="cn(cx('itemLink'), $safeNavigationMigration(item?.linkClass))"
                                         [style]="item?.linkStyle"
                                         pRipple
                                         pTooltip

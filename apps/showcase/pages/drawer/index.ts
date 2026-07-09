@@ -8,11 +8,12 @@ import { PTComponent } from '@/doc/drawer/pt/PTComponent';
 import { SizeDoc } from '@/doc/drawer/size-doc';
 import { TemplateDoc } from '@/doc/drawer/template-doc';
 import { UsageDoc } from '@/doc/drawer/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Drawer Component"

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { ContextMenuModule } from 'primeng/contextmenu';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'basic-doc',
     standalone: true,
     imports: [ContextMenuModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

@@ -1,10 +1,11 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProgressSpinner } from './progressspinner';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressspinner [strokeWidth]="strokeWidth" [fill]="fill" [animationDuration]="animationDuration" [ariaLabel]="ariaLabel"> </p-progressspinner>`
 })
 class TestBasicProgressSpinnerComponent {
@@ -16,6 +17,7 @@ class TestBasicProgressSpinnerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressspinner [style]="style"></p-progressspinner>`
 })
 class TestStyleProgressSpinnerComponent {
@@ -24,6 +26,7 @@ class TestStyleProgressSpinnerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressspinner strokeWidth="4" fill="red" animationDuration="3s" ariaLabel="Loading content"> </p-progressspinner>`
 })
 class TestCustomPropertiesComponent {}

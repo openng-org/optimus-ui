@@ -5,7 +5,7 @@ import { NestedDoc } from '@/doc/splitter/nested-doc';
 import { SizeDoc } from '@/doc/splitter/size-doc';
 import { VerticalDoc } from '@/doc/splitter/vertical-doc';
 import { PTComponent } from '@/doc/splitter/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -22,6 +22,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         ></app-doc>
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class SplitterDemo {

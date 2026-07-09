@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { TagModule } from 'primeng/tag';
     selector: 'icon-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, TagModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A font icon next to the value can be displayed with the <i>icon</i> property.</p>

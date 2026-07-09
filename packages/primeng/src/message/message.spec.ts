@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from 'primeng/api';
@@ -7,6 +7,7 @@ import { Message } from './message';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-message [severity]="severity" [closable]="closable" [icon]="icon" [closeIcon]="closeIcon" [life]="life" [size]="size" [variant]="variant" (onClose)="onClose($event)">
             <div class="message-content">{{ content }}</div>
@@ -32,6 +33,7 @@ class TestBasicMessageComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-message [closable]="true">
             <ng-template #container let-closeCallback="closeCallback">
@@ -47,6 +49,7 @@ class TestContainerTemplateComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-message [closable]="true">
             <ng-template #icon>
@@ -63,6 +66,7 @@ class TestIconTemplatesComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-message [closable]="true" [severity]="'error'">
             <input type="text" class="focusable-input" />

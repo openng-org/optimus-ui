@@ -1,11 +1,12 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'overlay-append-to-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Defines the default location of the overlays; <i>self</i> refers to the host element and <i>body</i> targets the document body. Defaults to <i>self</i>.</p>

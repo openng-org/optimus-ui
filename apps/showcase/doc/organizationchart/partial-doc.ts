@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { OrganizationChartModule, OrgChartNode } from 'primeng/organizationchart';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'partial-doc',
     standalone: true,
     imports: [OrganizationChartModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Collapsible and selectable behaviors can be controlled at the node level using the <i>collapsible</i> and <i>selectable</i> properties of a TreeNode.</p>

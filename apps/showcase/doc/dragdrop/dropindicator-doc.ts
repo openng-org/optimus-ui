@@ -3,13 +3,14 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DragDropModule } from 'primeng/dragdrop';
 
 @Component({
     selector: 'drop-indicator-doc',
     standalone: true,
     imports: [DragDropModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When a suitable draggable enters a droppable area, the area gets <i>p-draggable-enter</i> class that can be used to style the droppable section.</p>

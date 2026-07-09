@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { StepperModule } from 'primeng/stepper';
     selector: 'stepsonly',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, StepperModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Use Stepper with a <i>StepList</i> only for custom requirements where a progress indicator is needed.</p>

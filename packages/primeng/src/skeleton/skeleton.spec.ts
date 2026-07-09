@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { Skeleton, SkeletonModule } from './skeleton';
 @Component({
     standalone: false,
     selector: 'test-basic-skeleton',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-skeleton [shape]="shape" [animation]="animation" [width]="width" [height]="height"></p-skeleton>`
 })
 class TestBasicSkeletonComponent {
@@ -20,6 +21,7 @@ class TestBasicSkeletonComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-shapes',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-skeleton [shape]="shape" [size]="size" [borderRadius]="borderRadius" [animation]="animation"> </p-skeleton> `
 })
 class TestSkeletonShapesComponent {
@@ -32,6 +34,7 @@ class TestSkeletonShapesComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-dimensions',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-skeleton [width]="width" [height]="height" [size]="size" [shape]="shape" [borderRadius]="borderRadius"> </p-skeleton> `
 })
 class TestSkeletonDimensionsComponent {
@@ -45,6 +48,7 @@ class TestSkeletonDimensionsComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-animations',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-skeleton [animation]="animation" [shape]="shape"> </p-skeleton> `
 })
 class TestSkeletonAnimationsComponent {
@@ -55,6 +59,7 @@ class TestSkeletonAnimationsComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-styling',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-skeleton [shape]="shape" [borderRadius]="borderRadius"> </p-skeleton> `
 })
 class TestSkeletonStylingComponent {
@@ -65,6 +70,7 @@ class TestSkeletonStylingComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-card-layout',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="card-skeleton">
             <p-skeleton shape="circle" size="4rem"></p-skeleton>
@@ -81,6 +87,7 @@ class TestSkeletonCardLayoutComponent {}
 @Component({
     standalone: false,
     selector: 'test-skeleton-data-table',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="table-skeleton">
             <div class="table-header">
@@ -108,6 +115,7 @@ class TestSkeletonDataTableComponent {
 @Component({
     standalone: false,
     selector: 'test-skeleton-empty',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-skeleton></p-skeleton>`
 })
 class TestSkeletonEmptyComponent {}
@@ -115,6 +123,7 @@ class TestSkeletonEmptyComponent {}
 @Component({
     standalone: false,
     selector: 'test-skeleton-dynamic',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-skeleton [shape]="dynamicShape" [animation]="dynamicAnimation" [width]="dynamicWidth" [height]="dynamicHeight" [size]="dynamicSize" [borderRadius]="dynamicBorderRadius"> </p-skeleton> `
 })
 class TestSkeletonDynamicComponent {

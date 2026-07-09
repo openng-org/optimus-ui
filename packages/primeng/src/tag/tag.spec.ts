@@ -1,4 +1,4 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { Tag } from './tag';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-tag [value]="value" [icon]="icon" [severity]="severity" [rounded]="rounded"> </p-tag> `
 })
 class TestBasicTagComponent {
@@ -17,12 +18,14 @@ class TestBasicTagComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-tag value="Icon Tag" icon="pi pi-check"></p-tag> `
 })
 class TestIconTagComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tag value="Template Tag">
             <ng-template #icon>
@@ -35,6 +38,7 @@ class TestIconTemplateTagComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tag>
             <span class="content-projection">Custom Content</span>
@@ -45,12 +49,14 @@ class TestContentProjectionTagComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-tag value="Success Tag" severity="success" icon="pi pi-check" [rounded]="true"> </p-tag> `
 })
 class TestSeverityTagComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-tag [value]="value" [severity]="severity" [style]="style"> </p-tag> `
 })
 class TestStyleTagComponent {

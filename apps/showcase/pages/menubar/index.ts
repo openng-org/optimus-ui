@@ -5,7 +5,7 @@ import { UsageDoc } from '@/doc/menubar/usage-doc';
 import { PTComponent } from '@/doc/menubar/pt/PTComponent';
 import { RouterDoc } from '@/doc/menubar/router-doc';
 import { TemplateDoc } from '@/doc/menubar/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -20,6 +20,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class MenubarDemo {

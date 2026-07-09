@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -15,6 +15,7 @@ interface City {
     selector: 'checkbox-selection-doc',
     standalone: true,
     imports: [FormsModule, SelectModule, CheckboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Multiple selection with checkboxes using <i>multiple</i> and custom <i>#item</i> and <i>#header</i> templates.</p>

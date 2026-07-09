@@ -1,7 +1,7 @@
 import { AppTopBarComponent } from '@/components/layout/topbar/app.topbar.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component, computed, OnInit } from '@angular/core';
+import { Component, computed, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 import { BlockSectionComponent } from './blocksection.component';
@@ -17,6 +17,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CommonModule, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, BlockSectionComponent, TemplateSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {

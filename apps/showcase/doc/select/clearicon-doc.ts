@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -14,6 +14,7 @@ interface City {
     selector: 'clear-icon-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, Select],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>showClear</i> is enabled, a clear icon is displayed to clear the value.</p>

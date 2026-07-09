@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { RouterModule } from '@angular/router';
 
@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
     selector: 'nextsteps-doc',
     standalone: true,
     imports: [AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Welcome to the Prime UI Ecosystem! Once you have {{ PROJECT_NAME }} up and running, we recommend exploring the following resources to gain a deeper understanding of the library.</p>

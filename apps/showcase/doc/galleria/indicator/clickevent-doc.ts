@@ -3,13 +3,14 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { PhotoService } from '@/service/photoservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GalleriaModule } from 'primeng/galleria';
 
 @Component({
     selector: 'click-event-doc',
     standalone: true,
     imports: [CommonModule, GalleriaModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Indicators are displayed at the bottom by enabling <i>showIndicators</i> property and interacted with the click event by default.</p>

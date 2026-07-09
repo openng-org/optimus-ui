@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { isNotEmpty, resolve } from '@primeuix/utils';
 import { MegaMenuItem, SharedModule } from 'primeng/api';
@@ -214,6 +214,7 @@ import { MEGAMENU_INSTANCE, MEGAMENU_SUB_INSTANCE } from './megamenu-token';
         '(blur)': 'menuBlur.emit($event)',
         '(mousedown)': 'menuMouseDown.emit($event)'
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {

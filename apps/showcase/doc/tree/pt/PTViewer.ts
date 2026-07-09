@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
 import { NodeService } from '@/service/nodeservice';
@@ -10,6 +10,7 @@ import { NodeService } from '@/service/nodeservice';
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, TreeModule],
     providers: [NodeService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-tree [value]="nodes()" [(selection)]="selectedKey" filter selectionMode="checkbox" class="w-full md:w-120" />

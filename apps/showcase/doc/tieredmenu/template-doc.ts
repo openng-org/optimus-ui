@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BadgeModule } from 'primeng/badge';
 import { RippleModule } from 'primeng/ripple';
@@ -11,6 +11,7 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
     selector: 'template-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TieredMenuModule, BadgeModule, RippleModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>TieredMenu offers item customization with the <i>item</i> template that receives the menuitem instance from the model as a parameter.</p>

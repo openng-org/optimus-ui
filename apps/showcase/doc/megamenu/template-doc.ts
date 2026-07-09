@@ -2,7 +2,7 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { NgClass } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MegaMenuItem } from 'primeng/api';
 import { AvatarModule } from 'primeng/avatar';
 import { ButtonModule } from 'primeng/button';
@@ -13,6 +13,7 @@ import { RippleModule } from 'primeng/ripple';
     selector: 'template-doc',
     standalone: true,
     imports: [NgClass, MegaMenuModule, ButtonModule, AvatarModule, RippleModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Custom content can be placed between p-megamenu tags. Megamenu should be <i>horizontal</i> for custom content.</p>

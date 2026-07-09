@@ -1,6 +1,6 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import { PrimeNG } from 'primeng/config';
@@ -28,6 +28,7 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
         </div>
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouterOutlet, AppFooterComponent, CommonModule, AppMenuComponent, AppTopBarComponent]
 })
 export class AppMainComponent {

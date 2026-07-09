@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'update-prime-one-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>When a new version of PrimeOne is released, follow the steps below to update your files:</p>
         <ul class="leading-normal px-10 mb-2 list-disc">

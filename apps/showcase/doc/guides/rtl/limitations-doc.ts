@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'limitations-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>RTL is widely supported by the UI suite except the Galleria and Carousel components. These components will be enhanced with a modern implementation in upcoming versions with built-in support for RTL.</p>

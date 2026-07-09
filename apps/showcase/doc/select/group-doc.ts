@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SelectItemGroup } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
     selector: 'group-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, SelectModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Options can be grouped when a nested data structures is provided.</p>

@@ -1,11 +1,12 @@
 import { TemplateSeparator } from '@/components/template/templateseparator';
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     selector: 'verona-separator',
     imports: [TemplateSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <template-separator>
             <svg xmlns="http://www.w3.org/2000/svg" width="48" height="49" viewBox="0 0 48 49" fill="none">

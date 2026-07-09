@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'custom-doc',
     standalone: true,
     imports: [ProgressSpinnerModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>ProgressSpinner can be customized with styling property like <i>strokeWidth</i> and <i>fill</i>.</p>

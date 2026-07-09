@@ -1,12 +1,13 @@
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'zed-doc',
     standalone: true,
     imports: [AppCodeModule, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Add to your Zed settings at <i>~/.config/zed/settings.json</i> (Linux) or <i>~/Library/Application Support/Zed/settings.json</i> (macOS).</p>

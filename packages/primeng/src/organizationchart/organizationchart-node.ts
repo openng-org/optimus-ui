@@ -81,7 +81,7 @@ import { OrganizationChartStyle } from './style/organizationchartstyle';
         }
     `,
     encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [OrganizationChartStyle, { provide: PARENT_INSTANCE, useExisting: OrganizationChartNode }]
 })
 export class OrganizationChartNode extends BaseComponent {

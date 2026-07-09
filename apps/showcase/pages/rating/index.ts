@@ -8,7 +8,7 @@ import { ReadOnlyDoc } from '@/doc/rating/readonly-doc';
 import { TemplateDoc } from '@/doc/rating/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/rating/templatedrivenforms-doc';
 import { PTComponent } from '@/doc/rating/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -23,6 +23,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class RatingDemo {

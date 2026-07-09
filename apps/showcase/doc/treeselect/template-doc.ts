@@ -1,5 +1,5 @@
 import { NodeService } from '@/service/nodeservice';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +11,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'template-doc',
     standalone: true,
     imports: [FormsModule, TreeSelectModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>TreeSelect offers multiple templates for customization through templating.</p>

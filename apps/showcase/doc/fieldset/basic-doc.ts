@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FieldsetModule } from 'primeng/fieldset';
 
 @Component({
     selector: 'basic-doc',
     standalone: true,
     imports: [FieldsetModule, AppCode, AppDocSectionText, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A simple Fieldset is created with a <i>legend</i> property along with the content as children.</p>

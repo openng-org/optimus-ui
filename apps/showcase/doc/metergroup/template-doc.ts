@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MeterGroupModule } from 'primeng/metergroup';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'template-doc',
     standalone: true,
     imports: [MeterGroupModule, CardModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>MeterGroup provides templating support for labels, meter items, and content around the meters.</p>

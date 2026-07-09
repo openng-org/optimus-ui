@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { AppCode } from '@/components/doc/app.code';
@@ -11,6 +11,7 @@ import { TextareaModule } from 'primeng/textarea';
     selector: 'float-label-doc',
     standalone: true,
     imports: [FormsModule, RouterModule, AppCode, AppDocSectionText, AppDemoWrapper, FloatLabelModule, TextareaModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

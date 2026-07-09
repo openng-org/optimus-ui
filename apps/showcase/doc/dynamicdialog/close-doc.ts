@@ -1,6 +1,6 @@
 import { Code } from '@/domain/code';
 import { Product } from '@/domain/product';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductListDemo } from './productlistdemo';
@@ -20,6 +20,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [DialogService, MessageService]
 })
 export class CloseDoc {

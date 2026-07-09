@@ -13,7 +13,7 @@ import { ResponsiveDoc } from '@/doc/overlay/responsive-doc';
 import { TargetDoc } from '@/doc/overlay/target-doc';
 import { OverlayTemplateDemo } from '@/doc/overlay/template-doc';
 import { UsageDoc } from '@/doc/overlay/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -27,6 +27,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class OverlayDemo {

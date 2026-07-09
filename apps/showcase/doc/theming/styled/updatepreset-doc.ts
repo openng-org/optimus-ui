@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -6,6 +6,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'update-preset-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Merges the provided tokens to the current preset, an example would be changing the primary color palette dynamically.</p>

@@ -2,13 +2,14 @@ import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'theme-doc',
     standalone: true,
     imports: [RouterModule, AppDocSectionText, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>{{ PROJECT_NAME }} provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the <a routerLink="/theming">theming</a> documentation for details.</p>

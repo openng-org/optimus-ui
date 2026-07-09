@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, effect, ElementRef, inject, input, numberAttribute, output, Renderer2, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, ElementRef, inject, input, numberAttribute, output, Renderer2, signal, TemplateRef, viewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
 import { calculateScrollbarWidth, getHiddenElementOuterWidth, getOffset, getOuterWidth, getViewport, isNotEmpty, resolve } from '@primeuix/utils';
@@ -198,6 +198,7 @@ import { ContextMenuStyle } from './style/contextmenustyle';
         }
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ContextMenuStyle, { provide: CONTEXTMENUSUB_INSTANCE, useExisting: ContextMenuSub }, { provide: PARENT_INSTANCE, useExisting: ContextMenuSub }]
 })
 export class ContextMenuSub extends BaseComponent<ContextMenuPassThrough> {

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
@@ -18,6 +18,7 @@ interface City {
     selector: 'template-driven-forms-doc',
     standalone: true,
     imports: [FormsModule, ListboxModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext> </app-docsectiontext>
         <p-toast />

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Scroller } from './scroller';
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scroller
             [id]="id"
@@ -90,6 +91,7 @@ class TestBasicScrollerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scroller [items]="items" [itemSize]="itemSize" [scrollHeight]="scrollHeight">
             <ng-template #content let-items="items" let-options="options">
@@ -116,6 +118,7 @@ class TestContentTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scroller [items]="items" [itemSize]="itemSize" [scrollHeight]="scrollHeight">
             <ng-template #item let-item="item" let-options="options">
@@ -146,6 +149,7 @@ class TestItemTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scroller [items]="items" [itemSize]="itemSize" [scrollHeight]="scrollHeight" [lazy]="true" [showLoader]="true">
             <ng-template #loader let-options="options">
@@ -169,6 +173,7 @@ class TestLoaderTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-scroller [items]="items" [itemSize]="itemSize" [scrollHeight]="scrollHeight" [orientation]="'both'" [columns]="columns"> </p-scroller> `
 })
 class TestBothOrientationComponent {
@@ -185,6 +190,7 @@ class TestBothOrientationComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-scroller [items]="items" [itemSize]="itemSize" [scrollHeight]="scrollHeight" [lazy]="true" [step]="step" (onLazyLoad)="onLazyLoad($event)"> </p-scroller> `
 })
 class TestLazyLoadingComponent {
@@ -206,6 +212,7 @@ class TestLazyLoadingComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-scroller [items]="dynamicItems$ | async" [itemSize]="dynamicItemSize" [scrollHeight]="dynamicScrollHeight" [orientation]="dynamicOrientation" [loading]="dynamicLoading" [disabled]="dynamicDisabled"> </p-scroller> `
 })
 class TestDynamicPropertiesComponent {

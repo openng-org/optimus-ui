@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -625,6 +625,7 @@ describe('ToggleSwitch', () => {
 // Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toggleswitch [(ngModel)]="checked" [readonly]="readonly" [disabled]="disabled" [autofocus]="autofocus" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" [tabindex]="tabindex" (onChange)="onToggleChange($event)"> </p-toggleswitch>
     `
@@ -643,6 +644,7 @@ class TestBasicToggleSwitchComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-toggleswitch formControlName="toggleValue"></p-toggleswitch>
@@ -657,6 +659,7 @@ class TestFormToggleSwitchComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <ng-template #handle let-checked="checked">
@@ -671,6 +674,7 @@ class TestTemplateToggleSwitchComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <ng-template #handle let-checked="checked">
@@ -685,6 +689,7 @@ class TestHandleTemplateToggleSwitchComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-toggleswitch [required]="required"></p-toggleswitch> `
 })
 class TestRequiredToggleSwitchComponent {
@@ -693,6 +698,7 @@ class TestRequiredToggleSwitchComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-toggleswitch [name]="name"></p-toggleswitch> `
 })
 class TestNamedToggleSwitchComponent {
@@ -703,6 +709,7 @@ class TestNamedToggleSwitchComponent {
 @Component({
     standalone: true,
     imports: [ToggleSwitch, FormsModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <!-- Handle template with #handle reference -->
@@ -723,6 +730,7 @@ class TestToggleSwitchTemplateComponent {
 @Component({
     standalone: true,
     imports: [ToggleSwitch, FormsModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <!-- Handle template with #template reference -->

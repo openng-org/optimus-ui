@@ -3,12 +3,13 @@ import { BasicDoc } from '@/doc/iftalabel/basic-doc';
 import { UsageDoc } from '@/doc/iftalabel/usage-doc';
 import { InvalidDoc } from '@/doc/iftalabel/invalid-doc';
 import { PTComponent } from '@/doc/iftalabel/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Ifta Label Component"

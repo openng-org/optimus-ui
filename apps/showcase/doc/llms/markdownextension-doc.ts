@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { ButtonModule } from 'primeng/button';
 
@@ -6,6 +6,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'markdown-extension-doc',
     standalone: true,
     imports: [AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Add a <code>.md</code> to a page's URL to display a Markdown version of that page.</p>

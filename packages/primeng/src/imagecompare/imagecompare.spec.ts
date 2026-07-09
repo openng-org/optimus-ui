@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ImageCompare, ImageCompareModule } from './imagecompare';
 import { SharedModule } from 'primeng/api';
 
@@ -12,6 +12,7 @@ const mockImages = {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-imagecompare [tabindex]="tabindex" [ariaLabel]="ariaLabel" [ariaLabelledby]="ariaLabelledby">
             <ng-template #left>
@@ -35,6 +36,7 @@ class TestBasicImageCompareComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div dir="rtl">
             <p-imagecompare>
@@ -57,6 +59,7 @@ class TestRTLImageCompareComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-imagecompare class="responsive-container">
             <ng-template #left>
@@ -74,6 +77,7 @@ class TestCustomContentImageCompareComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-imagecompare [pt]="pt" [tabindex]="tabindex" [ariaLabel]="ariaLabel">
             <ng-template #left>

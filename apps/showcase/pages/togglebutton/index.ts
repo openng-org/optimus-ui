@@ -9,7 +9,7 @@ import { TemplateDrivenFormsDoc } from '@/doc/togglebutton/templatedrivenforms-d
 import { FluidDoc } from '@/doc/togglebutton/fluid-doc';
 import { UsageDoc } from '@/doc/togglebutton/usage-doc';
 import { PTComponent } from '@/doc/togglebutton/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -24,6 +24,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ToggleButtonDemo {

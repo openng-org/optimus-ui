@@ -1,5 +1,5 @@
 import { PhotoService } from '@/service/photoservice';
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GalleriaModule } from 'primeng/galleria';
 import { ButtonModule } from 'primeng/button';
@@ -11,6 +11,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'controlled-doc',
     standalone: true,
     imports: [CommonModule, GalleriaModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Galleria can be controlled programmatically using the <i>activeIndex</i> property.</p>

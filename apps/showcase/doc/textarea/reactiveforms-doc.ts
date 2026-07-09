@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
     selector: 'reactive-forms-doc',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, AppCode, AppDocSectionText, AppDemoWrapper, ButtonModule, MessageModule, TextareaModule, ToastModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Textarea can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>

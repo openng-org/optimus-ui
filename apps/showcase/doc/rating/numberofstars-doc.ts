@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RatingModule } from 'primeng/rating';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'number-of-stars-doc',
     standalone: true,
     imports: [FormsModule, RatingModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Number of stars to display is defined with <i>stars</i> property.</p>

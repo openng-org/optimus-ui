@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ChevronLeft } from '@primeicons/angular/chevron-left';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
@@ -9,6 +9,7 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
     selector: 'carousel-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, CarouselModule, ChevronLeft, ChevronRight],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-carousel class="max-w-xl mx-auto" align="center">

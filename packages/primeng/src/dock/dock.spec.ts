@@ -1,4 +1,4 @@
-import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { Dock } from './dock';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [id]="id" [model]="model" [position]="position" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" [breakpoint]="breakpoint" (onFocus)="onFocus($event)" (onBlur)="onBlur($event)"> </p-dock> `
 })
 class TestBasicDockComponent {
@@ -34,6 +35,7 @@ class TestBasicDockComponent {
 @Component({
     standalone: false,
     selector: 'test-position-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="model" [position]="position"></p-dock> `
 })
 class TestPositionDockComponent {
@@ -47,6 +49,7 @@ class TestPositionDockComponent {
 @Component({
     standalone: false,
     selector: 'test-router-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="routerModel"></p-dock> `
 })
 class TestRouterDockComponent {
@@ -65,6 +68,7 @@ class TestRouterDockComponent {
 @Component({
     standalone: false,
     selector: 'test-item-template-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dock [model]="model">
             <ng-template #item let-item>
@@ -86,6 +90,7 @@ class TestItemTemplateDockComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-items-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="disabledModel"></p-dock> `
 })
 class TestDisabledItemsDockComponent {
@@ -95,6 +100,7 @@ class TestDisabledItemsDockComponent {
 @Component({
     standalone: false,
     selector: 'test-styled-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="model" class="custom-dock-class"></p-dock> `
 })
 class TestStyledDockComponent {
@@ -104,6 +110,7 @@ class TestStyledDockComponent {
 @Component({
     standalone: false,
     selector: 'test-minimal-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-dock></p-dock>`
 })
 class TestMinimalDockComponent {}
@@ -111,6 +118,7 @@ class TestMinimalDockComponent {}
 @Component({
     standalone: false,
     selector: 'test-dynamic-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="dynamicModel"></p-dock> `
 })
 class TestDynamicDockComponent {
@@ -132,6 +140,7 @@ class TestDynamicDockComponent {
 @Component({
     standalone: false,
     selector: 'test-command-dock',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-dock [model]="commandModel"></p-dock> `
 })
 class TestCommandDockComponent {
@@ -150,6 +159,7 @@ class TestCommandDockComponent {
 
 @Component({
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: '<div>Target Page</div>'
 })
 class TestTargetComponent {}

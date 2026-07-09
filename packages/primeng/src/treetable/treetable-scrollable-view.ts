@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, effect, ElementRef, inject, input, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, effect, ElementRef, inject, input, viewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { addClass, calculateScrollbarHeight, calculateScrollbarWidth, findSingle } from '@primeuix/utils';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
@@ -79,6 +79,7 @@ import type { TreeTable } from './treetable';
         }
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TreeTableStyle]
 })
 export class TTScrollableView extends BaseComponent {

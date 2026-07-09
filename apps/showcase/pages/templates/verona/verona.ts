@@ -5,7 +5,7 @@ import { TemplateFeaturesAnimation } from '@/components/template/templatefeature
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
 import { TemplateYoutube } from '@/components/template/templateyoutube';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { VeronaLogo } from './veronalogo';
 import { VeronaSeparator } from './veronaseparator';
 
@@ -13,6 +13,7 @@ import { VeronaSeparator } from './veronaseparator';
     standalone: true,
     selector: 'verona-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, TemplateYoutube, TemplateLicense, VeronaSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="verona template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="veronaLogo"></template-hero>
         <verona-separator></verona-separator>

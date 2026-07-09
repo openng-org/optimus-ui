@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -14,6 +14,7 @@ interface AutoCompleteCompleteEvent {
     selector: 'dropdown-doc',
     standalone: true,
     imports: [FormsModule, AutoCompleteModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>
                 Enabling <i>dropdown</i> property displays a button next to the input field where click behavior of the button is defined using <i>dropdownMode</i> property that takes <strong>blank</strong> or <strong>current</strong> as possible

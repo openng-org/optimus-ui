@@ -1,5 +1,5 @@
 import { PhotoService } from '@/service/photoservice';
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GalleriaModule } from 'primeng/galleria';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -12,6 +12,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'positioned-doc',
     standalone: true,
     imports: [FormsModule, GalleriaModule, RadioButtonModule, CheckboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

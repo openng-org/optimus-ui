@@ -319,7 +319,7 @@ import { TABLE_INSTANCE, TableService } from './table-service';
         }
     `,
     providers: [TableService, TableStyle, { provide: TABLE_INSTANCE, useExisting: Table }, { provide: PARENT_INSTANCE, useExisting: Table }],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
     host: {
         '[class]': "cx('root')",

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -16,6 +16,7 @@ interface City {
     selector: 'float-label-doc',
     standalone: true,
     imports: [FormsModule, RouterModule, MultiSelectModule, FloatLabelModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

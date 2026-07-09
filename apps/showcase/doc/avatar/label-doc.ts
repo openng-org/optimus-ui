@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     selector: 'label-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, AvatarModule, OverlayBadgeModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A letter Avatar is defined with the <i>label</i> property.</p>

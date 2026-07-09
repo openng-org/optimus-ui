@@ -12,11 +12,12 @@ import { ReactiveFormsDoc } from '@/doc/checkbox/reactiveforms-doc';
 import { SizesDoc } from '@/doc/checkbox/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/checkbox/templatedrivenforms-doc';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Checkbox Component"

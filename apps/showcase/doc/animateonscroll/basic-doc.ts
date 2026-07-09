@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { AvatarModule } from 'primeng/avatar';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'basic-doc',
     standalone: true,
     imports: [CommonModule, AnimateOnScrollModule, AvatarModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Animation classes are defined with the <i>enterClass</i> and <i>leaveClass</i> properties. This example utilizes tailwindcss-primeui plugin animations however any valid CSS animation is supported.</p>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { uuid } from '@primeuix/utils';
 import { BaseIcon } from 'primeng/icons/baseicon';
 
 @Component({
     selector: '[data-p-icon="arrow-up"]',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <svg:g [attr.clip-path]="pathId">
             <svg:path

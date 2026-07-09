@@ -1,10 +1,11 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 @Component({
     selector: 'disable-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Individual animations can be reduced and even disabled completely using the animation duration.</p>

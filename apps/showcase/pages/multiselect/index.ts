@@ -18,7 +18,7 @@ import { VirtualScrollDoc } from '@/doc/multiselect/virtualscroll-doc';
 import { ClearIconDoc } from '@/doc/multiselect/clearicon-doc';
 import { FluidDoc } from '@/doc/multiselect/fluid-doc';
 import { PTComponent } from '@/doc/multiselect/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -33,6 +33,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         themeDocs="multiselect"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class MultiSelectDemo {

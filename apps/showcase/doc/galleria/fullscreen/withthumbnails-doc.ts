@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { PhotoService } from '@/service/photoservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { GalleriaModule } from 'primeng/galleria';
 
@@ -11,6 +11,7 @@ import { GalleriaModule } from 'primeng/galleria';
     selector: 'with-thumbnails-doc',
     standalone: true,
     imports: [CommonModule, GalleriaModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Full screen mode is enabled by adding <i>fullScreen</i> property.</p>

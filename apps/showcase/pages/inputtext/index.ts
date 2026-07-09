@@ -12,12 +12,13 @@ import { ReactiveFormsDoc } from '@/doc/inputtext/reactiveforms-doc';
 import { SizesDoc } from '@/doc/inputtext/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/inputtext/templatedrivenforms-doc';
 import { FluidDoc } from '@/doc/inputtext/fluid-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc
         docTitle="Angular InputText Component"
         header="InputText"

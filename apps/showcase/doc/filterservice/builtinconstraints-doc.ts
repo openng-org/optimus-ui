@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'built-in-constraints-doc',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="doc-tablewrapper">
             <table class="doc-table">

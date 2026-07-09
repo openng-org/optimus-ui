@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -6,6 +6,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'responsive-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>It is the option used to determine in which mode it should appear according to the given <i>media</i> or <i>breakpoint</i>.</p>
         </app-docsectiontext>

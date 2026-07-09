@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputOtpModule } from 'primeng/inputotp';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'sizes-doc',
     standalone: true,
     imports: [FormsModule, InputOtpModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>InputOtp provides <i>small</i> and <i>large</i> sizes as alternatives to the base.</p>

@@ -1,11 +1,12 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'mode-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>
                 It has two valid values; <i>overlay</i> and <i>modal</i>. In overlay mode, a container element is opened like overlaypanel or dropdown's panel. In modal mode, the container element behaves like popup. This behaviour is similar to a

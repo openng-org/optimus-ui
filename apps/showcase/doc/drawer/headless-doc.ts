@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Drawer } from 'primeng/drawer';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -14,6 +14,7 @@ import { StyleClassModule } from 'primeng/styleclass';
     selector: 'headless-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, DrawerModule, ButtonModule, FormsModule, AvatarModule, RippleModule, StyleClassModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p><i>Headless</i> mode allows you to customize the entire user interface instead of the default elements.</p>

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { MeterGroup, MeterGroupLabel, MeterGroupModule } from './metergroup';
 @Component({
     standalone: false,
     selector: 'test-basic-metergroup',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-metergroup [value]="value" [min]="min" [max]="max" [orientation]="orientation"></p-metergroup>`
 })
 class TestBasicMeterGroupComponent {
@@ -25,6 +26,7 @@ class TestBasicMeterGroupComponent {
 @Component({
     standalone: false,
     selector: 'test-metergroup-orientations',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-metergroup [value]="value" [orientation]="orientation" [labelPosition]="labelPosition" [labelOrientation]="labelOrientation"> </p-metergroup> `
 })
 class TestMeterGroupOrientationsComponent {
@@ -40,6 +42,7 @@ class TestMeterGroupOrientationsComponent {
 @Component({
     standalone: false,
     selector: 'test-metergroup-templates',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-metergroup [value]="value">
             <ng-template #label let-value let-totalPercent="totalPercent">
@@ -74,6 +77,7 @@ class TestMeterGroupTemplatesComponent {
 @Component({
     standalone: false,
     selector: 'test-metergroup-with-icons',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-metergroup [value]="value" [min]="min" [max]="max"> </p-metergroup> `
 })
 class TestMeterGroupWithIconsComponent {
@@ -89,6 +93,7 @@ class TestMeterGroupWithIconsComponent {
 @Component({
     standalone: false,
     selector: 'test-metergroup-empty',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-metergroup [value]="value" [min]="min" [max]="max"></p-metergroup>`
 })
 class TestMeterGroupEmptyComponent {
@@ -100,6 +105,7 @@ class TestMeterGroupEmptyComponent {
 @Component({
     standalone: false,
     selector: 'test-metergroup-dynamic',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-metergroup [value]="value" [min]="min" [max]="max" [class]="styleClass"> </p-metergroup> `
 })
 class TestMeterGroupDynamicComponent {

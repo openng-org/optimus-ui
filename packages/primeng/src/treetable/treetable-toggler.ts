@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, inject, input, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
 import { ChevronDown as ChevronDownIcon } from '@primeicons/angular/chevron-down';
@@ -39,6 +39,7 @@ import type { TreeTable } from './treetable';
     `,
     encapsulation: ViewEncapsulation.None,
     providers: [TreeTableStyle],
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class TreeTableToggler extends BaseComponent {

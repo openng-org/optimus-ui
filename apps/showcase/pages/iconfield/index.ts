@@ -6,7 +6,7 @@ import { UsageDoc } from '@/doc/iconfield/usage-doc';
 import { SizesDoc } from '@/doc/iconfield/sizes-doc';
 import { TemplateDoc } from '@/doc/iconfield/template-doc';
 import { PTComponent } from '@/doc/iconfield/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -23,6 +23,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         ></app-doc>
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class IconFieldDemo {

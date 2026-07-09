@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DrawerModule } from 'primeng/drawer';
 import { ButtonModule } from 'primeng/button';
 import { AvatarModule } from 'primeng/avatar';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'template-doc',
     standalone: true,
     imports: [DrawerModule, ButtonModule, AvatarModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Drawer is customizable by <i>header</i>, <i>content</i>, <i>footer</i> templates.</p>

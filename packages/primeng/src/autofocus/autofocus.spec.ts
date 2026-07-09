@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { Component, PLATFORM_ID, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AutoFocus, AutoFocusModule } from './autofocus';
@@ -6,6 +6,7 @@ import { AutoFocus, AutoFocusModule } from './autofocus';
 @Component({
     standalone: false,
     selector: 'test-basic-autofocus',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input type="text" pAutoFocus />`
 })
 class TestBasicAutofocusComponent {}
@@ -13,6 +14,7 @@ class TestBasicAutofocusComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-disabled',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input type="text" [pAutoFocus]="false" />`
 })
 class TestAutofocusDisabledComponent {}
@@ -20,6 +22,7 @@ class TestAutofocusDisabledComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-enabled',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input type="text" [pAutoFocus]="true" />`
 })
 class TestAutofocusEnabledComponent {}
@@ -27,6 +30,7 @@ class TestAutofocusEnabledComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-dynamic',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input type="text" [pAutoFocus]="autofocusEnabled" />`
 })
 class TestAutofocusDynamicComponent {
@@ -36,6 +40,7 @@ class TestAutofocusDynamicComponent {
 @Component({
     standalone: false,
     selector: 'test-autofocus-button',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<button [pAutoFocus]="true">Focus Button</button>`
 })
 class TestAutofocusButtonComponent {}
@@ -43,6 +48,7 @@ class TestAutofocusButtonComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-div',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div tabindex="0" [pAutoFocus]="true">Focusable Div</div>`
 })
 class TestAutofocusDivComponent {}
@@ -50,6 +56,7 @@ class TestAutofocusDivComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-multiple-elements',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pAutoFocus]="autofocusEnabled">
             <input type="text" id="first-input" />
@@ -65,6 +72,7 @@ class TestAutofocusMultipleElementsComponent {
 @Component({
     standalone: false,
     selector: 'test-autofocus-no-focusable-elements',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pAutoFocus]="true">
             <span>No focusable elements</span>
@@ -77,6 +85,7 @@ class TestAutofocusNoFocusableElementsComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-nested-focusable',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pAutoFocus]="true" class="container">
             <div class="nested">
@@ -94,6 +103,7 @@ class TestAutofocusNestedFocusableComponent {}
 @Component({
     standalone: false,
     selector: 'test-autofocus-conditional',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <input type="text" [pAutoFocus]="condition1" class="input-1" />
@@ -109,6 +119,7 @@ class TestAutofocusConditionalComponent {
 @Component({
     standalone: false,
     selector: 'test-autofocus-after-content-change',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pAutoFocus]="autofocus" class="dynamic-container">
             <input type="text" *ngIf="showInput" class="dynamic-input" />
@@ -125,6 +136,7 @@ class TestAutofocusAfterContentChangeComponent {
 @Component({
     standalone: false,
     selector: 'test-autofocus-dialog-simulation',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <!-- Dialog/Drawer simülasyonu -->
         <div class="overlay" *ngIf="isDialogVisible" [style.display]="isDialogVisible ? 'block' : 'none'">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SelectItemGroup } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
@@ -15,6 +15,7 @@ interface Country {
     selector: 'group-doc',
     standalone: true,
     imports: [FormsModule, ListboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Options can be grouped when a nested data structures is provided.</p>

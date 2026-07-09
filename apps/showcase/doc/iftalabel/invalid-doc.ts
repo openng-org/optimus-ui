@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IftaLabelModule } from 'primeng/iftalabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'invalid-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, IftaLabelModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When the form element is invalid, the label is also highlighted.</p>

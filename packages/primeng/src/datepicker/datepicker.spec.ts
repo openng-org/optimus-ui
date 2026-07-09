@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import type { DatePickerMonthChangeEvent, DatePickerYearChangeEvent } from 'prim
 import { DatePicker } from './datepicker';
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-datepicker
             [(ngModel)]="selectedDate"
@@ -131,6 +132,7 @@ class TestDatePickerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-datepicker formControlName="date" [dateFormat]="'dd/mm/yy'" [placeholder]="'Select date'"></p-datepicker>
@@ -146,6 +148,7 @@ class TestReactiveFormDatePickerComponent {
 // #template - Comprehensive template test component with all 12 ContentChild projections
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <!-- Date template with context parameters -->
@@ -237,6 +240,7 @@ class TestAllTemplatesDatePickerComponent {
 // #template references only - Comprehensive template test component with all 12 ContentChild projections
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <!-- Date template with context parameters -->
@@ -328,6 +332,7 @@ class TestRefTemplatesDatePickerComponent {
 // Legacy component for backward compatibility (deprecated - use separated versions above)
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <ng-template #date let-date>

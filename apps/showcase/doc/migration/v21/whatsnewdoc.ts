@@ -1,12 +1,13 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'v21-migration-whatsnew-doc',
     standalone: true,
     imports: [AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>{{ PROJECT_NAME }} v21 represents a major advancement in PrimeTek's product vision. Key highlights of this release include:</p>

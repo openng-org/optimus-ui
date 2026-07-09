@@ -2,7 +2,7 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { BindModule } from 'primeng/bind';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -10,6 +10,7 @@ import { TooltipModule } from 'primeng/tooltip';
     selector: 'examples-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, BindModule, TooltipModule, CommonModule, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The <i>pBind</i> is a directive that accepts an object of HTML attributes.</p>

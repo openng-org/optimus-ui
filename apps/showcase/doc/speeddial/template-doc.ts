@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -70,6 +70,7 @@ import { CommonModule } from '@angular/common';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService]
 })
 export class TemplateDoc implements OnInit {

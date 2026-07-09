@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -19,6 +19,7 @@ const mockItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-autocomplete
             [(ngModel)]="selectedValue"
@@ -277,6 +278,7 @@ class TestAutocompleteComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-autocomplete [(ngModel)]="selectedValue" [suggestions]="suggestions" [optionLabel]="'name'" [multiple]="multiple" [showClear]="showClear" [dropdown]="dropdown" (completeMethod)="onSearch($event)">
             <!-- Item Template with #item -->

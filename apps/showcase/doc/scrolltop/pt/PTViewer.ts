@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { ScrollTopModule } from 'primeng/scrolltop';
 
@@ -8,6 +8,7 @@ import { ScrollTopModule } from 'primeng/scrolltop';
     selector: 'scrolltop-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, ScrollTopModule, ScrollPanelModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <div [style]="{ width: '250px', height: '200px', overflow: 'auto' }">

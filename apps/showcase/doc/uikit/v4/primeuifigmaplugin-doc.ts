@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'prime-ui-figma-plugin-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>
             PrimeUI Theme Generator Figma plugin is the official tool developed by PrimeTek that provides built-in synchronization capabilities to automate the theme code generation process. Visit the

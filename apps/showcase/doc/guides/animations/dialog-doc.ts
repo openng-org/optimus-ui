@@ -1,6 +1,6 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -33,6 +33,7 @@ import { InputTextModule } from 'primeng/inputtext';
             <app-code [code]="code" hideToggleCode hideStackBlitz></app-code>
         </app-docsectiontext>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             :host::ng-deep {

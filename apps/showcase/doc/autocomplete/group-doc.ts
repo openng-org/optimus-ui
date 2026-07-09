@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FilterService, SelectItemGroup } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +16,7 @@ interface AutoCompleteCompleteEvent {
     selector: 'group-doc',
     standalone: true,
     imports: [CommonModule, FormsModule, AutoCompleteModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>Option grouping is enabled when <i>group</i> property is set to <i>true</i>. <i>group</i> template is available to customize the option groups. All templates get the option instance as the default local template variable.</p>
         </app-docsectiontext>

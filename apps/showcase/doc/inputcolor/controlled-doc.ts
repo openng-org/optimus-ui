@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     InputColor,
@@ -43,6 +43,7 @@ import { EyeDropper } from '@primeicons/angular/eye-dropper';
         AppDemoWrapper,
         EyeDropper
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Demonstrates tracking color value changes during interaction and when interaction ends.</p>

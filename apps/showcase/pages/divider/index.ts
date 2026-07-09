@@ -7,11 +7,12 @@ import { PTComponent } from '@/doc/divider/pt/PTComponent';
 import { TypeDoc } from '@/doc/divider/type-doc';
 import { UsageDoc } from '@/doc/divider/usage-doc';
 import { VerticalDoc } from '@/doc/divider/vertical-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-doc docTitle="Angular Divider Component" header="Divider" description="Divider is used to separate contents." [docs]="docs" [apiDocs]="['Divider']" themeDocs="divider" [ptDocs]="ptComponent" [heroDoc]="heroDoc"></app-doc> `
 })
 export class DividerDemo {

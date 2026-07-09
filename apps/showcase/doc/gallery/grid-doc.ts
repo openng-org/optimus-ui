@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { GalleryModule } from 'primeng/gallery';
 import { Replay } from '@primeicons/angular/replay';
 import { Refresh } from '@primeicons/angular/refresh';
@@ -19,6 +19,7 @@ import type { GalleryActiveIndexChangeEvent } from 'primeng/types/gallery';
     selector: 'grid-doc',
     standalone: true,
     imports: [GalleryModule, AppCode, AppDemoWrapper, AppDocSectionText, Replay, Refresh, SearchPlus, SearchMinus, ArrowsH, ArrowsV, Download, Times, ChevronLeft, ChevronRight],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Gallery can be used as a lightbox by combining it with a grid of thumbnails. Click on an image to open the gallery in fullscreen overlay.</p>

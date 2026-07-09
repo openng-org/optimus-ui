@@ -1,11 +1,12 @@
 import { AppDoc } from '@/components/doc/app.doc';
 import { ExamplesDoc } from '@/doc/bind/examples-doc';
 import { UsageDoc } from '@/doc/bind/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc docTitle="Angular Bind Directive" header="Bind" description="The Bind directive dynamically applies DOM element attributes using properties defined in an object." [docs]="docs" [heroDoc]="heroDoc"></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class Bind {

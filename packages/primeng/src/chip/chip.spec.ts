@@ -1,4 +1,4 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { Chip, ChipModule } from './chip';
 @Component({
     standalone: false,
     selector: 'test-basic-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip></p-chip>`
 })
 class TestBasicChipComponent {}
@@ -16,6 +17,7 @@ class TestBasicChipComponent {}
 @Component({
     standalone: false,
     selector: 'test-label-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [label]="label"></p-chip>`
 })
 class TestLabelChipComponent {
@@ -25,6 +27,7 @@ class TestLabelChipComponent {
 @Component({
     standalone: false,
     selector: 'test-icon-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [icon]="icon" [label]="label"></p-chip>`
 })
 class TestIconChipComponent {
@@ -35,6 +38,7 @@ class TestIconChipComponent {
 @Component({
     standalone: false,
     selector: 'test-image-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [image]="image" [alt]="alt" [label]="label" (onImageError)="onImageError($event)"></p-chip>`
 })
 class TestImageChipComponent {
@@ -51,6 +55,7 @@ class TestImageChipComponent {
 @Component({
     standalone: false,
     selector: 'test-removable-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [label]="label" [removable]="removable" (onRemove)="onRemove($event)"></p-chip>`
 })
 class TestRemovableChipComponent {
@@ -68,6 +73,7 @@ class TestRemovableChipComponent {
 @Component({
     standalone: false,
     selector: 'test-custom-remove-icon-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [label]="label" [removable]="removable" [removeIcon]="removeIcon" (onRemove)="onRemove($event)"></p-chip>`
 })
 class TestCustomRemoveIconChipComponent {
@@ -84,6 +90,7 @@ class TestCustomRemoveIconChipComponent {
 @Component({
     standalone: false,
     selector: 'test-template-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-chip [label]="label" [removable]="removable" (onRemove)="onRemove($event)">
             <ng-template #removeicon>
@@ -105,6 +112,7 @@ class TestTemplateChipComponent {
 @Component({
     standalone: false,
     selector: 'test-content-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-chip>
             <div class="custom-content">Custom Chip Content</div>
@@ -116,6 +124,7 @@ class TestContentChipComponent {}
 @Component({
     standalone: false,
     selector: 'test-style-class-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [label]="label" [class]="styleClass"></p-chip>`
 })
 class TestStyleClassChipComponent {
@@ -126,6 +135,7 @@ class TestStyleClassChipComponent {
 @Component({
     standalone: false,
     selector: 'test-chip-props',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [chipProps]="chipProps"></p-chip>`
 })
 class TestChipPropsComponent {
@@ -139,6 +149,7 @@ class TestChipPropsComponent {
 @Component({
     standalone: false,
     selector: 'test-dynamic-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-chip [label]="label" [icon]="icon" [image]="image" [alt]="alt" [removable]="removable" [removeIcon]="removeIcon" [class]="styleClass" [chipProps]="chipProps" (onRemove)="onRemove($event)" (onImageError)="onImageError($event)">
             @if (showContent) {
@@ -173,6 +184,7 @@ class TestDynamicChipComponent {
 @Component({
     standalone: false,
     selector: 'test-visibility-chip',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-chip [label]="label"></p-chip>`
 })
 class TestVisibilityChipComponent {

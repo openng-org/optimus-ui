@@ -35,7 +35,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                     <p class="text-primary-contrast mt-4 mb-0 lg:text-sm text-xs">{{ templateHeroData?.description }}</p>
                     <div class="flex items-center gap-4 mt-7">
                         <a
-                            [href]="templateHeroData?.liveHref"
+                            [href]="$safeNavigationMigration(templateHeroData?.liveHref)"
                             target="_blank"
                             class="flex-1 py-3.5 border border-primary-contrast hover:bg-primary-contrast/10 text-primary-contrast rounded-full text-center font-semibold transition-all leading-none text-sm"
                         >
@@ -55,7 +55,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                             <span class="hover:underline">{{ templateHeroData?.free ? 'Open Issues' : 'Community' }}</span>
                         </a>
                         @if (templateHeroData?.docHref) {
-                            <a class="flex items-center gap-2 text-primary-contrast lg:text-sm text-xs" [href]="templateHeroData?.docHref" target="_blank">
+                            <a class="flex items-center gap-2 text-primary-contrast lg:text-sm text-xs" [href]="$safeNavigationMigration(templateHeroData?.docHref)" target="_blank">
                                 <i class="pi pi-book " style="font-size: 0.875rem;"></i>
                                 <span class="hover:underline">Documentation</span>
                             </a>
@@ -67,7 +67,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                 <img
                     class="select-none flex z-20 absolute top-98 left-52 md:top-7 md:left-147 lg:left-175 xl:left-210 w-[33.141rem] shadow-[0px_0px_43.64997px_0px_rgba(0,0,0,0.12)] rounded-xs"
                     eager
-                    [src]="templateHeroData?.dashboard1"
+                    [src]="$safeNavigationMigration(templateHeroData?.dashboard1)"
                     alt="Template Dashboard Image 1"
                 />
             }
@@ -75,7 +75,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                 <img
                     class="select-none flex z-10 absolute top-98 left-6 md:top-7 md:left-112 lg:left-126 xl:left-147 w-[33.141rem] shadow-[0px_0px_43.64997px_0px_rgba(0,0,0,0.12)] rounded-xs"
                     eager
-                    [src]="templateHeroData?.dashboard2"
+                    [src]="$safeNavigationMigration(templateHeroData?.dashboard2)"
                     alt="Template Dashboard Image 2"
                 />
             }

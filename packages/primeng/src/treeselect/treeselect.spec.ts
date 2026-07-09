@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -48,6 +48,7 @@ const mockTreeNodes: TreeNode[] = [
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-treeselect
             [(ngModel)]="selectedValue"
@@ -329,6 +330,7 @@ class TestTreeSelectComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-treeselect [(ngModel)]="selectedValue" [options]="options" [placeholder]="placeholder" [disabled]="disabled" [showClear]="showClear" [filter]="filter">
             <!-- Value template -->

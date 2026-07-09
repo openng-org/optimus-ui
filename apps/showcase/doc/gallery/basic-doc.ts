@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { GalleryModule } from 'primeng/gallery';
 import { Replay } from '@primeicons/angular/replay';
 import { Refresh } from '@primeicons/angular/refresh';
@@ -19,6 +19,7 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
     selector: 'basic-doc',
     standalone: true,
     imports: [GalleryModule, AppCode, AppDemoWrapper, AppDocSectionText, Replay, Refresh, SearchPlus, SearchMinus, ArrowsH, ArrowsV, Download, ArrowUpRightAndArrowDownLeftFromCenter, ArrowDownLeftAndArrowUpRightToCenter, ChevronLeft, ChevronRight],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Gallery provides a composition-based API with sub-components for full control over the layout. Each part of the gallery (header, content, footer, toolbar, thumbnails) is a separate component.</p>

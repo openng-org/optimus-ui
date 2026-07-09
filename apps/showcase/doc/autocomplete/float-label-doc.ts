@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -16,6 +16,7 @@ interface AutoCompleteCompleteEvent {
     selector: 'float-label-doc',
     standalone: true,
     imports: [FormsModule, AutoCompleteModule, FloatLabelModule, RouterModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>
                 A floating label appears on top of the input field when focused. Visit

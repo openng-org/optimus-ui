@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { PLATFORM_ID } from '@angular/core';
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 // Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input type="text" [(ngModel)]="value" [pKeyFilter]="pattern" [pValidateOnly]="validateOnly" (ngModelChange)="onModelChange($event)" #inputEl /> `
 })
 class TestBasicKeyFilterComponent {
@@ -23,6 +24,7 @@ class TestBasicKeyFilterComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <input type="text" formControlName="testField" [pKeyFilter]="pattern" [pValidateOnly]="validateOnly" />

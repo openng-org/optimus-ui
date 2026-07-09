@@ -1,5 +1,5 @@
 import { default as IconData } from '@/assets/data/icons.json';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { InputTextModule } from 'primeng/inputtext';
 
@@ -7,6 +7,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'list-doc',
     standalone: true,
     imports: [AppDocSectionText, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

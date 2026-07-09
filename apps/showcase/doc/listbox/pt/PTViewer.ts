@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Listbox } from 'primeng/listbox';
 
@@ -13,6 +13,7 @@ interface City {
     selector: 'listbox-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, Listbox, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-listbox [(ngModel)]="selectedCity" [options]="cities" [multiple]="true" [checkbox]="true" [filter]="true" optionLabel="name" class="w-full md:w-56" />

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { ChipModule } from 'primeng/chip';
@@ -16,6 +16,7 @@ interface Member {
     selector: 'chip-doc',
     standalone: true,
     imports: [FormsModule, SelectModule, ChipModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Selected items displayed as chips using a custom <i>#selectedItem</i> template in multiple mode.</p>

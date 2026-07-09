@@ -18,11 +18,12 @@ import { TemplateDoc } from '@/doc/button/template-doc';
 import { TextDoc } from '@/doc/button/text-doc';
 import { UsageDoc } from '@/doc/button/usage-doc';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PTComponent } from '@/doc/button/pt/PTComponent';
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Button Component"

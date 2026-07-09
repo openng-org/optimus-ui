@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TreeDragDropService, TreeNode } from 'primeng/api';
 import { TreeModule } from 'primeng/tree';
 
@@ -32,6 +32,7 @@ import { TreeModule } from 'primeng/tree';
         </app-demo-wrapper>
     `,
     providers: [TreeDragDropService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             .p-tree-node-dragover {

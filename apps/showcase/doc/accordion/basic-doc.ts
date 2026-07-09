@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'basic-doc',
     standalone: true,
     imports: [AccordionModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Accordion is defined using <i>AccordionPanel</i>, <i>AccordionHeader</i> and <i>AccordionContent</i> components. Each AccordionPanel must contain a unique <i>value</i> property to specify the active item.</p>

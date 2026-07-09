@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'basic-doc',
     standalone: true,
     imports: [FormsModule, PasswordModule, AppCode, AppDocSectionText, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Two-way value binding is defined using <i>ngModel</i>.</p>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
     selector: 'avatar-group-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, AvatarModule, AvatarGroupModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Grouping is available by wrapping multiple Avatar components inside an <i>AvatarGroup</i>.</p>

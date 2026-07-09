@@ -1,12 +1,13 @@
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'video-tutorial-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>Before diving into the implementation details, if you would like to understand the final outcome and see how the solution operates, please refer to the video tutorial for a comprehensive walkthrough and demonstration.</p>
         <div class="video-container">

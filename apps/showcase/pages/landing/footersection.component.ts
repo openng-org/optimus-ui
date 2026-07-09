@@ -1,12 +1,13 @@
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'footer-section',
     standalone: true,
     imports: [CommonModule, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-footer pt-18 px-7 lg:px-20">
             <div class="landing-footer-container">
@@ -18,11 +19,7 @@ import { RouterModule } from '@angular/router';
                                 <a [routerLink]="['installation']" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"> Get Started </a>
                             </li>
                             <li class="mb-4">
-                                <a
-                                    href="{{ GITHUB_REPO_URL }}-examples"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
+                                <a href="{{ GITHUB_REPO_URL }}-examples" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
                                     >Examples</a
                                 >
                             </li>
@@ -32,13 +29,7 @@ import { RouterModule } from '@angular/router';
                         <ul class="list-none p-0 m-0">
                             <li class="text-sm font-bold mb-7">Support</li>
                             <li class="mb-4">
-                                <a
-                                    [href]="GITHUB_DISCUSSIONS_URL"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
-                                    >Forum</a
-                                >
+                                <a [href]="GITHUB_DISCUSSIONS_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Forum</a>
                             </li>
                             <li class="mb-4">
                                 <a [href]="DISCORD_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Discord</a>
@@ -72,9 +63,7 @@ import { RouterModule } from '@angular/router';
                                 <a href="https://primeui.store" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Store</a>
                             </li>
                             <li class="mb-4">
-                                <a [href]="GITHUB_REPO_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300"
-                                    >Source Code</a
-                                >
+                                <a [href]="GITHUB_REPO_URL" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Source Code</a>
                             </li>
                             <li class="mb-4">
                                 <a href="https://twitter.com/prime_ng" target="_blank" rel="noopener noreferrer" class="text-sm text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded-sm transition-all duration-300">Twitter</a>

@@ -24,7 +24,7 @@ import { TemplateDrivenFormsDoc } from '@/doc/select/templatedrivenforms-doc';
 import { UsageDoc } from '@/doc/select/usage-doc';
 import { VirtualScrollDoc } from '@/doc/select/virtualscroll-doc';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -39,6 +39,7 @@ import { Component } from '@angular/core';
     ></app-doc> `,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './selectdemo.scss'
 })
 export class SelectDemo {

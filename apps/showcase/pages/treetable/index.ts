@@ -31,7 +31,7 @@ import { TemplateDoc } from '@/doc/treetable/template-doc';
 import { UsageDoc } from '@/doc/treetable/usage-doc';
 import { LoadingMaskDoc } from '@/doc/treetable/loadingmask-doc';
 import { LoadingSkeletonDoc } from '@/doc/treetable/loadingskeleton-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -46,6 +46,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         themeDocs="treetable"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class TreeTableDemo {

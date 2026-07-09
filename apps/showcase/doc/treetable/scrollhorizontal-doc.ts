@@ -4,7 +4,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { NodeService } from '@/service/nodeservice';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { TreeTableModule } from 'primeng/treetable';
 
@@ -17,6 +17,7 @@ interface Column {
     selector: 'scroll-horizontal-doc',
     standalone: true,
     imports: [CommonModule, TreeTableModule, DeferredDemo, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Horizontal scrolling is enabled when the total width of columns exceeds table width.</p>

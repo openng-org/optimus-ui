@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { PhotoService } from '@/service/photoservice';
 import { NgStyle, isPlatformBrowser } from '@angular/common';
-import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, PLATFORM_ID, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Galleria, GalleriaModule } from 'primeng/galleria';
 
@@ -11,6 +11,7 @@ import { Galleria, GalleriaModule } from 'primeng/galleria';
     selector: 'advanced-doc',
     standalone: true,
     imports: [NgStyle, GalleriaModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Galleria can be extended further to implement complex requirements.</p>

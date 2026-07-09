@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommandMenuModule } from 'primeng/commandmenu';
 import { ArrowDown } from '@primeicons/angular/arrow-down';
 import { ArrowUp } from '@primeicons/angular/arrow-up';
@@ -10,6 +10,7 @@ import { ArrowUp } from '@primeicons/angular/arrow-up';
     selector: 'custom-doc',
     standalone: true,
     imports: [CommandMenuModule, AppCode, AppDemoWrapper, AppDocSectionText, ArrowUp, ArrowDown],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Custom content can be displayed for each item using the <i>item</i> template.</p>

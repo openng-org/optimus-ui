@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -42,6 +42,7 @@ import { ScrollPanelModule } from 'primeng/scrollpanel';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             :host ::ng-deep {

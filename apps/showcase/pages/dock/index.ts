@@ -3,12 +3,13 @@ import { AdvancedDoc } from '@/doc/dock/advanced-doc';
 import { BasicDoc } from '@/doc/dock/basic-doc';
 import { UsageDoc } from '@/doc/dock/usage-doc';
 import { PTComponent } from '@/doc/dock/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Dock Component"

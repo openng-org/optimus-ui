@@ -1,4 +1,4 @@
-import { Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { Component, PLATFORM_ID, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { FocusTrap, FocusTrapModule } from './focustrap';
 @Component({
     standalone: false,
     selector: 'test-basic-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap>
             <input type="text" class="first-input" />
@@ -20,6 +21,7 @@ class TestBasicFocusTrapComponent {}
 @Component({
     standalone: false,
     selector: 'test-disabled-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap [pFocusTrapDisabled]="disabled">
             <input type="text" class="input" />
@@ -34,6 +36,7 @@ class TestDisabledFocusTrapComponent {
 @Component({
     standalone: false,
     selector: 'test-dynamic-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap [pFocusTrapDisabled]="trapDisabled">
             <input type="text" *ngIf="showFirstInput" class="dynamic-first-input" />
@@ -57,6 +60,7 @@ class TestDynamicFocusTrapComponent {
 @Component({
     standalone: false,
     selector: 'test-nested-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap class="outer-trap">
             <input type="text" class="outer-input" />
@@ -76,6 +80,7 @@ class TestNestedFocusTrapComponent {}
 @Component({
     standalone: false,
     selector: 'test-complex-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap [pFocusTrapDisabled]="trapDisabled" class="complex-trap">
             <input type="text" class="text-input" [disabled]="inputDisabled" />
@@ -101,6 +106,7 @@ class TestComplexFocusTrapComponent {
 @Component({
     standalone: false,
     selector: 'test-empty-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap class="empty-trap">
             <span class="non-focusable">Non-focusable content</span>
@@ -113,6 +119,7 @@ class TestEmptyFocusTrapComponent {}
 @Component({
     standalone: false,
     selector: 'test-conditional-focus-trap',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div pFocusTrap [pFocusTrapDisabled]="trapDisabled">
             <input type="text" *ngIf="showElements" class="conditional-input" />

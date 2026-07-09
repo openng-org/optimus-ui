@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DataViewModule } from 'primeng/dataview';
@@ -16,6 +16,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     standalone: true,
     imports: [CommonModule, FormsModule, RouterModule, DataViewModule, SkeletonModule, SelectButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>While data is being loaded. <a routerLink="/skeleton">Skeleton</a> component may be used to indicate the busy state.</p>

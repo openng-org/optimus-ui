@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ interface Topping {
     selector: 'multiple-doc',
     standalone: true,
     imports: [FormsModule, SelectModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>multiple</i> is enabled, multiple items can be selected. Use <i>checkmark</i> to display a check indicator and a custom <i>#selectedItem</i> template for the label.</p>

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'loading-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Busy state is controlled with the <i>loading</i> property.</p>

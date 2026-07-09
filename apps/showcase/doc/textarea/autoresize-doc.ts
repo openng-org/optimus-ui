@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { TextareaModule } from 'primeng/textarea';
     selector: 'auto-resize-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText, AppDemoWrapper, TextareaModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>autoResize</i> is enabled, textarea grows instead of displaying a scrollbar.</p>

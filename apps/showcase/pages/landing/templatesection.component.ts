@@ -1,11 +1,12 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'templates-section',
     standalone: true,
     imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-templates theme-dark py-20">
             <div class="section-header relative z-30">Templates</div>

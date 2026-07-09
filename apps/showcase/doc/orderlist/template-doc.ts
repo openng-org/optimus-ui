@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OrderListModule } from 'primeng/orderlist';
 
 @Component({
@@ -12,6 +12,7 @@ import { OrderListModule } from 'primeng/orderlist';
     standalone: true,
     imports: [CommonModule, OrderListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>For custom content support define an <i>item</i> template that gets the item instance as a parameter. In addition <i>header</i> template is provided for further customization.</p>

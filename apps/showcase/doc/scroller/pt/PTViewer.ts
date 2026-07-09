@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ClassNamesModule } from 'primeng/classnames';
 import { ScrollerModule } from 'primeng/scroller';
 
@@ -8,6 +8,7 @@ import { ScrollerModule } from 'primeng/scroller';
     selector: 'scroller-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, ClassNamesModule, ScrollerModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-virtualscroller [items]="items" [itemSize]="50" scrollHeight="200px" styleClass="border border-surface" [style]="{ width: '200px', height: '200px' }">

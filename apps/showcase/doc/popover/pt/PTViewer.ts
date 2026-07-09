@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -18,6 +18,7 @@ interface Member {
     selector: 'popover-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, PopoverModule, ButtonModule, InputTextModule, InputGroupModule, InputGroupAddonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-button (click)="op.toggle($event)" icon="pi pi-share-alt" label="Share" />

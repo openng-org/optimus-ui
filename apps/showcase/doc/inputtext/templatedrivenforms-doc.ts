@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,6 +12,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'template-driven-forms-doc',
     standalone: true,
     imports: [FormsModule, InputTextModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toast />
         <app-demo-wrapper>

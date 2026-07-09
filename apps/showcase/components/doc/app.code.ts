@@ -3,7 +3,7 @@ import { resolveDomainTypes, ResolvedRouteFiles, resolveRouteFiles } from '@/dom
 import { DemoCodeService } from '@/service/democodeservice';
 import { HighlightService } from '@/service/highlightservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, computed, effect, ElementRef, inject, input, NgModule, PLATFORM_ID, signal } from '@angular/core';
+import { Component, computed, effect, ElementRef, inject, input, NgModule, PLATFORM_ID, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +15,7 @@ import { IN_DEMO_WRAPPER } from './demo-mode.token';
     selector: 'app-code',
     standalone: true,
     imports: [CommonModule, ButtonModule, TooltipModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         @if (resolvedCode()) {
             <div class="doc-section-code">

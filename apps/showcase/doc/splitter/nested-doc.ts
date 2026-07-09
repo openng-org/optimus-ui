@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SplitterModule } from 'primeng/splitter';
 
 @Component({
     selector: 'nested-doc',
     standalone: true,
     imports: [AppDocSectionText, SplitterModule, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Splitters can be combined to create advanced layouts.</p>

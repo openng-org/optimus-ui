@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Nullable } from 'primeng/ts-helpers';
@@ -21,6 +21,7 @@ import type { TreeTable } from './treetable';
         }
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         '[attr.data-p]': 'dataP'
     }

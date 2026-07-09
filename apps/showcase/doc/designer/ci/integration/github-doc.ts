@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'github-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, RouterModule, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>The <a href="https://github.com/marketplace/actions/prime-figma-to-theme-code-generator" target="_blank" rel="noopener noreferrer">prime-figma-to-theme-code-generator</a> is a GitHub Action that is available on the marketplace.</p>
         <h4>1. Add Secret Key to Repository Secrets</h4>

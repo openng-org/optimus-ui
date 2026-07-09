@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'disabled-doc',
     standalone: true,
     imports: [FormsModule, PasswordModule, AppCode, AppDocSectionText, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>disabled</i> is present, the element cannot be edited and focused.</p>

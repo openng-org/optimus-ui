@@ -13,24 +13,24 @@ import { AppDocSectionText } from './app.docsectiontext';
             @for (doc of docs; track trackById($index, doc)) {
                 <section class="py-6">
                     @if (!doc.component && doc.children) {
-                        <app-docsectiontext [title]="doc.label" [id]="doc.id" [level]="2" [description]="doc?.description" />
+                        <app-docsectiontext [title]="doc.label" [id]="doc.id" [level]="2" [description]="$safeNavigationMigration(doc?.description)" />
 
                         @for (child of doc.children; track $index) {
                             @if (!child.component && child.children) {
-                                <app-docsectiontext [title]="child.label" [id]="child.id" [level]="3" [description]="child?.description" />
+                                <app-docsectiontext [title]="child.label" [id]="child.id" [level]="3" [description]="$safeNavigationMigration(child?.description)" />
                                 @for (grandchild of child.children; track $index) {
-                                    <app-docsectiontext [title]="grandchild.label" [id]="grandchild.id" [level]="4" [description]="grandchild?.description" />
+                                    <app-docsectiontext [title]="grandchild.label" [id]="grandchild.id" [level]="4" [description]="$safeNavigationMigration(grandchild?.description)" />
                                     <ng-container *ngComponentOutlet="grandchild.component"></ng-container>
                                 }
                             } @else {
-                                <app-docsectiontext [title]="child.label" [id]="child.id" [level]="3" [description]="child?.description" />
+                                <app-docsectiontext [title]="child.label" [id]="child.id" [level]="3" [description]="$safeNavigationMigration(child?.description)" />
                                 <ng-container *ngComponentOutlet="child.component"></ng-container>
                             }
                         }
                     }
 
                     @if (doc.component && !doc.children) {
-                        <app-docsectiontext [title]="doc.label" [id]="doc.id" [level]="2" [description]="doc?.description" />
+                        <app-docsectiontext [title]="doc.label" [id]="doc.id" [level]="2" [description]="$safeNavigationMigration(doc?.description)" />
                         @if (doc.data) {
                             <app-docapitable [id]="doc.id" [data]="doc.data"></app-docapitable>
                         }

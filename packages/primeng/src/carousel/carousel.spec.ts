@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -21,6 +21,7 @@ const mockProducts = [
 // Test Components for different scenarios
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel
             [value]="products"
@@ -83,6 +84,7 @@ class TestBasicCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products" [numVisible]="3" [numScroll]="1" [circular]="true">
             <ng-template let-product #item>
@@ -97,6 +99,7 @@ class TestCircularCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products" [orientation]="'vertical'" [verticalViewPortHeight]="'400px'">
             <ng-template let-product #item>
@@ -111,6 +114,7 @@ class TestVerticalCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products" [responsiveOptions]="responsiveOptions">
             <ng-template let-product #item>
@@ -130,6 +134,7 @@ class TestResponsiveCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products" [autoplayInterval]="1000">
             <ng-template let-product #item>
@@ -144,6 +149,7 @@ class TestAutoplayCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products" [numVisible]="3">
             <ng-template #header>
@@ -164,6 +170,7 @@ class TestTemplateCarouselComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-carousel [value]="products">
             <ng-template #header>

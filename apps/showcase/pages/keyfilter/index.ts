@@ -2,7 +2,7 @@ import { AccessibilityDoc } from '@/doc/keyfilter/accessibility-doc';
 import { PresetsDoc } from '@/doc/keyfilter/presets-doc';
 import { RegexDoc } from '@/doc/keyfilter/regex-doc';
 import { UsageDoc } from '@/doc/keyfilter/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -15,6 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [apiDocs]="['KeyFilter']"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class KeyFilterDemo {

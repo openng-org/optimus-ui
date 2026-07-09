@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'controlled-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TabsModule, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Tabs can be controlled programmatically using <i>value</i> property as a model.</p>

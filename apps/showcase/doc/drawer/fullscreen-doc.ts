@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DrawerModule } from 'primeng/drawer';
@@ -10,6 +10,7 @@ import { DrawerModule } from 'primeng/drawer';
     selector: 'fullscreen-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, DrawerModule, ButtonModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Drawer can cover the whole page when <i>fullScreen</i> property is enabled.</p>

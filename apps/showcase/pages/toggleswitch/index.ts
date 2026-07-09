@@ -8,7 +8,7 @@ import { TemplateDoc } from '@/doc/toggleswitch/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/toggleswitch/templatedrivenforms-doc';
 import { UsageDoc } from '@/doc/toggleswitch/usage-doc';
 import { PTComponent } from '@/doc/toggleswitch/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -23,6 +23,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ToggleSwitchDemo {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'badge-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Buttons have built-in <i>badge</i> support with badge and <i>badgeClass</i> properties.</p>

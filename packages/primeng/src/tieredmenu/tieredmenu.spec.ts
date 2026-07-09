@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ElementRef, ViewChild, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,6 +11,7 @@ import { TieredMenu } from './tieredmenu';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-tieredmenu [model]="model" [styleClass]="styleClass" [style]="style" [popup]="popup" [disabled]="disabled" [autoDisplay]="autoDisplay"></p-tieredmenu>`
 })
 class TestBasicTieredMenuComponent {
@@ -37,6 +38,7 @@ class TestBasicTieredMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tieredmenu #menu [model]="model" [popup]="true"></p-tieredmenu>
         <button #toggleButton (click)="menu.toggle($event)" class="toggle-button">Show Menu</button>
@@ -70,6 +72,7 @@ class TestPopupTieredMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tieredmenu [model]="model">
             <ng-template #item let-item let-hasSubmenu="hasSubmenu">
@@ -96,6 +99,7 @@ class TestTemplateTieredMenuComponent {
 // Test Component for #item template approach
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tieredmenu [model]="model">
             <ng-template #item let-item let-hasSubmenu="hasSubmenu">
@@ -123,6 +127,7 @@ class TestContentTemplateTieredMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-tieredmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
 })
 class TestDisabledTieredMenuComponent {
@@ -137,6 +142,7 @@ class TestDisabledTieredMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-router-tieredmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
 })
 class TestRouterTieredMenuComponent {
@@ -160,6 +166,7 @@ class TestRouterTieredMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-breakpoint-tieredmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-tieredmenu [model]="model" [breakpoint]="breakpoint"></p-tieredmenu>`
 })
 class TestBreakpointTieredMenuComponent {

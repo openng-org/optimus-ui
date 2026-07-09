@@ -6,7 +6,7 @@ import { FilterDoc } from '@/doc/orderlist/filter-doc';
 import { UsageDoc } from '@/doc/orderlist/usage-doc';
 import { TemplateDoc } from '@/doc/orderlist/template-doc';
 import { PTComponent } from '@/doc/orderlist/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -20,6 +20,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class OrderListDemo {

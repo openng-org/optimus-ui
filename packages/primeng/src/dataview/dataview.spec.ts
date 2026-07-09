@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ViewChild, signal, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ViewChild, signal, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DataView } from './dataview';
@@ -8,6 +8,7 @@ import { PaginatorModule } from 'primeng/paginator';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dataview
             [value]="products"
@@ -118,6 +119,7 @@ class TestBasicDataViewComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dataview [value]="products">
             <p-header>
@@ -145,6 +147,7 @@ class TestHeaderFooterDataViewComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dataview [value]="products" [paginator]="true" [rows]="2">
             <ng-template #list let-items>
@@ -178,6 +181,7 @@ class TestTemplatesDataViewComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dataview [value]="products()" [layout]="layout">
             <ng-template #list let-items>
@@ -1607,6 +1611,7 @@ describe('DataView', () => {
 // Test component for dynamic values
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dataview
             #dataView

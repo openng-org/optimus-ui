@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
@@ -11,6 +11,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     standalone: true,
     imports: [ProgressBarModule, ToastModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Value is reactive so updating it dynamically changes the bar as well.</p>

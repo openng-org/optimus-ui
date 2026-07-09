@@ -8,7 +8,7 @@ import { TemplateDoc } from '@/doc/accordion/template-doc';
 import { UsageDoc } from '@/doc/accordion/usage-doc';
 import { PTComponent } from '@/doc/accordion/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocService } from '@/components/doc/app.doc.service';
 
 @Component({
@@ -24,6 +24,7 @@ import { AppDocService } from '@/components/doc/app.doc.service';
     ></app-doc>`,
     imports: [AppDoc],
     providers: [AppDocService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 export class AccordionDemo {

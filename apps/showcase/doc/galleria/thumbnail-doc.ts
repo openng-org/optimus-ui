@@ -1,5 +1,5 @@
 import { PhotoService } from '@/service/photoservice';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GalleriaModule } from 'primeng/galleria';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -11,6 +11,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'thumbnail-doc',
     standalone: true,
     imports: [FormsModule, GalleriaModule, RadioButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Galleria can be controlled programmatically using the <i>activeIndex</i> property.</p>

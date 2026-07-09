@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,12 +7,14 @@ import { Divider, DividerModule } from './divider';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-divider></p-divider> `
 })
 class TestBasicDividerComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-divider [layout]="layout" [type]="type" [align]="align">
             <div class="custom-content">Custom Divider Content</div>
@@ -27,6 +29,7 @@ class TestCustomDividerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-divider layout="horizontal" type="solid" align="left">
             <b>Left Aligned</b>
@@ -43,6 +46,7 @@ class TestHorizontalDividerComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div style="height: 200px; display: flex;">
             <div>Left Content</div>
@@ -65,6 +69,7 @@ class TestVerticalDividerComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-divider>
             <div class="content-with-icon">
@@ -79,6 +84,7 @@ class TestComplexContentDividerComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-divider [layout]="layout" [type]="type" [align]="align">
             <span>Dynamic Content</span>

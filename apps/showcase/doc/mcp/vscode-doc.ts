@@ -1,12 +1,13 @@
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'vscode-doc',
     standalone: true,
     imports: [AppCodeModule, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Create <i>.vscode/mcp.json</i> in your project or <i>~/Library/Application Support/Code/User/mcp.json</i> for global configuration.</p>

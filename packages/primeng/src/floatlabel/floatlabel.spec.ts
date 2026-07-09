@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { FloatLabel } from './floatlabel';
@@ -8,6 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-floatlabel>
             <input id="username" [(ngModel)]="value" />
@@ -22,6 +23,7 @@ class TestBasicFloatLabelComponent {
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-floatlabel [variant]="variant">
             <input id="test-input" [(ngModel)]="value" />
@@ -588,6 +590,7 @@ describe('FloatLabel PassThrough Tests', () => {
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-floatlabel [pt]="{ root: 'INLINE_STRING' }"><input /></p-floatlabel>`
 })
 class TestInlineStringPTComponent {}
@@ -595,6 +598,7 @@ class TestInlineStringPTComponent {}
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-floatlabel [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', 'data-inline': 'true' } }"><input /></p-floatlabel>`
 })
 class TestInlineObjectPTComponent {}
@@ -602,6 +606,7 @@ class TestInlineObjectPTComponent {}
 @Component({
     standalone: true,
     imports: [FloatLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-floatlabel><input /></p-floatlabel>
         <p-floatlabel><input /></p-floatlabel>

@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'important-notice-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>
             Starting from PrimeOne UI Kit version 4.0, the Tokens Studio plugin is no longer used. We've fully migrated to Figma's native variable features, which now power the system. If you prefer to continue working with Tokens Studio, please use

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { TagModule } from 'primeng/tag';
     selector: 'severity-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, TagModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Severity defines the color of the tag, possible values are <i>success</i>, <i>info</i>, <i>warn</i> and <i>danger</i> in addition to the default theme color.</p>

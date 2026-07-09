@@ -369,6 +369,9 @@ importers:
       '@angular-devkit/schematics':
         specifier: catalog:angular22
         version: 22.0.4(chokidar@5.0.0)
+      istanbul-lib-instrument:
+        specifier: ^6.0.3
+        version: 6.0.3
       karma:
         specifier: ~6.4.4
         version: 6.4.4

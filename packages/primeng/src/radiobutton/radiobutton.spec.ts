@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [RadioButton, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-radiobutton
             name="test"
@@ -55,6 +56,7 @@ class TestBasicRadioComponent {
 @Component({
     standalone: true,
     imports: [RadioButton, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-radiobutton name="group" value="option1" [(ngModel)]="selectedOption" inputId="option1" />
         <p-radiobutton name="group" value="option2" [(ngModel)]="selectedOption" inputId="option2" />
@@ -69,6 +71,7 @@ class TestRadioGroupComponent {
 @Component({
     standalone: true,
     imports: [RadioButton, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="radioForm">
             <p-radiobutton formControlName="selectedValue" name="radioGroup" value="value1" inputId="radio1" [invalid]="isInvalid" />
@@ -89,6 +92,7 @@ class TestReactiveRadioComponent {
 @Component({
     standalone: true,
     imports: [RadioButton, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-radiobutton name="advanced" [value]="radioValue" [(ngModel)]="selectedValue" [disabled]="isDisabled" [binary]="binary" [variant]="variant" [size]="size" [autofocus]="autofocus" (onClick)="onAdvancedClick($event)" /> `
 })
 class TestAdvancedRadioComponent {
@@ -111,6 +115,7 @@ class TestAdvancedRadioComponent {
 @Component({
     standalone: true,
     imports: [RadioButton, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-radiobutton name="binary" value="binary-value" [(ngModel)]="binaryValue" [binary]="true" /> `
 })
 class TestBinaryRadioComponent {

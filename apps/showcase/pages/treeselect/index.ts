@@ -18,12 +18,13 @@ import { VirtualScrollDoc } from '@/doc/treeselect/virtualscroll-doc';
 import { FluidDoc } from '@/doc/treeselect/fluid-doc';
 import { ClearIconDoc } from '@/doc/treeselect/clearicon-doc';
 import { PTComponent } from '@/doc/treeselect/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular TreeSelect Component"

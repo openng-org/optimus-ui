@@ -1,5 +1,5 @@
 import { NodeService } from '@/service/nodeservice';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TreeSelectModule } from 'primeng/treeselect';
 import { RouterModule } from '@angular/router';
@@ -11,6 +11,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'clear-icon-doc',
     standalone: true,
     imports: [TreeSelectModule, FormsModule, RouterModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>showClear</i> is enabled, a clear icon is displayed to clear the value.</p>

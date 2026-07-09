@@ -1,6 +1,6 @@
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccordionModule } from 'primeng/accordion';
 
 @Component({
@@ -51,6 +51,7 @@ import { AccordionModule } from 'primeng/accordion';
             <app-code [code]="code" hideToggleCode hideStackBlitz></app-code>
         </app-docsectiontext>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             :host::ng-deep {

@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'p-deferred-demo',
@@ -14,6 +14,7 @@ import { Component, ElementRef, EventEmitter, Inject, Input, OnInit, Output, PLA
             <ng-content></ng-content>
         }
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './deferreddemo.scss'
 })
 export class DeferredDemo implements OnInit {

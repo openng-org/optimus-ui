@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ScrollerModule } from 'primeng/scroller';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
     selector: 'delay-doc',
     standalone: true,
     imports: [ScrollerModule, AppCode, AppDemoWrapper, AppDocSectionText, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Scroll delay is adjusted by using <i>delay</i> property.</p>

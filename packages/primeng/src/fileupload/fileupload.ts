@@ -76,12 +76,12 @@ import { FileUploadStyle } from './style/fileuploadstyle';
                             />
                             <ng-template #icon>
                                 @if (chooseIcon()) {
-                                    <span [class]="chooseIcon()" [attr.aria-label]="true" [pBind]="ptm('pcChooseButton')?.icon"></span>
+                                    <span [class]="chooseIcon()" [attr.aria-label]="true" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)"></span>
                                 } @else {
                                     @if (!chooseIconTemplate()) {
-                                        <svg data-p-icon="plus" [attr.aria-label]="true" [pBind]="ptm('pcChooseButton')?.icon" />
+                                        <svg data-p-icon="plus" [attr.aria-label]="true" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)" />
                                     } @else {
-                                        <span [attr.aria-label]="true" [pBind]="ptm('pcChooseButton')?.icon">
+                                        <span [attr.aria-label]="true" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)">
                                             <ng-container *ngTemplateOutlet="chooseIconTemplate()"></ng-container>
                                         </span>
                                     }
@@ -101,12 +101,12 @@ import { FileUploadStyle } from './style/fileuploadstyle';
                             >
                                 <ng-template #icon>
                                     @if (uploadIcon()) {
-                                        <span [class]="uploadIcon()" [attr.aria-hidden]="true" [pBind]="ptm('pcUploadButton')?.icon"></span>
+                                        <span [class]="uploadIcon()" [attr.aria-hidden]="true" [pBind]="$safeNavigationMigration(ptm('pcUploadButton')?.icon)"></span>
                                     } @else {
                                         @if (!uploadIconTemplate()) {
-                                            <svg data-p-icon="upload" [pBind]="ptm('pcUploadButton')?.icon" />
+                                            <svg data-p-icon="upload" [pBind]="$safeNavigationMigration(ptm('pcUploadButton')?.icon)" />
                                         } @else {
-                                            <span [attr.aria-hidden]="true" [pBind]="ptm('pcUploadButton')?.icon">
+                                            <span [attr.aria-hidden]="true" [pBind]="$safeNavigationMigration(ptm('pcUploadButton')?.icon)">
                                                 <ng-container *ngTemplateOutlet="uploadIconTemplate()"></ng-container>
                                             </span>
                                         }
@@ -213,22 +213,22 @@ import { FileUploadStyle } from './style/fileuploadstyle';
                         <ng-template #icon>
                             @if (hasFiles() && !auto()) {
                                 @if (uploadIcon()) {
-                                    <span [class]="cn('p-button-icon p-button-icon-left', uploadIcon())" [pBind]="ptm('pcChooseButton')?.icon"></span>
+                                    <span [class]="cn('p-button-icon p-button-icon-left', uploadIcon())" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)"></span>
                                 } @else {
                                     @if (!uploadIconTemplate()) {
-                                        <svg data-p-icon="upload" [class]="'p-button-icon p-button-icon-left'" [pBind]="ptm('pcChooseButton')?.icon" />
+                                        <svg data-p-icon="upload" [class]="'p-button-icon p-button-icon-left'" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)" />
                                     } @else {
-                                        <span class="p-button-icon p-button-icon-left" [pBind]="ptm('pcChooseButton')?.icon">
+                                        <span class="p-button-icon p-button-icon-left" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)">
                                             <ng-container *ngTemplateOutlet="uploadIconTemplate()"></ng-container>
                                         </span>
                                     }
                                 }
                             } @else {
                                 @if (chooseIcon()) {
-                                    <span [class]="cn('p-button-icon p-button-icon-left pi', chooseIcon())" [pBind]="ptm('pcChooseButton')?.icon"></span>
+                                    <span [class]="cn('p-button-icon p-button-icon-left pi', chooseIcon())" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)"></span>
                                 } @else {
                                     @if (!chooseIconTemplate()) {
-                                        <svg data-p-icon="plus" [pBind]="ptm('pcChooseButton')?.icon" />
+                                        <svg data-p-icon="plus" [pBind]="$safeNavigationMigration(ptm('pcChooseButton')?.icon)" />
                                     } @else {
                                         <ng-container *ngTemplateOutlet="chooseIconTemplate()"></ng-container>
                                     }

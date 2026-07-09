@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, effect, ElementRef, inject, input, numberAttribute, output, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, effect, ElementRef, inject, input, numberAttribute, output, signal, TemplateRef, viewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MotionEvent, MotionOptions } from '@primeuix/motion';
 import { isNotEmpty, nestedPosition, resolve } from '@primeuix/utils';
@@ -206,6 +206,7 @@ import { TIEREDMENU_INSTANCE, TIEREDMENUSUB_INSTANCE } from './tieredmenu-token'
         { provide: TIEREDMENUSUB_INSTANCE, useExisting: TieredMenuSub },
         { provide: PARENT_INSTANCE, useExisting: TieredMenuSub }
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class TieredMenuSub extends BaseComponent<TieredMenuPassThrough> {

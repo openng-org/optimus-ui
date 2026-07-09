@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { Slider, SliderModule } from './slider';
 // Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-slider
             [(ngModel)]="value"
@@ -51,6 +52,7 @@ class TestBasicSliderComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-slider formControlName="sliderValue"></p-slider>
@@ -65,6 +67,7 @@ class TestFormSliderComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-slider [range]="true" formControlName="rangeValue"> </p-slider>

@@ -4,11 +4,12 @@ import { BasicDoc } from '@/doc/blockui/basic-doc';
 import { DocumentDoc } from '@/doc/blockui/document-doc';
 import { UsageDoc } from '@/doc/blockui/usage-doc';
 import { PTComponent } from '@/doc/blockui/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular BlockUI Component"

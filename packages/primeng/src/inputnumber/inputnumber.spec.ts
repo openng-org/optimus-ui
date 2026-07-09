@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { InputNumber, InputNumberModule } from './inputnumber';
 // Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputnumber
             [(ngModel)]="value"
@@ -100,6 +101,7 @@ class TestBasicInputNumberComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-inputnumber formControlName="numberField" [showButtons]="showButtons" [min]="min" [max]="max" [step]="step"></p-inputnumber>
@@ -119,6 +121,7 @@ class TestFormInputNumberComponent {
 // InputNumber #template component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
             <!-- Clear icon template with #template reference -->
@@ -148,6 +151,7 @@ class TestInputNumberTemplateComponent {
 // InputNumber #template reference component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputnumber [(ngModel)]="value" [showButtons]="true" [showClear]="true" [mode]="'currency'" [currency]="'USD'" [locale]="'en-US'" [min]="min" [max]="max" [step]="step">
             <!-- Clear icon template with #template reference -->

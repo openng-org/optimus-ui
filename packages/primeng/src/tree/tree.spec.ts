@@ -1,4 +1,4 @@
-import { Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ViewChild, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { UITreeNode } from './tree-node';
 // Test component for basic use cases
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree
             [value]="nodes"
@@ -117,6 +118,7 @@ class TestBasicTreeComponent {
 // Test component for #template testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -183,6 +185,7 @@ class TestTemplateTreeComponent {
 // Test component for #template testing (new approach)
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -236,6 +239,7 @@ class TestTemplateRefTreeComponent {
 // Test component for context testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree [value]="nodes" [selectionMode]="'checkbox'">
             <ng-template #node let-node>
@@ -271,6 +275,7 @@ class TestContextTreeComponent {
 // Dedicated Template Test Components (originally in tree-templates.spec.ts)
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading" [selectionMode]="'checkbox'">
             <ng-template #node let-node>
@@ -324,6 +329,7 @@ class TestTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
             <ng-template #node let-node>
@@ -2738,6 +2744,7 @@ describe('Tree', () => {
 // Test component for dynamic values
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-tree
             #tree

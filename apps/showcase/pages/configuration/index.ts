@@ -12,13 +12,14 @@ import { RippleDoc } from '@/doc/configuration/ripple-doc';
 import { OverlayAppendToDoc } from '@/doc/configuration/overlayappendto-doc';
 import { ThemeDoc } from '@/doc/configuration/theme-doc';
 import { ZIndexDoc } from '@/doc/configuration/zindex-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     selector: 'configuration',
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc docTitle="Configuration - {{ PROJECT_NAME }}" header="Configuration" description="Application wide configuration for {{ PROJECT_NAME }}." [docs]="docs" docType="page"></app-doc>`
 })
 export class ConfigurationDemo {

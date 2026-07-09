@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { ToggleButton } from './togglebutton';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-togglebutton
             [(ngModel)]="checked"
@@ -55,6 +56,7 @@ class TestBasicToggleButtonComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="toggleForm">
             <p-togglebutton formControlName="toggle" [onLabel]="onLabel" [offLabel]="offLabel" (onChange)="onFormToggleChange($event)"> </p-togglebutton>
@@ -76,6 +78,7 @@ class TestReactiveToggleButtonComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <ng-template #content let-checked>
@@ -90,6 +93,7 @@ class TestTemplateToggleButtonComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <ng-template #icon let-checked>
@@ -104,6 +108,7 @@ class TestIconTemplateToggleButtonComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-togglebutton [(ngModel)]="checked" [onIcon]="onIcon" [offIcon]="offIcon" [iconPos]="iconPos"> </p-togglebutton> `
 })
 class TestIconToggleButtonComponent {
@@ -117,6 +122,7 @@ class TestIconToggleButtonComponent {
 @Component({
     standalone: true,
     imports: [ToggleButton, FormsModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <!-- Icon template with #template reference -->
@@ -134,6 +140,7 @@ class TestToggleButtonIconTemplateRefComponent {
 @Component({
     standalone: true,
     imports: [ToggleButton, FormsModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <!-- Icon template with #template reference -->

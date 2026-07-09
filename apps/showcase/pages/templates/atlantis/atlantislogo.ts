@@ -1,9 +1,10 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     selector: 'atlantis-logo',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <svg width="149" height="40" viewBox="0 0 149 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M69.3651 24.0154H61.2671L59.6707 27.7636H56.5703L63.8585 11.5677H66.82L74.1313 27.7636H70.9847L69.3651 24.0154ZM68.3702 21.6555L65.3161 14.5755L62.2852 21.6555H68.3702Z" [attr.fill]="fillColor" />

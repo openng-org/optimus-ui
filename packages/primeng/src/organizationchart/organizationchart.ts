@@ -43,7 +43,7 @@ import { OrganizationChartStyle } from './style/organizationchartstyle';
             </ul>
         }
     `,
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [OrganizationChartStyle, { provide: ORGANIZATIONCHART_INSTANCE, useExisting: OrganizationChart }, { provide: PARENT_INSTANCE, useExisting: OrganizationChart }],
     host: {
         '[class]': "cx('root')",

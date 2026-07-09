@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { DividerModule } from 'primeng/divider';
     selector: 'vertical-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, DividerModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p class="text-sm">Vertical divider is enabled by setting the <i>layout</i> property as <i>vertical</i>.</p>

@@ -1,10 +1,11 @@
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <div class="flex flex-col md:flex-row mb-7 gap-7">
@@ -14,16 +15,15 @@ import { Component } from '@angular/core';
                     <p class="m-0 leading-normal relative">
                         <a [href]="GITHUB_DISCUSSIONS_URL" class="doc-link" target="_blank" rel="noopener noreferrer">Forum</a>
                         and
-                        <a [href]="DISCORD_URL" class="doc-link" target="_blank" rel="noopener noreferrer">Discord</a> are where the community users gather to seek support, post topics and discuss the technology. GitHub issue is the
-                        channel for the community users to create tickets however PrimeTek does not guarantee a response time although they are monitored and maintained by our staff. If you need to secure a response, you may consider PRO support
-                        instead.
+                        <a [href]="DISCORD_URL" class="doc-link" target="_blank" rel="noopener noreferrer">Discord</a> are where the community users gather to seek support, post topics and discuss the technology. GitHub issue is the channel for the
+                        community users to create tickets however PrimeTek does not guarantee a response time although they are monitored and maintained by our staff. If you need to secure a response, you may consider PRO support instead.
                     </p>
                 </div>
                 <div class="card m-0! flex-1 bg-primary! text-primary-contrast! font-medium">
                     <div class="text-xl font-semibold mb-3">Professional Support</div>
                     <p class="m-0 leading-normal">
-                        With PRO support, it's easy to support, tune, and add features to {{ PROJECT_NAME }} as an in-house library. With the exclusive services of a PRO account, you no longer need to post questions in the community forum and the community
-                        issue tracker at GitHub. Service is delivered via a private issue tracker based on a one-business-day response time.
+                        With PRO support, it's easy to support, tune, and add features to {{ PROJECT_NAME }} as an in-house library. With the exclusive services of a PRO account, you no longer need to post questions in the community forum and the
+                        community issue tracker at GitHub. Service is delivered via a private issue tracker based on a one-business-day response time.
                     </p>
                 </div>
             </div>
@@ -116,7 +116,8 @@ import { Component } from '@angular/core';
                         <li>
                             <div class="font-semibold mb-1">6. Delivery</div>
                             <span class="leading-normal"
-                                >If the issue requires an update in the library, it gets published to npm by as part of the public {{ PROJECT_NAME }} package. A patch update on an older version can also be requested if you are not using the latest version.
+                                >If the issue requires an update in the library, it gets published to npm by as part of the public {{ PROJECT_NAME }} package. A patch update on an older version can also be requested if you are not using the latest
+                                version.
                             </span>
                         </li>
                     </ul>

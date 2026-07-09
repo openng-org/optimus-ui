@@ -1,12 +1,13 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MenuModule } from 'primeng/menu';
 
 @Component({
     selector: 'menu-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, MenuModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-menu [model]="items" />

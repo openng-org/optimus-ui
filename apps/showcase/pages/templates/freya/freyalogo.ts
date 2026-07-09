@@ -1,9 +1,10 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     selector: 'freya-logo',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <svg width="139" height="40" viewBox="0 0 139 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M0 0H10.5065V6.75772L29.7675 2.94574V11.7829L10.5065 15.5949V18.5407L29.7675 14.7287V23.5659L10.5065 27.3779V35.3488H0V0Z" [attr.fill]="fillColor" />

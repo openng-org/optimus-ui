@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'inputgroup-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, InputGroupModule, InputGroupAddonModule, InputTextModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-inputgroup>

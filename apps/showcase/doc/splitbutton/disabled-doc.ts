@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -26,6 +26,7 @@ import { RouterModule } from '@angular/router';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService]
 })
 export class DisabledDoc {

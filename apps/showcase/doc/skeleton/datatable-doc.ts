@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
     selector: 'data-table-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, SkeletonModule, TableModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Sample DataTable implementation using different Skeleton components and Tailwind CSS utilities.</p>

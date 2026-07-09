@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
     selector: 'filter-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, SelectModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Select provides built-in filtering that is enabled by adding the <i>filter</i> property.</p>

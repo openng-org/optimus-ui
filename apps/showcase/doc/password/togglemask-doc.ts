@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'toggle-mask-doc',
     standalone: true,
     imports: [FormsModule, PasswordModule, AppCode, AppDocSectionText, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>toggleMask</i> is present, an icon is displayed to show the value as plain text.</p>

@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
@@ -9,6 +9,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, ConfirmDialogModule],
     providers: [ConfirmationService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-confirmdialog [style]="{ width: '25rem' }" maskStyleClass="relative! rounded-4xl!" styleClass="relative!" [draggable]="false" appendTo="self" [autoZIndex]="false" [baseZIndex]="2" [modal]="false"></p-confirmdialog>

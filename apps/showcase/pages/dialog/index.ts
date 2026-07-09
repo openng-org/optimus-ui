@@ -9,12 +9,13 @@ import { PTComponent } from '@/doc/dialog/pt/PTComponent';
 import { ResponsiveDoc } from '@/doc/dialog/responsive-doc';
 import { TemplateDoc } from '@/doc/dialog/template-doc';
 import { WithoutModalDoc } from '@/doc/dialog/withoutmodal-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Dialog Component"

@@ -1,6 +1,6 @@
 import { GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Component, inject, input, OnInit, PLATFORM_ID } from '@angular/core';
+import { Component, inject, input, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem, MessageService } from 'primeng/api';
 import { SplitButtonModule } from 'primeng/splitbutton';
@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
     standalone: true,
     imports: [CommonModule, SplitButtonModule, ToastModule],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toast position="top-right" />
         <p-splitbutton label="Copy Markdown" icon="pi pi-copy" severity="secondary" outlined [model]="menuItems" (onClick)="copyMarkdown()" appendTo="body" [menuStyleClass]="'min-w-56'" />

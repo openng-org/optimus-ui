@@ -14,7 +14,7 @@ import { ButtonModule } from 'primeng/button';
                         <div class="flex-1 border border-surface rounded-xl lg:rounded-2xl p-5 min-w-72">
                             <span class="text-surface-600 dark:text-surface-400 font-semibold text-sm">{{ licenseData?.title }}</span>
                             <div class="text-surface-900 dark:text-surface-0 text-4xl font-semibold mt-4 mb-5">
-                                <span [ngClass]="{ 'text-muted-color line-through mr-4': license?.showDiscount }">{{ licenseData?.price }}</span>
+                                <span [ngClass]="{ 'text-muted-color line-through mr-4': $safeNavigationMigration(license?.showDiscount) }">{{ licenseData?.price }}</span>
                                 @if (license?.showDiscount) {
                                     <span>{{ licenseData?.discount_price }}</span>
                                 }
@@ -34,7 +34,7 @@ import { ButtonModule } from 'primeng/button';
                 @if (license.documentLink) {
                     <p class="text-muted-color text-center mt-5 mb-0 text-sm">
                         Visit the
-                        <a [href]="license?.documentLink" class="text-primary cursor-pointer transition-all hover:underline" target="_blank"> official documentation </a>
+                        <a [href]="$safeNavigationMigration(license?.documentLink)" class="text-primary cursor-pointer transition-all hover:underline" target="_blank"> official documentation </a>
                         for more information.
                     </p>
                 }

@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { StepperModule } from 'primeng/stepper';
 
@@ -8,6 +8,7 @@ import { StepperModule } from 'primeng/stepper';
     selector: 'stepper-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, StepperModule, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-stepper [value]="1" class="basis-200">

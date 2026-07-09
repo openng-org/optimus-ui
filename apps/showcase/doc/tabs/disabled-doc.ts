@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { TabsModule } from 'primeng/tabs';
     selector: 'disabled-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TabsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Enabling <i>disabled</i> property of a Tab prevents user interaction.</p>

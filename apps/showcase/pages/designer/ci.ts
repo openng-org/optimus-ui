@@ -8,11 +8,12 @@ import { GitLabDoc } from '@/doc/designer/ci/integration/gitlab-doc';
 import { LivePreviewDoc } from '@/doc/designer/ci/livepreview-doc';
 import { OverviewDoc } from '@/doc/designer/ci/overview-doc';
 import { VideoTutorialDoc } from '@/doc/designer/ci/videotutorial-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDocSection, AppDocSectionNav],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="doc">
         <div class="doc-main">
             <div class="doc-notification">

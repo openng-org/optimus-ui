@@ -181,7 +181,7 @@ import type { Table } from './table';
             <ng-container *ngTemplateOutlet="dataTable.emptyMessageTemplate(); context: bodyContext()"></ng-container>
         }
     `,
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
     host: {
         '[attr.data-p]': 'dataP()'

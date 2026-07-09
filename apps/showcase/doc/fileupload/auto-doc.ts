@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -27,6 +27,7 @@ interface UploadEvent {
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService]
 })
 export class AutoDoc {

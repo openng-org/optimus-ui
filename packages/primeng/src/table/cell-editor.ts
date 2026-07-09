@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, contentChild, inject, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, contentChild, inject, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { EditableColumn } from './editable-column';
 import { EditableRow } from './editable-row';
@@ -18,6 +18,7 @@ import type { Table } from './table';
             <ng-container *ngTemplateOutlet="_outputTemplate()"></ng-container>
         }
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None
 })
 export class CellEditor extends BaseComponent {

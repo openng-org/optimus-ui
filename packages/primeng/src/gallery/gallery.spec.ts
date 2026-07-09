@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { GalleryModule, Gallery } from './gallery';
 import { GalleryItem } from './gallery-item';
 import { GalleryPrev } from './gallery-prev';
@@ -23,6 +23,7 @@ import { GalleryThumbnailItem } from './gallery-thumbnail-item';
 @Component({
     standalone: true,
     imports: [GalleryModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-gallery [(activeIndex)]="activeIndex" (onActiveIndexChange)="onIndexChange($event)">
             <p-gallery-backdrop></p-gallery-backdrop>

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroupAddon } from './inputgroupaddon';
@@ -8,6 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [InputGroupAddon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputgroup-addon>
             <i class="pi pi-user"></i>
@@ -19,6 +20,7 @@ class TestBasicInputGroupAddonComponent {}
 @Component({
     standalone: true,
     imports: [InputGroupAddon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-inputgroup-addon [style]="addonStyle" [class]="addonClass"> $ </p-inputgroup-addon> `
 })
 class TestStyledInputGroupAddonComponent {

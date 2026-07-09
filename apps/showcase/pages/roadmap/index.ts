@@ -1,19 +1,20 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
     standalone: true,
     imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <div class="doc-intro">
                 <h1>Roadmap</h1>
                 <p>
-                    At <a href="https://www.primetek.com.tr/" target="_blank" rel="noopener noreferrer" class="text-primary font-medium hover:underline">PrimeTek</a>, we are passionate about improving {{ PROJECT_NAME }} and would like to share our ideas for
-                    2026 (Year 10) with the community. These are planned to be implemented in parallel to the regular maintenance work of the library involving review of issue tickets, PRs, LTS updates and {{ PROJECT_NAME }} PRO support. Based on semantic
-                    versioning guidelines, {{ PROJECT_NAME }} updates will be backward compatible with a clear migration path when necessary.
+                    At <a href="https://www.primetek.com.tr/" target="_blank" rel="noopener noreferrer" class="text-primary font-medium hover:underline">PrimeTek</a>, we are passionate about improving {{ PROJECT_NAME }} and would like to share our
+                    ideas for 2026 (Year 10) with the community. These are planned to be implemented in parallel to the regular maintenance work of the library involving review of issue tickets, PRs, LTS updates and {{ PROJECT_NAME }} PRO support.
+                    Based on semantic versioning guidelines, {{ PROJECT_NAME }} updates will be backward compatible with a clear migration path when necessary.
                 </p>
             </div>
 

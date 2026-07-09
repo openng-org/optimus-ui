@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IftaLabel } from './iftalabel';
@@ -8,6 +8,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [IftaLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iftalabel>
             <input id="username" [(ngModel)]="value" />
@@ -22,6 +23,7 @@ class TestBasicIftaLabelComponent {
 @Component({
     standalone: true,
     imports: [IftaLabel, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iftalabel>
             <input id="email" type="email" [(ngModel)]="email" />

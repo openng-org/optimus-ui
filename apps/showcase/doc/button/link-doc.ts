@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
     selector: 'link-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, ButtonModule, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A button can be rendered as a link when <i>link</i> property is present, while the <i>pButton</i> directive can be applied on an anchor element to style the link as a button.</p>

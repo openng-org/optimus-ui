@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Car } from '@/domain/car';
 import { CarService } from '@/service/carservice';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FilterMatchMode, FilterService, SelectItem } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 
@@ -42,6 +42,7 @@ import { TableModule } from 'primeng/table';
             <app-code [extFiles]="['Product', 'Car']"></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [FilterService]
 })
 export class TableIntegrationDoc implements OnInit {

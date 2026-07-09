@@ -6,7 +6,7 @@ import { UsageDoc } from '@/doc/timeline/usage-doc';
 import { OppositeDoc } from '@/doc/timeline/opposite-doc';
 import { TemplateDoc } from '@/doc/timeline/template-doc';
 import { PTComponent } from '@/doc/timeline/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -22,6 +22,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './timelinedemo.scss'
 })
 export class TimelineDemo {

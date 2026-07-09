@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'template-doc',
     standalone: true,
     imports: [CommonModule, FormsModule, AppDocSectionText, AppCode, AppDemoWrapper, StepperModule, ButtonModule, PasswordModule, ToggleButtonModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Stepper provides various templating options to customize the default UI design.</p>

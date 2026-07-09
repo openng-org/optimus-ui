@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'dialog-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, DialogModule, ButtonModule, InputTextModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-dialog [(visible)]="visible" header="Edit Profile" [maximizable]="true" maskStyleClass="relative!" [draggable]="false" class="my-auto! w-full">

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'login-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, ButtonModule, DividerModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Sample implementation of a login form using a divider with content.</p>

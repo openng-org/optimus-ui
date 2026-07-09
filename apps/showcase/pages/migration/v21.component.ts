@@ -4,11 +4,12 @@ import { BreakingDoc } from '@/doc/migration/v21/breakingdoc';
 import { DeprecationsDoc } from '@/doc/migration/v21/deprecationsdoc';
 import { RemovalsDoc } from '@/doc/migration/v21/removalsdoc';
 import { WhatsNewDoc } from '@/doc/migration/v21/whatsnewdoc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     imports: [AppDoc],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc docTitle="Migration - {{ PROJECT_NAME }} v21" header="Migration to v21" description="Migration guide to {{ PROJECT_NAME }} v21." [docs]="docs" docType="page"></app-doc>`
 })
 export class v21MigrationDemoComponent {

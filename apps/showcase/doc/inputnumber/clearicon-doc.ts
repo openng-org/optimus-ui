@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -10,6 +10,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     selector: 'clear-icon-doc',
     standalone: true,
     imports: [FormsModule, RouterModule, InputNumberModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>showClear</i> is enabled, a clear icon is displayed to clear the value.</p>

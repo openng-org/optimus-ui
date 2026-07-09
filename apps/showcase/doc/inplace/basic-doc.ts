@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { InplaceModule } from 'primeng/inplace';
 
 @Component({
     selector: 'basic-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, InplaceModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p><i>Inplace</i> component requires <i>display</i> and <i>content</i> templates to define the content of each state.</p>

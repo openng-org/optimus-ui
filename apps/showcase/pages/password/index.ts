@@ -16,7 +16,7 @@ import { ToggleMaskDoc } from '@/doc/password/togglemask-doc';
 import { FluidDoc } from '@/doc/password/fluid-doc';
 import { ClearIconDoc } from '@/doc/password/clearicon-doc';
 import { PTComponent } from '@/doc/password/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -31,6 +31,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class PasswordDemo {

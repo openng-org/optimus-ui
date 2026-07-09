@@ -1,12 +1,13 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommandMenuModule } from 'primeng/commandmenu';
 
 @Component({
     selector: 'commandmenu-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, CommandMenuModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-commandmenu [options]="commands" optionLabel="label" optionValue="value" [group]="true" optionGroupLabel="group" optionGroupChildren="items" placeholder="Search for commands...">

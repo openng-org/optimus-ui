@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
@@ -13,6 +13,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'button-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, InputGroupModule, InputGroupAddonModule, InputTextModule, ButtonModule, MenuModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Buttons can be placed at either side of an input element.</p>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, ViewChild, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { ContextMenu } from './contextmenu';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-contextmenu
             [model]="model"
@@ -57,6 +58,7 @@ class TestBasicContextMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-target-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div #targetDiv id="target-div">Target Element</div>
         <p-contextmenu [model]="model" target="targetDiv"></p-contextmenu>
@@ -74,6 +76,7 @@ class TestTargetContextMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-global-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-contextmenu [model]="model" [global]="true"></p-contextmenu> `
 })
 class TestGlobalContextMenuComponent {
@@ -82,6 +85,7 @@ class TestGlobalContextMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-contextmenu [model]="nestedModel">
             <ng-template #item let-item>
@@ -109,6 +113,7 @@ class TestItemTemplateContextMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-contextmenu [model]="model">
             <ng-template #submenuicon>
@@ -129,6 +134,7 @@ class TestSubmenuIconTemplateComponent {
 @Component({
     standalone: false,
     selector: 'test-router-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-contextmenu [model]="routerModel"></p-contextmenu> `
 })
 class TestRouterContextMenuComponent {
@@ -146,6 +152,7 @@ class TestRouterContextMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-styled-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-contextmenu [style]="customStyle" styleClass="custom-contextmenu"></p-contextmenu> `
 })
 class TestStyledContextMenuComponent {
@@ -159,6 +166,7 @@ class TestStyledContextMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-minimal-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-contextmenu></p-contextmenu>`
 })
 class TestMinimalContextMenuComponent {}
@@ -166,6 +174,7 @@ class TestMinimalContextMenuComponent {}
 @Component({
     standalone: false,
     selector: 'test-dynamic-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-contextmenu [model]="dynamicModel"></p-contextmenu> `
 })
 class TestDynamicContextMenuComponent {
@@ -187,6 +196,7 @@ class TestDynamicContextMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-items-contextmenu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-contextmenu [model]="disabledModel"></p-contextmenu> `
 })
 class TestDisabledItemsComponent {
@@ -196,6 +206,7 @@ class TestDisabledItemsComponent {
 @Component({
     standalone: true,
     selector: 'test-target-component',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: '<div>Target Page</div>'
 })
 class TestTargetComponent {}

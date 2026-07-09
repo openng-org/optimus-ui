@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { Drawer } from './drawer';
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer
             [(visible)]="visible"
@@ -79,6 +80,7 @@ class TestDrawerBasicComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible" [header]="header">
             <ng-template #header>
@@ -104,6 +106,7 @@ class TestDrawerTemplatesComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible">
             <ng-template #header>
@@ -128,6 +131,7 @@ class TestDrawerTemplateRefsComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible">
             <ng-template #headless>
@@ -147,6 +151,7 @@ class TestDrawerHeadlessComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible" [position]="position">
             <p>Position test content</p>
@@ -161,6 +166,7 @@ class TestDrawerPositionComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible" [fullScreen]="fullScreen">
             <p>Full screen test content</p>
@@ -175,6 +181,7 @@ class TestDrawerFullScreenComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible" [modal]="modal" [dismissible]="dismissible">
             <p>Modal test content</p>
@@ -190,6 +197,7 @@ class TestDrawerModalComponent {
 @Component({
     standalone: false,
     imports: [Drawer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-drawer [(visible)]="visible" [closable]="closable" [closeOnEscape]="closeOnEscape" [ariaCloseLabel]="ariaCloseLabel">
             <p>Accessibility test content</p>

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
 import { AppCode } from '@/components/doc/app.code';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
     selector: 'life-doc',
     standalone: true,
     imports: [MessageModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Messages can disappear automatically by defined the <i>life</i> in milliseconds.</p>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
@@ -15,6 +15,7 @@ interface Country {
     selector: 'template-doc',
     standalone: true,
     imports: [FormsModule, MultiSelectModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Available options and the selected options support customization with <i>item</i> and <i>selecteditems</i> templates respectively. In addition, header, footer and filter sections can be templated as well.</p>

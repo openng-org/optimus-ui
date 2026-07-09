@@ -6,11 +6,12 @@ import { UsageDoc } from '@/doc/chip/usage-doc';
 import { TemplateDoc } from '@/doc/chip/template-doc';
 import { PTComponent } from '@/doc/chip/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc docTitle="Angular Chip Component" header="Chip" description="Chip represents entities using icons, labels and images." [docs]="docs" [heroDoc]="heroDoc" [apiDocs]="['Chip']" [ptDocs]="ptComponent" themeDocs="chip"></app-doc>
     `

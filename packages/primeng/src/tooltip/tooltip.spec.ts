@@ -1,4 +1,4 @@
-import { Component, ElementRef, TemplateRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { Tooltip } from './tooltip';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input
             #inputElement
@@ -56,6 +57,7 @@ class TestBasicTooltipComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <input #templateElement [pTooltip]="tooltipTemplate" type="text" placeholder="Template tooltip" />
         <ng-template #tooltipTemplate>
@@ -73,6 +75,7 @@ class TestTemplateTooltipComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <button #buttonElement pTooltip="Button tooltip" [tooltipOptions]="options" type="button">Click me</button> `
 })
 class TestTooltipOptionsComponent {

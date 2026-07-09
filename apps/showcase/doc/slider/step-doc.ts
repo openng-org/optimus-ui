@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -9,6 +9,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'step-doc',
     standalone: true,
     imports: [FormsModule, SliderModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Size of each movement is defined with the <i>step</i> property.</p>

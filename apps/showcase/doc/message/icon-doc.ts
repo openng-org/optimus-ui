@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 import { MessageModule } from 'primeng/message';
 
@@ -9,6 +9,7 @@ import { MessageModule } from 'primeng/message';
     selector: 'icon-doc',
     standalone: true,
     imports: [MessageModule, AvatarModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The icon of a message is specified with the <i>icon</i> property.</p>

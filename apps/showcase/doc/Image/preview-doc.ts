@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ImageModule } from 'primeng/image';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'preview-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, ImageModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Preview mode displays a modal layer when the image is clicked that provides transformation options such as rotating and zooming.</p>

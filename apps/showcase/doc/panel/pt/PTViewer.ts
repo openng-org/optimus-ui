@@ -1,12 +1,13 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PanelModule } from 'primeng/panel';
 
 @Component({
     selector: 'panel-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, PanelModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-panel header="Header" toggleable>

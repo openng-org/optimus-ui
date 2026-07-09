@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TabsModule } from 'primeng/tabs';
 import { FieldsetModule } from 'primeng/fieldset';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { AppConfigService } from '@/service/appconfigservice';
     selector: 'design-component',
     standalone: true,
     imports: [CommonModule, FieldsetModule, TabsModule, DesignComponentSection],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<section class="flex flex-col gap-3">
         <div class="text-base font-semibold capitalize mb-2">{{ componentKey() }}</div>
         <p-fieldset legend="Common" [toggleable]="true">

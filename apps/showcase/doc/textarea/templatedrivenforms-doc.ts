@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
     selector: 'template-driven-forms-doc',
     standalone: true,
     imports: [CommonModule, FormsModule, AppCode, AppDocSectionText, AppDemoWrapper, ButtonModule, MessageModule, TextareaModule, ToastModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext> </app-docsectiontext>
         <p-toast />

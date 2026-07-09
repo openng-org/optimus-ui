@@ -1,5 +1,5 @@
 import { CountryService } from '@/service/countryservice';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
@@ -17,6 +17,7 @@ interface AutoCompleteCompleteEvent {
     selector: 'template-doc',
     standalone: true,
     imports: [CommonModule, FormsModule, AutoCompleteModule, ButtonModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>AutoComplete offers multiple templates for customization through templating.</p>
         </app-docsectiontext>

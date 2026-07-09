@@ -3,7 +3,7 @@ import { DataTableDoc } from '@/doc/dragdrop/datatable-doc';
 import { DragHandleDoc } from '@/doc/dragdrop/draghandle-doc';
 import { DropIndicatorDoc } from '@/doc/dragdrop/dropindicator-doc';
 import { UsageDoc } from '@/doc/dragdrop/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -17,6 +17,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
         [apiDocs]="['DragDrop']"
     ></app-doc>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./dragdropdemo.scss']
 })
 export class DragDropDemo {

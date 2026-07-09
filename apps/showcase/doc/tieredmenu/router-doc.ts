@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -10,6 +10,7 @@ import { TieredMenuModule } from 'primeng/tieredmenu';
     selector: 'router-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TieredMenuModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Menu items support navigation via routerLink, programmatic routing using commands, or external URLs.</p>

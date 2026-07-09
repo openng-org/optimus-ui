@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -14,6 +14,7 @@ interface City {
     selector: 'sizes-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, FormsModule, SelectModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Select provides <i>small</i> and <i>large</i> sizes as alternatives to the base.</p>

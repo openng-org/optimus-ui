@@ -9,7 +9,7 @@ import { SizesDoc } from '@/doc/radiobutton/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/radiobutton/templatedrivenforms-doc';
 import { UsageDoc } from '@/doc/radiobutton/usage-doc';
 import { PTComponent } from '@/doc/radiobutton/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 import { AppDocService } from '@/components/doc/app.doc.service';
 @Component({
@@ -24,6 +24,7 @@ import { AppDocService } from '@/components/doc/app.doc.service';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class RadioButtonDemo {

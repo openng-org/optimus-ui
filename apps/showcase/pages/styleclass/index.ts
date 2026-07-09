@@ -2,7 +2,7 @@ import { AnimationDoc } from '@/doc/styleclass/animation-doc';
 import { HideOnResizeDoc } from '@/doc/styleclass/hideonresize-doc';
 import { ToggleClassDoc } from '@/doc/styleclass/toggleclass-doc';
 import { UsageDoc } from '@/doc/styleclass/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -15,6 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [apiDocs]="['StyleClass']"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class StyleClassDemo {

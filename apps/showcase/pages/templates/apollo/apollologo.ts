@@ -1,5 +1,5 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
@@ -26,6 +26,7 @@ import { Component, inject } from '@angular/core';
             />
         </svg>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         class: 'h-8 lg:h-10 [&>svg]:h-full [&>svg]:w-auto select-none'
     }

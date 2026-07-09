@@ -8,7 +8,7 @@ import { ListDoc } from '@/doc/icons/list-doc';
 import { SizeDoc } from '@/doc/icons/size-doc';
 import { SpinDoc } from '@/doc/icons/spin-doc';
 import { UsageDoc } from '@/doc/icons/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -24,6 +24,7 @@ import { AppDoc } from '@/components/doc/app.doc';
             docType="page"
         ></app-doc>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./iconsdemo.component.scss']
 })
 export class IconsDemo {

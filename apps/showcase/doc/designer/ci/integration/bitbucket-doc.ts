@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'bitbucket-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, RouterModule, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>The BitBucket integration is implemented by executing a custom pipe whenever the tokens file changes.</p>
         <h4>1. Add Secret Key to Repository Secrets</h4>

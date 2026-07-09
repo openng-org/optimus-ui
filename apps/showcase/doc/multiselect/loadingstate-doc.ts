@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ interface City {
     selector: 'loading-state-doc',
     standalone: true,
     imports: [FormsModule, MultiSelectModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Loading state can be used <i>loading</i> property.</p>

@@ -6,7 +6,7 @@ import { LoadingDoc } from '@/doc/dataview/loading-doc';
 import { PaginationDoc } from '@/doc/dataview/pagination-doc';
 import { SortingDoc } from '@/doc/dataview/sorting-doc';
 import { PTComponent } from '@/doc/dataview/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -24,6 +24,7 @@ import { AppDoc } from '@/components/doc/app.doc';
             themeDocs="dataview"
         ></app-doc>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./dataviewdemo.scss']
 })
 export class DataViewDemo {

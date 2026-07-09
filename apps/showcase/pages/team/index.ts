@@ -1,10 +1,11 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <div class="doc-intro">

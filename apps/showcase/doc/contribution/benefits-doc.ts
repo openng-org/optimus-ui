@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -7,6 +7,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'benefits-doc',
     standalone: true,
     imports: [RouterModule, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

@@ -1,6 +1,6 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ScrollerOptions, SelectItem } from 'primeng/api';
 import { SelectModule } from 'primeng/select';
@@ -9,6 +9,7 @@ import { SelectModule } from 'primeng/select';
     selector: 'lazy-virtual-scroll-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, FormsModule, SelectModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-demo-wrapper>
             <div class="flex justify-center">

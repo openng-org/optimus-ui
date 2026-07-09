@@ -20,7 +20,7 @@ import { ItemWithoutThumbnailsDoc } from '@/doc/galleria/navigator/itemwithoutth
 import { PTComponent } from '@/doc/galleria/pt/PTComponent';
 import { ResponsiveDoc } from '@/doc/galleria/responsive-doc';
 import { ThumbnailDoc } from '@/doc/galleria/thumbnail-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `
@@ -37,6 +37,7 @@ import { Component } from '@angular/core';
     `,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './galleriademo.scss'
 })
 export class GalleriaDemo {

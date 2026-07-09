@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { PhotoService } from '@/service/photoservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, model, OnInit } from '@angular/core';
+import { Component, inject, model, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { GalleriaModule } from 'primeng/galleria';
 
 @Component({
@@ -23,6 +23,7 @@ import { GalleriaModule } from 'primeng/galleria';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [PhotoService]
 })
 export class ItemWithoutThumbnailsDoc implements OnInit {

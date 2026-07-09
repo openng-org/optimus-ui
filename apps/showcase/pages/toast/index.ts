@@ -11,7 +11,7 @@ import { SeverityDoc } from '@/doc/toast/severity-doc';
 import { StackDoc } from '@/doc/toast/stack-doc';
 import { StickyDoc } from '@/doc/toast/sticky-doc';
 import { TemplateDoc } from '@/doc/toast/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -25,6 +25,7 @@ import { Component } from '@angular/core';
         themeDocs="toast"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ToastDemo {

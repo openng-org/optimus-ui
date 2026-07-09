@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { ScrollPanel } from './scrollpanel';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrollpanel [step]="step" style="width: 400px; height: 200px;">
             <div class="content-div" style="width: 800px; height: 600px; padding: 20px;">
@@ -23,6 +24,7 @@ class TestScrollPanelComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrollpanel style="width: 300px; height: 150px;">
             <ng-template #content>
@@ -38,6 +40,7 @@ class TestTemplateScrollPanelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrollpanel style="width: 280px; height: 120px;">
             <ng-template #content>
@@ -53,6 +56,7 @@ class TestContentTemplateScrollPanelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrollpanel style="width: 250px; height: 100px;">
             <div style="width: 100px; height: 50px;">Small content - no scrollbars needed</div>
@@ -63,6 +67,7 @@ class TestNoScrollScrollPanelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrollpanel [pt]="pt" style="width: 400px; height: 200px;">
             <div style="width: 800px; height: 600px; padding: 20px;">

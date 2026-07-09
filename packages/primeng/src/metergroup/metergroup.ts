@@ -13,6 +13,7 @@ const METERGROUP_INSTANCE = new InjectionToken<MeterGroup>('METERGROUP_INSTANCE'
     selector: 'p-metergrouplabel',
     standalone: true,
     imports: [NgTemplateOutlet, SharedModule, Bind],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <ol [class]="cx('labelList')" [pBind]="ptm('labelList')" [attr.data-p]="dataP()">
             @for (labelItem of value(); track labelItem) {

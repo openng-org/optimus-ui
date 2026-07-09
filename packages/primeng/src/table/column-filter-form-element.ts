@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, numberAttribute, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, numberAttribute, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FilterMetadata } from 'primeng/api';
 import { BaseComponent } from 'primeng/basecomponent';
@@ -30,7 +30,7 @@ import type { Table } from './table';
                         [ariaLabel]="ariaLabel()"
                         pInputText
                         [pt]="ptm('pcFilterInputText')"
-                        [value]="filterConstraint()?.value"
+                        [value]="$safeNavigationMigration(filterConstraint()?.value)"
                         (input)="onModelChange($event.target.value)"
                         (keydown.enter)="onTextInputEnterKeyDown($event)"
                         [attr.placeholder]="placeholder()"
@@ -39,7 +39,7 @@ import type { Table } from './table';
                 }
                 @case ('numeric') {
                     <p-input-number
-                        [ngModel]="filterConstraint()?.value"
+                        [ngModel]="$safeNavigationMigration(filterConstraint()?.value)"
                         (ngModelChange)="onModelChange($event)"
                         (onKeyDown)="onNumericInputKeyDown($event)"
                         [showButtons]="showButtons()"
@@ -60,16 +60,32 @@ import type { Table } from './table';
                     />
                 }
                 @case ('boolean') {
-                    <p-checkbox [pt]="ptm('pcFilterCheckbox')" [indeterminate]="filterConstraint()?.value === null" [binary]="true" [ngModel]="filterConstraint()?.value" (ngModelChange)="onModelChange($event)" [unstyled]="unstyled()" />
+                    <p-checkbox
+                        [pt]="ptm('pcFilterCheckbox')"
+                        [indeterminate]="$safeNavigationMigration(filterConstraint()?.value) === null"
+                        [binary]="true"
+                        [ngModel]="$safeNavigationMigration(filterConstraint()?.value)"
+                        (ngModelChange)="onModelChange($event)"
+                        [unstyled]="unstyled()"
+                    />
                 }
                 @case ('date') {
-                    <p-datepicker [pt]="ptm('pcFilterDatePicker')" [ariaLabel]="ariaLabel()" [placeholder]="placeholder()" [ngModel]="filterConstraint()?.value" (ngModelChange)="onModelChange($event)" appendTo="body" [unstyled]="unstyled()" />
+                    <p-datepicker
+                        [pt]="ptm('pcFilterDatePicker')"
+                        [ariaLabel]="ariaLabel()"
+                        [placeholder]="placeholder()"
+                        [ngModel]="$safeNavigationMigration(filterConstraint()?.value)"
+                        (ngModelChange)="onModelChange($event)"
+                        appendTo="body"
+                        [unstyled]="unstyled()"
+                    />
                 }
             }
         }
     `,
     providers: [TableStyle],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class ColumnFilterFormElement extends BaseComponent<ColumnFilterPassThrough> {

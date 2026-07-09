@@ -4,7 +4,7 @@ import { TemplateFeatures } from '@/components/template/templatefeatures';
 import { TemplateFeaturesAnimation } from '@/components/template/templatefeaturesanimation/templatefeaturesanimation';
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AvalonLogo } from './avalonlogo';
 import { AvalonSeparator } from './avalonseparator';
 
@@ -12,6 +12,7 @@ import { AvalonSeparator } from './avalonseparator';
     standalone: true,
     selector: 'avalon-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, TemplateLicense, AvalonSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="avalon template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="avalonLogo"></template-hero>
         <avalon-separator></avalon-separator>

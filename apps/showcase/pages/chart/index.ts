@@ -13,12 +13,13 @@ import { RadarDoc } from '@/doc/chart/radar-doc';
 import { StackedBarDoc } from '@/doc/chart/stackedbar-doc';
 import { UsageDoc } from '@/doc/chart/usage-doc';
 import { VerticalBarDoc } from '@/doc/chart/verticalbar-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 import { PTComponent } from '@/doc/chart/pt/PTComponent';
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Chart Component"

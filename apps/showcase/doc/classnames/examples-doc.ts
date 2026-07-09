@@ -2,13 +2,14 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ClassNamesModule } from 'primeng/classnames';
 
 @Component({
     selector: 'examples-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, ClassNamesModule, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { ConfirmDialog } from './confirmdialog';
 // Basic ConfirmDialog Component Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmdialog
             [header]="header"
@@ -89,6 +90,7 @@ class TestBasicConfirmDialogComponent {
 // ConfirmDialog with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmdialog>
             <ng-template #header>
@@ -135,6 +137,7 @@ class TestTemplatePConfirmDialogComponent {}
 // ConfirmDialog with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmdialog>
             <ng-template #header>
@@ -180,6 +183,7 @@ class TestContentTemplateConfirmDialogComponent {}
 // ConfirmDialog Position Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-confirmdialog [position]="position" [visible]="visible"> </p-confirmdialog> `
 })
 class TestPositionConfirmDialogComponent {
@@ -194,6 +198,7 @@ class TestPositionConfirmDialogComponent {
         <p-confirmdialog></p-confirmdialog>
         <button (click)="confirm()" class="confirm-btn">Confirm</button>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ConfirmationService]
 })
 class TestConfirmationServiceComponent {
@@ -229,6 +234,7 @@ class TestConfirmationServiceComponent {
 // ConfirmDialog Accessibility Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-confirmdialog [visible]="true" [acceptAriaLabel]="acceptAriaLabel" [rejectAriaLabel]="rejectAriaLabel" [closeAriaLabel]="closeAriaLabel" header="Accessibility Test" message="Test message"> </p-confirmdialog> `
 })
 class TestAccessibilityConfirmDialogComponent {
@@ -240,6 +246,7 @@ class TestAccessibilityConfirmDialogComponent {
 // ConfirmDialog Button Properties Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-confirmdialog
             [visible]="visible"
@@ -266,6 +273,7 @@ class TestButtonPropertiesComponent {
 // ConfirmDialog Events Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-confirmdialog [visible]="visible" (onHide)="onHide($event)"> </p-confirmdialog> `
 })
 class TestEventsConfirmDialogComponent {

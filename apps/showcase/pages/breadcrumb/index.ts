@@ -5,11 +5,12 @@ import { RouterDoc } from '@/doc/breadcrumb/router-doc';
 import { TemplateDoc } from '@/doc/breadcrumb/template-doc';
 import { PTComponent } from '@/doc/breadcrumb/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Breadcrumb Component"

@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { ButtonModule } from 'primeng/button';
 
@@ -7,11 +7,12 @@ import { ButtonModule } from 'primeng/button';
     selector: 'llmstxt-doc',
     standalone: true,
     imports: [AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>
-                The <a href="https://llmstxt.org/" target="_blank" rel="noopener noreferrer">llms.txt</a> file is an industry standard that helps AI models better understand and navigate the {{ PROJECT_NAME }} documentation. It lists key pages in a structured
-                format, making it easier for LLMs to retrieve relevant information.
+                The <a href="https://llmstxt.org/" target="_blank" rel="noopener noreferrer">llms.txt</a> file is an industry standard that helps AI models better understand and navigate the {{ PROJECT_NAME }} documentation. It lists key pages in a
+                structured format, making it easier for LLMs to retrieve relevant information.
             </p>
             <a href="/llms/llms.txt" target="_blank">
                 <p-button label="Open llms.txt" />

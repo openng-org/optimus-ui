@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PickListModule } from 'primeng/picklist';
 
 @Component({
@@ -11,6 +11,7 @@ import { PickListModule } from 'primeng/picklist';
     standalone: true,
     imports: [PickListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

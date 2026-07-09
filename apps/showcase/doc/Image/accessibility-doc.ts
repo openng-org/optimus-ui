@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -6,6 +6,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'accessibility-doc',
     standalone: true,
     imports: [AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
         <h3>Screen Reader</h3>
         <p>The preview button is a native <i>button</i> element with an <i>aria-label</i> that refers to the <i>aria.zoomImage</i> property of the <a href="/configuration/#locale">locale</a> API by default.</p>

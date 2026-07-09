@@ -9,7 +9,7 @@ import { PhotoService } from '@/service/photoservice';
 import { ProductService } from '@/service/productservice';
 import { DOCUMENT, IMAGE_CONFIG } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { afterNextRender, Component, Inject, PLATFORM_ID, Renderer2 } from '@angular/core';
+import { afterNextRender, Component, Inject, PLATFORM_ID, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
@@ -18,6 +18,7 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
     template: `<router-outlet></router-outlet> <app-designer />`,
     standalone: true,
     imports: [RouterOutlet, FormsModule, ReactiveFormsModule, HttpClientModule, AppDesigner],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [
         CarService,
         CountryService,

@@ -1,7 +1,7 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { DesignerService } from '@/service/designerservice';
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { ChartModule } from 'primeng/chart';
@@ -11,6 +11,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'polar-area-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText, ChartModule, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Polar area charts are similar to pie charts, but each segment has the same angle - the radius of the segment differs depending on the value.</p>

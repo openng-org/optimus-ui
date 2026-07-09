@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, ElementRef, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, ElementRef, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MotionOptions } from '@primeuix/motion';
 import { isNotEmpty, resolve } from '@primeuix/utils';
@@ -170,7 +170,7 @@ import { PANELMENU_INSTANCE, PANELMENUSUB_INSTANCE } from './panelmenu-token';
                                 pPanelMenuSub
                                 [id]="getItemId(processedItem) + '_list'"
                                 [panelId]="panelId()"
-                                [items]="processedItem?.items"
+                                [items]="$safeNavigationMigration(processedItem?.items)"
                                 [itemTemplate]="itemTemplate()"
                                 [focusedItemId]="focusedItemId()"
                                 [activeItemPath]="activeItemPath()"
@@ -199,6 +199,7 @@ import { PANELMENU_INSTANCE, PANELMENUSUB_INSTANCE } from './panelmenu-token';
         '(focusout)': 'menuBlur.emit($event)',
         '(keydown)': 'menuKeyDown.emit($event)'
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class PanelMenuSub extends BaseComponent {

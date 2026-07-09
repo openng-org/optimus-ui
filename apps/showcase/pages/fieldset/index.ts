@@ -5,11 +5,12 @@ import { UsageDoc } from '@/doc/fieldset/usage-doc';
 import { PTComponent } from '@/doc/fieldset/pt/PTComponent';
 import { TemplateDoc } from '@/doc/fieldset/template-doc';
 import { ToggleableDoc } from '@/doc/fieldset/toggleable-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Fieldset Component"

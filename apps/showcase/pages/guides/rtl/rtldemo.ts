@@ -1,13 +1,14 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { ConfigurationDoc } from '@/doc/guides/rtl/configuration-doc';
 import { LimitationsDoc } from '@/doc/guides/rtl/limitations-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     selector: 'rtl-demo',
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc title="RTL Support" header="RTL Support" description="Right-to-left direction support of {{ PROJECT_NAME }}." [docs]="docs" docType="page"></app-doc>`
 })
 export class RTLDemoComponent {

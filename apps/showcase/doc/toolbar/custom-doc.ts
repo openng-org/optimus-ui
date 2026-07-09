@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -10,6 +10,7 @@ import { AvatarModule } from 'primeng/avatar';
     selector: 'custom-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, ToolbarModule, ButtonModule, AvatarModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Content can also be placed using the <i>start</i>, <i>center</i> and <i>end</i> templates.</p>

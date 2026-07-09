@@ -4,11 +4,12 @@ import { AdvancedDoc } from '@/doc/card/advanced-doc';
 import { BasicDoc } from '@/doc/card/basic-doc';
 import { UsageDoc } from '@/doc/card/usage-doc';
 import { PTComponent } from '@/doc/card/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-doc docTitle="Angular Card Component" header="Card" description="Card is a flexible container component." [docs]="docs" [apiDocs]="['Card']" themeDocs="Card" [ptDocs]="ptComponent" [heroDoc]="heroDoc"></app-doc> `
 })
 export class CardDemo {

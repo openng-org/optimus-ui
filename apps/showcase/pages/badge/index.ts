@@ -7,11 +7,12 @@ import { SeverityDoc } from '@/doc/badge/severity-doc';
 import { SizeDoc } from '@/doc/badge/size-doc';
 import { PTComponent } from '@/doc/badge/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc docTitle="Angular Badge Component" header="Badge" description="Badge is a small status indicator for another element." [docs]="docs" [heroDoc]="heroDoc" [apiDocs]="['Badge']" [ptDocs]="ptComponent" themeDocs="Badge"></app-doc>
     `

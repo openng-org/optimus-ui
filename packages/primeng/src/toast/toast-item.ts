@@ -29,7 +29,7 @@ import { ToastStyle } from './style/toaststyle';
             (pMotionOnAfterLeave)="onAfterLeave($event)"
             [attr.id]="message()?.id"
             [pBind]="ptm('message')"
-            [class]="cn(cx('message'), message()?.styleClass)"
+            [class]="cn(cx('message'), $safeNavigationMigration(message()?.styleClass))"
             [style]="stackStyles()"
             (mouseenter)="onMouseEnter()"
             (mouseleave)="onMouseLeave()"
@@ -46,10 +46,10 @@ import { ToastStyle } from './style/toaststyle';
             @if (headlessTemplate()) {
                 <ng-container *ngTemplateOutlet="headlessTemplate(); context: headlessContext()"></ng-container>
             } @else {
-                <div [pBind]="ptm('messageContent')" [class]="cn(cx('messageContent'), message()?.contentStyleClass)">
+                <div [pBind]="ptm('messageContent')" [class]="cn(cx('messageContent'), $safeNavigationMigration(message()?.contentStyleClass))">
                     @if (!template()) {
                         @if (message()?.icon) {
-                            <span [pBind]="ptm('messageIcon')" [class]="cn(cx('messageIcon'), message()?.icon)"></span>
+                            <span [pBind]="ptm('messageIcon')" [class]="cn(cx('messageIcon'), $safeNavigationMigration(message()?.icon))"></span>
                         } @else {
                             @switch (message()?.severity) {
                                 @case ('success') {
@@ -92,7 +92,7 @@ import { ToastStyle } from './style/toaststyle';
                                 [attr.data-p]="dataP()"
                             >
                                 @if (message()?.closeIcon) {
-                                    <span [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), message()?.closeIcon)"></span>
+                                    <span [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), $safeNavigationMigration(message()?.closeIcon))"></span>
                                 } @else {
                                     <svg [pBind]="ptm('closeIcon')" data-p-icon="times" [class]="cx('closeIcon')" [attr.aria-hidden]="true" />
                                 }

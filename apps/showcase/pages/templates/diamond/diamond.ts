@@ -5,7 +5,7 @@ import { TemplateFeaturesAnimation } from '@/components/template/templatefeature
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
 import { TemplateYoutube } from '@/components/template/templateyoutube';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DiamondLogo } from './diamondlogo';
 import { DiamondSeparator } from './diamondseparator';
 
@@ -13,6 +13,7 @@ import { DiamondSeparator } from './diamondseparator';
     standalone: true,
     selector: 'diamond-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, TemplateYoutube, TemplateLicense, DiamondSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="diamond template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="diamondLogo"></template-hero>
         <diamond-separator></diamond-separator>

@@ -6,7 +6,7 @@ import { RouterDoc } from '@/doc/megamenu/router-doc';
 import { TemplateDoc } from '@/doc/megamenu/template-doc';
 import { UsageDoc } from '@/doc/megamenu/usage-doc';
 import { VerticalDoc } from '@/doc/megamenu/vertical-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 import { AppDocService } from '@/components/doc/app.doc.service';
 
@@ -32,6 +32,7 @@ import { AppDocService } from '@/components/doc/app.doc.service';
             }
         `
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [AppDocService]
 })
 export class MegaMenuDemo {

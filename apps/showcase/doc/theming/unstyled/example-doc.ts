@@ -2,7 +2,7 @@ import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -16,6 +16,7 @@ interface City {
     selector: 'example-doc',
     standalone: true,
     imports: [AppDocSectionText, FormsModule, RouterModule, AppCode, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

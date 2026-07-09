@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -8,6 +8,7 @@ import { ChipModule } from 'primeng/chip';
     selector: 'template-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, ChipModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Content can easily be customized with the dynamic content instead of using the built-in modes.</p>

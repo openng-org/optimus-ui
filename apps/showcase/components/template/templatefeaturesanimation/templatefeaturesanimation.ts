@@ -50,14 +50,14 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
                 <div class="flex-1 w-full lg:w-fit rounded-2xl bg-surface-100 dark:bg-surface-800 overflow-hidden flex sm:min-w-105">
                     @if (featuresData[selectedID - 1]?.type === 'inline-animation') {
                         <template-features-animation-inline
-                            [inlineFeaturesData]="featuresData[selectedID - 1]?.inlineFeaturesData"
+                            [inlineFeaturesData]="$safeNavigationMigration(featuresData[selectedID - 1]?.inlineFeaturesData)"
                             [parentHandleClick]="handleClick"
                             [parentHandleHover]="handleHover"
                             [parentID]="selectedID"
-                            [inlineSeconds]="animationSeconds / featuresData[selectedID - 1]?.inlineFeaturesData.length"
+                            [inlineSeconds]="animationSeconds / $safeNavigationMigration(featuresData[selectedID - 1]?.inlineFeaturesData.length)"
                         ></template-features-animation-inline>
                     } @else {
-                        <img class="w-full h-auto object-cover flex" [src]="featuresData[selectedID - 1]?.src" alt="Animation Feature Image" />
+                        <img class="w-full h-auto object-cover flex" [src]="$safeNavigationMigration(featuresData[selectedID - 1]?.src)" alt="Animation Feature Image" />
                     }
                 </div>
             </div>

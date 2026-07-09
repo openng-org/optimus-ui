@@ -5,7 +5,7 @@ import { TemplateFeaturesAnimation } from '@/components/template/templatefeature
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
 import { TemplateYoutube } from '@/components/template/templateyoutube';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { PoseidonLogo } from './poseidonlogo';
 import { PoseidonSeparator } from './poseidonseparator';
 
@@ -13,6 +13,7 @@ import { PoseidonSeparator } from './poseidonseparator';
     standalone: true,
     selector: 'poseidon-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, TemplateYoutube, TemplateLicense, PoseidonSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="apollo template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="poseidonLogo"></template-hero>
         <poseidon-separator></poseidon-separator>

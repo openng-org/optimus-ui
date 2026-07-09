@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -9,6 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
     selector: 'basic-doc',
     standalone: true,
     imports: [FormsModule, AppCode, AppDocSectionText, AppDemoWrapper, TextareaModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Textarea is applied to an input field with <i>pTextarea</i> directive.</p>

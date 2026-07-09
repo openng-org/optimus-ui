@@ -1,7 +1,7 @@
 import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { NodeService } from '@/service/nodeservice';
 import { PhotoService } from '@/service/photoservice';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { TerminalModule, TerminalService } from 'primeng/terminal';
 import { Subscription } from 'rxjs';
@@ -98,6 +98,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             }
         `
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService, TerminalService, PhotoService, NodeService]
 })
 export class AdvancedDoc implements OnInit, OnDestroy {

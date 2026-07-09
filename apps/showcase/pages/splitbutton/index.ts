@@ -14,7 +14,7 @@ import { TextDoc } from '@/doc/splitbutton/text-doc';
 import { UsageDoc } from '@/doc/splitbutton/usage-doc';
 import { PTComponent } from '@/doc/splitbutton/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -28,6 +28,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class SplitButtonDemo {

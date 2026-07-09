@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { Knob } from './knob';
 @Component({
     standalone: true,
     imports: [Knob, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-knob [(ngModel)]="value" />`
 })
 class TestBasicKnobComponent {
@@ -20,6 +21,7 @@ class TestBasicKnobComponent {
 @Component({
     standalone: true,
     imports: [Knob, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-knob [formControl]="knobControl" [min]="min" [max]="max" [step]="step" (onChange)="onKnobChange($event)" /> `
 })
 class TestReactiveFormKnobComponent {
@@ -38,6 +40,7 @@ class TestReactiveFormKnobComponent {
 @Component({
     standalone: true,
     imports: [Knob, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-knob
             [(ngModel)]="value"
@@ -85,6 +88,7 @@ class TestAdvancedKnobComponent {
 @Component({
     standalone: true,
     imports: [Knob, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-knob [(ngModel)]="value" [min]="0" [max]="100" [step]="1" /> `
 })
 class TestKeyboardKnobComponent {
@@ -95,6 +99,7 @@ class TestKeyboardKnobComponent {
 @Component({
     standalone: true,
     imports: [Knob, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-knob [(ngModel)]="temperature" [min]="0" [max]="40" [valueTemplate]="'{value}°C'" /> `
 })
 class TestTemplateKnobComponent {

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -11,6 +11,7 @@ import { ToastModule } from 'primeng/toast';
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TieredMenuModule, ToastModule],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The <i>command</i> property defines the callback to run when an item is activated by click or a key event.</p>

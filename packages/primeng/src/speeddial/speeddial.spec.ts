@@ -1,4 +1,4 @@
-import { Input, provideZonelessChangeDetection } from '@angular/core';
+import { Input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
 // Basic SpeedDial Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-speeddial
             [id]="id"
@@ -108,6 +109,7 @@ class TestBasicSpeedDialComponent {
 // SpeedDial with #template approach
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-speeddial [model]="model">
             <ng-template #button let-toggleCallback="toggleCallback">
@@ -137,6 +139,7 @@ class TestContentTemplateSpeedDialComponent {
 // SpeedDial Types Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="speed-dial-types">
             <p-speeddial [model]="model" type="linear"></p-speeddial>
@@ -157,6 +160,7 @@ class TestSpeedDialTypesComponent {
 // SpeedDial Directions Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="speed-dial-directions">
             <p-speeddial [model]="model" direction="up"></p-speeddial>
@@ -180,6 +184,7 @@ class TestSpeedDialDirectionsComponent {
 // SpeedDial with Mask
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model" [mask]="true" [maskStyle]="maskStyle" [maskClassName]="maskClassName" [visible]="visible"> </p-speeddial> `
 })
 class TestMaskSpeedDialComponent {
@@ -192,6 +197,7 @@ class TestMaskSpeedDialComponent {
 // Disabled SpeedDial Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="disabled-speed-dials">
             <p-speeddial [model]="model" [disabled]="true"></p-speeddial>
@@ -214,6 +220,7 @@ class TestDisabledSpeedDialComponent {
 // SpeedDial with Router Links
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model"></p-speeddial> `
 })
 class TestRouterSpeedDialComponent {
@@ -233,6 +240,7 @@ class TestRouterSpeedDialComponent {
 // SpeedDial with Custom Icons
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model" [showIcon]="showIcon" [hideIcon]="hideIcon" [rotateAnimation]="rotateAnimation"> </p-speeddial> `
 })
 class TestIconSpeedDialComponent {
@@ -245,6 +253,7 @@ class TestIconSpeedDialComponent {
 // SpeedDial with Tooltip
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model" [tooltipOptions]="tooltipOptions"> </p-speeddial> `
 })
 class TestTooltipSpeedDialComponent {
@@ -261,6 +270,7 @@ class TestTooltipSpeedDialComponent {
 // SpeedDial Command Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model" [visible]="true"></p-speeddial> `
 })
 class TestCommandSpeedDialComponent {
@@ -290,6 +300,7 @@ class TestCommandSpeedDialComponent {
 // SpeedDial PT Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-speeddial [model]="model" [pt]="pt" [visible]="visible" [mask]="mask"></p-speeddial> `
 })
 class TestPTSpeedDialComponent {

@@ -4,7 +4,7 @@ import { TemplateFeatures } from '@/components/template/templatefeatures';
 import { TemplateFeaturesAnimation } from '@/components/template/templatefeaturesanimation/templatefeaturesanimation';
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { GenesisLogo } from './genesislogo';
 import { GenesisSeparator } from './genesisseparator';
 
@@ -12,6 +12,7 @@ import { GenesisSeparator } from './genesisseparator';
     standalone: true,
     selector: 'genesis-page',
     imports: [TemplateHero, TemplateLicense, GenesisSeparator, TemplateFeaturesAnimation, TemplateConfiguration, TemplateFeatures],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="template">
             <template-hero [templateHeroData]="templateHeroData" [templateLogo]="genesisLogo"></template-hero>

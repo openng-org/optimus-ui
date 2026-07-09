@@ -4,7 +4,7 @@ import { ElementDoc } from '@/doc/scrolltop/element-doc';
 import { UsageDoc } from '@/doc/scrolltop/usage-doc';
 import { PTComponent } from '@/doc/scrolltop/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
@@ -19,6 +19,7 @@ import { Component } from '@angular/core';
         [apiDocs]="['ScrollTop']"
         themeDocs="scrollTop"
     ></app-doc>`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./scrolltopdemo.scss']
 })
 export class ScrollTopDemo {

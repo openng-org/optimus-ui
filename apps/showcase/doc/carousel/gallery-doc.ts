@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 
 const images = [
@@ -20,6 +20,7 @@ const images = [
     selector: 'gallery-doc',
     standalone: true,
     imports: [CarouselModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Two carousels synchronized via <i>slide</i> input to create a gallery with thumbnail navigation.</p>

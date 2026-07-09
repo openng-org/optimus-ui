@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -50,6 +50,7 @@ import { ProgressBar } from 'primeng/progressbar';
             }
         `
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService]
 })
 export class HeadlessDoc {

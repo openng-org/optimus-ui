@@ -1,6 +1,6 @@
 import { BasicDoc } from '@/doc/toolbar/basic-doc';
 import { UsageDoc } from '@/doc/toolbar/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AccessibilityDoc } from '@/doc/toolbar/accessibility-doc';
 import { CustomDoc } from '@/doc/toolbar/custom-doc';
 import { PTComponent } from '@/doc/toolbar/pt/PTComponent';
@@ -18,6 +18,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ToolbarDemo {

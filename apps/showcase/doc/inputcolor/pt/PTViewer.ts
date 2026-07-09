@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     InputColor,
@@ -37,6 +37,7 @@ import { EyeDropper } from '@primeicons/angular/eye-dropper';
         InputColorEyeDropper,
         EyeDropper
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-inputcolor [(ngModel)]="color" class="w-80 mx-auto space-y-3">

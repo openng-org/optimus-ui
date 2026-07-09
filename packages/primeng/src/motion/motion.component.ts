@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { afterRenderEffect, Component, computed, effect, inject, InjectionToken, input, output, signal, untracked } from '@angular/core';
+import { afterRenderEffect, Component, computed, effect, inject, InjectionToken, input, output, signal, untracked, ChangeDetectionStrategy } from '@angular/core';
 import { type ClassNameOptions, createMotion, resolveDuration, type MotionEvent, type MotionInstance, type MotionOptions, type MotionPhase } from '@primeuix/motion';
 import { nextFrame } from '@primeuix/utils';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -27,6 +27,7 @@ const MOTION_INSTANCE = new InjectionToken<Motion>('MOTION_INSTANCE');
     host: {
         '[class]': "cx('root')"
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class Motion extends BaseComponent<MotionPassThrough> {

@@ -7,7 +7,7 @@ import { PTComponent } from '@/doc/tieredmenu/pt/PTComponent';
 import { RouterDoc } from '@/doc/tieredmenu/router-doc';
 import { TemplateDoc } from '@/doc/tieredmenu/template-doc';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
         themeDocs="tieredmenu"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class TieredMenuDemo {

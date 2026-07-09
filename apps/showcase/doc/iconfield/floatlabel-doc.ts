@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { FloatLabelModule } from 'primeng/floatlabel';
@@ -13,6 +13,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'float-label-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, RouterModule, FormsModule, FloatLabelModule, IconFieldModule, InputIconModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>FloatLabel visually integrates a label with its form element. Visit <a routerLink="/floatlabel">FloatLabel</a> documentation for more information.</p>

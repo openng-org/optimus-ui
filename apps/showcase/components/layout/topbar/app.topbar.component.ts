@@ -3,7 +3,7 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { NgClass, DOCUMENT } from '@angular/common';
-import { afterNextRender, booleanAttribute, Component, computed, inject, input, Renderer2 } from '@angular/core';
+import { afterNextRender, booleanAttribute, Component, computed, inject, input, Renderer2, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
@@ -15,6 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 @Component({
     selector: 'app-topbar',
     imports: [NgClass, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent],
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './app.topbar.component.html'
 })
 export class AppTopBarComponent {

@@ -1,7 +1,7 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +10,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'headless-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, ButtonModule, DialogModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A headless {{ PROJECT_NAME }} dialog with a custom UI.</p>

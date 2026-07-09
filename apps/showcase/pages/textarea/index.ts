@@ -12,12 +12,13 @@ import { SizesDoc } from '@/doc/textarea/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/textarea/templatedrivenforms-doc';
 import { FluidDoc } from '@/doc/textarea/fluid-doc';
 import { PTComponent } from '@/doc/textarea/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc
         docTitle="Angular Textarea Component"
         header="Textarea"

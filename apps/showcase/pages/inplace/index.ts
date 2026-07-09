@@ -5,12 +5,13 @@ import { UsageDoc } from '@/doc/inplace/usage-doc';
 import { InputDoc } from '@/doc/inplace/input-doc';
 import { LazyDoc } from '@/doc/inplace/lazy-doc';
 import { PTComponent } from '@/doc/inplace/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Inplace Component"

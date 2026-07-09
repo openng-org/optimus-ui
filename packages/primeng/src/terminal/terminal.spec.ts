@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -9,6 +9,7 @@ import { TerminalService } from './terminalservice';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal [welcomeMessage]="welcomeMessage" [prompt]="prompt" [style]="style" [response]="response"> </p-terminal> `
 })
 class TestBasicTerminalComponent {
@@ -20,12 +21,14 @@ class TestBasicTerminalComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal welcomeMessage="System Ready" prompt="system> "> </p-terminal> `
 })
 class TestStaticPropsTerminalComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal [style]="customStyle" class="custom-terminal"> </p-terminal> `
 })
 class TestStyledTerminalComponent {
@@ -38,18 +41,21 @@ class TestStyledTerminalComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal></p-terminal> `
 })
 class TestMinimalTerminalComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal welcomeMessage="Interactive Terminal" prompt="cmd> "> </p-terminal> `
 })
 class TestInteractiveTerminalComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-terminal [welcomeMessage]="message" [prompt]="commandPrompt"> </p-terminal> `
 })
 class TestDynamicTerminalComponent {

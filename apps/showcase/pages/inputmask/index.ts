@@ -14,7 +14,7 @@ import { TemplateDrivenFormsDoc } from '@/doc/inputmask/templatedrivenforms-doc'
 import { FluidDoc } from '@/doc/inputmask/fluid-doc';
 import { UsageDoc } from '@/doc/inputmask/usage-doc';
 import { PTComponent } from '@/doc/inputmask/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -29,6 +29,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         themeDocs="inputmask"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class InputMaskDemo {

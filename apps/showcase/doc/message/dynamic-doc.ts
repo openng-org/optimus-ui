@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { MessageModule } from 'primeng/message';
 import { ButtonModule } from 'primeng/button';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'dynamic-doc',
     standalone: true,
     imports: [MessageModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Multiple messages can be displayed using the standard <i>for</i> block.</p>
@@ -21,7 +22,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 </div>
                 <div class="flex flex-col">
                     @for (message of messages(); track message.severity; let first = $first) {
-                        <p-message [severity]="message.severity" [class]="{ 'mt-4': !first }" [closable]="message?.closable">{{ message.content }}</p-message>
+                        <p-message [severity]="message.severity" [class]="{ 'mt-4': !first }" [closable]="$safeNavigationMigration(message?.closable)">{{ message.content }}</p-message>
                     }
                 </div>
             </div>

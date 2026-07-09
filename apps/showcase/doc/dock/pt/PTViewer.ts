@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DockModule } from 'primeng/dock';
 import { TooltipModule } from 'primeng/tooltip';
 
@@ -8,6 +8,7 @@ import { TooltipModule } from 'primeng/tooltip';
     selector: 'dock-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, DockModule, TooltipModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <div class="relative w-full">

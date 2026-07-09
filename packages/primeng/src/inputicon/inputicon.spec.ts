@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputIcon } from './inputicon';
@@ -10,6 +10,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield>
             <p-inputicon class="pi pi-search" />
@@ -24,6 +25,7 @@ class TestBasicInputIconComponent {
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield>
             <p-inputicon [class]="customClass + ' pi pi-user'" />

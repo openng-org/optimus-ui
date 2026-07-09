@@ -1,4 +1,4 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from 'primeng/api';
@@ -7,6 +7,7 @@ import { Avatar, AvatarModule } from './avatar';
 @Component({
     standalone: false,
     selector: 'test-basic-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar></p-avatar>`
 })
 class TestBasicAvatarComponent {}
@@ -14,6 +15,7 @@ class TestBasicAvatarComponent {}
 @Component({
     standalone: false,
     selector: 'test-label-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [label]="label"></p-avatar>`
 })
 class TestLabelAvatarComponent {
@@ -23,6 +25,7 @@ class TestLabelAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-icon-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [icon]="icon"></p-avatar>`
 })
 class TestIconAvatarComponent {
@@ -32,6 +35,7 @@ class TestIconAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-image-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [image]="image" [ariaLabel]="ariaLabel" (onImageError)="onImageError($event)"></p-avatar>`
 })
 class TestImageAvatarComponent {
@@ -47,6 +51,7 @@ class TestImageAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-size-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [label]="label" [size]="size"></p-avatar>`
 })
 class TestSizeAvatarComponent {
@@ -57,6 +62,7 @@ class TestSizeAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-shape-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [label]="label" [shape]="shape"></p-avatar>`
 })
 class TestShapeAvatarComponent {
@@ -67,6 +73,7 @@ class TestShapeAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-aria-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [label]="label" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy"></p-avatar>`
 })
 class TestAriaAvatarComponent {
@@ -78,6 +85,7 @@ class TestAriaAvatarComponent {
 @Component({
     standalone: false,
     selector: 'test-content-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-avatar>
             <span class="custom-content">Custom</span>
@@ -89,6 +97,7 @@ class TestContentAvatarComponent {}
 @Component({
     standalone: false,
     selector: 'test-dynamic-avatar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-avatar [label]="label" [icon]="icon" [image]="image" [size]="size" [shape]="shape" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" (onImageError)="onImageError($event)"> </p-avatar> `
 })
 class TestDynamicAvatarComponent {
@@ -109,6 +118,7 @@ class TestDynamicAvatarComponent {
 @Component({
     standalone: true,
     imports: [Avatar],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-avatar [label]="label()" [icon]="icon()" [image]="image()" [size]="size()" [shape]="shape()" [ariaLabel]="ariaLabel()" [pt]="pt()"></p-avatar>`
 })
 class TestPTAvatarComponent {

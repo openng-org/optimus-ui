@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'importing-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <ul class="leading-normal px-10 m-0 list-disc">
             <li class="p-2"><b>Download the latest .fig UI Kit</b> - From your PrimeStore panel, download the latest PrimeOne package. The archive contains the .fig UI Kit.</li>

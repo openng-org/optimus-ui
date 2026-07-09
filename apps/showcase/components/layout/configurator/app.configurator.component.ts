@@ -1,7 +1,7 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { DesignerService } from '@/service/designerservice';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
+import { Component, computed, inject, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { $t, updatePreset, updateSurfacePalette } from '@primeuix/themes';
 import Aura from '@primeuix/themes/aura';
@@ -83,6 +83,7 @@ const presets = {
     host: {
         class: 'config-panel hidden'
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [CommonModule, FormsModule, ButtonModule, RadioButtonModule, SelectButton, ToggleSwitchModule]
 })
 export class AppConfiguratorComponent {

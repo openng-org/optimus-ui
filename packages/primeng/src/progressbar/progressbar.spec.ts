@@ -1,10 +1,11 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProgressBar } from './progressbar';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressbar [value]="value" [showValue]="showValue" [unit]="unit" [mode]="mode" [color]="color" [valueStyleClass]="valueStyleClass"> </p-progressbar>`
 })
 class TestBasicProgressBarComponent {
@@ -18,6 +19,7 @@ class TestBasicProgressBarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-progressbar [value]="value">
             <ng-template #content let-value>
@@ -32,6 +34,7 @@ class TestContentTemplateProgressBarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressbar [value]="value" mode="indeterminate"></p-progressbar>`
 })
 class TestIndeterminateProgressBarComponent {
@@ -40,6 +43,7 @@ class TestIndeterminateProgressBarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-progressbar [value]="value" [style]="style"></p-progressbar>`
 })
 class TestStyleProgressBarComponent {

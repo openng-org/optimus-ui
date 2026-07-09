@@ -1,13 +1,14 @@
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'accessibility-doc',
     standalone: true,
     imports: [RouterModule, AppCodeModule, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
         <h3>Screen Reader</h3>
         <p>

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, contentChild, effect, ElementRef, inject, input, numberAttribute, output, TemplateRef, untracked, viewChild, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, contentChild, effect, ElementRef, inject, input, numberAttribute, output, TemplateRef, untracked, viewChild, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { addStyle, calculateScrollbarWidth, equals, find, findSingle, getHiddenElementOuterHeight, getHiddenElementOuterWidth, getIndex, getOffset, isClickable, isEmpty, removeClass, reorderArray, resolveFieldData } from '@primeuix/utils';
 import { BlockableUI, FilterMetadata, FilterService, ScrollerOptions, SortMeta, TreeNode, TreeTableNode } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -246,6 +246,7 @@ import { TREETABLE_INSTANCE, TreeTableService } from './treetable-service';
         '[attr.data-p]': 'dataP()',
         '[attr.data-scrollselectors]': "'.p-treetable-scrollable-body'"
     },
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class TreeTable extends BaseComponent<TreeTablePassThrough> implements BlockableUI {

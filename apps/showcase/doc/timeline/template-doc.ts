@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -18,6 +18,7 @@ interface EventItem {
     selector: 'template-doc',
     standalone: true,
     imports: [AppDocSectionText, TimelineModule, CardModule, ButtonModule, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Sample implementation with custom content and styled markers.</p>

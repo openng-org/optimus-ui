@@ -8,12 +8,13 @@ import { MultipleDoc } from '@/doc/metergroup/multiple-doc';
 import { PTComponent } from '@/doc/metergroup/pt/PTComponent';
 import { TemplateDoc } from '@/doc/metergroup/template-doc';
 import { VerticalDoc } from '@/doc/metergroup/vertical-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-doc
         docTitle="Angular MeterGroup Component"
         header="MeterGroup"

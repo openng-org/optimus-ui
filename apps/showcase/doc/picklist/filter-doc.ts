@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PickListModule } from 'primeng/picklist';
 
 @Component({
@@ -12,6 +12,7 @@ import { PickListModule } from 'primeng/picklist';
     standalone: true,
     imports: [CommonModule, PickListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Filter value is checked against the property of an object configured with the <i>filterBy</i> property.</p>

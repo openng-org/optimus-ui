@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { ColorPicker } from './colorpicker';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-colorpicker
             [(ngModel)]="color"
@@ -58,6 +59,7 @@ class TestBasicColorPickerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <p-colorpicker formControlName="selectedColor" [format]="format" [defaultColor]="defaultColor" (onChange)="onColorChange($event)"> </p-colorpicker>
@@ -85,6 +87,7 @@ class TestReactiveFormColorPickerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <p-colorpicker [(ngModel)]="hexColor" format="hex" inputId="hex-picker"> </p-colorpicker>
@@ -105,6 +108,7 @@ class TestFormatColorPickerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-colorpicker [(ngModel)]="color" [inline]="true" [disabled]="disabled" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
 class TestInlineColorPickerComponent {
@@ -120,6 +124,7 @@ class TestInlineColorPickerComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-colorpicker [(ngModel)]="color" [disabled]="disabled" [autofocus]="autofocus" [inputId]="inputId" [tabindex]="tabindex" [defaultColor]="defaultColor" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
 class TestStyledColorPickerComponent {

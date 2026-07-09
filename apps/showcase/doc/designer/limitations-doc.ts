@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { RouterModule } from '@angular/router';
@@ -7,6 +7,7 @@ import { RouterModule } from '@angular/router';
     selector: 'limitations-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>Current known technical limitations are listed at this section.</p>
         <ul class="leading-relaxed list-inside list-disc">

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DomHandler } from 'primeng/dom';
@@ -11,6 +11,7 @@ import { DynamicDialogRef } from './dynamicdialog-ref';
 // Test components to be used in dynamic dialogs
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="test-component">
             <h3>Test Component Content</h3>
@@ -36,6 +37,7 @@ class TestDialogContentComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="nested-dialog-content">
             <h3>Nested Dialog</h3>
@@ -61,6 +63,7 @@ class NestedDialogContentComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="dialog-within-dialog-content">
             <h3>Dialog Within Dialog</h3>
@@ -78,6 +81,7 @@ class DialogWithinDialogComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="maximizable-content">
             <h3>Maximizable Dialog</h3>
@@ -94,6 +98,7 @@ class MaximizableDialogComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="resizable-content">
             <h3>Resizable Dialog</h3>
@@ -106,6 +111,7 @@ class ResizableDialogComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="draggable-content">
             <h3>Draggable Dialog</h3>

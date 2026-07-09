@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ChevronUp } from '@primeicons/angular/chevron-up';
 import { ChevronDown } from '@primeicons/angular/chevron-down';
@@ -10,6 +10,7 @@ import { ChevronDown } from '@primeicons/angular/chevron-down';
     selector: 'orientation-doc',
     standalone: true,
     imports: [CarouselModule, AppCode, AppDemoWrapper, AppDocSectionText, ChevronUp, ChevronDown],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Set <i>orientation</i> to <i>vertical</i> for a vertical carousel layout.</p>

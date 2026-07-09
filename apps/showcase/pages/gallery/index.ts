@@ -4,7 +4,7 @@ import { BasicDoc } from '@/doc/gallery/basic-doc';
 import { GridDoc } from '@/doc/gallery/grid-doc';
 import { UsageDoc } from '@/doc/gallery/usage-doc';
 import { PTComponent } from '@/doc/gallery/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -41,6 +41,7 @@ import { Component } from '@angular/core';
         themeDocs="gallery"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class GalleryDemo {

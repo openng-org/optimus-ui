@@ -2,7 +2,7 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,6 +12,7 @@ import { MessageModule } from 'primeng/message';
     selector: 'form-doc',
     standalone: true,
     imports: [FormsModule, MessageModule, InputTextModule, InputMaskModule, AppCode, AppDemoWrapper, AppDocSectionText, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Validation errors in a form are displayed with the <i>error</i> severity.</p>

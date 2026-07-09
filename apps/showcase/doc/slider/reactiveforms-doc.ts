@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { SliderModule } from 'primeng/slider';
@@ -14,6 +14,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'reactive-forms-doc',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, SliderModule, ToastModule, MessageModule, ButtonModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Slider can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>

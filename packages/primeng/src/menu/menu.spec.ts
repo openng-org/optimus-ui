@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -9,6 +9,7 @@ import { Menu } from './menu';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menu
             [id]="id"
@@ -67,6 +68,7 @@ class TestBasicMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menu #menu [model]="popupItems" [popup]="true"></p-menu>
         <button #toggleButton (click)="menu.toggle($event)" class="toggle-button">Show Menu</button>
@@ -104,6 +106,7 @@ class TestPopupMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-router-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="routerModel"></p-menu> `
 })
 class TestRouterMenuComponent {
@@ -122,6 +125,7 @@ class TestRouterMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-submenu-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="submenuModel"></p-menu> `
 })
 class TestSubmenuMenuComponent {
@@ -146,6 +150,7 @@ class TestSubmenuMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-item-template-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menu [model]="model">
             <ng-template #item let-item>
@@ -167,6 +172,7 @@ class TestItemTemplateMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-ptemplate-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menu [model]="model">
             <ng-template #item let-item>
@@ -188,6 +194,7 @@ class TestTemplateMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-items-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="disabledModel"></p-menu> `
 })
 class TestDisabledItemsMenuComponent {
@@ -197,6 +204,7 @@ class TestDisabledItemsMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-styled-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="model" [styleClass]="customStyleClass" [style]="customStyle"></p-menu> `
 })
 class TestStyledMenuComponent {
@@ -208,6 +216,7 @@ class TestStyledMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-minimal-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-menu></p-menu>`
 })
 class TestMinimalMenuComponent {}
@@ -215,6 +224,7 @@ class TestMinimalMenuComponent {}
 @Component({
     standalone: false,
     selector: 'test-dynamic-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="dynamicModel"></p-menu> `
 })
 class TestDynamicMenuComponent {
@@ -236,6 +246,7 @@ class TestDynamicMenuComponent {
 @Component({
     standalone: false,
     selector: 'test-command-menu',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menu [model]="commandModel"></p-menu> `
 })
 class TestCommandMenuComponent {
@@ -254,6 +265,7 @@ class TestCommandMenuComponent {
 
 @Component({
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: '<div>Target Page</div>'
 })
 class TestTargetComponent {}

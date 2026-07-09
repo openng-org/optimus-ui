@@ -7,7 +7,7 @@ import { SelectDataDoc } from '@/doc/popover/selectdata-doc';
 import { TargetDoc } from '@/doc/popover/target-doc';
 import { TemplateDoc } from '@/doc/popover/template-doc';
 import { UsageDoc } from '@/doc/popover/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
         componentName="Popover"
     ></app-doc>`,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 export class PopoverDemo {

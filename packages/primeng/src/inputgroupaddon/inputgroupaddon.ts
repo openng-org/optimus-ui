@@ -1,4 +1,4 @@
-import { Component, inject, InjectionToken, NgModule } from '@angular/core';
+import { Component, inject, InjectionToken, NgModule, ChangeDetectionStrategy } from '@angular/core';
 import { SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { Bind, BindModule } from 'primeng/bind';
@@ -20,6 +20,7 @@ const INPUTGROUPADDON_INSTANCE = new InjectionToken<InputGroupAddon>('INPUTGROUP
         '[class]': "cx('root')"
     },
     providers: [InputGroupAddonStyle, { provide: INPUTGROUPADDON_INSTANCE, useExisting: InputGroupAddon }, { provide: PARENT_INSTANCE, useExisting: InputGroupAddon }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class InputGroupAddon extends BaseComponent<InputGroupAddonPassThrough> {

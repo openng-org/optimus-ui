@@ -7,7 +7,7 @@ import { WithDialogDoc } from '@/doc/commandmenu/with-dialog-doc';
 import { FilterDoc } from '@/doc/commandmenu/filter-doc';
 import { PTComponent } from '@/doc/commandmenu/pt/PTComponent';
 import { UsageDoc } from '@/doc/commandmenu/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
         themeDocs="commandmenu"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class CommandMenuDemo {

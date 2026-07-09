@@ -10,7 +10,7 @@ import { PTComponent } from '@/doc/scroller/pt/PTComponent';
 import { ProgrammaticDoc } from '@/doc/scroller/programmatic-doc';
 import { ScrollOptionsDoc } from '@/doc/scroller/scrolloptions-doc';
 import { TemplateDoc } from '@/doc/scroller/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -26,6 +26,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './scrollerdemo.scss'
 })
 export class VirtualScrollerDemo {

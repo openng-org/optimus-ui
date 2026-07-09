@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { BadgeModule } from 'primeng/badge';
 import { OverlayBadgeModule } from 'primeng/overlaybadge';
 
@@ -8,6 +8,7 @@ import { OverlayBadgeModule } from 'primeng/overlaybadge';
     selector: 'badge-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, BadgeModule, OverlayBadgeModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <div class="flex flex-wrap gap-8">

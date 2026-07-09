@@ -10,7 +10,7 @@ import { PTComponent } from '@/doc/tabs/pt/PTComponent';
 import { ScrollableDoc } from '@/doc/tabs/scrollable-doc';
 import { TabmenuDoc } from '@/doc/tabs/tabmenu-doc';
 import { UsageDoc } from '@/doc/tabs/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 export class TabsDemo {

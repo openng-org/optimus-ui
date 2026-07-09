@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { SplitButton } from './splitbutton';
 // Basic SplitButton Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-splitbutton
             [model]="model"
@@ -121,6 +122,7 @@ class TestBasicSplitButtonComponent {
 // SplitButton with #template approach
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-splitbutton [model]="model">
             <ng-template #content>
@@ -142,6 +144,7 @@ class TestContentTemplateSplitButtonComponent {
 // Severity SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="severity-buttons">
             <p-splitbutton label="Primary" severity="primary" [model]="model" />
@@ -162,6 +165,7 @@ class TestSeveritySplitButtonComponent {
 // SplitButton Variants Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="variant-buttons">
             <p-splitbutton label="Raised" [raised]="true" [model]="model" />
@@ -181,6 +185,7 @@ class TestSplitButtonVariantsComponent {
 // Disabled SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="disabled-buttons">
             <p-splitbutton label="Disabled" [disabled]="true" [model]="model" />
@@ -196,6 +201,7 @@ class TestDisabledSplitButtonComponent {
 // Icon SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="icon-buttons">
             <p-splitbutton icon="pi pi-check" [iconPos]="iconPos" [model]="model" />
@@ -212,6 +218,7 @@ class TestIconSplitButtonComponent {
 // Dropdown Icon SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-splitbutton label="Custom Dropdown" [dropdownIcon]="dropdownIcon" [model]="model" /> `
 })
 class TestDropdownIconSplitButtonComponent {
@@ -222,6 +229,7 @@ class TestDropdownIconSplitButtonComponent {
 // Command SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-splitbutton label="Actions" [model]="model" (onClick)="onMainClick()" /> `
 })
 class TestCommandSplitButtonComponent {
@@ -248,6 +256,7 @@ class TestCommandSplitButtonComponent {
 // Tooltip SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-splitbutton label="Tooltip Button" [tooltip]="tooltip" [tooltipOptions]="tooltipOptions" [model]="model" /> `
 })
 class TestTooltipSplitButtonComponent {
@@ -259,6 +268,7 @@ class TestTooltipSplitButtonComponent {
 // Autofocus SplitButton Test
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-splitbutton label="Autofocus" [autofocus]="autofocus" [model]="model" /> `
 })
 class TestAutofocusSplitButtonComponent {

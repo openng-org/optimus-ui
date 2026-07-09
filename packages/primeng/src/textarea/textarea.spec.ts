@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { Textarea } from './textarea';
 @Component({
     standalone: true,
     imports: [Textarea, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <textarea pTextarea [(ngModel)]="value" placeholder="Enter text"></textarea> `
 })
 class TestBasicTextareaComponent {
@@ -19,6 +20,7 @@ class TestBasicTextareaComponent {
 @Component({
     standalone: true,
     imports: [Textarea, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <textarea pTextarea [(ngModel)]="content" [autoResize]="enableAutoResize" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" (onResize)="onResizeHandler($event)" rows="3" cols="30"> </textarea> `
 })
 class TestAdvancedTextareaComponent {
@@ -38,6 +40,7 @@ class TestAdvancedTextareaComponent {
 @Component({
     standalone: true,
     imports: [Textarea, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <textarea pTextarea [formControl]="textControl"></textarea> `
 })
 class TestReactiveFormTextareaComponent {
@@ -47,6 +50,7 @@ class TestReactiveFormTextareaComponent {
 @Component({
     standalone: true,
     imports: [Textarea, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <textarea pTextarea [(ngModel)]="value" [pt]="pt" [autoResize]="autoResize" [invalid]="invalid"></textarea> `
 })
 class TestPTTextareaComponent {

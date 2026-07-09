@@ -15,11 +15,12 @@ import { FluidDoc } from '@/doc/cascadeselect/fluid-doc';
 import { ClearIconDoc } from '@/doc/cascadeselect/clearicon-doc';
 import { PTComponent } from '@/doc/cascadeselect/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular CascadeSelect Component"

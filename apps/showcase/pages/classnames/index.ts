@@ -1,7 +1,7 @@
 import { AppDoc } from '@/components/doc/app.doc';
 import { ExamplesDoc } from '@/doc/classnames/examples-doc';
 import { UsageDoc } from '@/doc/classnames/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -13,6 +13,7 @@ import { Component } from '@angular/core';
         [apiDocs]="['ClassNames']"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ClassNamesDemo {

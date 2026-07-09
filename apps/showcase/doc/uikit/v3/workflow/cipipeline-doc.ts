@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { RouterLink } from '@angular/router';
 
@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
     selector: 'ci-pipeline-doc',
     standalone: true,
     imports: [AppDocSectionText, RouterLink],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>
             Theme Designer offers an API that can be utilized to implement continuos integration pipelines to automate figma to theme code generation whenever you push updates to the repository from Figma. Visit the

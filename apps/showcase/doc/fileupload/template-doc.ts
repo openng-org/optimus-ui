@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { PrimeNG } from 'primeng/config';
 import { FileUploadModule } from 'primeng/fileupload';
@@ -88,6 +88,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MessageService]
 })
 export class TemplateDoc {

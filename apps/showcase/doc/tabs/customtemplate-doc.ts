@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -10,6 +10,7 @@ import { BadgeModule } from 'primeng/badge';
     selector: 'custom-template-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, TabsModule, AvatarModule, BadgeModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Custom content for a tab is defined with the default ng-content.</p>

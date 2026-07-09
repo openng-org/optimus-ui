@@ -8,13 +8,14 @@ import { WindsurfDoc } from '@/doc/mcp/windsurf-doc';
 import { ZedDoc } from '@/doc/mcp/zed-doc';
 import { ToolsDoc } from '@/doc/mcp/tools-doc';
 import { ExamplePromptsDoc } from '@/doc/mcp/exampleprompts-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     selector: 'mcp-demo',
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="MCP Server - {{ PROJECT_NAME }}"

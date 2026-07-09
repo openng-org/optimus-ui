@@ -1,7 +1,7 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DatePickerModule } from 'primeng/datepicker';
 import { InputTextModule } from 'primeng/inputtext';
@@ -12,6 +12,7 @@ import { TextareaModule } from 'primeng/textarea';
     selector: 'form-doc',
     standalone: true,
     imports: [FormsModule, AppDocSectionText, AppCode, InputTextModule, SelectModule, DatePickerModule, TextareaModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Using Tailwind utilities for the responsive layout of a form with {{ PROJECT_NAME }} components.</p>

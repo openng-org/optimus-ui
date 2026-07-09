@@ -5,7 +5,7 @@ import { ImagesDoc } from '@/doc/paginator/images-doc';
 import { UsageDoc } from '@/doc/paginator/usage-doc';
 import { TemplateDoc } from '@/doc/paginator/template-doc';
 import { PTComponent } from '@/doc/paginator/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -21,6 +21,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: `
         .image-gallery {
             text-align: center;

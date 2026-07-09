@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
@@ -10,6 +10,7 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup';
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, ConfirmPopupModule, ButtonModule],
     providers: [ConfirmationService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-confirmpopup />

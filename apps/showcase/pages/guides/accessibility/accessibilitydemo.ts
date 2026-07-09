@@ -6,12 +6,13 @@ import { IntroductionDoc } from '@/doc/guides/accessibility/introduction-doc';
 import { SemanticHTMLDoc } from '@/doc/guides/accessibility/semantichtml-doc';
 import { WAIARIADoc } from '@/doc/guides/accessibility/waiaria-doc';
 import { WCAGDoc } from '@/doc/guides/accessibility/wcag-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'accessibility',
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc
         docTitle="Accessibility - {{ PROJECT_NAME }}"
         header="Accessibility"

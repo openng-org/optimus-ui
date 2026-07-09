@@ -1,13 +1,14 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AvatarModule } from 'primeng/avatar';
 
 @Component({
     selector: 'template-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, AvatarModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Content can easily be customized with the dynamic content instead of using the built-in modes.</p>

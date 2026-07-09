@@ -1,7 +1,7 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { NodeService } from '@/service/nodeservice';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { ChangeDetectorRef, Component, ChangeDetectionStrategy } from '@angular/core';
 import { TreeNode } from 'primeng/api';
 import { TreeTableModule } from 'primeng/treetable';
 
@@ -9,6 +9,7 @@ import { TreeTableModule } from 'primeng/treetable';
     selector: 'treetable-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, TreeTableModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-treetable [value]="nodes">

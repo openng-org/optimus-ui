@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { PasswordModule } from 'primeng/password';
@@ -14,6 +14,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     standalone: true,
     imports: [ReactiveFormsModule, PasswordModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDocSectionText, AppDemoWrapper],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Password can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>

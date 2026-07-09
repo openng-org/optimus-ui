@@ -1,7 +1,7 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TerminalModule, TerminalService } from 'primeng/terminal';
 
 @Component({
@@ -9,6 +9,7 @@ import { TerminalModule, TerminalService } from 'primeng/terminal';
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, TerminalModule],
     providers: [TerminalService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <div>

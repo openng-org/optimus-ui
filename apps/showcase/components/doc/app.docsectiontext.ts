@@ -1,8 +1,9 @@
 import { Location } from '@angular/common';
-import { Component, ElementRef, Input, numberAttribute } from '@angular/core';
+import { Component, ElementRef, Input, numberAttribute, ChangeDetectionStrategy } from '@angular/core';
 @Component({
     selector: 'app-docsectiontext',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         @if (level === 2) {
             <h2 class="doc-section-label">

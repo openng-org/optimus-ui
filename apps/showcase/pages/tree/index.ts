@@ -16,11 +16,12 @@ import { SingleDoc } from '@/doc/tree/single-doc';
 import { TemplateDoc } from '@/doc/tree/template-doc';
 import { VirtualScrollDoc } from '@/doc/tree/virtualscroll-doc';
 import { LazyVirtualScrollDoc } from '@/doc/tree/virtualscrolllazy-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc docTitle="Angular Tree Component" header="Tree" description="Tree is used to display hierarchical data." [docs]="docs" [heroDoc]="heroDoc" [apiDocs]="['Tree', 'TreeNode']" [ptDocs]="ptComponent" themeDocs="tree"></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class TreeDemo {

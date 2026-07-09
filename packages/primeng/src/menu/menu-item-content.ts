@@ -1,5 +1,5 @@
 import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
-import { Component, inject, input, output, Pipe, PipeTransform, PLATFORM_ID, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, inject, input, output, Pipe, PipeTransform, PLATFORM_ID, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 import { MenuItem, SharedModule } from 'primeng/api';
@@ -44,9 +44,9 @@ export class SafeHtmlPipe implements PipeTransform {
                         [attr.href]="_item?.url || null"
                         [attr.data-automationid]="_item?.automationId"
                         [attr.tabindex]="-1"
-                        [class]="cn(cx('itemLink'), _item?.linkClass)"
+                        [class]="cn(cx('itemLink'), $safeNavigationMigration(_item?.linkClass))"
                         [style]="_item?.linkStyle"
-                        [target]="_item?.target"
+                        [target]="$safeNavigationMigration(_item?.target)"
                         [pBind]="getPTOptions('itemLink')"
                         pRipple
                     >
@@ -54,22 +54,22 @@ export class SafeHtmlPipe implements PipeTransform {
                     </a>
                 } @else {
                     <a
-                        [routerLink]="_item?.routerLink"
+                        [routerLink]="$safeNavigationMigration(_item?.routerLink)"
                         [attr.data-automationid]="_item?.automationId"
                         [attr.tabindex]="-1"
                         [attr.title]="_item?.title"
-                        [queryParams]="_item?.queryParams"
+                        [queryParams]="$safeNavigationMigration(_item?.queryParams)"
                         routerLinkActive="p-menu-item-link-active"
                         [routerLinkActiveOptions]="getRouterLinkActiveOptions(_item)"
-                        [class]="cn(cx('itemLink'), _item?.linkClass)"
+                        [class]="cn(cx('itemLink'), $safeNavigationMigration(_item?.linkClass))"
                         [style]="_item?.linkStyle"
-                        [target]="_item?.target"
-                        [fragment]="_item?.fragment"
-                        [queryParamsHandling]="_item?.queryParamsHandling"
-                        [preserveFragment]="_item?.preserveFragment"
-                        [skipLocationChange]="_item?.skipLocationChange"
-                        [replaceUrl]="_item?.replaceUrl"
-                        [state]="_item?.state"
+                        [target]="$safeNavigationMigration(_item?.target)"
+                        [fragment]="$safeNavigationMigration(_item?.fragment)"
+                        [queryParamsHandling]="$safeNavigationMigration(_item?.queryParamsHandling)"
+                        [preserveFragment]="$safeNavigationMigration(_item?.preserveFragment)"
+                        [skipLocationChange]="$safeNavigationMigration(_item?.skipLocationChange)"
+                        [replaceUrl]="$safeNavigationMigration(_item?.replaceUrl)"
+                        [state]="$safeNavigationMigration(_item?.state)"
                         [pBind]="getPTOptions('itemLink')"
                         pRipple
                     >
@@ -82,20 +82,27 @@ export class SafeHtmlPipe implements PipeTransform {
 
             <ng-template #itemContent>
                 @if (_item?.icon) {
-                    <span [class]="cn(cx('itemIcon', { item: _item }), _item?.iconClass)" [pBind]="getPTOptions('itemIcon')" [style]="_item?.iconStyle" [attr.data-pc-section]="'itemicon'"></span>
+                    <span [class]="cn(cx('itemIcon', { item: _item }), $safeNavigationMigration(_item?.iconClass))" [pBind]="getPTOptions('itemIcon')" [style]="_item?.iconStyle" [attr.data-pc-section]="'itemicon'"></span>
                 }
                 @if (_item?.escape !== false) {
-                    <span [class]="cn(cx('itemLabel'), _item?.labelClass)" [style]="_item?.labelStyle" [pBind]="getPTOptions('itemLabel')" [attr.data-pc-section]="'itemlabel'">{{ _item?.label }}</span>
+                    <span [class]="cn(cx('itemLabel'), $safeNavigationMigration(_item?.labelClass))" [style]="_item?.labelStyle" [pBind]="getPTOptions('itemLabel')" [attr.data-pc-section]="'itemlabel'">{{ _item?.label }}</span>
                 } @else {
-                    <span [class]="cn(cx('itemLabel'), _item?.labelClass)" [style]="_item?.labelStyle" [attr.data-pc-section]="'itemlabel'" [innerHTML]="_item?.label | safeHtml" [pBind]="getPTOptions('itemLabel')"></span>
+                    <span
+                        [class]="cn(cx('itemLabel'), $safeNavigationMigration(_item?.labelClass))"
+                        [style]="_item?.labelStyle"
+                        [attr.data-pc-section]="'itemlabel'"
+                        [innerHTML]="$safeNavigationMigration(_item?.label) | safeHtml"
+                        [pBind]="getPTOptions('itemLabel')"
+                    ></span>
                 }
                 @if (_item?.badge) {
-                    <p-badge [class]="_item?.badgeStyleClass" [value]="_item?.badge" [pt]="getPTOptions('pcBadge')" [unstyled]="unstyled()" />
+                    <p-badge [class]="_item?.badgeStyleClass" [value]="$safeNavigationMigration(_item?.badge)" [pt]="getPTOptions('pcBadge')" [unstyled]="unstyled()" />
                 }
             </ng-template>
         </div>
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [MenuStyle]
 })
 export class MenuItemContent extends BaseComponent {

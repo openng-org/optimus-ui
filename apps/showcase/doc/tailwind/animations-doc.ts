@@ -2,7 +2,7 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { SelectModule } from 'primeng/select';
@@ -11,6 +11,7 @@ import { SelectModule } from 'primeng/select';
     selector: 'animations-doc',
     standalone: true,
     imports: [CommonModule, FormsModule, AppDocSectionText, AppCode, SelectModule, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The plugin also adds extended animation utilities that can be used with the <a routerLink="/styleclass">styleclass</a> and <a routerLink="/animateonscroll">animateonscroll</a> directives.</p>

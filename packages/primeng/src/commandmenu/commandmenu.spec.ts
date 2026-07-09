@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { CommandMenu } from './commandmenu';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-commandmenu
             [options]="options"
@@ -55,6 +56,7 @@ class TestCommandMenuComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-commandmenu [options]="options">
             <ng-template #header let-search>
@@ -81,6 +83,7 @@ class TestCommandMenuTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-commandmenu [options]="options" [group]="true" [optionGroupLabel]="'label'" [optionGroupChildren]="'items'">
             <ng-template #group let-group>

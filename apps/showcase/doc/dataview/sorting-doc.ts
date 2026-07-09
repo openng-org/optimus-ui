@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectItem } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -17,6 +17,7 @@ import { TagModule } from 'primeng/tag';
     standalone: true,
     imports: [CommonModule, FormsModule, DataViewModule, ButtonModule, TagModule, SelectModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Built-in sorting is controlled by bindings <i>sortField</i> and <i>sortOrder</i> properties from a custom UI.</p>

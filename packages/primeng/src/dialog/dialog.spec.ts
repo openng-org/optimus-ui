@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { Dialog } from './dialog';
 // Basic Dialog Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog
             [(visible)]="visible"
@@ -137,6 +138,7 @@ class TestBasicDialogComponent {
 // Dialog with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true">
             <ng-template #header>
@@ -167,6 +169,7 @@ class TestTemplateDialogComponent {
 // Dialog with #template Templates
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true" [maximizable]="true">
             <ng-template #header>
@@ -197,6 +200,7 @@ class TestHashTemplateDialogComponent {
 // Dialog with Headless Template
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible">
             <ng-template #headless>
@@ -216,6 +220,7 @@ class TestHeadlessDialogComponent {
 // Dialog for Position Testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible" [position]="position" header="Position Test">
             <div>Testing different positions</div>
@@ -230,6 +235,7 @@ class TestPositionDialogComponent {
 // Dialog for Maximizable Testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible" [maximizable]="maximizable" header="Maximizable Test" (onMaximize)="onMaximize($event)">
             <div>Testing maximize functionality</div>
@@ -249,6 +255,7 @@ class TestMaximizableDialogComponent {
 // Dialog for Accessibility Testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true" header="Accessibility Test" [closeAriaLabel]="closeAriaLabel" [role]="role" [focusTrap]="focusTrap">
             <div>Testing accessibility features</div>

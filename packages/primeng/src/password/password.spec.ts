@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { MapperPipe, Password, PasswordDirective, PasswordModule } from './passw
 // Test Components
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-password
             [(ngModel)]="value"
@@ -72,6 +73,7 @@ class TestBasicPasswordComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-password formControlName="password" [feedback]="feedback" [toggleMask]="toggleMask"> </p-password>
@@ -90,6 +92,7 @@ class TestFormPasswordComponent {
 // Password #template component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-password [(ngModel)]="value" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear" [placeholder]="placeholder">
             <!-- Header template with #template reference -->
@@ -149,6 +152,7 @@ class TestPasswordTemplateComponent {
 // Password #template reference component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-password [(ngModel)]="value" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear" [placeholder]="placeholder">
             <!-- Header template with #template reference -->
@@ -207,6 +211,7 @@ class TestPasswordRefTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input type="password" pPassword [(ngModel)]="value" [feedback]="feedback" [promptLabel]="promptLabel" [weakLabel]="weakLabel" [mediumLabel]="mediumLabel" [strongLabel]="strongLabel" /> `
 })
 class TestPasswordDirectiveComponent {
@@ -220,6 +225,7 @@ class TestPasswordDirectiveComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input type="password" pPassword [(ngModel)]="value" [pt]="pt" [feedback]="feedback" /> `
 })
 class TestPTPasswordDirectiveComponent {
@@ -230,6 +236,7 @@ class TestPTPasswordDirectiveComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-password [(ngModel)]="value" [pt]="pt" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear"> </p-password> `
 })
 class TestPTPasswordComponent {

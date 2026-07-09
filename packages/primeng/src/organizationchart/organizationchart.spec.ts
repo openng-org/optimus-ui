@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { OrganizationChartNode } from './organizationchart-node';
 // Test component for basic use cases
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-organization-chart
             [value]="data"
@@ -62,6 +63,7 @@ class TestBasicOrganizationChartComponent {
 // Test component for template testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-organization-chart [value]="data" [collapsible]="true">
             <ng-template #node let-node>
@@ -102,6 +104,7 @@ class TestTemplateOrganizationChartComponent {
 // Test component for toggler icon template
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-organization-chart [value]="data" [collapsible]="true">
             <ng-template #togglericon let-expanded>
@@ -125,6 +128,7 @@ class TestTogglerIconTemplateComponent {
 // Test component for keyboard navigation
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-organization-chart [value]="data" [collapsible]="true" [selectionMode]="'single'"> </p-organization-chart> `
 })
 class TestKeyboardNavigationComponent {

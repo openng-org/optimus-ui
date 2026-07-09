@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OrderListModule } from 'primeng/orderlist';
 import { ProductService } from '@/service/productservice';
 
@@ -30,6 +30,7 @@ interface Product {
             </p-orderlist>
         </app-docptviewer>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ProductService]
 })
 export class PTViewer implements OnInit {

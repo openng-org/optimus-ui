@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
 @Component({
     selector: 'resources-doc',
     standalone: true,
     imports: [AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-docsectiontext>
         <p>PrimeOne for Figma takes full advantage of powerful Figma features such as components, variants, auto layout, styles, interactivity, and design tokens via Tokens Studio.</p>
         <p>If you're new to Figma or want to get the most out of PrimeOne, we recommend exploring the following resources:</p>

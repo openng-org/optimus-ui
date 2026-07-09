@@ -1,5 +1,5 @@
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 
@@ -7,6 +7,7 @@ import { AppCode } from '@/components/doc/app.code';
     selector: 'csp-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The <i>nonce</i> value to use on dynamically generated style elements in core.</p>

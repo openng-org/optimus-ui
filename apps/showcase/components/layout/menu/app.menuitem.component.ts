@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { booleanAttribute, Component, Input } from '@angular/core';
+import { booleanAttribute, Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { StyleClass } from 'primeng/styleclass';
 import { Tag } from 'primeng/tag';
@@ -62,6 +62,7 @@ import { MenuItem } from './app.menu.component';
         }
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [NgClass, StyleClass, RouterModule, Tag]
 })
 export class AppMenuItemComponent {

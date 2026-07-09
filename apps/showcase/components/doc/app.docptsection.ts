@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionNav } from './app.docsection-nav';
 
 @Component({
     selector: 'app-docptsection',
     standalone: true,
     imports: [CommonModule, AppDocSectionNav],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="doc-main">
             @if (ptComponent()) {

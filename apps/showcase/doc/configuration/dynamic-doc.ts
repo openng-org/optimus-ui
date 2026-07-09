@@ -1,6 +1,6 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 
@@ -8,9 +8,12 @@ import { AppCode } from '@/components/doc/app.code';
     selector: 'dynamic-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
-            <p>Inject the <i>{{ PROJECT_NAME }}</i> to your application to update the initial configuration at runtime.</p>
+            <p>
+                Inject the <i>{{ PROJECT_NAME }}</i> to your application to update the initial configuration at runtime.
+            </p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `

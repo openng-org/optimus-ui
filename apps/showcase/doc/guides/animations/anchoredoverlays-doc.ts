@@ -1,6 +1,6 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 
@@ -27,6 +27,7 @@ interface City {
 
         <app-code [code]="code" hideToggleCode hideStackBlitz></app-code>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             :host::ng-deep {

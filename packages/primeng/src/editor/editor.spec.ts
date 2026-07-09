@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { Editor } from './editor';
 // Test Components for different scenarios
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-editor
             [(ngModel)]="text"
@@ -77,6 +78,7 @@ class TestBasicEditorComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-editor [(ngModel)]="text">
             <ng-template #header>
@@ -94,6 +96,7 @@ class TestCustomToolbarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-editor [(ngModel)]="text" [readonly]="true"> </p-editor> `
 })
 class TestReadonlyComponent {
@@ -102,6 +105,7 @@ class TestReadonlyComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-editor [(ngModel)]="text" [modules]="customModules" [formats]="customFormats"> </p-editor> `
 })
 class TestCustomConfigurationComponent {

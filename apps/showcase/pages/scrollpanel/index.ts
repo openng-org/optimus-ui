@@ -4,7 +4,7 @@ import { BasicDoc } from '@/doc/scrollpanel/basic-doc';
 import { CusstomDoc } from '@/doc/scrollpanel/custom-doc';
 import { UsageDoc } from '@/doc/scrollpanel/usage-doc';
 import { PTComponent } from '@/doc/scrollpanel/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -18,6 +18,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ScrollPanelDemo {

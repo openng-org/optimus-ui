@@ -1,6 +1,6 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 
@@ -8,12 +8,13 @@ import { AppCode } from '@/components/doc/app.code';
     selector: 'zindex-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>
                 ZIndexes are managed automatically to make sure layering of overlay components work seamlessly when combining multiple components. Still there may be cases where you'd like to configure the configure default values such as a custom
-                layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. {{ PROJECT_NAME }} configuration offers the <i>zIndex</i> property to customize
-                the default values for components categories. Default values are described below and can be customized when setting up {{ PROJECT_NAME }}.
+                layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. {{ PROJECT_NAME }} configuration offers the <i>zIndex</i> property to
+                customize the default values for components categories. Default values are described below and can be customized when setting up {{ PROJECT_NAME }}.
             </p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>

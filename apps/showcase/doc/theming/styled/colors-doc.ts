@@ -1,12 +1,13 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'colors-doc',
     standalone: true,
     imports: [CommonModule, AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Color palette of a preset is defined by the <i>primitive</i> design token group. You can access colors using CSS variables or the <i>$dt</i> utility.</p>

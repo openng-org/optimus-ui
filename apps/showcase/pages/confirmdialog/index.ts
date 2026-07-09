@@ -5,11 +5,12 @@ import { PositionDoc } from '@/doc/confirmdialog/position-doc';
 import { PTComponent } from '@/doc/confirmdialog/pt/PTComponent';
 import { TemplateDoc } from '@/doc/confirmdialog/template-doc';
 import { UsageDoc } from '@/doc/confirmdialog/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular ConfirmDialog Component"

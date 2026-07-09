@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputMask, InputMaskModule, InputMaskDirective } from './inputmask';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
     standalone: true,
     imports: [InputMaskModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputmask
             [(ngModel)]="value"
@@ -79,6 +80,7 @@ class TestBasicInputMaskComponent {
 @Component({
     standalone: true,
     imports: [InputMaskModule, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-inputmask [mask]="mask" formControlName="maskedValue" [unmask]="unmask"> </p-inputmask>
@@ -97,6 +99,7 @@ class TestFormInputMaskComponent {
 @Component({
     standalone: true,
     imports: [InputMaskModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputmask [mask]="mask" [(ngModel)]="value" [showClear]="showClear" [placeholder]="placeholder" [autoClear]="autoClear" [unmask]="unmask">
             <!-- Clear icon template with #template reference -->
@@ -118,6 +121,7 @@ class TestTemplateInputMaskComponent {
 @Component({
     standalone: true,
     imports: [InputMaskModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <p-inputmask [mask]="phoneMask" [(ngModel)]="phoneValue" placeholder="Phone Number"> </p-inputmask>
@@ -1512,6 +1516,7 @@ describe('InputMask', () => {
 @Component({
     standalone: true,
     imports: [InputMaskDirective, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input [pInputMask]="mask" [(ngModel)]="value" />`
 })
 class DirectiveBasicTestComponent {
@@ -1522,6 +1527,7 @@ class DirectiveBasicTestComponent {
 @Component({
     standalone: true,
     imports: [InputMaskDirective, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<input [pInputMask]="mask" [formControl]="control" />`
 })
 class DirectiveReactiveFormTestComponent {
@@ -1532,6 +1538,7 @@ class DirectiveReactiveFormTestComponent {
 @Component({
     standalone: true,
     imports: [InputMaskDirective, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <input [pInputMask]="mask" [(ngModel)]="value" [slotChar]="slotChar" [autoClear]="autoClear" [attr.readonly]="readonly ? '' : null" [keepBuffer]="keepBuffer" [characterPattern]="characterPattern" (onComplete)="onComplete()" /> `
 })
 class DirectiveFullFeaturedTestComponent {

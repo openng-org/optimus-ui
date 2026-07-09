@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AnimateOnScroll, AnimateOnScrollModule } from './animateonscroll';
@@ -56,12 +56,14 @@ class MockIntersectionObserver implements IntersectionObserver {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div pAnimateOnScroll>Basic AnimateOnScroll</div>`
 })
 class TestBasicAnimateOnScrollComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div pAnimateOnScroll [enterClass]="enterClass" [leaveClass]="leaveClass" [root]="root" [rootMargin]="rootMargin" [threshold]="threshold" [once]="once">Custom AnimateOnScroll</div> `
 })
 class TestCustomAnimateOnScrollComponent {
@@ -75,6 +77,7 @@ class TestCustomAnimateOnScrollComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="container">
             <div pAnimateOnScroll enterClass="fade-in" leaveClass="fade-out">Element 1</div>
@@ -87,18 +90,21 @@ class TestMultipleAnimateOnScrollComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div pAnimateOnScroll enterClass="animate__fadeIn" [once]="true">Once Animation Element</div> `
 })
 class TestOnceAnimateOnScrollComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div pAnimateOnScroll enterClass="custom-enter" leaveClass="custom-leave" [threshold]="0.8" rootMargin="10px">Advanced Config Element</div> `
 })
 class TestAdvancedConfigComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div pAnimateOnScroll [enterClass]="enterClass" [leaveClass]="leaveClass" [once]="once" [threshold]="threshold">Dynamic Config Element</div> `
 })
 class TestDynamicConfigComponent {

@@ -3,7 +3,7 @@ import { Customer } from '@/domain/customer';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CustomerService } from '@/service/customerservice';
 import { CommonModule } from '@angular/common';
-import { Component, Inject, PLATFORM_ID, ViewChild } from '@angular/core';
+import { Component, Inject, PLATFORM_ID, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
@@ -16,6 +16,7 @@ import { Tag } from 'primeng/tag';
     selector: 'theme-section',
     standalone: true,
     imports: [CommonModule, TableModule, ButtonModule, Tag, ProgressBar, InputTextModule, IconField, InputIcon],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-themes py-20">
             <div class="section-header">Components</div>

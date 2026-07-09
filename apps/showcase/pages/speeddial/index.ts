@@ -9,7 +9,7 @@ import { SemiCircleDoc } from '@/doc/speeddial/semicircle-doc';
 import { TemplateDoc } from '@/doc/speeddial/template-doc';
 import { TooltipDoc } from '@/doc/speeddial/tooltip-doc';
 import { UsageDoc } from '@/doc/speeddial/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './speeddialdemo.scss'
 })
 export class SpeedDialDemo {

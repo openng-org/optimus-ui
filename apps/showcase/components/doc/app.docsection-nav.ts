@@ -1,6 +1,6 @@
 import { Doc } from '@/domain/doc';
 import { CommonModule, DOCUMENT, isPlatformBrowser, Location } from '@angular/common';
-import { AfterViewInit, Component, DestroyRef, ElementRef, inject, input, OnInit, PLATFORM_ID, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, ElementRef, inject, input, OnInit, PLATFORM_ID, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -12,6 +12,7 @@ import { fromEvent } from 'rxjs';
     selector: 'app-docsection-nav',
     standalone: true,
     imports: [CommonModule, ButtonModule, RouterLink],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="doc-section-nav-container">
             <span class="doc-section-nav-title">ON THIS PAGE</span>

@@ -9,7 +9,7 @@ import { PTComponent } from '@/doc/organizationchart/pt/PTComponent';
 import { SelectionDoc } from '@/doc/organizationchart/selection-doc';
 import { TemplateDoc } from '@/doc/organizationchart/template-doc';
 import { UsageDoc } from '@/doc/organizationchart/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: ` <app-doc
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './organizationchartdemo.scss'
 })
 export class OrganizationChartDemo {

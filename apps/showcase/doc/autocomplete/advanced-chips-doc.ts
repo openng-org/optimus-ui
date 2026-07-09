@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { ChipModule } from 'primeng/chip';
@@ -14,6 +14,7 @@ import { ChipModule } from 'primeng/chip';
     standalone: true,
     imports: [CommonModule, FormsModule, AutoCompleteModule, ChipModule, AppDocSectionText, AppCode, AppDemoWrapper],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>This example demonstrates an advanced use case with templating, object handling, dropdown, and multiple mode.</p>
         </app-docsectiontext>

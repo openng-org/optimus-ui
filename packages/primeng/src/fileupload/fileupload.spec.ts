@@ -1,6 +1,6 @@
 import { HttpEventType } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -743,6 +743,7 @@ describe('FileUpload', () => {
 // Test Components for Template Testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -759,6 +760,7 @@ class TestTemplateHeaderComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -775,6 +777,7 @@ class TestHashHeaderComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback">
@@ -792,6 +795,7 @@ class TestTemplateContentComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback">
@@ -809,6 +813,7 @@ class TestHashContentComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #file let-file let-index="index">
@@ -823,6 +828,7 @@ class TestTemplateFileComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #empty>
@@ -835,6 +841,7 @@ class TestTemplateEmptyComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
             <ng-template #filelabel let-files>
@@ -849,6 +856,7 @@ class TestTemplateFileLabelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #chooseicon>
@@ -867,6 +875,7 @@ class TestTemplateIconsComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #toolbar>
@@ -882,6 +891,7 @@ class TestTemplateToolbarComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload" [files]="files">
             <ng-template #file let-file let-index="index">
@@ -906,6 +916,7 @@ class TestFileRemoveIconComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
@@ -935,6 +946,7 @@ class TestContextObjectsComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
             <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback" let-progress="progress" let-messages="messages">
@@ -966,6 +978,7 @@ class TestContentContextComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
             <ng-template #filelabel let-files>

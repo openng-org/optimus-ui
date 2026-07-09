@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { RatingModule } from 'primeng/rating';
@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
     standalone: true,
     imports: [FormsModule, RatingModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDemoWrapper, AppDocSectionText, CommonModule],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext></app-docsectiontext>
         <p-toast />

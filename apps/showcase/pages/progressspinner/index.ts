@@ -3,7 +3,7 @@ import { BasicDoc } from '@/doc/progressspinner/basic-doc';
 import { CustomDoc } from '@/doc/progressspinner/custom-doc';
 import { UsageDoc } from '@/doc/progressspinner/usage-doc';
 import { PTComponent } from '@/doc/progressspinner/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -18,6 +18,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         themeDocs="progressspinner"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ProgressSpinnerDemo {

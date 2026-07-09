@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +10,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'input-doc',
     standalone: true,
     imports: [FormsModule, SliderModule, InputTextModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Slider is connected to an input field using two-way binding.</p>

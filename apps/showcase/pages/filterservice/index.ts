@@ -4,12 +4,13 @@ import { BuiltInConstraintsDoc } from '@/doc/filterservice/builtinconstraints-do
 import { CustomConstraintsDoc } from '@/doc/filterservice/customconstraints-doc';
 import { TableIntegrationDoc } from '@/doc/filterservice/tableintegration-doc';
 import { UsageDoc } from '@/doc/filterservice/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-doc docTitle="FilterService - {{ PROJECT_NAME }}" header="FilterService" description="FilterService is a helper utility to filter collections against constraints." [docs]="docs" [heroDoc]="heroDoc"></app-doc>`
 })
 export class FilterServiceDemo {

@@ -8,7 +8,7 @@ import { IftaLabelDoc } from '@/doc/inputgroup/iftalabel-doc';
 import { UsageDoc } from '@/doc/inputgroup/usage-doc';
 import { MultipleDoc } from '@/doc/inputgroup/multiple-doc';
 import { PTComponent } from '@/doc/inputgroup/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
         themeDocs="inputgroup"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class InputGroupDemo {

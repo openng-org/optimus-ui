@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, inject, input, ChangeDetectionStrategy } from '@angular/core';
 import { DesignerService } from '@/service/designerservice';
 import { DesignTokenField } from '../designtokenfield';
 
@@ -6,6 +6,7 @@ import { DesignTokenField } from '../designtokenfield';
     selector: 'design-component-section',
     standalone: true,
     imports: [DesignTokenField],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<section>
         <div class="text-sm mb-1 font-semibold text-surface-950 dark:text-surface-0 capitalize">{{ sectionName() }}</div>
         <div class="grid grid-cols-4 gap-x-2 gap-y-3">

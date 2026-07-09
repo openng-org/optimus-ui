@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SliderModule } from 'primeng/slider';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -10,6 +10,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'filter-doc',
     standalone: true,
     imports: [FormsModule, SliderModule, SelectButtonModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Image filter implementation using multiple sliders.</p>

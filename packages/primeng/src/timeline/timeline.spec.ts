@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -17,6 +17,7 @@ interface EventItem {
 // Basic test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-timeline [value]="events" [align]="align" [layout]="layout" [class]="styleClass"> </p-timeline> `
 })
 class TestBasicTimelineComponent {
@@ -35,6 +36,7 @@ class TestBasicTimelineComponent {
 // Template test component with ContentChild approach
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-timeline [value]="events" [align]="align">
             <ng-template #content let-event>
@@ -64,6 +66,7 @@ class TestTemplatesTimelineComponent {
 // Empty state test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-timeline [value]="events">
             <ng-template #content let-event>
@@ -79,6 +82,7 @@ class TestEmptyTimelineComponent {
 // Complex event data test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-timeline [value]="events" [layout]="layout" [align]="align">
             <ng-template #content let-event>

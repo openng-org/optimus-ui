@@ -1,4 +1,4 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from 'primeng/api';
@@ -7,6 +7,7 @@ import { Badge, BadgeModule } from './badge';
 @Component({
     standalone: false,
     selector: 'test-basic-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-badge></p-badge>`
 })
 class TestBasicBadgeComponent {}
@@ -14,6 +15,7 @@ class TestBasicBadgeComponent {}
 @Component({
     standalone: false,
     selector: 'test-value-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-badge [value]="value"></p-badge>`
 })
 class TestValueBadgeComponent {
@@ -23,6 +25,7 @@ class TestValueBadgeComponent {
 @Component({
     standalone: false,
     selector: 'test-size-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-badge [badgeSize]="badgeSize" value="1"></p-badge>`
 })
 class TestSizeBadgeComponent {
@@ -32,6 +35,7 @@ class TestSizeBadgeComponent {
 @Component({
     standalone: false,
     selector: 'test-severity-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-badge [severity]="severity" value="1"></p-badge>`
 })
 class TestSeverityBadgeComponent {
@@ -41,6 +45,7 @@ class TestSeverityBadgeComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-badge [badgeDisabled]="disabled" value="1"></p-badge>`
 })
 class TestDisabledBadgeComponent {
@@ -50,6 +55,7 @@ class TestDisabledBadgeComponent {
 @Component({
     standalone: false,
     selector: 'test-dynamic-badge',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-badge [value]="value" [badgeSize]="badgeSize" [severity]="severity" [badgeDisabled]="disabled"> </p-badge> `
 })
 class TestDynamicBadgeComponent {

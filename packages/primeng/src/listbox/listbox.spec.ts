@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { Listbox } from './listbox';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-listbox
             [(ngModel)]="selectedValue"
@@ -1054,6 +1055,7 @@ describe('Listbox', () => {
 // Template test component using #template references with enhanced features
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
             <!-- Item template with context parameters -->
@@ -1168,6 +1170,7 @@ class TestListboxTemplateComponent {
 // Template test component using #template references with enhanced context testing
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
             <!-- Item template with context parameters -->
@@ -1655,6 +1658,7 @@ describe('Listbox #template Reference Tests', () => {
 // Additional comprehensive test component for ViewChild properties and complex scenarios
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-listbox
             #listboxRef

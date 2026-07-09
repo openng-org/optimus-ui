@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { FormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
@@ -14,6 +14,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     standalone: true,
     imports: [FormsModule, PasswordModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDocSectionText, AppDemoWrapper],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext> </app-docsectiontext>
         <p-toast />

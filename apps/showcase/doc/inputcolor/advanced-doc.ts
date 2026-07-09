@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import {
     InputColor,
@@ -49,6 +49,7 @@ import { EyeDropper } from '@primeicons/angular/eye-dropper';
         AppDemoWrapper,
         EyeDropper
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Advanced color picker with per-format channel sliders, input groups for RGBA, HSBA, HSLA, OKLCH channels, and a CSS output.</p>

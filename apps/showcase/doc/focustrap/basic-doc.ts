@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -15,6 +15,7 @@ import { InputTextModule } from 'primeng/inputtext';
     selector: 'basic-doc',
     standalone: true,
     imports: [FormsModule, AppCode, AppDemoWrapper, AppDocSectionText, AutoFocusModule, ButtonModule, CheckboxModule, FocusTrapModule, IconFieldModule, InputIconModule, InputTextModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>FocusTrap is applied to a container element with the <i>pFocusTrap</i> directive.</p>

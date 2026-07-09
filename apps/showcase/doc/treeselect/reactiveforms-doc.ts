@@ -1,5 +1,5 @@
 import { NodeService } from '@/service/nodeservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -15,6 +15,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'reactive-forms-doc',
     standalone: true,
     imports: [CommonModule, ReactiveFormsModule, TreeSelectModule, ButtonModule, ToastModule, MessageModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>TreeSelect can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>

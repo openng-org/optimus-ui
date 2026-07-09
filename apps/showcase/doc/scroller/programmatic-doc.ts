@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Scroller, ScrollerModule } from 'primeng/scroller';
 import { ButtonModule } from 'primeng/button';
 import { AppCode } from '@/components/doc/app.code';
@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
     selector: 'programmatic-doc',
     standalone: true,
     imports: [ScrollerModule, ButtonModule, AppCode, AppDemoWrapper, AppDocSectionText, CommonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Scrolling to a specific index can be done with the <i>scrollToIndex</i> function.</p>

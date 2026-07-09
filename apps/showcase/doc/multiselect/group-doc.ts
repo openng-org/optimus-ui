@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectItemGroup } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
@@ -15,6 +15,7 @@ interface City {
     selector: 'group-doc',
     standalone: true,
     imports: [FormsModule, MultiSelectModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Options can be grouped when a nested data structures is provided.</p>

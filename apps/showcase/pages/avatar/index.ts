@@ -9,12 +9,13 @@ import { SizeDoc } from '@/doc/avatar/size-doc';
 import { TemplateDoc } from '@/doc/avatar/template-doc';
 import { UsageDoc } from '@/doc/avatar/usage-doc';
 import { PTComponent } from '@/doc/avatar/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Avatar Component"

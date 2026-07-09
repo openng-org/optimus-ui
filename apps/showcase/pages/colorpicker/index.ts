@@ -7,12 +7,13 @@ import { InlineDoc } from '@/doc/colorpicker/inline-doc';
 import { PTComponent } from '@/doc/colorpicker/pt/PTComponent';
 import { ReactiveFormsDoc } from '@/doc/colorpicker/reactiveforms-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/colorpicker/templatedrivenforms-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-doc
         docTitle="Angular ColorPicker Component"
         header="ColorPicker"

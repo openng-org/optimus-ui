@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, computed, DebugElement, provideZonelessChangeDetection, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { Select } from './select';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-select
             [options]="options"
@@ -100,6 +101,7 @@ class TestBasicSelectComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-select formControlName="selectedOption" [options]="options" optionLabel="name" optionValue="code" placeholder="Choose an option"> </p-select>
@@ -123,6 +125,7 @@ class TestReactiveFormSelectComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-select [options]="groupedOptions" [(ngModel)]="selectedCity" optionLabel="cname" optionValue="code" [group]="true" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select a city"> </p-select> `
 })
 class TestGroupedSelectComponent {
@@ -149,6 +152,7 @@ class TestGroupedSelectComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with templates" [filter]="filter" [showClear]="showClear" [loading]="loading">
             <ng-template #item let-option>
@@ -215,6 +219,7 @@ class TestSelectTemplateRefComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with template refs" [filter]="filter" [showClear]="showClear" [loading]="loading">
             <ng-template #item let-option>
@@ -277,6 +282,7 @@ class TestSelectRefTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-select [options]="dynamicOptions()" [(ngModel)]="selectedValue" optionLabel="label" optionValue="value" [placeholder]="dynamicPlaceholder()" [disabled]="dynamicDisabled()" [loading]="dynamicLoading()"> </p-select> `
 })
 class TestDynamicSelectComponent {
@@ -314,6 +320,7 @@ class TestDynamicSelectComponent {
 // Dynamic data sources test component (signals, observables, async pipes)
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="dynamic-test-container">
             <!-- Signal-based options -->
@@ -548,6 +555,7 @@ class TestDynamicDataSourcesComponent {
 // Comprehensive FormControl test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="form-test-container">
             <form [formGroup]="testForm">
@@ -577,10 +585,10 @@ class TestDynamicDataSourcesComponent {
                 <div>Form Valid: {{ testForm.valid }}</div>
                 <div>Form Dirty: {{ testForm.dirty }}</div>
                 <div>Form Touched: {{ testForm.touched }}</div>
-                <div>Basic Select Value: {{ testForm.get('basicSelect')?.value | json }}</div>
+                <div>Basic Select Value: {{ $safeNavigationMigration(testForm.get('basicSelect')?.value) | json }}</div>
                 <div>Basic Select Status: {{ testForm.get('basicSelect')?.status }}</div>
-                <div>Basic Select Errors: {{ testForm.get('basicSelect')?.errors | json }}</div>
-                <div>Validated Select Errors: {{ testForm.get('validatedSelect')?.errors | json }}</div>
+                <div>Basic Select Errors: {{ $safeNavigationMigration(testForm.get('basicSelect')?.errors) | json }}</div>
+                <div>Validated Select Errors: {{ $safeNavigationMigration(testForm.get('validatedSelect')?.errors) | json }}</div>
                 <div>NgModel Value: {{ ngModelValue | json }}</div>
                 <div>NgModel Valid: {{ ngModelRef.valid }}</div>
                 <div>NgModel Dirty: {{ ngModelRef.dirty }}</div>
@@ -663,6 +671,7 @@ class TestComprehensiveFormComponent {
 // Comprehensive ViewChild properties test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="viewchild-test-container">
             <p-select #testSelect [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="ViewChild test select" [filter]="true" [showClear]="true" [virtualScroll]="false"></p-select>
@@ -695,6 +704,7 @@ class TestViewChildComponent {
 // Complex edge cases test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="edge-cases-container">
             <!-- Rapid updates test -->
@@ -800,6 +810,7 @@ class TestComplexEdgeCasesComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-select
             [options]="options"

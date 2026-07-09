@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, provideZonelessChangeDetection, signal } from '@angular/core';
+import { Component, computed, provideZonelessChangeDetection, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ClassNamesModule } from './classnames';
@@ -14,6 +14,7 @@ import { ClassNamesModule } from './classnames';
         <div class="p-2 border border-surface-700" [ngClass]="ngClassExample" [pClass]="[combinedExample, 'string_class']" data-testid="combined"></div>
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClassNamesModule, NgClass]
 })
 class TestComponent {
@@ -111,6 +112,7 @@ describe('PClass Directive', () => {
         <div [pClass]="comboClasses()" data-testid="combo"></div>
     `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [ClassNamesModule]
 })
 class SignalTestComponent {

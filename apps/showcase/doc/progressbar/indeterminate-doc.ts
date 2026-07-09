@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { AppCode } from '@/components/doc/app.code';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     standalone: true,
     imports: [ProgressBarModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [MessageService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>For progresses with no value to track, set the <i>mode</i> property to <i>indeterminate</i>.</p>

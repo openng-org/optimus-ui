@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ChangeDetectionStrategy } from '@angular/core';
 import { SharedModule } from 'primeng/api';
 import { BaseComponent, PARENT_INSTANCE } from 'primeng/basecomponent';
 import { BindModule } from 'primeng/bind';
@@ -35,17 +35,18 @@ import { SelectStyle } from './style/selectstyle';
         >
             @if (checkmark()) {
                 @if (selected()) {
-                    <svg data-p-icon="check" [class]="cx('optionCheckIcon')" [pBind]="$pcSelect?.ptm('optionCheckIcon')" />
+                    <svg data-p-icon="check" [class]="cx('optionCheckIcon')" [pBind]="$safeNavigationMigration($pcSelect?.ptm('optionCheckIcon'))" />
                 } @else {
-                    <svg data-p-icon="blank" [class]="cx('optionBlankIcon')" [pBind]="$pcSelect?.ptm('optionBlankIcon')" />
+                    <svg data-p-icon="blank" [class]="cx('optionBlankIcon')" [pBind]="$safeNavigationMigration($pcSelect?.ptm('optionBlankIcon'))" />
                 }
             }
             @if (!template()) {
-                <span [pBind]="$pcSelect?.ptm('optionLabel')">{{ label() ?? 'empty' }}</span>
+                <span [pBind]="$safeNavigationMigration($pcSelect?.ptm('optionLabel'))">{{ label() ?? 'empty' }}</span>
             }
             <ng-container *ngTemplateOutlet="template(); context: templateContext()"></ng-container>
         </li>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [SelectStyle, { provide: PARENT_INSTANCE, useExisting: SelectItem }]
 })
 export class SelectItem extends BaseComponent {

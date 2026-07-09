@@ -1,6 +1,6 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import APIDoc from '@/doc/apidoc/index.json';
-import { ChangeDetectorRef, Component, computed, ElementRef, inject, input, InputSignal, viewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, ElementRef, inject, input, InputSignal, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { addClass, find, removeClass } from '@primeuix/utils/dom';
 import { PrimeNG } from 'primeng/config';
@@ -119,6 +119,7 @@ export const getPTOptions = (name, { exclude = [] }: { exclude?: string[] } = {}
     selector: 'app-docptviewer',
     standalone: true,
     imports: [AppDocSectionText, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -12,6 +12,7 @@ function createProcessedItem(item: MenuItem, key: string, index: number, level: 
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar
             [model]="model"
@@ -57,6 +58,7 @@ class TestBasicMenubarComponent {
 @Component({
     standalone: false,
     selector: 'test-nested-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="nestedModel"> </p-menubar> `
 })
 class TestNestedMenubarComponent {
@@ -80,6 +82,7 @@ class TestNestedMenubarComponent {
 @Component({
     standalone: false,
     selector: 'test-router-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="routerModel"> </p-menubar> `
 })
 class TestRouterMenubarComponent {
@@ -97,6 +100,7 @@ class TestRouterMenubarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar [model]="model">
             <ng-template #start>
@@ -114,6 +118,7 @@ class TestTemplateMenubarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar [model]="model">
             <ng-template #item let-item>
@@ -134,6 +139,7 @@ class TestItemTemplateMenubarComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar [model]="model">
             <ng-template #item let-item>
@@ -148,6 +154,7 @@ class TestTemplateMenubarItemComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar [model]="model">
             <ng-template #submenuicon>
@@ -167,6 +174,7 @@ class TestSubmenuIconTemplateComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-menubar [model]="model">
             <ng-template #menuicon>
@@ -182,6 +190,7 @@ class TestMenuIconTemplateComponent {
 @Component({
     standalone: false,
     selector: 'test-disabled-items',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="disabledModel"> </p-menubar> `
 })
 class TestDisabledItemsComponent {
@@ -191,6 +200,7 @@ class TestDisabledItemsComponent {
 @Component({
     standalone: false,
     selector: 'test-styled-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [class]="customStyleClass"> </p-menubar> `
 })
 class TestStyledMenubarComponent {
@@ -200,6 +210,7 @@ class TestStyledMenubarComponent {
 @Component({
     standalone: false,
     selector: 'test-minimal-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-menubar></p-menubar>`
 })
 class TestMinimalMenubarComponent {}
@@ -207,6 +218,7 @@ class TestMinimalMenubarComponent {}
 @Component({
     standalone: false,
     selector: 'test-dynamic-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="dynamicModel"> </p-menubar> `
 })
 class TestDynamicMenubarComponent {
@@ -228,6 +240,7 @@ class TestDynamicMenubarComponent {
 @Component({
     standalone: false,
     selector: 'test-command-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="commandModel"> </p-menubar> `
 })
 class TestCommandMenubarComponent {
@@ -247,6 +260,7 @@ class TestCommandMenubarComponent {
 @Component({
     standalone: false,
     selector: 'test-autohide-menubar',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-menubar [model]="model" [autoHide]="autoHide" [autoHideDelay]="autoHideDelay"> </p-menubar> `
 })
 class TestAutoHideMenubarComponent {
@@ -257,6 +271,7 @@ class TestAutoHideMenubarComponent {
 
 @Component({
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: '<div>Target Page</div>'
 })
 class TestTargetComponent {}

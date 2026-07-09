@@ -13,7 +13,7 @@ import { StepDoc } from '@/doc/knob/step-doc';
 import { StrokeDoc } from '@/doc/knob/stroke-doc';
 import { TemplateDoc } from '@/doc/knob/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/knob/templatedrivenforms-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -28,6 +28,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [ptDocs]="ptComponent"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class KnobDemo {

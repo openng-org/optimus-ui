@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,6 +11,7 @@ const mockPreviewImageSrc = 'https://primefaces.org/cdn/primeng/images/galleria/
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-image [src]="src" [alt]="alt" [width]="width" [height]="height" [srcSet]="srcSet" [sizes]="sizes" [loading]="loading" [imageClass]="imageClass" [imageStyle]="imageStyle" (onImageError)="onImageError($event)"> </p-image> `
 })
 class TestBasicImageComponent {
@@ -32,6 +33,7 @@ class TestBasicImageComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true" [previewImageSrc]="previewImageSrc" [previewImageSrcSet]="previewImageSrcSet" [previewImageSizes]="previewImageSizes" (onShow)="onShow($event)" (onHide)="onHide($event)">
         </p-image>
@@ -58,6 +60,7 @@ class TestPreviewImageComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true">
             <ng-template #indicator>

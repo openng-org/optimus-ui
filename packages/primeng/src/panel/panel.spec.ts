@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -11,6 +11,7 @@ import { Panel } from './panel';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-panel
             [header]="header"
@@ -56,6 +57,7 @@ class TestBasicPanelComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-panel header="Template Panel" [toggleable]="true">
             <ng-template #header>
@@ -80,6 +82,7 @@ class TestTemplatesPanelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-panel header="Facet Panel" [toggleable]="true">
             <p-header>
@@ -96,6 +99,7 @@ class TestFacetsPanelComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-panel header="Keyboard Panel" [toggleable]="true" [collapsed]="false">
             <div>

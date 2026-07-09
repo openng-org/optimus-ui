@@ -1,9 +1,10 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     selector: 'verona-logo',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <svg width="142" height="40" viewBox="0 0 142 40" fill="none" xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_2008_66426)">

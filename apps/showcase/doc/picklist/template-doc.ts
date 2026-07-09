@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { PickListModule } from 'primeng/picklist';
 
 @Component({
@@ -12,6 +12,7 @@ import { PickListModule } from 'primeng/picklist';
     standalone: true,
     imports: [CommonModule, PickListModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>For custom content support define an <i>item</i> template that gets the item instance as a parameter. In addition <i>sourceheader</i> and <i>targetheader</i> templates are provided for further customization.</p>

@@ -3,7 +3,7 @@ import { BasicDoc } from '@/doc/animateonscroll/basic-doc';
 import { UsageDoc } from '@/doc/animateonscroll/usage-doc';
 import { AppDoc } from '@/components/doc/app.doc';
 import { AppDocService } from '@/components/doc/app.doc.service';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: ` <app-doc
@@ -16,6 +16,7 @@ import { Component } from '@angular/core';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [AppDocService]
 })
 export class AnimateOnScrollDemo {

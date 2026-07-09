@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -38,6 +38,7 @@ import { InputColorEyeDropper } from './inputcolor-eyedropper';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputcolor [(ngModel)]="color" [format]="format" (onValueChange)="onValueChange($event)" (onValueChangeEnd)="onValueChangeEnd($event)">
             <p-inputcolor-slider [channel]="sliderChannel" [orientation]="sliderOrientation">
@@ -73,6 +74,7 @@ class TestBasicComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputcolor [(ngModel)]="color" [format]="format">
             <input pInputColorInput [channel]="channel" />
@@ -87,6 +89,7 @@ class TestInputChannelsComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputcolor [(ngModel)]="color">
             <input pInputColorInput [channel]="'hue'" [type]="'text'" />
@@ -99,6 +102,7 @@ class TestCustomTypeInputComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-inputcolor formControlName="selectedColor" [format]="format">
@@ -116,6 +120,7 @@ class TestReactiveFormComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputcolor [(ngModel)]="color" [format]="format">
             <input pInputColorInput [channel]="'hex'" />
@@ -130,6 +135,7 @@ class TestFormatComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputcolor [(ngModel)]="color">
             <p-inputcolor-eyedropper [iconOnly]="iconOnly" [outlined]="outlined" [severity]="severity" [text]="text" [rounded]="rounded" [size]="size"> Pick </p-inputcolor-eyedropper>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { Inplace, InplaceContent, InplaceDisplay, InplaceModule } from './inplac
 @Component({
     standalone: false,
     selector: 'test-basic-inplace',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace>
             <p-inplacedisplay pInplaceDisplay>
@@ -26,6 +27,7 @@ class TestBasicInplaceComponent {}
 @Component({
     standalone: false,
     selector: 'test-inplace-with-events',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace (onActivate)="onActivate($event)" (onDeactivate)="onDeactivate($event)">
             <p-inplacedisplay pInplaceDisplay>
@@ -53,6 +55,7 @@ class TestInplaceWithEventsComponent {
 @Component({
     standalone: false,
     selector: 'test-inplace-disabled',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace [disabled]="disabled">
             <p-inplacedisplay pInplaceDisplay>
@@ -71,6 +74,7 @@ class TestInplaceDisabledComponent {
 @Component({
     standalone: false,
     selector: 'test-inplace-prevent-click',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace [preventClick]="preventClick">
             <p-inplacedisplay pInplaceDisplay>
@@ -89,6 +93,7 @@ class TestInplacePreventClickComponent {
 @Component({
     standalone: false,
     selector: 'test-inplace-active-state',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace>
             <p-inplacedisplay>
@@ -105,6 +110,7 @@ class TestInplaceActiveStateComponent {}
 @Component({
     standalone: false,
     selector: 'test-inplace-templates',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace>
             <ng-template #display>
@@ -124,6 +130,7 @@ class TestInplaceTemplatesComponent {}
 @Component({
     standalone: false,
     selector: 'test-inplace-keyboard',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace>
             <p-inplacedisplay>
@@ -140,6 +147,7 @@ class TestInplaceKeyboardComponent {}
 @Component({
     standalone: false,
     selector: 'test-inplace-complex-content',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace>
             <p-inplacedisplay pInplaceDisplay>
@@ -178,6 +186,7 @@ class TestInplaceComplexContentComponent {
 @Component({
     standalone: false,
     selector: 'test-inplace-dynamic',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inplace [disabled]="dynamicDisabled" [preventClick]="dynamicPreventClick">
             <p-inplacedisplay pInplaceDisplay>

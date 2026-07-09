@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { StyleClass } from './styleclass';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <button
             [pStyleClass]="selector"
@@ -44,6 +45,7 @@ class TestBasicStyleClassComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="container target-parent">
             <button pStyleClass="@parent" [toggleClass]="toggleClass">Parent Toggle</button>
@@ -60,6 +62,7 @@ class TestSelectorStyleClassComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="grandparent">
             <div class="parent">
@@ -74,6 +77,7 @@ class TestGrandparentSelectorComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <button pStyleClass="@next" enterActiveClass="slide-down-enter" leaveActiveClass="slide-up-leave" [hideOnOutsideClick]="true" [hideOnEscape]="true">Animated Toggle</button>
         <div class="animated-target">Animated Content</div>
@@ -83,6 +87,7 @@ class TestAnimationStyleClassComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <button pStyleClass="@next" enterActiveClass="slidedown" enterFromClass="hidden" enterToClass="visible" leaveFromClass="visible" leaveActiveClass="slideup" leaveToClass="hidden">Slidedown Animation</button>
         <div class="slidedown-target">Slidedown Content</div>
@@ -92,6 +97,7 @@ class TestSlidedownStyleClassComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <button pStyleClass="#resize-target" [hideOnResize]="true" [toggleClass]="toggleClass" [resizeSelector]="resizeSelector">Resize Toggle</button>
         <div id="resize-target" class="resize-target">Resize Target</div>

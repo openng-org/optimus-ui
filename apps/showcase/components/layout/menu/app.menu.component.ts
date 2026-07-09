@@ -1,6 +1,6 @@
 import { default as MenuData } from '@/assets/data/menu.json';
 import { AppConfigService } from '@/service/appconfigservice';
-import { afterNextRender, Component, computed, ElementRef, OnDestroy } from '@angular/core';
+import { afterNextRender, Component, computed, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AutoComplete } from 'primeng/autocomplete';
 import { DomHandler } from 'primeng/dom';
@@ -32,6 +32,7 @@ export interface MenuItem {
         '[class.active]': 'isActive()'
     },
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [RouterModule, AppMenuItemComponent]
 })
 export class AppMenuComponent implements OnDestroy {

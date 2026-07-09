@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ interface City {
     selector: 'checkbox-doc',
     standalone: true,
     imports: [FormsModule, ListboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Listbox allows item selection using checkboxes.</p>

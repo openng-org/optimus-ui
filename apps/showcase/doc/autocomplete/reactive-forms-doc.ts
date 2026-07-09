@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -19,6 +19,7 @@ interface AutoCompleteCompleteEvent {
     selector: 'reactive-forms-doc',
     standalone: true,
     imports: [ReactiveFormsModule, AutoCompleteModule, ToastModule, MessageModule, ButtonModule, CommonModule, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <app-docsectiontext>
             <p>AutoComplete can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>
         </app-docsectiontext>

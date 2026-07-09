@@ -6,11 +6,12 @@ import { OpenDoc } from '@/doc/dynamicdialog/open-doc';
 import { PassingDataDoc } from '@/doc/dynamicdialog/passingdata-doc';
 import { PTComponent } from '@/doc/dynamicdialog/pt/PTComponent';
 import { UsageDoc } from '@/doc/dynamicdialog/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Dynamic Dialog Component"

@@ -1,4 +1,4 @@
-import { Component, DebugElement, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, PLATFORM_ID, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { ScrollTop, ScrollTopModule } from './scrolltop';
 @Component({
     standalone: false,
     selector: 'test-basic-scrolltop',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-scrolltop [threshold]="threshold" [target]="target"></p-scrolltop>`
 })
 class TestBasicScrollTopComponent {
@@ -20,6 +21,7 @@ class TestBasicScrollTopComponent {
 @Component({
     standalone: false,
     selector: 'test-scrolltop-with-parent',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="scroll-container" style="height: 200px; overflow-y: auto;">
             <div style="height: 1000px;">
@@ -34,6 +36,7 @@ class TestScrollTopWithParentComponent {}
 @Component({
     standalone: false,
     selector: 'test-scrolltop-with-icon',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-scrolltop [icon]="icon" [threshold]="threshold" [buttonAriaLabel]="buttonAriaLabel"> </p-scrolltop> `
 })
 class TestScrollTopWithIconComponent {
@@ -45,6 +48,7 @@ class TestScrollTopWithIconComponent {
 @Component({
     standalone: false,
     selector: 'test-scrolltop-with-template',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-scrolltop [threshold]="50">
             <ng-template #icon let-styleClass="styleClass">
@@ -58,6 +62,7 @@ class TestScrollTopWithTemplateComponent {}
 @Component({
     standalone: false,
     selector: 'test-scrolltop-with-styles',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-scrolltop [threshold]="threshold" [style]="customStyle" [styleClass]="customClass" [behavior]="behavior" [buttonProps]="buttonProps"> </p-scrolltop> `
 })
 class TestScrollTopWithStylesComponent {
@@ -71,6 +76,7 @@ class TestScrollTopWithStylesComponent {
 @Component({
     standalone: false,
     selector: 'test-scrolltop-dynamic',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="dynamic-container" style="height: 300px; overflow-y: auto;">
             <div [style.height.px]="contentHeight">

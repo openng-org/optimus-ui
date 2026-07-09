@@ -5,10 +5,11 @@ import { BreakingDoc } from '@/doc/migration/v20/breakingdoc';
 import { DeprecationsDoc } from '@/doc/migration/v20/deprecationsdoc';
 import { OverviewDoc } from '@/doc/migration/v20/overviewdoc';
 import { RemovalsDoc } from '@/doc/migration/v20/removalsdoc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 @Component({
     imports: [AppDoc],
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<app-doc docTitle="Migration - {{ PROJECT_NAME }} v20" header="Migration to v20" description="Migration guide to {{ PROJECT_NAME }} v20." [docs]="docs" docType="page"></app-doc>`
 })
 export class v20MigrationDemoComponent {

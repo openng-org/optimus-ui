@@ -1,7 +1,7 @@
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BadgeModule } from 'primeng/badge';
 import { Ripple } from 'primeng/ripple';
@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip';
     selector: 'overview-doc',
     standalone: true,
     imports: [CommonModule, Ripple, BadgeModule, TooltipModule, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div>
         <div style="border-radius: 50px" class="overflow-hidden mb-7 flex items-center">
             <img alt="{{ PROJECT_NAME }} Designer" src="https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/uikit/primeone-cover-{{ isDarkMode() ? 'dark' : 'light' }}.jpg" class="w-full" />
@@ -369,8 +370,7 @@ import { TooltipModule } from 'primeng/tooltip';
                     <div class="leading-normal mb-2 font-bold">How can I get support?</div>
                     <p class="mt-0 mb-12 p-0 leading-normal">
                         PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users can
-                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and
-                        <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/figma-ui-kit" class="doc-link">Forum</a>.
+                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/figma-ui-kit" class="doc-link">Forum</a>.
                     </p>
                 </div>
                 <div class="col-span-12 lg:col-span-4 px-2 lg:px-8">

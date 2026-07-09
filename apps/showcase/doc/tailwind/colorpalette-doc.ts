@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgClass, NgStyle } from '@angular/common';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -7,8 +7,11 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'color-palette-doc',
     standalone: true,
     imports: [NgClass, NgStyle, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
-        <app-docsectiontext> <p>{{ PROJECT_NAME }} color palette as utility classes.</p></app-docsectiontext>
+        <app-docsectiontext>
+            <p>{{ PROJECT_NAME }} color palette as utility classes.</p></app-docsectiontext
+        >
         <div class="card">
             <div class="flex flex-col gap-12">
                 <ul class="p-0 m-0 list-none flex sm:flex-col gap-4 flex-wrap sm:flex-nowrap">

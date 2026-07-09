@@ -8,11 +8,12 @@ import { VariableSizeDoc } from '@/doc/carousel/variable-size-doc';
 import { GalleryDoc } from '@/doc/carousel/gallery-doc';
 import { PTComponent } from '@/doc/carousel/pt/PTComponent';
 import { UsageDoc } from '@/doc/carousel/usage-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Carousel Component"

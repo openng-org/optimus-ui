@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { TerminalService } from 'primeng/terminal';
 import { TerminalModule } from 'primeng/terminal';
 import { Subscription } from 'rxjs';
@@ -21,6 +21,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
             <app-code></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [TerminalService]
 })
 export class BasicDoc implements OnDestroy {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
     selector: 'badge-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, AvatarModule, OverlayBadgeModule, RouterModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A <i>badge</i> can be added to an Avatar with the <a href="#" [routerLink]="['/badge']">OverlayBadge</a> component.</p>

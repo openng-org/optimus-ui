@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'primeng/api';
 import { BaseComponent } from 'primeng/basecomponent';
@@ -28,6 +28,7 @@ import { MultiSelectStyle } from './style/multiselectstyle';
     `,
     encapsulation: ViewEncapsulation.None,
     providers: [MultiSelectStyle],
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         '[style.height.px]': 'itemSize()',
         '[attr.aria-label]': 'label()',

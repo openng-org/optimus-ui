@@ -1,6 +1,6 @@
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { InfoDemo } from './infodemo';
 import { ButtonModule } from 'primeng/button';
@@ -8,6 +8,7 @@ import { TableModule } from 'primeng/table';
 @Component({
     standalone: true,
     imports: [ButtonModule, TableModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <div class="flex justify-end mt-1 mb-4">
             <p-button icon="pi pi-external-link" label="Nested Dialog" [outlined]="true" severity="success" (click)="showInfo()" />
         </div>

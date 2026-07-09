@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'vertical-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, StepperModule, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Vertical layout requires <i>StepItem</i> as a wrapper of <i>Step</i> and <i>StepPanel</i> components.</p>

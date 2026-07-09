@@ -17,7 +17,7 @@ import { ReactiveFormsDoc } from '@/doc/inputnumber/reactiveforms-doc';
 import { SizesDoc } from '@/doc/inputnumber/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/inputnumber/templatedrivenforms-doc';
 import { VerticalDoc } from '@/doc/inputnumber/vertical-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -32,6 +32,7 @@ import { AppDoc } from '@/components/doc/app.doc';
         [ptDocs]="ptComponent"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class InputNumberDemo {

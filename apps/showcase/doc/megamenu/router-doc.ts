@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { Router } from '@angular/router';
 import { MegaMenuItem } from 'primeng/api';
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -10,6 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'router-doc',
     standalone: true,
     imports: [MegaMenuModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Menu items support navigation via routerLink, programmatic routing using commands, or external URLs.</p>

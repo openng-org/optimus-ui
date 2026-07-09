@@ -10,7 +10,7 @@ import { AccessibilityDoc } from '@/doc/inputcolor/accessibility-doc';
 import { UsageDoc } from '@/doc/inputcolor/usage-doc';
 import { PTComponent } from '@/doc/inputcolor/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
         themeDocs="inputcolor"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class InputColorDemo {

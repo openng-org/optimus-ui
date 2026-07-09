@@ -1,9 +1,10 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'app-footer',
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="layout-footer">
             <div>

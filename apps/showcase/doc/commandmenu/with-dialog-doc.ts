@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommandMenu, CommandMenuModule } from 'primeng/commandmenu';
 import { ArrowDown } from '@primeicons/angular/arrow-down';
@@ -12,6 +12,7 @@ import { DialogModule } from 'primeng/dialog';
     selector: 'with-dialog-doc',
     standalone: true,
     imports: [FormsModule, CommandMenuModule, DialogModule, AppCode, AppDemoWrapper, AppDocSectionText, ArrowUp, ArrowDown],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>CommandMenu can be used inside a Dialog to create a command palette experience. Press <i>Ctrl+K</i> (or <i>Cmd+K</i> on Mac) to open.</p>

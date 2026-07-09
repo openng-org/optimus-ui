@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { DataViewModule } from 'primeng/dataview';
 import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
@@ -74,6 +74,7 @@ interface Product {
             </p-dataview>
         </app-docptviewer>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [ProductService]
 })
 export class PTViewer implements OnInit {

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MessageService } from 'primeng/api';
@@ -46,6 +46,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         AppDemoWrapper,
         AppDocSectionText
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>InputColor can also be used with reactive forms. In this case, the <i>formControlName</i> property is used to bind the component to a form control.</p>

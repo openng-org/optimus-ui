@@ -375,7 +375,7 @@ export class ButtonDirective extends BaseComponent {
             [attr.aria-label]="$ariaLabel()"
             [style]="mergedStyle()"
             [disabled]="$disabled()"
-            [class]="cn(cx('root'), styleClass(), buttonProps()?.styleClass)"
+            [class]="cn(cx('root'), styleClass(), $safeNavigationMigration(buttonProps()?.styleClass))"
             (click)="onClick.emit($event)"
             (focus)="onFocus.emit($event)"
             (blur)="onBlur.emit($event)"

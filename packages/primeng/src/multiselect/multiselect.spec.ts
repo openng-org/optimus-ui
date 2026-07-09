@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, provideZonelessChangeDetection, signal, ViewChild } from '@angular/core';
+import { Component, computed, provideZonelessChangeDetection, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, NgForm, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -26,6 +26,7 @@ interface Country {
 // Basic test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-multiselect
             [options]="options"
@@ -189,6 +190,7 @@ class TestBasicMultiSelectComponent {
 // Form integration test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="form">
             <p-multiselect formControlName="selectedCities" [options]="options" optionLabel="name" placeholder="Select Cities" [showClear]="true" [filter]="true"></p-multiselect>
@@ -199,9 +201,9 @@ class TestBasicMultiSelectComponent {
             <div>Invalid: {{ form.get('selectedCities')?.invalid }}</div>
             <div>Touched: {{ form.get('selectedCities')?.touched }}</div>
             <div>Dirty: {{ form.get('selectedCities')?.dirty }}</div>
-            <div>Value: {{ form.get('selectedCities')?.value | json }}</div>
+            <div>Value: {{ $safeNavigationMigration(form.get('selectedCities')?.value) | json }}</div>
             <div>Status: {{ form.get('selectedCities')?.status }}</div>
-            <div>Errors: {{ form.get('selectedCities')?.errors | json }}</div>
+            <div>Errors: {{ $safeNavigationMigration(form.get('selectedCities')?.errors) | json }}</div>
         </div>
     `
 })
@@ -222,6 +224,7 @@ class TestFormMultiSelectComponent {
 // Template test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
@@ -273,6 +276,7 @@ class TestTemplateMultiSelectComponent {
 // Grouped options test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-multiselect [options]="groupedOptions" [(ngModel)]="selectedCities" [group]="true" optionLabel="name" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select Cities"></p-multiselect> `
 })
 class TestGroupedMultiSelectComponent {
@@ -303,6 +307,7 @@ class TestGroupedMultiSelectComponent {
 // Content child test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
@@ -345,6 +350,7 @@ class TestContentChildMultiSelectComponent {
 // Virtual scroll test component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name" [virtualScroll]="true" [virtualScrollItemSize]="40" [scrollHeight]="'200px'" [lazy]="lazy" (onLazyLoad)="onLazyLoad($event)"></p-multiselect> `
 })
 class TestVirtualScrollMultiSelectComponent {
@@ -1747,6 +1753,7 @@ describe('MultiSelect Virtual Scrolling', () => {
 // Dynamic Data Sources Test Component - Tests signals, observables, getters, async pipes, late-loading
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="test-dynamic-data">
             <!-- Signal-based options -->
@@ -1972,6 +1979,7 @@ class TestDynamicDataSourcesMultiSelectComponent {
 // Comprehensive Form Integration Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="comprehensive-form-tests">
             <!-- Reactive Form with all Angular FormControl APIs -->
@@ -2022,10 +2030,10 @@ class TestDynamicDataSourcesMultiSelectComponent {
                     <div>Form Dirty: {{ reactiveForm.dirty }}</div>
                     <div>Form Status: {{ reactiveForm.status }}</div>
                     <div>Cities Valid: {{ reactiveForm.get('cities')?.valid }}</div>
-                    <div>Cities Value: {{ reactiveForm.get('cities')?.value | json }}</div>
-                    <div>Cities Errors: {{ reactiveForm.get('cities')?.errors | json }}</div>
+                    <div>Cities Value: {{ $safeNavigationMigration(reactiveForm.get('cities')?.value) | json }}</div>
+                    <div>Cities Errors: {{ $safeNavigationMigration(reactiveForm.get('cities')?.errors) | json }}</div>
                     <div>Validated Cities Valid: {{ reactiveForm.get('validatedCities')?.valid }}</div>
-                    <div>Validated Cities Errors: {{ reactiveForm.get('validatedCities')?.errors | json }}</div>
+                    <div>Validated Cities Errors: {{ $safeNavigationMigration(reactiveForm.get('validatedCities')?.errors) | json }}</div>
                 </div>
 
                 <div class="template-status">
@@ -2033,7 +2041,7 @@ class TestDynamicDataSourcesMultiSelectComponent {
                     <div>Form Valid: {{ templateForm.valid }}</div>
                     <div>NgModel Value: {{ ngModelValue | json }}</div>
                     <div>NgModel Valid: {{ citiesModel?.valid }}</div>
-                    <div>NgModel Errors: {{ citiesModel?.errors | json }}</div>
+                    <div>NgModel Errors: {{ $safeNavigationMigration(citiesModel?.errors) | json }}</div>
                 </div>
             </div>
         </div>
@@ -2131,6 +2139,7 @@ class TestComprehensiveFormMultiSelectComponent {
 // ViewChild Properties Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="viewchild-tests">
             <p-multiselect
@@ -2262,6 +2271,7 @@ class TestViewChildMultiSelectComponent {
 // Complex Edge Cases Test Component
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="edge-cases-tests">
             <!-- Large dataset performance test -->

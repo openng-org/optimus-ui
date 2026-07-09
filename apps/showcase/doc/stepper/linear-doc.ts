@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'linear-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, StepperModule, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>When <i>linear</i> property is set to true, current step must be completed in order to move to the next step.</p>

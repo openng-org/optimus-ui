@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputColor, InputColorArea, InputColorAreaBackground, InputColorAreaThumb, InputColorSlider, InputColorSliderThumb, InputColorSliderTrack, InputColorTransparencyGrid } from 'primeng/inputcolor';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -9,6 +9,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'vertical-slider-doc',
     standalone: true,
     imports: [FormsModule, InputColor, InputColorArea, InputColorAreaBackground, InputColorAreaThumb, InputColorSlider, InputColorSliderThumb, InputColorSliderTrack, InputColorTransparencyGrid, AppDocSectionText, AppCode, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Sliders support vertical orientation, displayed alongside the color area.</p>

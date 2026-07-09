@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, TemplateRef, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,12 +6,14 @@ import { Card, CardModule } from './card';
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-card></p-card>`
 })
 class TestBasicCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card [header]="header" [subheader]="subheader" [style]="style">
             <div class="card-content">Custom Card Content</div>
@@ -26,6 +28,7 @@ class TestCustomCardComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card>
             <ng-template #header>
@@ -50,6 +53,7 @@ class TestTemplateCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card>
             <p-header>
@@ -66,6 +70,7 @@ class TestFacetCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card>
             <ng-template #header>
@@ -96,6 +101,7 @@ class TestContentChildCardComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card header="Simple Header" subheader="Simple Subheader">
             <div class="simple-content">Simple card content with just text properties</div>
@@ -106,6 +112,7 @@ class TestSimpleTextCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card [header]="header" [subheader]="subheader">
             <ng-container *ngIf="showContent">
@@ -122,6 +129,7 @@ class TestDynamicCardComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card>
             <ng-template #header>
@@ -151,6 +159,7 @@ class TestComplexCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card header="Header Only">
             <div class="header-only-content">Content with header only</div>
@@ -161,6 +170,7 @@ class TestHeaderOnlyCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card subheader="Subheader Only">
             <div class="subheader-only-content">Content with subheader only</div>
@@ -171,6 +181,7 @@ class TestSubheaderOnlyCardComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-card>
             <ng-template #footer>

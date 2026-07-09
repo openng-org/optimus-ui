@@ -1,5 +1,5 @@
 import { DesignerService } from '@/service/designerservice';
-import { Component, inject, input } from '@angular/core';
+import { Component, inject, input, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'design-color-palette',
@@ -10,6 +10,7 @@ import { Component, inject, input } from '@angular/core';
             <div class="flex-1 h-8 w-8" [style]="{ backgroundColor: designerService.resolveColor(color) }" [title]="color"></div>
         }
     }`,
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         class: 'flex w-full border border-surface rounded-l-lg rounded-r-lg overflow-hidden'
     }

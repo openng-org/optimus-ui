@@ -26,11 +26,12 @@ import { UpdatePresetDoc } from '@/doc/theming/styled/updatepreset-doc';
 import { UpdatePrimaryPaletteDoc } from '@/doc/theming/styled/updateprimarypalette-doc';
 import { UpdateSurfacePaletteDoc } from '@/doc/theming/styled/updatesurfacepalette-doc';
 import { UsePresetDoc } from '@/doc/theming/styled/usepreset-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc docTitle="Styled Mode" header="Styled Mode" description="Choose from a variety of pre-styled themes or develop your own." [docs]="docs" docType="page"></app-doc>`,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
 export class ThemingStyledDemo {

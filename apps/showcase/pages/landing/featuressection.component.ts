@@ -1,13 +1,14 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 
 @Component({
     selector: 'features-section',
     standalone: true,
     imports: [CommonModule, AnimateOnScrollModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-features py-20">
             <div class="section-header">Features</div>

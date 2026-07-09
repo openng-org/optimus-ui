@@ -10,7 +10,7 @@ import { FieldsetModule } from 'primeng/fieldset';
     standalone: true,
     imports: [FieldsetModule, FormsModule, DesignColorPalette],
     template: ` <p-fieldset legend="Colors" [toggleable]="true">
-        @for (key of objectKeys(designerService.designer().theme?.preset?.primitive); track key) {
+        @for (key of objectKeys($safeNavigationMigration(designerService.designer().theme?.preset?.primitive)); track key) {
             @if (key !== 'borderRadius') {
                 <section class="flex justify-between items-center mb-4 gap-8">
                     <div class="flex gap-2 items-center">
@@ -24,7 +24,7 @@ import { FieldsetModule } from 'primeng/fieldset';
                             [class]="{ 'cursor-not-allowed!': designerService.isThemeViewOnly() }"
                         />
                     </div>
-                    <design-color-palette [value]="designerService.designer().theme?.preset?.primitive[key]" />
+                    <design-color-palette [value]="$safeNavigationMigration(designerService.designer().theme?.preset?.primitive[key])" />
                 </section>
             }
         }

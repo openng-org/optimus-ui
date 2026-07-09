@@ -1,5 +1,5 @@
 import { Code } from '@/domain/code';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem, PrimeIcons } from 'primeng/api';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -10,6 +10,7 @@ import { MenuModule } from 'primeng/menu';
     selector: 'constants-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, AppDemoWrapper, MenuModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Constants API is available to reference icons easily when used programmatically.</p>

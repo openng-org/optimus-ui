@@ -1,7 +1,7 @@
 import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -49,6 +49,7 @@ import { OverviewApp } from './samples/overviewapp.component';
         KnobModule,
         ButtonModule
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <section class="landing-hero py-20 px-7 lg:px-20">
             <div class="flex flex-col items-center">

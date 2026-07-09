@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IconField } from './iconfield';
@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield>
             <p-inputicon class="pi pi-search" />
@@ -23,6 +24,7 @@ class TestBasicIconFieldComponent {
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield [iconPosition]="position">
             <p-inputicon class="pi pi-user" />
@@ -38,6 +40,7 @@ class TestPositionIconFieldComponent {
 @Component({
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield [class]="customClass">
             <input type="email" [(ngModel)]="email" />
@@ -358,6 +361,7 @@ describe('IconField PassThrough Tests', () => {
 @Component({
     standalone: true,
     imports: [IconField, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-iconfield [pt]="{ root: 'INLINE_STRING' }"><input /></p-iconfield>`
 })
 class TestInlineStringPTComponent {}
@@ -365,6 +369,7 @@ class TestInlineStringPTComponent {}
 @Component({
     standalone: true,
     imports: [IconField, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-iconfield><input /></p-iconfield>
         <p-iconfield><input /></p-iconfield>

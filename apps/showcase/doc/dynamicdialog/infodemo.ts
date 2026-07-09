@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogService, DynamicDialog, DynamicDialogRef } from 'primeng/dynamicdialog';
 
 @Component({
     standalone: true,
     imports: [ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div>
             <p class="text-sm">

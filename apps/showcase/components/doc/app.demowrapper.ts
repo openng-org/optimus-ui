@@ -1,4 +1,4 @@
-import { Component, computed, contentChild, ElementRef, inject, input, signal } from '@angular/core';
+import { Component, computed, contentChild, ElementRef, inject, input, signal, ChangeDetectionStrategy } from '@angular/core';
 import { TooltipModule } from 'primeng/tooltip';
 import { AppCode } from './app.code';
 import { DEMO_MODE, IN_DEMO_WRAPPER } from './demo-mode.token';
@@ -8,6 +8,7 @@ import { DEMO_MODE, IN_DEMO_WRAPPER } from './demo-mode.token';
     standalone: true,
     imports: [TooltipModule],
     providers: [{ provide: IN_DEMO_WRAPPER, useValue: true }],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="doc-section-demo">
             <div class="doc-section-demo-card">

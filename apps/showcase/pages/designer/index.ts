@@ -1,6 +1,6 @@
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, PROJECT_NAME } from '@/utils/constants';
 import { AppConfigService } from '@/service/appconfigservice';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, ChangeDetectionStrategy } from '@angular/core';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -9,6 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 @Component({
     standalone: true,
     imports: [AnimateOnScrollModule, RippleModule, ButtonModule, DialogModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div>
         <div style="border-radius: 50px; max-height: 500px" class="overflow-hidden mb-7 flex items-center">
             <img alt="{{ PROJECT_NAME }} Designer" [src]="coverImage()" class="w-full" />
@@ -342,8 +343,7 @@ import { RippleModule } from 'primeng/ripple';
                     <div class="leading-normal mb-2 font-bold">How can I get support?</div>
                     <p class="mt-0 mb-11 p-0 leading-normal">
                         PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users can
-                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and
-                        <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/theme-designer" class="doc-link">Forum</a>.
+                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/theme-designer" class="doc-link">Forum</a>.
                     </p>
                 </div>
                 <div class="col-span-12 lg:col-span-4 px-2 lg:px-7">
@@ -423,8 +423,8 @@ import { RippleModule } from 'primeng/ripple';
                 <li>
                     <div class="font-bold mb-4">10. Contact Information</div>
                     <p>
-                        For any questions regarding these Terms and Conditions, please contact us through our official channels as listed on our website. By using the {{ PROJECT_NAME }} Theme Designer, you acknowledge that you have read and agree to these Terms
-                        and Conditions.
+                        For any questions regarding these Terms and Conditions, please contact us through our official channels as listed on our website. By using the {{ PROJECT_NAME }} Theme Designer, you acknowledge that you have read and agree to
+                        these Terms and Conditions.
                     </p>
                 </li>
             </ol>

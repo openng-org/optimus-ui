@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { PasswordModule } from 'primeng/password';
@@ -11,6 +11,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'ifta-label-doc',
     standalone: true,
     imports: [FormsModule, RouterModule, PasswordModule, IftaLabelModule, AppCode, AppDocSectionText, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>IftaLabel is used to create infield top aligned labels. Visit <a routerLink="/iftalabel">IftaLabel</a> documentation for more information.</p>

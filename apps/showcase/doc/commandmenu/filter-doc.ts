@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommandMenuModule } from 'primeng/commandmenu';
 import { ArrowDown } from '@primeicons/angular/arrow-down';
 import { ArrowUp } from '@primeicons/angular/arrow-up';
@@ -10,6 +10,7 @@ import { ArrowUp } from '@primeicons/angular/arrow-up';
     selector: 'filter-doc',
     standalone: true,
     imports: [CommandMenuModule, AppCode, AppDemoWrapper, AppDocSectionText, ArrowUp, ArrowDown],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A custom filter function can be provided with the <i>filter</i> property. The function receives the label, search term, and optional keywords, and should return a score (0 means no match).</p>

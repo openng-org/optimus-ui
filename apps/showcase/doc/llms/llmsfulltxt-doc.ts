@@ -1,5 +1,5 @@
 import { PROJECT_NAME } from '@/utils/constants';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { ButtonModule } from 'primeng/button';
 
@@ -7,6 +7,7 @@ import { ButtonModule } from 'primeng/button';
     selector: 'llmsfulltxt-doc',
     standalone: true,
     imports: [AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The <code>llms-full.txt</code> file is a complete list of all the pages in the {{ PROJECT_NAME }} documentation. It is used to help AI models understand the entire documentation set.</p>

@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CurrencyPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { TableModule } from 'primeng/table';
 
 interface Product {
@@ -20,6 +20,7 @@ interface Product {
     selector: 'table-pt-viewer',
     standalone: true,
     imports: [TableModule, CurrencyPipe, AppDocPtViewer],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-table

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,6 +11,7 @@ import { ToastItem } from './toast-item';
 // Test Components for different scenarios
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toast
             [key]="key"
@@ -44,6 +45,7 @@ class TestBasicToastComponent {
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toast [key]="'template-test'">
             <ng-template #message let-message>
@@ -59,6 +61,7 @@ class TestMessageTemplateComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-toast [key]="'headless-test'">
             <ng-template #headless let-message let-closeFn="closeFn">
@@ -74,6 +77,7 @@ class TestHeadlessTemplateComponent {}
 
 @Component({
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-toast [key]="'position-test'" [position]="position"> </p-toast> `
 })
 class TestPositionComponent {

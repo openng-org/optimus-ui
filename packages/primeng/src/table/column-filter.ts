@@ -70,7 +70,7 @@ import type { Table } from './table';
                     [attr.aria-expanded]="overlayVisible ?? false"
                     (click)="toggleMenu($event)"
                     (keydown)="onToggleButtonKeyDown($event)"
-                    [buttonProps]="filterButtonProps()?.filter"
+                    [buttonProps]="$safeNavigationMigration(filterButtonProps()?.filter)"
                     #menuButton
                     [unstyled]="unstyled()"
                 >
@@ -175,7 +175,7 @@ import type { Table } from './table';
                                                 (onClick)="removeConstraint(fieldConstraint)"
                                                 [ariaLabel]="removeRuleButtonLabel"
                                                 [label]="removeRuleButtonLabel"
-                                                [buttonProps]="filterButtonProps()?.popover?.removeRule"
+                                                [buttonProps]="$safeNavigationMigration(filterButtonProps()?.popover?.removeRule)"
                                                 [unstyled]="unstyled()"
                                             >
                                                 <ng-template #icon>
@@ -200,7 +200,7 @@ import type { Table } from './table';
                                 [text]="true"
                                 size="small"
                                 (onClick)="addConstraint()"
-                                [buttonProps]="filterButtonProps()?.popover?.addRule"
+                                [buttonProps]="$safeNavigationMigration(filterButtonProps()?.popover?.addRule)"
                                 [unstyled]="unstyled()"
                             >
                                 <ng-template #icon>
@@ -219,7 +219,7 @@ import type { Table } from './table';
                                     (onClick)="clearFilter()"
                                     [attr.aria-label]="clearButtonLabel"
                                     [label]="clearButtonLabel"
-                                    [buttonProps]="filterButtonProps()?.popover?.clear"
+                                    [buttonProps]="$safeNavigationMigration(filterButtonProps()?.popover?.clear)"
                                     [pt]="ptm('pcFilterClearButton')"
                                     [unstyled]="unstyled()"
                                 />
@@ -230,7 +230,7 @@ import type { Table } from './table';
                                     size="small"
                                     [label]="applyButtonLabel"
                                     [attr.aria-label]="applyButtonLabel"
-                                    [buttonProps]="filterButtonProps()?.popover?.apply"
+                                    [buttonProps]="$safeNavigationMigration(filterButtonProps()?.popover?.apply)"
                                     [pt]="ptm('pcFilterApplyButton')"
                                     [unstyled]="unstyled()"
                                 />
@@ -244,6 +244,7 @@ import type { Table } from './table';
     `,
     providers: [TableStyle, { provide: COLUMN_FILTER_INSTANCE, useExisting: ColumnFilter }],
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class ColumnFilter extends BaseComponent {

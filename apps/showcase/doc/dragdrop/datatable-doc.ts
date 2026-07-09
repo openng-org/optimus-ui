@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { DragDropModule } from 'primeng/dragdrop';
 import { TableModule } from 'primeng/table';
 import { TagModule } from 'primeng/tag';
@@ -14,6 +14,7 @@ import { TagModule } from 'primeng/tag';
     standalone: true,
     imports: [DragDropModule, TableModule, TagModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Drag and Drop to Table</p>

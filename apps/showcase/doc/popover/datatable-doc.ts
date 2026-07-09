@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, signal, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Popover, PopoverModule } from 'primeng/popover';
@@ -15,6 +15,7 @@ import { TagModule } from 'primeng/tag';
     standalone: true,
     imports: [PopoverModule, TableModule, ButtonModule, TagModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [MessageService, ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Place the Popover outside of the data iteration components to avoid rendering it multiple times.</p>

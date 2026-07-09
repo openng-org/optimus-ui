@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ListboxModule } from 'primeng/listbox';
 import { AppCode } from '@/components/doc/app.code';
@@ -14,6 +14,7 @@ interface Country {
     selector: 'template-doc',
     standalone: true,
     imports: [FormsModule, ListboxModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>For custom content support define a template named <i>item</i> where the default local template variable refers to an option.</p>

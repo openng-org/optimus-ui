@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroup } from './inputgroup';
@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputgroup>
             <p-inputgroup-addon>
@@ -25,6 +26,7 @@ class TestBasicInputGroupComponent {
 @Component({
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputgroup [class]="customClass">
             <p-inputgroup-addon>$</p-inputgroup-addon>
@@ -41,6 +43,7 @@ class TestStyledInputGroupComponent {
 @Component({
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputgroup>
             <p-inputgroup-addon [style]="addonStyle" [class]="addonClass"> www </p-inputgroup-addon>

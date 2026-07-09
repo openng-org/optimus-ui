@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, Component, computed, inject, input, numberAttribute, output, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { isNotEmpty, resolve } from '@primeuix/utils';
 import { MenuItem, SharedModule } from 'primeng/api';
@@ -23,7 +23,7 @@ import { MenuBarStyle } from './style/menubarstyle';
     template: `
         @for (processedItem of items(); track processedItem) {
             @if (isItemVisible(processedItem) && getItemProp(processedItem, 'separator')) {
-                <li [attr.id]="getItemId(processedItem)" [style]="getItemProp(processedItem, 'style')" [class]="cn(cx('separator'), processedItem?.styleClass)" role="separator" [pBind]="ptm('separator')"></li>
+                <li [attr.id]="getItemId(processedItem)" [style]="getItemProp(processedItem, 'style')" [class]="cn(cx('separator'), $safeNavigationMigration(processedItem?.styleClass))" role="separator" [pBind]="ptm('separator')"></li>
             }
             @if (isItemVisible(processedItem) && !getItemProp(processedItem, 'separator')) {
                 <li
@@ -187,6 +187,7 @@ import { MenuBarStyle } from './style/menubarstyle';
         }
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     host: {
         '[attr.id]': 'hostId()',
         '[attr.aria-activedescendant]': 'focusedItemId()',

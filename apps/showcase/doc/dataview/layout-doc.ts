@@ -4,7 +4,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
@@ -16,6 +16,7 @@ import { TagModule } from 'primeng/tag';
     standalone: true,
     imports: [CommonModule, FormsModule, DataViewModule, ButtonModule, TagModule, SelectButtonModule, AppCode, AppDemoWrapper, AppDocSectionText],
     providers: [ProductService],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>DataView supports <i>list</i> and <i>grid</i> display modes defined with the <i>layout</i> property. The <i>grid</i> mode is not built-in for flexibility purposes and requires a library with CSS grid features like Tailwind.</p>

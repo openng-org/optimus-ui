@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
@@ -9,6 +9,7 @@ import { TabsModule } from 'primeng/tabs';
     selector: 'scrollable-doc',
     standalone: true,
     imports: [CommonModule, AppDocSectionText, AppCode, AppDemoWrapper, TabsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Adding <i>scrollable</i> property displays navigational buttons at each side to scroll between tabs.</p>

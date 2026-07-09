@@ -2,13 +2,14 @@ import { TemplateConfiguration } from '@/components/template/templateconfigurati
 import { TemplateFeatures } from '@/components/template/templatefeatures';
 import { TemplateFeaturesAnimation } from '@/components/template/templatefeaturesanimation/templatefeaturesanimation';
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { SakaiLogo } from './sakailogo';
 import { SakaiSeparator } from './sakaiseparator';
 @Component({
     standalone: true,
     selector: 'sakai-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, SakaiSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="sakai template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="sakaiLogo"></template-hero>
         <sakai-separator></sakai-separator>

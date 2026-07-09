@@ -7,13 +7,14 @@ import { HeadlessDoc } from '@/doc/tailwind/headless-doc';
 import { OverrideDoc } from '@/doc/tailwind/override-doc';
 import { OverviewDoc } from '@/doc/tailwind/overview-doc';
 import { PluginDoc } from '@/doc/tailwind/plugin-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DarkModeDoc } from '@/doc/tailwind/darkmode-doc';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc docTitle="Tailwind CSS - {{ PROJECT_NAME }}" header="Tailwind CSS" description="Integration between {{ PROJECT_NAME }} and Tailwind CSS." [docs]="docs" docType="page"></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class TailwindDemo {

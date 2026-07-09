@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -12,6 +12,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [Rating, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-rating
             [(ngModel)]="value"
@@ -61,6 +62,7 @@ class TestBasicRatingComponent {
 @Component({
     standalone: true,
     imports: [Rating, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <form [formGroup]="ratingForm">
             <p-rating formControlName="rating" [stars]="5" [invalid]="isInvalid" />
@@ -79,6 +81,7 @@ class TestReactiveRatingComponent {
 @Component({
     standalone: true,
     imports: [Rating, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-rating [(ngModel)]="value">
             <ng-template #onicon>
@@ -98,6 +101,7 @@ class TestTemplateRatingComponent {
 @Component({
     standalone: true,
     imports: [Rating, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-rating [(ngModel)]="value" [stars]="numberOfStars" [readonly]="isReadonly" [disabled]="isDisabled" [name]="name" [required]="required" (onRate)="onAdvancedRate($event)" /> `
 })
 class TestAdvancedRatingComponent {
@@ -119,6 +123,7 @@ class TestAdvancedRatingComponent {
 @Component({
     standalone: true,
     imports: [Rating, FormsModule, NgClass, SharedModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
             <!-- On icon template with #template reference -->
@@ -142,6 +147,7 @@ class TestRatingTemplateComponent {
 @Component({
     standalone: true,
     imports: [Rating, FormsModule, NgClass, SharedModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
             <!-- On icon template with #template reference -->

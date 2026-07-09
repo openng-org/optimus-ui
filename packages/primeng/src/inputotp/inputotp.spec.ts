@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputOtp, InputOtpChangeEvent } from './inputotp';
@@ -9,6 +9,7 @@ import { providePrimeNG } from 'primeng/config';
 @Component({
     standalone: true,
     imports: [InputOtp, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-inputotp [(ngModel)]="value" [length]="length" />`
 })
 class TestBasicInputOtpComponent {
@@ -20,6 +21,7 @@ class TestBasicInputOtpComponent {
 @Component({
     standalone: true,
     imports: [InputOtp, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: ` <p-inputotp [formControl]="otpControl" [length]="length" (onChange)="onOtpChange($event)" /> `
 })
 class TestReactiveFormInputOtpComponent {
@@ -36,6 +38,7 @@ class TestReactiveFormInputOtpComponent {
 @Component({
     standalone: true,
     imports: [InputOtp, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputotp
             [(ngModel)]="value"
@@ -83,6 +86,7 @@ class TestAdvancedInputOtpComponent {
 @Component({
     standalone: true,
     imports: [InputOtp, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputotp [(ngModel)]="value" [length]="length">
             <!-- Input template with #template reference -->
@@ -113,6 +117,7 @@ class TestInputOtpTemplateComponent {
 @Component({
     standalone: true,
     imports: [InputOtp, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-inputotp [(ngModel)]="value" [length]="length">
             <!-- Input template with #template reference -->

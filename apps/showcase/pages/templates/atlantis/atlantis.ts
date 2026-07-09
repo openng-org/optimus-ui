@@ -5,13 +5,14 @@ import { TemplateFeaturesAnimation } from '@/components/template/templatefeature
 import { TemplateHero } from '@/components/template/templatehero/templatehero';
 import { TemplateLicense } from '@/components/template/templatelicense';
 import { TemplateYoutube } from '@/components/template/templateyoutube';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AtlantisLogo } from './atlantislogo';
 import { AtlantisSeparator } from './atlantisseparator';
 @Component({
     standalone: true,
     selector: 'atlantis-page',
     imports: [TemplateHero, TemplateFeaturesAnimation, TemplateFeatures, TemplateConfiguration, TemplateFeaturesAnimation, TemplateYoutube, TemplateLicense, AtlantisSeparator],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<div class="atlantis template">
         <template-hero [templateHeroData]="templateHeroData" [templateLogo]="atlantisLogo"></template-hero>
         <atlantis-separator></atlantis-separator>

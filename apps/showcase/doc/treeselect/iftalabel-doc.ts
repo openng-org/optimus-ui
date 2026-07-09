@@ -1,5 +1,5 @@
 import { NodeService } from '@/service/nodeservice';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { TreeSelectModule } from 'primeng/treeselect';
@@ -12,6 +12,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'ifta-label-doc',
     standalone: true,
     imports: [FormsModule, RouterModule, TreeSelectModule, IftaLabelModule, AppCode, AppDemoWrapper, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>IftaLabel is used to create infield top aligned labels. Visit <a routerLink="/iftalabel">IftaLabel</a> documentation for more information.</p>

@@ -1,7 +1,7 @@
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { ChevronLeft } from '@primeicons/angular/chevron-left';
 import { ChevronRight } from '@primeicons/angular/chevron-right';
@@ -10,6 +10,7 @@ import { ChevronRight } from '@primeicons/angular/chevron-right';
     selector: 'alignment-doc',
     standalone: true,
     imports: [CarouselModule, AppCode, AppDemoWrapper, AppDocSectionText, ChevronLeft, ChevronRight],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Use <i>align</i> to control snap alignment and <i>slidesPerPage</i> to show partial slides.</p>

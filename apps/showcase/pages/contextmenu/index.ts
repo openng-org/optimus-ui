@@ -7,12 +7,13 @@ import { PTComponent } from '@/doc/contextmenu/pt/PTComponent';
 import { RouterDoc } from '@/doc/contextmenu/router-doc';
 import { TableDoc } from '@/doc/contextmenu/table-doc';
 import { TemplateDoc } from '@/doc/contextmenu/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular ContextMenu Component"

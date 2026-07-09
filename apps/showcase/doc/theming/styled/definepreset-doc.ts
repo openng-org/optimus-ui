@@ -1,6 +1,6 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -8,6 +8,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     selector: 'define-preset-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>The <i>definePreset</i> utility is used to customize an existing preset during the {{ PROJECT_NAME }} setup. The first parameter is the preset to customize and the second is the design tokens to override.</p>

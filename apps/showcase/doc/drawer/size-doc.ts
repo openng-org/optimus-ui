@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
     selector: 'size-doc',
     standalone: true,
     imports: [AppCode, AppDemoWrapper, AppDocSectionText, DrawerModule, ButtonModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Drawer dimension can be defined with <i>style</i> or <i>class</i> properties, this responsive example utilizes Tailwind.</p>

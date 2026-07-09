@@ -3,7 +3,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { OrderListModule } from 'primeng/orderlist';
 
 @Component({
@@ -26,6 +26,7 @@ import { OrderListModule } from 'primeng/orderlist';
             <app-code [extFiles]="['Product']"></app-code>
         </app-demo-wrapper>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     styles: [
         `
             @media (min-width: 576px) {

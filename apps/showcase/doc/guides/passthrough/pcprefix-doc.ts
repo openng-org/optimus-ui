@@ -1,7 +1,7 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 
@@ -9,11 +9,12 @@ import { PanelModule } from 'primeng/panel';
     selector: 'pc-prefix-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, PanelModule, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>
-                A UI component may also use other UI components, in this case section names are prefixed with <i>pc</i> (Prime Component) to denote the {{ PROJECT_NAME }} component begin used. This distinguishes components from standard DOM elements and
-                indicating the necessity for a nested structure. For example, the <i>badge</i> section is identified as <i>pcBadge</i> because the button component incorporates the badge component internally.
+                A UI component may also use other UI components, in this case section names are prefixed with <i>pc</i> (Prime Component) to denote the {{ PROJECT_NAME }} component begin used. This distinguishes components from standard DOM elements
+                and indicating the necessity for a nested structure. For example, the <i>badge</i> section is identified as <i>pcBadge</i> because the button component incorporates the badge component internally.
             </p>
         </app-docsectiontext>
         <div class="card flex justify-center">

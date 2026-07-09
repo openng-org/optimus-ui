@@ -2,12 +2,13 @@ import { AccessibilityDoc } from '@/doc/fluid/accessibility-doc';
 import { BasicDoc } from '@/doc/fluid/basic-doc';
 import { UsageDoc } from '@/doc/fluid/usage-doc';
 import { PTComponent } from '@/doc/fluid/pt/PTComponent';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-doc
             docTitle="Angular Fluid Component"

@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { Component, contentChild, inject, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { Component, contentChild, inject, TemplateRef, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
 import { BaseComponent } from 'primeng/basecomponent';
 import { Bind } from 'primeng/bind';
 import { TREETABLE_INSTANCE } from './treetable-service';
@@ -18,6 +18,7 @@ import type { TreeTable } from './treetable';
         }
     `,
     encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.Eager,
     hostDirectives: [Bind]
 })
 export class TreeTableCellEditor extends BaseComponent {

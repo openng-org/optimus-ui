@@ -4,7 +4,7 @@ import { BasicDoc } from '@/doc/imagecompare/basic-doc';
 import { UsageDoc } from '@/doc/imagecompare/usage-doc';
 import { PTComponent } from '@/doc/imagecompare/pt/PTComponent';
 import { ResponsiveDoc } from '@/doc/imagecompare/responsive-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -18,6 +18,7 @@ import { Component } from '@angular/core';
         [heroDoc]="heroDoc"
     ></app-doc> `,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class ImageCompareDemo {

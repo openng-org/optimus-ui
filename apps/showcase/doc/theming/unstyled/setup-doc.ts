@@ -2,13 +2,14 @@ import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'setup-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText, ButtonModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>Unstyled mode is enabled for the whole suite by enabling <i>unstyled</i> option during {{ PROJECT_NAME }} installation.</p>

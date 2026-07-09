@@ -1,5 +1,5 @@
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DialogService, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { ProductListDemo } from './productlistdemo';
 import { AppCode } from '@/components/doc/app.code';
@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `,
+    changeDetection: ChangeDetectionStrategy.Eager,
     providers: [DialogService]
 })
 export class CustomizationDoc {

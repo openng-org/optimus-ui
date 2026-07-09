@@ -10,7 +10,7 @@ import { StepDoc } from '@/doc/slider/step-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/slider/templatedrivenforms-doc';
 import { VerticalDoc } from '@/doc/slider/vertical-doc';
 import { AppDoc } from '@/components/doc/app.doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     template: `<app-doc
@@ -24,6 +24,7 @@ import { Component } from '@angular/core';
         [ptDocs]="ptComponent"
     ></app-doc>`,
     standalone: true,
+    changeDetection: ChangeDetectionStrategy.Eager,
     imports: [AppDoc]
 })
 export class SliderDemo {

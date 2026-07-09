@@ -2,17 +2,18 @@ import { PROJECT_NAME, GITHUB_REPO_URL } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
     selector: 'introduction-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>
-                {{ PROJECT_NAME }} is a popular Angular UI library maintained by PrimeTek, a company renowned for its comprehensive set of UI components for various frameworks. PrimeTek is dedicated to providing high-quality, versatile, and accessible UI
-                components that help developers build better applications faster.
+                {{ PROJECT_NAME }} is a popular Angular UI library maintained by PrimeTek, a company renowned for its comprehensive set of UI components for various frameworks. PrimeTek is dedicated to providing high-quality, versatile, and
+                accessible UI components that help developers build better applications faster.
             </p>
             <h3>Development Setup</h3>
             <p>To begin with, clone the {{ PROJECT_NAME }} repository from GitHub:</p>

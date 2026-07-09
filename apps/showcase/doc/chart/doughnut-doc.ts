@@ -1,7 +1,7 @@
 import { AppConfigService } from '@/service/appconfigservice';
 import { DesignerService } from '@/service/designerservice';
 import { isPlatformBrowser } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID, ChangeDetectionStrategy } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { ChartModule } from 'primeng/chart';
@@ -11,6 +11,7 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
     selector: 'doughnut-doc',
     standalone: true,
     imports: [AppCode, AppDocSectionText, ChartModule, AppDemoWrapper],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>A doughnut chart is a variant of the pie chart, with a blank center allowing for additional information about the data as a whole to be included.</p>

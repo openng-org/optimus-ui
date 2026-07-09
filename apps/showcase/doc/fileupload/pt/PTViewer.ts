@@ -1,12 +1,13 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
     selector: 'fileupload-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, FileUploadModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <div class="w-full">

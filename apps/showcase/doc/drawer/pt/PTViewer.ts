@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { DrawerModule } from 'primeng/drawer';
 import { TimesIcon } from 'primeng/icons';
 
@@ -8,9 +8,10 @@ import { TimesIcon } from 'primeng/icons';
     selector: 'drawer-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, DrawerModule, TimesIcon],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs" class="justify-start!" #docref>
-            <p-drawer [(visible)]="visible" styleClass="relative! h-[450px]! w-80!" header="Drawer" [appendTo]="docref?.nativeElement" [modal]="false">
+            <p-drawer [(visible)]="visible" styleClass="relative! h-[450px]! w-80!" header="Drawer" [appendTo]="$safeNavigationMigration(docref?.nativeElement)" [modal]="false">
                 <ng-template #headless>
                     <span class="p-hidden-accessible p-hidden-focusable" tabindex="0" role="presentation" aria-hidden="true" data-p-hidden-accessible="true" data-p-hidden-focusable="true" data-pc-section="firstfocusableelement"></span>
                     <div class="p-drawer-header" data-pc-section="header">

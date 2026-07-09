@@ -1,4 +1,4 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { Fluid, FluidModule } from './fluid';
 @Component({
     standalone: false,
     selector: 'test-basic-fluid',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `<p-fluid></p-fluid>`
 })
 class TestBasicFluidComponent {}
@@ -14,6 +15,7 @@ class TestBasicFluidComponent {}
 @Component({
     standalone: false,
     selector: 'test-fluid-with-content',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fluid>
             <div class="test-content">Content inside fluid</div>
@@ -25,6 +27,7 @@ class TestFluidWithContentComponent {}
 @Component({
     standalone: false,
     selector: 'test-fluid-with-form-controls',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fluid>
             <div class="form-group">
@@ -50,6 +53,7 @@ class TestFluidWithFormControlsComponent {}
 @Component({
     standalone: false,
     selector: 'test-nested-fluid',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fluid>
             <div class="outer-container">
@@ -67,6 +71,7 @@ class TestNestedFluidComponent {}
 @Component({
     standalone: false,
     selector: 'test-fluid-with-primeng-components',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fluid>
             <div class="primeng-controls">
@@ -93,6 +98,7 @@ class TestFluidWithPrimeNGComponentsComponent {}
 @Component({
     standalone: false,
     selector: 'test-fluid-responsive',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="responsive-container">
             <p-fluid>
@@ -116,6 +122,7 @@ class TestFluidResponsiveComponent {}
 @Component({
     standalone: false,
     selector: 'test-fluid-dynamic-content',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fluid>
             <div *ngIf="showFirstSection" class="first-section">
@@ -147,6 +154,7 @@ class TestFluidDynamicContentComponent {
 @Component({
     standalone: false,
     selector: 'test-fluid-complex-layout',
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div class="complex-layout">
             <p-fluid>

@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { Fieldset } from './fieldset';
 @Component({
     standalone: true,
     imports: [Fieldset],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fieldset
             [legend]="legend"
@@ -51,6 +52,7 @@ class TestFieldsetComponent {
 @Component({
     standalone: true,
     imports: [Fieldset],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fieldset [toggleable]="true">
             <ng-template #header>
@@ -74,6 +76,7 @@ class TestTemplateFieldsetComponent {}
 @Component({
     standalone: true,
     imports: [Fieldset],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-fieldset legend="Header Facet Test" [toggleable]="true">
             <div class="facet-content">Facet Test Content</div>

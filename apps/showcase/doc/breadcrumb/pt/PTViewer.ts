@@ -1,6 +1,6 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 
@@ -8,6 +8,7 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
     selector: 'breadcrumb-pt-viewer',
     standalone: true,
     imports: [CommonModule, AppDocPtViewer, BreadcrumbModule],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docptviewer [docs]="docs">
             <p-breadcrumb [model]="items" [home]="home" />

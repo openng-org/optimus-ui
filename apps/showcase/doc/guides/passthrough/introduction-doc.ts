@@ -1,7 +1,7 @@
 import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Panel, PanelModule, PanelPassThrough } from 'primeng/panel';
 
@@ -9,6 +9,7 @@ import { Panel, PanelModule, PanelPassThrough } from 'primeng/panel';
     selector: 'introduction-doc',
     standalone: true,
     imports: [AppDocSectionText, AppCode, PanelModule, RouterLink],
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <app-docsectiontext>
             <p>

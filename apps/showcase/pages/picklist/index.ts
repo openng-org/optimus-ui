@@ -4,7 +4,7 @@ import { FilterDoc } from '@/doc/picklist/filter-doc';
 import { UsageDoc } from '@/doc/picklist/usage-doc';
 import { PTComponent } from '@/doc/picklist/pt/PTComponent';
 import { TemplateDoc } from '@/doc/picklist/template-doc';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
@@ -20,6 +20,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrl: './picklistdemo.scss'
 })
 export class PickListDemo {

@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
     selector: 'templates',
     standalone: false,
+    changeDetection: ChangeDetectionStrategy.Eager,
     templateUrl: './templates.component.html'
 })
 export class TemplatesComponent {
