@@ -15,6 +15,8 @@ catalog:
 
 catalogs:
     angular22:
+        "@angular-devkit/core": ^22.0.0
+        "@angular-devkit/schematics": ^22.0.0
         "@angular-devkit/build-angular": ^22.0.0
         "@angular/cdk": ^22.0.0
         "@angular/cli": ^22.0.0
