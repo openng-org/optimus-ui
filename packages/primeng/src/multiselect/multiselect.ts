@@ -527,6 +527,12 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
      */
     resetFilterOnHide = input(false, { transform: booleanAttribute });
     /**
+     * When enabled, the selected options are displayed at the top of the list when the overlay is opened. The order is updated on each open instead of on selection to keep the list stable while interacting with it.
+     * @defaultValue false
+     * @group Props
+     */
+    selectedItemsOnTop = input(false, { transform: booleanAttribute });
+    /**
      * Icon class of the dropdown icon.
      * @group Props
      */
@@ -685,7 +691,7 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
      * Whether all data is selected.
      * @group Props
      */
-    selectAll = input<boolean | null>();
+    selectAll = input<boolean | null>(null);
     /**
      * Indicates whether to focus on options when hovering over them, defaults to optionLabel.
      * @group Props
@@ -986,6 +992,8 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
     selectedOptions = signal<any>(null);
 
+    pinnedSelectedValues = signal<any[]>([]);
+
     clickInProgress: boolean = false;
 
     emptyMessageLabel = computed(() => {
@@ -1060,10 +1068,29 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
                 return this.flatOptions(filtered);
             }
 
-            return filteredOptions;
+            return this.sortSelectedItemsOnTop(filteredOptions);
         }
-        return options;
+        return group ? options : this.sortSelectedItemsOnTop(options);
     });
+
+    private sortSelectedItemsOnTop(options: any[]) {
+        const pinnedValues = this.pinnedSelectedValues();
+
+        if (!this.selectedItemsOnTop() || !isNotEmpty(pinnedValues)) {
+            return options;
+        }
+
+        const equalityKey = this.equalityKey() || '';
+        const selectedOptions: any[] = [];
+        const restOptions: any[] = [];
+
+        for (const option of options) {
+            const optionValue = this.getOptionValue(option);
+            (pinnedValues.some((value) => equals(value, optionValue, equalityKey)) ? selectedOptions : restOptions).push(option);
+        }
+
+        return [...selectedOptions, ...restOptions];
+    }
 
     label = computed(() => {
         let label;
@@ -1075,15 +1102,10 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
             if (isNotEmpty(maxSelectedLabels) && modelValue?.length > (maxSelectedLabels || 0)) {
                 return this.getSelectedItemsLabel();
             } else {
-                label = '';
-
-                for (let i = 0; i < modelValue.length; i++) {
-                    if (i !== 0) {
-                        label += ', ';
-                    }
-
-                    label += this.getLabelByValue(modelValue[i]);
-                }
+                label = modelValue
+                    .map((value) => this.getLabelByValue(value))
+                    .filter((optionLabel) => optionLabel != null)
+                    .join(', ');
             }
         } else {
             label = this.placeholder() || '';
@@ -1840,6 +1862,10 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
      * @group Method
      */
     public show(isFocus?) {
+        if (this.selectedItemsOnTop()) {
+            this.pinnedSelectedValues.set(this.modelValue() || []);
+        }
+
         this.overlayVisible.set(true);
 
         const focusedOptionIndex = this.focusedOptionIndex() !== -1 ? this.focusedOptionIndex() : this.autoOptionFocus() ? this.findFirstFocusedOptionIndex() : this.findSelectedOptionIndex();
