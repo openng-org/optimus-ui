@@ -888,6 +888,13 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
             this.setContentPosition(newState);
 
+            // When the range moves anywhere other than one page forward (a backward scroll or a
+            // multi-page jump), the page before the landing page can still be (partially) visible
+            // through the tolerated items, so it must be included in the lazy load request.
+            const currentPage = this.getPageByFirst(first);
+            const previousPage = this.getPageByFirst(this.first);
+            const loadPreviousPage = currentPage !== previousPage && currentPage !== previousPage + 1;
+
             this.first = first;
             this.last = last;
             this.lastScrollPos = scrollPos;
@@ -896,10 +903,10 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
             if (this._lazy() && this.isPageChanged(first)) {
                 const lazyLoadState = {
-                    first: this._step() ? Math.min(this.getPageByFirst(first) * this._step(), (<any[]>this._items()).length - this._step()) : first,
-                    last: Math.min(this._step() ? (this.getPageByFirst(first) + 1) * this._step() : last, (<any[]>this._items()).length)
+                    first: this._step() ? Math.max(0, Math.min((currentPage - (loadPreviousPage ? 1 : 0)) * this._step(), (<any[]>this._items()).length - this._step())) : first,
+                    last: Math.min(this._step() ? (currentPage + 1) * this._step() : last, (<any[]>this._items()).length)
                 };
-                const isLazyStateChanged = this.lazyLoadState.first !== lazyLoadState.first || this.lazyLoadState.last !== lazyLoadState.last;
+                const isLazyStateChanged = lazyLoadState.first < this.lazyLoadState.first || lazyLoadState.last > this.lazyLoadState.last;
 
                 isLazyStateChanged && this.handleEvents('onLazyLoad', lazyLoadState);
                 this.lazyLoadState = lazyLoadState;
