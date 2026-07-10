@@ -705,16 +705,6 @@ function getTokensFromApi(componentName) {
 }
 
 /**
- * Get all related components from API doc
- */
-function getRelatedComponents(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return [];
-
-    return Object.keys(apiDoc.components);
-}
-
-/**
  * Generate API section for markdown (with all sub-components)
  */
 function generateApiSection(apiDocs, componentName, includeRelated = true) {

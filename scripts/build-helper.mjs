@@ -63,9 +63,9 @@ export function createPackageJson_For_NG_Packager(localPackageJson, INPUT_PATH, 
         delete pkg?.main;
         delete pkg?.module;
         delete pkg?.types;
-    });
 
-    callback?.(pkg);
+        callback?.(pkg);
+    });
 }
 
 export function clearPackageJson(localPackageJson, callback) {

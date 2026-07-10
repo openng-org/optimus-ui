@@ -471,64 +471,6 @@ async function main() {
                             };
 
                             module_types_group.children.forEach((t) => {
-                                const parameters =
-                                    t.signatures && t.signatures[0]?.parameters
-                                        ? t.signatures[0].parameters.map((param) => ({
-                                              name: param.name,
-                                              description: param.comment && param.comment.summary.map((s) => s.text || '').join(' '),
-                                              type: param.type && param.type.name
-                                          }))
-                                        : [];
-
-                                const returnType = t.signatures && t.signatures[0]?.type ? t.signatures[0].type.name : t.type && t.type.declaration && t.type.declaration.signatures && t.type.declaration.signatures[0]?.type.name;
-
-                                const returnDescription =
-                                    t.comment && t.comment.blockTags
-                                        ? t.comment.blockTags
-                                              .filter((tag) => tag.tag === '@returns')
-                                              .map((tag) => tag.content.map((content) => content.text).join(' '))
-                                              .join(' ')
-                                        : '';
-
-                                const typeChildren =
-                                    t.children && t.children.length
-                                        ? t.children.map((child) => {
-                                              const childSignatures = child.type && child.type.declaration && child.type.declaration.signatures;
-                                              const childParameters =
-                                                  childSignatures && childSignatures[0]?.parameters
-                                                      ? childSignatures[0].parameters.map((param) => ({
-                                                            name: param.name,
-                                                            description: param.comment && param.comment.summary.map((s) => s.text || '').join(' '),
-                                                            type: param.type && param.type.name
-                                                        }))
-                                                      : [];
-
-                                              const childReturnType = childSignatures && childSignatures[0]?.type ? childSignatures[0].type.name : undefined;
-
-                                              const childReturnDescription =
-                                                  child.comment && child.comment.blockTags
-                                                      ? child.comment.blockTags
-                                                            .filter((tag) => tag.tag === '@returns')
-                                                            .map((tag) => tag.content.map((content) => content.text).join(' '))
-                                                            .join(' ')
-                                                      : '';
-
-                                              return {
-                                                  name: child.name,
-                                                  description: child.comment && child.comment.summary.map((s) => s.text || '').join(' '),
-                                                  type: childParameters.length || childReturnType ? 'function' : child.type && child.type.name,
-                                                  parameters: childParameters.length ? childParameters : undefined,
-                                                  returns: childReturnType
-                                                      ? {
-                                                            type: childReturnType,
-                                                            description: childReturnDescription
-                                                        }
-                                                      : undefined,
-                                                  deprecated: getDeprecatedText(child)
-                                              };
-                                          })
-                                        : [];
-
                                 types.values.push({
                                     name: t.name,
                                     value: getTypesValue(t),
@@ -684,7 +626,7 @@ async function main() {
 }
 
 function extractParameter(emitter) {
-    let { comment, type } = emitter;
+    let { type } = emitter;
 
     if (type && type.typeArguments) {
         if (type.toString()) {

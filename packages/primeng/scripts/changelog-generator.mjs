@@ -1,7 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { dirname } from 'path';
-import * as TypeDoc from 'typedoc';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -41,7 +40,7 @@ fs.readFile(tsvFilePath, 'utf8', (err, data) => {
             return;
         }
 
-        let [title, issueUrl, assignees, pullRequestUrl, status, labels, milestone] = columns.map((item) => item.trim());
+        let [title, issueUrl, , , , labels, milestone] = columns.map((item) => item.trim());
 
         if (!milestone) {
             console.warn(`⚠ Milestone (Version) information is missing: "${title}"`);

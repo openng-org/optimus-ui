@@ -140,7 +140,6 @@ function testStackBlitzFileGeneration(demos) {
             allPassed &= logTest('theme-switcher added to template', modified.includes('<theme-switcher />'));
 
             // Test: PrimeNG module imports removed
-            const hasNoDirectModuleImport = !modified.includes("from 'primeng/select';") || modified.includes('ImportsModule');
             allPassed &= logTest('PrimeNG direct imports removed', !modified.match(/import\s+\{[^}]*Module[^}]*\}\s+from\s+'primeng\//));
         }
 
@@ -260,7 +259,6 @@ function testStackBlitzProjectStructure(demos) {
     }
 
     const selector = testDemo.selector || 'select-basic-demo';
-    const code = testDemo.code;
 
     log(`\n  Simulating StackBlitz project for: ${selector}`, 'blue');
 
