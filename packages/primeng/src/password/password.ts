@@ -24,8 +24,11 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Eye as EyeIcon } from '@primeicons/angular/eye';
+import { EyeSlash as EyeSlashIcon } from '@primeicons/angular/eye-slash';
+import { Times as TimesIcon } from '@primeicons/angular/times';
 import { MotionOptions } from '@primeuix/motion';
-import { absolutePosition, addClass, hasClass, isTouchDevice, removeClass } from '@primeuix/utils';
+import { absolutePosition, addClass, isTouchDevice, removeClass } from '@primeuix/utils';
 import { OverlayOptions, OverlayService, SharedModule, TranslationKeys } from 'primeng/api';
 import { AutoFocus } from 'primeng/autofocus';
 import { PARENT_INSTANCE } from 'primeng/basecomponent';
@@ -34,14 +37,11 @@ import { BaseInput } from 'primeng/baseinput';
 import { Bind, BindModule } from 'primeng/bind';
 import { ConnectedOverlayScrollHandler, DomHandler } from 'primeng/dom';
 import { Fluid } from 'primeng/fluid';
-import { Eye as EyeIcon } from '@primeicons/angular/eye';
-import { EyeSlash as EyeSlashIcon } from '@primeicons/angular/eye-slash';
-import { Times as TimesIcon } from '@primeicons/angular/times';
 import { InputText } from 'primeng/inputtext';
 import { Overlay } from 'primeng/overlay';
 import { Nullable, VoidListener } from 'primeng/ts-helpers';
-import type { AppendTo, CSSProperties, InputSize, InputVariant } from 'primeng/types/shared';
 import type { PasswordIconTemplateContext, PasswordPassThrough } from 'primeng/types/password';
+import type { AppendTo, CSSProperties, InputSize, InputVariant } from 'primeng/types/shared';
 import { Subscription } from 'rxjs';
 import { PasswordStyle } from './style/passwordstyle';
 
@@ -156,7 +156,7 @@ export class PasswordDirective extends BaseEditableHolder {
 
     content: Nullable<HTMLDivElement>;
 
-    label: Nullable<HTMLLabelElement>;
+    meterLabel: Nullable<HTMLDivElement>;
 
     scrollHandler: Nullable<ConnectedOverlayScrollHandler>;
 
@@ -201,18 +201,18 @@ export class PasswordDirective extends BaseEditableHolder {
             this.renderer.addClass(this.meter, 'p-password-meter');
             this.renderer.appendChild(this.content, this.meter);
 
-            this.label = this.renderer.createElement('div');
-            this.renderer.addClass(this.label, 'p-password-meter-label');
-            this.renderer.appendChild(this.meter, this.label);
+            this.meterLabel = this.renderer.createElement('div');
+            this.renderer.addClass(this.meterLabel, 'p-password-meter-label');
+            this.renderer.appendChild(this.meter, this.meterLabel);
 
             this.info = this.renderer.createElement('div');
             this.renderer.addClass(this.info, 'p-password-meter-text');
             this.renderer.setProperty(this.info, 'textContent', this.promptLabel());
             this.renderer.appendChild(this.content, this.info);
 
+            this.renderer.setStyle(this.panel, 'position', 'absolute');
             this.renderer.setStyle(this.panel, 'minWidth', `${this.el.nativeElement.offsetWidth}px`);
-            this.renderer.appendChild(document.body, this.panel);
-            this.updateMeter();
+            this.renderer.appendChild(this.document.body, this.panel);
         }
     }
 
@@ -224,26 +224,39 @@ export class PasswordDirective extends BaseEditableHolder {
 
             this.renderer.setStyle(this.panel, 'zIndex', String(++DomHandler.zindex));
             this.renderer.setStyle(this.panel, 'display', 'block');
-            setTimeout(() => {
-                addClass(this.panel!, 'p-connected-overlay-visible');
-                this.bindScrollListener();
-                this.bindDocumentResizeListener();
-            }, 1);
             absolutePosition(this.panel!, this.el.nativeElement);
+            removeClass(this.panel!, 'p-password-leave');
+            addClass(this.panel!, 'p-password-enter');
+            this.bindScrollListener();
+            this.bindDocumentResizeListener();
+            this.updateMeter(false);
         }
     }
 
     hideOverlay() {
         if (this.feedback() && this.panel) {
-            addClass(this.panel, 'p-connected-overlay-hidden');
-            removeClass(this.panel, 'p-connected-overlay-visible');
+            const panelRef = this.panel;
+
+            removeClass(panelRef, 'p-password-enter');
+            addClass(panelRef, 'p-password-leave');
             this.unbindScrollListener();
             this.unbindDocumentResizeListener();
+            this.clearState();
 
             setTimeout(() => {
-                this.onDestroy();
-            }, 150);
+                if (panelRef.parentNode) {
+                    panelRef.parentNode.removeChild(panelRef);
+                }
+            }, 300);
         }
+    }
+
+    clearState() {
+        this.panel = null;
+        this.meter = null;
+        this.meterLabel = null;
+        this.info = null;
+        this.content = null;
     }
 
     @HostListener('focus')
@@ -268,6 +281,8 @@ export class PasswordDirective extends BaseEditableHolder {
             if (value.length === 0) {
                 label = this.promptLabel();
                 meterPos = '0px 0px';
+                this.labelSignal.set('');
+                this.updateMeter();
             } else {
                 var score = this.testStrength(value);
 
@@ -286,7 +301,7 @@ export class PasswordDirective extends BaseEditableHolder {
                 this.updateMeter();
             }
 
-            if (!this.panel || !hasClass(this.panel, 'p-connected-overlay-visible')) {
+            if (!this.panel) {
                 this.showOverlay();
             }
 
@@ -300,15 +315,35 @@ export class PasswordDirective extends BaseEditableHolder {
         }
     }
 
-    updateMeter() {
-        if (this.labelSignal() && this.meter && this.info) {
+    updateMeter(animate = true) {
+        if (this.meterLabel) {
+            ['weak', 'medium', 'strong'].forEach((strength) => {
+                this.renderer.removeClass(this.meterLabel, this.strengthClass(strength));
+            });
+        }
+
+        if (this.labelSignal() && this.meter && this.meterLabel && this.info) {
             const label = this.labelSignal();
             const strengthClass = this.strengthClass(label.toLowerCase());
             const width = this.getWidth(label.toLowerCase());
 
-            this.renderer.addClass(this.meter, strengthClass);
-            this.renderer.setStyle(this.meter, 'width', width);
+            if (!animate) {
+                this.renderer.setStyle(this.meterLabel, 'transition', 'none');
+            }
+
+            this.renderer.addClass(this.meterLabel, strengthClass);
+            this.renderer.setStyle(this.meterLabel, 'width', width);
             (this.info as HTMLDivElement).textContent = label;
+
+            if (!animate) {
+                setTimeout(() => {
+                    if (this.meterLabel) {
+                        this.renderer.removeStyle(this.meterLabel, 'transition');
+                    }
+                }, 0);
+            }
+        } else if (this.meterLabel) {
+            this.renderer.setStyle(this.meterLabel, 'width', '');
         }
     }
 
@@ -351,7 +386,7 @@ export class PasswordDirective extends BaseEditableHolder {
     bindScrollListener() {
         if (!this.scrollHandler) {
             this.scrollHandler = new ConnectedOverlayScrollHandler(this.el.nativeElement, () => {
-                if (hasClass(this.panel!, 'p-connected-overlay-visible')) {
+                if (this.panel) {
                     this.hideOverlay();
                 }
             });
@@ -398,9 +433,7 @@ export class PasswordDirective extends BaseEditableHolder {
             this.unbindDocumentResizeListener();
 
             this.renderer.removeChild(this.document.body, this.panel);
-            this.panel = null;
-            this.meter = null;
-            this.info = null;
+            this.clearState();
         }
     }
 }

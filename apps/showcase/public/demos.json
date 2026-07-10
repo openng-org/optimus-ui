@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-07-01T15:48:08.070Z",
-  "totalDemos": 831,
+  "generatedAt": "2026-07-03T16:36:24.977Z",
+  "totalDemos": 832,
   "demos": {
     "Image-template-demo": {
       "key": "Image-template-demo",
@@ -9056,6 +9056,23 @@
         "extFiles": [],
         "imports": [
           "PasswordModule",
+          "FormsModule"
+        ]
+      }
+    },
+    "password-directive-demo": {
+      "key": "password-directive-demo",
+      "selector": "password-directive-demo",
+      "component": "password",
+      "section": "directive",
+      "code": {
+        "typescript": "import { Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\n@Component({\n    template: `\n        <div class=\"flex justify-center\">\n            <input type=\"password\" pPassword [(ngModel)]=\"value\" autocomplete=\"new-password\" placeholder=\"New password\" />\n        </div>\n    `,\n    standalone: true,\n    imports: [FormsModule]\n})\nexport class PasswordDirectiveDemo {\n    value!: string;\n}"
+      },
+      "metadata": {
+        "services": [],
+        "primeNGServices": [],
+        "extFiles": [],
+        "imports": [
           "FormsModule"
         ]
       }
