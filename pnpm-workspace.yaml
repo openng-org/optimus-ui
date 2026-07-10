@@ -1,36 +1,45 @@
 packages:
-    - 'packages/*'
-    - 'apps/*'
+  - 'packages/*'
+  - 'apps/*'
+
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: false
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true
 
 catalog:
-    '@primeuix/styled': ^0.7.4
-    '@primeuix/utils': ^0.7.2
-    '@primeuix/styles': ^3.0.0-alpha.1
-    '@primeuix/themes': 3.0.0-alpha.13
-    '@primeuix/motion': ^0.0.10
-    '@primeuix/mcp': ^1.0.0
-    'tailwindcss-primeui': ^0.6.1
-    '@primeicons/angular': 8.0.0-alpha.7
-    'primeicons': 8.0.0-alpha.7
+  '@primeuix/styled': ^0.7.4
+  '@primeuix/utils': ^0.7.2
+  '@primeuix/styles': ^3.0.0-alpha.1
+  '@primeuix/themes': 3.0.0-alpha.13
+  '@primeuix/motion': ^0.0.10
+  '@primeuix/mcp': ^1.0.0
+  'tailwindcss-primeui': ^0.6.1
+  '@primeicons/angular': 8.0.0-alpha.7
+  'primeicons': 8.0.0-alpha.7
 
 catalogs:
-    angular22:
-        "@angular-devkit/build-angular": ^22.0.0
-        "@angular/cdk": ^22.0.0
-        "@angular/cli": ^22.0.0
-        "@angular/common": ^22.0.0
-        "@angular/compiler": ^22.0.0
-        "@angular/compiler-cli": ^22.0.0
-        "@angular/core": ^22.0.0
-        "@angular/forms": ^22.0.0
-        "@angular/platform-browser": ^22.0.0
-        "@angular/platform-browser-dynamic": ^22.0.0
-        "@angular/platform-server": ^22.0.0
-        "@angular/router": ^22.0.0
-        "@angular/ssr": ^22.0.0
-        "@angular-eslint/eslint-plugin": ^22.0.0
-        "@angular-eslint/eslint-plugin-template": ^22.0.0
-        "@angular-eslint/schematics": ^22.0.0
-        "@angular-eslint/template-parser": ^22.0.0
-        "ng-packagr": ^22.0.0
-        "typescript": "~6.0.0"
+  angular22:
+    "@angular-devkit/build-angular": ^22.0.0
+    "@angular-devkit/core": ^22.0.0
+    "@angular-devkit/schematics": ^22.0.0
+    "@angular/cdk": ^22.0.0
+    "@angular/cli": ^22.0.0
+    "@angular/common": ^22.0.0
+    "@angular/compiler": ^22.0.0
+    "@angular/compiler-cli": ^22.0.0
+    "@angular/core": ^22.0.0
+    "@angular/forms": ^22.0.0
+    "@angular/platform-browser": ^22.0.0
+    "@angular/platform-browser-dynamic": ^22.0.0
+    "@angular/platform-server": ^22.0.0
+    "@angular/router": ^22.0.0
+    "@angular/ssr": ^22.0.0
+    "@angular-eslint/eslint-plugin": ^22.0.0
+    "@angular-eslint/eslint-plugin-template": ^22.0.0
+    "@angular-eslint/schematics": ^22.0.0
+    "@angular-eslint/template-parser": ^22.0.0
+    "ng-packagr": ^22.0.0
+    "typescript": "~6.0.0"
