@@ -33,7 +33,6 @@ import { blockBodyScroll, ConnectedOverlayScrollHandler, unblockBodyScroll } fro
 import { InputText } from 'primeng/inputtext';
 import { MotionModule } from 'primeng/motion';
 import { Ripple } from 'primeng/ripple';
-import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 import { Nullable, VoidListener } from 'primeng/ts-helpers';
 import {
     DatePickerButtonBarTemplateContext,
@@ -53,6 +52,7 @@ import {
     Month,
     NavigationState
 } from 'primeng/types/datepicker';
+import type { AppendTo, CSSProperties } from 'primeng/types/shared';
 import { ZIndexUtils } from 'primeng/utils';
 import { Subscription } from 'rxjs';
 import { DatePickerStyle } from './style/datepickerstyle';
@@ -103,6 +103,7 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                 [attr.readonly]="readonlyAttr()"
                 [attr.disabled]="disabledAttr()"
                 (input)="onUserInput($event)"
+                (paste)="onPaste($event)"
                 [style]="inputStyle()"
                 [class]="cn(cx('pcInputText'), inputStyleClass())"
                 [attr.placeholder]="placeholder()"
@@ -1066,6 +1067,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     focus = signal<boolean>(false);
 
     isKeydown: Nullable<boolean>;
+
+    isPaste = false;
 
     preventDocumentListener: Nullable<boolean>;
 
@@ -3014,15 +3017,15 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         event.preventDefault();
     }
 
-    onUserInput(event: KeyboardEvent | any) {
+    onUserInput(event: InputEvent) {
         // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
 
-        if (!this.isKeydown) {
+        if (!this.isKeydown && !this.isPaste) {
             return;
         }
-        this.isKeydown = false;
+        this.isKeydown = this.isPaste = false;
 
-        let val = (<HTMLInputElement>event.target).value;
+        let val = (event.target as HTMLInputElement).value;
         try {
             let value = this.parseValueFromString(val);
             if (this.isValidSelection(value)) {
@@ -3036,7 +3039,6 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             let value = this.keepInvalid() ? val : null;
             this.updateModel(value);
         }
-
         this.onInput.emit(event);
     }
 
@@ -3819,6 +3821,10 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         this.clearTimePickerTimer();
         this.restoreOverlayAppend();
         this.onOverlayHide();
+    }
+
+    onPaste(ev: ClipboardEvent) {
+        this.isPaste = true;
     }
 }
 
