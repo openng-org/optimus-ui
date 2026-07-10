@@ -51,3 +51,4 @@ api-generator/themedoc.json
 
 # primeng packages
 packages/primeng/src/package.json
+.eslintcache
