@@ -118,6 +118,11 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR = {
                 [fluid]="hasFluid"
                 [pInputTextUnstyled]="unstyled()"
             />
+            @if ($showSelectedItem()) {
+                <span [pBind]="ptm('selectedItem')" [class]="cx('selectedItem')">
+                    <ng-container [ngTemplateOutlet]="selectedItemTemplate()!" [ngTemplateOutletContext]="getSelectedItemContext($selectedOption())"></ng-container>
+                </span>
+            }
         }
         @if ($showClear()) {
             @if (!clearIconTemplate()) {
@@ -187,7 +192,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR = {
                         [attr.name]="name()"
                         [attr.minlength]="minlength()"
                         [attr.maxlength]="maxlength()"
-                        [attr.size]="size()"
+                        [attr.size]="inputSize()"
                         [attr.min]="min()"
                         [attr.max]="max()"
                         [attr.pattern]="pattern()"
@@ -768,11 +773,15 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      */
     footerTemplate = contentChild<TemplateRef<void>>('footer', { descendants: false });
 
+    _selectedItemTemplate = contentChild<TemplateRef<AutoCompleteSelectedItemTemplateContext>>('selecteditem', { descendants: false });
+
+    _selectedItemTemplateAlias = contentChild<TemplateRef<AutoCompleteSelectedItemTemplateContext>>('selectedItem', { descendants: false });
+
     /**
-     * Custom selected item template.
+     * Custom selected item template. Accepts both the `selecteditem` and `selectedItem` template names for consistency with Select.
      * @group Templates
      */
-    selectedItemTemplate = contentChild<TemplateRef<AutoCompleteSelectedItemTemplateContext>>('selecteditem', { descendants: false });
+    selectedItemTemplate = computed(() => this._selectedItemTemplate() ?? this._selectedItemTemplateAlias());
 
     /**
      * Custom group template.
@@ -857,9 +866,17 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         return this.group() ? this.flatOptions(this.suggestions()) : this.suggestions() || [];
     });
 
+    $selectedOption = computed(() => {
+        const modelValue = this.modelValue();
+
+        return this.optionValueSelected ? (this.suggestions() || []).find((option: any) => equals(option, modelValue, this.equalityKey())) : modelValue;
+    });
+
+    $showSelectedItem = computed(() => !this.multiple() && this.$filled() && !this.focused() && !!this.selectedItemTemplate());
+
     inputValue = computed(() => {
         const modelValue = this.modelValue();
-        const selectedOption = this.optionValueSelected ? (this.suggestions() || []).find((option: any) => equals(option, modelValue, this.equalityKey())) : modelValue;
+        const selectedOption = this.$selectedOption();
 
         if (isNotEmpty(modelValue)) {
             if (typeof modelValue === 'object' || this.optionValueSelected) {

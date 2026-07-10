@@ -1070,6 +1070,35 @@ describe('AutoComplete', () => {
                 const autocompleteInstance = templateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
                 expect(autocompleteInstance.selectedItemTemplate()).toBeTruthy();
             });
+
+            it('should render #selecteditem with item context in single mode', async () => {
+                const autocompleteInstance = templateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                autocompleteInstance.writeValue(mockCountries[0]);
+                templateFixture.changeDetectorRef.markForCheck();
+                await templateFixture.whenStable();
+
+                const selectedItemElement = templateFixture.debugElement.query(By.css('.p-autocomplete-selected-item'));
+                expect(selectedItemElement).toBeTruthy();
+                expect(selectedItemElement.query(By.css('.selected-name')).nativeElement.textContent.trim()).toBe('Afghanistan');
+            });
+
+            it('should hide #selecteditem in single mode while the input is focused', async () => {
+                const autocompleteInstance = templateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                autocompleteInstance.writeValue(mockCountries[0]);
+                templateFixture.changeDetectorRef.markForCheck();
+                await templateFixture.whenStable();
+
+                const inputElement = templateFixture.debugElement.query(By.css('input'));
+                inputElement.nativeElement.dispatchEvent(new Event('focus'));
+                await templateFixture.whenStable();
+
+                expect(templateFixture.debugElement.query(By.css('.p-autocomplete-selected-item'))).toBeFalsy();
+
+                inputElement.nativeElement.dispatchEvent(new Event('blur'));
+                await templateFixture.whenStable();
+
+                expect(templateFixture.debugElement.query(By.css('.p-autocomplete-selected-item'))).toBeTruthy();
+            });
         });
 
         describe('Group Template (_groupTemplate)', () => {
@@ -2289,6 +2318,56 @@ describe('AutoComplete', () => {
         });
     });
 
+    describe('Size Property', () => {
+        let fixture: ComponentFixture<AutoComplete>;
+        let autocompleteElement: HTMLElement;
+
+        beforeEach(async () => {
+            fixture = TestBed.createComponent(AutoComplete);
+            fixture.componentRef.setInput('suggestions', mockCountries);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            autocompleteElement = fixture.nativeElement;
+        });
+
+        it('should apply size classes to the root element', async () => {
+            fixture.componentRef.setInput('size', 'small');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(autocompleteElement.classList.contains('p-autocomplete-sm')).toBe(true);
+            expect(autocompleteElement.classList.contains('p-inputfield-sm')).toBe(true);
+
+            fixture.componentRef.setInput('size', 'large');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(autocompleteElement.classList.contains('p-autocomplete-lg')).toBe(true);
+            expect(autocompleteElement.classList.contains('p-inputfield-lg')).toBe(true);
+        });
+
+        it('should apply size classes to the root element in multiple mode', async () => {
+            fixture.componentRef.setInput('multiple', true);
+            fixture.componentRef.setInput('size', 'large');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(autocompleteElement.querySelector('ul[role="listbox"]')).toBeTruthy();
+            expect(autocompleteElement.classList.contains('p-autocomplete-lg')).toBe(true);
+            expect(autocompleteElement.classList.contains('p-inputfield-lg')).toBe(true);
+        });
+
+        it('should not render the size attribute on the multiple input when pSize is set', async () => {
+            fixture.componentRef.setInput('multiple', true);
+            fixture.componentRef.setInput('size', 'large');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const inputElement = autocompleteElement.querySelector('input') as HTMLInputElement;
+            expect(inputElement.getAttribute('size')).toBeNull();
+        });
+    });
+
     describe('PassThrough (PT) Tests', () => {
         let fixture: ComponentFixture<AutoComplete>;
         let autocompleteElement: HTMLElement;
@@ -2598,5 +2677,54 @@ describe('AutoComplete', () => {
                 expect(dropdownButton?.getAttribute('data-has-suggestions')).toBe('true');
             });
         });
+    });
+});
+
+@Component({
+    standalone: true,
+    imports: [AutoCompleteModule, FormsModule],
+    template: `
+        <p-autocomplete [(ngModel)]="value" [suggestions]="suggestions()" optionLabel="name" [multiple]="true" (completeMethod)="search()">
+            <ng-template #selectedItem let-item>
+                <span class="alias-selected">{{ item.name }}</span>
+            </ng-template>
+        </p-autocomplete>
+    `
+})
+class TestSelectedItemAliasAutocompleteComponent {
+    value: any[] = [{ name: 'Afghanistan', code: 'AF' }];
+    suggestions = signal<any[]>([]);
+
+    search() {
+        this.suggestions.set([...mockCountries]);
+    }
+}
+
+describe('AutoComplete - selectedItem Template Alias', () => {
+    let fixture: ComponentFixture<TestSelectedItemAliasAutocompleteComponent>;
+    let autocompleteInstance: AutoComplete;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [AutoCompleteModule, FormsModule, TestSelectedItemAliasAutocompleteComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestSelectedItemAliasAutocompleteComponent);
+        autocompleteInstance = fixture.debugElement.query(By.css('p-autocomplete')).componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should resolve the camelCase #selectedItem template name', () => {
+        expect(autocompleteInstance.selectedItemTemplate()).toBeTruthy();
+    });
+
+    it('should render the aliased selected item template', async () => {
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        const selected = fixture.debugElement.query(By.css('.alias-selected'));
+        expect(selected).toBeTruthy();
+        expect(selected.nativeElement.textContent).toContain('Afghanistan');
     });
 });

@@ -28,6 +28,10 @@ export interface AutoCompletePassThroughOptions<I = unknown> {
      */
     pcInputText?: InputTextPassThrough;
     /**
+     * Used to pass attributes to the selected item's DOM element.
+     */
+    selectedItem?: PassThroughOption<HTMLSpanElement, I>;
+    /**
      * Used to pass attributes to the input multiple's DOM element.
      */
     inputMultiple?: PassThroughOption<HTMLUListElement, I>;
@@ -277,7 +281,7 @@ export interface AutoCompleteTemplates<T = any> {
      */
     group(context: AutoCompleteGroupTemplateContext<T>): TemplateRef<AutoCompleteGroupTemplateContext<T>>;
     /**
-     * Custom selected item template, only supported in multiple mode.
+     * Custom selected item template.
      * @param {Object} context - selected item data.
      */
     selecteditem(context: AutoCompleteSelectedItemTemplateContext<T>): TemplateRef<AutoCompleteSelectedItemTemplateContext<T>>;
