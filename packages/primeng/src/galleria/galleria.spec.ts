@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -17,33 +17,34 @@ const mockImages = [
 
 // Test Components for different scenarios
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria
-            [value]="images"
-            [activeIndex]="activeIndex"
-            [fullScreen]="fullScreen"
-            [id]="id"
-            [numVisible]="numVisible"
-            [responsiveOptions]="responsiveOptions"
-            [showItemNavigators]="showItemNavigators"
-            [showThumbnailNavigators]="showThumbnailNavigators"
-            [showItemNavigatorsOnHover]="showItemNavigatorsOnHover"
-            [changeItemOnIndicatorHover]="changeItemOnIndicatorHover"
-            [circular]="circular"
-            [autoPlay]="autoPlay"
-            [shouldStopAutoplayByClick]="shouldStopAutoplayByClick"
-            [transitionInterval]="transitionInterval"
-            [showThumbnails]="showThumbnails"
-            [thumbnailsPosition]="thumbnailsPosition"
-            [verticalThumbnailViewPortHeight]="verticalThumbnailViewPortHeight"
-            [showIndicators]="showIndicators"
-            [showIndicatorsOnItem]="showIndicatorsOnItem"
-            [indicatorsPosition]="indicatorsPosition"
-            [baseZIndex]="baseZIndex"
-            [maskClass]="maskClass"
-            [containerClass]="containerClass"
-            [containerStyle]="containerStyle"
+            [value]="images()"
+            [activeIndex]="activeIndex()"
+            [fullScreen]="fullScreen()"
+            [id]="id()"
+            [numVisible]="numVisible()"
+            [responsiveOptions]="responsiveOptions()"
+            [showItemNavigators]="showItemNavigators()"
+            [showThumbnailNavigators]="showThumbnailNavigators()"
+            [showItemNavigatorsOnHover]="showItemNavigatorsOnHover()"
+            [changeItemOnIndicatorHover]="changeItemOnIndicatorHover()"
+            [circular]="circular()"
+            [autoPlay]="autoPlay()"
+            [shouldStopAutoplayByClick]="shouldStopAutoplayByClick()"
+            [transitionInterval]="transitionInterval()"
+            [showThumbnails]="showThumbnails()"
+            [thumbnailsPosition]="thumbnailsPosition()"
+            [verticalThumbnailViewPortHeight]="verticalThumbnailViewPortHeight()"
+            [showIndicators]="showIndicators()"
+            [showIndicatorsOnItem]="showIndicatorsOnItem()"
+            [indicatorsPosition]="indicatorsPosition()"
+            [baseZIndex]="baseZIndex()"
+            [maskClass]="maskClass()"
+            [containerClass]="containerClass()"
+            [containerStyle]="containerStyle()"
             [(visible)]="visible"
             (activeIndexChange)="onActiveIndexChange($event)"
         >
@@ -57,30 +58,30 @@ const mockImages = [
     `
 })
 class TestBasicGalleriaComponent {
-    images: any[] = mockImages;
-    activeIndex: number = 0;
-    fullScreen: boolean = false;
-    id: string | undefined;
-    numVisible: number = 3;
-    responsiveOptions: GalleriaResponsiveOptions[] | undefined;
-    showItemNavigators: boolean = false;
-    showThumbnailNavigators: boolean = true;
-    showItemNavigatorsOnHover: boolean = false;
-    changeItemOnIndicatorHover: boolean = false;
-    circular: boolean = false;
-    autoPlay: boolean = false;
-    shouldStopAutoplayByClick: boolean = true;
-    transitionInterval: number = 4000;
-    showThumbnails: boolean = true;
-    thumbnailsPosition: 'bottom' | 'top' | 'left' | 'right' | undefined = 'bottom';
-    verticalThumbnailViewPortHeight: string = '300px';
-    showIndicators: boolean = false;
-    showIndicatorsOnItem: boolean = false;
-    indicatorsPosition: 'bottom' | 'top' | 'left' | 'right' | undefined = 'bottom';
-    baseZIndex: number = 0;
-    maskClass: string | undefined;
-    containerClass: string | undefined;
-    containerStyle: { [klass: string]: any } | null | undefined;
+    images = signal<any[]>(mockImages);
+    activeIndex = signal<number>(0);
+    fullScreen = signal<boolean>(false);
+    id = signal<string | undefined>(undefined);
+    numVisible = signal<number>(3);
+    responsiveOptions = signal<GalleriaResponsiveOptions[] | undefined>(undefined);
+    showItemNavigators = signal<boolean>(false);
+    showThumbnailNavigators = signal<boolean>(true);
+    showItemNavigatorsOnHover = signal<boolean>(false);
+    changeItemOnIndicatorHover = signal<boolean>(false);
+    circular = signal<boolean>(false);
+    autoPlay = signal<boolean>(false);
+    shouldStopAutoplayByClick = signal<boolean>(true);
+    transitionInterval = signal<number>(4000);
+    showThumbnails = signal<boolean>(true);
+    thumbnailsPosition = signal<'bottom' | 'top' | 'left' | 'right' | undefined>('bottom');
+    verticalThumbnailViewPortHeight = signal<string>('300px');
+    showIndicators = signal<boolean>(false);
+    showIndicatorsOnItem = signal<boolean>(false);
+    indicatorsPosition = signal<'bottom' | 'top' | 'left' | 'right' | undefined>('bottom');
+    baseZIndex = signal<number>(0);
+    maskClass = signal<string | undefined>(undefined);
+    containerClass = signal<string | undefined>(undefined);
+    containerStyle = signal<{ [klass: string]: any } | null | undefined>(undefined);
     visible: boolean = false;
 
     // Event handlers
@@ -92,7 +93,8 @@ class TestBasicGalleriaComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria [value]="images" [fullScreen]="true" [(visible)]="visible">
             <ng-template #item let-item>
@@ -110,7 +112,8 @@ class TestFullScreenGalleriaComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [transitionInterval]="1000">
             <ng-template #item let-item>
@@ -124,7 +127,8 @@ class TestAutoPlayGalleriaComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria [value]="images" [responsiveOptions]="responsiveOptions">
             <ng-template #item let-item>
@@ -143,7 +147,8 @@ class TestResponsiveGalleriaComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria [value]="images" [showIndicators]="true" [showThumbnails]="false">
             <ng-template #item let-item>
@@ -157,7 +162,8 @@ class TestIndicatorsGalleriaComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [GalleriaModule],
     template: `
         <p-galleria [value]="images" [numVisible]="3">
             <ng-template #header>
@@ -185,8 +191,7 @@ class TestTemplateGalleriaComponent {
 describe('Galleria', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [GalleriaModule, SharedModule],
-            declarations: [TestBasicGalleriaComponent, TestFullScreenGalleriaComponent, TestAutoPlayGalleriaComponent, TestResponsiveGalleriaComponent, TestIndicatorsGalleriaComponent, TestTemplateGalleriaComponent],
+            imports: [GalleriaModule, SharedModule, TestBasicGalleriaComponent, TestFullScreenGalleriaComponent, TestAutoPlayGalleriaComponent, TestResponsiveGalleriaComponent, TestIndicatorsGalleriaComponent, TestTemplateGalleriaComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -233,15 +238,15 @@ describe('Galleria', () => {
         });
 
         it('should accept input values', async () => {
-            component.activeIndex = 2;
-            component.fullScreen = true;
-            component.numVisible = 5;
-            component.showItemNavigators = true;
-            component.circular = true;
-            component.autoPlay = true;
-            component.transitionInterval = 2000;
-            component.showIndicators = true;
-            component.baseZIndex = 1000;
+            component.activeIndex.set(2);
+            component.fullScreen.set(true);
+            component.numVisible.set(5);
+            component.showItemNavigators.set(true);
+            component.circular.set(true);
+            component.autoPlay.set(true);
+            component.transitionInterval.set(2000);
+            component.showIndicators.set(true);
+            component.baseZIndex.set(1000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -262,8 +267,8 @@ describe('Galleria', () => {
         });
 
         it('should set numVisibleLimit when value length is less than numVisible', async () => {
-            component.images = mockImages.slice(0, 2); // Only 2 images
-            component.numVisible = 5; // Want to show 5
+            component.images.set(mockImages.slice(0, 2)); // Only 2 images
+            component.numVisible.set(5); // Want to show 5
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -316,7 +321,7 @@ describe('Galleria', () => {
         });
 
         it('should emit activeIndexChange event', () => {
-            spyOn(component, 'onActiveIndexChange');
+            vi.spyOn(component, 'onActiveIndexChange');
 
             galleriaInstance.onActiveItemChange(2);
 
@@ -325,7 +330,7 @@ describe('Galleria', () => {
         });
 
         it('should not emit activeIndexChange if index is same', () => {
-            spyOn(galleriaInstance.activeIndexChange, 'emit');
+            vi.spyOn(galleriaInstance.activeIndexChange, 'emit');
 
             galleriaInstance._activeIndex.set(1);
             galleriaInstance.onActiveItemChange(1);
@@ -545,7 +550,7 @@ describe('Galleria', () => {
         });
 
         it('should apply custom mask class', async () => {
-            component.maskClass = 'custom-mask-class';
+            component.maskClass.set('custom-mask-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -553,8 +558,8 @@ describe('Galleria', () => {
         });
 
         it('should apply custom container class and style', async () => {
-            component.containerClass = 'custom-container-class';
-            component.containerStyle = { width: '800px', height: '600px' };
+            component.containerClass.set('custom-container-class');
+            component.containerStyle.set({ width: '800px', height: '600px' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -586,7 +591,7 @@ describe('Galleria', () => {
             const positions: Array<'bottom' | 'top' | 'left' | 'right'> = ['bottom', 'top', 'left', 'right'];
 
             for (const position of positions) {
-                component.thumbnailsPosition = position;
+                component.thumbnailsPosition.set(position);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 expect(galleriaInstance.thumbnailsPosition()).toBe(position);
@@ -597,7 +602,7 @@ describe('Galleria', () => {
             const positions: Array<'bottom' | 'top' | 'left' | 'right'> = ['bottom', 'top', 'left', 'right'];
 
             for (const position of positions) {
-                component.indicatorsPosition = position;
+                component.indicatorsPosition.set(position);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 expect(galleriaInstance.indicatorsPosition()).toBe(position);
@@ -605,7 +610,7 @@ describe('Galleria', () => {
         });
 
         it('should handle vertical thumbnail viewport height', async () => {
-            component.verticalThumbnailViewPortHeight = '400px';
+            component.verticalThumbnailViewPortHeight.set('400px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -613,7 +618,7 @@ describe('Galleria', () => {
         });
 
         it('should handle show indicators on item', async () => {
-            component.showIndicatorsOnItem = true;
+            component.showIndicatorsOnItem.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -672,7 +677,7 @@ describe('Galleria', () => {
         });
 
         it('should handle empty images array', async () => {
-            component.images = [];
+            component.images.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -680,7 +685,7 @@ describe('Galleria', () => {
         });
 
         it('should handle null images', async () => {
-            component.images = null as any;
+            component.images.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -688,7 +693,7 @@ describe('Galleria', () => {
         });
 
         it('should handle single image', async () => {
-            component.images = [mockImages[0]];
+            component.images.set([mockImages[0]]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -696,14 +701,14 @@ describe('Galleria', () => {
         });
 
         it('should handle undefined id', () => {
-            component.id = undefined as any;
+            component.id.set(undefined as any);
             fixture.detectChanges();
 
             expect(galleriaInstance.id()).toBeUndefined();
         });
 
         it('should handle custom id', async () => {
-            component.id = 'custom-galleria-id';
+            component.id.set('custom-galleria-id');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

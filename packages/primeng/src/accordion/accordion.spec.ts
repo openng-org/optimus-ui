@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Accordion } from './accordion';
@@ -42,15 +42,77 @@ import type { AccordionTabCloseEvent, AccordionTabOpenEvent } from 'primeng/type
     `
 })
 class TestAccordionComponent {
-    value: undefined | null | string | number | string[] | number[] = undefined as any;
-    multiple = false;
-    selectOnFocus = false;
-    expandIcon?: string;
-    collapseIcon?: string;
-    motionOptions?: any;
-    tab1Disabled = false;
-    tab2Disabled = false;
-    tab3Disabled = false;
+    private _value = signal<undefined | null | string | number | string[] | number[]>(undefined as any);
+    get value() {
+        return this._value();
+    }
+    set value(v: undefined | null | string | number | string[] | number[]) {
+        this._value.set(v);
+    }
+
+    private _multiple = signal(false);
+    get multiple() {
+        return this._multiple();
+    }
+    set multiple(v: boolean) {
+        this._multiple.set(v);
+    }
+
+    private _selectOnFocus = signal(false);
+    get selectOnFocus() {
+        return this._selectOnFocus();
+    }
+    set selectOnFocus(v: boolean) {
+        this._selectOnFocus.set(v);
+    }
+
+    private _expandIcon = signal<string | undefined>(undefined);
+    get expandIcon() {
+        return this._expandIcon();
+    }
+    set expandIcon(v: string | undefined) {
+        this._expandIcon.set(v);
+    }
+
+    private _collapseIcon = signal<string | undefined>(undefined);
+    get collapseIcon() {
+        return this._collapseIcon();
+    }
+    set collapseIcon(v: string | undefined) {
+        this._collapseIcon.set(v);
+    }
+
+    private _motionOptions = signal<any>(undefined);
+    get motionOptions() {
+        return this._motionOptions();
+    }
+    set motionOptions(v: any) {
+        this._motionOptions.set(v);
+    }
+
+    private _tab1Disabled = signal(false);
+    get tab1Disabled() {
+        return this._tab1Disabled();
+    }
+    set tab1Disabled(v: boolean) {
+        this._tab1Disabled.set(v);
+    }
+
+    private _tab2Disabled = signal(false);
+    get tab2Disabled() {
+        return this._tab2Disabled();
+    }
+    set tab2Disabled(v: boolean) {
+        this._tab2Disabled.set(v);
+    }
+
+    private _tab3Disabled = signal(false);
+    get tab3Disabled() {
+        return this._tab3Disabled();
+    }
+    set tab3Disabled(v: boolean) {
+        this._tab3Disabled.set(v);
+    }
 
     openEvent?: AccordionTabOpenEvent;
     closeEvent?: AccordionTabCloseEvent;
@@ -79,12 +141,25 @@ class TestAccordionComponent {
     `
 })
 class TestDynamicAccordionComponent {
-    value: string[] = [];
-    tabs = [
+    private _value = signal<string[]>([]);
+    get value() {
+        return this._value();
+    }
+    set value(v: string[]) {
+        this._value.set(v);
+    }
+
+    private _tabs = signal([
         { id: '1', header: 'Dynamic Tab 1', content: 'Dynamic Content 1' },
         { id: '2', header: 'Dynamic Tab 2', content: 'Dynamic Content 2' },
         { id: '3', header: 'Dynamic Tab 3', content: 'Dynamic Content 3' }
-    ];
+    ]);
+    get tabs() {
+        return this._tabs();
+    }
+    set tabs(v: { id: string; header: string; content: string }[]) {
+        this._tabs.set(v);
+    }
 }
 
 @Component({
@@ -125,7 +200,14 @@ class TestCustomIconAccordionComponent {
     `
 })
 class TestPTAccordionComponent {
-    @Input() pt: any;
+    private _pt = signal<any>(undefined);
+    @Input()
+    get pt() {
+        return this._pt();
+    }
+    set pt(v: any) {
+        this._pt.set(v);
+    }
 }
 
 describe('Accordion', () => {
@@ -338,7 +420,7 @@ describe('Accordion', () => {
 
             firstHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(secondHeader, 'focus');
+            vi.spyOn(secondHeader, 'focus');
 
             firstHeader.dispatchEvent(event);
 
@@ -352,7 +434,7 @@ describe('Accordion', () => {
 
             secondHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'ArrowUp' });
-            spyOn(firstHeader, 'focus');
+            vi.spyOn(firstHeader, 'focus');
 
             secondHeader.dispatchEvent(event);
 
@@ -366,7 +448,7 @@ describe('Accordion', () => {
 
             lastHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(firstHeader, 'focus');
+            vi.spyOn(firstHeader, 'focus');
 
             lastHeader.dispatchEvent(event);
 
@@ -380,7 +462,7 @@ describe('Accordion', () => {
 
             firstHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(lastHeader, 'focus');
+            vi.spyOn(lastHeader, 'focus');
 
             firstHeader.dispatchEvent(event);
 
@@ -422,7 +504,7 @@ describe('Accordion', () => {
 
             firstHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(thirdHeader, 'focus');
+            vi.spyOn(thirdHeader, 'focus');
 
             firstHeader.dispatchEvent(event);
 
@@ -436,7 +518,7 @@ describe('Accordion', () => {
 
             lastHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(firstHeader, 'focus');
+            vi.spyOn(firstHeader, 'focus');
 
             lastHeader.dispatchEvent(event);
 
@@ -450,7 +532,7 @@ describe('Accordion', () => {
 
             firstHeader.focus();
             const event = new KeyboardEvent('keydown', { code: 'ArrowUp' });
-            spyOn(lastHeader, 'focus');
+            vi.spyOn(lastHeader, 'focus');
 
             firstHeader.dispatchEvent(event);
 
@@ -486,7 +568,7 @@ describe('Accordion', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            const spy = spyOn(accordion, 'updateValue');
+            const spy = vi.spyOn(accordion, 'updateValue');
             const headers = fixture.debugElement.queryAll(By.directive(AccordionHeader));
             headers[0].nativeElement.click();
 
@@ -677,11 +759,14 @@ describe('Accordion', () => {
             const panels = dynamicFixture.debugElement.queryAll(By.directive(AccordionPanel));
             expect(panels.length).toBe(3);
 
-            dynamicFixture.componentInstance.tabs.push({
-                id: '4',
-                header: 'Dynamic Tab 4',
-                content: 'Dynamic Content 4'
-            });
+            dynamicFixture.componentInstance.tabs = [
+                ...dynamicFixture.componentInstance.tabs,
+                {
+                    id: '4',
+                    header: 'Dynamic Tab 4',
+                    content: 'Dynamic Content 4'
+                }
+            ];
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
@@ -695,7 +780,7 @@ describe('Accordion', () => {
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
-            dynamicFixture.componentInstance.tabs.splice(1, 1);
+            dynamicFixture.componentInstance.tabs = dynamicFixture.componentInstance.tabs.filter((_, i) => i !== 1);
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 

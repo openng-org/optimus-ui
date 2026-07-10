@@ -1,18 +1,20 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Fluid, FluidModule } from './fluid';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-basic-fluid',
     template: `<p-fluid></p-fluid>`
 })
 class TestBasicFluidComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-with-content',
     template: `
         <p-fluid>
@@ -23,7 +25,8 @@ class TestBasicFluidComponent {}
 class TestFluidWithContentComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-with-form-controls',
     template: `
         <p-fluid>
@@ -48,7 +51,8 @@ class TestFluidWithContentComponent {}
 class TestFluidWithFormControlsComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-nested-fluid',
     template: `
         <p-fluid>
@@ -65,7 +69,8 @@ class TestFluidWithFormControlsComponent {}
 class TestNestedFluidComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-with-primeng-components',
     template: `
         <p-fluid>
@@ -91,7 +96,8 @@ class TestNestedFluidComponent {}
 class TestFluidWithPrimeNGComponentsComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-responsive',
     template: `
         <div class="responsive-container">
@@ -114,38 +120,46 @@ class TestFluidWithPrimeNGComponentsComponent {}
 class TestFluidResponsiveComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-dynamic-content',
     template: `
         <p-fluid>
-            <div *ngIf="showFirstSection" class="first-section">
-                <input type="text" class="dynamic-input-1" />
-                <button class="dynamic-button-1">Button 1</button>
-            </div>
-            <div *ngIf="showSecondSection" class="second-section">
-                <textarea class="dynamic-textarea"></textarea>
-                <select class="dynamic-select">
-                    <option>Dynamic Option</option>
-                </select>
-            </div>
-            <div *ngFor="let item of dynamicItems" class="dynamic-item">
-                <span>{{ item.label }}</span>
-                <input type="text" [value]="item.value" class="dynamic-list-input" />
-            </div>
+            @if (showFirstSection()) {
+                <div class="first-section">
+                    <input type="text" class="dynamic-input-1" />
+                    <button class="dynamic-button-1">Button 1</button>
+                </div>
+            }
+            @if (showSecondSection()) {
+                <div class="second-section">
+                    <textarea class="dynamic-textarea"></textarea>
+                    <select class="dynamic-select">
+                        <option>Dynamic Option</option>
+                    </select>
+                </div>
+            }
+            @for (item of dynamicItems(); track item.label) {
+                <div class="dynamic-item">
+                    <span>{{ item.label }}</span>
+                    <input type="text" [value]="item.value" class="dynamic-list-input" />
+                </div>
+            }
         </p-fluid>
     `
 })
 class TestFluidDynamicContentComponent {
-    showFirstSection = true;
-    showSecondSection = false;
-    dynamicItems = [
+    showFirstSection = signal(true);
+    showSecondSection = signal(false);
+    dynamicItems = signal([
         { label: 'Item 1', value: 'Value 1' },
         { label: 'Item 2', value: 'Value 2' }
-    ];
+    ]);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [FluidModule],
     selector: 'test-fluid-complex-layout',
     template: `
         <div class="complex-layout">
@@ -180,8 +194,8 @@ class TestFluidComplexLayoutComponent {}
 describe('Fluid', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [FluidModule],
-            declarations: [
+            imports: [
+                FluidModule,
                 TestBasicFluidComponent,
                 TestFluidWithContentComponent,
                 TestFluidWithFormControlsComponent,
@@ -453,7 +467,7 @@ describe('Fluid', () => {
             expect(element.querySelector('.second-section')).toBeFalsy();
 
             // Show second section
-            component.showSecondSection = true;
+            component.showSecondSection.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -462,7 +476,7 @@ describe('Fluid', () => {
 
         it('should handle content visibility changes', async () => {
             // Hide first section
-            component.showFirstSection = false;
+            component.showFirstSection.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -485,7 +499,7 @@ describe('Fluid', () => {
 
         it('should update dynamic content', async () => {
             // Add new item
-            component.dynamicItems.push({ label: 'Item 3', value: 'Value 3' });
+            component.dynamicItems.set([...component.dynamicItems(), { label: 'Item 3', value: 'Value 3' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -494,7 +508,7 @@ describe('Fluid', () => {
         });
 
         it('should handle empty dynamic content', async () => {
-            component.dynamicItems = [];
+            component.dynamicItems.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

@@ -1,28 +1,31 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, signal, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Tag } from './tag';
 
 @Component({
-    standalone: false,
-    template: ` <p-tag [value]="value" [icon]="icon" [severity]="severity" [rounded]="rounded"> </p-tag> `
+    standalone: true,
+    imports: [Tag],
+    template: ` <p-tag [value]="value()" [icon]="icon()" [severity]="severity()" [rounded]="rounded()"> </p-tag> `
 })
 class TestBasicTagComponent {
-    value: string | undefined = 'Test Tag';
-    icon: string | undefined;
-    severity: string | undefined;
-    rounded: boolean | undefined;
+    value = signal<string | undefined>('Test Tag');
+    icon = signal<string | undefined>(undefined);
+    severity = signal<string | undefined>(undefined);
+    rounded = signal<boolean | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tag],
     template: ` <p-tag value="Icon Tag" icon="pi pi-check"></p-tag> `
 })
 class TestIconTagComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tag],
     template: `
         <p-tag value="Template Tag">
             <ng-template #icon>
@@ -34,7 +37,8 @@ class TestIconTagComponent {}
 class TestIconTemplateTagComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tag],
     template: `
         <p-tag>
             <span class="content-projection">Custom Content</span>
@@ -44,13 +48,15 @@ class TestIconTemplateTagComponent {}
 class TestContentProjectionTagComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tag],
     template: ` <p-tag value="Success Tag" severity="success" icon="pi pi-check" [rounded]="true"> </p-tag> `
 })
 class TestSeverityTagComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Tag],
     template: ` <p-tag [value]="value" [severity]="severity" [style]="style"> </p-tag> `
 })
 class TestStyleTagComponent {
@@ -67,8 +73,7 @@ describe('Tag', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicTagComponent, TestIconTagComponent, TestIconTemplateTagComponent, TestContentProjectionTagComponent, TestSeverityTagComponent, TestStyleTagComponent],
-            imports: [Tag],
+            imports: [Tag, TestBasicTagComponent, TestIconTagComponent, TestIconTemplateTagComponent, TestContentProjectionTagComponent, TestSeverityTagComponent, TestStyleTagComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -87,10 +92,10 @@ describe('Tag', () => {
         it('should have default values', () => {
             const freshFixture = TestBed.createComponent(TestBasicTagComponent);
             const freshComponent = freshFixture.componentInstance;
-            freshComponent.value = undefined as any;
-            freshComponent.icon = undefined as any;
-            freshComponent.severity = undefined as any;
-            freshComponent.rounded = undefined as any;
+            freshComponent.value.set(undefined as any);
+            freshComponent.icon.set(undefined as any);
+            freshComponent.severity.set(undefined as any);
+            freshComponent.rounded.set(undefined as any);
             freshFixture.detectChanges();
 
             const freshTag = freshFixture.debugElement.query(By.directive(Tag)).componentInstance;
@@ -102,10 +107,10 @@ describe('Tag', () => {
         });
 
         it('should accept custom values', async () => {
-            component.value = 'Custom Tag';
-            component.icon = 'pi pi-star';
-            component.severity = 'success';
-            component.rounded = true;
+            component.value.set('Custom Tag');
+            component.icon.set('pi pi-star');
+            component.severity.set('success');
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -118,7 +123,7 @@ describe('Tag', () => {
 
         it('should have required dependencies injected', () => {
             expect(tagInstance._componentStyle).toBeTruthy();
-            expect(tagInstance.constructor.name).toBe('Tag');
+            expect(tagInstance instanceof Tag).toBe(true);
         });
 
         it('should initialize iconTemplate', () => {
@@ -128,7 +133,7 @@ describe('Tag', () => {
 
     describe('Input Properties', () => {
         it('should update value input', async () => {
-            component.value = 'Updated Value';
+            component.value.set('Updated Value');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -136,7 +141,7 @@ describe('Tag', () => {
         });
 
         it('should update icon input', async () => {
-            component.icon = 'pi pi-tag';
+            component.icon.set('pi pi-tag');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -144,7 +149,7 @@ describe('Tag', () => {
         });
 
         it('should update severity input', async () => {
-            component.severity = 'danger';
+            component.severity.set('danger');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -152,13 +157,13 @@ describe('Tag', () => {
         });
 
         it('should update rounded input with booleanAttribute transform', async () => {
-            component.rounded = true;
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(tagInstance.rounded()).toBe(true);
 
-            component.rounded = false;
+            component.rounded.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -169,7 +174,7 @@ describe('Tag', () => {
             const severities = ['success', 'secondary', 'info', 'warn', 'danger', 'contrast'];
 
             for (const severity of severities) {
-                component.severity = severity;
+                component.severity.set(severity);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -178,13 +183,13 @@ describe('Tag', () => {
         });
 
         it('should handle undefined and null severity', async () => {
-            component.severity = undefined as any;
+            component.severity.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(tagInstance.severity()).toBeUndefined();
 
-            component.severity = null as any;
+            component.severity.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -192,7 +197,7 @@ describe('Tag', () => {
         });
 
         it('should handle string severity values', async () => {
-            component.severity = 'custom-severity';
+            component.severity.set('custom-severity');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -202,7 +207,7 @@ describe('Tag', () => {
 
     describe('Value Display', () => {
         it('should display the value in label span', async () => {
-            component.value = 'Display Test';
+            component.value.set('Display Test');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -213,7 +218,7 @@ describe('Tag', () => {
         });
 
         it('should update label when value changes', async () => {
-            component.value = 'Initial Value';
+            component.value.set('Initial Value');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -221,7 +226,7 @@ describe('Tag', () => {
             let labelSpan = fixture.debugElement.query(By.css('span:last-child'));
             expect(labelSpan.nativeElement.textContent.trim()).toBe('Initial Value');
 
-            component.value = 'Updated Value';
+            component.value.set('Updated Value');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -231,7 +236,7 @@ describe('Tag', () => {
         });
 
         it('should handle empty value', async () => {
-            component.value = '';
+            component.value.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -241,7 +246,7 @@ describe('Tag', () => {
         });
 
         it('should handle undefined value', async () => {
-            component.value = undefined as any;
+            component.value.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -269,7 +274,7 @@ describe('Tag', () => {
         });
 
         it('should not display icon when icon property is not set', () => {
-            component.icon = undefined as any;
+            component.icon.set(undefined as any);
             fixture.detectChanges();
 
             const iconSpan = fixture.debugElement.query(By.css('.p-tag-icon'));
@@ -277,7 +282,7 @@ describe('Tag', () => {
         });
 
         it('should update icon classes when icon changes', async () => {
-            component.icon = 'pi pi-star';
+            component.icon.set('pi pi-star');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -286,7 +291,7 @@ describe('Tag', () => {
             if (iconSpan) {
                 expect(iconSpan.nativeElement.classList.contains('pi-star')).toBe(true);
 
-                component.icon = 'pi pi-heart';
+                component.icon.set('pi pi-heart');
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -296,7 +301,7 @@ describe('Tag', () => {
             } else {
                 // Icon may not render in test environment, just verify property updates
                 expect(tagInstance.icon()).toBe('pi pi-star');
-                component.icon = 'pi pi-heart';
+                component.icon.set('pi pi-heart');
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -305,7 +310,7 @@ describe('Tag', () => {
         });
 
         it('should handle multiple CSS classes in icon', async () => {
-            component.icon = 'pi pi-check custom-icon-class';
+            component.icon.set('pi pi-check custom-icon-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -459,7 +464,7 @@ describe('Tag', () => {
         });
 
         it('should apply rounded class when rounded is true', async () => {
-            component.rounded = true;
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -470,8 +475,8 @@ describe('Tag', () => {
         });
 
         it('should apply data-pc attributes for styling sections', async () => {
-            component.value = 'Test';
-            component.icon = 'pi pi-tag';
+            component.value.set('Test');
+            component.icon.set('pi pi-tag');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -491,7 +496,7 @@ describe('Tag', () => {
 
     describe('Severity Tests', () => {
         it('should handle success severity', async () => {
-            component.severity = 'success';
+            component.severity.set('success');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -500,7 +505,7 @@ describe('Tag', () => {
         });
 
         it('should handle secondary severity', async () => {
-            component.severity = 'secondary';
+            component.severity.set('secondary');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -509,7 +514,7 @@ describe('Tag', () => {
         });
 
         it('should handle info severity', async () => {
-            component.severity = 'info';
+            component.severity.set('info');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -518,7 +523,7 @@ describe('Tag', () => {
         });
 
         it('should handle warn severity', async () => {
-            component.severity = 'warn';
+            component.severity.set('warn');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -527,7 +532,7 @@ describe('Tag', () => {
         });
 
         it('should handle danger severity', async () => {
-            component.severity = 'danger';
+            component.severity.set('danger');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -536,7 +541,7 @@ describe('Tag', () => {
         });
 
         it('should handle contrast severity', async () => {
-            component.severity = 'contrast';
+            component.severity.set('contrast');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -545,7 +550,7 @@ describe('Tag', () => {
         });
 
         it('should handle custom string severity', async () => {
-            component.severity = 'my-custom-severity';
+            component.severity.set('my-custom-severity');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -554,7 +559,7 @@ describe('Tag', () => {
         });
 
         it('should work without severity', () => {
-            component.severity = undefined as any;
+            component.severity.set(undefined as any);
             fixture.detectChanges();
 
             expect(tagInstance.severity()).toBeUndefined();
@@ -564,7 +569,7 @@ describe('Tag', () => {
 
     describe('Rounded Attribute Tests', () => {
         it('should handle rounded true', async () => {
-            component.rounded = true;
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -573,7 +578,7 @@ describe('Tag', () => {
         });
 
         it('should handle rounded false', async () => {
-            component.rounded = false;
+            component.rounded.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -582,7 +587,7 @@ describe('Tag', () => {
         });
 
         it('should handle rounded undefined', () => {
-            component.rounded = undefined as any;
+            component.rounded.set(undefined as any);
             fixture.detectChanges();
 
             expect(tagInstance.rounded()).toBeFalsy(); // booleanAttribute transforms undefined to false
@@ -590,26 +595,26 @@ describe('Tag', () => {
 
         it('should use booleanAttribute transform', async () => {
             // Test booleanAttribute behavior for rounded property
-            component.rounded = true;
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(tagInstance.rounded()).toBe(true);
 
-            component.rounded = false;
+            component.rounded.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(tagInstance.rounded()).toBe(false);
 
             // booleanAttribute converts non-boolean values
-            component.rounded = null as any;
+            component.rounded.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(tagInstance.rounded()).toBe(false);
 
-            component.rounded = undefined as any;
+            component.rounded.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -635,10 +640,10 @@ describe('Tag', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values', async () => {
-            component.value = undefined as any;
-            component.icon = undefined as any;
-            component.severity = undefined as any;
-            component.rounded = undefined as any;
+            component.value.set(undefined as any);
+            component.icon.set(undefined as any);
+            component.severity.set(undefined as any);
+            component.rounded.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -651,9 +656,9 @@ describe('Tag', () => {
         });
 
         it('should handle empty string values', async () => {
-            component.value = '';
-            component.icon = '';
-            component.severity = '';
+            component.value.set('');
+            component.icon.set('');
+            component.severity.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -668,7 +673,7 @@ describe('Tag', () => {
             const specialValues = ['Tag with spaces', 'Tag-with-dashes', 'Tag_with_underscores', 'Tag with emojis 🏷️', 'Tag with @#$%^&*() symbols', 'Tag with "quotes" and \'apostrophes\'', 'Tag with <html> tags'];
 
             for (const value of specialValues) {
-                component.value = value;
+                component.value.set(value);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -680,7 +685,7 @@ describe('Tag', () => {
 
         it('should handle very long values', async () => {
             const longValue = 'This is a very long tag value that might cause layout issues or performance problems in some cases but should be handled gracefully by the component';
-            component.value = longValue;
+            component.value.set(longValue);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -699,9 +704,9 @@ describe('Tag', () => {
             const severities = ['success', 'info', 'warn', 'danger', 'secondary'];
 
             for (let index = 0; index < values.length; index++) {
-                component.value = values[index];
-                component.severity = severities[index];
-                component.rounded = index % 2 === 0;
+                component.value.set(values[index]);
+                component.severity.set(severities[index]);
+                component.rounded.set(index % 2 === 0);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -726,14 +731,14 @@ describe('Tag', () => {
             const fixture1 = TestBed.createComponent(TestBasicTagComponent);
             const fixture2 = TestBed.createComponent(TestBasicTagComponent);
 
-            fixture1.componentInstance.value = 'Tag 1';
-            fixture1.componentInstance.severity = 'success';
+            fixture1.componentInstance.value.set('Tag 1');
+            fixture1.componentInstance.severity.set('success');
             fixture1.changeDetectorRef.markForCheck();
             await fixture1.whenStable();
             fixture1.detectChanges();
 
-            fixture2.componentInstance.value = 'Tag 2';
-            fixture2.componentInstance.severity = 'danger';
+            fixture2.componentInstance.value.set('Tag 2');
+            fixture2.componentInstance.severity.set('danger');
             fixture2.changeDetectorRef.markForCheck();
             await fixture2.whenStable();
             fixture2.detectChanges();
@@ -773,8 +778,8 @@ describe('Tag', () => {
         });
 
         it('should maintain state across property changes', async () => {
-            component.value = 'Initial';
-            component.severity = 'info';
+            component.value.set('Initial');
+            component.severity.set('info');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -782,9 +787,9 @@ describe('Tag', () => {
             expect(tagInstance.value()).toBe('Initial');
             expect(tagInstance.severity()).toBe('info');
 
-            component.value = 'Updated';
-            component.severity = 'success';
-            component.rounded = true;
+            component.value.set('Updated');
+            component.severity.set('success');
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -798,10 +803,10 @@ describe('Tag', () => {
             const minimalFixture = TestBed.createComponent(TestBasicTagComponent);
             const minimalComponent = minimalFixture.componentInstance;
 
-            minimalComponent.value = undefined as any;
-            minimalComponent.icon = undefined as any;
-            minimalComponent.severity = undefined as any;
-            minimalComponent.rounded = undefined as any;
+            minimalComponent.value.set(undefined as any);
+            minimalComponent.icon.set(undefined as any);
+            minimalComponent.severity.set(undefined as any);
+            minimalComponent.rounded.set(undefined as any);
 
             minimalFixture.detectChanges();
 
@@ -815,10 +820,10 @@ describe('Tag', () => {
         });
 
         it('should work with all features combined', async () => {
-            component.value = 'Complete Tag';
-            component.icon = 'pi pi-check-circle';
-            component.severity = 'success';
-            component.rounded = true;
+            component.value.set('Complete Tag');
+            component.icon.set('pi pi-check-circle');
+            component.severity.set('success');
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -839,8 +844,8 @@ describe('Tag', () => {
         });
 
         it('should compute dataP based on severity and rounded', async () => {
-            component.severity = 'success';
-            component.rounded = true;
+            component.severity.set('success');
+            component.rounded.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();

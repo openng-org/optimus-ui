@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,13 +9,14 @@ import { OrganizationChartNode } from './organizationchart-node';
 
 // Test component for basic use cases
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [OrganizationChart],
     template: `
         <p-organization-chart
-            [value]="data"
-            [selectionMode]="selectionMode"
-            [selection]="selection"
-            [collapsible]="collapsible"
+            [value]="data()"
+            [selectionMode]="selectionMode()"
+            [selection]="selection()"
+            [collapsible]="collapsible()"
             (selectionChange)="onSelectionChange($event)"
             (onNodeSelect)="onNodeSelect($event)"
             (onNodeUnselect)="onNodeUnselect($event)"
@@ -26,10 +27,10 @@ import { OrganizationChartNode } from './organizationchart-node';
     `
 })
 class TestBasicOrganizationChartComponent {
-    data: TreeNode[] = [];
-    selectionMode: 'single' | 'multiple' | null | undefined = null as any;
-    selection: any;
-    collapsible: boolean = false;
+    data = signal<TreeNode[]>([]);
+    selectionMode = signal<'single' | 'multiple' | null | undefined>(null as any);
+    selection = signal<any>(undefined);
+    collapsible = signal(false);
 
     selectionChangeEvent: any;
     nodeSelectEvent: any;
@@ -38,7 +39,7 @@ class TestBasicOrganizationChartComponent {
     nodeCollapseEvent: any;
 
     onSelectionChange(event: any) {
-        this.selection = event;
+        this.selection.set(event);
         this.selectionChangeEvent = event;
     }
 
@@ -61,7 +62,8 @@ class TestBasicOrganizationChartComponent {
 
 // Test component for template testing
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [OrganizationChart],
     template: `
         <p-organization-chart [value]="data" [collapsible]="true">
             <ng-template #node let-node>
@@ -101,7 +103,8 @@ class TestTemplateOrganizationChartComponent {
 
 // Test component for toggler icon template
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [OrganizationChart],
     template: `
         <p-organization-chart [value]="data" [collapsible]="true">
             <ng-template #togglericon let-expanded>
@@ -124,7 +127,8 @@ class TestTogglerIconTemplateComponent {
 
 // Test component for keyboard navigation
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [OrganizationChart],
     template: ` <p-organization-chart [value]="data" [collapsible]="true" [selectionMode]="'single'"> </p-organization-chart> `
 })
 class TestKeyboardNavigationComponent {
@@ -144,8 +148,7 @@ describe('OrganizationChart', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicOrganizationChartComponent, TestTemplateOrganizationChartComponent, TestTogglerIconTemplateComponent, TestKeyboardNavigationComponent],
-            imports: [OrganizationChart, OrganizationChartNode],
+            imports: [OrganizationChart, OrganizationChartNode, TestBasicOrganizationChartComponent, TestTemplateOrganizationChartComponent, TestTogglerIconTemplateComponent, TestKeyboardNavigationComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -177,9 +180,9 @@ describe('OrganizationChart', () => {
                 }
             ];
 
-            component.data = testData;
-            component.selectionMode = 'single';
-            component.collapsible = true;
+            component.data.set(testData);
+            component.selectionMode.set('single');
+            component.collapsible.set(true);
 
             fixture.detectChanges();
 
@@ -191,7 +194,7 @@ describe('OrganizationChart', () => {
         it('should correctly identify root node', () => {
             expect(organizationChart.root()).toBeNull();
 
-            component.data = [{ label: 'Root Node' }];
+            component.data.set([{ label: 'Root Node' }]);
             fixture.detectChanges();
 
             expect(organizationChart.root()).toBeDefined();
@@ -199,7 +202,7 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle empty data array', () => {
-            component.data = [];
+            component.data.set([]);
             fixture.detectChanges();
 
             expect(organizationChart.root()).toBeNull();
@@ -210,47 +213,47 @@ describe('OrganizationChart', () => {
 
     describe('Public Methods', () => {
         beforeEach(() => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child 1', selectable: true }, { label: 'Child 2', selectable: false }, { label: 'Child 3' }]
                 }
-            ];
-            component.selectionMode = 'single';
+            ]);
+            component.selectionMode.set('single');
             fixture.detectChanges();
         });
 
         it('should find index in selection for single mode', () => {
-            const node = component.data[0].children![0];
+            const node = component.data()[0].children![0];
 
             expect(organizationChart.findIndexInSelection(node)).toBe(-1);
 
             organizationChart.selection.set(node);
             expect(organizationChart.findIndexInSelection(node)).toBe(0);
 
-            const otherNode = component.data[0].children![1];
+            const otherNode = component.data()[0].children![1];
             expect(organizationChart.findIndexInSelection(otherNode)).toBe(-1);
         });
 
         it('should find index in selection for multiple mode', async () => {
-            component.selectionMode = 'multiple';
+            component.selectionMode.set('multiple');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node1 = component.data[0].children![0];
-            const node2 = component.data[0].children![2];
+            const node1 = component.data()[0].children![0];
+            const node2 = component.data()[0].children![2];
 
             organizationChart.selection.set([node1, node2]);
 
             expect(organizationChart.findIndexInSelection(node1)).toBe(0);
             expect(organizationChart.findIndexInSelection(node2)).toBe(1);
-            expect(organizationChart.findIndexInSelection(component.data[0].children![1])).toBe(-1);
+            expect(organizationChart.findIndexInSelection(component.data()[0].children![1])).toBe(-1);
         });
 
         it('should check if node is selected', () => {
-            const node = component.data[0].children![0];
+            const node = component.data()[0].children![0];
 
             expect(organizationChart.isSelected(node)).toBe(false);
 
@@ -278,23 +281,23 @@ describe('OrganizationChart', () => {
 
     describe('Event Handling', () => {
         beforeEach(() => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child 1' }, { label: 'Child 2', selectable: false }, { label: 'Child 3' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
         });
 
         it('should handle node click in single selection mode', async () => {
-            component.selectionMode = 'single';
+            component.selectionMode.set('single');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node = component.data[0].children![0];
+            const node = component.data()[0].children![0];
             const event = new MouseEvent('click');
             Object.defineProperty(event, 'target', {
                 value: document.createElement('div'),
@@ -310,12 +313,12 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle node unselection in single mode', async () => {
-            component.selectionMode = 'single';
+            component.selectionMode.set('single');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node = component.data[0].children![0];
+            const node = component.data()[0].children![0];
             organizationChart.selection.set(node);
 
             const event = new MouseEvent('click');
@@ -331,13 +334,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle node click in multiple selection mode', async () => {
-            component.selectionMode = 'multiple';
+            component.selectionMode.set('multiple');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node1 = component.data[0].children![0];
-            const node2 = component.data[0].children![2];
+            const node1 = component.data()[0].children![0];
+            const node2 = component.data()[0].children![2];
 
             const event1 = new MouseEvent('click');
             Object.defineProperty(event1, 'target', {
@@ -360,13 +363,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle node unselection in multiple mode', async () => {
-            component.selectionMode = 'multiple';
+            component.selectionMode.set('multiple');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node1 = component.data[0].children![0];
-            const node2 = component.data[0].children![2];
+            const node1 = component.data()[0].children![0];
+            const node2 = component.data()[0].children![2];
             organizationChart.selection.set([node1, node2]);
 
             const event = new MouseEvent('click');
@@ -381,12 +384,12 @@ describe('OrganizationChart', () => {
         });
 
         it('should not select non-selectable nodes', async () => {
-            component.selectionMode = 'single';
+            component.selectionMode.set('single');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const nonSelectableNode = component.data[0].children![1];
+            const nonSelectableNode = component.data()[0].children![1];
             const event = new MouseEvent('click');
             Object.defineProperty(event, 'target', {
                 value: document.createElement('div'),
@@ -400,13 +403,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should ignore click on collapse button', async () => {
-            component.selectionMode = 'single';
-            component.collapsible = true;
+            component.selectionMode.set('single');
+            component.collapsible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const node = component.data[0];
+            const node = component.data()[0];
             const mockElement = document.createElement('div');
             mockElement.setAttribute('data-pc-section', 'collapsebutton');
             const event = new MouseEvent('click');
@@ -422,14 +425,14 @@ describe('OrganizationChart', () => {
         });
 
         it('should emit expand and collapse events', async () => {
-            component.collapsible = true;
+            component.collapsible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             const nodeElements = fixture.debugElement.queryAll(By.css('[pOrganizationChartNode]'));
             const rootNodeComponent = nodeElements[0].componentInstance as OrganizationChartNode;
-            const node = component.data[0];
+            const node = component.data()[0];
 
             rootNodeComponent.toggleNode(new MouseEvent('click'), node);
             await fixture.whenStable();
@@ -449,13 +452,13 @@ describe('OrganizationChart', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values gracefully', async () => {
-            component.data = null as any;
+            component.data.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(() => fixture.detectChanges()).not.toThrow();
             expect(organizationChart.root()).toBeNull();
 
-            component.data = undefined as any;
+            component.data.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(() => fixture.detectChanges()).not.toThrow();
@@ -463,7 +466,7 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle nodes without children', () => {
-            component.data = [{ label: 'Leaf Node' }];
+            component.data.set([{ label: 'Leaf Node' }]);
             fixture.detectChanges();
 
             const nodeElements = fixture.debugElement.queryAll(By.css('[pOrganizationChartNode]'));
@@ -473,7 +476,7 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle nodes with leaf property set to false', () => {
-            component.data = [{ label: 'Non-Leaf Node', leaf: false }];
+            component.data.set([{ label: 'Non-Leaf Node', leaf: false }]);
             fixture.detectChanges();
 
             const nodeElements = fixture.debugElement.queryAll(By.css('[pOrganizationChartNode]'));
@@ -483,16 +486,16 @@ describe('OrganizationChart', () => {
         });
 
         it('should handle rapid selection changes', async () => {
-            component.selectionMode = 'single';
-            component.data = [
+            component.selectionMode.set('single');
+            component.data.set([
                 {
                     label: 'Root',
                     children: [{ label: 'Child 1' }, { label: 'Child 2' }, { label: 'Child 3' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
-            const nodes = component.data[0].children!;
+            const nodes = component.data()[0].children!;
 
             for (let i = 0; i < nodes.length; i++) {
                 const event = new MouseEvent('click');
@@ -550,14 +553,14 @@ describe('OrganizationChart', () => {
 
     describe('CSS Classes and Styling', () => {
         it('should apply correct classes to nodes', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     styleClass: 'custom-node-class',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
             const nodeDiv = fixture.debugElement.query(By.css('.p-organizationchart-node'));
@@ -565,14 +568,14 @@ describe('OrganizationChart', () => {
         });
 
         it('should not render subtree when node is collapsed', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: false,
                     children: [{ label: 'Child 1' }, { label: 'Child 2' }]
                 }
-            ];
-            component.collapsible = true;
+            ]);
+            component.collapsible.set(true);
             fixture.detectChanges();
 
             // Root node's subtree should not be rendered when collapsed
@@ -582,14 +585,14 @@ describe('OrganizationChart', () => {
         });
 
         it('should render subtree when node is expanded', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child 1' }, { label: 'Child 2' }]
                 }
-            ];
-            component.collapsible = true;
+            ]);
+            component.collapsible.set(true);
             fixture.detectChanges();
 
             const subtrees = fixture.debugElement.queryAll(By.css('.p-organizationchart-subtree'));
@@ -600,13 +603,13 @@ describe('OrganizationChart', () => {
 
     describe('Accessibility', () => {
         it('should have role tree on root subtree', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
             const rootSubtree = fixture.debugElement.query(By.css('.p-organizationchart-subtree-root'));
@@ -614,13 +617,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should have role treeitem on tree items', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
             const treeItems = fixture.debugElement.queryAll(By.css('.p-organizationchart-tree'));
@@ -631,13 +634,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should have role group on child subtrees', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
             const childSubtrees = fixture.debugElement.queryAll(By.css('.p-organizationchart-subtree:not(.p-organizationchart-subtree-root)'));
@@ -647,8 +650,8 @@ describe('OrganizationChart', () => {
         });
 
         it('should have data-selectable attribute on selectable nodes', () => {
-            component.data = [{ label: 'Root', selectable: true }];
-            component.selectionMode = 'single';
+            component.data.set([{ label: 'Root', selectable: true }]);
+            component.selectionMode.set('single');
             fixture.detectChanges();
 
             const node = fixture.debugElement.query(By.css('.p-organizationchart-node'));
@@ -656,13 +659,13 @@ describe('OrganizationChart', () => {
         });
 
         it('should have correct CSS classes', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
+            ]);
             fixture.detectChanges();
 
             expect(fixture.debugElement.query(By.css('.p-organizationchart'))).toBeTruthy();
@@ -673,14 +676,14 @@ describe('OrganizationChart', () => {
         });
 
         it('should render collapse button with child count when collapsed', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: false,
                     children: [{ label: 'Child 1' }, { label: 'Child 2' }]
                 }
-            ];
-            component.collapsible = true;
+            ]);
+            component.collapsible.set(true);
             fixture.detectChanges();
 
             const collapseButton = fixture.debugElement.query(By.css('.p-organizationchart-collapse-button'));
@@ -689,20 +692,23 @@ describe('OrganizationChart', () => {
         });
 
         it('should render correct icon based on expansion state', async () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
-            component.collapsible = true;
+            ]);
+            component.collapsible.set(true);
             fixture.detectChanges();
 
             const chevronUp = fixture.debugElement.query(By.css('[data-p-icon="chevron-up"]'));
             expect(chevronUp).toBeTruthy();
 
-            component.data[0].expanded = false;
+            component.data.update((d) => {
+                d[0].expanded = false;
+                return [...d];
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -742,23 +748,23 @@ describe('OrganizationChart', () => {
         });
 
         it('should prevent default on toggle', () => {
-            component.data = [
+            component.data.set([
                 {
                     label: 'Root',
                     expanded: true,
                     children: [{ label: 'Child' }]
                 }
-            ];
-            component.collapsible = true;
+            ]);
+            component.collapsible.set(true);
             fixture.detectChanges();
 
             const nodeElements = fixture.debugElement.queryAll(By.css('[pOrganizationChartNode]'));
             const nodeComponent = nodeElements[0].componentInstance as OrganizationChartNode;
 
             const event = new MouseEvent('click');
-            spyOn(event, 'preventDefault');
+            vi.spyOn(event, 'preventDefault');
 
-            nodeComponent.toggleNode(event, component.data[0]);
+            nodeComponent.toggleNode(event, component.data()[0]);
 
             expect(event.preventDefault).toHaveBeenCalled();
         });
@@ -766,7 +772,7 @@ describe('OrganizationChart', () => {
 
     describe('Gap Property', () => {
         it('should apply default gap values', () => {
-            component.data = [{ label: 'Root' }];
+            component.data.set([{ label: 'Root' }]);
             fixture.detectChanges();
 
             const host = fixture.debugElement.query(By.directive(OrganizationChart));
@@ -799,7 +805,7 @@ describe('OrganizationChart', () => {
 
     describe('Component Lifecycle', () => {
         it('should clean up on destroy', () => {
-            component.data = [{ label: 'Root' }];
+            component.data.set([{ label: 'Root' }]);
             fixture.detectChanges();
 
             expect(() => fixture.destroy()).not.toThrow();
@@ -939,7 +945,7 @@ describe('OrganizationChart', () => {
                 ptFixture.componentRef.setInput('value', [{ label: 'Root' }]);
                 ptFixture.componentRef.setInput('pt', {
                     root: {
-                        onclick: jasmine.createSpy('onRootClick')
+                        onclick: vi.fn()
                     }
                 });
                 ptFixture.detectChanges();

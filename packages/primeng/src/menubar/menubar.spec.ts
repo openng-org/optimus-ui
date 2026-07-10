@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
@@ -11,19 +11,20 @@ function createProcessedItem(item: MenuItem, key: string, index: number, level: 
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar
-            [model]="model"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [autoDisplay]="autoDisplay"
-            [autoHide]="autoHide"
-            [autoHideDelay]="autoHideDelay"
-            [breakpoint]="breakpoint"
-            [id]="id"
-            [ariaLabel]="ariaLabel"
-            [ariaLabelledBy]="ariaLabelledBy"
+            [model]="model()"
+            [autoZIndex]="autoZIndex()"
+            [baseZIndex]="baseZIndex()"
+            [autoDisplay]="autoDisplay()"
+            [autoHide]="autoHide()"
+            [autoHideDelay]="autoHideDelay()"
+            [breakpoint]="breakpoint()"
+            [id]="id()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
             (onFocus)="onFocus($event)"
             (onBlur)="onBlur($event)"
         >
@@ -31,16 +32,16 @@ function createProcessedItem(item: MenuItem, key: string, index: number, level: 
     `
 })
 class TestBasicMenubarComponent {
-    model: MenuItem[] | undefined = [{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }];
-    autoZIndex: boolean = true;
-    baseZIndex: number = 0;
-    autoDisplay: boolean | undefined = true;
-    autoHide: boolean | undefined;
-    autoHideDelay: number = 100;
-    breakpoint: string = '960px';
-    id: string | undefined;
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
+    model = signal<MenuItem[] | undefined>([{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }]);
+    autoZIndex = signal<boolean>(true);
+    baseZIndex = signal<number>(0);
+    autoDisplay = signal<boolean | undefined>(true);
+    autoHide = signal<boolean | undefined>(undefined);
+    autoHideDelay = signal<number>(100);
+    breakpoint = signal<string>('960px');
+    id = signal<string | undefined>(undefined);
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
 
     focusEvent: any;
     blurEvent: any;
@@ -55,7 +56,8 @@ class TestBasicMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-nested-menubar',
     template: ` <p-menubar [model]="nestedModel"> </p-menubar> `
 })
@@ -78,7 +80,8 @@ class TestNestedMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-router-menubar',
     template: ` <p-menubar [model]="routerModel"> </p-menubar> `
 })
@@ -96,7 +99,8 @@ class TestRouterMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar [model]="model">
             <ng-template #start>
@@ -113,12 +117,15 @@ class TestTemplateMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar [model]="model">
             <ng-template #item let-item>
                 <div class="custom-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>
@@ -133,7 +140,8 @@ class TestItemTemplateMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar [model]="model">
             <ng-template #item let-item>
@@ -147,7 +155,8 @@ class TestTemplateMenubarItemComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar [model]="model">
             <ng-template #submenuicon>
@@ -166,7 +175,8 @@ class TestSubmenuIconTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     template: `
         <p-menubar [model]="model">
             <ng-template #menuicon>
@@ -180,7 +190,8 @@ class TestMenuIconTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-disabled-items',
     template: ` <p-menubar [model]="disabledModel"> </p-menubar> `
 })
@@ -189,7 +200,8 @@ class TestDisabledItemsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-styled-menubar',
     template: ` <p-menubar [class]="customStyleClass"> </p-menubar> `
 })
@@ -198,35 +210,38 @@ class TestStyledMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-minimal-menubar',
     template: `<p-menubar></p-menubar>`
 })
 class TestMinimalMenubarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-dynamic-menubar',
-    template: ` <p-menubar [model]="dynamicModel"> </p-menubar> `
+    template: ` <p-menubar [model]="dynamicModel()"> </p-menubar> `
 })
 class TestDynamicMenubarComponent {
-    dynamicModel: MenuItem[] = [];
+    dynamicModel = signal<MenuItem[]>([]);
 
     addItem(item: MenuItem) {
-        this.dynamicModel.push(item);
+        this.dynamicModel.update((model) => [...model, item]);
     }
 
     clearItems() {
-        this.dynamicModel = [];
+        this.dynamicModel.set([]);
     }
 
     removeItem(index: number) {
-        this.dynamicModel.splice(index, 1);
+        this.dynamicModel.update((model) => model.filter((_, i) => i !== index));
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-command-menubar',
     template: ` <p-menubar [model]="commandModel"> </p-menubar> `
 })
@@ -245,7 +260,33 @@ class TestCommandMenubarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Menubar],
+    selector: 'test-item-template-command-menubar',
+    template: `
+        <p-menubar [model]="model">
+            <ng-template #item let-item>
+                <span class="custom-template-item">{{ item.label }}</span>
+            </ng-template>
+        </p-menubar>
+    `
+})
+class TestItemTemplateCommandMenubarComponent {
+    commandExecuted: any;
+
+    model: MenuItem[] = [
+        {
+            label: 'Custom Command Item',
+            command: (event) => {
+                this.commandExecuted = event;
+            }
+        }
+    ];
+}
+
+@Component({
+    standalone: true,
+    imports: [Menubar],
     selector: 'test-autohide-menubar',
     template: ` <p-menubar [model]="model" [autoHide]="autoHide" [autoHideDelay]="autoHideDelay"> </p-menubar> `
 })
@@ -269,7 +310,7 @@ describe('Menubar', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
                 TestBasicMenubarComponent,
                 TestNestedMenubarComponent,
                 TestRouterMenubarComponent,
@@ -283,9 +324,8 @@ describe('Menubar', () => {
                 TestMinimalMenubarComponent,
                 TestDynamicMenubarComponent,
                 TestCommandMenubarComponent,
-                TestAutoHideMenubarComponent
-            ],
-            imports: [
+                TestItemTemplateCommandMenubarComponent,
+                TestAutoHideMenubarComponent,
                 Menubar,
                 TestTargetComponent,
 
@@ -334,13 +374,13 @@ describe('Menubar', () => {
 
         it('should accept custom values', async () => {
             const testModel: MenuItem[] = [{ label: 'Test Item' }];
-            component.model = testModel;
-            component.autoZIndex = false;
-            component.baseZIndex = 1000;
-            component.autoDisplay = false;
-            component.autoHide = true;
-            component.breakpoint = '768px';
-            component.ariaLabel = 'Custom Menu Bar';
+            component.model.set(testModel);
+            component.autoZIndex.set(false);
+            component.baseZIndex.set(1000);
+            component.autoDisplay.set(false);
+            component.autoHide.set(true);
+            component.breakpoint.set('768px');
+            component.ariaLabel.set('Custom Menu Bar');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -376,7 +416,7 @@ describe('Menubar', () => {
     describe('Input Properties', () => {
         it('should update model input', async () => {
             const newModel = [{ label: 'New Item' }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -385,50 +425,50 @@ describe('Menubar', () => {
         });
 
         it('should update autoZIndex with booleanAttribute transform', async () => {
-            component.autoZIndex = false;
+            component.autoZIndex.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.autoZIndex()).toBe(false);
         });
 
         it('should update baseZIndex with numberAttribute transform', async () => {
-            component.baseZIndex = 500;
+            component.baseZIndex.set(500);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.baseZIndex()).toBe(500);
         });
 
         it('should update autoDisplay with booleanAttribute transform', async () => {
-            component.autoDisplay = false;
+            component.autoDisplay.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.autoDisplay()).toBe(false);
         });
 
         it('should update autoHide with booleanAttribute transform', async () => {
-            component.autoHide = true;
+            component.autoHide.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.autoHide()).toBe(true);
         });
 
         it('should update autoHideDelay with numberAttribute transform', async () => {
-            component.autoHideDelay = 300;
+            component.autoHideDelay.set(300);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.autoHideDelay()).toBe(300);
         });
 
         it('should update breakpoint input', async () => {
-            component.breakpoint = '768px';
+            component.breakpoint.set('768px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(menubarInstance.breakpoint()).toBe('768px');
         });
 
         it('should update ariaLabel and ariaLabelledBy inputs', async () => {
-            component.ariaLabel = 'Test Menubar';
-            component.ariaLabelledBy = 'menubar-label';
+            component.ariaLabel.set('Test Menubar');
+            component.ariaLabelledBy.set('menubar-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -489,7 +529,7 @@ describe('Menubar', () => {
         it('should handle item click', () => {
             const firstItem = fixture.debugElement.query(By.css('li[data-pc-section="item"] div[data-pc-section="itemcontent"]'));
 
-            spyOn(menubarInstance, 'onItemClick');
+            vi.spyOn(menubarInstance, 'onItemClick');
 
             firstItem.nativeElement.click();
 
@@ -511,7 +551,7 @@ describe('Menubar', () => {
         it('should handle mouse enter on item', () => {
             const firstItemContent = fixture.debugElement.query(By.css('li[data-pc-section="item"] div[data-pc-section="itemcontent"]'));
 
-            spyOn(menubarInstance, 'onItemMouseEnter');
+            vi.spyOn(menubarInstance, 'onItemMouseEnter');
 
             // Trigger mouseenter on the content div which has the actual handler
             firstItemContent.triggerEventHandler('mouseenter', new MouseEvent('mouseenter'));
@@ -605,9 +645,9 @@ describe('Menubar', () => {
 
         it('should handle arrow right key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
-            spyOn(menubarInstance, 'changeFocusedItemIndex');
+            vi.spyOn(menubarInstance, 'changeFocusedItemIndex');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -616,9 +656,9 @@ describe('Menubar', () => {
 
         it('should handle arrow left key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
-            spyOn(menubarInstance, 'changeFocusedItemIndex');
+            vi.spyOn(menubarInstance, 'changeFocusedItemIndex');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -628,7 +668,7 @@ describe('Menubar', () => {
         it('should handle arrow down key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
 
-            spyOn(menubarInstance, 'onArrowDownKey');
+            vi.spyOn(menubarInstance, 'onArrowDownKey');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -638,7 +678,7 @@ describe('Menubar', () => {
         it('should handle arrow up key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
 
-            spyOn(menubarInstance, 'onArrowUpKey');
+            vi.spyOn(menubarInstance, 'onArrowUpKey');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -647,9 +687,9 @@ describe('Menubar', () => {
 
         it('should handle home key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
-            spyOn(menubarInstance, 'changeFocusedItemIndex');
+            vi.spyOn(menubarInstance, 'changeFocusedItemIndex');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -659,9 +699,9 @@ describe('Menubar', () => {
 
         it('should handle end key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
-            spyOn(menubarInstance, 'changeFocusedItemIndex');
+            vi.spyOn(menubarInstance, 'changeFocusedItemIndex');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -671,7 +711,7 @@ describe('Menubar', () => {
 
         it('should handle enter key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Enter' });
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -680,7 +720,7 @@ describe('Menubar', () => {
 
         it('should handle space key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Space' });
-            spyOn(menubarInstance, 'onEnterKey');
+            vi.spyOn(menubarInstance, 'onEnterKey');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -689,8 +729,8 @@ describe('Menubar', () => {
 
         it('should handle escape key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Escape' });
-            spyOn(menubarInstance, 'hide');
-            spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(menubarInstance, 'hide');
+            vi.spyOn(keyEvent, 'preventDefault');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -700,7 +740,7 @@ describe('Menubar', () => {
 
         it('should handle tab key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Tab' });
-            spyOn(menubarInstance, 'hide');
+            vi.spyOn(menubarInstance, 'hide');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -709,7 +749,7 @@ describe('Menubar', () => {
 
         it('should handle printable character search', () => {
             const keyEvent = new KeyboardEvent('keydown', { key: 'f' });
-            spyOn(menubarInstance, 'searchItems');
+            vi.spyOn(menubarInstance, 'searchItems');
 
             menubarInstance.onKeyDown(keyEvent);
 
@@ -753,8 +793,8 @@ describe('Menubar', () => {
         it('should handle focus and blur events', () => {
             const rootMenu = fixture.debugElement.query(By.css('ul[pMenubarSub]'));
 
-            spyOn(menubarInstance, 'onMenuFocus');
-            spyOn(menubarInstance, 'onMenuBlur');
+            vi.spyOn(menubarInstance, 'onMenuFocus');
+            vi.spyOn(menubarInstance, 'onMenuBlur');
 
             rootMenu.triggerEventHandler('focus', new FocusEvent('focus'));
             expect(menubarInstance.onMenuFocus).toHaveBeenCalled();
@@ -780,8 +820,8 @@ describe('Menubar', () => {
         });
 
         it('should update ariaLabel and ariaLabelledBy', async () => {
-            component.ariaLabel = 'Main Navigation';
-            component.ariaLabelledBy = 'nav-heading';
+            component.ariaLabel.set('Main Navigation');
+            component.ariaLabelledBy.set('nav-heading');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -819,7 +859,7 @@ describe('Menubar', () => {
         });
 
         it('should bind match media listener on init', () => {
-            spyOn(menubarInstance, 'bindMatchMediaListener');
+            vi.spyOn(menubarInstance, 'bindMatchMediaListener');
 
             menubarInstance.ngOnInit();
 
@@ -827,7 +867,7 @@ describe('Menubar', () => {
         });
 
         it('should unbind match media listener on destroy', () => {
-            spyOn(menubarInstance, 'unbindMatchMediaListener');
+            vi.spyOn(menubarInstance, 'unbindMatchMediaListener');
 
             menubarInstance.ngOnDestroy();
 
@@ -835,7 +875,7 @@ describe('Menubar', () => {
         });
 
         it('should handle breakpoint changes', async () => {
-            component.breakpoint = '768px';
+            component.breakpoint.set('768px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -858,7 +898,7 @@ describe('Menubar', () => {
         it('should handle mouse leave with autoHide', () => {
             const rootMenu = fixture.debugElement.query(By.css('ul[pMenubarSub]'));
 
-            spyOn(menubarInstance, 'onMouseLeave');
+            vi.spyOn(menubarInstance, 'onMouseLeave');
 
             rootMenu.triggerEventHandler('mouseleave', new MouseEvent('mouseleave'));
 
@@ -868,7 +908,7 @@ describe('Menubar', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined model', async () => {
-            component.model = undefined as any;
+            component.model.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -877,7 +917,7 @@ describe('Menubar', () => {
         });
 
         it('should handle empty model array', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -886,7 +926,7 @@ describe('Menubar', () => {
         });
 
         it('should handle items without labels', async () => {
-            component.model = [{ icon: 'pi pi-file' }];
+            component.model.set([{ icon: 'pi pi-file' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -964,8 +1004,8 @@ describe('Menubar', () => {
         });
 
         it('should call show method programmatically', () => {
-            spyOn(menubarInstance, 'findFirstFocusedItemIndex').and.returnValue(0);
-            spyOn(menubarInstance, 'findVisibleItem').and.returnValue({ item: { label: 'Test' } });
+            vi.spyOn(menubarInstance, 'findFirstFocusedItemIndex').mockReturnValue(0);
+            vi.spyOn(menubarInstance, 'findVisibleItem').mockReturnValue({ item: { label: 'Test' } } as ProcessedMenuItem);
 
             menubarInstance.show();
 
@@ -984,7 +1024,7 @@ describe('Menubar', () => {
 
         it('should call toggle method programmatically', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(mockEvent, 'preventDefault');
+            vi.spyOn(mockEvent, 'preventDefault');
 
             expect(menubarInstance.mobileActive).toBeFalsy();
 
@@ -1040,7 +1080,7 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Test Item', disabled: false }, '0', 0);
 
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'item');
 
@@ -1048,9 +1088,9 @@ describe('Menubar', () => {
                 context: {
                     item: processedItem.item,
                     index: 0,
-                    active: jasmine.any(Boolean),
-                    focused: jasmine.any(Boolean),
-                    disabled: jasmine.any(Boolean),
+                    active: expect.any(Boolean),
+                    focused: expect.any(Boolean),
+                    disabled: expect.any(Boolean),
                     level: menubarSub.level()
                 }
             });
@@ -1081,14 +1121,14 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Test Item' }, '0', 0);
 
-            spyOn(menubarSub, 'isItemActive').and.returnValue(true);
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'isItemActive').mockReturnValue(true);
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'item');
 
             expect(menubarSub.isItemActive).toHaveBeenCalledWith(processedItem);
             expect(menubarSub.ptm).toHaveBeenCalledWith('item', {
-                context: jasmine.objectContaining({
+                context: expect.objectContaining({
                     active: true
                 })
             });
@@ -1104,14 +1144,14 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Test Item', id: 'test-item-0' }, '0', 0);
 
-            spyOn(menubarSub, 'isItemFocused').and.returnValue(true);
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'isItemFocused').mockReturnValue(true);
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'item');
 
             expect(menubarSub.isItemFocused).toHaveBeenCalledWith(processedItem);
             expect(menubarSub.ptm).toHaveBeenCalledWith('item', {
-                context: jasmine.objectContaining({
+                context: expect.objectContaining({
                     focused: true
                 })
             });
@@ -1127,14 +1167,14 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Disabled Item', disabled: true }, '0', 0);
 
-            spyOn(menubarSub, 'isItemDisabled').and.returnValue(true);
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'isItemDisabled').mockReturnValue(true);
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'item');
 
             expect(menubarSub.isItemDisabled).toHaveBeenCalledWith(processedItem);
             expect(menubarSub.ptm).toHaveBeenCalledWith('item', {
-                context: jasmine.objectContaining({
+                context: expect.objectContaining({
                     disabled: true
                 })
             });
@@ -1150,11 +1190,11 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Test Item' }, '0', 0);
 
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'itemLink');
 
-            expect(menubarSub.ptm).toHaveBeenCalledWith('itemLink', jasmine.any(Object));
+            expect(menubarSub.ptm).toHaveBeenCalledWith('itemLink', expect.any(Object));
         });
 
         it('should include level in context', () => {
@@ -1167,12 +1207,12 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Test Item' }, '0', 0);
 
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 0, 'item');
 
             expect(menubarSub.ptm).toHaveBeenCalledWith('item', {
-                context: jasmine.objectContaining({
+                context: expect.objectContaining({
                     level: menubarSub.level()
                 })
             });
@@ -1188,12 +1228,12 @@ describe('Menubar', () => {
             const menubarSub = menubar.rootmenu()!;
             const processedItem = createProcessedItem({ label: 'Item 2' }, '1', 1);
 
-            spyOn(menubarSub, 'ptm').and.callThrough();
+            vi.spyOn(menubarSub, 'ptm');
 
             menubarSub.getPTOptions(processedItem, 1, 'item');
 
             expect(menubarSub.ptm).toHaveBeenCalledWith('item', {
-                context: jasmine.objectContaining({
+                context: expect.objectContaining({
                     index: 1
                 })
             });

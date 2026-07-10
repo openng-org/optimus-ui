@@ -1,32 +1,32 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Drawer } from './drawer';
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
         <p-drawer
-            [(visible)]="visible"
-            [position]="position"
-            [modal]="modal"
-            [dismissible]="dismissible"
-            [closeOnEscape]="closeOnEscape"
-            [header]="header"
-            [closable]="closable"
-            [showCloseIcon]="showCloseIcon"
-            [blockScroll]="blockScroll"
-            [style]="style"
-            [styleClass]="styleClass"
-            [maskStyle]="maskStyle"
-            [appendTo]="appendTo"
-            [autoZIndex]="autoZIndex"
-            [baseZIndex]="baseZIndex"
-            [closeButtonProps]="closeButtonProps"
-            [ariaCloseLabel]="ariaCloseLabel"
-            [fullScreen]="fullScreen"
+            [visible]="visible()"
+            [position]="position()"
+            [modal]="modal()"
+            [dismissible]="dismissible()"
+            [closeOnEscape]="closeOnEscape()"
+            [header]="header()"
+            [closable]="closable()"
+            [showCloseIcon]="showCloseIcon()"
+            [blockScroll]="blockScroll()"
+            [style]="style()"
+            [styleClass]="styleClass()"
+            [maskStyle]="maskStyle()"
+            [appendTo]="appendTo()"
+            [autoZIndex]="autoZIndex()"
+            [baseZIndex]="baseZIndex()"
+            [closeButtonProps]="closeButtonProps()"
+            [ariaCloseLabel]="ariaCloseLabel()"
+            [fullScreen]="fullScreen()"
             (onShow)="onShow($event)"
             (onHide)="onHide($event)"
             (visibleChange)="onVisibleChange($event)"
@@ -36,24 +36,24 @@ import { Drawer } from './drawer';
     `
 })
 class TestDrawerBasicComponent {
-    visible = false;
-    position = 'left';
-    modal = true;
-    dismissible = true;
-    closeOnEscape = true;
-    header = '';
-    closable = true;
-    showCloseIcon = true;
-    blockScroll = false;
-    style: any = null as any;
-    styleClass = '';
-    maskStyle: any = null as any;
-    appendTo: any = 'body';
-    autoZIndex = true;
-    baseZIndex = 0;
-    closeButtonProps: any = { severity: 'secondary', text: true, rounded: true };
-    ariaCloseLabel = '';
-    fullScreen = false;
+    visible = signal(false);
+    position = signal('left');
+    modal = signal(true);
+    dismissible = signal(true);
+    closeOnEscape = signal(true);
+    header = signal('');
+    closable = signal(true);
+    showCloseIcon = signal(true);
+    blockScroll = signal(false);
+    style = signal<any>(null as any);
+    styleClass = signal<any>('');
+    maskStyle = signal<any>(null as any);
+    appendTo = signal<any>('body');
+    autoZIndex = signal(true);
+    baseZIndex = signal(0);
+    closeButtonProps = signal<any>({ severity: 'secondary', text: true, rounded: true });
+    ariaCloseLabel = signal('');
+    fullScreen = signal(false);
 
     showCount = 0;
     hideCount = 0;
@@ -71,16 +71,16 @@ class TestDrawerBasicComponent {
         this.visibleChangeCount++;
         // Use queueMicrotask to avoid ExpressionChangedAfterItHasBeenCheckedError
         queueMicrotask(() => {
-            this.visible = visible;
+            this.visible.set(visible);
         });
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
-        <p-drawer [(visible)]="visible" [header]="header">
+        <p-drawer [visible]="visible()" (visibleChange)="visible.set($event)" [header]="header">
             <ng-template #header>
                 <div class="custom-header">Custom Header Template</div>
             </ng-template>
@@ -97,15 +97,15 @@ class TestDrawerBasicComponent {
     `
 })
 class TestDrawerTemplatesComponent {
-    visible = false;
+    visible = signal(false);
     header = 'Test Header';
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
-        <p-drawer [(visible)]="visible">
+        <p-drawer [visible]="visible()" (visibleChange)="visible.set($event)">
             <ng-template #header>
                 <div class="ref-header">Template Ref Header</div>
             </ng-template>
@@ -122,14 +122,14 @@ class TestDrawerTemplatesComponent {
     `
 })
 class TestDrawerTemplateRefsComponent {
-    visible = false;
+    visible = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
-        <p-drawer [(visible)]="visible">
+        <p-drawer [visible]="visible()" (visibleChange)="visible.set($event)">
             <ng-template #headless>
                 <div class="headless-template">
                     <div class="headless-header">Headless Header</div>
@@ -141,11 +141,11 @@ class TestDrawerTemplateRefsComponent {
     `
 })
 class TestDrawerHeadlessComponent {
-    visible = false;
+    visible = signal(false);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
         <p-drawer [(visible)]="visible" [position]="position">
@@ -159,7 +159,7 @@ class TestDrawerPositionComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
         <p-drawer [(visible)]="visible" [fullScreen]="fullScreen">
@@ -173,34 +173,34 @@ class TestDrawerFullScreenComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
-        <p-drawer [(visible)]="visible" [modal]="modal" [dismissible]="dismissible">
+        <p-drawer [visible]="visible()" (visibleChange)="visible.set($event)" [modal]="modal()" [dismissible]="dismissible()">
             <p>Modal test content</p>
         </p-drawer>
     `
 })
 class TestDrawerModalComponent {
-    visible = false;
-    modal = true;
-    dismissible = true;
+    visible = signal(false);
+    modal = signal(true);
+    dismissible = signal(true);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
     imports: [Drawer],
     template: `
-        <p-drawer [(visible)]="visible" [closable]="closable" [closeOnEscape]="closeOnEscape" [ariaCloseLabel]="ariaCloseLabel">
+        <p-drawer [visible]="visible()" (visibleChange)="visible.set($event)" [closable]="closable()" [closeOnEscape]="closeOnEscape()" [ariaCloseLabel]="ariaCloseLabel()">
             <p>Accessibility test content</p>
         </p-drawer>
     `
 })
 class TestDrawerAccessibilityComponent {
-    visible = false;
-    closable = true;
-    closeOnEscape = true;
-    ariaCloseLabel = 'Close drawer';
+    visible = signal(false);
+    closable = signal(true);
+    closeOnEscape = signal(true);
+    ariaCloseLabel = signal('Close drawer');
 }
 
 describe('Drawer', () => {
@@ -209,8 +209,8 @@ describe('Drawer', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [Drawer],
-            declarations: [
+            imports: [
+                Drawer,
                 TestDrawerBasicComponent,
                 TestDrawerTemplatesComponent,
                 TestDrawerTemplateRefsComponent,
@@ -270,7 +270,7 @@ describe('Drawer', () => {
         });
 
         it('should be visible when visible property is true', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -294,56 +294,56 @@ describe('Drawer', () => {
         });
 
         it('should set position property correctly', async () => {
-            testComponent.position = 'right';
+            testComponent.position.set('right');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.position()).toBe('right');
         });
 
         it('should set modal property correctly', async () => {
-            testComponent.modal = false;
+            testComponent.modal.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.modal()).toBe(false);
         });
 
         it('should set dismissible property correctly', async () => {
-            testComponent.dismissible = false;
+            testComponent.dismissible.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.dismissible()).toBe(false);
         });
 
         it('should set closeOnEscape property correctly', async () => {
-            testComponent.closeOnEscape = false;
+            testComponent.closeOnEscape.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.closeOnEscape()).toBe(false);
         });
 
         it('should set header property correctly', async () => {
-            testComponent.header = 'Test Header';
+            testComponent.header.set('Test Header');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.header()).toBe('Test Header');
         });
 
         it('should set closable property correctly', async () => {
-            testComponent.closable = false;
+            testComponent.closable.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.closable()).toBe(false);
         });
 
         it('should set blockScroll property correctly', async () => {
-            testComponent.blockScroll = true;
+            testComponent.blockScroll.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.blockScroll()).toBe(true);
         });
 
         it('should set fullScreen property correctly', async () => {
-            testComponent.fullScreen = true;
+            testComponent.fullScreen.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.fullScreen()).toBe(true);
@@ -351,28 +351,28 @@ describe('Drawer', () => {
 
         it('should set style property correctly', async () => {
             const testStyle = { width: '300px', height: '400px' };
-            testComponent.style = testStyle;
+            testComponent.style.set(testStyle);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.style()).toEqual(testStyle);
         });
 
         it('should set styleClass property correctly', async () => {
-            testComponent.styleClass = 'custom-drawer';
+            testComponent.styleClass.set('custom-drawer');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.styleClass()).toBe('custom-drawer');
         });
 
         it('should set autoZIndex property correctly', async () => {
-            testComponent.autoZIndex = false;
+            testComponent.autoZIndex.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.autoZIndex()).toBe(false);
         });
 
         it('should set baseZIndex property correctly', async () => {
-            testComponent.baseZIndex = 1000;
+            testComponent.baseZIndex.set(1000);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.baseZIndex()).toBe(1000);
@@ -405,9 +405,9 @@ describe('Drawer', () => {
         });
 
         // TODO: This test requires BrowserAnimationsModule as show() is called in onAnimationStart
-        xit('should call show method when drawer becomes visible', async () => {
-            const showSpy = spyOn(drawerComponent, 'show').and.callThrough();
-            testComponent.visible = true;
+        it.skip('should call show method when drawer becomes visible', async () => {
+            const showSpy = vi.spyOn(drawerComponent, 'show');
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             // Wait for show method to be called
@@ -417,14 +417,14 @@ describe('Drawer', () => {
         });
 
         it('should call hide method with emit parameter', () => {
-            spyOn(drawerComponent, 'hide');
+            vi.spyOn(drawerComponent, 'hide');
             drawerComponent.hide(false);
             expect(drawerComponent.hide).toHaveBeenCalledWith(false);
         });
 
         it('should call close method with event parameter', () => {
             const mockEvent = new Event('click');
-            spyOn(drawerComponent, 'close');
+            vi.spyOn(drawerComponent, 'close');
             drawerComponent.close(mockEvent);
             expect(drawerComponent.close).toHaveBeenCalledWith(mockEvent);
         });
@@ -444,8 +444,8 @@ describe('Drawer', () => {
         });
 
         // TODO: This test requires BrowserAnimationsModule as onShow is emitted in show() which is called in onAnimationStart
-        xit('should emit onShow event when drawer is shown', async () => {
-            testComponent.visible = true;
+        it.skip('should emit onShow event when drawer is shown', async () => {
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             // Wait for animation and event emission
@@ -455,7 +455,7 @@ describe('Drawer', () => {
         });
 
         it('should emit onHide event when drawer is hidden', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -470,8 +470,8 @@ describe('Drawer', () => {
         });
 
         // TODO: This test requires BrowserAnimationsModule as visibleChange is emitted in show() which is called in onAnimationStart
-        xit('should emit visibleChange event when visibility changes', async () => {
-            testComponent.visible = true;
+        it.skip('should emit visibleChange event when visibility changes', async () => {
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             // Wait for animation and event emission
@@ -481,7 +481,7 @@ describe('Drawer', () => {
         });
 
         it('should handle close button click', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -493,7 +493,7 @@ describe('Drawer', () => {
                 await testFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
-                expect(testComponent.visible).toBe(false);
+                expect(testComponent.visible()).toBe(false);
             } else {
                 // If no close button found, skip this test
                 expect(true).toBe(true);
@@ -515,8 +515,8 @@ describe('Drawer', () => {
         });
 
         it('should close drawer on Escape key when closeOnEscape is true', async () => {
-            testComponent.visible = true;
-            testComponent.closeOnEscape = true;
+            testComponent.visible.set(true);
+            testComponent.closeOnEscape.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -534,8 +534,8 @@ describe('Drawer', () => {
         });
 
         it('should not close drawer on Escape key when closeOnEscape is false', async () => {
-            testComponent.visible = true;
-            testComponent.closeOnEscape = false;
+            testComponent.visible.set(true);
+            testComponent.closeOnEscape.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -548,11 +548,11 @@ describe('Drawer', () => {
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
 
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
         });
 
         it('should handle close button Enter key press', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -565,7 +565,7 @@ describe('Drawer', () => {
                 await testFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
-                expect(testComponent.visible).toBe(false);
+                expect(testComponent.visible()).toBe(false);
             } else {
                 // If no close button found, skip this test
                 expect(true).toBe(true);
@@ -580,7 +580,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -588,7 +588,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             // Templates are processed in ngAfterContentInit
@@ -603,7 +603,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -611,7 +611,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -625,7 +625,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -633,7 +633,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -647,7 +647,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -655,7 +655,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -669,7 +669,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -677,7 +677,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -691,7 +691,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -699,7 +699,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -713,7 +713,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -721,7 +721,7 @@ describe('Drawer', () => {
             // In test environment, verify component is configured for templates
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.visible()).toBe(true);
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
 
             // Verify the headless template configuration is correct
             testFixture.changeDetectorRef.markForCheck();
@@ -742,8 +742,8 @@ describe('Drawer', () => {
         });
 
         it('should create modal mask when modal is true', async () => {
-            testComponent.modal = true;
-            testComponent.visible = true;
+            testComponent.modal.set(true);
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -754,12 +754,12 @@ describe('Drawer', () => {
 
             // The mask creation happens in the component's show() method
             // We verify the component is configured for modal behavior
-            expect(testComponent.modal).toBe(true);
+            expect(testComponent.modal()).toBe(true);
         });
 
         it('should not create modal mask when modal is false', async () => {
-            testComponent.modal = false;
-            testComponent.visible = true;
+            testComponent.modal.set(false);
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -767,13 +767,13 @@ describe('Drawer', () => {
             // Check if modal property is set correctly on component
             const drawerComponent = testFixture.debugElement.query(By.directive(Drawer)).componentInstance;
             expect(drawerComponent.modal()).toBe(false);
-            expect(testComponent.modal).toBe(false);
+            expect(testComponent.modal()).toBe(false);
         });
 
         it('should close drawer on mask click when dismissible is true', async () => {
-            testComponent.modal = true;
-            testComponent.dismissible = true;
-            testComponent.visible = true;
+            testComponent.modal.set(true);
+            testComponent.dismissible.set(true);
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -785,13 +785,13 @@ describe('Drawer', () => {
 
             // Since mask click behavior is complex and involves DOM manipulation,
             // we test the dismissible property setup which is the main concern
-            expect(testComponent.dismissible).toBe(true);
+            expect(testComponent.dismissible()).toBe(true);
         });
 
         it('should not close drawer on mask click when dismissible is false', async () => {
-            testComponent.modal = true;
-            testComponent.dismissible = false;
-            testComponent.visible = true;
+            testComponent.modal.set(true);
+            testComponent.dismissible.set(false);
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -803,7 +803,7 @@ describe('Drawer', () => {
                 await testFixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 100));
 
-                expect(testComponent.visible).toBe(true);
+                expect(testComponent.visible()).toBe(true);
             }
         });
     });
@@ -820,7 +820,7 @@ describe('Drawer', () => {
         });
 
         it('should have correct ARIA role', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -830,7 +830,7 @@ describe('Drawer', () => {
         });
 
         it('should have correct data attributes', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -841,9 +841,9 @@ describe('Drawer', () => {
         });
 
         it('should set aria-label on close button when ariaCloseLabel is provided', async () => {
-            testComponent.visible = true;
-            testComponent.ariaCloseLabel = 'Close drawer';
-            testComponent.closable = true;
+            testComponent.visible.set(true);
+            testComponent.ariaCloseLabel.set('Close drawer');
+            testComponent.closable.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -861,8 +861,8 @@ describe('Drawer', () => {
         });
 
         it('should show close button when closable is true', async () => {
-            testComponent.visible = true;
-            testComponent.closable = true;
+            testComponent.visible.set(true);
+            testComponent.closable.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -872,8 +872,8 @@ describe('Drawer', () => {
         });
 
         it('should hide close button when closable is false', async () => {
-            testComponent.visible = true;
-            testComponent.closable = false;
+            testComponent.visible.set(true);
+            testComponent.closable.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -883,7 +883,7 @@ describe('Drawer', () => {
         });
 
         it('should handle focus management correctly', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -906,8 +906,8 @@ describe('Drawer', () => {
         });
 
         it('should display header when header property is set', async () => {
-            testComponent.header = 'Test Header';
-            testComponent.visible = true;
+            testComponent.header.set('Test Header');
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -922,8 +922,8 @@ describe('Drawer', () => {
         });
 
         it('should not display header section when header is not set', async () => {
-            testComponent.header = '';
-            testComponent.visible = true;
+            testComponent.header.set('');
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -947,40 +947,40 @@ describe('Drawer', () => {
         });
 
         it('should handle null style property', async () => {
-            testComponent.style = null as any;
+            testComponent.style.set(null as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.style()).toBeNull();
         });
 
         it('should handle undefined styleClass property', async () => {
-            testComponent.styleClass = undefined as any;
+            testComponent.styleClass.set(undefined as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             expect(drawerComponent.styleClass()).toBeUndefined();
         });
 
         it('should handle rapid visible changes', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
 
-            testComponent.visible = false;
+            testComponent.visible.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
 
-            expect(testComponent.visible).toBe(true);
+            expect(testComponent.visible()).toBe(true);
         });
 
         it('should handle invalid position values gracefully', async () => {
-            testComponent.position = 'invalid' as any;
+            testComponent.position.set('invalid' as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -992,7 +992,7 @@ describe('Drawer', () => {
         });
 
         it('should handle component destruction correctly', async () => {
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1000,7 +1000,7 @@ describe('Drawer', () => {
         });
 
         // TODO: This test fails with ExpressionChangedAfterItHasBeenCheckedError in zoneless mode due to two-way binding
-        xit('should handle multiple drawer instances', async () => {
+        it.skip('should handle multiple drawer instances', async () => {
             const fixture1 = TestBed.createComponent(TestDrawerBasicComponent);
             const component1 = fixture1.componentInstance;
             fixture1.changeDetectorRef.markForCheck();
@@ -1011,8 +1011,8 @@ describe('Drawer', () => {
             fixture2.changeDetectorRef.markForCheck();
             await fixture2.whenStable();
 
-            component1.visible = true;
-            component2.visible = true;
+            component1.visible.set(true);
+            component2.visible.set(true);
 
             fixture1.changeDetectorRef.markForCheck();
             await fixture1.whenStable();
@@ -1021,8 +1021,8 @@ describe('Drawer', () => {
             // Wait for queueMicrotask in onVisibleChange and animations
             await new Promise((resolve) => setTimeout(resolve, 500));
 
-            expect(component1.visible).toBe(true);
-            expect(component2.visible).toBe(true);
+            expect(component1.visible()).toBe(true);
+            expect(component2.visible()).toBe(true);
         });
     });
 
@@ -1033,7 +1033,7 @@ describe('Drawer', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            testComponent.visible = true;
+            testComponent.visible.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -1058,7 +1058,8 @@ describe('Drawer', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase1Component {
@@ -1076,8 +1077,7 @@ describe('Drawer', () => {
             it('should apply simple string classes to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase1Component],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase1Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1105,7 +1105,8 @@ describe('Drawer', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase2Component {
@@ -1130,8 +1131,7 @@ describe('Drawer', () => {
             it('should apply object properties to PT sections', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase2Component],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase2Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1163,7 +1163,8 @@ describe('Drawer', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase3Component {
@@ -1182,8 +1183,7 @@ describe('Drawer', () => {
             it('should apply mixed object and string values correctly', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase3Component],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase3Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1211,7 +1211,8 @@ describe('Drawer', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" [position]="position" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase4Component {
@@ -1236,8 +1237,7 @@ describe('Drawer', () => {
             it('should use instance variables in PT functions', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase4Component],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase4Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1260,7 +1260,8 @@ describe('Drawer', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase5Component {
@@ -1283,8 +1284,7 @@ describe('Drawer', () => {
             it('should bind click events through PT', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase5Component],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase5Component],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1310,7 +1310,8 @@ describe('Drawer', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="{ root: 'INLINE_ROOT_CLASS', header: 'INLINE_HEADER_CLASS' }" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase6InlineComponent {
@@ -1318,7 +1319,8 @@ describe('Drawer', () => {
             }
 
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, content: { class: 'INLINE_CONTENT_CLASS' } }" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase6InlineObjectComponent {
@@ -1328,8 +1330,7 @@ describe('Drawer', () => {
             it('should apply inline PT string classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineComponent],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase6InlineComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1352,8 +1353,7 @@ describe('Drawer', () => {
             it('should apply inline PT object classes', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase6InlineObjectComponent],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase6InlineObjectComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 
@@ -1376,7 +1376,8 @@ describe('Drawer', () => {
 
         describe('Case 7: Test from PrimeNGConfig', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `
                     <p-drawer [(visible)]="visible1" header="Drawer 1">Content 1</p-drawer>
                     <p-drawer [(visible)]="visible2" header="Drawer 2">Content 2</p-drawer>
@@ -1390,8 +1391,7 @@ describe('Drawer', () => {
             it('should apply global PT configuration from PrimeNGConfig', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase7GlobalComponent],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         {
@@ -1420,7 +1420,8 @@ describe('Drawer', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Drawer],
                 template: `<p-drawer [pt]="pt" [(visible)]="visible" header="Test Drawer">Content</p-drawer>`
             })
             class TestPTCase8HooksComponent {
@@ -1448,8 +1449,7 @@ describe('Drawer', () => {
             it('should call PT hooks on Angular lifecycle events', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestPTCase8HooksComponent],
-                    imports: [Drawer],
+                    imports: [Drawer, TestPTCase8HooksComponent],
                     providers: [provideZonelessChangeDetection()]
                 }).compileComponents();
 

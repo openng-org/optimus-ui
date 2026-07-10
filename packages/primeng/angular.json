@@ -1,34 +1,44 @@
 {
-    "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
-    "version": 1,
-    "newProjectRoot": "projects",
-    "projects": {
-        "primeng": {
-            "root": "src",
-            "projectType": "library",
-            "architect": {
-                "build": {
-                    "builder": "@angular-devkit/build-angular:ng-packagr",
-                    "options": {
-                        "project": "src/ng-package.json",
-                        "tsConfig": "tsconfig.json"
-                    }
-                },
-                "test": {
-                    "builder": "@angular/build:karma",
-                    "options": {
-                        "tsConfig": "tsconfig.spec.json",
-                        "scripts": []
-                    }
-                },
-                "lint": {
-                    "builder": "@angular-eslint/builder:lint",
-                    "options": {}
-                }
-            }
+  "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "primeng": {
+      "root": "src",
+      "sourceRoot": "src",
+      "projectType": "library",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "options": {
+            "project": "src/ng-package.json",
+            "tsConfig": "tsconfig.json"
+          },
+          "configurations": {
+            "development": {
+              "tsConfig": "tsconfig.spec.json"
+            },
+            "production": {}
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runner": "vitest",
+            "buildTarget": "primeng:build:development",
+            "runnerConfig": "vitest.config.ts"
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {}
         }
-    },
-    "cli": {
-        "analytics": false
+      }
     }
+  },
+  "cli": {
+    "analytics": false
+  }
 }

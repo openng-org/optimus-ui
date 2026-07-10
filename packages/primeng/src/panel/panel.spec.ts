@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -10,16 +10,17 @@ import { PanelAfterToggleEvent, PanelBeforeToggleEvent } from 'primeng/types/pan
 import { Panel } from './panel';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule],
     template: `
         <p-panel
-            [header]="header"
-            [toggleable]="toggleable"
-            [collapsed]="collapsed"
-            [showHeader]="showHeader"
-            [toggler]="toggler"
-            [toggleButtonProps]="toggleButtonProps"
-            [iconPos]="iconPos"
+            [header]="header()"
+            [toggleable]="toggleable()"
+            [collapsed]="collapsed()"
+            [showHeader]="showHeader()"
+            [toggler]="toggler()"
+            [toggleButtonProps]="toggleButtonProps()"
+            [iconPos]="iconPos()"
             (collapsedChange)="onCollapsedChange($event)"
             (onBeforeToggle)="onBeforeToggle($event)"
             (onAfterToggle)="onAfterToggle($event)"
@@ -29,13 +30,13 @@ import { Panel } from './panel';
     `
 })
 class TestBasicPanelComponent {
-    header = 'Test Panel';
-    toggleable = true;
-    collapsed = false;
-    showHeader = true;
-    toggler: 'icon' | 'header' = 'icon';
-    toggleButtonProps: any;
-    iconPos: 'start' | 'end' | 'center' = 'end';
+    header = signal<string | undefined>('Test Panel');
+    toggleable = signal(true);
+    collapsed = signal(false);
+    showHeader = signal(true);
+    toggler = signal<'icon' | 'header'>('icon');
+    toggleButtonProps = signal<any>(undefined);
+    iconPos = signal<'start' | 'end' | 'center'>('end');
 
     collapsedChangeEvent: boolean | undefined;
     beforeToggleEvent: PanelBeforeToggleEvent | undefined;
@@ -55,7 +56,8 @@ class TestBasicPanelComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule],
     template: `
         <p-panel header="Template Panel" [toggleable]="true">
             <ng-template #header>
@@ -79,7 +81,8 @@ class TestBasicPanelComponent {
 class TestTemplatesPanelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule],
     template: `
         <p-panel header="Facet Panel" [toggleable]="true">
             <p-header>
@@ -95,7 +98,8 @@ class TestTemplatesPanelComponent {}
 class TestFacetsPanelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule],
     template: `
         <p-panel header="Keyboard Panel" [toggleable]="true" [collapsed]="false">
             <div>
@@ -121,9 +125,8 @@ describe('Panel', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule],
-            providers: [provideNoopAnimations(), provideZonelessChangeDetection()],
-            declarations: [TestBasicPanelComponent, TestTemplatesPanelComponent, TestFacetsPanelComponent, TestKeyboardNavigationComponent]
+            imports: [Panel, ButtonModule, PlusIcon, MinusIcon, SharedModule, TestBasicPanelComponent, TestTemplatesPanelComponent, TestFacetsPanelComponent, TestKeyboardNavigationComponent],
+            providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
         });
 
         testFixture = TestBed.createComponent(TestBasicPanelComponent);
@@ -151,11 +154,11 @@ describe('Panel', () => {
         });
 
         it('should accept custom values', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = true;
-            testComponent.showHeader = false;
-            testComponent.toggler = 'header';
-            testComponent.iconPos = 'start';
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(true);
+            testComponent.showHeader.set(false);
+            testComponent.toggler.set('header');
+            testComponent.iconPos.set('start');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -169,7 +172,7 @@ describe('Panel', () => {
 
     describe('Header Display', () => {
         it('should display header text', async () => {
-            testComponent.header = 'My Panel Header';
+            testComponent.header.set('My Panel Header');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -178,7 +181,7 @@ describe('Panel', () => {
         });
 
         it('should hide header when showHeader is false', async () => {
-            testComponent.showHeader = false;
+            testComponent.showHeader.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -187,7 +190,7 @@ describe('Panel', () => {
         });
 
         it('should show header when showHeader is true', async () => {
-            testComponent.showHeader = true;
+            testComponent.showHeader.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -198,7 +201,7 @@ describe('Panel', () => {
 
     describe('Toggle Functionality', () => {
         it('should not show toggle button when not toggleable', async () => {
-            testComponent.toggleable = false;
+            testComponent.toggleable.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -207,7 +210,7 @@ describe('Panel', () => {
         });
 
         it('should show toggle button when toggleable', async () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -216,8 +219,8 @@ describe('Panel', () => {
         });
 
         it('should toggle panel when icon is clicked', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -230,9 +233,9 @@ describe('Panel', () => {
         });
 
         it('should toggle panel when header is clicked and toggler is header', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
-            testComponent.toggler = 'header';
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
+            testComponent.toggler.set('header');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -245,9 +248,9 @@ describe('Panel', () => {
         });
 
         it('should not toggle when header is clicked and toggler is icon', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
-            testComponent.toggler = 'icon';
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
+            testComponent.toggler.set('icon');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -259,8 +262,8 @@ describe('Panel', () => {
         });
 
         it('should expand collapsed panel', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = true;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -275,41 +278,41 @@ describe('Panel', () => {
 
     describe('Keyboard Navigation', () => {
         it('should toggle on Enter key', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.detectChanges();
 
             const toggleButton = testFixture.debugElement.query(By.css('p-button'));
             const enterEvent = new KeyboardEvent('keydown', { code: 'Enter' });
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             toggleButton.nativeElement.dispatchEvent(enterEvent);
 
             expect(panelInstance.toggle).toHaveBeenCalled();
         });
 
         it('should toggle on Space key', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.detectChanges();
 
             const toggleButton = testFixture.debugElement.query(By.css('p-button'));
             const spaceEvent = new KeyboardEvent('keydown', { code: 'Space' });
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             toggleButton.nativeElement.dispatchEvent(spaceEvent);
 
             expect(panelInstance.toggle).toHaveBeenCalled();
         });
 
         it('should not toggle on other keys', () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             testFixture.detectChanges();
 
             const toggleButton = testFixture.debugElement.query(By.css('p-button'));
             const escEvent = new KeyboardEvent('keydown', { code: 'Escape' });
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             toggleButton.nativeElement.dispatchEvent(escEvent);
 
             expect(panelInstance.toggle).not.toHaveBeenCalled();
@@ -318,7 +321,7 @@ describe('Panel', () => {
 
     describe('Content Display', () => {
         it('should display content when expanded', async () => {
-            testComponent.collapsed = false;
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -328,7 +331,7 @@ describe('Panel', () => {
         });
 
         it('should set aria-hidden when collapsed', async () => {
-            testComponent.collapsed = true;
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -337,15 +340,15 @@ describe('Panel', () => {
         });
 
         it('should set aria-expanded on toggle button', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const toggleButton = testFixture.debugElement.query(By.css('p-button'));
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe((!panelInstance.collapsed()).toString());
 
-            testComponent.collapsed = true;
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -355,8 +358,8 @@ describe('Panel', () => {
 
     describe('Icon Display', () => {
         it('should show minus icon when expanded', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -365,8 +368,8 @@ describe('Panel', () => {
         });
 
         it('should show plus icon when collapsed', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = true;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -375,11 +378,11 @@ describe('Panel', () => {
         });
 
         it('should use custom toggle button props', async () => {
-            testComponent.toggleable = true;
-            testComponent.toggleButtonProps = {
+            testComponent.toggleable.set(true);
+            testComponent.toggleButtonProps.set({
                 icon: 'pi pi-chevron-down',
                 severity: 'primary'
-            };
+            });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -443,7 +446,7 @@ describe('Panel', () => {
 
             const panelComp = fixture.debugElement.query(By.directive(Panel)).componentInstance;
 
-            spyOn(panelComp, 'updateTabIndex');
+            vi.spyOn(panelComp, 'updateTabIndex');
 
             // Collapse panel
             panelComp.collapse();
@@ -457,7 +460,7 @@ describe('Panel', () => {
 
     describe('Accessibility', () => {
         it('should have proper ARIA attributes', async () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -467,22 +470,22 @@ describe('Panel', () => {
             expect(toggleButton.nativeElement.getAttribute('role')).toBe('button');
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBeTruthy();
             expect(toggleButton.nativeElement.getAttribute('aria-controls')).toBeTruthy();
-            expect(toggleButton.nativeElement.getAttribute('aria-label')).toBe(testComponent.header);
+            expect(toggleButton.nativeElement.getAttribute('aria-label')).toBe(testComponent.header());
 
             expect(contentContainer.nativeElement.getAttribute('role')).toBe('region');
             expect(contentContainer.nativeElement.getAttribute('aria-labelledby')).toBeTruthy();
         });
 
         it('should update aria-expanded when collapsed state changes', async () => {
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const toggleButton = testFixture.debugElement.query(By.css('p-button'));
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe((!panelInstance.collapsed()).toString());
 
-            testComponent.collapsed = true;
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -514,7 +517,7 @@ describe('Panel', () => {
 
     describe('Edge Cases', () => {
         it('should handle undefined header', async () => {
-            testComponent.header = undefined as any;
+            testComponent.header.set(undefined as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -523,7 +526,7 @@ describe('Panel', () => {
         });
 
         it('should handle toggle when not toggleable', async () => {
-            testComponent.toggleable = false;
+            testComponent.toggleable.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -536,19 +539,19 @@ describe('Panel', () => {
         });
 
         it('should prevent default on toggle', () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             testFixture.detectChanges();
 
             const event = new MouseEvent('click');
-            spyOn(event, 'preventDefault');
+            vi.spyOn(event, 'preventDefault');
 
             panelInstance.toggle(event);
             expect(event.preventDefault).toHaveBeenCalled();
         });
 
         it('should handle null toggleButtonProps', async () => {
-            testComponent.toggleable = true;
-            testComponent.toggleButtonProps = null as any;
+            testComponent.toggleable.set(true);
+            testComponent.toggleButtonProps.set(null as any);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -559,7 +562,7 @@ describe('Panel', () => {
 
     describe('Public Methods', () => {
         it('should expand programmatically', async () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             panelInstance.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -571,7 +574,7 @@ describe('Panel', () => {
         });
 
         it('should collapse programmatically', async () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             panelInstance.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -583,7 +586,7 @@ describe('Panel', () => {
         });
 
         it('should toggle programmatically', async () => {
-            testComponent.toggleable = true;
+            testComponent.toggleable.set(true);
             panelInstance.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -595,47 +598,47 @@ describe('Panel', () => {
         });
 
         it('should call updateTabIndex when expanding', () => {
-            spyOn(panelInstance, 'updateTabIndex');
+            vi.spyOn(panelInstance, 'updateTabIndex');
             panelInstance.expand();
             expect(panelInstance.updateTabIndex).toHaveBeenCalled();
         });
 
         it('should call updateTabIndex when collapsing', () => {
-            spyOn(panelInstance, 'updateTabIndex');
+            vi.spyOn(panelInstance, 'updateTabIndex');
             panelInstance.collapse();
             expect(panelInstance.updateTabIndex).toHaveBeenCalled();
         });
 
         it('should handle onHeaderClick with icon toggler', async () => {
-            testComponent.toggleable = true;
-            testComponent.toggler = 'icon';
+            testComponent.toggleable.set(true);
+            testComponent.toggler.set('icon');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             panelInstance.onHeaderClick(new MouseEvent('click'));
 
             expect(panelInstance.toggle).not.toHaveBeenCalled();
         });
 
         it('should handle onHeaderClick with header toggler', async () => {
-            testComponent.toggleable = true;
-            testComponent.toggler = 'header';
+            testComponent.toggleable.set(true);
+            testComponent.toggler.set('header');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             panelInstance.onHeaderClick(new MouseEvent('click'));
 
             expect(panelInstance.toggle).toHaveBeenCalled();
         });
 
         it('should handle onIconClick with icon toggler', () => {
-            testComponent.toggleable = true;
-            testComponent.toggler = 'icon';
+            testComponent.toggleable.set(true);
+            testComponent.toggler.set('icon');
             testFixture.detectChanges();
 
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
             panelInstance.onIconClick(new MouseEvent('click'));
 
             expect(panelInstance.toggle).toHaveBeenCalled();
@@ -643,8 +646,8 @@ describe('Panel', () => {
 
         it('should handle onKeyDown with Enter key', () => {
             const event = new KeyboardEvent('keydown', { code: 'Enter' });
-            spyOn(event, 'preventDefault');
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(event, 'preventDefault');
+            vi.spyOn(panelInstance, 'toggle');
 
             panelInstance.onKeyDown(event);
 
@@ -654,8 +657,8 @@ describe('Panel', () => {
 
         it('should handle onKeyDown with Space key', () => {
             const event = new KeyboardEvent('keydown', { code: 'Space' });
-            spyOn(event, 'preventDefault');
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(event, 'preventDefault');
+            vi.spyOn(panelInstance, 'toggle');
 
             panelInstance.onKeyDown(event);
 
@@ -665,7 +668,7 @@ describe('Panel', () => {
 
         it('should not handle onKeyDown with other keys', () => {
             const event = new KeyboardEvent('keydown', { code: 'Tab' });
-            spyOn(panelInstance, 'toggle');
+            vi.spyOn(panelInstance, 'toggle');
 
             panelInstance.onKeyDown(event);
 
@@ -802,8 +805,8 @@ describe('Panel', () => {
 
     describe('Icon Position', () => {
         it('should apply correct class for icon position start', async () => {
-            testComponent.toggleable = true;
-            testComponent.iconPos = 'start';
+            testComponent.toggleable.set(true);
+            testComponent.iconPos.set('start');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -812,8 +815,8 @@ describe('Panel', () => {
         });
 
         it('should apply correct class for icon position end', async () => {
-            testComponent.toggleable = true;
-            testComponent.iconPos = 'end';
+            testComponent.toggleable.set(true);
+            testComponent.iconPos.set('end');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -822,8 +825,8 @@ describe('Panel', () => {
         });
 
         it('should apply correct class for icon position center', async () => {
-            testComponent.toggleable = true;
-            testComponent.iconPos = 'center';
+            testComponent.toggleable.set(true);
+            testComponent.iconPos.set('center');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -835,8 +838,8 @@ describe('Panel', () => {
     describe('Multiple Panels Interaction', () => {
         it('should handle multiple panels independently', async () => {
             // Setup toggleable panel
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.detectChanges();
 
             // Test that panel works independently
@@ -887,7 +890,7 @@ describe('Panel', () => {
 
         it('should show content container in DOM when expanded', async () => {
             // Start collapsed
-            testComponent.collapsed = true;
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -955,10 +958,10 @@ describe('Panel', () => {
     });
 
     describe('Collapsed Panel CSS Styles', () => {
-        it('should apply overflow:hidden style to content container when panel is collapsed and toggleable', async () => {
+        it('should hide content container via the motion display strategy when panel is collapsed and toggleable', async () => {
             // Test with toggleable panel in collapsed state
-            testComponent.toggleable = true;
-            testComponent.collapsed = true;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -967,9 +970,10 @@ describe('Panel', () => {
             // Content container should exist
             expect(contentContainer).toBeTruthy();
 
-            // Should have overflow:hidden style applied via CSS
-            const computedStyle = window.getComputedStyle(contentContainer.nativeElement);
-            expect(computedStyle.overflow).toBe('hidden');
+            // The pMotion directive on the content container uses the default 'display' hide
+            // strategy, so a collapsed panel hides its content with display:none (the previous
+            // overflow:hidden behaviour belonged to the retired Angular-animations implementation).
+            expect(contentContainer.nativeElement.style.display).toBe('none');
 
             // Panel should have p-panel-collapsed class
             const panelElement = testFixture.debugElement.query(By.css('p-panel'));
@@ -982,8 +986,8 @@ describe('Panel', () => {
 
         it('should not have overflow:hidden when panel is expanded', async () => {
             // Test with toggleable panel in expanded state
-            testComponent.toggleable = true;
-            testComponent.collapsed = false;
+            testComponent.toggleable.set(true);
+            testComponent.collapsed.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1003,8 +1007,8 @@ describe('Panel', () => {
         // TODO: Feature works, test will be debugged.
         // it('should verify CSS rule for collapsed panel is correctly applied', () => {
         //     // This test verifies the CSS selector works correctly with the DOM structure
-        //     testComponent.toggleable = true;
-        //     testComponent.collapsed = true;
+        //     testComponent.toggleable.set(true);
+        //     testComponent.collapsed.set(true);
         //     testFixture.detectChanges();
 
         //     const panelRoot = testFixture.debugElement.query(By.css('p-panel'));
@@ -1107,7 +1111,7 @@ describe('Panel', () => {
         });
 
         describe('Case 2: Object Values with Attributes and Styles', () => {
-            xit('should apply PT object with class, style and data attributes to root', () => {
+            it.skip('should apply PT object with class, style and data attributes to root', () => {
                 // Skipped: PT style and attribute binding to host causes infinite loop with current implementation
                 const fixture = TestBed.createComponent(Panel);
                 const panel = fixture.componentInstance;

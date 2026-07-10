@@ -8,9 +8,24 @@ import { SharedModule } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import { MapperPipe, Password, PasswordDirective, PasswordModule } from './password';
 
+// jsdom does not implement matchMedia, which the overlay relies on
+if (!window.matchMedia) {
+    window.matchMedia = ((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: () => {},
+        removeListener: () => {},
+        addEventListener: () => {},
+        removeEventListener: () => {},
+        dispatchEvent: () => false
+    })) as any;
+}
+
 // Test Components
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: `
         <p-password
             [(ngModel)]="value"
@@ -71,7 +86,8 @@ class TestBasicPasswordComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: `
         <form [formGroup]="form">
             <p-password formControlName="password" [feedback]="feedback" [toggleMask]="toggleMask"> </p-password>
@@ -89,7 +105,8 @@ class TestFormPasswordComponent {
 // Comprehensive template test component with all ContentChild projections
 // Password #template component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: `
         <p-password [(ngModel)]="value" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear" [placeholder]="placeholder">
             <!-- Header template with #template reference -->
@@ -148,7 +165,8 @@ class TestPasswordTemplateComponent {
 
 // Password #template reference component
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: `
         <p-password [(ngModel)]="value" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear" [placeholder]="placeholder">
             <!-- Header template with #template reference -->
@@ -206,7 +224,8 @@ class TestPasswordRefTemplateComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: ` <input type="password" pPassword [(ngModel)]="value" [feedback]="feedback" [promptLabel]="promptLabel" [weakLabel]="weakLabel" [mediumLabel]="mediumLabel" [strongLabel]="strongLabel" /> `
 })
 class TestPasswordDirectiveComponent {
@@ -219,7 +238,8 @@ class TestPasswordDirectiveComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: ` <input type="password" pPassword [(ngModel)]="value" [pt]="pt" [feedback]="feedback" /> `
 })
 class TestPTPasswordDirectiveComponent {
@@ -229,7 +249,8 @@ class TestPTPasswordDirectiveComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [PasswordModule, PasswordDirective, MapperPipe, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
     template: ` <p-password [(ngModel)]="value" [pt]="pt" [feedback]="feedback" [toggleMask]="toggleMask" [showClear]="showClear"> </p-password> `
 })
 class TestPTPasswordComponent {
@@ -247,8 +268,7 @@ describe('Password', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PasswordModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
-            declarations: [TestBasicPasswordComponent, TestFormPasswordComponent, TestPasswordTemplateComponent, TestPasswordRefTemplateComponent, TestPTPasswordComponent],
+            imports: [PasswordModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, TestBasicPasswordComponent, TestFormPasswordComponent, TestPasswordTemplateComponent, TestPasswordRefTemplateComponent, TestPTPasswordComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -383,9 +403,9 @@ describe('Password', () => {
         });
 
         it('should clear password value', () => {
-            spyOn(component, 'onModelChange');
-            spyOn(component, 'writeValue');
-            spyOn(component.onClear, 'emit');
+            vi.spyOn(component, 'onModelChange');
+            vi.spyOn(component, 'writeValue');
+            vi.spyOn(component.onClear, 'emit');
 
             component.value = 'password123';
             component.clear();
@@ -443,7 +463,7 @@ describe('Password', () => {
         });
 
         it('should handle focus events', async () => {
-            spyOn(testComponent, 'onInputFocus');
+            vi.spyOn(testComponent, 'onInputFocus');
             testFixture.detectChanges();
             const inputEl = testFixture.debugElement.query(By.css('input'));
 
@@ -459,7 +479,7 @@ describe('Password', () => {
         });
 
         it('should handle blur events', async () => {
-            spyOn(testComponent, 'onInputBlur');
+            vi.spyOn(testComponent, 'onInputBlur');
             testFixture.detectChanges();
             const inputEl = testFixture.debugElement.query(By.css('input'));
 
@@ -516,7 +536,7 @@ describe('Password', () => {
         });
 
         it('should handle clear button click', async () => {
-            spyOn(testComponent, 'onClearEvent');
+            vi.spyOn(testComponent, 'onClearEvent');
             testComponent.showClear = true;
             testComponent.value = 'password123';
             testFixture.changeDetectorRef.markForCheck();
@@ -1030,7 +1050,7 @@ describe('Password', () => {
         });
 
         it('should handle component destruction', () => {
-            spyOn(component, 'ngOnDestroy').and.callThrough();
+            vi.spyOn(component, 'ngOnDestroy');
             component.ngOnDestroy();
             expect(component.ngOnDestroy).toHaveBeenCalled();
         });
@@ -1055,8 +1075,8 @@ describe('Password', () => {
         });
 
         it('should handle writeControlValue correctly', () => {
-            spyOn(component, 'updateUI');
-            const mockSetValue = jasmine.createSpy('setModelValue');
+            vi.spyOn(component, 'updateUI');
+            const mockSetValue = vi.fn();
 
             fixture.componentRef.setInput('feedback', true);
             component.writeControlValue('testPassword', mockSetValue);
@@ -1067,7 +1087,7 @@ describe('Password', () => {
         });
 
         it('should handle overlay service integration', () => {
-            spyOn(component.overlayService, 'add');
+            vi.spyOn(component.overlayService, 'add');
             const mockEvent = new Event('click');
 
             component.onOverlayClick(mockEvent);
@@ -1225,8 +1245,7 @@ describe('PasswordDirective', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PasswordDirective, FormsModule, CommonModule],
-            declarations: [TestPasswordDirectiveComponent, TestPTPasswordDirectiveComponent],
+            imports: [PasswordDirective, FormsModule, CommonModule, TestPasswordDirectiveComponent, TestPTPasswordDirectiveComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1285,7 +1304,7 @@ describe('PasswordDirective', () => {
             component.feedback = true;
             fixture.detectChanges();
 
-            spyOn(directive, 'showOverlay');
+            vi.spyOn(directive, 'showOverlay');
             directive.onFocus();
             await fixture.whenStable();
 
@@ -1296,7 +1315,7 @@ describe('PasswordDirective', () => {
             component.feedback = true;
             fixture.detectChanges();
 
-            spyOn(directive, 'hideOverlay');
+            vi.spyOn(directive, 'hideOverlay');
             directive.onBlur();
             await fixture.whenStable();
 
@@ -1306,7 +1325,7 @@ describe('PasswordDirective', () => {
 
     describe('Input Events', () => {
         it('should handle input event', () => {
-            spyOn(directive, 'writeModelValue');
+            vi.spyOn(directive, 'writeModelValue');
             const inputEl = fixture.debugElement.query(By.css('input'));
 
             inputEl.nativeElement.value = 'test123';
@@ -1347,7 +1366,12 @@ describe('PasswordDirective', () => {
         });
 
         it('should handle window resize', () => {
-            spyOn(directive, 'hideOverlay');
+            // Force a non-touch environment (jsdom does not expose deterministic touch flags)
+            delete (window as any).ontouchstart;
+            Object.defineProperty(navigator, 'maxTouchPoints', { value: 0, configurable: true });
+            Object.defineProperty(navigator, 'msMaxTouchPoints', { value: 0, configurable: true });
+
+            vi.spyOn(directive, 'hideOverlay');
             directive.onWindowResize();
 
             // Should call hideOverlay on non-touch devices
@@ -1606,8 +1630,7 @@ describe('PasswordDirective', () => {
             it('should have global pt configuration available', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [PasswordDirective, FormsModule, CommonModule],
-                    declarations: [TestPTPasswordDirectiveComponent],
+                    imports: [PasswordDirective, FormsModule, CommonModule, TestPTPasswordDirectiveComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1634,8 +1657,7 @@ describe('PasswordDirective', () => {
             it('should instantiate multiple directive instances with global config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    imports: [PasswordDirective, FormsModule, CommonModule],
-                    declarations: [TestPTPasswordDirectiveComponent],
+                    imports: [PasswordDirective, FormsModule, CommonModule, TestPTPasswordDirectiveComponent],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1761,8 +1783,7 @@ describe('Password Integration Tests', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PasswordModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
-            declarations: [TestBasicPasswordComponent],
+            imports: [PasswordModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, TestBasicPasswordComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1830,8 +1851,7 @@ describe('Password PassThrough Tests', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PasswordModule, FormsModule, CommonModule],
-            declarations: [TestPTPasswordComponent],
+            imports: [PasswordModule, FormsModule, CommonModule, TestPTPasswordComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -2167,8 +2187,7 @@ describe('Password PassThrough Tests', () => {
         it('should apply global pt configuration', async () => {
             await TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [PasswordModule, FormsModule, CommonModule],
-                declarations: [TestPTPasswordComponent],
+                imports: [PasswordModule, FormsModule, CommonModule, TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({
@@ -2194,8 +2213,7 @@ describe('Password PassThrough Tests', () => {
         it('should apply global CSS from pt configuration', async () => {
             await TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [PasswordModule, FormsModule, CommonModule],
-                declarations: [TestPTPasswordComponent],
+                imports: [PasswordModule, FormsModule, CommonModule, TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({
@@ -2222,8 +2240,7 @@ describe('Password PassThrough Tests', () => {
         it('should apply global pt to multiple instances', async () => {
             await TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [PasswordModule, FormsModule, CommonModule],
-                declarations: [TestPTPasswordComponent],
+                imports: [PasswordModule, FormsModule, CommonModule, TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({

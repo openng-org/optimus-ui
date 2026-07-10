@@ -1,23 +1,25 @@
-import { Component, DebugElement, Input, TemplateRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, TemplateRef, ViewChild, model, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Toolbar, ToolbarModule } from './toolbar';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
-        <p-toolbar [ariaLabelledBy]="ariaLabelledBy">
+        <p-toolbar [ariaLabelledBy]="ariaLabelledBy()">
             <div class="default-content">Default Toolbar Content</div>
         </p-toolbar>
     `
 })
 class TestBasicToolbarComponent {
-    ariaLabelledBy: string | undefined;
+    ariaLabelledBy = signal<string | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #start>
@@ -35,7 +37,8 @@ class TestBasicToolbarComponent {
 class TestTemplateToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #start>
@@ -53,7 +56,8 @@ class TestTemplateToolbarComponent {}
 class TestLegacyTemplateToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #start>
@@ -75,7 +79,8 @@ class TestContentChildToolbarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #start>
@@ -94,7 +99,8 @@ class TestContentChildToolbarComponent {
 class TestComplexToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #start>
@@ -106,7 +112,8 @@ class TestComplexToolbarComponent {}
 class TestStartOnlyToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #center>
@@ -118,7 +125,8 @@ class TestStartOnlyToolbarComponent {}
 class TestCenterOnlyToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
         <p-toolbar>
             <ng-template #end>
@@ -130,38 +138,40 @@ class TestCenterOnlyToolbarComponent {}
 class TestEndOnlyToolbarComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
-        <p-toolbar [ariaLabelledBy]="ariaLabel">
-            <ng-container *ngIf="showStart">
+        <p-toolbar [ariaLabelledBy]="ariaLabel()">
+            @if (showStart) {
                 <ng-template #start>
                     <button class="dynamic-start">Dynamic Start</button>
                 </ng-template>
-            </ng-container>
-            <ng-container *ngIf="showCenter">
+            }
+            @if (showCenter) {
                 <ng-template #center>
                     <span class="dynamic-center">Dynamic Center</span>
                 </ng-template>
-            </ng-container>
-            <ng-container *ngIf="showEnd">
+            }
+            @if (showEnd) {
                 <ng-template #end>
                     <button class="dynamic-end">Dynamic End</button>
                 </ng-template>
-            </ng-container>
+            }
         </p-toolbar>
     `
 })
 class TestDynamicToolbarComponent {
-    ariaLabel = 'toolbar-label';
+    ariaLabel = signal('toolbar-label');
     showStart = true;
     showCenter = true;
     showEnd = true;
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ToolbarModule],
     template: `
-        <p-toolbar [pt]="pt">
+        <p-toolbar [pt]="pt()">
             <ng-template #start>
                 <button>PT Test Start</button>
             </ng-template>
@@ -175,7 +185,7 @@ class TestDynamicToolbarComponent {
     `
 })
 class TestPTToolbarComponent {
-    @Input() pt: any;
+    pt = model<any>();
 }
 
 describe('Toolbar', () => {
@@ -186,8 +196,8 @@ describe('Toolbar', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [ToolbarModule],
-            declarations: [
+            imports: [
+                ToolbarModule,
                 TestBasicToolbarComponent,
                 TestTemplateToolbarComponent,
                 TestLegacyTemplateToolbarComponent,
@@ -238,7 +248,7 @@ describe('Toolbar', () => {
 
     describe('Accessibility', () => {
         it('should bind ariaLabelledBy attribute', async () => {
-            component.ariaLabelledBy = 'my-toolbar-label';
+            component.ariaLabelledBy.set('my-toolbar-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -247,7 +257,7 @@ describe('Toolbar', () => {
         });
 
         it('should handle undefined ariaLabelledBy', async () => {
-            component.ariaLabelledBy = undefined as any;
+            component.ariaLabelledBy.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -256,13 +266,13 @@ describe('Toolbar', () => {
         });
 
         it('should update ariaLabelledBy dynamically', async () => {
-            component.ariaLabelledBy = 'label-1';
+            component.ariaLabelledBy.set('label-1');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(toolbarEl.nativeElement.getAttribute('aria-labelledby')).toBe('label-1');
 
-            component.ariaLabelledBy = 'label-2';
+            component.ariaLabelledBy.set('label-2');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -423,7 +433,7 @@ describe('Toolbar', () => {
             const toolbar = dynamicFixture.debugElement.query(By.directive(Toolbar));
             expect(toolbar.nativeElement.getAttribute('aria-labelledby')).toBe('toolbar-label');
 
-            dynamicComponent.ariaLabel = 'new-label';
+            dynamicComponent.ariaLabel.set('new-label');
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
             dynamicFixture.detectChanges();
@@ -458,7 +468,7 @@ describe('Toolbar', () => {
         it('should handle toolbar without any content', async () => {
             // Using existing basic component without any content except default
             const basicFixture = TestBed.createComponent(TestBasicToolbarComponent);
-            basicFixture.componentInstance.ariaLabelledBy = undefined as any;
+            basicFixture.componentInstance.ariaLabelledBy.set(undefined as any);
             basicFixture.changeDetectorRef.markForCheck();
             await basicFixture.whenStable();
             basicFixture.detectChanges();
@@ -693,13 +703,13 @@ describe('Toolbar', () => {
         });
 
         it('should apply simple string classes to PT sections', async () => {
-            ptComponent.pt = {
+            ptComponent.pt.set({
                 root: 'ROOT_CLASS',
                 host: 'HOST_CLASS',
                 start: 'START_CLASS',
                 center: 'CENTER_CLASS',
                 end: 'END_CLASS'
-            };
+            });
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
             ptFixture.detectChanges();
@@ -720,7 +730,7 @@ describe('Toolbar', () => {
         });
 
         it('should apply object-based PT options with class and attributes', async () => {
-            ptComponent.pt = {
+            ptComponent.pt.set({
                 root: {
                     class: 'PT_ROOT_CLASS',
                     'data-test': 'toolbar-test',
@@ -731,7 +741,7 @@ describe('Toolbar', () => {
                     class: 'PT_START_CLASS',
                     'data-section': 'start'
                 }
-            };
+            });
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
             ptFixture.detectChanges();
@@ -751,13 +761,13 @@ describe('Toolbar', () => {
         });
 
         it('should apply mixed object and string PT values', async () => {
-            ptComponent.pt = {
+            ptComponent.pt.set({
                 root: {
                     class: 'PT_ROOT_CLASS'
                 },
                 host: 'PT_HOST_CLASS',
                 start: 'PT_START_STRING'
-            };
+            });
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
             ptFixture.detectChanges();
@@ -774,13 +784,13 @@ describe('Toolbar', () => {
         });
 
         it('should use instance variables in PT functions', async () => {
-            ptComponent.pt = {
+            ptComponent.pt.set({
                 root: ({ instance }) => {
                     return {
                         class: instance?.ariaLabelledBy() ? 'HAS_ARIA' : 'NO_ARIA'
                     };
                 }
-            };
+            });
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
             ptFixture.detectChanges();
@@ -796,13 +806,13 @@ describe('Toolbar', () => {
 
         it('should handle event binding in PT options', async () => {
             let clicked = false;
-            ptComponent.pt = {
+            ptComponent.pt.set({
                 root: {
                     onclick: () => {
                         clicked = true;
                     }
                 }
-            };
+            });
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
             ptFixture.detectChanges();

@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -11,11 +11,11 @@ import { Fieldset } from './fieldset';
     imports: [Fieldset],
     template: `
         <p-fieldset
-            [legend]="legend"
-            [toggleable]="toggleable"
-            [collapsed]="collapsed"
-            [style]="style"
-            [styleClass]="styleClass"
+            [legend]="legend()"
+            [toggleable]="toggleable()"
+            [collapsed]="collapsed()"
+            [style]="style()"
+            [styleClass]="styleClass()"
             (collapsedChange)="onCollapsedChange($event)"
             (onBeforeToggle)="onBeforeToggle($event)"
             (onAfterToggle)="onAfterToggle($event)"
@@ -25,11 +25,11 @@ import { Fieldset } from './fieldset';
     `
 })
 class TestFieldsetComponent {
-    legend = 'Test Fieldset';
-    toggleable = false;
-    collapsed = false;
-    style: any = null as any;
-    styleClass?: string;
+    legend = signal<string | null | undefined>('Test Fieldset');
+    toggleable = signal(false);
+    collapsed = signal(false);
+    style = signal<any>(null as any);
+    styleClass = signal<string | undefined>(undefined);
 
     collapsedChangeEvent?: boolean;
     beforeToggleEvent?: FieldsetBeforeToggleEvent;
@@ -120,11 +120,11 @@ describe('Fieldset', () => {
         });
 
         it('should accept custom values', async () => {
-            component.legend = 'Custom Legend';
-            component.toggleable = true;
-            component.collapsed = true;
-            component.style = { backgroundColor: 'red' };
-            component.styleClass = 'custom-fieldset';
+            component.legend.set('Custom Legend');
+            component.toggleable.set(true);
+            component.collapsed.set(true);
+            component.style.set({ backgroundColor: 'red' });
+            component.styleClass.set('custom-fieldset');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -141,7 +141,7 @@ describe('Fieldset', () => {
         });
 
         it('should set buttonAriaLabel from legend', async () => {
-            component.legend = 'Test Legend';
+            component.legend.set('Test Legend');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(fieldset.buttonAriaLabel()).toBe('Test Legend');
@@ -150,7 +150,7 @@ describe('Fieldset', () => {
 
     describe('Basic Fieldset', () => {
         it('should display legend text', async () => {
-            component.legend = 'My Fieldset';
+            component.legend.set('My Fieldset');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -165,7 +165,7 @@ describe('Fieldset', () => {
         });
 
         it('should not show toggle button when not toggleable', () => {
-            component.toggleable = false;
+            component.toggleable.set(false);
             fixture.changeDetectorRef.markForCheck();
 
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
@@ -173,7 +173,7 @@ describe('Fieldset', () => {
         });
 
         it('should apply custom styles', async () => {
-            component.style = { border: '2px solid red', padding: '10px' };
+            component.style.set({ border: '2px solid red', padding: '10px' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -205,7 +205,7 @@ describe('Fieldset', () => {
         });
 
         it('should apply custom CSS classes', async () => {
-            component.styleClass = 'my-custom-fieldset another-class';
+            component.styleClass.set('my-custom-fieldset another-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -217,7 +217,7 @@ describe('Fieldset', () => {
 
     describe('Toggleable Fieldset', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -229,7 +229,7 @@ describe('Fieldset', () => {
         });
 
         it('should expand fieldset when clicked', async () => {
-            component.collapsed = true;
+            component.collapsed.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -241,7 +241,7 @@ describe('Fieldset', () => {
         });
 
         it('should collapse fieldset when clicked again', async () => {
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -253,7 +253,7 @@ describe('Fieldset', () => {
         });
 
         it('should show correct icon when collapsed', async () => {
-            component.collapsed = true;
+            component.collapsed.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -265,7 +265,7 @@ describe('Fieldset', () => {
         });
 
         it('should show correct icon when expanded', async () => {
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -279,12 +279,12 @@ describe('Fieldset', () => {
         it('should update aria-expanded attribute', async () => {
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
 
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe('true');
 
-            component.collapsed = true;
+            component.collapsed.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe('false');
@@ -293,12 +293,12 @@ describe('Fieldset', () => {
         it('should update aria-hidden on content', async () => {
             const contentContainer = fixture.debugElement.query(By.css('.p-fieldset-content-container'));
 
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contentContainer.nativeElement.getAttribute('aria-hidden')).toBe('false');
 
-            component.collapsed = true;
+            component.collapsed.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(contentContainer.nativeElement.getAttribute('aria-hidden')).toBe('true');
@@ -307,7 +307,7 @@ describe('Fieldset', () => {
 
     describe('Public Methods', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -359,13 +359,13 @@ describe('Fieldset', () => {
 
     describe('Event Handling', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
 
         it('should emit collapsedChange event on expand', async () => {
-            component.collapsed = true;
+            component.collapsed.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -377,7 +377,7 @@ describe('Fieldset', () => {
         });
 
         it('should emit collapsedChange event on collapse', async () => {
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -403,7 +403,7 @@ describe('Fieldset', () => {
 
     describe('Keyboard Navigation', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -412,7 +412,7 @@ describe('Fieldset', () => {
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
             const event = new KeyboardEvent('keydown', { code: 'Enter' });
 
-            spyOn(fieldset, 'toggle');
+            vi.spyOn(fieldset, 'toggle');
             toggleButton.nativeElement.dispatchEvent(event);
 
             expect(fieldset.toggle).toHaveBeenCalled();
@@ -422,7 +422,7 @@ describe('Fieldset', () => {
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
             const event = new KeyboardEvent('keydown', { code: 'Space' });
 
-            spyOn(fieldset, 'toggle');
+            vi.spyOn(fieldset, 'toggle');
             toggleButton.nativeElement.dispatchEvent(event);
 
             expect(fieldset.toggle).toHaveBeenCalled();
@@ -432,7 +432,7 @@ describe('Fieldset', () => {
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
             const event = new KeyboardEvent('keydown', { code: 'Tab' });
 
-            spyOn(fieldset, 'toggle');
+            vi.spyOn(fieldset, 'toggle');
             toggleButton.nativeElement.dispatchEvent(event);
 
             expect(fieldset.toggle).not.toHaveBeenCalled();
@@ -443,8 +443,8 @@ describe('Fieldset', () => {
             const enterEvent = new KeyboardEvent('keydown', { code: 'Enter' });
             const spaceEvent = new KeyboardEvent('keydown', { code: 'Space' });
 
-            spyOn(enterEvent, 'preventDefault');
-            spyOn(spaceEvent, 'preventDefault');
+            vi.spyOn(enterEvent, 'preventDefault');
+            vi.spyOn(spaceEvent, 'preventDefault');
 
             toggleButton.nativeElement.dispatchEvent(enterEvent);
             toggleButton.nativeElement.dispatchEvent(spaceEvent);
@@ -531,7 +531,7 @@ describe('Fieldset', () => {
 
     describe('Accessibility', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -572,7 +572,7 @@ describe('Fieldset', () => {
         });
 
         it('should update aria-label from legend', async () => {
-            component.legend = 'Accessibility Test';
+            component.legend.set('Accessibility Test');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -583,7 +583,7 @@ describe('Fieldset', () => {
 
     describe('Edge Cases', () => {
         it('should handle null legend', async () => {
-            component.legend = null as any;
+            component.legend.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -592,7 +592,7 @@ describe('Fieldset', () => {
         });
 
         it('should handle undefined legend', async () => {
-            component.legend = undefined as any;
+            component.legend.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -601,7 +601,7 @@ describe('Fieldset', () => {
         });
 
         it('should handle empty legend', async () => {
-            component.legend = '';
+            component.legend.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -610,14 +610,14 @@ describe('Fieldset', () => {
         });
 
         it('should handle null/undefined style objects', async () => {
-            component.style = null as any;
+            component.style.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(() => {
                 fixture.changeDetectorRef.markForCheck();
             }).not.toThrow();
 
-            component.style = undefined as any;
+            component.style.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(() => {
@@ -626,13 +626,13 @@ describe('Fieldset', () => {
         });
 
         it('should handle complex style objects', async () => {
-            component.style = {
+            component.style.set({
                 backgroundColor: 'blue',
                 border: '1px solid red',
                 padding: '20px',
                 margin: '10px',
                 fontSize: '16px'
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -662,7 +662,7 @@ describe('Fieldset', () => {
         });
 
         it('should handle 0ms motion options', async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -673,12 +673,12 @@ describe('Fieldset', () => {
         });
 
         it('should prevent event default in toggle', async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const event = new MouseEvent('click');
-            spyOn(event, 'preventDefault');
+            vi.spyOn(event, 'preventDefault');
 
             fieldset.toggle(event);
 
@@ -688,13 +688,13 @@ describe('Fieldset', () => {
 
     describe('Animation Edge Cases', () => {
         beforeEach(async () => {
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
 
         it('should pass correct animation parameters', async () => {
-            component.collapsed = false;
+            component.collapsed.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -709,7 +709,7 @@ describe('Fieldset', () => {
     describe('Template Edge Cases', () => {
         it('should handle missing templates gracefully', async () => {
             // Test with basic fieldset (no templates)
-            component.toggleable = true;
+            component.toggleable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

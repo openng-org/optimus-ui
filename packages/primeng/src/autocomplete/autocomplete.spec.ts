@@ -18,41 +18,43 @@ const mockCountries = [
 const mockItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [AutoCompleteModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-autocomplete
-            [(ngModel)]="selectedValue"
-            [suggestions]="suggestions"
-            [optionLabel]="optionLabel"
-            [optionValue]="optionValue"
-            [optionGroupLabel]="optionGroupLabel"
-            [optionDisabled]="optionDisabled"
-            [multiple]="multiple"
-            [readonly]="readonly"
-            [placeholder]="placeholder"
-            [minQueryLength]="minLength"
-            [delay]="delay"
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [suggestions]="suggestions()"
+            [optionLabel]="optionLabel()"
+            [optionValue]="optionValue()"
+            [optionGroupLabel]="optionGroupLabel()"
+            [optionDisabled]="optionDisabled()"
+            [multiple]="multiple()"
+            [readonly]="readonly()"
+            [placeholder]="placeholder()"
+            [minQueryLength]="minLength()"
+            [delay]="delay()"
             [autoZIndex]="autoZIndex"
             [baseZIndex]="baseZIndex"
-            [showClear]="showClear"
-            [dropdown]="dropdown"
-            [autoHighlight]="autoHighlight"
-            [forceSelection]="forceSelection"
-            [completeOnFocus]="completeOnFocus"
+            [showClear]="showClear()"
+            [dropdown]="dropdown()"
+            [autoHighlight]="autoHighlight()"
+            [forceSelection]="forceSelection()"
+            [completeOnFocus]="completeOnFocus()"
             [autofocus]="autofocus"
             [inputId]="inputId"
-            [inputStyle]="inputStyle"
-            [panelStyle]="panelStyle"
-            [panelStyleClass]="panelStyleClass"
+            [inputStyle]="inputStyle()"
+            [panelStyle]="panelStyle()"
+            [panelStyleClass]="panelStyleClass()"
             [scrollHeight]="scrollHeight"
-            [lazy]="lazy"
-            [virtualScroll]="virtualScroll"
-            [virtualScrollItemSize]="virtualScrollItemSize"
-            [unique]="unique"
-            [typeahead]="typeahead"
-            [addOnBlur]="addOnBlur"
-            [addOnTab]="addOnTab"
-            [separator]="separator"
+            [lazy]="lazy()"
+            [virtualScroll]="virtualScroll()"
+            [virtualScrollItemSize]="virtualScrollItemSize()"
+            [unique]="unique()"
+            [typeahead]="typeahead()"
+            [addOnBlur]="addOnBlur()"
+            [addOnTab]="addOnTab()"
+            [separator]="separator()"
             [ariaLabel]="ariaLabel"
             [ariaLabelledBy]="ariaLabelledBy"
             [dropdownAriaLabel]="dropdownAriaLabel"
@@ -75,7 +77,7 @@ const mockItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
                 <div class="custom-header">Available Options</div>
             </ng-template>
             <ng-template #footer>
-                <div class="custom-footer">Total: {{ suggestions.length }}</div>
+                <div class="custom-footer">Total: {{ suggestions().length }}</div>
             </ng-template>
             <ng-template #empty>
                 <div class="custom-empty">No results found</div>
@@ -89,50 +91,52 @@ const mockItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
         </p-autocomplete>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-autocomplete formControlName="selectedItems" [suggestions]="formSuggestions" [optionLabel]="'name'" [multiple]="true" (completeMethod)="onFormSearch($event)"> </p-autocomplete>
-        </form>
+        @if (showReactiveForm()) {
+            <form [formGroup]="reactiveForm">
+                <p-autocomplete formControlName="selectedItems" [suggestions]="formSuggestions" [optionLabel]="'name'" [multiple]="true" (completeMethod)="onFormSearch($event)"> </p-autocomplete>
+            </form>
+        }
     `
 })
 class TestAutocompleteComponent {
-    selectedValue: any;
-    suggestions: any[] = [];
+    selectedValue = signal<any>(undefined);
+    suggestions = signal<any[]>([]);
     formSuggestions: any[] = [];
 
     // Options configuration
-    optionLabel: string | ((item: any) => string) = 'name';
-    optionValue: string | ((item: any) => any) | undefined;
-    optionGroupLabel: string = 'label';
-    optionDisabled: string | ((item: any) => boolean) = 'disabled';
+    optionLabel = signal<string | ((item: any) => string)>('name');
+    optionValue = signal<string | ((item: any) => any) | undefined>(undefined);
+    optionGroupLabel = signal<string>('label');
+    optionDisabled = signal<string | ((item: any) => boolean)>('disabled');
 
     // Behavior
-    multiple: boolean = false;
-    readonly: boolean = false;
-    placeholder: string = 'Enter text';
-    minLength: number = 1;
-    delay: number = 300;
+    multiple = signal<boolean>(false);
+    readonly = signal<boolean>(false);
+    placeholder = signal<string>('Enter text');
+    minLength = signal<number>(1);
+    delay = signal<number>(300);
     autoZIndex: boolean = true;
     baseZIndex: number = 0;
-    showClear: boolean = false;
-    dropdown: boolean = false;
-    autoHighlight: boolean = false;
-    forceSelection: boolean = false;
-    completeOnFocus: boolean = false;
+    showClear = signal<boolean>(false);
+    dropdown = signal<boolean>(false);
+    autoHighlight = signal<boolean>(false);
+    forceSelection = signal<boolean>(false);
+    completeOnFocus = signal<boolean>(false);
     autofocus: boolean = false;
     inputId: string = 'test-input';
-    unique: boolean = true;
-    lazy: boolean = false;
-    virtualScroll: boolean = false;
-    virtualScrollItemSize: number = 38;
-    typeahead: boolean = true;
-    addOnBlur: boolean = false;
-    addOnTab: boolean = false;
-    separator: string | RegExp | undefined;
+    unique = signal<boolean>(true);
+    lazy = signal<boolean>(false);
+    virtualScroll = signal<boolean>(false);
+    virtualScrollItemSize = signal<number>(38);
+    typeahead = signal<boolean>(true);
+    addOnBlur = signal<boolean>(false);
+    addOnTab = signal<boolean>(false);
+    separator = signal<string | RegExp | undefined>(undefined);
 
     // Styling
-    inputStyle: any = {};
-    panelStyle: any = {};
-    panelStyleClass: string = '';
+    inputStyle = signal<any>({});
+    panelStyle = signal<any>({});
+    panelStyleClass = signal<string>('');
     scrollHeight: string = '200px';
 
     // Accessibility
@@ -154,7 +158,7 @@ class TestAutocompleteComponent {
 
     // Form handling
     reactiveForm: FormGroup;
-    showReactiveForm: boolean = false;
+    showReactiveForm = signal<boolean>(false);
 
     // Dynamic data testing
     signalOptions = signal(['Signal Item 1', 'Signal Item 2']);
@@ -169,10 +173,10 @@ class TestAutocompleteComponent {
 
     // Search methods
     onSearch(event: AutoCompleteCompleteEvent) {
-        if (typeof this.optionLabel === 'string') {
-            this.suggestions = mockCountries.filter((country) => country.name.toLowerCase().includes(event.query.toLowerCase()));
+        if (typeof this.optionLabel() === 'string') {
+            this.suggestions.set(mockCountries.filter((country) => country.name.toLowerCase().includes(event.query.toLowerCase())));
         } else {
-            this.suggestions = mockItems.filter((item) => item.toLowerCase().includes(event.query.toLowerCase()));
+            this.suggestions.set(mockItems.filter((item) => item.toLowerCase().includes(event.query.toLowerCase())));
         }
     }
 
@@ -225,7 +229,7 @@ class TestAutocompleteComponent {
     loadLateOptions() {
         setTimeout(() => {
             this.lateLoadedOptions = ['Late Item 1', 'Late Item 2'];
-            this.suggestions = this.lateLoadedOptions;
+            this.suggestions.set(this.lateLoadedOptions);
         }, 100);
     }
 
@@ -276,9 +280,19 @@ class TestAutocompleteComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [AutoCompleteModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-autocomplete [(ngModel)]="selectedValue" [suggestions]="suggestions" [optionLabel]="'name'" [multiple]="multiple" [showClear]="showClear" [dropdown]="dropdown" (completeMethod)="onSearch($event)">
+        <p-autocomplete
+            [ngModel]="selectedValue()"
+            (ngModelChange)="selectedValue.set($event)"
+            [suggestions]="suggestions()"
+            [optionLabel]="'name'"
+            [multiple]="multiple()"
+            [showClear]="showClear()"
+            [dropdown]="dropdown()"
+            (completeMethod)="onSearch($event)"
+        >
             <!-- Item Template with #item -->
             <ng-template #item let-item let-index="index">
                 <div class="ptemplate-item" [attr.data-index]="index">
@@ -291,7 +305,7 @@ class TestAutocompleteComponent {
             <ng-template #header>
                 <div class="ptemplate-header">
                     <h4>Countries List</h4>
-                    <span class="header-count">{{ suggestions.length }} items</span>
+                    <span class="header-count">{{ suggestions().length }} items</span>
                 </div>
             </ng-template>
 
@@ -328,7 +342,7 @@ class TestAutocompleteComponent {
 
             <!-- Loader Template with #loader -->
             <ng-template #loader let-options="options">
-                <div class="ptemplate-loader" [attr.data-loading]="loading">
+                <div class="ptemplate-loader" [attr.data-loading]="loading()">
                     <span class="loader-spinner">⏳</span>
                     <span class="loader-text">Loading...</span>
                 </div>
@@ -365,19 +379,19 @@ class TestAutocompleteComponent {
     `
 })
 class TestTemplateAutocompleteComponent {
-    selectedValue: any;
-    suggestions: any[] = [];
-    multiple: boolean = false;
-    loading: boolean = false;
-    showClear: boolean = false;
-    dropdown: boolean = false;
+    selectedValue = signal<any>(undefined);
+    suggestions = signal<any[]>([]);
+    multiple = signal<boolean>(false);
+    loading = signal<boolean>(false);
+    showClear = signal<boolean>(false);
+    dropdown = signal<boolean>(false);
 
     onSearch(event: AutoCompleteCompleteEvent) {
-        this.loading = true;
+        this.loading.set(true);
         // Simulate async search
         setTimeout(() => {
-            this.suggestions = mockCountries.filter((country) => country.name.toLowerCase().includes(event.query.toLowerCase()));
-            this.loading = false;
+            this.suggestions.set(mockCountries.filter((country) => country.name.toLowerCase().includes(event.query.toLowerCase())));
+            this.loading.set(false);
         }, 100);
     }
 
@@ -411,8 +425,7 @@ describe('AutoComplete', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [AutoCompleteModule, SharedModule, FormsModule, ReactiveFormsModule],
-            declarations: [TestAutocompleteComponent, TestTemplateAutocompleteComponent],
+            imports: [AutoCompleteModule, SharedModule, FormsModule, ReactiveFormsModule, TestAutocompleteComponent, TestTemplateAutocompleteComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -464,16 +477,16 @@ describe('AutoComplete', () => {
         });
 
         it('should work with simple array', async () => {
-            testComponent.suggestions = testComponent.stringOptions;
+            testComponent.suggestions.set(testComponent.stringOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(3);
-            expect(testComponent.suggestions[0]).toBe('String 1');
+            expect(testComponent.suggestions().length).toBe(3);
+            expect(testComponent.suggestions()[0]).toBe('String 1');
         });
 
         it('should work with string array', async () => {
-            testComponent.suggestions = testComponent.stringOptions;
+            testComponent.suggestions.set(testComponent.stringOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -482,7 +495,7 @@ describe('AutoComplete', () => {
         });
 
         it('should work with number array', async () => {
-            testComponent.suggestions = testComponent.numberOptions;
+            testComponent.suggestions.set(testComponent.numberOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -491,8 +504,8 @@ describe('AutoComplete', () => {
         });
 
         it('should work with object array', async () => {
-            testComponent.suggestions = testComponent.objectOptions;
-            testComponent.optionLabel = 'name';
+            testComponent.suggestions.set(testComponent.objectOptions);
+            testComponent.optionLabel.set('name');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -511,31 +524,31 @@ describe('AutoComplete', () => {
                 }
             });
 
-            testComponent.suggestions = (testComponent as any).dynamicSuggestions;
+            testComponent.suggestions.set((testComponent as any).dynamicSuggestions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(3);
+            expect(testComponent.suggestions().length).toBe(3);
         });
 
         it('should work with signals', async () => {
-            testComponent.suggestions = testComponent.signalOptions();
+            testComponent.suggestions.set(testComponent.signalOptions());
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(2);
-            expect(testComponent.suggestions[0]).toBe('Signal Item 1');
+            expect(testComponent.suggestions().length).toBe(2);
+            expect(testComponent.suggestions()[0]).toBe('Signal Item 1');
         });
 
         it('should work with observables and async pipe', async () => {
             testComponent.observableOptions$.subscribe((options) => {
-                testComponent.suggestions = options;
+                testComponent.suggestions.set(options);
                 testFixture.changeDetectorRef.markForCheck();
             });
 
             await testFixture.whenStable();
-            expect(testComponent.suggestions.length).toBe(2);
-            expect(testComponent.suggestions[0]).toBe('Observable Item 1');
+            expect(testComponent.suggestions().length).toBe(2);
+            expect(testComponent.suggestions()[0]).toBe('Observable Item 1');
         });
 
         it('should work with late-loaded values (HTTP/setTimeout)', async () => {
@@ -544,8 +557,8 @@ describe('AutoComplete', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(2);
-            expect(testComponent.suggestions[0]).toBe('Late Item 1');
+            expect(testComponent.suggestions().length).toBe(2);
+            expect(testComponent.suggestions()[0]).toBe('Late Item 1');
         });
     });
 
@@ -556,7 +569,7 @@ describe('AutoComplete', () => {
         });
 
         it('should work with ReactiveFormsModule', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -568,7 +581,7 @@ describe('AutoComplete', () => {
         });
 
         it('should work with NgModel two-way binding', async () => {
-            testComponent.selectedValue = 'test value';
+            testComponent.selectedValue.set('test value');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -579,7 +592,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle FormControl states (pristine, dirty, touched, valid, invalid)', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -601,7 +614,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle setValue and getValue operations', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -616,7 +629,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle updateOn configurations', async () => {
-            testComponent.showReactiveForm = true;
+            testComponent.showReactiveForm.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -632,8 +645,8 @@ describe('AutoComplete', () => {
         });
 
         it('should work with optionLabel as string', async () => {
-            testComponent.optionLabel = 'name';
-            testComponent.suggestions = testComponent.objectOptions;
+            testComponent.optionLabel.set('name');
+            testComponent.suggestions.set(testComponent.objectOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -645,19 +658,19 @@ describe('AutoComplete', () => {
         });
 
         it('should work with optionLabel as function', async () => {
-            testComponent.optionLabel = testComponent.getLabelFunction();
-            testComponent.suggestions = [{ customName: 'Custom Afghanistan', name: 'Afghanistan' }];
+            testComponent.optionLabel.set(testComponent.getLabelFunction());
+            testComponent.suggestions.set([{ customName: 'Custom Afghanistan', name: 'Afghanistan' }]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
-            const labelResult = autocompleteInstance.getOptionLabel(testComponent.suggestions[0]);
+            const labelResult = autocompleteInstance.getOptionLabel(testComponent.suggestions()[0]);
             expect(labelResult).toBe('Custom Afghanistan');
         });
 
         it('should work with optionValue as string', async () => {
-            testComponent.optionValue = 'code';
-            testComponent.suggestions = testComponent.objectOptions;
+            testComponent.optionValue.set('code');
+            testComponent.suggestions.set(testComponent.objectOptions);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -666,60 +679,60 @@ describe('AutoComplete', () => {
         });
 
         it('should work with optionValue as function', async () => {
-            testComponent.optionValue = testComponent.getValueFunction();
-            testComponent.suggestions = [{ customValue: 'CUSTOM_AF', code: 'AF', name: 'Afghanistan' }];
+            testComponent.optionValue.set(testComponent.getValueFunction());
+            testComponent.suggestions.set([{ customValue: 'CUSTOM_AF', code: 'AF', name: 'Afghanistan' }]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
-            const valueResult = autocompleteInstance.getOptionValue(testComponent.suggestions[0]);
+            const valueResult = autocompleteInstance.getOptionValue(testComponent.suggestions()[0]);
             expect(valueResult).toBe('CUSTOM_AF');
         });
 
         it('should work with optionDisabled as string', async () => {
-            testComponent.optionDisabled = 'disabled';
-            testComponent.suggestions = [
+            testComponent.optionDisabled.set('disabled');
+            testComponent.suggestions.set([
                 { name: 'Enabled', disabled: false },
                 { name: 'Disabled', disabled: true }
-            ];
+            ]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
-            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions[1])).toBe(true);
-            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions[0])).toBe(false);
+            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions()[1])).toBe(true);
+            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions()[0])).toBe(false);
         });
 
         it('should work with optionDisabled as function', async () => {
-            testComponent.optionDisabled = testComponent.getDisabledFunction();
-            testComponent.suggestions = [
+            testComponent.optionDisabled.set(testComponent.getDisabledFunction());
+            testComponent.suggestions.set([
                 { name: 'Enabled', disabled: false },
                 { name: 'Disabled', disabled: true }
-            ];
+            ]);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
-            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions[1])).toBe(true);
+            expect(autocompleteInstance.isOptionDisabled(testComponent.suggestions()[1])).toBe(true);
         });
 
         it('should work with dynamic updated values', async () => {
-            testComponent.suggestions = ['Initial'];
+            testComponent.suggestions.set(['Initial']);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(1);
+            expect(testComponent.suggestions().length).toBe(1);
 
             // Update dynamically
-            testComponent.suggestions = ['Updated 1', 'Updated 2'];
+            testComponent.suggestions.set(['Updated 1', 'Updated 2']);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(2);
+            expect(testComponent.suggestions().length).toBe(2);
         });
 
         it('should work with lazy loading', async () => {
-            testComponent.lazy = true;
+            testComponent.lazy.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -728,8 +741,8 @@ describe('AutoComplete', () => {
         });
 
         it('should work with virtualScroll', async () => {
-            testComponent.virtualScroll = true;
-            testComponent.virtualScrollItemSize = 50;
+            testComponent.virtualScroll.set(true);
+            testComponent.virtualScrollItemSize.set(50);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -739,7 +752,7 @@ describe('AutoComplete', () => {
         });
 
         it('should work with placeholder', async () => {
-            testComponent.placeholder = 'Custom placeholder';
+            testComponent.placeholder.set('Custom placeholder');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -748,7 +761,7 @@ describe('AutoComplete', () => {
         });
 
         it('should work with inputStyle', async () => {
-            testComponent.inputStyle = { border: '2px solid blue', padding: '5px' };
+            testComponent.inputStyle.set({ border: '2px solid blue', padding: '5px' });
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -757,8 +770,8 @@ describe('AutoComplete', () => {
         });
 
         it('should work with panelStyle and panelStyleClass', async () => {
-            testComponent.panelStyle = { background: 'lightgray' };
-            testComponent.panelStyleClass = 'custom-panel';
+            testComponent.panelStyle.set({ background: 'lightgray' });
+            testComponent.panelStyleClass.set('custom-panel');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -775,7 +788,7 @@ describe('AutoComplete', () => {
         });
 
         it('should emit completeMethod event', async () => {
-            spyOn(testComponent, 'onSearch').and.callThrough();
+            vi.spyOn(testComponent, 'onSearch');
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.value = 'test';
@@ -786,14 +799,14 @@ describe('AutoComplete', () => {
             await testFixture.whenStable();
 
             expect(testComponent.onSearch).toHaveBeenCalled();
-            const callArgs = (testComponent.onSearch as jasmine.Spy).calls.mostRecent().args[0];
+            const callArgs = (testComponent.onSearch as any).mock.calls.at(-1)[0];
             expect(callArgs.query).toBe('test');
         });
 
         it('should emit onSelect event', async () => {
             // Setup suggestions first
-            testComponent.suggestions = [];
-            testComponent.optionLabel = undefined as any; // Use direct string comparison
+            testComponent.suggestions.set([]);
+            testComponent.optionLabel.set(undefined as any); // Use direct string comparison
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -807,9 +820,9 @@ describe('AutoComplete', () => {
             const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
 
             // Manually trigger select as options may not render
-            if (testComponent.suggestions.length > 0) {
+            if (testComponent.suggestions().length > 0) {
                 const selectEvent = {
-                    value: testComponent.suggestions[0],
+                    value: testComponent.suggestions()[0],
                     originalEvent: new Event('click')
                 };
                 testComponent.onSelectionChange(selectEvent as any);
@@ -820,7 +833,7 @@ describe('AutoComplete', () => {
                 expect(testComponent.selectEvent?.value).toBeTruthy();
             } else {
                 // No suggestions available, at least verify search was attempted
-                expect(testComponent.suggestions).toBeDefined();
+                expect(testComponent.suggestions()).toBeDefined();
             }
         });
 
@@ -841,8 +854,8 @@ describe('AutoComplete', () => {
         });
 
         it('should emit onClear event', async () => {
-            testComponent.showClear = true;
-            testComponent.selectedValue = 'test';
+            testComponent.showClear.set(true);
+            testComponent.selectedValue.set('test');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -855,12 +868,12 @@ describe('AutoComplete', () => {
         });
 
         it('should emit onDropdownClick event', async () => {
-            testComponent.dropdown = true;
+            testComponent.dropdown.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             const dropdownButton = testFixture.debugElement.query(By.css('button[type="button"]'));
-            expect(dropdownButton).toBeTruthy('Dropdown button should exist');
+            expect(dropdownButton).toBeTruthy();
 
             dropdownButton.nativeElement.click();
             testFixture.detectChanges();
@@ -893,7 +906,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle #template with context parameters', async () => {
-            testComponent.suggestions = mockCountries;
+            testComponent.suggestions.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -933,7 +946,7 @@ describe('AutoComplete', () => {
 
         describe('Item Template (_itemTemplate)', () => {
             it('should render #item with item and index context', async () => {
-                templateComponent.suggestions = mockCountries;
+                templateComponent.suggestions.set(mockCountries);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -964,7 +977,7 @@ describe('AutoComplete', () => {
 
         describe('Header Template (_headerTemplate)', () => {
             it('should render #header with suggestions count', async () => {
-                templateComponent.suggestions = mockCountries.slice(0, 3);
+                templateComponent.suggestions.set(mockCountries.slice(0, 3));
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -995,7 +1008,7 @@ describe('AutoComplete', () => {
 
         describe('Footer Template (_footerTemplate)', () => {
             it('should render #footer with custom content', async () => {
-                templateComponent.suggestions = mockCountries;
+                templateComponent.suggestions.set(mockCountries);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1022,7 +1035,7 @@ describe('AutoComplete', () => {
 
         describe('Empty Template (_emptyTemplate)', () => {
             it('should render #empty when no results', async () => {
-                templateComponent.suggestions = [];
+                templateComponent.suggestions.set([]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1050,8 +1063,8 @@ describe('AutoComplete', () => {
 
         describe('Selected Item Template (_selectedItemTemplate)', () => {
             it('should render #selecteditem with item context in multiple mode', async () => {
-                templateComponent.multiple = true;
-                templateComponent.selectedValue = [mockCountries[0]];
+                templateComponent.multiple.set(true);
+                templateComponent.selectedValue.set([mockCountries[0]]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1070,12 +1083,19 @@ describe('AutoComplete', () => {
                 const autocompleteInstance = templateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
                 expect(autocompleteInstance.selectedItemTemplate()).toBeTruthy();
             });
+
+            it('should not render #selecteditem in single mode when there is no value', async () => {
+                templateFixture.changeDetectorRef.markForCheck();
+                await templateFixture.whenStable();
+
+                expect(templateFixture.debugElement.query(By.css('.p-autocomplete-selected-item'))).toBeFalsy();
+            });
         });
 
         describe('Group Template (_groupTemplate)', () => {
             it('should render #group with group context', async () => {
                 const groupedData = templateComponent.groupedSuggestions;
-                templateComponent.suggestions = groupedData;
+                templateComponent.suggestions.set(groupedData);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1092,7 +1112,7 @@ describe('AutoComplete', () => {
 
         describe('Loader Template (_loaderTemplate)', () => {
             it('should render #loader with options context during loading', async () => {
-                templateComponent.loading = true;
+                templateComponent.loading.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1109,8 +1129,8 @@ describe('AutoComplete', () => {
 
         describe('Remove Icon Template (_removeIconTemplate)', () => {
             it('should render #removeicon with removeCallback and index context', async () => {
-                templateComponent.multiple = true;
-                templateComponent.selectedValue = [mockCountries[0], mockCountries[1]];
+                templateComponent.multiple.set(true);
+                templateComponent.selectedValue.set([mockCountries[0], mockCountries[1]]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1120,8 +1140,8 @@ describe('AutoComplete', () => {
             });
 
             it('should handle remove callback functionality', async () => {
-                templateComponent.multiple = true;
-                templateComponent.selectedValue = [mockCountries[0]];
+                templateComponent.multiple.set(true);
+                templateComponent.selectedValue.set([mockCountries[0]]);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1143,7 +1163,7 @@ describe('AutoComplete', () => {
 
         describe('Loading Icon Template (_loadingIconTemplate)', () => {
             it('should render #loadingicon during loading state', async () => {
-                templateComponent.loading = true;
+                templateComponent.loading.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1165,8 +1185,8 @@ describe('AutoComplete', () => {
 
         describe('Clear Icon Template (_clearIconTemplate)', () => {
             it('should render #clearicon when showClear is enabled', async () => {
-                templateComponent.showClear = true;
-                templateComponent.selectedValue = 'test';
+                templateComponent.showClear.set(true);
+                templateComponent.selectedValue.set('test');
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1188,7 +1208,7 @@ describe('AutoComplete', () => {
 
         describe('Dropdown Icon Template (_dropdownIconTemplate)', () => {
             it('should render #dropdownicon when dropdown is enabled', async () => {
-                templateComponent.dropdown = true;
+                templateComponent.dropdown.set(true);
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1227,9 +1247,9 @@ describe('AutoComplete', () => {
             });
 
             it('should handle context parameters correctly for all templates', async () => {
-                templateComponent.multiple = true;
-                templateComponent.selectedValue = [mockCountries[0]];
-                templateComponent.suggestions = mockCountries.slice(0, 2);
+                templateComponent.multiple.set(true);
+                templateComponent.selectedValue.set([mockCountries[0]]);
+                templateComponent.suggestions.set(mockCountries.slice(0, 2));
                 templateFixture.changeDetectorRef.markForCheck();
                 await templateFixture.whenStable();
 
@@ -1252,7 +1272,7 @@ describe('AutoComplete', () => {
                 if (headerTemplate) {
                     expect(headerTemplate.nativeElement.textContent).toContain('items');
                 } else {
-                    expect(templateComponent.suggestions).toBeDefined();
+                    expect(templateComponent.suggestions()).toBeDefined();
                 }
             });
         });
@@ -1272,7 +1292,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle multiple mode ViewChild properties', async () => {
-            testComponent.multiple = true;
+            testComponent.multiple.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1281,7 +1301,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle dropdown ViewChild properties', async () => {
-            testComponent.dropdown = true;
+            testComponent.dropdown.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1306,7 +1326,7 @@ describe('AutoComplete', () => {
         });
 
         it('should update aria-expanded when overlay is visible', async () => {
-            testComponent.suggestions = mockItems;
+            testComponent.suggestions.set(mockItems);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             const inputElement = testFixture.debugElement.query(By.css('input'));
@@ -1325,7 +1345,7 @@ describe('AutoComplete', () => {
         });
 
         it('should have proper list ARIA attributes', async () => {
-            testComponent.suggestions = mockItems;
+            testComponent.suggestions.set(mockItems);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
             const inputElement = testFixture.debugElement.query(By.css('input'));
@@ -1379,7 +1399,7 @@ describe('AutoComplete', () => {
 
         it('should handle empty suggestions gracefully', async () => {
             testComponent.onSearch = () => {
-                testComponent.suggestions = [];
+                testComponent.suggestions.set([]);
             };
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
@@ -1387,21 +1407,21 @@ describe('AutoComplete', () => {
             inputElement.nativeElement.dispatchEvent(new Event('input'));
             await testFixture.whenStable();
 
-            expect(testComponent.suggestions.length).toBe(0);
+            expect(testComponent.suggestions().length).toBe(0);
         });
 
         it('should handle null/undefined values', async () => {
-            testComponent.selectedValue = null as any;
+            testComponent.selectedValue.set(null as any);
             testFixture.changeDetectorRef.markForCheck();
-            await expectAsync(testFixture.whenStable()).toBeResolved();
+            await expect(testFixture.whenStable()).resolves.toBeDefined();
 
-            testComponent.selectedValue = undefined as any;
+            testComponent.selectedValue.set(undefined as any);
             testFixture.changeDetectorRef.markForCheck();
-            await expectAsync(testFixture.whenStable()).toBeResolved();
+            await expect(testFixture.whenStable()).resolves.toBeDefined();
         });
 
         it('should handle rapid input changes with debouncing', async () => {
-            spyOn(testComponent, 'onSearch');
+            vi.spyOn(testComponent, 'onSearch');
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
 
@@ -1424,8 +1444,8 @@ describe('AutoComplete', () => {
         });
 
         it('should handle minimum length constraint', async () => {
-            testComponent.minLength = 3;
-            spyOn(testComponent, 'onSearch').and.callThrough();
+            testComponent.minLength.set(3);
+            vi.spyOn(testComponent, 'onSearch');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1449,8 +1469,8 @@ describe('AutoComplete', () => {
         });
 
         it('should handle multiple selection mode', async () => {
-            testComponent.multiple = true;
-            testComponent.selectedValue = ['Item 1', 'Item 2'];
+            testComponent.multiple.set(true);
+            testComponent.selectedValue.set(['Item 1', 'Item 2']);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1469,8 +1489,8 @@ describe('AutoComplete', () => {
         // });
 
         it('should handle virtual scrolling with large datasets', async () => {
-            testComponent.virtualScroll = true;
-            testComponent.suggestions = Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`);
+            testComponent.virtualScroll.set(true);
+            testComponent.suggestions.set(Array.from({ length: 1000 }, (_, i) => `Item ${i + 1}`));
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1480,7 +1500,7 @@ describe('AutoComplete', () => {
         });
 
         it('should handle readonly state', async () => {
-            testComponent.readonly = true;
+            testComponent.readonly.set(true);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1489,9 +1509,9 @@ describe('AutoComplete', () => {
         });
 
         it('should handle forceSelection mode', async () => {
-            testComponent.forceSelection = true;
-            testComponent.optionLabel = undefined as any; // Use string comparison for forceSelection
-            testComponent.suggestions = mockItems;
+            testComponent.forceSelection.set(true);
+            testComponent.optionLabel.set(undefined as any); // Use string comparison for forceSelection
+            testComponent.suggestions.set(mockItems);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1513,8 +1533,8 @@ describe('AutoComplete', () => {
         });
 
         it('should handle autoHighlight feature', async () => {
-            testComponent.autoHighlight = true;
-            testComponent.suggestions = mockItems;
+            testComponent.autoHighlight.set(true);
+            testComponent.suggestions.set(mockItems);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1528,9 +1548,9 @@ describe('AutoComplete', () => {
         });
 
         it('should handle completeOnFocus feature', async () => {
-            testComponent.completeOnFocus = true;
-            testComponent.suggestions = mockItems;
-            spyOn(testComponent, 'onSearch').and.callThrough();
+            testComponent.completeOnFocus.set(true);
+            testComponent.suggestions.set(mockItems);
+            vi.spyOn(testComponent, 'onSearch');
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.value = ''; // completeOnFocus works with empty value
@@ -1556,26 +1576,26 @@ describe('AutoComplete', () => {
             await basicFixture.whenStable();
 
             basicFixture.changeDetectorRef.markForCheck();
-            await expectAsync(basicFixture.whenStable()).toBeResolved();
+            await expect(basicFixture.whenStable()).resolves.toBeDefined();
         });
 
         it('should handle invalid option configuration', async () => {
-            testComponent.optionLabel = 'nonexistent';
-            testComponent.suggestions = mockCountries;
+            testComponent.optionLabel.set('nonexistent');
+            testComponent.suggestions.set(mockCountries);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
             testFixture.changeDetectorRef.markForCheck();
-            await expectAsync(testFixture.whenStable()).toBeResolved();
+            await expect(testFixture.whenStable()).resolves.toBeDefined();
         });
 
         it('should handle search method errors gracefully', async () => {
             // Spy on console.error to avoid cluttering test output
-            spyOn(console, 'error');
+            vi.spyOn(console, 'error');
 
             testComponent.onSearch = () => {
                 console.error('Search failed');
-                testComponent.suggestions = [];
+                testComponent.suggestions.set([]);
             };
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
@@ -1603,8 +1623,8 @@ describe('AutoComplete', () => {
         });
 
         it('should handle delay configuration for performance', async () => {
-            testComponent.delay = 500;
-            spyOn(testComponent, 'onSearch').and.callThrough();
+            testComponent.delay.set(500);
+            vi.spyOn(testComponent, 'onSearch');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1624,9 +1644,9 @@ describe('AutoComplete', () => {
         });
 
         it('should handle unique constraint in multiple mode', async () => {
-            testComponent.multiple = true;
-            testComponent.unique = true;
-            testComponent.selectedValue = ['Item 1', 'Item 1', 'Item 2'];
+            testComponent.multiple.set(true);
+            testComponent.unique.set(true);
+            testComponent.selectedValue.set(['Item 1', 'Item 1', 'Item 2']);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -1637,22 +1657,22 @@ describe('AutoComplete', () => {
 
     describe('Chips-like Features (addOnBlur and separator)', () => {
         beforeEach(async () => {
-            testComponent.multiple = true;
-            testComponent.typeahead = false;
+            testComponent.multiple.set(true);
+            testComponent.typeahead.set(false);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
         });
 
         describe('addOnBlur feature', () => {
             beforeEach(async () => {
-                testComponent.addOnBlur = true;
-                testComponent.unique = true; // Enable unique for isSelected to work
+                testComponent.addOnBlur.set(true);
+                testComponent.unique.set(true); // Enable unique for isSelected to work
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
             });
 
             it('should add item on blur when addOnBlur is enabled', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1663,13 +1683,13 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('New Item');
+                expect(testComponent.selectedValue()).toContain('New Item');
                 expect(testComponent.addEvent).toBeTruthy();
                 expect(testComponent.addEvent.value).toBe('New Item');
             });
 
             it('should not add empty items on blur', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1680,11 +1700,11 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual([]);
+                expect(testComponent.selectedValue()).toEqual([]);
             });
 
             it('should not add duplicate items on blur when unique is true', async () => {
-                testComponent.selectedValue = ['Existing Item'];
+                testComponent.selectedValue.set(['Existing Item']);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1695,11 +1715,11 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual(['Existing Item']);
+                expect(testComponent.selectedValue()).toEqual(['Existing Item']);
             });
 
             it('should clear input after adding item on blur', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1714,8 +1734,8 @@ describe('AutoComplete', () => {
             });
 
             it('should not add items on blur when typeahead is true', async () => {
-                testComponent.typeahead = true;
-                testComponent.selectedValue = [];
+                testComponent.typeahead.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1726,12 +1746,12 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual([]);
+                expect(testComponent.selectedValue()).toEqual([]);
             });
 
             it('should not add items on blur when multiple is false', async () => {
-                testComponent.multiple = false;
-                testComponent.selectedValue = null;
+                testComponent.multiple.set(false);
+                testComponent.selectedValue.set(null);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1742,12 +1762,12 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toBeNull();
+                expect(testComponent.selectedValue()).toBeNull();
             });
 
             it('should not add items on blur when addOnBlur is false', async () => {
-                testComponent.addOnBlur = false;
-                testComponent.selectedValue = [];
+                testComponent.addOnBlur.set(false);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1758,11 +1778,11 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual([]);
+                expect(testComponent.selectedValue()).toEqual([]);
             });
 
             it('should emit onAdd event only when typeahead is false and multiple is true', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testComponent.addEvent = null;
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
@@ -1782,14 +1802,14 @@ describe('AutoComplete', () => {
 
         describe('separator feature', () => {
             beforeEach(async () => {
-                testComponent.separator = ',';
-                testComponent.unique = true; // Enable unique for isSelected to work
+                testComponent.separator.set(',');
+                testComponent.unique.set(true); // Enable unique for isSelected to work
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
             });
 
             it('should add items when separator key is pressed', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1802,13 +1822,13 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('Item1');
+                expect(testComponent.selectedValue()).toContain('Item1');
                 expect(testComponent.addEvent).toBeTruthy();
                 expect(testComponent.addEvent.value).toBe('Item1');
             });
 
             it('should handle multiple items separated by comma on paste', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1820,20 +1840,20 @@ describe('AutoComplete', () => {
                         getData: () => 'Item1,Item2,Item3'
                     },
                     target: inputElement.nativeElement,
-                    preventDefault: jasmine.createSpy('preventDefault')
+                    preventDefault: vi.fn()
                 };
 
                 autocompleteComponent.onInputPaste(pasteEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('Item1');
-                expect(testComponent.selectedValue).toContain('Item2');
-                expect(testComponent.selectedValue).toContain('Item3');
+                expect(testComponent.selectedValue()).toContain('Item1');
+                expect(testComponent.selectedValue()).toContain('Item2');
+                expect(testComponent.selectedValue()).toContain('Item3');
             });
 
             it('should handle regex separator', async () => {
-                testComponent.separator = /[,;]/;
-                testComponent.selectedValue = [];
+                testComponent.separator.set(/[,;]/);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1846,11 +1866,11 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('Item1');
+                expect(testComponent.selectedValue()).toContain('Item1');
             });
 
             it('should not add empty items when using separator', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1863,11 +1883,11 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual([]);
+                expect(testComponent.selectedValue()).toEqual([]);
             });
 
             it('should clear input after adding items with separator', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1884,8 +1904,8 @@ describe('AutoComplete', () => {
             });
 
             it('should not add items with separator when typeahead is true', async () => {
-                testComponent.typeahead = true;
-                testComponent.selectedValue = [];
+                testComponent.typeahead.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1898,12 +1918,12 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toEqual([]);
+                expect(testComponent.selectedValue()).toEqual([]);
             });
 
             it('should not add items with separator when multiple is false', async () => {
-                testComponent.multiple = false;
-                testComponent.selectedValue = null;
+                testComponent.multiple.set(false);
+                testComponent.selectedValue.set(null);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1916,21 +1936,21 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toBeNull();
+                expect(testComponent.selectedValue()).toBeNull();
             });
         });
 
         describe('combined addOnBlur and separator features', () => {
             beforeEach(async () => {
-                testComponent.addOnBlur = true;
-                testComponent.separator = ',';
-                testComponent.unique = true; // Enable unique for isSelected to work
+                testComponent.addOnBlur.set(true);
+                testComponent.separator.set(',');
+                testComponent.unique.set(true); // Enable unique for isSelected to work
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
             });
 
             it('should work together - separator takes priority over blur', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1944,18 +1964,18 @@ describe('AutoComplete', () => {
                 autocompleteComponent.onKeyDown(keydownEvent);
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('Item1');
+                expect(testComponent.selectedValue()).toContain('Item1');
 
                 // After separator handling, test blur for remaining content
                 inputElement.nativeElement.value = 'Item3';
                 autocompleteComponent.onInputBlur({ target: inputElement.nativeElement });
                 await testFixture.whenStable();
 
-                expect(testComponent.selectedValue).toContain('Item3');
+                expect(testComponent.selectedValue()).toContain('Item3');
             });
 
             it('should handle paste event with multiple items', async () => {
-                testComponent.selectedValue = [];
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1967,16 +1987,16 @@ describe('AutoComplete', () => {
                         getData: () => 'Item1,Item2,Item3'
                     },
                     target: inputElement.nativeElement,
-                    preventDefault: jasmine.createSpy('preventDefault')
+                    preventDefault: vi.fn()
                 };
 
                 autocompleteComponent.onInputPaste(pasteEvent);
                 await testFixture.whenStable();
 
                 // Paste should handle the separators and add multiple items
-                expect(testComponent.selectedValue).toContain('Item1');
-                expect(testComponent.selectedValue).toContain('Item2');
-                expect(testComponent.selectedValue).toContain('Item3');
+                expect(testComponent.selectedValue()).toContain('Item1');
+                expect(testComponent.selectedValue()).toContain('Item2');
+                expect(testComponent.selectedValue()).toContain('Item3');
             });
         });
 
@@ -1985,9 +2005,9 @@ describe('AutoComplete', () => {
             let inputElement: any;
 
             beforeEach(async () => {
-                testComponent.multiple = true;
-                testComponent.typeahead = false;
-                testComponent.unique = true;
+                testComponent.multiple.set(true);
+                testComponent.typeahead.set(false);
+                testComponent.unique.set(true);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -1996,9 +2016,9 @@ describe('AutoComplete', () => {
             });
 
             it('should trigger blur and addOnBlur when addOnTab=false and addOnBlur=true', async () => {
-                testComponent.addOnTab = false;
-                testComponent.addOnBlur = true;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(false);
+                testComponent.addOnBlur.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2025,16 +2045,16 @@ describe('AutoComplete', () => {
                 await testFixture.whenStable();
 
                 // Check that the item was added via addOnBlur
-                expect(testComponent.selectedValue).toContain('Test Item');
+                expect(testComponent.selectedValue()).toContain('Test Item');
 
                 // Check focus state from DOM
                 expect(document.activeElement).not.toBe(inputElement);
             });
 
             it('should add item and keep focus on first tab when addOnTab=true, addOnBlur=true with value', async () => {
-                testComponent.addOnTab = true;
-                testComponent.addOnBlur = true;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.addOnBlur.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2059,7 +2079,7 @@ describe('AutoComplete', () => {
                 expect(tabEvent.defaultPrevented).toBe(true);
 
                 // Check that the item was added
-                expect(testComponent.selectedValue).toContain('Test Item');
+                expect(testComponent.selectedValue()).toContain('Test Item');
 
                 // Check input is cleared
                 expect(inputElement.value).toBe('');
@@ -2083,9 +2103,9 @@ describe('AutoComplete', () => {
             });
 
             it('should trigger blur when addOnTab=true, addOnBlur=true without value', async () => {
-                testComponent.addOnTab = true;
-                testComponent.addOnBlur = true;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.addOnBlur.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2110,13 +2130,13 @@ describe('AutoComplete', () => {
                 expect(tabEvent.defaultPrevented).toBe(false);
 
                 // No items should be added
-                expect(testComponent.selectedValue.length).toBe(0);
+                expect(testComponent.selectedValue().length).toBe(0);
             });
 
             it('should add item and keep focus when addOnTab=true, addOnBlur=false with value', async () => {
-                testComponent.addOnTab = true;
-                testComponent.addOnBlur = false;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.addOnBlur.set(false);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2141,7 +2161,7 @@ describe('AutoComplete', () => {
                 expect(tabEvent.defaultPrevented).toBe(true);
 
                 // Check that the item was added
-                expect(testComponent.selectedValue).toContain('Test Item');
+                expect(testComponent.selectedValue()).toContain('Test Item');
 
                 // Check input is cleared
                 expect(inputElement.value).toBe('');
@@ -2151,9 +2171,9 @@ describe('AutoComplete', () => {
             });
 
             it('should trigger blur when addOnTab=true, addOnBlur=false without value', async () => {
-                testComponent.addOnTab = true;
-                testComponent.addOnBlur = false;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.addOnBlur.set(false);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2178,17 +2198,17 @@ describe('AutoComplete', () => {
                 expect(tabEvent.defaultPrevented).toBe(false);
 
                 // No items should be added
-                expect(testComponent.selectedValue.length).toBe(0);
+                expect(testComponent.selectedValue().length).toBe(0);
             });
 
             it('should not trigger addOnTab when dropdown option is focused', async () => {
-                testComponent.addOnTab = true;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
                 // Setup component to have visible options
-                testComponent.suggestions = ['Option 1', 'Option 2'];
+                testComponent.suggestions.set(['Option 1', 'Option 2']);
                 autocompleteComponent.overlayVisible.set(true);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
@@ -2215,13 +2235,13 @@ describe('AutoComplete', () => {
                 await testFixture.whenStable();
 
                 // Should select the focused option instead of adding input value
-                expect(testComponent.selectedValue).toContain('Option 1');
-                expect(testComponent.selectedValue).not.toContain('Test');
+                expect(testComponent.selectedValue()).toContain('Option 1');
+                expect(testComponent.selectedValue()).not.toContain('Test');
             });
 
             it('should handle already selected items correctly', async () => {
-                testComponent.addOnTab = true;
-                testComponent.selectedValue = ['Test Item'];
+                testComponent.addOnTab.set(true);
+                testComponent.selectedValue.set(['Test Item']);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2256,12 +2276,12 @@ describe('AutoComplete', () => {
                 expect(tabEvent.defaultPrevented).toBe(false);
 
                 // Should still have only one instance of the item
-                expect(testComponent.selectedValue.filter((v: any) => v === 'Test Item').length).toBe(1);
+                expect(testComponent.selectedValue().filter((v: any) => v === 'Test Item').length).toBe(1);
             });
 
             it('should trim whitespace when adding items via tab', async () => {
-                testComponent.addOnTab = true;
-                testComponent.selectedValue = [];
+                testComponent.addOnTab.set(true);
+                testComponent.selectedValue.set([]);
                 testFixture.changeDetectorRef.markForCheck();
                 await testFixture.whenStable();
 
@@ -2283,8 +2303,8 @@ describe('AutoComplete', () => {
                 await testFixture.whenStable();
 
                 // Check that the item was added without whitespace
-                expect(testComponent.selectedValue).toContain('Test Item');
-                expect(testComponent.selectedValue).not.toContain('  Test Item  ');
+                expect(testComponent.selectedValue()).toContain('Test Item');
+                expect(testComponent.selectedValue()).not.toContain('  Test Item  ');
             });
         });
     });
@@ -2600,3 +2620,23 @@ describe('AutoComplete', () => {
         });
     });
 });
+
+@Component({
+    standalone: true,
+    imports: [AutoCompleteModule, FormsModule],
+    template: `
+        <p-autocomplete [(ngModel)]="value" [suggestions]="suggestions()" optionLabel="name" [multiple]="true" (completeMethod)="search()">
+            <ng-template #selectedItem let-item>
+                <span class="alias-selected">{{ item.name }}</span>
+            </ng-template>
+        </p-autocomplete>
+    `
+})
+class TestSelectedItemAliasAutocompleteComponent {
+    value: any[] = [{ name: 'Afghanistan', code: 'AF' }];
+    suggestions = signal<any[]>([]);
+
+    search() {
+        this.suggestions.set([...mockCountries]);
+    }
+}

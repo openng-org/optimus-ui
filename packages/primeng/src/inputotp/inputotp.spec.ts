@@ -213,8 +213,8 @@ describe('InputOtp', () => {
             const firstInput = inputs[0].nativeElement;
             const secondInput = inputs[1].nativeElement;
 
-            spyOn(secondInput, 'focus');
-            spyOn(secondInput, 'select');
+            vi.spyOn(secondInput, 'focus');
+            vi.spyOn(secondInput, 'select');
 
             firstInput.value = '1';
             firstInput.dispatchEvent(new InputEvent('input', { inputType: 'insertText' }));
@@ -265,8 +265,8 @@ describe('InputOtp', () => {
             const firstInput = inputs[0].nativeElement;
             const secondInput = inputs[1].nativeElement;
 
-            spyOn(secondInput, 'focus');
-            spyOn(secondInput, 'select');
+            vi.spyOn(secondInput, 'focus');
+            vi.spyOn(secondInput, 'select');
 
             const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
             firstInput.dispatchEvent(rightArrowEvent);
@@ -282,8 +282,8 @@ describe('InputOtp', () => {
             const firstInput = inputs[0].nativeElement;
             const secondInput = inputs[1].nativeElement;
 
-            spyOn(firstInput, 'focus');
-            spyOn(firstInput, 'select');
+            vi.spyOn(firstInput, 'focus');
+            vi.spyOn(firstInput, 'select');
 
             const leftArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowLeft' });
             secondInput.dispatchEvent(leftArrowEvent);
@@ -301,8 +301,8 @@ describe('InputOtp', () => {
             const upEvent = new KeyboardEvent('keydown', { key: 'ArrowUp', cancelable: true });
             const downEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
 
-            spyOn(upEvent, 'preventDefault').and.callThrough();
-            spyOn(downEvent, 'preventDefault').and.callThrough();
+            vi.spyOn(upEvent, 'preventDefault');
+            vi.spyOn(downEvent, 'preventDefault');
 
             firstInput.dispatchEvent(upEvent);
             firstInput.dispatchEvent(downEvent);
@@ -333,14 +333,14 @@ describe('InputOtp', () => {
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             const firstInput = inputs[0].nativeElement;
 
-            const pasteEvent = new ClipboardEvent('paste');
+            const pasteEvent = new Event('paste');
             Object.defineProperty(pasteEvent, 'clipboardData', {
                 value: {
                     getData: () => '1234'
                 }
             });
 
-            spyOn(pasteEvent, 'preventDefault');
+            vi.spyOn(pasteEvent, 'preventDefault');
             firstInput.dispatchEvent(pasteEvent);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
@@ -354,7 +354,7 @@ describe('InputOtp', () => {
             const inputs = fixture.debugElement.queryAll(By.css('input'));
             const firstInput = inputs[0].nativeElement;
 
-            const pasteEvent = new ClipboardEvent('paste');
+            const pasteEvent = new Event('paste');
             Object.defineProperty(pasteEvent, 'clipboardData', {
                 value: {
                     getData: () => '123456789'
@@ -415,13 +415,13 @@ describe('InputOtp', () => {
             const firstInput = inputs[0].nativeElement;
 
             const numericEvent = new KeyboardEvent('keydown', { code: 'Digit1', key: '1' });
-            spyOn(numericEvent, 'preventDefault');
+            vi.spyOn(numericEvent, 'preventDefault');
             firstInput.dispatchEvent(numericEvent);
 
             expect(numericEvent.preventDefault).not.toHaveBeenCalled();
 
             const alphaEvent = new KeyboardEvent('keydown', { code: 'KeyA', key: 'a' });
-            spyOn(alphaEvent, 'preventDefault');
+            vi.spyOn(alphaEvent, 'preventDefault');
             firstInput.dispatchEvent(alphaEvent);
 
             expect(alphaEvent.preventDefault).toHaveBeenCalled();
@@ -832,13 +832,12 @@ describe('InputOtp PassThrough Tests', () => {
     });
 
     describe('PT Case 4: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

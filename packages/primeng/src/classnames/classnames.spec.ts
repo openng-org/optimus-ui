@@ -6,7 +6,7 @@ import { ClassNamesModule } from './classnames';
 
 @Component({
     template: `
-        <div [pClass]="stringClass" data-testid="string"></div>
+        <div [pClass]="stringClass()" data-testid="string"></div>
         <div [pClass]="arrayClass" data-testid="array"></div>
         <div [pClass]="objectClass" data-testid="object"></div>
         <div [pClass]="mixedClass" data-testid="mixed"></div>
@@ -17,7 +17,7 @@ import { ClassNamesModule } from './classnames';
     imports: [ClassNamesModule, NgClass]
 })
 class TestComponent {
-    stringClass = 'test-class';
+    stringClass = signal('test-class');
     arrayClass = ['class1', 'class2'];
     objectClass = { active: true, disabled: false };
     mixedClass = ['base', { active: true, hidden: false }];
@@ -78,8 +78,7 @@ describe('PClass Directive', () => {
     it('should update classes when input changes', async () => {
         const element = fixture.debugElement.query(By.css('[data-testid="string"]'));
 
-        component.stringClass = 'new-class';
-        fixture.changeDetectorRef.markForCheck();
+        component.stringClass.set('new-class');
         await fixture.whenStable();
 
         expect(element.nativeElement.className).toBe('new-class');

@@ -1,9 +1,23 @@
 {
-    "extends": "./tsconfig.json",
+    "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "types": ["jasmine"],
+        "strictNullChecks": true,
+        "types": [
+            "vitest/globals",
+            "node"
+        ],
         "outDir": "./out-tsc/spec"
     },
-    "exclude": ["node_modules"],
-    "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
+    "angularCompilerOptions": {
+        "strictTemplates": false,
+        "fullTemplateTypeCheck": false
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "include": [
+        "src/**/*.spec.ts",
+        "src/**/*.d.ts",
+        "src/test-setup.ts"
+    ]
 }

@@ -4,16 +4,18 @@ import { By } from '@angular/platform-browser';
 import { Bind } from './bind';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-basic-bind',
-    template: `<div [pBind]="attrs"></div>`
+    template: `<div [pBind]="attrs()"></div>`
 })
 class TestBasicBindComponent {
-    attrs: any = {};
+    attrs = signal<any>({});
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-attributes',
     template: `<div [pBind]="attrs"></div>`
 })
@@ -26,7 +28,8 @@ class TestBindAttributesComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-classes',
     template: `<div [pBind]="attrs"></div>`
 })
@@ -37,7 +40,8 @@ class TestBindClassesComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-classes-array',
     template: `<div [pBind]="attrs"></div>`
 })
@@ -48,7 +52,8 @@ class TestBindClassesArrayComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-classes-object',
     template: `<div [pBind]="attrs"></div>`
 })
@@ -63,7 +68,8 @@ class TestBindClassesObjectComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-styles',
     template: `<div [pBind]="attrs"></div>`
 })
@@ -77,13 +83,14 @@ class TestBindStylesComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-listeners',
     template: `<div [pBind]="attrs"></div>`
 })
 class TestBindListenersComponent {
-    clickHandler = jasmine.createSpy('click');
-    hoverHandler = jasmine.createSpy('hover');
+    clickHandler = vi.fn();
+    hoverHandler = vi.fn();
 
     attrs = {
         onclick: this.clickHandler,
@@ -92,12 +99,13 @@ class TestBindListenersComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-mixed',
     template: `<div [pBind]="attrs" class="existing-class" style="margin: 10px;"></div>`
 })
 class TestBindMixedComponent {
-    clickHandler = jasmine.createSpy('click');
+    clickHandler = vi.fn();
 
     attrs = {
         id: 'mixed-id',
@@ -111,27 +119,29 @@ class TestBindMixedComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-bind-dynamic',
-    template: `<div [pBind]="attrs"></div>`
+    template: `<div [pBind]="attrs()"></div>`
 })
 class TestBindDynamicComponent {
-    attrs: any = {
+    attrs = signal<any>({
         id: 'initial-id',
         class: 'initial-class'
-    };
+    });
 
     updateAttrs() {
-        this.attrs = {
+        this.attrs.set({
             id: 'updated-id',
             class: 'updated-class',
             'data-updated': 'true'
-        };
+        });
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Bind],
     selector: 'test-set-attrs',
     template: `<div [pBind]="undefined"></div>`
 })
@@ -140,8 +150,8 @@ class TestSetAttrsComponent {}
 describe('Bind', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [Bind],
-            declarations: [
+            imports: [
+                Bind,
                 TestBasicBindComponent,
                 TestBindAttributesComponent,
                 TestBindClassesComponent,
@@ -184,11 +194,11 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBasicBindComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = {
+            component.attrs.set({
                 id: 'test-id',
                 'data-test': null,
                 'data-value': undefined
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -285,10 +295,10 @@ describe('Bind', () => {
         //     const fixture = TestBed.createComponent(TestBindDynamicComponent);
         //     const component = fixture.componentInstance;
 
-        //     const firstHandler = jasmine.createSpy('first');
-        //     const secondHandler = jasmine.createSpy('second');
+        //     const firstHandler = vi.fn();
+        //     const secondHandler = vi.fn();
 
-        //     component.attrs = { onclick: firstHandler };
+        //     component.attrs.set({ onclick: firstHandler });
         //     fixture.detectChanges();
 
         //     const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
@@ -298,7 +308,7 @@ describe('Bind', () => {
         //     expect(firstHandler).toHaveBeenCalledTimes(1);
 
         //     // Update to second handler
-        //     component.attrs = { onclick: secondHandler };
+        //     component.attrs.set({ onclick: secondHandler });
         //     fixture.detectChanges();
 
         //     // Test that first handler is no longer called
@@ -360,10 +370,10 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBindDynamicComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = {
+            component.attrs.set({
                 id: 'test-id',
                 'data-test': 'test-value'
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -372,10 +382,10 @@ describe('Bind', () => {
             expect(element.getAttribute('data-test')).toBe('test-value');
 
             // Update with null to remove attribute
-            component.attrs = {
+            component.attrs.set({
                 id: 'test-id',
                 'data-test': null
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -409,10 +419,10 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBasicBindComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = {
+            component.attrs.set({
                 id: 'input-id',
                 class: 'input-class'
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -436,7 +446,7 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBasicBindComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = undefined;
+            component.attrs.set(undefined);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -449,9 +459,9 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBasicBindComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = {
+            component.attrs.set({
                 id: 'test-id'
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -464,9 +474,9 @@ describe('Bind', () => {
             const fixture = TestBed.createComponent(TestBasicBindComponent);
             const component = fixture.componentInstance;
 
-            component.attrs = {
+            component.attrs.set({
                 id: 'test-id'
-            };
+            });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -485,15 +495,15 @@ describe('Bind', () => {
             const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
 
             // Update multiple times with same classes
-            component.attrs = { class: 'test-class another-class' };
+            component.attrs.set({ class: 'test-class another-class' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.attrs = { class: 'test-class another-class' };
+            component.attrs.set({ class: 'test-class another-class' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.attrs = { class: 'test-class another-class' };
+            component.attrs.set({ class: 'test-class another-class' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -517,15 +527,15 @@ describe('Bind', () => {
             const clickHandler = () => clickCount++;
 
             // Update multiple times with same event listener
-            component.attrs = { onclick: clickHandler };
+            component.attrs.set({ onclick: clickHandler });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.attrs = { onclick: clickHandler };
+            component.attrs.set({ onclick: clickHandler });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.attrs = { onclick: clickHandler };
+            component.attrs.set({ onclick: clickHandler });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -547,9 +557,9 @@ describe('Bind', () => {
             // Rapidly toggle 10 times
             for (let i = 0; i < 10; i++) {
                 isActive.set(!isActive());
-                component.attrs = {
+                component.attrs.set({
                     class: isActive() ? 'active' : 'inactive'
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
             }

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,42 +6,45 @@ import { MeterGroupLabelPosition, MeterGroupOrientation, MeterItem } from 'prime
 import { MeterGroup, MeterGroupLabel, MeterGroupModule } from './metergroup';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-basic-metergroup',
-    template: `<p-metergroup [value]="value" [min]="min" [max]="max" [orientation]="orientation"></p-metergroup>`
+    template: `<p-metergroup [value]="value()" [min]="min()" [max]="max()" [orientation]="orientation()"></p-metergroup>`
 })
 class TestBasicMeterGroupComponent {
-    value: MeterItem[] = [
+    value = signal<MeterItem[] | undefined | null>([
         { label: 'Apps', value: 16, color: '#34d399' },
         { label: 'Messages', value: 8, color: '#fbbf24' },
         { label: 'Media', value: 24, color: '#60a5fa' },
         { label: 'System', value: 10, color: '#c084fc' }
-    ];
-    min = 0;
-    max = 100;
-    orientation: MeterGroupOrientation = 'horizontal';
+    ]);
+    min = signal(0);
+    max = signal(100);
+    orientation = signal<MeterGroupOrientation>('horizontal');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-metergroup-orientations',
-    template: ` <p-metergroup [value]="value" [orientation]="orientation" [labelPosition]="labelPosition" [labelOrientation]="labelOrientation"> </p-metergroup> `
+    template: ` <p-metergroup [value]="value()" [orientation]="orientation()" [labelPosition]="labelPosition()" [labelOrientation]="labelOrientation()"> </p-metergroup> `
 })
 class TestMeterGroupOrientationsComponent {
-    value: MeterItem[] = [
+    value = signal<MeterItem[]>([
         { label: 'Item 1', value: 25, color: '#ff0000' },
         { label: 'Item 2', value: 50, color: '#00ff00' }
-    ];
-    orientation: MeterGroupOrientation = 'horizontal';
-    labelPosition: MeterGroupLabelPosition = 'end';
-    labelOrientation: MeterGroupOrientation = 'horizontal';
+    ]);
+    orientation = signal<MeterGroupOrientation>('horizontal');
+    labelPosition = signal<MeterGroupLabelPosition>('end');
+    labelOrientation = signal<MeterGroupOrientation>('horizontal');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-metergroup-templates',
     template: `
-        <p-metergroup [value]="value">
+        <p-metergroup [value]="value()">
             <ng-template #label let-value let-totalPercent="totalPercent">
                 <div class="custom-label">
                     <span>Total: {{ totalPercent }}%</span>
@@ -65,55 +68,57 @@ class TestMeterGroupOrientationsComponent {
     `
 })
 class TestMeterGroupTemplatesComponent {
-    value: MeterItem[] = [
+    value = signal<MeterItem[]>([
         { label: 'Category A', value: 30, color: '#3b82f6' },
         { label: 'Category B', value: 45, color: '#22c55e' }
-    ];
+    ]);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-metergroup-with-icons',
-    template: ` <p-metergroup [value]="value" [min]="min" [max]="max"> </p-metergroup> `
+    template: ` <p-metergroup [value]="value()" [min]="min()" [max]="max()"> </p-metergroup> `
 })
 class TestMeterGroupWithIconsComponent {
-    value: MeterItem[] = [
+    value = signal<MeterItem[]>([
         { label: 'Apps', value: 20, color: '#34d399', icon: 'pi pi-mobile' },
         { label: 'Files', value: 35, color: '#fbbf24', icon: 'pi pi-file' },
         { label: 'Downloads', value: 15, color: '#60a5fa', icon: 'pi pi-download' }
-    ];
-    min = 0;
-    max = 100;
+    ]);
+    min = signal(0);
+    max = signal(100);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-metergroup-empty',
-    template: `<p-metergroup [value]="value" [min]="min" [max]="max"></p-metergroup>`
+    template: `<p-metergroup [value]="value()" [min]="min()" [max]="max()"></p-metergroup>`
 })
 class TestMeterGroupEmptyComponent {
-    value: MeterItem[] | undefined = [];
-    min = 0;
-    max = 100;
+    value = signal<MeterItem[] | undefined | null>([]);
+    min = signal(0);
+    max = signal(100);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MeterGroupModule],
     selector: 'test-metergroup-dynamic',
-    template: ` <p-metergroup [value]="value" [min]="min" [max]="max" [class]="styleClass"> </p-metergroup> `
+    template: ` <p-metergroup [value]="value()" [min]="min()" [max]="max()" [class]="styleClass()"> </p-metergroup> `
 })
 class TestMeterGroupDynamicComponent {
-    value: MeterItem[] = [{ label: 'Dynamic 1', value: 10, color: '#ff6b6b' }];
-    min = 0;
-    max = 100;
-    styleClass = 'custom-meter-class';
+    value = signal<MeterItem[]>([{ label: 'Dynamic 1', value: 10, color: '#ff6b6b' }]);
+    min = signal(0);
+    max = signal(100);
+    styleClass = signal('custom-meter-class');
 }
 
 describe('MeterGroup', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [MeterGroupModule],
-            declarations: [TestBasicMeterGroupComponent, TestMeterGroupOrientationsComponent, TestMeterGroupTemplatesComponent, TestMeterGroupWithIconsComponent, TestMeterGroupEmptyComponent, TestMeterGroupDynamicComponent],
+            imports: [MeterGroupModule, TestBasicMeterGroupComponent, TestMeterGroupOrientationsComponent, TestMeterGroupTemplatesComponent, TestMeterGroupWithIconsComponent, TestMeterGroupEmptyComponent, TestMeterGroupDynamicComponent],
             providers: [provideZonelessChangeDetection()]
         });
     });
@@ -150,9 +155,9 @@ describe('MeterGroup', () => {
         });
 
         it('should accept custom values', () => {
-            expect(meterGroup.value()).toEqual(component.value);
-            expect(meterGroup.min()).toBe(component.min);
-            expect(meterGroup.max()).toBe(component.max);
+            expect(meterGroup.value()).toEqual(component.value());
+            expect(meterGroup.min()).toBe(component.min());
+            expect(meterGroup.max()).toBe(component.max());
         });
 
         it('should extend BaseComponent', () => {
@@ -192,8 +197,8 @@ describe('MeterGroup', () => {
             expect(percent).toBe(16);
 
             // Test with different min/max
-            component.min = 10;
-            component.max = 110;
+            component.min.set(10);
+            component.max.set(110);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -225,7 +230,7 @@ describe('MeterGroup', () => {
         });
 
         it('should apply meter styles correctly for vertical orientation', async () => {
-            component.orientation = 'vertical';
+            component.orientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -236,7 +241,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle zero values', async () => {
-            component.value = [{ label: 'Zero', value: 0, color: '#ff0000' }];
+            component.value.set([{ label: 'Zero', value: 0, color: '#ff0000' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -272,7 +277,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle horizontal orientation', async () => {
-            component.orientation = 'horizontal';
+            component.orientation.set('horizontal');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -281,7 +286,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle vertical orientation', async () => {
-            component.orientation = 'vertical';
+            component.orientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -290,7 +295,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle label position start', async () => {
-            component.labelPosition = 'start';
+            component.labelPosition.set('start');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -300,7 +305,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle label position end', async () => {
-            component.labelPosition = 'end';
+            component.labelPosition.set('end');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -310,7 +315,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle horizontal label orientation', async () => {
-            component.labelOrientation = 'horizontal';
+            component.labelOrientation.set('horizontal');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -318,7 +323,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle vertical label orientation', async () => {
-            component.labelOrientation = 'vertical';
+            component.labelOrientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -326,7 +331,7 @@ describe('MeterGroup', () => {
         });
 
         it('should apply height for vertical orientation', async () => {
-            component.orientation = 'vertical';
+            component.orientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -484,7 +489,7 @@ describe('MeterGroup', () => {
         });
 
         it('should render markers when no icon provided', async () => {
-            component.value = [{ label: 'No Icon', value: 30, color: '#123456' }];
+            component.value.set([{ label: 'No Icon', value: 30, color: '#123456' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -527,7 +532,7 @@ describe('MeterGroup', () => {
         });
 
         it('should update aria-valuenow when value changes', async () => {
-            component.value = [{ label: 'New', value: 50, color: '#ff0000' }];
+            component.value.set([{ label: 'New', value: 50, color: '#ff0000' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -584,10 +589,10 @@ describe('MeterGroup', () => {
         });
 
         it('should update when value changes', async () => {
-            component.value = [
+            component.value.set([
                 { label: 'Updated 1', value: 40, color: '#00ff00' },
                 { label: 'Updated 2', value: 30, color: '#0000ff' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -596,8 +601,8 @@ describe('MeterGroup', () => {
         });
 
         it('should update when min/max changes', async () => {
-            component.min = 10;
-            component.max = 50;
+            component.min.set(10);
+            component.max.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -607,15 +612,15 @@ describe('MeterGroup', () => {
 
         it('should add new meter items dynamically', async () => {
             // Initial state has 1 item
-            expect(component.value.length).toBe(1);
+            expect(component.value().length).toBe(1);
 
             // Create a new array with the additional item (to trigger change detection)
-            component.value = [...component.value, { label: 'New Item', value: 20, color: '#ff00ff' }];
+            component.value.set([...component.value(), { label: 'New Item', value: 20, color: '#ff00ff' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             // Check the component's value array
-            expect(component.value.length).toBe(2);
+            expect(component.value().length).toBe(2);
 
             // The meterGroup should reflect the updated value
             expect(meterGroup.value()!.length).toBe(2);
@@ -626,7 +631,7 @@ describe('MeterGroup', () => {
         });
 
         it('should remove meter items dynamically', async () => {
-            component.value = [];
+            component.value.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -658,7 +663,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle undefined value', async () => {
-            component.value = undefined;
+            component.value.set(undefined);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -666,7 +671,7 @@ describe('MeterGroup', () => {
         });
 
         it('should handle null value gracefully', async () => {
-            component.value = null as any;
+            component.value.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -674,25 +679,25 @@ describe('MeterGroup', () => {
         });
 
         it('should handle meter items with missing properties', async () => {
-            component.value = [{ label: 'Incomplete', value: 30 } as MeterItem];
+            component.value.set([{ label: 'Incomplete', value: 30 } as MeterItem]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            const meterStyle = meterGroup.meterStyle(component.value![0]);
+            const meterStyle = meterGroup.meterStyle(component.value()![0]);
             expect(meterStyle.backgroundColor).toBeUndefined();
             expect(meterStyle.width).toBe('30%');
         });
 
         it('should handle rapid value updates', async () => {
-            component.value = [{ label: 'Test 1', value: 10, color: '#ff0000' }];
+            component.value.set([{ label: 'Test 1', value: 10, color: '#ff0000' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.value = [{ label: 'Test 2', value: 20, color: '#00ff00' }];
+            component.value.set([{ label: 'Test 2', value: 20, color: '#00ff00' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            component.value = [{ label: 'Test 3', value: 30, color: '#0000ff' }];
+            component.value.set([{ label: 'Test 3', value: 30, color: '#0000ff' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -701,8 +706,8 @@ describe('MeterGroup', () => {
 
         it('should handle boundary values', async () => {
             // Test with min = max
-            component.min = 50;
-            component.max = 50;
+            component.min.set(50);
+            component.max.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -710,8 +715,8 @@ describe('MeterGroup', () => {
             expect(percent).toBe(100); // When min = max, any value should be 100%
 
             // Reset to normal
-            component.min = 0;
-            component.max = 100;
+            component.min.set(0);
+            component.max.set(100);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -738,13 +743,13 @@ describe('MeterGroup', () => {
         });
 
         it('should call ngAfterViewInit', () => {
-            spyOn(meterGroup, 'ngAfterViewInit').and.callThrough();
+            vi.spyOn(meterGroup, 'ngAfterViewInit');
             meterGroup.ngAfterViewInit();
             expect(meterGroup.ngAfterViewInit).toHaveBeenCalled();
         });
 
         it('should call ngAfterContentInit', () => {
-            spyOn(meterGroup, 'ngAfterContentInit').and.callThrough();
+            vi.spyOn(meterGroup, 'ngAfterContentInit');
             meterGroup.ngAfterContentInit();
             expect(meterGroup.ngAfterContentInit).toHaveBeenCalled();
         });
@@ -763,7 +768,7 @@ describe('MeterGroup', () => {
 
             const fixture = TestBed.createComponent(TestBasicMeterGroupComponent);
             const component = fixture.componentInstance;
-            component.value = largeDataset;
+            component.value.set(largeDataset);
             fixture.detectChanges();
 
             await expect(async () => {
@@ -809,9 +814,9 @@ describe('MeterGroup', () => {
             ];
 
             for (const combo of combinations) {
-                component.orientation = combo.orientation;
-                component.labelPosition = combo.labelPosition;
-                component.labelOrientation = combo.labelOrientation;
+                component.orientation.set(combo.orientation);
+                component.labelPosition.set(combo.labelPosition);
+                component.labelOrientation.set(combo.labelOrientation);
 
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
@@ -834,14 +839,14 @@ describe('MeterGroup', () => {
                 system: 50
             };
 
-            component.value = [
+            component.value.set([
                 { label: 'Apps', value: usedStorage.apps, color: '#3b82f6' },
                 { label: 'Photos', value: usedStorage.photos, color: '#22c55e' },
                 { label: 'Videos', value: usedStorage.videos, color: '#eab308' },
                 { label: 'Documents', value: usedStorage.documents, color: '#8b5cf6' },
                 { label: 'System', value: usedStorage.system, color: '#6b7280' }
-            ];
-            component.max = totalStorage;
+            ]);
+            component.max.set(totalStorage);
             fixture.detectChanges();
 
             const meterGroup = fixture.debugElement.query(By.directive(MeterGroup)).componentInstance;

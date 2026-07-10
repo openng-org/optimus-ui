@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -16,14 +16,14 @@ class TestBasicInputTextComponent {
 @Component({
     standalone: true,
     imports: [InputText, FormsModule],
-    template: ` <input type="text" pInputText [(ngModel)]="content" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" placeholder="Advanced input" /> `
+    template: ` <input type="text" pInputText [(ngModel)]="content" [pSize]="size()" [variant]="variant()" [fluid]="fluid()" [invalid]="invalid()" placeholder="Advanced input" /> `
 })
 class TestAdvancedInputTextComponent {
     content: string = '';
-    size: 'large' | 'small' | undefined = undefined as any;
-    variant: 'filled' | 'outlined' | undefined = undefined as any;
-    fluid: boolean | undefined = undefined as any;
-    invalid: boolean | undefined = undefined as any;
+    size = signal<'large' | 'small' | undefined>(undefined as any);
+    variant = signal<'filled' | 'outlined' | undefined>(undefined as any);
+    fluid = signal<boolean | undefined>(undefined as any);
+    invalid = signal<boolean | undefined>(undefined as any);
 }
 
 @Component({
@@ -132,43 +132,37 @@ describe('InputText', () => {
         });
 
         it('should apply size variants', async () => {
-            component.size = 'large';
-            fixture.changeDetectorRef.markForCheck();
+            component.size.set('large');
             await fixture.whenStable();
 
             expect(inputDirective.pSize()).toBe('large');
 
-            component.size = 'small';
-            fixture.changeDetectorRef.markForCheck();
+            component.size.set('small');
             await fixture.whenStable();
 
             expect(inputDirective.pSize()).toBe('small');
         });
 
         it('should apply variant styles', async () => {
-            component.variant = 'filled';
-            fixture.changeDetectorRef.markForCheck();
+            component.variant.set('filled');
             await fixture.whenStable();
 
             expect(inputDirective.variant()).toBe('filled');
 
-            component.variant = 'outlined';
-            fixture.changeDetectorRef.markForCheck();
+            component.variant.set('outlined');
             await fixture.whenStable();
 
             expect(inputDirective.variant()).toBe('outlined');
         });
 
         it('should apply fluid styling', async () => {
-            component.fluid = true;
-            fixture.changeDetectorRef.markForCheck();
+            component.fluid.set(true);
             await fixture.whenStable();
 
             expect(inputDirective.fluid()).toBe(true);
             expect(inputDirective.hasFluid).toBe(true);
 
-            component.fluid = false;
-            fixture.changeDetectorRef.markForCheck();
+            component.fluid.set(false);
             await fixture.whenStable();
 
             expect(inputDirective.fluid()).toBe(false);
@@ -176,14 +170,12 @@ describe('InputText', () => {
         });
 
         it('should apply invalid state', async () => {
-            component.invalid = true;
-            fixture.changeDetectorRef.markForCheck();
+            component.invalid.set(true);
             await fixture.whenStable();
 
             expect(inputDirective.invalid()).toBe(true);
 
-            component.invalid = false;
-            fixture.changeDetectorRef.markForCheck();
+            component.invalid.set(false);
             await fixture.whenStable();
 
             expect(inputDirective.invalid()).toBe(false);

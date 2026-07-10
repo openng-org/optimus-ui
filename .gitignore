@@ -51,3 +51,5 @@ api-generator/themedoc.json
 
 # primeng packages
 packages/primeng/src/package.json
+packages/primeng/out-tsc/
+.vitest-attachments/

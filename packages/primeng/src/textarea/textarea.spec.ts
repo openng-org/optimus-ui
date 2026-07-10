@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -19,15 +19,30 @@ class TestBasicTextareaComponent {
 @Component({
     standalone: true,
     imports: [Textarea, FormsModule],
-    template: ` <textarea pTextarea [(ngModel)]="content" [autoResize]="enableAutoResize" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" (onResize)="onResizeHandler($event)" rows="3" cols="30"> </textarea> `
+    template: `
+        <textarea
+            pTextarea
+            [ngModel]="content()"
+            (ngModelChange)="content.set($event)"
+            [autoResize]="enableAutoResize()"
+            [pSize]="size()"
+            [variant]="variant()"
+            [fluid]="fluid()"
+            [invalid]="invalid()"
+            (onResize)="onResizeHandler($event)"
+            rows="3"
+            cols="30"
+        >
+        </textarea>
+    `
 })
 class TestAdvancedTextareaComponent {
-    content: string = '';
-    enableAutoResize: boolean = false;
-    size: 'large' | 'small' | undefined = undefined as any;
-    variant: 'filled' | 'outlined' | undefined = undefined as any;
-    fluid: boolean | undefined = undefined as any;
-    invalid: boolean | undefined = undefined as any;
+    content = signal<string>('');
+    enableAutoResize = signal<boolean>(false);
+    size = signal<'large' | 'small' | undefined>(undefined as any);
+    variant = signal<'filled' | 'outlined' | undefined>(undefined as any);
+    fluid = signal<boolean | undefined>(undefined as any);
+    invalid = signal<boolean | undefined>(undefined as any);
     resizeEventCount: number = 0;
 
     onResizeHandler(event: any) {
@@ -47,13 +62,13 @@ class TestReactiveFormTextareaComponent {
 @Component({
     standalone: true,
     imports: [Textarea, FormsModule],
-    template: ` <textarea pTextarea [(ngModel)]="value" [pt]="pt" [autoResize]="autoResize" [invalid]="invalid"></textarea> `
+    template: ` <textarea pTextarea [(ngModel)]="value" [pt]="pt()" [autoResize]="autoResize()" [invalid]="invalid()"></textarea> `
 })
 class TestPTTextareaComponent {
     value: string = '';
-    pt: TextareaPassThrough | undefined = undefined as any;
-    autoResize: boolean = false;
-    invalid: boolean = false;
+    pt = signal<TextareaPassThrough | undefined>(undefined as any);
+    autoResize = signal<boolean>(false);
+    invalid = signal<boolean>(false);
 }
 
 describe('Textarea', () => {
@@ -136,7 +151,7 @@ describe('Textarea', () => {
         });
 
         it('should apply autoResize functionality', async () => {
-            component.enableAutoResize = true;
+            component.enableAutoResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -144,7 +159,7 @@ describe('Textarea', () => {
             expect(textareaDirective.autoResize()).toBe(true);
 
             // Simulate text input that would require resize
-            component.content = 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5';
+            component.content.set('Line 1\nLine 2\nLine 3\nLine 4\nLine 5');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -155,14 +170,14 @@ describe('Textarea', () => {
         });
 
         it('should apply size variants', async () => {
-            component.size = 'large';
+            component.size.set('large');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             expect(textareaDirective.pSize()).toBe('large');
 
-            component.size = 'small';
+            component.size.set('small');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -171,14 +186,14 @@ describe('Textarea', () => {
         });
 
         it('should apply variant styles', async () => {
-            component.variant = 'filled';
+            component.variant.set('filled');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             expect(textareaDirective.variant()).toBe('filled');
 
-            component.variant = 'outlined';
+            component.variant.set('outlined');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -187,21 +202,21 @@ describe('Textarea', () => {
         });
 
         it('should apply fluid styling', () => {
-            component.fluid = true;
+            component.fluid.set(true);
             fixture.detectChanges();
 
             expect(textareaDirective.fluid()).toBe(true);
         });
 
         it('should apply invalid state', () => {
-            component.invalid = true;
+            component.invalid.set(true);
             fixture.detectChanges();
 
             expect(textareaDirective.invalid()).toBe(true);
         });
 
         it('should emit resize events', async () => {
-            component.enableAutoResize = true;
+            component.enableAutoResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -209,7 +224,7 @@ describe('Textarea', () => {
             const initialCount = component.resizeEventCount;
 
             // Trigger resize by changing content
-            component.content = 'This is a very long text that should trigger resize functionality';
+            component.content.set('This is a very long text that should trigger resize functionality');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -345,7 +360,7 @@ describe('Textarea', () => {
 
         describe('Case 1: Simple string classes', () => {
             it('should apply root class from pt', async () => {
-                component.pt = { root: 'ROOT_CLASS' };
+                component.pt.set({ root: 'ROOT_CLASS' });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -356,7 +371,7 @@ describe('Textarea', () => {
             });
 
             it('should apply host class from pt', async () => {
-                component.pt = { host: 'HOST_CLASS' };
+                component.pt.set({ host: 'HOST_CLASS' });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -369,14 +384,14 @@ describe('Textarea', () => {
 
         describe('Case 2: Objects', () => {
             it('should apply root object with class, style, data attributes, and aria-label', async () => {
-                component.pt = {
+                component.pt.set({
                     root: {
                         class: 'ROOT_OBJECT_CLASS',
                         style: { borderColor: 'red' } as any,
                         'data-p-test': true,
                         'aria-label': 'TEST_ARIA_LABEL'
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -390,13 +405,13 @@ describe('Textarea', () => {
             });
 
             it('should apply host object with multiple attributes', async () => {
-                component.pt = {
+                component.pt.set({
                     host: {
                         class: 'HOST_OBJECT_CLASS',
                         style: { padding: '10px' } as any,
                         'data-custom': 'custom-value'
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -411,12 +426,12 @@ describe('Textarea', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             it('should apply mixed pt with root object and host string', async () => {
-                component.pt = {
+                component.pt.set({
                     root: {
                         class: 'ROOT_MIXED_CLASS'
                     },
                     host: 'HOST_MIXED_CLASS'
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -430,13 +445,13 @@ describe('Textarea', () => {
 
         describe('Case 4: Use variables from instance', () => {
             it('should access instance.invalid property in PT callback', async () => {
-                component.invalid = true;
+                component.invalid.set(true);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
 
                 let instanceAccessed = false;
-                component.pt = {
+                component.pt.set({
                     root: ({ instance }) => {
                         if ((instance as any)?.invalid()) {
                             instanceAccessed = true;
@@ -447,7 +462,7 @@ describe('Textarea', () => {
                             }
                         };
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -458,13 +473,13 @@ describe('Textarea', () => {
             });
 
             it('should access instance.autoResize property in PT callback', async () => {
-                component.autoResize = true;
+                component.autoResize.set(true);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
 
                 let instanceAccessed = false;
-                component.pt = {
+                component.pt.set({
                     root: ({ instance }) => {
                         if ((instance as any)?.autoResize()) {
                             instanceAccessed = true;
@@ -475,7 +490,7 @@ describe('Textarea', () => {
                             }
                         };
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -486,18 +501,18 @@ describe('Textarea', () => {
             });
 
             it('should use instance properties for conditional styling', async () => {
-                component.invalid = true;
+                component.invalid.set(true);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
 
-                component.pt = {
+                component.pt.set({
                     root: ({ instance }) => ({
                         style: {
                             borderColor: (instance as any)?.invalid() ? 'red' : 'green'
                         } as any
                     })
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -511,13 +526,13 @@ describe('Textarea', () => {
         describe('Case 5: Event binding', () => {
             it('should bind onclick event via PT', async () => {
                 let clicked = false;
-                component.pt = {
+                component.pt.set({
                     root: () => ({
                         onclick: () => {
                             clicked = true;
                         }
                     })
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -530,13 +545,13 @@ describe('Textarea', () => {
 
             it('should bind onfocus event via PT', async () => {
                 let focused = false;
-                component.pt = {
+                component.pt.set({
                     root: () => ({
                         onfocus: () => {
                             focused = true;
                         }
                     })
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -551,7 +566,7 @@ describe('Textarea', () => {
         describe('Case 6: Inline PT', () => {
             it('should apply inline pt with string class', async () => {
                 const inlineFixture = TestBed.createComponent(TestPTTextareaComponent);
-                inlineFixture.componentInstance.pt = { root: 'INLINE_CLASS' };
+                inlineFixture.componentInstance.pt.set({ root: 'INLINE_CLASS' });
                 inlineFixture.changeDetectorRef.markForCheck();
                 await inlineFixture.whenStable();
                 inlineFixture.detectChanges();
@@ -564,11 +579,11 @@ describe('Textarea', () => {
 
             it('should apply inline pt with object', async () => {
                 const inlineFixture = TestBed.createComponent(TestPTTextareaComponent);
-                inlineFixture.componentInstance.pt = {
+                inlineFixture.componentInstance.pt.set({
                     root: {
                         class: 'INLINE_OBJECT_CLASS'
                     }
-                };
+                });
                 inlineFixture.changeDetectorRef.markForCheck();
                 await inlineFixture.whenStable();
                 inlineFixture.detectChanges();
@@ -642,18 +657,18 @@ describe('Textarea', () => {
         describe('Case 8: Hooks', () => {
             it('should execute onAfterViewInit hook', async () => {
                 let hookCalled = false;
-                component.pt = {
+                component.pt.set({
                     root: 'HOOK_CLASS',
                     hooks: {
                         onAfterViewInit: () => {
                             hookCalled = true;
                         }
                     }
-                };
+                });
 
                 // Recreate component to trigger lifecycle hooks
                 const newFixture = TestBed.createComponent(TestPTTextareaComponent);
-                newFixture.componentInstance.pt = component.pt;
+                newFixture.componentInstance.pt.set(component.pt());
                 newFixture.changeDetectorRef.markForCheck();
                 await newFixture.whenStable();
                 newFixture.detectChanges();
@@ -665,14 +680,14 @@ describe('Textarea', () => {
 
             it('should execute onAfterViewChecked hook', async () => {
                 let hookCallCount = 0;
-                component.pt = {
+                component.pt.set({
                     root: 'HOOK_CLASS',
                     hooks: {
                         onAfterViewChecked: () => {
                             hookCallCount++;
                         }
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -684,14 +699,14 @@ describe('Textarea', () => {
 
             it('should execute onDestroy hook', async () => {
                 let hookCalled = false;
-                component.pt = {
+                component.pt.set({
                     root: 'HOOK_CLASS',
                     hooks: {
                         onDestroy: () => {
                             hookCalled = true;
                         }
                     }
-                };
+                });
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();

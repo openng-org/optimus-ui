@@ -1,79 +1,99 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { StyleClass } from './styleclass';
 
-@Component({
-    standalone: false,
-    template: `
-        <button
-            [pStyleClass]="selector"
-            [enterFromClass]="enterFromClass"
-            [enterActiveClass]="enterActiveClass"
-            [enterToClass]="enterToClass"
-            [leaveFromClass]="leaveFromClass"
-            [leaveActiveClass]="leaveActiveClass"
-            [leaveToClass]="leaveToClass"
-            [hideOnOutsideClick]="hideOnOutsideClick"
-            [hideOnEscape]="hideOnEscape"
-            [hideOnResize]="hideOnResize"
-            [toggleClass]="toggleClass"
-            [resizeSelector]="resizeSelector"
-        >
-            Toggle
-        </button>
-        <div class="target-element" [class.hidden]="targetHidden">Target Content</div>
-    `
-})
-class TestBasicStyleClassComponent {
-    selector: string = '@next';
-    enterFromClass: string | undefined;
-    enterActiveClass: string | undefined;
-    enterToClass: string | undefined;
-    leaveFromClass: string | undefined;
-    leaveActiveClass: string | undefined;
-    leaveToClass: string | undefined;
-    hideOnOutsideClick: boolean | undefined;
-    hideOnEscape: boolean | undefined;
-    hideOnResize: boolean | undefined;
-    toggleClass: string | undefined;
-    resizeSelector: string | undefined;
-    targetHidden = true;
+// jsdom does not implement these browser APIs that the directive relies on.
+if (typeof (globalThis as any).ResizeObserver === 'undefined') {
+    (globalThis as any).ResizeObserver = class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+    };
+}
+if (typeof (globalThis as any).AnimationEvent === 'undefined') {
+    (globalThis as any).AnimationEvent = class AnimationEvent extends Event {
+        constructor(type: string, init?: any) {
+            super(type, init);
+        }
+    };
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [StyleClass],
+    template: `
+        <button
+            [pStyleClass]="selector()"
+            [enterFromClass]="enterFromClass()"
+            [enterActiveClass]="enterActiveClass()"
+            [enterToClass]="enterToClass()"
+            [leaveFromClass]="leaveFromClass()"
+            [leaveActiveClass]="leaveActiveClass()"
+            [leaveToClass]="leaveToClass()"
+            [hideOnOutsideClick]="hideOnOutsideClick()"
+            [hideOnEscape]="hideOnEscape()"
+            [hideOnResize]="hideOnResize()"
+            [toggleClass]="toggleClass()"
+            [resizeSelector]="resizeSelector()"
+        >
+            Toggle
+        </button>
+        <div class="target-element" [class.hidden]="targetHidden()">Target Content</div>
+    `
+})
+class TestBasicStyleClassComponent {
+    selector = signal<string>('@next');
+    enterFromClass = signal<string | undefined>(undefined);
+    enterActiveClass = signal<string | undefined>(undefined);
+    enterToClass = signal<string | undefined>(undefined);
+    leaveFromClass = signal<string | undefined>(undefined);
+    leaveActiveClass = signal<string | undefined>(undefined);
+    leaveToClass = signal<string | undefined>(undefined);
+    hideOnOutsideClick = signal<boolean | undefined>(undefined);
+    hideOnEscape = signal<boolean | undefined>(undefined);
+    hideOnResize = signal<boolean | undefined>(undefined);
+    toggleClass = signal<string | undefined>(undefined);
+    resizeSelector = signal<string | undefined>(undefined);
+    targetHidden = signal(true);
+}
+
+@Component({
+    standalone: true,
+    imports: [StyleClass],
     template: `
         <div class="container target-parent">
-            <button pStyleClass="@parent" [toggleClass]="toggleClass">Parent Toggle</button>
+            <button pStyleClass="@parent" [toggleClass]="toggleClass()">Parent Toggle</button>
             <div class="sibling">
                 <div class="target">Target for Previous</div>
-                <button pStyleClass="@prev" [toggleClass]="toggleClass">Previous Toggle</button>
+                <button pStyleClass="@prev" [toggleClass]="toggleClass()">Previous Toggle</button>
             </div>
         </div>
     `
 })
 class TestSelectorStyleClassComponent {
-    toggleClass = 'active';
+    toggleClass = signal('active');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [StyleClass],
     template: `
         <div class="grandparent">
             <div class="parent">
-                <button pStyleClass="@grandparent" [toggleClass]="toggleClass">Grandparent Toggle</button>
+                <button pStyleClass="@grandparent" [toggleClass]="toggleClass()">Grandparent Toggle</button>
             </div>
         </div>
     `
 })
 class TestGrandparentSelectorComponent {
-    toggleClass = 'highlight';
+    toggleClass = signal('highlight');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [StyleClass],
     template: `
         <button pStyleClass="@next" enterActiveClass="slide-down-enter" leaveActiveClass="slide-up-leave" [hideOnOutsideClick]="true" [hideOnEscape]="true">Animated Toggle</button>
         <div class="animated-target">Animated Content</div>
@@ -82,7 +102,8 @@ class TestGrandparentSelectorComponent {
 class TestAnimationStyleClassComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [StyleClass],
     template: `
         <button pStyleClass="@next" enterActiveClass="slidedown" enterFromClass="hidden" enterToClass="visible" leaveFromClass="visible" leaveActiveClass="slideup" leaveToClass="hidden">Slidedown Animation</button>
         <div class="slidedown-target">Slidedown Content</div>
@@ -91,15 +112,16 @@ class TestAnimationStyleClassComponent {}
 class TestSlidedownStyleClassComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [StyleClass],
     template: `
-        <button pStyleClass="#resize-target" [hideOnResize]="true" [toggleClass]="toggleClass" [resizeSelector]="resizeSelector">Resize Toggle</button>
+        <button pStyleClass="#resize-target" [hideOnResize]="true" [toggleClass]="toggleClass()" [resizeSelector]="resizeSelector()">Resize Toggle</button>
         <div id="resize-target" class="resize-target">Resize Target</div>
     `
 })
 class TestResizeStyleClassComponent {
-    toggleClass = 'expanded';
-    resizeSelector: string | undefined;
+    toggleClass = signal('expanded');
+    resizeSelector = signal<string | undefined>(undefined);
 }
 
 describe('StyleClass', () => {
@@ -110,8 +132,7 @@ describe('StyleClass', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicStyleClassComponent, TestSelectorStyleClassComponent, TestGrandparentSelectorComponent, TestAnimationStyleClassComponent, TestSlidedownStyleClassComponent, TestResizeStyleClassComponent],
-            imports: [StyleClass],
+            imports: [StyleClass, TestBasicStyleClassComponent, TestSelectorStyleClassComponent, TestGrandparentSelectorComponent, TestAnimationStyleClassComponent, TestSlidedownStyleClassComponent, TestResizeStyleClassComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -130,7 +151,7 @@ describe('StyleClass', () => {
         it('should have required dependencies injected', () => {
             expect(styleClassInstance.el).toBeTruthy();
             expect(styleClassInstance.renderer).toBeTruthy();
-            expect(styleClassInstance.constructor.name).toBe('StyleClass');
+            expect(styleClassInstance.constructor.name).toBe('_StyleClass');
         });
 
         it('should initialize with undefined values', () => {
@@ -162,92 +183,92 @@ describe('StyleClass', () => {
         });
 
         it('should update enterFromClass input', async () => {
-            component.enterFromClass = 'hidden';
+            component.enterFromClass.set('hidden');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.enterFromClass()).toBe('hidden');
         });
 
         it('should update enterActiveClass input', async () => {
-            component.enterActiveClass = 'fade-in';
+            component.enterActiveClass.set('fade-in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.enterActiveClass()).toBe('fade-in');
         });
 
         it('should update enterToClass input', async () => {
-            component.enterToClass = 'visible';
+            component.enterToClass.set('visible');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.enterToClass()).toBe('visible');
         });
 
         it('should update leaveFromClass input', async () => {
-            component.leaveFromClass = 'visible';
+            component.leaveFromClass.set('visible');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.leaveFromClass()).toBe('visible');
         });
 
         it('should update leaveActiveClass input', async () => {
-            component.leaveActiveClass = 'fade-out';
+            component.leaveActiveClass.set('fade-out');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.leaveActiveClass()).toBe('fade-out');
         });
 
         it('should update leaveToClass input', async () => {
-            component.leaveToClass = 'hidden';
+            component.leaveToClass.set('hidden');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.leaveToClass()).toBe('hidden');
         });
 
         it('should update hideOnOutsideClick with booleanAttribute transform', async () => {
-            component.hideOnOutsideClick = true;
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnOutsideClick()).toBe(true);
 
-            component.hideOnOutsideClick = false;
+            component.hideOnOutsideClick.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnOutsideClick()).toBe(false);
         });
 
         it('should update hideOnEscape with booleanAttribute transform', async () => {
-            component.hideOnEscape = true;
+            component.hideOnEscape.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnEscape()).toBe(true);
 
-            component.hideOnEscape = false;
+            component.hideOnEscape.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnEscape()).toBe(false);
         });
 
         it('should update hideOnResize with booleanAttribute transform', async () => {
-            component.hideOnResize = true;
+            component.hideOnResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnResize()).toBe(true);
 
-            component.hideOnResize = false;
+            component.hideOnResize.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.hideOnResize()).toBe(false);
         });
 
         it('should update toggleClass input', async () => {
-            component.toggleClass = 'active';
+            component.toggleClass.set('active');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.toggleClass()).toBe('active');
         });
 
         it('should update resizeSelector input', async () => {
-            component.resizeSelector = '#resize-target';
+            component.resizeSelector.set('#resize-target');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(styleClassInstance.resizeSelector()).toBe('#resize-target');
@@ -256,8 +277,8 @@ describe('StyleClass', () => {
 
     describe('Click Handler Tests', () => {
         it('should handle click event', async () => {
-            spyOn(styleClassInstance, 'toggle');
-            component.toggleClass = 'active';
+            vi.spyOn(styleClassInstance, 'toggle');
+            component.toggleClass.set('active');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -267,8 +288,8 @@ describe('StyleClass', () => {
         });
 
         it('should call enter method when target is hidden', async () => {
-            spyOn(styleClassInstance, 'enter');
-            component.enterActiveClass = 'slide-in';
+            vi.spyOn(styleClassInstance, 'enter');
+            component.enterActiveClass.set('slide-in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -285,8 +306,8 @@ describe('StyleClass', () => {
         });
 
         it('should call leave method when target is visible', async () => {
-            spyOn(styleClassInstance, 'leave');
-            component.leaveActiveClass = 'slide-out';
+            vi.spyOn(styleClassInstance, 'leave');
+            component.leaveActiveClass.set('slide-out');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -314,7 +335,7 @@ describe('StyleClass', () => {
 
     describe('Toggle Method Tests', () => {
         beforeEach(async () => {
-            component.toggleClass = 'active';
+            component.toggleClass.set('active');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click(); // Set target
@@ -371,8 +392,8 @@ describe('StyleClass', () => {
         });
 
         it('should handle enter without animation classes', async () => {
-            component.enterFromClass = 'hidden';
-            component.enterToClass = 'visible';
+            component.enterFromClass.set('hidden');
+            component.enterToClass.set('visible');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -386,9 +407,9 @@ describe('StyleClass', () => {
         });
 
         it('should handle enter with animation classes', async () => {
-            component.enterActiveClass = 'slide-in';
-            component.enterFromClass = 'hidden';
-            component.enterToClass = 'visible';
+            component.enterActiveClass.set('slide-in');
+            component.enterFromClass.set('hidden');
+            component.enterToClass.set('visible');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -403,7 +424,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle slidedown animation', async () => {
-            component.enterActiveClass = 'slidedown';
+            component.enterActiveClass.set('slidedown');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -422,11 +443,11 @@ describe('StyleClass', () => {
         });
 
         it('should bind listeners when hideOnOutsideClick is true', async () => {
-            component.hideOnOutsideClick = true;
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'bindDocumentClickListener');
+            vi.spyOn(styleClassInstance, 'bindDocumentClickListener');
 
             styleClassInstance.enter();
 
@@ -434,11 +455,11 @@ describe('StyleClass', () => {
         });
 
         it('should bind listeners when hideOnEscape is true', async () => {
-            component.hideOnEscape = true;
+            component.hideOnEscape.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'bindDocumentKeydownListener');
+            vi.spyOn(styleClassInstance, 'bindDocumentKeydownListener');
 
             styleClassInstance.enter();
 
@@ -446,11 +467,11 @@ describe('StyleClass', () => {
         });
 
         it('should bind listeners when hideOnResize is true', async () => {
-            component.hideOnResize = true;
+            component.hideOnResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'bindResizeListener');
+            vi.spyOn(styleClassInstance, 'bindResizeListener');
 
             styleClassInstance.enter();
 
@@ -458,7 +479,7 @@ describe('StyleClass', () => {
         });
 
         it('should not start animation when already animating', async () => {
-            component.enterActiveClass = 'slide-in';
+            component.enterActiveClass.set('slide-in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -477,8 +498,8 @@ describe('StyleClass', () => {
         });
 
         it('should handle leave without animation classes', async () => {
-            component.leaveFromClass = 'visible';
-            component.leaveToClass = 'hidden';
+            component.leaveFromClass.set('visible');
+            component.leaveToClass.set('hidden');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -492,9 +513,9 @@ describe('StyleClass', () => {
         });
 
         it('should handle leave with animation classes', async () => {
-            component.leaveActiveClass = 'slide-out';
-            component.leaveFromClass = 'visible';
-            component.leaveToClass = 'hidden';
+            component.leaveActiveClass.set('slide-out');
+            component.leaveFromClass.set('visible');
+            component.leaveToClass.set('hidden');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -509,11 +530,11 @@ describe('StyleClass', () => {
         });
 
         it('should unbind listeners when hideOnOutsideClick is true', async () => {
-            component.hideOnOutsideClick = true;
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'unbindDocumentClickListener');
+            vi.spyOn(styleClassInstance, 'unbindDocumentClickListener');
 
             styleClassInstance.leave();
 
@@ -521,11 +542,11 @@ describe('StyleClass', () => {
         });
 
         it('should unbind listeners when hideOnEscape is true', async () => {
-            component.hideOnEscape = true;
+            component.hideOnEscape.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'unbindDocumentKeydownListener');
+            vi.spyOn(styleClassInstance, 'unbindDocumentKeydownListener');
 
             styleClassInstance.leave();
 
@@ -533,11 +554,11 @@ describe('StyleClass', () => {
         });
 
         it('should unbind listeners when hideOnResize is true', async () => {
-            component.hideOnResize = true;
+            component.hideOnResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            spyOn(styleClassInstance, 'unbindResizeListener');
+            vi.spyOn(styleClassInstance, 'unbindResizeListener');
 
             styleClassInstance.leave();
 
@@ -545,7 +566,7 @@ describe('StyleClass', () => {
         });
 
         it('should not start animation when already animating', async () => {
-            component.leaveActiveClass = 'slide-out';
+            component.leaveActiveClass.set('slide-out');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -603,8 +624,8 @@ describe('StyleClass', () => {
         });
 
         it('should work with CSS selector', async () => {
-            component.toggleClass = 'active';
-            component.selector = '.target-element';
+            component.toggleClass.set('active');
+            component.selector.set('.target-element');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -618,7 +639,7 @@ describe('StyleClass', () => {
 
     describe('Outside Click Tests', () => {
         beforeEach(async () => {
-            component.hideOnOutsideClick = true;
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click(); // Set target and bind listeners
@@ -659,7 +680,7 @@ describe('StyleClass', () => {
 
     describe('Escape Key Tests', () => {
         beforeEach(async () => {
-            component.hideOnEscape = true;
+            component.hideOnEscape.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click(); // Set target
@@ -686,7 +707,7 @@ describe('StyleClass', () => {
                 configurable: true
             });
 
-            spyOn(styleClassInstance, 'leave');
+            vi.spyOn(styleClassInstance, 'leave');
             styleClassInstance.bindDocumentKeydownListener();
 
             const escapeEvent = new KeyboardEvent('keydown', {
@@ -758,10 +779,10 @@ describe('StyleClass', () => {
             const resizeButton = resizeFixture.debugElement.query(By.directive(StyleClass));
             const resizeInstance = resizeButton.injector.get(StyleClass);
 
-            spyOn(resizeInstance, 'bindElementResizeListener');
-            spyOn(resizeInstance, 'bindWindowResizeListener');
+            vi.spyOn(resizeInstance, 'bindElementResizeListener');
+            vi.spyOn(resizeInstance, 'bindWindowResizeListener');
 
-            resizeComponent.resizeSelector = '#resize-target';
+            resizeComponent.resizeSelector.set('#resize-target');
             resizeFixture.changeDetectorRef.markForCheck();
             resizeFixture.detectChanges();
             await resizeFixture.whenStable();
@@ -775,8 +796,8 @@ describe('StyleClass', () => {
             const resizeButton = resizeFixture.debugElement.query(By.directive(StyleClass));
             const resizeInstance = resizeButton.injector.get(StyleClass);
 
-            spyOn(resizeInstance, 'unbindElementResizeListener');
-            spyOn(resizeInstance, 'unbindWindowResizeListener');
+            vi.spyOn(resizeInstance, 'unbindElementResizeListener');
+            vi.spyOn(resizeInstance, 'unbindWindowResizeListener');
 
             resizeInstance.unbindResizeListener();
 
@@ -817,8 +838,8 @@ describe('StyleClass', () => {
         });
 
         it('should handle animation end for enter', async () => {
-            component.enterActiveClass = 'slide-in';
-            component.enterToClass = 'visible';
+            component.enterActiveClass.set('slide-in');
+            component.enterToClass.set('visible');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -838,8 +859,8 @@ describe('StyleClass', () => {
         });
 
         it('should handle animation end for leave', async () => {
-            component.leaveActiveClass = 'slide-out';
-            component.leaveToClass = 'hidden';
+            component.leaveActiveClass.set('slide-out');
+            component.leaveToClass.set('hidden');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -859,7 +880,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle slidedown maxHeight reset on animation end', async () => {
-            component.enterActiveClass = 'slidedown';
+            component.enterActiveClass.set('slidedown');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -878,7 +899,7 @@ describe('StyleClass', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined selector', async () => {
-            component.selector = undefined as any;
+            component.selector.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -887,7 +908,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle empty class names', async () => {
-            component.toggleClass = '';
+            component.toggleClass.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click(); // Set target
@@ -896,7 +917,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle rapid clicks during animation', async () => {
-            component.enterActiveClass = 'slide-in';
+            component.enterActiveClass.set('slide-in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click(); // Set target
@@ -928,7 +949,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle multiple listener bindings', async () => {
-            component.hideOnOutsideClick = true;
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -941,7 +962,7 @@ describe('StyleClass', () => {
         });
 
         it('should handle component destruction during animation', async () => {
-            component.enterActiveClass = 'slide-in';
+            component.enterActiveClass.set('slide-in');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             buttonElement.nativeElement.click();
@@ -984,7 +1005,7 @@ describe('StyleClass', () => {
         });
 
         it('should maintain state across multiple interactions', async () => {
-            component.toggleClass = 'active';
+            component.toggleClass.set('active');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1004,9 +1025,9 @@ describe('StyleClass', () => {
 
     describe('Cleanup Tests', () => {
         it('should cleanup all listeners on destroy', async () => {
-            component.hideOnOutsideClick = true;
-            component.hideOnEscape = true;
-            component.hideOnResize = true;
+            component.hideOnOutsideClick.set(true);
+            component.hideOnEscape.set(true);
+            component.hideOnResize.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1044,7 +1065,7 @@ describe('StyleClass', () => {
         });
 
         it('should cleanup event listener if exists', () => {
-            const mockListener = jasmine.createSpy('eventListener');
+            const mockListener = vi.fn();
             styleClassInstance.eventListener = mockListener;
 
             styleClassInstance.ngOnDestroy();
@@ -1071,8 +1092,8 @@ describe('StyleClass', () => {
         });
 
         it('should call enter method programmatically', async () => {
-            spyOn(styleClassInstance, 'bindDocumentClickListener');
-            component.hideOnOutsideClick = true;
+            vi.spyOn(styleClassInstance, 'bindDocumentClickListener');
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1082,8 +1103,8 @@ describe('StyleClass', () => {
         });
 
         it('should call leave method programmatically', async () => {
-            spyOn(styleClassInstance, 'unbindDocumentClickListener');
-            component.hideOnOutsideClick = true;
+            vi.spyOn(styleClassInstance, 'unbindDocumentClickListener');
+            component.hideOnOutsideClick.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1093,7 +1114,7 @@ describe('StyleClass', () => {
         });
 
         it('should call toggle method programmatically', async () => {
-            component.toggleClass = 'test-class';
+            component.toggleClass.set('test-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 

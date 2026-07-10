@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -37,10 +37,11 @@ import { InputColorEyeDropper } from './inputcolor-eyedropper';
 // ─── Test Wrapper Components ───────────────────────────────────────────
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
-        <p-inputcolor [(ngModel)]="color" [format]="format" (onValueChange)="onValueChange($event)" (onValueChangeEnd)="onValueChangeEnd($event)">
-            <p-inputcolor-slider [channel]="sliderChannel" [orientation]="sliderOrientation">
+        <p-inputcolor [ngModel]="color()" (ngModelChange)="color.set($event)" [format]="format()" (onValueChange)="onValueChange($event)" (onValueChangeEnd)="onValueChangeEnd($event)">
+            <p-inputcolor-slider [channel]="sliderChannel()" [orientation]="sliderOrientation()">
                 <p-inputcolor-slider-track />
                 <p-inputcolor-slider-thumb />
             </p-inputcolor-slider>
@@ -55,10 +56,10 @@ import { InputColorEyeDropper } from './inputcolor-eyedropper';
     `
 })
 class TestBasicComponent {
-    color: string | null = null;
-    format: ColorSpace = 'hsba';
-    sliderChannel: ColorSliderChannel = 'hue';
-    sliderOrientation: 'horizontal' | 'vertical' = 'horizontal';
+    color = signal<string | null>(null);
+    format = signal<ColorSpace>('hsba');
+    sliderChannel = signal<ColorSliderChannel>('hue');
+    sliderOrientation = signal<'horizontal' | 'vertical'>('horizontal');
 
     valueChangeEvent: any;
     valueChangeEndEvent: any;
@@ -72,7 +73,8 @@ class TestBasicComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-inputcolor [(ngModel)]="color" [format]="format">
             <input pInputColorInput [channel]="channel" />
@@ -86,7 +88,8 @@ class TestInputChannelsComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-inputcolor [(ngModel)]="color">
             <input pInputColorInput [channel]="'hue'" [type]="'text'" />
@@ -98,7 +101,8 @@ class TestCustomTypeInputComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
         <form [formGroup]="form">
             <p-inputcolor formControlName="selectedColor" [format]="format">
@@ -115,7 +119,8 @@ class TestReactiveFormComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-inputcolor [(ngModel)]="color" [format]="format">
             <input pInputColorInput [channel]="'hex'" />
@@ -129,7 +134,8 @@ class TestFormatComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [InputColorModule, FormsModule, ReactiveFormsModule],
     template: `
         <p-inputcolor [(ngModel)]="color">
             <p-inputcolor-eyedropper [iconOnly]="iconOnly" [outlined]="outlined" [severity]="severity" [text]="text" [rounded]="rounded" [size]="size"> Pick </p-inputcolor-eyedropper>
@@ -245,7 +251,7 @@ describe('Color Manager', () => {
             it('should set lightness through HSL conversion', () => {
                 const newC = c.setChannelValue('lightness', 50);
                 expect(newC).toBeDefined();
-                expect(newC instanceof HSBColor).toBeTrue();
+                expect(newC instanceof HSBColor).toBe(true);
             });
 
             it('should set red through RGB conversion', () => {
@@ -255,7 +261,7 @@ describe('Color Manager', () => {
 
             it('should set oklch channels through OKLCH conversion', () => {
                 const newC = c.setChannelValue('L', 0.5);
-                expect(newC instanceof HSBColor).toBeTrue();
+                expect(newC instanceof HSBColor).toBe(true);
             });
         });
 
@@ -648,7 +654,7 @@ describe('Color Manager', () => {
             it('should convert black to OKLCH with NaN hue', () => {
                 const oklch = new RGBColor(0, 0, 0).toOKLCH();
                 expect(oklch.L).toBe(0);
-                expect(Number.isNaN(oklch.H)).toBeTrue();
+                expect(Number.isNaN(oklch.H)).toBe(true);
             });
 
             it('toRGB should return clone', () => {
@@ -702,7 +708,7 @@ describe('Color Manager', () => {
             });
 
             it('should preserve NaN hue', () => {
-                expect(Number.isNaN(new OKLCHColor(0.5, 0, NaN).H)).toBeTrue();
+                expect(Number.isNaN(new OKLCHColor(0.5, 0, NaN).H)).toBe(true);
             });
 
             it('should have colorSpace oklch', () => {
@@ -721,7 +727,7 @@ describe('Color Manager', () => {
 
             it('should return NaN hue for achromatic', () => {
                 const c = new OKLCHColor(0.5, 0, NaN);
-                expect(Number.isNaN(c.getChannelValue('H'))).toBeTrue();
+                expect(Number.isNaN(c.getChannelValue('H'))).toBe(true);
             });
 
             it('should delegate red to RGB', () => {
@@ -1236,8 +1242,7 @@ describe('Color Manager', () => {
 describe('InputColor Component Tests', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [FormsModule, ReactiveFormsModule, InputColorModule],
-            declarations: [TestBasicComponent, TestInputChannelsComponent, TestCustomTypeInputComponent, TestReactiveFormComponent, TestFormatComponent, TestEyeDropperComponent],
+            imports: [FormsModule, ReactiveFormsModule, InputColorModule, TestBasicComponent, TestInputChannelsComponent, TestCustomTypeInputComponent, TestReactiveFormComponent, TestFormatComponent, TestEyeDropperComponent],
             providers: [provideZonelessChangeDetection(), providePrimeNG()]
         }).compileComponents();
     });
@@ -1275,14 +1280,14 @@ describe('InputColor Component Tests', () => {
 
         describe('format', () => {
             it('should update axes when format changes', async () => {
-                component.format = 'hsla';
+                component.format.set('hsla');
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 expect(inputColor.$axes().yChannel).toBe('lightness');
             });
 
             it('should update axes for hsba', async () => {
-                component.format = 'hsba';
+                component.format.set('hsba');
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 expect(inputColor.$axes().yChannel).toBe('brightness');
@@ -1291,7 +1296,7 @@ describe('InputColor Component Tests', () => {
 
         describe('ngModel', () => {
             it('should set color from ngModel', async () => {
-                component.color = '#00ff00';
+                component.color.set('#00ff00');
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 const hex = inputColor.$color().toHex();
@@ -1299,7 +1304,7 @@ describe('InputColor Component Tests', () => {
             });
 
             it('should handle null ngModel', async () => {
-                component.color = null;
+                component.color.set(null);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 expect(inputColor.$color()).toBeTruthy();
@@ -1468,12 +1473,12 @@ describe('InputColor Component Tests', () => {
         });
 
         it('should be invalid when required and null', () => {
-            expect(component.form.get('selectedColor')!.valid).toBeFalse();
+            expect(component.form.get('selectedColor')!.valid).toBe(false);
         });
 
         it('should be valid after setting value', () => {
             component.form.get('selectedColor')!.setValue('#ff0000');
-            expect(component.form.get('selectedColor')!.valid).toBeTrue();
+            expect(component.form.get('selectedColor')!.valid).toBe(true);
         });
     });
 
@@ -1898,15 +1903,15 @@ describe('InputColor Component Tests', () => {
 
         it('should apply horizontal CSS class', () => {
             const sliderEl = fixture.debugElement.query(By.directive(InputColorSlider)).nativeElement;
-            expect(sliderEl.classList.contains('p-inputcolor-slider-horizontal')).toBeTrue();
+            expect(sliderEl.classList.contains('p-inputcolor-slider-horizontal')).toBe(true);
         });
 
         it('should apply vertical CSS class', async () => {
-            component.sliderOrientation = 'vertical';
+            component.sliderOrientation.set('vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             const sliderEl = fixture.debugElement.query(By.directive(InputColorSlider)).nativeElement;
-            expect(sliderEl.classList.contains('p-inputcolor-slider-vertical')).toBeTrue();
+            expect(sliderEl.classList.contains('p-inputcolor-slider-vertical')).toBe(true);
         });
 
         it('should set data-orientation attribute', () => {
@@ -2114,7 +2119,7 @@ describe('InputColor Component Tests', () => {
         });
 
         it('should use saturation/lightness for hsla format', async () => {
-            fixture.componentInstance.format = 'hsla';
+            fixture.componentInstance.format.set('hsla');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             const area = fixture.debugElement.query(By.directive(InputColorArea)).componentInstance as InputColorArea;
@@ -2323,10 +2328,10 @@ describe('InputColor Component Tests', () => {
 
         it('should pass props to component', () => {
             const eyeDropper = fixture.debugElement.query(By.directive(InputColorEyeDropper)).componentInstance as InputColorEyeDropper;
-            expect(eyeDropper.iconOnly()).toBeFalse();
-            expect(eyeDropper.outlined()).toBeFalse();
-            expect(eyeDropper.text()).toBeFalse();
-            expect(eyeDropper.rounded()).toBeFalse();
+            expect(eyeDropper.iconOnly()).toBe(false);
+            expect(eyeDropper.outlined()).toBe(false);
+            expect(eyeDropper.text()).toBe(false);
+            expect(eyeDropper.rounded()).toBe(false);
         });
     });
 
@@ -2397,17 +2402,17 @@ describe('InputColor Component Tests', () => {
         describe('OKLCH achromatic', () => {
             it('black should have NaN hue', () => {
                 const oklch = new RGBColor(0, 0, 0).toOKLCH();
-                expect(Number.isNaN(oklch.H)).toBeTrue();
+                expect(Number.isNaN(oklch.H)).toBe(true);
             });
 
             it('white should have NaN hue', () => {
                 const oklch = new RGBColor(255, 255, 255).toOKLCH();
-                expect(Number.isNaN(oklch.H)).toBeTrue();
+                expect(Number.isNaN(oklch.H)).toBe(true);
             });
 
             it('grey should have NaN hue', () => {
                 const oklch = new RGBColor(128, 128, 128).toOKLCH();
-                expect(Number.isNaN(oklch.H)).toBeTrue();
+                expect(Number.isNaN(oklch.H)).toBe(true);
             });
 
             it('NaN hue should output as 0 in toString', () => {

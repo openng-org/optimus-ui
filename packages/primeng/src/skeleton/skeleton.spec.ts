@@ -1,12 +1,14 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, signal, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { providePrimeNG } from 'primeng/config';
 
 import { BaseComponent } from 'primeng/basecomponent';
 import { Skeleton, SkeletonModule } from './skeleton';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-basic-skeleton',
     template: `<p-skeleton [shape]="shape" [animation]="animation" [width]="width" [height]="height"></p-skeleton>`
 })
@@ -18,42 +20,46 @@ class TestBasicSkeletonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-shapes',
-    template: ` <p-skeleton [shape]="shape" [size]="size" [borderRadius]="borderRadius" [animation]="animation"> </p-skeleton> `
+    template: ` <p-skeleton [shape]="shape()" [size]="size()" [borderRadius]="borderRadius()" [animation]="animation()"> </p-skeleton> `
 })
 class TestSkeletonShapesComponent {
-    shape: string = 'rectangle';
-    size: string | undefined;
-    borderRadius: string | undefined;
-    animation = 'wave';
+    shape = signal<string>('rectangle');
+    size = signal<string | undefined>(undefined);
+    borderRadius = signal<string | undefined>(undefined);
+    animation = signal<string>('wave');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-dimensions',
-    template: ` <p-skeleton [width]="width" [height]="height" [size]="size" [shape]="shape" [borderRadius]="borderRadius"> </p-skeleton> `
+    template: ` <p-skeleton [width]="width()" [height]="height()" [size]="size()" [shape]="shape()" [borderRadius]="borderRadius()"> </p-skeleton> `
 })
 class TestSkeletonDimensionsComponent {
-    width = '200px';
-    height = '50px';
-    size: string | undefined;
-    shape = 'rectangle';
-    borderRadius: string | undefined;
+    width = signal<string>('200px');
+    height = signal<string>('50px');
+    size = signal<string | undefined>(undefined);
+    shape = signal<string>('rectangle');
+    borderRadius = signal<string | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-animations',
-    template: ` <p-skeleton [animation]="animation" [shape]="shape"> </p-skeleton> `
+    template: ` <p-skeleton [animation]="animation()" [shape]="shape()"> </p-skeleton> `
 })
 class TestSkeletonAnimationsComponent {
-    animation = 'wave';
-    shape = 'rectangle';
+    animation = signal<string>('wave');
+    shape = signal<string>('rectangle');
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-styling',
     template: ` <p-skeleton [shape]="shape" [borderRadius]="borderRadius"> </p-skeleton> `
 })
@@ -63,7 +69,8 @@ class TestSkeletonStylingComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-card-layout',
     template: `
         <div class="card-skeleton">
@@ -79,7 +86,8 @@ class TestSkeletonStylingComponent {
 class TestSkeletonCardLayoutComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-data-table',
     template: `
         <div class="table-skeleton">
@@ -87,50 +95,50 @@ class TestSkeletonCardLayoutComponent {}
                 <p-skeleton width="100%" height="2rem"></p-skeleton>
             </div>
             <div class="table-rows">
-                <div *ngFor="let row of rows; trackBy: trackByFn" class="table-row">
-                    <p-skeleton width="25%" height="1.5rem"></p-skeleton>
-                    <p-skeleton width="25%" height="1.5rem"></p-skeleton>
-                    <p-skeleton width="25%" height="1.5rem"></p-skeleton>
-                    <p-skeleton width="25%" height="1.5rem"></p-skeleton>
-                </div>
+                @for (row of rows; track $index) {
+                    <div class="table-row">
+                        <p-skeleton width="25%" height="1.5rem"></p-skeleton>
+                        <p-skeleton width="25%" height="1.5rem"></p-skeleton>
+                        <p-skeleton width="25%" height="1.5rem"></p-skeleton>
+                        <p-skeleton width="25%" height="1.5rem"></p-skeleton>
+                    </div>
+                }
             </div>
         </div>
     `
 })
 class TestSkeletonDataTableComponent {
     rows = Array(5).fill({});
-
-    trackByFn(index: number): number {
-        return index;
-    }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-empty',
     template: `<p-skeleton></p-skeleton>`
 })
 class TestSkeletonEmptyComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SkeletonModule],
     selector: 'test-skeleton-dynamic',
-    template: ` <p-skeleton [shape]="dynamicShape" [animation]="dynamicAnimation" [width]="dynamicWidth" [height]="dynamicHeight" [size]="dynamicSize" [borderRadius]="dynamicBorderRadius"> </p-skeleton> `
+    template: ` <p-skeleton [shape]="dynamicShape()" [animation]="dynamicAnimation()" [width]="dynamicWidth()" [height]="dynamicHeight()" [size]="dynamicSize()" [borderRadius]="dynamicBorderRadius()"> </p-skeleton> `
 })
 class TestSkeletonDynamicComponent {
-    dynamicShape = 'rectangle';
-    dynamicAnimation = 'wave';
-    dynamicWidth = '100px';
-    dynamicHeight = '20px';
-    dynamicSize: string | undefined;
-    dynamicBorderRadius: string | undefined;
+    dynamicShape = signal<string>('rectangle');
+    dynamicAnimation = signal<string>('wave');
+    dynamicWidth = signal<string>('100px');
+    dynamicHeight = signal<string>('20px');
+    dynamicSize = signal<string | undefined>(undefined);
+    dynamicBorderRadius = signal<string | undefined>(undefined);
 }
 
 describe('Skeleton', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [SkeletonModule],
-            declarations: [
+            imports: [
+                SkeletonModule,
                 TestBasicSkeletonComponent,
                 TestSkeletonShapesComponent,
                 TestSkeletonDimensionsComponent,
@@ -210,7 +218,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle rectangle shape', async () => {
-            component.shape = 'rectangle';
+            component.shape.set('rectangle');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -219,7 +227,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle circle shape', async () => {
-            component.shape = 'circle';
+            component.shape.set('circle');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -228,7 +236,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle square shape', async () => {
-            component.shape = 'square';
+            component.shape.set('square');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -237,7 +245,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle custom shapes', async () => {
-            component.shape = 'custom-shape';
+            component.shape.set('custom-shape');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -246,7 +254,7 @@ describe('Skeleton', () => {
         });
 
         it('should apply border radius correctly', async () => {
-            component.borderRadius = '10px';
+            component.borderRadius.set('10px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -256,8 +264,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle size property for square elements', async () => {
-            component.size = '50px';
-            component.shape = 'circle';
+            component.size.set('50px');
+            component.shape.set('circle');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -282,15 +290,15 @@ describe('Skeleton', () => {
         });
 
         it('should apply custom width and height', () => {
-            expect(skeleton.width()).toBe(component.width);
-            expect(skeleton.height()).toBe(component.height);
+            expect(skeleton.width()).toBe(component.width());
+            expect(skeleton.height()).toBe(component.height());
 
             expect(skeleton.containerStyle()?.width).toBe('200px');
             expect(skeleton.containerStyle()?.height).toBe('50px');
         });
 
         it('should prioritize size over width/height when size is provided', async () => {
-            component.size = '100px';
+            component.size.set('100px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -300,9 +308,9 @@ describe('Skeleton', () => {
         });
 
         it('should use width/height when size is not provided', async () => {
-            component.size = undefined as any;
-            component.width = '300px';
-            component.height = '40px';
+            component.size.set(undefined as any);
+            component.width.set('300px');
+            component.height.set('40px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -312,8 +320,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle percentage values', async () => {
-            component.width = '75%';
-            component.height = '2em';
+            component.width.set('75%');
+            component.height.set('2em');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -323,8 +331,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle viewport units', async () => {
-            component.width = '50vw';
-            component.height = '10vh';
+            component.width.set('50vw');
+            component.height.set('10vh');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -334,8 +342,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle rem and em units', async () => {
-            component.width = '20rem';
-            component.height = '3em';
+            component.width.set('20rem');
+            component.height.set('3em');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -359,7 +367,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle wave animation', async () => {
-            component.animation = 'wave';
+            component.animation.set('wave');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -368,7 +376,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle pulse animation', async () => {
-            component.animation = 'pulse';
+            component.animation.set('pulse');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -377,7 +385,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle none animation', async () => {
-            component.animation = 'none';
+            component.animation.set('none');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -386,7 +394,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle custom animation types', async () => {
-            component.animation = 'custom-animation';
+            component.animation.set('custom-animation');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -436,8 +444,8 @@ describe('Skeleton', () => {
         });
 
         it('should calculate container style with size property', async () => {
-            component.size = '80px';
-            component.borderRadius = '5px';
+            component.size.set('80px');
+            component.borderRadius.set('5px');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -450,10 +458,10 @@ describe('Skeleton', () => {
         });
 
         it('should calculate container style with width and height', async () => {
-            component.size = undefined;
-            component.width = '150px';
-            component.height = '30px';
-            component.borderRadius = '3px';
+            component.size.set(undefined);
+            component.width.set('150px');
+            component.height.set('30px');
+            component.borderRadius.set('3px');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -474,7 +482,7 @@ describe('Skeleton', () => {
         });
 
         it('should handle missing borderRadius', async () => {
-            component.borderRadius = undefined;
+            component.borderRadius.set(undefined);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -561,7 +569,7 @@ describe('Skeleton', () => {
         });
 
         it('should update shape dynamically', async () => {
-            component.dynamicShape = 'circle';
+            component.dynamicShape.set('circle');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -570,7 +578,7 @@ describe('Skeleton', () => {
         });
 
         it('should update animation dynamically', async () => {
-            component.dynamicAnimation = 'pulse';
+            component.dynamicAnimation.set('pulse');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -579,8 +587,8 @@ describe('Skeleton', () => {
         });
 
         it('should update dimensions dynamically', async () => {
-            component.dynamicWidth = '250px';
-            component.dynamicHeight = '60px';
+            component.dynamicWidth.set('250px');
+            component.dynamicHeight.set('60px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -592,7 +600,7 @@ describe('Skeleton', () => {
         });
 
         it('should update size dynamically', async () => {
-            component.dynamicSize = '120px';
+            component.dynamicSize.set('120px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -603,7 +611,7 @@ describe('Skeleton', () => {
         });
 
         it('should update border radius dynamically', async () => {
-            component.dynamicBorderRadius = '15px';
+            component.dynamicBorderRadius.set('15px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -638,8 +646,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle zero dimensions', async () => {
-            component.dynamicWidth = '0px';
-            component.dynamicHeight = '0px';
+            component.dynamicWidth.set('0px');
+            component.dynamicHeight.set('0px');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -650,8 +658,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle very large dimensions', async () => {
-            component.dynamicWidth = '9999px';
-            component.dynamicHeight = '9999px';
+            component.dynamicWidth.set('9999px');
+            component.dynamicHeight.set('9999px');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -662,8 +670,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle empty strings', async () => {
-            component.dynamicWidth = '';
-            component.dynamicHeight = '';
+            component.dynamicWidth.set('');
+            component.dynamicHeight.set('');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -674,8 +682,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle null/undefined values gracefully', async () => {
-            component.dynamicBorderRadius = undefined;
-            component.dynamicSize = undefined;
+            component.dynamicBorderRadius.set(undefined);
+            component.dynamicSize.set(undefined);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -687,8 +695,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle invalid CSS values', async () => {
-            component.dynamicWidth = 'invalid-value';
-            component.dynamicHeight = 'another-invalid';
+            component.dynamicWidth.set('invalid-value');
+            component.dynamicHeight.set('another-invalid');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -699,17 +707,17 @@ describe('Skeleton', () => {
         });
 
         it('should handle rapid property updates', async () => {
-            component.dynamicShape = 'rectangle';
+            component.dynamicShape.set('rectangle');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
 
-            component.dynamicShape = 'circle';
+            component.dynamicShape.set('circle');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
 
-            component.dynamicShape = 'square';
+            component.dynamicShape.set('square');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -718,8 +726,8 @@ describe('Skeleton', () => {
         });
 
         it('should handle complex CSS calc expressions', async () => {
-            component.dynamicWidth = 'calc(100% - 20px)';
-            component.dynamicHeight = 'calc(50vh - 10px)';
+            component.dynamicWidth.set('calc(100% - 20px)');
+            component.dynamicHeight.set('calc(50vh - 10px)');
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await fixture.whenStable();
@@ -733,11 +741,14 @@ describe('Skeleton', () => {
     describe('Performance', () => {
         it('should handle multiple skeletons efficiently', async () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [SkeletonModule],
                 template: `
-                    <div *ngFor="let item of items; trackBy: trackByFn">
-                        <p-skeleton [width]="item.width" [height]="item.height"></p-skeleton>
-                    </div>
+                    @for (item of items; track $index) {
+                        <div>
+                            <p-skeleton [width]="item.width" [height]="item.height"></p-skeleton>
+                        </div>
+                    }
                 `
             })
             class TestMultipleSkeletonsComponent {
@@ -747,15 +758,10 @@ describe('Skeleton', () => {
                         width: `${100 + i}px`,
                         height: `${20 + i}px`
                     }));
-
-                trackByFn(index: number): number {
-                    return index;
-                }
             }
 
             TestBed.configureTestingModule({
-                declarations: [TestMultipleSkeletonsComponent],
-                imports: [SkeletonModule],
+                imports: [SkeletonModule, TestMultipleSkeletonsComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -794,7 +800,8 @@ describe('Skeleton', () => {
     describe('Complex Scenarios', () => {
         it('should handle nested skeleton layouts', () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [SkeletonModule],
                 template: `
                     <div class="container">
                         <div class="header">
@@ -817,8 +824,7 @@ describe('Skeleton', () => {
             class TestNestedSkeletonsComponent {}
 
             TestBed.configureTestingModule({
-                declarations: [TestNestedSkeletonsComponent],
-                imports: [SkeletonModule],
+                imports: [SkeletonModule, TestNestedSkeletonsComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -838,15 +844,20 @@ describe('Skeleton', () => {
 
         it('should work with conditional rendering', async () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [SkeletonModule],
                 template: `
-                    <div *ngIf="showSkeletons">
-                        <p-skeleton *ngFor="let item of skeletonItems" [width]="item.width" [height]="item.height" [shape]="item.shape"> </p-skeleton>
-                    </div>
+                    @if (showSkeletons()) {
+                        <div>
+                            @for (item of skeletonItems; track $index) {
+                                <p-skeleton [width]="item.width" [height]="item.height" [shape]="item.shape"> </p-skeleton>
+                            }
+                        </div>
+                    }
                 `
             })
             class TestConditionalSkeletonsComponent {
-                showSkeletons = true;
+                showSkeletons = signal(true);
                 skeletonItems = [
                     { width: '100%', height: '2rem', shape: 'rectangle' },
                     { width: '80%', height: '1.5rem', shape: 'rectangle' },
@@ -855,8 +866,7 @@ describe('Skeleton', () => {
             }
 
             TestBed.configureTestingModule({
-                declarations: [TestConditionalSkeletonsComponent],
-                imports: [SkeletonModule],
+                imports: [SkeletonModule, TestConditionalSkeletonsComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -869,7 +879,7 @@ describe('Skeleton', () => {
             expect(skeletons.length).toBe(3);
 
             // Hide skeletons
-            component.showSkeletons = false;
+            component.showSkeletons.set(false);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -879,7 +889,7 @@ describe('Skeleton', () => {
             expect(skeletons.length).toBe(0);
 
             // Show skeletons again
-            component.showSkeletons = true;
+            component.showSkeletons.set(true);
             fixture.changeDetectorRef.markForCheck();
             fixture.detectChanges();
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -901,13 +911,13 @@ describe('Skeleton', () => {
         });
 
         it('should call super.ngOnInit', () => {
-            spyOn(BaseComponent.prototype, 'ngOnInit');
+            vi.spyOn(BaseComponent.prototype, 'ngOnInit');
             skeleton.ngOnInit();
             expect(BaseComponent.prototype.ngOnInit).toHaveBeenCalled();
         });
 
         it('should call super.ngOnDestroy', () => {
-            spyOn(BaseComponent.prototype, 'ngOnDestroy');
+            vi.spyOn(BaseComponent.prototype, 'ngOnDestroy');
             skeleton.ngOnDestroy();
             expect(BaseComponent.prototype.ngOnDestroy).toHaveBeenCalled();
         });
@@ -948,7 +958,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 1: Simple string classes', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtComponent {
@@ -961,8 +972,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtComponent],
+                imports: [SkeletonModule, TestSkeletonPtComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -991,7 +1001,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 2: Objects', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtObjectComponent {
@@ -1004,8 +1015,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtObjectComponent],
+                imports: [SkeletonModule, TestSkeletonPtObjectComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1050,7 +1060,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 3: Mixed object and string values', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtMixedComponent {
@@ -1063,8 +1074,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtMixedComponent],
+                imports: [SkeletonModule, TestSkeletonPtMixedComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1092,13 +1102,14 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 4: Use variables from instance', () => {
         @Component({
-            standalone: false,
-            template: ` <p-skeleton [shape]="shape" [animation]="animation" [pt]="pt"></p-skeleton> `
+            standalone: true,
+            imports: [SkeletonModule],
+            template: ` <p-skeleton [shape]="shape()" [animation]="animation()" [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtInstanceComponent {
             pt: any = {};
-            shape = 'circle';
-            animation = 'wave';
+            shape = signal<string>('circle');
+            animation = signal<string>('wave');
         }
 
         let fixture: ComponentFixture<TestSkeletonPtInstanceComponent>;
@@ -1107,8 +1118,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtInstanceComponent],
+                imports: [SkeletonModule, TestSkeletonPtInstanceComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1117,7 +1127,7 @@ describe('Skeleton', () => {
         });
 
         it('should apply pt based on instance shape', async () => {
-            component.shape = 'circle';
+            component.shape.set('circle');
             component.pt = {
                 host: ({ instance }: any) => {
                     return {
@@ -1141,7 +1151,7 @@ describe('Skeleton', () => {
         });
 
         it('should apply pt style based on instance animation', async () => {
-            component.animation = 'pulse';
+            component.animation.set('pulse');
             component.pt = {
                 root: ({ instance }: any) => {
                     return {
@@ -1163,7 +1173,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 5: Event binding', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtEventComponent {
@@ -1176,8 +1187,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtEventComponent],
+                imports: [SkeletonModule, TestSkeletonPtEventComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1230,13 +1240,15 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 6: Inline test', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="{ host: 'INLINE_HOST_CLASS' }"></p-skeleton> `
         })
         class TestSkeletonInlineStringPtComponent {}
 
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="{ host: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid green' } } }"></p-skeleton> `
         })
         class TestSkeletonInlineObjectPtComponent {}
@@ -1244,8 +1256,7 @@ describe('Skeleton', () => {
         it('should apply inline pt with string class', () => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonInlineStringPtComponent],
+                imports: [SkeletonModule, TestSkeletonInlineStringPtComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1260,8 +1271,7 @@ describe('Skeleton', () => {
         it('should apply inline pt with object', () => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonInlineObjectPtComponent],
+                imports: [SkeletonModule, TestSkeletonInlineObjectPtComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 
@@ -1277,10 +1287,9 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 7: Test from PrimeNGConfig', () => {
         it('should apply global pt configuration from PrimeNGConfig', () => {
-            const { providePrimeNG } = require('primeng/config');
-
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [SkeletonModule],
                 template: `
                     <p-skeleton></p-skeleton>
                     <p-skeleton></p-skeleton>
@@ -1290,8 +1299,7 @@ describe('Skeleton', () => {
 
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonGlobalPtComponent],
+                imports: [SkeletonModule, TestSkeletonGlobalPtComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({
@@ -1319,18 +1327,16 @@ describe('Skeleton', () => {
         });
 
         it('should merge local pt with global pt configuration', () => {
-            const { providePrimeNG } = require('primeng/config');
-
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [SkeletonModule],
                 template: ` <p-skeleton [pt]="{ host: 'LOCAL_HOST_CLASS', root: 'LOCAL_ROOT_CLASS' }"></p-skeleton> `
             })
             class TestSkeletonMergedPtComponent {}
 
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonMergedPtComponent],
+                imports: [SkeletonModule, TestSkeletonMergedPtComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({
@@ -1356,7 +1362,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 8: Test hooks', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [SkeletonModule],
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
         class TestSkeletonPtHooksComponent {
@@ -1369,8 +1376,7 @@ describe('Skeleton', () => {
         beforeEach(() => {
             TestBed.resetTestingModule();
             TestBed.configureTestingModule({
-                imports: [SkeletonModule],
-                declarations: [TestSkeletonPtHooksComponent],
+                imports: [SkeletonModule, TestSkeletonPtHooksComponent],
                 providers: [provideZonelessChangeDetection()]
             });
 

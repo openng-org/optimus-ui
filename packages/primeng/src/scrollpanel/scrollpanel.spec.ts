@@ -1,28 +1,32 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, Input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ScrollPanel } from './scrollpanel';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ScrollPanel],
     template: `
-        <p-scrollpanel [step]="step" style="width: 400px; height: 200px;">
+        <p-scrollpanel [step]="step()" style="width: 400px; height: 200px;">
             <div class="content-div" style="width: 800px; height: 600px; padding: 20px;">
                 <h2>Scrollable Content</h2>
                 <p>This is content that will cause scrollbars to appear.</p>
-                <div *ngFor="let item of items">Item {{ item }}</div>
+                @for (item of items(); track item) {
+                    <div>Item {{ item }}</div>
+                }
             </div>
         </p-scrollpanel>
     `
 })
 class TestScrollPanelComponent {
-    step = 5;
-    items = Array.from({ length: 20 }, (_, i) => i + 1);
+    step = signal(5);
+    items = signal(Array.from({ length: 20 }, (_, i) => i + 1));
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ScrollPanel],
     template: `
         <p-scrollpanel style="width: 300px; height: 150px;">
             <ng-template #content>
@@ -37,7 +41,8 @@ class TestScrollPanelComponent {
 class TestTemplateScrollPanelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ScrollPanel],
     template: `
         <p-scrollpanel style="width: 280px; height: 120px;">
             <ng-template #content>
@@ -52,7 +57,8 @@ class TestTemplateScrollPanelComponent {}
 class TestContentTemplateScrollPanelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ScrollPanel],
     template: `
         <p-scrollpanel style="width: 250px; height: 100px;">
             <div style="width: 100px; height: 50px;">Small content - no scrollbars needed</div>
@@ -62,7 +68,8 @@ class TestContentTemplateScrollPanelComponent {}
 class TestNoScrollScrollPanelComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ScrollPanel],
     template: `
         <p-scrollpanel [pt]="pt" style="width: 400px; height: 200px;">
             <div style="width: 800px; height: 600px; padding: 20px;">
@@ -81,10 +88,33 @@ describe('ScrollPanel', () => {
     let scrollPanelEl: DebugElement;
     let scrollPanel: ScrollPanel;
 
+    // jsdom has no layout engine, so every element reports 0 for scroll/client dimensions.
+    // ScrollPanel.moveBar() then computes NaN ratios and writes invalid CSS like
+    // `calc(NaN% - 0px)`, which jsdom's CSS parser rejects. Provide non-zero dimensions so
+    // the scrollbar math stays finite, emulating a real browser's layout.
+    const dimensionProps: Record<string, number> = {
+        scrollWidth: 800,
+        scrollHeight: 200,
+        clientWidth: 200,
+        clientHeight: 200,
+        offsetWidth: 200,
+        offsetHeight: 200
+    };
+    const originalDimensionDescriptors: Record<string, PropertyDescriptor | undefined> = {};
+
     beforeEach(() => {
+        for (const prop of Object.keys(dimensionProps)) {
+            originalDimensionDescriptors[prop] = Object.getOwnPropertyDescriptor(HTMLElement.prototype, prop);
+            Object.defineProperty(HTMLElement.prototype, prop, {
+                configurable: true,
+                get() {
+                    return dimensionProps[prop];
+                }
+            });
+        }
+
         TestBed.configureTestingModule({
-            imports: [ScrollPanel],
-            declarations: [TestScrollPanelComponent, TestTemplateScrollPanelComponent, TestContentTemplateScrollPanelComponent, TestNoScrollScrollPanelComponent, TestPTScrollPanelComponent],
+            imports: [ScrollPanel, TestScrollPanelComponent, TestTemplateScrollPanelComponent, TestContentTemplateScrollPanelComponent, TestNoScrollScrollPanelComponent, TestPTScrollPanelComponent],
             providers: [provideZonelessChangeDetection()]
         });
 
@@ -94,6 +124,17 @@ describe('ScrollPanel', () => {
 
         scrollPanelEl = fixture.debugElement.query(By.directive(ScrollPanel));
         scrollPanel = scrollPanelEl.componentInstance;
+    });
+
+    afterEach(() => {
+        for (const prop of Object.keys(dimensionProps)) {
+            const original = originalDimensionDescriptors[prop];
+            if (original) {
+                Object.defineProperty(HTMLElement.prototype, prop, original);
+            } else {
+                delete (HTMLElement.prototype as any)[prop];
+            }
+        }
     });
 
     describe('Component Initialization', () => {
@@ -113,7 +154,7 @@ describe('ScrollPanel', () => {
         });
 
         it('should accept custom step value', async () => {
-            component.step = 10;
+            component.step.set(10);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -316,8 +357,8 @@ describe('ScrollPanel', () => {
             const arrowDownEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
             const arrowUpEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
 
-            spyOn(arrowDownEvent, 'preventDefault');
-            spyOn(arrowUpEvent, 'preventDefault');
+            vi.spyOn(arrowDownEvent, 'preventDefault');
+            vi.spyOn(arrowUpEvent, 'preventDefault');
 
             scrollPanel.onKeyDown(arrowDownEvent);
             expect(arrowDownEvent.preventDefault).toHaveBeenCalled();
@@ -335,8 +376,8 @@ describe('ScrollPanel', () => {
             const arrowRightEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
             const arrowLeftEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
 
-            spyOn(arrowRightEvent, 'preventDefault');
-            spyOn(arrowLeftEvent, 'preventDefault');
+            vi.spyOn(arrowRightEvent, 'preventDefault');
+            vi.spyOn(arrowLeftEvent, 'preventDefault');
 
             scrollPanel.onKeyDown(arrowRightEvent);
             expect(arrowRightEvent.preventDefault).toHaveBeenCalled();
@@ -355,7 +396,7 @@ describe('ScrollPanel', () => {
             scrollPanel.onKeyUp();
 
             // clearTimer calls clearTimeout but doesn't set timer to undefined
-            expect(typeof timerId).toBe('number');
+            expect(timerId).toBeDefined();
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
         });
@@ -393,8 +434,8 @@ describe('ScrollPanel', () => {
             const mouseEvent = new MouseEvent('mousedown');
             Object.defineProperty(mouseEvent, 'pageY', { value: 100, writable: false });
 
-            spyOn(yBar.nativeElement, 'focus');
-            spyOn(mouseEvent, 'preventDefault');
+            vi.spyOn(yBar.nativeElement, 'focus');
+            vi.spyOn(mouseEvent, 'preventDefault');
 
             scrollPanel.onYBarMouseDown(mouseEvent);
 
@@ -410,8 +451,8 @@ describe('ScrollPanel', () => {
             const mouseEvent = new MouseEvent('mousedown');
             Object.defineProperty(mouseEvent, 'pageX', { value: 150, writable: false });
 
-            spyOn(xBar.nativeElement, 'focus');
-            spyOn(mouseEvent, 'preventDefault');
+            vi.spyOn(xBar.nativeElement, 'focus');
+            vi.spyOn(mouseEvent, 'preventDefault');
 
             scrollPanel.onXBarMouseDown(mouseEvent);
 
@@ -553,7 +594,7 @@ describe('ScrollPanel', () => {
         });
 
         it('should refresh scrollbar position and size', async () => {
-            spyOn(scrollPanel, 'moveBar');
+            vi.spyOn(scrollPanel, 'moveBar');
 
             scrollPanel.refresh();
 
@@ -653,19 +694,19 @@ describe('ScrollPanel', () => {
         });
 
         it('should handle extreme step values', async () => {
-            component.step = 0;
+            component.step.set(0);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(scrollPanel.step()).toBe(0);
 
-            component.step = 1000;
+            component.step.set(1000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
             expect(scrollPanel.step()).toBe(1000);
 
-            component.step = -5;
+            component.step.set(-5);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -696,21 +737,21 @@ describe('ScrollPanel', () => {
 
     describe('Memory Management', () => {
         it('should bind and unbind document mouse listeners', () => {
-            spyOn(document, 'addEventListener');
-            spyOn(document, 'removeEventListener');
+            vi.spyOn(document, 'addEventListener');
+            vi.spyOn(document, 'removeEventListener');
 
             scrollPanel.bindDocumentMouseListeners();
-            expect(document.addEventListener).toHaveBeenCalledWith('mousemove', jasmine.any(Function));
-            expect(document.addEventListener).toHaveBeenCalledWith('mouseup', jasmine.any(Function));
+            expect(document.addEventListener).toHaveBeenCalledWith('mousemove', expect.any(Function));
+            expect(document.addEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
 
             scrollPanel.unbindDocumentMouseListeners();
-            expect(document.removeEventListener).toHaveBeenCalledWith('mousemove', jasmine.any(Function));
-            expect(document.removeEventListener).toHaveBeenCalledWith('mouseup', jasmine.any(Function));
+            expect(document.removeEventListener).toHaveBeenCalledWith('mousemove', expect.any(Function));
+            expect(document.removeEventListener).toHaveBeenCalledWith('mouseup', expect.any(Function));
         });
 
         it('should cleanup listeners on destroy', async () => {
             scrollPanel.initialized = true;
-            spyOn(scrollPanel, 'unbindListeners');
+            vi.spyOn(scrollPanel, 'unbindListeners');
 
             fixture.destroy();
 
@@ -724,7 +765,7 @@ describe('ScrollPanel', () => {
             scrollPanel.clearTimer();
 
             // clearTimer calls clearTimeout but timer reference remains
-            expect(typeof timerId).toBe('number');
+            expect(timerId).toBeDefined();
 
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
@@ -739,7 +780,7 @@ describe('ScrollPanel', () => {
 
             const timerId = scrollPanel.timer;
             scrollPanel.clearTimer();
-            expect(typeof timerId).toBe('number');
+            expect(timerId).toBeDefined();
 
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
@@ -815,11 +856,17 @@ describe('ScrollPanel', () => {
                 Object.defineProperty(contentView.nativeElement, 'clientHeight', { value: 0, writable: true });
             }
 
-            await expect(async () => {
-                scrollPanel.moveBar();
-                await new Promise((resolve) => setTimeout(resolve, 100));
-                await fixture.whenStable();
-            }).not.toThrow();
+            // With zero dimensions the scrollbar ratios become NaN and moveBar writes CSS
+            // like `calc(NaN% - 0px)` in a deferred frame. A real browser ignores that
+            // invalid value, but jsdom's CSS parser throws on it, so stub the deferred write
+            // to keep the assertion focused on moveBar's synchronous handling.
+            vi.spyOn(scrollPanel, 'requestAnimationFrame').mockImplementation(() => {});
+
+            expect(() => scrollPanel.moveBar()).not.toThrow();
+            await fixture.whenStable();
+
+            expect(scrollPanel.scrollXRatio).toBeNaN();
+            expect(scrollPanel.scrollYRatio).toBeNaN();
         });
     });
 

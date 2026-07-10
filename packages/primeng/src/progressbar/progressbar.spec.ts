@@ -1,25 +1,27 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, signal, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProgressBar } from './progressbar';
 
 @Component({
-    standalone: false,
-    template: `<p-progressbar [value]="value" [showValue]="showValue" [unit]="unit" [mode]="mode" [color]="color" [valueStyleClass]="valueStyleClass"> </p-progressbar>`
+    standalone: true,
+    imports: [ProgressBar],
+    template: `<p-progressbar [value]="value()" [showValue]="showValue()" [unit]="unit()" [mode]="mode()" [color]="color()" [valueStyleClass]="valueStyleClass()"> </p-progressbar>`
 })
 class TestBasicProgressBarComponent {
-    value: number | undefined = 50;
-    showValue: boolean = true;
-    unit: string = '%';
-    mode: string = 'determinate';
-    color: string | undefined;
-    valueStyleClass: string | undefined;
+    value = signal<number | undefined>(50);
+    showValue = signal<boolean>(true);
+    unit = signal<string>('%');
+    mode = signal<string>('determinate');
+    color = signal<string | undefined>(undefined);
+    valueStyleClass = signal<string | undefined>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ProgressBar],
     template: `
-        <p-progressbar [value]="value">
+        <p-progressbar [value]="value()">
             <ng-template #content let-value>
                 <div class="custom-content-template">Custom: {{ value }}%</div>
             </ng-template>
@@ -27,11 +29,12 @@ class TestBasicProgressBarComponent {
     `
 })
 class TestContentTemplateProgressBarComponent {
-    value = 60;
+    value = signal<number>(60);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ProgressBar],
     template: `<p-progressbar [value]="value" mode="indeterminate"></p-progressbar>`
 })
 class TestIndeterminateProgressBarComponent {
@@ -39,7 +42,8 @@ class TestIndeterminateProgressBarComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [ProgressBar],
     template: `<p-progressbar [value]="value" [style]="style"></p-progressbar>`
 })
 class TestStyleProgressBarComponent {
@@ -55,8 +59,7 @@ describe('ProgressBar', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicProgressBarComponent, TestContentTemplateProgressBarComponent, TestIndeterminateProgressBarComponent, TestStyleProgressBarComponent],
-            imports: [ProgressBar],
+            imports: [ProgressBar, TestBasicProgressBarComponent, TestContentTemplateProgressBarComponent, TestIndeterminateProgressBarComponent, TestStyleProgressBarComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -75,7 +78,7 @@ describe('ProgressBar', () => {
         it('should have default values', () => {
             const freshFixture = TestBed.createComponent(TestBasicProgressBarComponent);
             const freshComponent = freshFixture.componentInstance;
-            freshComponent.value = undefined as any; // Reset to undefined
+            freshComponent.value.set(undefined as any); // Reset to undefined
             freshFixture.detectChanges();
             const freshProgressBar = freshFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
 
@@ -87,12 +90,12 @@ describe('ProgressBar', () => {
         });
 
         it('should accept custom values', async () => {
-            component.value = 75;
-            component.showValue = false;
-            component.unit = ' points';
-            component.mode = 'indeterminate';
-            component.color = 'blue';
-            component.valueStyleClass = 'custom-value-class';
+            component.value.set(75);
+            component.showValue.set(false);
+            component.unit.set(' points');
+            component.mode.set('indeterminate');
+            component.color.set('blue');
+            component.valueStyleClass.set('custom-value-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -107,14 +110,14 @@ describe('ProgressBar', () => {
 
     describe('Input Properties', () => {
         it('should update value input', async () => {
-            component.value = 80;
+            component.value.set(80);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.value()).toBe(80);
         });
 
         it('should handle value as number through numberAttribute transform', async () => {
-            component.value = 45;
+            component.value.set(45);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.value()).toBe(45);
@@ -122,35 +125,35 @@ describe('ProgressBar', () => {
         });
 
         it('should handle showValue through booleanAttribute transform', async () => {
-            component.showValue = false;
+            component.showValue.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.showValue()).toBe(false);
         });
 
         it('should update unit input', async () => {
-            component.unit = ' MB';
+            component.unit.set(' MB');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.unit()).toBe(' MB');
         });
 
         it('should update mode input', async () => {
-            component.mode = 'indeterminate';
+            component.mode.set('indeterminate');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.mode()).toBe('indeterminate');
         });
 
         it('should update color input', async () => {
-            component.color = '#ff0000';
+            component.color.set('#ff0000');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.color()).toBe('#ff0000');
         });
 
         it('should update valueStyleClass input', async () => {
-            component.valueStyleClass = 'value-test-class';
+            component.valueStyleClass.set('value-test-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(progressBarInstance.valueStyleClass()).toBe('value-test-class');
@@ -159,8 +162,8 @@ describe('ProgressBar', () => {
 
     describe('Determinate Mode Rendering', () => {
         it('should render determinate progress bar correctly', async () => {
-            component.value = 60;
-            component.mode = 'determinate';
+            component.value.set(60);
+            component.mode.set('determinate');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -170,8 +173,8 @@ describe('ProgressBar', () => {
         });
 
         it('should display value when showValue is true', async () => {
-            component.value = 45;
-            component.showValue = true;
+            component.value.set(45);
+            component.showValue.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -181,8 +184,8 @@ describe('ProgressBar', () => {
         });
 
         it('should hide value when showValue is false', async () => {
-            component.value = 45;
-            component.showValue = false;
+            component.value.set(45);
+            component.showValue.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -191,9 +194,9 @@ describe('ProgressBar', () => {
         });
 
         it('should display custom unit', async () => {
-            component.value = 25;
-            component.unit = ' MB';
-            component.showValue = true;
+            component.value.set(25);
+            component.unit.set(' MB');
+            component.showValue.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -202,8 +205,8 @@ describe('ProgressBar', () => {
         });
 
         it('should apply color to progress value', async () => {
-            component.value = 70;
-            component.color = '#00ff00';
+            component.value.set(70);
+            component.color.set('#00ff00');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -212,8 +215,8 @@ describe('ProgressBar', () => {
         });
 
         it('should apply valueStyleClass to progress value', async () => {
-            component.value = 80;
-            component.valueStyleClass = 'custom-value-style';
+            component.value.set(80);
+            component.valueStyleClass.set('custom-value-style');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -222,8 +225,8 @@ describe('ProgressBar', () => {
         });
 
         it('should hide label when value is null or zero and showValue is true', async () => {
-            component.value = 0;
-            component.showValue = true;
+            component.value.set(0);
+            component.showValue.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -250,8 +253,8 @@ describe('ProgressBar', () => {
         });
 
         it('should apply color to indeterminate progress bar', async () => {
-            component.mode = 'indeterminate';
-            component.color = '#ff6600';
+            component.mode.set('indeterminate');
+            component.color.set('#ff6600');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -298,7 +301,7 @@ describe('ProgressBar', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await templateFixture.whenStable();
 
-            templateComponent.value = 85;
+            templateComponent.value.set(85);
             templateFixture.changeDetectorRef.markForCheck();
             await templateFixture.whenStable();
 
@@ -306,7 +309,7 @@ describe('ProgressBar', () => {
             if (customContent) {
                 expect(customContent.nativeElement.textContent.trim()).toBe('Custom: 85%');
             } else {
-                expect(templateComponent.value).toBe(85);
+                expect(templateComponent.value()).toBe(85);
             }
         });
     });
@@ -336,8 +339,8 @@ describe('ProgressBar', () => {
         });
 
         it('should apply valueStyleClass to value element', async () => {
-            component.value = 55;
-            component.valueStyleClass = 'custom-value-class';
+            component.value.set(55);
+            component.valueStyleClass.set('custom-value-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -348,7 +351,7 @@ describe('ProgressBar', () => {
 
     describe('Accessibility', () => {
         it('should have proper ARIA attributes', async () => {
-            component.value = 65;
+            component.value.set(65);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -361,22 +364,22 @@ describe('ProgressBar', () => {
         });
 
         it('should update aria-valuenow when value changes', async () => {
-            component.value = 30;
+            component.value.set(30);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
             expect(rootElement.nativeElement.getAttribute('aria-valuenow')).toBe('30');
 
-            component.value = 80;
+            component.value.set(80);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(rootElement.nativeElement.getAttribute('aria-valuenow')).toBe('80');
         });
 
         it('should set aria-level with value and unit', async () => {
-            component.value = 45;
-            component.unit = ' MB';
+            component.value.set(45);
+            component.unit.set(' MB');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -385,7 +388,7 @@ describe('ProgressBar', () => {
         });
 
         it('should handle undefined value in ARIA attributes', async () => {
-            component.value = undefined as any;
+            component.value.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -397,8 +400,8 @@ describe('ProgressBar', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values', async () => {
-            component.value = undefined as any;
-            component.color = undefined as any;
+            component.value.set(undefined as any);
+            component.color.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -409,8 +412,8 @@ describe('ProgressBar', () => {
         });
 
         it('should handle zero value correctly', async () => {
-            component.value = 0;
-            component.showValue = true;
+            component.value.set(0);
+            component.showValue.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -428,9 +431,9 @@ describe('ProgressBar', () => {
             const negativeComponent = negativeFixture.componentInstance;
 
             // Explicitly set all properties to ensure clean state
-            negativeComponent.value = -10;
-            negativeComponent.mode = 'determinate';
-            negativeComponent.showValue = true;
+            negativeComponent.value.set(-10);
+            negativeComponent.mode.set('determinate');
+            negativeComponent.showValue.set(true);
             negativeFixture.detectChanges();
 
             const progressBarInstance = negativeFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
@@ -449,7 +452,7 @@ describe('ProgressBar', () => {
         });
 
         it('should handle values over 100%', async () => {
-            component.value = 150;
+            component.value.set(150);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -463,7 +466,7 @@ describe('ProgressBar', () => {
         });
 
         it('should handle empty string values gracefully', async () => {
-            component.unit = '';
+            component.unit.set('');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -472,15 +475,15 @@ describe('ProgressBar', () => {
         });
 
         it('should handle mode changes correctly', async () => {
-            component.mode = 'determinate';
-            component.value = 50;
+            component.mode.set('determinate');
+            component.value.set(50);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             let valueElement = fixture.debugElement.query(By.css('[data-pc-section="value"]'));
             expect(valueElement.nativeElement.style.width).toBe('50%');
 
-            component.mode = 'indeterminate';
+            component.mode.set('indeterminate');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -492,7 +495,7 @@ describe('ProgressBar', () => {
             const values = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
             for (const value of values) {
-                component.value = value;
+                component.value.set(value);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
 

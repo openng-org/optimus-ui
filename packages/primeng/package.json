@@ -37,18 +37,14 @@
         "build:schematics": "tsc -p tsconfig.schematics.json",
         "dev:link": "pnpm link --global && npm link",
         "lint": "ng lint",
-        "test:unit": "ng test primeng --watch=false --browsers=ChromeHeadless",
+        "test:unit": "ng test primeng --watch=false",
         "test:unit:watch": "ng test primeng",
-        "test:unit:coverage": "ng test primeng --coverage"
+        "test:unit:coverage": "ng test primeng --coverage --watch=false"
     },
     "devDependencies": {
         "@angular-devkit/core": "catalog:angular22",
         "@angular-devkit/schematics": "catalog:angular22",
-        "karma": "~6.4.4",
-        "karma-chrome-launcher": "~3.2.0",
-        "karma-coverage": "~2.2.1",
-        "karma-jasmine": "~5.1.0",
-        "karma-jasmine-html-reporter": "~2.1.0",
+        "@types/node": "^22.9.0",
         "tslib": "^2.8.1"
     },
     "peerDependencies": {

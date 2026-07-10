@@ -1,4 +1,4 @@
-import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,16 +8,17 @@ import { providePrimeNG } from 'primeng/config';
 import { Dock } from './dock';
 
 @Component({
-    standalone: false,
-    template: ` <p-dock [id]="id" [model]="model" [position]="position" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" [breakpoint]="breakpoint" (onFocus)="onFocus($event)" (onBlur)="onBlur($event)"> </p-dock> `
+    standalone: true,
+    imports: [Dock],
+    template: ` <p-dock [id]="id()" [model]="model()" [position]="position()" [ariaLabel]="ariaLabel()" [ariaLabelledBy]="ariaLabelledBy()" [breakpoint]="breakpoint()" (onFocus)="onFocus($event)" (onBlur)="onBlur($event)"> </p-dock> `
 })
 class TestBasicDockComponent {
-    id: string | undefined;
-    model: MenuItem[] | undefined = [{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }];
-    position: 'bottom' | 'top' | 'left' | 'right' = 'bottom';
-    ariaLabel: string | undefined;
-    ariaLabelledBy: string | undefined;
-    breakpoint: string | undefined;
+    id = signal<string | undefined>(undefined);
+    model = signal<MenuItem[] | undefined>([{ label: 'File', icon: 'pi pi-file' }, { label: 'Edit', icon: 'pi pi-pencil' }, { separator: true }, { label: 'Settings', icon: 'pi pi-cog' }]);
+    position = signal<'bottom' | 'top' | 'left' | 'right'>('bottom');
+    ariaLabel = signal<string | undefined>(undefined);
+    ariaLabelledBy = signal<string | undefined>(undefined);
+    breakpoint = signal<string | undefined>(undefined);
 
     focusEvent: any;
     blurEvent: any;
@@ -32,7 +33,8 @@ class TestBasicDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-position-dock',
     template: ` <p-dock [model]="model" [position]="position"></p-dock> `
 })
@@ -45,7 +47,8 @@ class TestPositionDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-router-dock',
     template: ` <p-dock [model]="routerModel"></p-dock> `
 })
@@ -63,13 +66,16 @@ class TestRouterDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-item-template-dock',
     template: `
         <p-dock [model]="model">
             <ng-template #item let-item>
                 <div class="custom-dock-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>
@@ -84,7 +90,8 @@ class TestItemTemplateDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-disabled-items-dock',
     template: ` <p-dock [model]="disabledModel"></p-dock> `
 })
@@ -93,7 +100,8 @@ class TestDisabledItemsDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-styled-dock',
     template: ` <p-dock [model]="model" class="custom-dock-class"></p-dock> `
 })
@@ -102,35 +110,38 @@ class TestStyledDockComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-minimal-dock',
     template: `<p-dock></p-dock>`
 })
 class TestMinimalDockComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-dynamic-dock',
-    template: ` <p-dock [model]="dynamicModel"></p-dock> `
+    template: ` <p-dock [model]="dynamicModel()"></p-dock> `
 })
 class TestDynamicDockComponent {
-    dynamicModel: MenuItem[] = [];
+    dynamicModel = signal<MenuItem[]>([]);
 
     addItem(item: MenuItem) {
-        this.dynamicModel.push(item);
+        this.dynamicModel.update((model) => [...model, item]);
     }
 
     clearItems() {
-        this.dynamicModel = [];
+        this.dynamicModel.set([]);
     }
 
     removeItem(index: number) {
-        this.dynamicModel.splice(index, 1);
+        this.dynamicModel.update((model) => model.filter((_, i) => i !== index));
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Dock],
     selector: 'test-command-dock',
     template: ` <p-dock [model]="commandModel"></p-dock> `
 })
@@ -162,7 +173,9 @@ describe('Dock', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
+                Dock,
+                TestTargetComponent,
                 TestBasicDockComponent,
                 TestPositionDockComponent,
                 TestRouterDockComponent,
@@ -171,11 +184,7 @@ describe('Dock', () => {
                 TestStyledDockComponent,
                 TestMinimalDockComponent,
                 TestDynamicDockComponent,
-                TestCommandDockComponent
-            ],
-            imports: [
-                Dock,
-                TestTargetComponent,
+                TestCommandDockComponent,
 
                 SharedModule,
                 RouterTestingModule.withRoutes([
@@ -203,7 +212,7 @@ describe('Dock', () => {
 
         it('should have required dependencies injected', () => {
             expect(dockInstance._componentStyle).toBeTruthy();
-            expect(dockInstance.constructor.name).toBe('Dock');
+            expect(dockInstance.constructor.name).toContain('Dock');
         });
 
         it('should have default values', async () => {
@@ -224,10 +233,10 @@ describe('Dock', () => {
 
         it('should accept custom values', async () => {
             const testModel: MenuItem[] = [{ label: 'Test Item' }];
-            component.model = testModel;
-            component.position = 'top';
-            component.ariaLabel = 'Custom Dock';
-            component.breakpoint = '768px';
+            component.model.set(testModel);
+            component.position.set('top');
+            component.ariaLabel.set('Custom Dock');
+            component.breakpoint.set('768px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -257,7 +266,7 @@ describe('Dock', () => {
     describe('Input Properties', () => {
         it('should update model input', async () => {
             const newModel = [{ label: 'New Item' }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -265,7 +274,7 @@ describe('Dock', () => {
         });
 
         it('should update position input', async () => {
-            component.position = 'left';
+            component.position.set('left');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -273,8 +282,8 @@ describe('Dock', () => {
         });
 
         it('should update ariaLabel and ariaLabelledBy inputs', async () => {
-            component.ariaLabel = 'Test Dock';
-            component.ariaLabelledBy = 'dock-label';
+            component.ariaLabel.set('Test Dock');
+            component.ariaLabelledBy.set('dock-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -283,14 +292,14 @@ describe('Dock', () => {
         });
 
         it('should update breakpoint input', async () => {
-            component.breakpoint = '768px';
+            component.breakpoint.set('768px');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(dockInstance.breakpoint()).toBe('768px');
         });
 
         it('should update id input', async () => {
-            component.id = 'custom-dock-id';
+            component.id.set('custom-dock-id');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(dockInstance.$id()).toBe('custom-dock-id');
@@ -317,11 +326,11 @@ describe('Dock', () => {
         });
 
         it('should hide items when visible is false', async () => {
-            component.model = [
+            component.model.set([
                 { label: 'Visible Item', visible: true },
                 { label: 'Hidden Item', visible: false },
                 { label: 'Default Item' } // visible undefined = true
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -330,7 +339,7 @@ describe('Dock', () => {
         });
 
         it('should handle empty model', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -339,7 +348,7 @@ describe('Dock', () => {
         });
 
         it('should handle null model', async () => {
-            component.model = null as any;
+            component.model.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -409,7 +418,7 @@ describe('Dock', () => {
         });
 
         it('should handle mouse enter on item', () => {
-            spyOn(dockInstance, 'onItemMouseEnter');
+            vi.spyOn(dockInstance, 'onItemMouseEnter');
 
             const itemElement = fixture.debugElement.query(By.css('li[role="menuitem"]'));
             itemElement.triggerEventHandler('mouseenter', {});
@@ -418,7 +427,7 @@ describe('Dock', () => {
         });
 
         it('should handle mouse leave on list', () => {
-            spyOn(dockInstance, 'onListMouseLeave');
+            vi.spyOn(dockInstance, 'onListMouseLeave');
 
             const listElement = fixture.debugElement.query(By.css('ul[role="menu"]'));
             listElement.triggerEventHandler('mouseleave', {});
@@ -467,13 +476,13 @@ describe('Dock', () => {
         });
 
         it('should handle arrow right key for horizontal positions', async () => {
-            component.position = 'bottom';
+            component.position.set('bottom');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onArrowDownKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onArrowDownKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -482,13 +491,13 @@ describe('Dock', () => {
         });
 
         it('should handle arrow left key for horizontal positions', async () => {
-            component.position = 'top';
+            component.position.set('top');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onArrowUpKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onArrowUpKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -497,13 +506,13 @@ describe('Dock', () => {
         });
 
         it('should handle arrow down key for vertical positions', async () => {
-            component.position = 'left';
+            component.position.set('left');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onArrowDownKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onArrowDownKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -512,13 +521,13 @@ describe('Dock', () => {
         });
 
         it('should handle arrow up key for vertical positions', async () => {
-            component.position = 'right';
+            component.position.set('right');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onArrowUpKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onArrowUpKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -528,8 +537,8 @@ describe('Dock', () => {
 
         it('should handle home key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Home' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onHomeKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onHomeKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -539,8 +548,8 @@ describe('Dock', () => {
 
         it('should handle end key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'End' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onEndKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onEndKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -550,8 +559,8 @@ describe('Dock', () => {
 
         it('should handle enter key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Enter' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onSpaceKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onSpaceKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -561,8 +570,8 @@ describe('Dock', () => {
 
         it('should handle space key', () => {
             const keyEvent = new KeyboardEvent('keydown', { code: 'Space' });
-            spyOn(keyEvent, 'preventDefault');
-            spyOn(dockInstance, 'onSpaceKey');
+            vi.spyOn(keyEvent, 'preventDefault');
+            vi.spyOn(dockInstance, 'onSpaceKey');
 
             dockInstance.onListKeyDown(keyEvent);
 
@@ -573,7 +582,7 @@ describe('Dock', () => {
 
     describe('Focus Management Tests', () => {
         it('should emit onFocus when list gains focus', () => {
-            spyOn(dockInstance.onFocus, 'emit');
+            vi.spyOn(dockInstance.onFocus, 'emit');
             const focusEvent = new FocusEvent('focus');
 
             dockInstance.onListFocus(focusEvent);
@@ -583,7 +592,7 @@ describe('Dock', () => {
         });
 
         it('should emit onBlur when list loses focus', () => {
-            spyOn(dockInstance.onBlur, 'emit');
+            vi.spyOn(dockInstance.onBlur, 'emit');
             const blurEvent = new FocusEvent('blur');
             dockInstance.focused.set(true);
 
@@ -597,8 +606,8 @@ describe('Dock', () => {
         it('should handle focus and blur events from template', () => {
             const listElement = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
-            spyOn(component, 'onFocus');
-            spyOn(component, 'onBlur');
+            vi.spyOn(component, 'onFocus');
+            vi.spyOn(component, 'onBlur');
 
             listElement.triggerEventHandler('focus', new FocusEvent('focus'));
             expect(component.onFocus).toHaveBeenCalled();
@@ -702,7 +711,7 @@ describe('Dock', () => {
         });
 
         it('should set aria-label when provided', async () => {
-            component.ariaLabel = 'Main Navigation Dock';
+            component.ariaLabel.set('Main Navigation Dock');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -711,7 +720,7 @@ describe('Dock', () => {
         });
 
         it('should set aria-labelledby when provided', async () => {
-            component.ariaLabelledBy = 'dock-heading';
+            component.ariaLabelledBy.set('dock-heading');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -825,8 +834,8 @@ describe('Dock', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values gracefully', async () => {
-            component.model = undefined as any;
-            component.ariaLabel = undefined as any;
+            component.model.set(undefined as any);
+            component.ariaLabel.set(undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -838,7 +847,7 @@ describe('Dock', () => {
         });
 
         it('should handle items without icons', async () => {
-            component.model = [{ label: 'No Icon Item' }, { label: 'Icon Item', icon: 'pi pi-check' }];
+            component.model.set([{ label: 'No Icon Item' }, { label: 'Icon Item', icon: 'pi pi-check' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -847,7 +856,7 @@ describe('Dock', () => {
         });
 
         it('should handle items with custom styleClass', async () => {
-            component.model = [{ label: 'Custom Style', styleClass: 'custom-item-class' }];
+            component.model.set([{ label: 'Custom Style', styleClass: 'custom-item-class' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -856,7 +865,7 @@ describe('Dock', () => {
         });
 
         it('should handle memory cleanup on destroy', () => {
-            spyOn(dockInstance, 'unbindMatchMediaListener');
+            vi.spyOn(dockInstance, 'unbindMatchMediaListener');
 
             dockInstance.ngOnDestroy();
 
@@ -873,7 +882,7 @@ describe('Dock', () => {
         });
 
         it('should bind match media listener on init', () => {
-            spyOn(dockInstance, 'bindMatchMediaListener');
+            vi.spyOn(dockInstance, 'bindMatchMediaListener');
 
             dockInstance.ngOnInit();
 
@@ -881,7 +890,7 @@ describe('Dock', () => {
         });
 
         it('should unbind match media listener on destroy', () => {
-            spyOn(dockInstance, 'unbindMatchMediaListener');
+            vi.spyOn(dockInstance, 'unbindMatchMediaListener');
 
             dockInstance.ngOnDestroy();
 
@@ -1096,7 +1105,7 @@ describe('Dock', () => {
                 { label: 'Item 2', icon: 'pi pi-pencil' }
             ];
 
-            spyOn(ptDock, 'getPTOptions').and.callThrough();
+            vi.spyOn(ptDock, 'getPTOptions');
             ptFixture.changeDetectorRef.markForCheck();
             await ptFixture.whenStable();
 

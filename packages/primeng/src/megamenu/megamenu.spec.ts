@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -13,15 +13,27 @@ function createProcessedMegaMenuItem(item: MegaMenuItem, key: string, index: num
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     template: `
-        <p-megamenu [id]="id" [model]="model" [orientation]="orientation" [breakpoint]="breakpoint" [scrollHeight]="scrollHeight" [disabled]="disabled" [tabindex]="tabindex" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" [pt]="pt">
+        <p-megamenu
+            [id]="id()"
+            [model]="model()"
+            [orientation]="orientation()"
+            [breakpoint]="breakpoint()"
+            [scrollHeight]="scrollHeight()"
+            [disabled]="disabled()"
+            [tabindex]="tabindex()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [pt]="pt()"
+        >
         </p-megamenu>
     `
 })
 class TestBasicMegaMenuComponent {
-    @Input() id: string | undefined;
-    @Input() model: MegaMenuItem[] | undefined = [
+    id = input<string | undefined>(undefined);
+    model = input<MegaMenuItem[] | undefined>([
         {
             label: 'Fashion',
             icon: 'pi pi-shopping-cart',
@@ -58,19 +70,20 @@ class TestBasicMegaMenuComponent {
         },
         { separator: true },
         { label: 'Simple Item', icon: 'pi pi-home', disabled: true }
-    ];
-    @Input() orientation: 'horizontal' | 'vertical' | string = 'horizontal';
-    @Input() breakpoint: string = '960px';
-    @Input() scrollHeight: string = '20rem';
-    @Input() disabled: boolean = false;
-    @Input() tabindex: number = 0;
-    @Input() ariaLabel: string | undefined;
-    @Input() ariaLabelledBy: string | undefined;
-    @Input() pt: any;
+    ]);
+    orientation = input<'horizontal' | 'vertical' | string>('horizontal');
+    breakpoint = input<string>('960px');
+    scrollHeight = input<string>('20rem');
+    disabled = input<boolean>(false);
+    tabindex = input<number>(0);
+    ariaLabel = input<string | undefined>(undefined);
+    ariaLabelledBy = input<string | undefined>(undefined);
+    pt = input<any>(undefined);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-vertical-megamenu',
     template: ` <p-megamenu [model]="verticalModel" orientation="vertical"></p-megamenu> `
 })
@@ -102,7 +115,8 @@ class TestVerticalMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-router-megamenu',
     template: ` <p-megamenu [model]="routerModel"></p-megamenu> `
 })
@@ -139,7 +153,8 @@ class TestRouterMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-template-megamenu',
     template: `
         <p-megamenu [model]="model">
@@ -151,7 +166,9 @@ class TestRouterMegaMenuComponent {
             </ng-template>
             <ng-template #item let-item>
                 <div class="custom-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>
@@ -172,7 +189,8 @@ class TestTemplateMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-disabled-megamenu',
     template: ` <p-megamenu [model]="disabledModel"></p-megamenu> `
 })
@@ -181,7 +199,8 @@ class TestDisabledMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-styled-megamenu',
     template: ` <p-megamenu [model]="model"></p-megamenu> `
 })
@@ -190,35 +209,38 @@ class TestStyledMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-minimal-megamenu',
     template: `<p-megamenu></p-megamenu>`
 })
 class TestMinimalMegaMenuComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-dynamic-megamenu',
-    template: ` <p-megamenu [model]="dynamicModel"></p-megamenu> `
+    template: ` <p-megamenu [model]="dynamicModel()"></p-megamenu> `
 })
 class TestDynamicMegaMenuComponent {
-    dynamicModel: MegaMenuItem[] = [];
+    dynamicModel = signal<MegaMenuItem[]>([]);
 
     addItem(item: MegaMenuItem) {
-        this.dynamicModel.push(item);
+        this.dynamicModel.update((model) => [...model, item]);
     }
 
     clearItems() {
-        this.dynamicModel = [];
+        this.dynamicModel.set([]);
     }
 
     removeItem(index: number) {
-        this.dynamicModel.splice(index, 1);
+        this.dynamicModel.update((model) => model.filter((_, i) => i !== index));
     }
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-command-megamenu',
     template: ` <p-megamenu [model]="commandModel"></p-megamenu> `
 })
@@ -255,7 +277,8 @@ class TestCommandMegaMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [MegaMenu],
     selector: 'test-responsive-megamenu',
     template: ` <p-megamenu [model]="model" [breakpoint]="breakpoint"></p-megamenu> `
 })
@@ -278,7 +301,7 @@ describe('MegaMenu', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [
+            imports: [
                 TestBasicMegaMenuComponent,
                 TestVerticalMegaMenuComponent,
                 TestRouterMegaMenuComponent,
@@ -288,9 +311,7 @@ describe('MegaMenu', () => {
                 TestMinimalMegaMenuComponent,
                 TestDynamicMegaMenuComponent,
                 TestCommandMegaMenuComponent,
-                TestResponsiveMegaMenuComponent
-            ],
-            imports: [
+                TestResponsiveMegaMenuComponent,
                 MegaMenu,
                 TestTargetComponent,
 
@@ -318,7 +339,7 @@ describe('MegaMenu', () => {
 
         it('should have required dependencies injected', () => {
             expect(megaMenuInstance._componentStyle).toBeTruthy();
-            expect(megaMenuInstance.constructor.name).toBe('MegaMenu');
+            expect(megaMenuInstance.constructor.name).toBe('_MegaMenu');
         });
 
         it('should have default values', () => {
@@ -339,10 +360,10 @@ describe('MegaMenu', () => {
 
         it('should accept custom values', async () => {
             const testModel: MegaMenuItem[] = [{ label: 'Test Item' }];
-            component.model = testModel;
-            component.orientation = 'vertical';
-            component.ariaLabel = 'Custom MegaMenu';
-            component.tabindex = 1;
+            fixture.componentRef.setInput('model', testModel);
+            fixture.componentRef.setInput('orientation', 'vertical');
+            fixture.componentRef.setInput('ariaLabel', 'Custom MegaMenu');
+            fixture.componentRef.setInput('tabindex', 1);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -378,7 +399,7 @@ describe('MegaMenu', () => {
     describe('Input Properties', () => {
         it('should update model input', async () => {
             const newModel = [{ label: 'New Item' }];
-            component.model = newModel;
+            fixture.componentRef.setInput('model', newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -387,7 +408,7 @@ describe('MegaMenu', () => {
         });
 
         it('should update orientation input', async () => {
-            component.orientation = 'vertical';
+            fixture.componentRef.setInput('orientation', 'vertical');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -395,8 +416,8 @@ describe('MegaMenu', () => {
         });
 
         it('should update styling inputs', async () => {
-            component.breakpoint = '768px';
-            component.scrollHeight = '15rem';
+            fixture.componentRef.setInput('breakpoint', '768px');
+            fixture.componentRef.setInput('scrollHeight', '15rem');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -405,8 +426,8 @@ describe('MegaMenu', () => {
         });
 
         it('should update disabled and tabindex inputs', async () => {
-            component.disabled = true;
-            component.tabindex = 2;
+            fixture.componentRef.setInput('disabled', true);
+            fixture.componentRef.setInput('tabindex', 2);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -415,8 +436,8 @@ describe('MegaMenu', () => {
         });
 
         it('should update aria inputs', async () => {
-            component.ariaLabel = 'Test MegaMenu';
-            component.ariaLabelledBy = 'megamenu-label';
+            fixture.componentRef.setInput('ariaLabel', 'Test MegaMenu');
+            fixture.componentRef.setInput('ariaLabelledBy', 'megamenu-label');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -425,7 +446,7 @@ describe('MegaMenu', () => {
         });
 
         it('should update id input', async () => {
-            component.id = 'custom-megamenu-id';
+            fixture.componentRef.setInput('id', 'custom-megamenu-id');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(megaMenuInstance.id()).toBe('custom-megamenu-id');
@@ -449,11 +470,11 @@ describe('MegaMenu', () => {
         });
 
         it('should hide items when visible is false', async () => {
-            component.model = [
+            fixture.componentRef.setInput('model', [
                 { label: 'Visible Item', visible: true },
                 { label: 'Hidden Item', visible: false },
                 { label: 'Default Item' } // visible undefined = true
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -462,7 +483,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle empty model', async () => {
-            component.model = [];
+            fixture.componentRef.setInput('model', []);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -471,7 +492,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle null model', async () => {
-            component.model = undefined as any;
+            fixture.componentRef.setInput('model', undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -516,7 +537,7 @@ describe('MegaMenu', () => {
 
     describe('Orientation Tests', () => {
         it('should handle horizontal orientation', () => {
-            component.orientation = 'horizontal';
+            fixture.componentRef.setInput('orientation', 'horizontal');
             fixture.detectChanges();
 
             expect(megaMenuInstance.orientation()).toBe('horizontal');
@@ -670,7 +691,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle arrow down key', () => {
-            spyOn(megaMenuInstance, 'onArrowDownKey');
+            vi.spyOn(megaMenuInstance, 'onArrowDownKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -679,7 +700,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle arrow up key', () => {
-            spyOn(megaMenuInstance, 'onArrowUpKey');
+            vi.spyOn(megaMenuInstance, 'onArrowUpKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowUp' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -688,7 +709,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle arrow left key', () => {
-            spyOn(megaMenuInstance, 'onArrowLeftKey');
+            vi.spyOn(megaMenuInstance, 'onArrowLeftKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -697,7 +718,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle arrow right key', () => {
-            spyOn(megaMenuInstance, 'onArrowRightKey');
+            vi.spyOn(megaMenuInstance, 'onArrowRightKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -706,7 +727,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle home key', () => {
-            spyOn(megaMenuInstance, 'onHomeKey');
+            vi.spyOn(megaMenuInstance, 'onHomeKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'Home' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -715,7 +736,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle end key', () => {
-            spyOn(megaMenuInstance, 'onEndKey');
+            vi.spyOn(megaMenuInstance, 'onEndKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'End' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -724,7 +745,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle enter key', () => {
-            spyOn(megaMenuInstance, 'onEnterKey');
+            vi.spyOn(megaMenuInstance, 'onEnterKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'Enter' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -733,7 +754,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle space key', () => {
-            spyOn(megaMenuInstance, 'onSpaceKey');
+            vi.spyOn(megaMenuInstance, 'onSpaceKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'Space' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -742,7 +763,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle escape key', () => {
-            spyOn(megaMenuInstance, 'onEscapeKey');
+            vi.spyOn(megaMenuInstance, 'onEscapeKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'Escape' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -751,7 +772,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle tab key', () => {
-            spyOn(megaMenuInstance, 'onTabKey');
+            vi.spyOn(megaMenuInstance, 'onTabKey');
             const keyEvent = new KeyboardEvent('keydown', { code: 'Tab' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -760,7 +781,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle printable characters for search', () => {
-            spyOn(megaMenuInstance, 'searchItems');
+            vi.spyOn(megaMenuInstance, 'searchItems');
             const keyEvent = new KeyboardEvent('keydown', { key: 'f' });
 
             megaMenuInstance.onKeyDown(keyEvent);
@@ -780,18 +801,18 @@ describe('MegaMenu', () => {
         });
 
         it('should handle blur events', () => {
-            jasmine.clock().install();
+            vi.useFakeTimers();
             const blurEvent = new FocusEvent('blur');
             megaMenuInstance.focused.set(true);
 
             megaMenuInstance.onMenuBlur(blurEvent);
-            jasmine.clock().tick(10);
+            vi.advanceTimersByTime(10);
 
             expect(megaMenuInstance.focused()).toBe(false);
             expect(megaMenuInstance.focusedItemInfo().index).toBe(-1);
             expect(megaMenuInstance.searchValue).toBe('' as any);
             expect(megaMenuInstance.dirty).toBe(false);
-            jasmine.clock().uninstall();
+            vi.useRealTimers();
         });
 
         it('should get focusedItemId correctly', () => {
@@ -805,8 +826,8 @@ describe('MegaMenu', () => {
         it('should change focused item info', () => {
             const mockEvent = new KeyboardEvent('keydown');
 
-            spyOn(megaMenuInstance, 'changeFocusedItemInfo').and.callThrough();
-            spyOn(megaMenuInstance, 'findVisibleItem').and.returnValue({ key: 'test', parentKey: '', item: null });
+            vi.spyOn(megaMenuInstance, 'changeFocusedItemInfo');
+            vi.spyOn(megaMenuInstance, 'findVisibleItem').mockReturnValue({ key: 'test', parentKey: '', item: null } as any);
 
             megaMenuInstance.changeFocusedItemInfo(mockEvent, 0);
 
@@ -893,7 +914,7 @@ describe('MegaMenu', () => {
         });
 
         it('should set aria-label when provided', async () => {
-            component.ariaLabel = 'Main Navigation Menu';
+            fixture.componentRef.setInput('ariaLabel', 'Main Navigation Menu');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -911,7 +932,7 @@ describe('MegaMenu', () => {
         });
 
         it('should set aria-labelledby when provided', async () => {
-            component.ariaLabelledBy = 'megamenu-heading';
+            fixture.componentRef.setInput('ariaLabelledBy', 'megamenu-heading');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1031,7 +1052,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle menu button click', () => {
-            spyOn(megaMenuInstance, 'toggle');
+            vi.spyOn(megaMenuInstance, 'toggle');
             megaMenuInstance.queryMatches.set(true);
             fixture.detectChanges();
 
@@ -1082,8 +1103,8 @@ describe('MegaMenu', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined values gracefully', async () => {
-            component.model = undefined as any;
-            component.ariaLabel = undefined as any;
+            fixture.componentRef.setInput('model', undefined as any);
+            fixture.componentRef.setInput('ariaLabel', undefined as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1092,7 +1113,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle items without icons', async () => {
-            component.model = [{ label: 'No Icon Item' }, { label: 'Icon Item', icon: 'pi pi-check' }];
+            fixture.componentRef.setInput('model', [{ label: 'No Icon Item' }, { label: 'Icon Item', icon: 'pi pi-check' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1101,7 +1122,7 @@ describe('MegaMenu', () => {
         });
 
         it('should handle items with custom styleClass', async () => {
-            component.model = [{ label: 'Custom Style', styleClass: 'custom-item-class' }];
+            fixture.componentRef.setInput('model', [{ label: 'Custom Style', styleClass: 'custom-item-class' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1110,9 +1131,9 @@ describe('MegaMenu', () => {
         });
 
         it('should handle memory cleanup on destroy', () => {
-            spyOn(megaMenuInstance, 'unbindOutsideClickListener');
-            spyOn(megaMenuInstance, 'unbindResizeListener');
-            spyOn(megaMenuInstance, 'unbindMatchMediaListener');
+            vi.spyOn(megaMenuInstance, 'unbindOutsideClickListener');
+            vi.spyOn(megaMenuInstance, 'unbindResizeListener');
+            vi.spyOn(megaMenuInstance, 'unbindMatchMediaListener');
 
             megaMenuInstance.ngOnDestroy();
 
@@ -1134,16 +1155,16 @@ describe('MegaMenu', () => {
         });
 
         it('should handle search timeout correctly', async () => {
-            jasmine.clock().install();
+            vi.useFakeTimers();
             megaMenuInstance.searchValue = '';
 
             megaMenuInstance.searchItems(new KeyboardEvent('keydown', { key: 'f' }), 'f');
             expect(megaMenuInstance.searchValue).toBe('f');
 
-            jasmine.clock().tick(600); // Wait for search timeout
+            vi.advanceTimersByTime(600); // Wait for search timeout
 
             expect(megaMenuInstance.searchValue).toBe('' as any);
-            jasmine.clock().uninstall();
+            vi.useRealTimers();
         });
     });
 
@@ -1301,7 +1322,7 @@ describe('MegaMenu', () => {
             });
 
             it('should apply object PT to button section', () => {
-                component.model = [{ label: 'Test' }];
+                fixture.componentRef.setInput('model', [{ label: 'Test' }]);
                 fixture.componentRef.setInput('pt', {
                     button: {
                         class: 'BUTTON_OBJECT_CLASS',
@@ -1359,7 +1380,7 @@ describe('MegaMenu', () => {
 
         describe('Case 4: Use variables from instance', () => {
             it('should access instance properties via PT functions', () => {
-                component.disabled = true;
+                fixture.componentRef.setInput('disabled', true);
                 fixture.componentRef.setInput('disabled', true);
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
@@ -1376,7 +1397,7 @@ describe('MegaMenu', () => {
             });
 
             it('should use instance state in PT function for button', () => {
-                component.model = [{ label: 'Test' }];
+                fixture.componentRef.setInput('model', [{ label: 'Test' }]);
                 fixture.componentRef.setInput('pt', {
                     button: ({ instance }) => {
                         return {
@@ -1416,7 +1437,7 @@ describe('MegaMenu', () => {
             });
 
             it('should bind onclick to button via PT', () => {
-                component.model = [{ label: 'Test' }];
+                fixture.componentRef.setInput('model', [{ label: 'Test' }]);
                 let buttonClicked = false;
 
                 fixture.componentRef.setInput('pt', {
@@ -1459,8 +1480,7 @@ describe('MegaMenu', () => {
             it('should apply global PT configuration from PrimeNG config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestBasicMegaMenuComponent],
-                    imports: [MegaMenu, SharedModule, RouterTestingModule],
+                    imports: [TestBasicMegaMenuComponent, MegaMenu, SharedModule, RouterTestingModule],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1486,8 +1506,7 @@ describe('MegaMenu', () => {
             it('should apply global CSS from PrimeNG config', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestBasicMegaMenuComponent],
-                    imports: [MegaMenu, SharedModule, RouterTestingModule],
+                    imports: [TestBasicMegaMenuComponent, MegaMenu, SharedModule, RouterTestingModule],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({
@@ -1517,8 +1536,7 @@ describe('MegaMenu', () => {
             it('should merge instance PT with global PT', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
-                    declarations: [TestBasicMegaMenuComponent],
-                    imports: [MegaMenu, SharedModule, RouterTestingModule],
+                    imports: [TestBasicMegaMenuComponent, MegaMenu, SharedModule, RouterTestingModule],
                     providers: [
                         provideZonelessChangeDetection(),
                         providePrimeNG({

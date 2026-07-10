@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from 'primeng/api';
@@ -6,22 +6,23 @@ import { providePrimeNG } from 'primeng/config';
 import { Message } from './message';
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Message, SharedModule],
     template: `
-        <p-message [severity]="severity" [closable]="closable" [icon]="icon" [closeIcon]="closeIcon" [life]="life" [size]="size" [variant]="variant" (onClose)="onClose($event)">
-            <div class="message-content">{{ content }}</div>
+        <p-message [severity]="severity()" [closable]="closable()" [icon]="icon()" [closeIcon]="closeIcon()" [life]="life()" [size]="size()" [variant]="variant()" (onClose)="onClose($event)">
+            <div class="message-content">{{ content() }}</div>
         </p-message>
     `
 })
 class TestBasicMessageComponent {
-    severity: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast' = 'info';
-    closable = false;
-    icon: string | undefined;
-    closeIcon: string | undefined;
-    life: number | undefined;
-    size: 'large' | 'small' | undefined;
-    variant: 'outlined' | 'text' | 'simple' | undefined;
-    content = 'Test Message Content';
+    severity = signal<'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast'>('info');
+    closable = signal(false);
+    icon = signal<string | undefined>(undefined);
+    closeIcon = signal<string | undefined>(undefined);
+    life = signal<number | undefined>(undefined);
+    size = signal<'large' | 'small' | undefined>(undefined);
+    variant = signal<'outlined' | 'text' | 'simple' | undefined>(undefined);
+    content = signal('Test Message Content');
 
     closeEvent: any;
 
@@ -31,7 +32,8 @@ class TestBasicMessageComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Message, SharedModule],
     template: `
         <p-message [closable]="true">
             <ng-template #container let-closeCallback="closeCallback">
@@ -46,7 +48,8 @@ class TestBasicMessageComponent {
 class TestContainerTemplateComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Message, SharedModule],
     template: `
         <p-message [closable]="true">
             <ng-template #icon>
@@ -62,7 +65,8 @@ class TestContainerTemplateComponent {}
 class TestIconTemplatesComponent {}
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [Message, SharedModule],
     template: `
         <p-message [closable]="true" [severity]="'error'">
             <input type="text" class="focusable-input" />
@@ -81,8 +85,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -105,12 +108,12 @@ describe('Message', () => {
         });
 
         it('should accept custom values', async () => {
-            component.severity = 'error';
-            component.closable = true;
-            component.icon = 'pi pi-exclamation-triangle';
-            component.closeIcon = 'pi pi-times';
-            component.size = 'large';
-            component.variant = 'outlined';
+            component.severity.set('error');
+            component.closable.set(true);
+            component.icon.set('pi pi-exclamation-triangle');
+            component.closeIcon.set('pi pi-times');
+            component.size.set('large');
+            component.variant.set('outlined');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -139,8 +142,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -153,7 +155,7 @@ describe('Message', () => {
 
         it('should close message programmatically', () => {
             const mockEvent = new MouseEvent('click');
-            spyOn(messageInstance.onClose, 'emit');
+            vi.spyOn(messageInstance.onClose, 'emit');
 
             messageInstance.close(mockEvent);
 
@@ -179,14 +181,13 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
             fixture = TestBed.createComponent(TestBasicMessageComponent);
             component = fixture.componentInstance;
-            component.closable = true;
+            component.closable.set(true);
             fixture.detectChanges();
             messageEl = fixture.debugElement.query(By.css('p-message'));
         });
@@ -205,7 +206,7 @@ describe('Message', () => {
         });
 
         it('should show close button when closable is true', () => {
-            component.closable = true;
+            component.closable.set(true);
             fixture.detectChanges();
 
             const closeButton = fixture.debugElement.query(By.css('button'));
@@ -213,7 +214,7 @@ describe('Message', () => {
         });
 
         it('should not show close button when closable is false', async () => {
-            component.closable = false;
+            component.closable.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -231,8 +232,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
         });
@@ -240,7 +240,7 @@ describe('Message', () => {
         it('should auto-close after specified life duration', async () => {
             fixture = TestBed.createComponent(TestBasicMessageComponent);
             component = fixture.componentInstance;
-            component.life = 1000;
+            component.life.set(1000);
             fixture.detectChanges();
 
             messageEl = fixture.debugElement.query(By.css('p-message'));
@@ -259,7 +259,7 @@ describe('Message', () => {
         it('should not auto-close when life is not set', async () => {
             fixture = TestBed.createComponent(TestBasicMessageComponent);
             component = fixture.componentInstance;
-            component.life = undefined;
+            component.life.set(undefined);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -282,8 +282,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -295,7 +294,7 @@ describe('Message', () => {
             const severities: Array<'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast'> = ['success', 'info', 'warn', 'error', 'secondary', 'contrast'];
 
             for (const severity of severities) {
-                component.severity = severity;
+                component.severity.set(severity);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -313,8 +312,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -323,7 +321,7 @@ describe('Message', () => {
         });
 
         it('should display content projection', () => {
-            component.content = 'Projected content';
+            component.content.set('Projected content');
             fixture.detectChanges();
 
             const contentElement = fixture.debugElement.query(By.css('.message-content'));
@@ -338,8 +336,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -348,7 +345,7 @@ describe('Message', () => {
         });
 
         it('should display icon when icon property is set', () => {
-            component.icon = 'pi pi-info-circle';
+            component.icon.set('pi pi-info-circle');
             fixture.detectChanges();
 
             const iconElement = fixture.debugElement.query(By.css('i.pi-info-circle'));
@@ -356,8 +353,8 @@ describe('Message', () => {
         });
 
         it('should display close icon when closeIcon property is set', () => {
-            component.closable = true;
-            component.closeIcon = 'pi pi-times-circle';
+            component.closable.set(true);
+            component.closeIcon.set('pi pi-times-circle');
             fixture.detectChanges();
 
             const closeIconElement = fixture.debugElement.query(By.css('button i.pi-times-circle'));
@@ -365,8 +362,8 @@ describe('Message', () => {
         });
 
         it('should display default close icon when closable is true and no closeIcon is set', () => {
-            component.closable = true;
-            component.closeIcon = undefined;
+            component.closable.set(true);
+            component.closeIcon.set(undefined);
             fixture.detectChanges();
 
             const defaultCloseIcon = fixture.debugElement.query(By.css('button svg[data-p-icon="times"]'));
@@ -379,8 +376,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestContainerTemplateComponent],
+                imports: [Message, SharedModule, TestContainerTemplateComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -398,7 +394,7 @@ describe('Message', () => {
             const messageEl = fixture.debugElement.query(By.css('p-message'));
             const messageInstance = messageEl.componentInstance as Message;
 
-            spyOn(messageInstance, 'close');
+            vi.spyOn(messageInstance, 'close');
 
             await fixture.whenStable();
             fixture.changeDetectorRef.markForCheck();
@@ -421,8 +417,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestIconTemplatesComponent],
+                imports: [Message, SharedModule, TestIconTemplatesComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -449,8 +444,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -459,7 +453,7 @@ describe('Message', () => {
         });
 
         it('should apply size classes', async () => {
-            component.size = 'large';
+            component.size.set('large');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -468,7 +462,7 @@ describe('Message', () => {
             const messageInstance = messageEl.componentInstance as Message;
             expect(messageInstance.size()).toBe('large');
 
-            component.size = 'small';
+            component.size.set('small');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -479,7 +473,7 @@ describe('Message', () => {
             const variants: Array<'outlined' | 'text' | 'simple'> = ['outlined', 'text', 'simple'];
 
             for (const variant of variants) {
-                component.variant = variant;
+                component.variant.set(variant);
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
                 fixture.detectChanges();
@@ -496,8 +490,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestKeyboardNavigationComponent],
+                imports: [Message, SharedModule, TestKeyboardNavigationComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -537,8 +530,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
 
@@ -547,8 +539,8 @@ describe('Message', () => {
         });
 
         it('should handle null/undefined values gracefully', () => {
-            component.icon = undefined;
-            component.closeIcon = undefined;
+            component.icon.set(undefined);
+            component.closeIcon.set(undefined);
             fixture.detectChanges();
 
             const messageDiv = fixture.debugElement.query(By.css('.p-message'));
@@ -556,13 +548,13 @@ describe('Message', () => {
         });
 
         it('should handle rapid close button clicks', async () => {
-            component.closable = true;
+            component.closable.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const messageEl = fixture.debugElement.query(By.css('p-message'));
             const messageInstance = messageEl.componentInstance as Message;
-            spyOn(messageInstance.onClose, 'emit');
+            vi.spyOn(messageInstance.onClose, 'emit');
 
             const closeButton = fixture.debugElement.query(By.css('button'));
 
@@ -577,12 +569,12 @@ describe('Message', () => {
 
         it('should handle multiple messages on same page', async () => {
             const fixture2 = TestBed.createComponent(TestBasicMessageComponent);
-            fixture2.componentInstance.severity = 'success';
+            fixture2.componentInstance.severity.set('success');
             fixture2.changeDetectorRef.markForCheck();
             await fixture2.whenStable();
             fixture2.detectChanges();
 
-            component.severity = 'error';
+            component.severity.set('error');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -595,7 +587,7 @@ describe('Message', () => {
         });
 
         it('should handle life property with zero value', async () => {
-            component.life = 0;
+            component.life.set(0);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -610,7 +602,7 @@ describe('Message', () => {
         });
 
         it('should handle long projected content', () => {
-            component.content = 'A'.repeat(1000);
+            component.content.set('A'.repeat(1000));
             fixture.detectChanges();
 
             const contentElement = fixture.debugElement.query(By.css('.message-content'));
@@ -625,8 +617,7 @@ describe('Message', () => {
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
-                imports: [Message, SharedModule],
-                declarations: [TestBasicMessageComponent],
+                imports: [Message, SharedModule, TestBasicMessageComponent],
                 providers: [provideZonelessChangeDetection()]
             }).compileComponents();
         });
@@ -634,7 +625,7 @@ describe('Message', () => {
         it('should cleanup timeout when component is destroyed before life expires', async () => {
             fixture = TestBed.createComponent(TestBasicMessageComponent);
             component = fixture.componentInstance;
-            component.life = 5000;
+            component.life.set(5000);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -647,7 +638,7 @@ describe('Message', () => {
         it('should handle component recreation', async () => {
             fixture = TestBed.createComponent(TestBasicMessageComponent);
             component = fixture.componentInstance;
-            component.life = 100;
+            component.life.set(100);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -894,7 +885,8 @@ describe('Message', () => {
 
     describe('PassThrough - Case 7: Test from PrimeNGConfig', () => {
         @Component({
-            standalone: false,
+            standalone: true,
+            imports: [Message],
             template: `
                 <p-message [closable]="true">First Message</p-message>
                 <p-message [closable]="true">Second Message</p-message>
@@ -904,8 +896,7 @@ describe('Message', () => {
 
         it('should apply global pt configuration from PrimeNGConfig', async () => {
             await TestBed.configureTestingModule({
-                imports: [Message],
-                declarations: [TestGlobalPtComponent],
+                imports: [Message, TestGlobalPtComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({
@@ -936,14 +927,14 @@ describe('Message', () => {
 
         it('should merge local pt with global pt configuration', async () => {
             @Component({
-                standalone: false,
+                standalone: true,
+                imports: [Message],
                 template: `<p-message [pt]="{ root: 'LOCAL_ROOT_CLASS', content: 'LOCAL_CONTENT_CLASS' }">Test</p-message>`
             })
             class TestMergedPtComponent {}
 
             await TestBed.configureTestingModule({
-                imports: [Message],
-                declarations: [TestMergedPtComponent],
+                imports: [Message, TestMergedPtComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     providePrimeNG({

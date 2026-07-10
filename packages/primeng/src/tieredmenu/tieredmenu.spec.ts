@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,11 +10,12 @@ import { Tooltip } from 'primeng/tooltip';
 import { TieredMenu } from './tieredmenu';
 
 @Component({
-    standalone: false,
-    template: `<p-tieredmenu [model]="model" [styleClass]="styleClass" [style]="style" [popup]="popup" [disabled]="disabled" [autoDisplay]="autoDisplay"></p-tieredmenu>`
+    standalone: true,
+    imports: [TieredMenu],
+    template: `<p-tieredmenu [model]="model()" [styleClass]="styleClass()" [style]="style()" [popup]="popup()" [disabled]="disabled()" [autoDisplay]="autoDisplay()"></p-tieredmenu>`
 })
 class TestBasicTieredMenuComponent {
-    model: MenuItem[] = [
+    model = signal<MenuItem[]>([
         {
             label: 'File',
             items: [
@@ -27,16 +28,17 @@ class TestBasicTieredMenuComponent {
             label: 'Edit',
             items: [{ label: 'Copy', icon: 'pi pi-fw pi-copy' }, { label: 'Paste', icon: 'pi pi-fw pi-file' }, { separator: true }, { label: 'Find', icon: 'pi pi-fw pi-search' }]
         }
-    ];
-    styleClass = '';
-    style: any = {};
-    popup = false;
-    disabled = false;
-    autoDisplay = true;
+    ]);
+    styleClass = signal<string>('');
+    style = signal<any>({});
+    popup = signal<boolean>(false);
+    disabled = signal<boolean>(false);
+    autoDisplay = signal<boolean>(true);
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     template: `
         <p-tieredmenu #menu [model]="model" [popup]="true"></p-tieredmenu>
         <button #toggleButton (click)="menu.toggle($event)" class="toggle-button">Show Menu</button>
@@ -69,13 +71,16 @@ class TestPopupTieredMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     template: `
         <p-tieredmenu [model]="model">
             <ng-template #item let-item let-hasSubmenu="hasSubmenu">
                 <div class="custom-item">
                     <span class="custom-label">{{ item.label }}</span>
-                    <span *ngIf="hasSubmenu" class="custom-arrow">→</span>
+                    @if (hasSubmenu) {
+                        <span class="custom-arrow">→</span>
+                    }
                 </div>
             </ng-template>
             <ng-template #submenuicon>
@@ -95,14 +100,19 @@ class TestTemplateTieredMenuComponent {
 
 // Test Component for #item template approach
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     template: `
         <p-tieredmenu [model]="model">
             <ng-template #item let-item let-hasSubmenu="hasSubmenu">
                 <div class="content-template-item">
                     <span class="item-label">{{ item.label }}</span>
-                    <span class="custom-badge" *ngIf="item.badge">{{ item.badge }}</span>
-                    <span *ngIf="hasSubmenu" class="submenu-indicator">▶</span>
+                    @if (item.badge) {
+                        <span class="custom-badge">{{ item.badge }}</span>
+                    }
+                    @if (hasSubmenu) {
+                        <span class="submenu-indicator">▶</span>
+                    }
                 </div>
             </ng-template>
             <ng-template #submenuicon>
@@ -121,7 +131,8 @@ class TestContentTemplateTieredMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     selector: 'test-disabled-tieredmenu',
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
 })
@@ -135,7 +146,8 @@ class TestDisabledTieredMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     selector: 'test-router-tieredmenu',
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
 })
@@ -158,7 +170,8 @@ class TestRouterTieredMenuComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [TieredMenu],
     selector: 'test-breakpoint-tieredmenu',
     template: `<p-tieredmenu [model]="model" [breakpoint]="breakpoint"></p-tieredmenu>`
 })
@@ -186,9 +199,7 @@ describe('TieredMenu', () => {
                     { path: 'home', component: TestBasicTieredMenuComponent },
                     { path: 'about', component: TestBasicTieredMenuComponent },
                     { path: 'products', component: TestBasicTieredMenuComponent }
-                ])
-            ],
-            declarations: [
+                ]),
                 TestBasicTieredMenuComponent,
                 TestPopupTieredMenuComponent,
                 TestTemplateTieredMenuComponent,
@@ -238,7 +249,7 @@ describe('TieredMenu', () => {
     describe('Input Properties', () => {
         it('should bind model correctly', async () => {
             const newModel = [{ label: 'New Menu', items: [{ label: 'Item' }] }];
-            component.model = newModel;
+            component.model.set(newModel);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -248,7 +259,7 @@ describe('TieredMenu', () => {
         });
 
         it('should bind styleClass', async () => {
-            component.styleClass = 'custom-class';
+            component.styleClass.set('custom-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -258,7 +269,7 @@ describe('TieredMenu', () => {
 
         it('should bind style object', async () => {
             const customStyle = { width: '300px', height: '400px' };
-            component.style = customStyle;
+            component.style.set(customStyle);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -267,7 +278,7 @@ describe('TieredMenu', () => {
         });
 
         it('should bind popup property', async () => {
-            component.popup = true;
+            component.popup.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -276,7 +287,7 @@ describe('TieredMenu', () => {
         });
 
         it('should bind disabled property', async () => {
-            component.disabled = true;
+            component.disabled.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -285,7 +296,7 @@ describe('TieredMenu', () => {
         });
 
         it('should bind autoDisplay property', async () => {
-            component.autoDisplay = false;
+            component.autoDisplay.set(false);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -307,7 +318,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle menu item click', async () => {
-            const clickSpy = spyOn(tieredMenu, 'onItemClick').and.callThrough();
+            const clickSpy = vi.spyOn(tieredMenu, 'onItemClick');
             const menuItem = fixture.debugElement.query(By.css('li[role="menuitem"] .p-tieredmenu-item-content'));
 
             menuItem.triggerEventHandler('click', { preventDefault: () => {} });
@@ -331,7 +342,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle mouse enter on menu item', async () => {
-            const mouseEnterSpy = spyOn(tieredMenu, 'onItemMouseEnter').and.callThrough();
+            const mouseEnterSpy = vi.spyOn(tieredMenu, 'onItemMouseEnter');
             const menuItem = fixture.debugElement.query(By.css('li[role="menuitem"] .p-tieredmenu-item-content'));
 
             menuItem.triggerEventHandler('mouseenter', { target: menuItem.nativeElement });
@@ -548,7 +559,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle arrow down key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onArrowDownKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onArrowDownKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'ArrowDown', preventDefault: () => {} });
@@ -559,7 +570,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle arrow up key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onArrowUpKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onArrowUpKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'ArrowUp', preventDefault: () => {} });
@@ -570,7 +581,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle arrow right key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onArrowRightKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onArrowRightKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'ArrowRight', preventDefault: () => {} });
@@ -581,7 +592,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle arrow left key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onArrowLeftKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onArrowLeftKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'ArrowLeft', preventDefault: () => {} });
@@ -592,7 +603,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle enter key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onEnterKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onEnterKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'Enter', preventDefault: () => {} });
@@ -603,7 +614,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle space key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onSpaceKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onSpaceKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'Space', preventDefault: () => {} });
@@ -614,7 +625,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle escape key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onEscapeKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onEscapeKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'Escape', preventDefault: () => {} });
@@ -625,7 +636,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle tab key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onTabKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onTabKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'Tab', preventDefault: () => {} });
@@ -636,7 +647,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle home key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onHomeKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onHomeKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'Home', preventDefault: () => {} });
@@ -647,7 +658,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle end key', async () => {
-            const keydownSpy = spyOn(tieredMenu, 'onEndKey').and.callThrough();
+            const keydownSpy = vi.spyOn(tieredMenu, 'onEndKey');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'End', preventDefault: () => {} });
@@ -658,20 +669,20 @@ describe('TieredMenu', () => {
         });
 
         it('should search items with character keys', async () => {
-            const searchSpy = spyOn(tieredMenu, 'searchItems').and.callThrough();
+            const searchSpy = vi.spyOn(tieredMenu, 'searchItems');
             const menuList = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menuList.triggerEventHandler('keydown', { code: 'KeyF', key: 'f', metaKey: false, ctrlKey: false, preventDefault: () => {} });
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(searchSpy).toHaveBeenCalledWith(jasmine.any(Object), 'f');
+            expect(searchSpy).toHaveBeenCalledWith(expect.any(Object), 'f');
         });
     });
 
     describe('CSS Classes and Styling', () => {
         it('should apply custom style class', async () => {
-            component.styleClass = 'my-custom-class';
+            component.styleClass.set('my-custom-class');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -681,7 +692,7 @@ describe('TieredMenu', () => {
         });
 
         it('should apply inline styles', async () => {
-            component.style = { backgroundColor: 'red', border: '1px solid blue' };
+            component.style.set({ backgroundColor: 'red', border: '1px solid blue' });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -750,7 +761,7 @@ describe('TieredMenu', () => {
         });
 
         it('should navigate on router link click', async () => {
-            const navigateSpy = spyOn(router, 'navigate').and.returnValue(Promise.resolve(true));
+            const navigateSpy = vi.spyOn(router, 'navigate').mockReturnValue(Promise.resolve(true));
 
             // Wait for menu to render
             await new Promise((resolve) => setTimeout(resolve, 100));
@@ -788,7 +799,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle focus management', async () => {
-            const focusSpy = spyOn(tieredMenu, 'onMenuFocus').and.callThrough();
+            const focusSpy = vi.spyOn(tieredMenu, 'onMenuFocus');
             const menu = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menu.triggerEventHandler('focus', {});
@@ -800,7 +811,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle blur management', async () => {
-            const blurSpy = spyOn(tieredMenu, 'onMenuBlur').and.callThrough();
+            const blurSpy = vi.spyOn(tieredMenu, 'onMenuBlur');
             const menu = fixture.debugElement.query(By.css('ul[role="menu"]'));
 
             menu.triggerEventHandler('focus', {});
@@ -839,7 +850,7 @@ describe('TieredMenu', () => {
         });
 
         it('should bind media query listener', () => {
-            const bindSpy = spyOn(breakpointTieredMenu, 'bindMatchMediaListener').and.callThrough();
+            const bindSpy = vi.spyOn(breakpointTieredMenu, 'bindMatchMediaListener');
             breakpointTieredMenu.ngOnInit();
             expect(bindSpy).toHaveBeenCalled();
         });
@@ -858,7 +869,7 @@ describe('TieredMenu', () => {
         });
 
         it('should emit onShow event', async () => {
-            const showSpy = spyOn(popupTieredMenu.onShow, 'emit');
+            const showSpy = vi.spyOn(popupTieredMenu.onShow, 'emit');
             const mockEvent = { currentTarget: popupFixture.componentInstance.toggleButton.nativeElement };
 
             popupTieredMenu.show(mockEvent);
@@ -873,7 +884,7 @@ describe('TieredMenu', () => {
         });
 
         it('should emit onHide event', async () => {
-            const hideSpy = spyOn(popupTieredMenu.onHide, 'emit');
+            const hideSpy = vi.spyOn(popupTieredMenu.onHide, 'emit');
             const mockEvent = { currentTarget: document.createElement('button') };
 
             popupTieredMenu.show(mockEvent);
@@ -892,10 +903,10 @@ describe('TieredMenu', () => {
             // Items are placed at the root level so they are visible without expanding
             // any sub-menu. The nested p-tieredmenusub for group children only renders
             // once the parent item is activated.
-            component.model = [
+            component.model.set([
                 { label: 'Save', tooltip: 'Save the file' },
                 { label: 'Delete', tooltipOptions: { tooltipLabel: 'Delete the file' } }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -909,27 +920,27 @@ describe('TieredMenu', () => {
             // Find the directive bound via the `tooltip` property on the MenuItem:
             // `content` is the @Input('pTooltip') property set directly by Angular
             const directiveViaTooltipProp = tooltipDirectives.find((d) => d.content() === 'Save the file');
-            expect(directiveViaTooltipProp).withContext('Tooltip directive not found for item with tooltip property').toBeTruthy();
+            expect(directiveViaTooltipProp).toBeTruthy();
 
             // Find the directive bound via `tooltipOptions.tooltipLabel`:
             // `tooltipOptions` is the @Input() property set directly by Angular
             const directiveViaTooltipOptions = tooltipDirectives.find((d) => (d.tooltipOptions() as any)?.tooltipLabel === 'Delete the file');
-            expect(directiveViaTooltipOptions).withContext('Tooltip directive not found for item with tooltipOptions.tooltipLabel').toBeTruthy();
+            expect(directiveViaTooltipOptions).toBeTruthy();
 
             // Activate each directive and verify the tooltip container (DOM element) is spawned
             directiveViaTooltipProp!.activate();
             await fixture.whenStable();
-            expect(directiveViaTooltipProp!.container).withContext('Tooltip container was not created for item with tooltip property').toBeTruthy();
+            expect(directiveViaTooltipProp!.container).toBeTruthy();
 
             directiveViaTooltipOptions!.activate();
             await fixture.whenStable();
-            expect(directiveViaTooltipOptions!.container).withContext('Tooltip container was not created for item with tooltipOptions.tooltipLabel').toBeTruthy();
+            expect(directiveViaTooltipOptions!.container).toBeTruthy();
         });
     });
 
     describe('Edge Cases', () => {
         it('should handle empty model', async () => {
-            component.model = [];
+            component.model.set([]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -939,7 +950,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle null/undefined model', async () => {
-            component.model = null as any;
+            component.model.set(null as any);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -948,7 +959,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle items with no subitems', async () => {
-            component.model = [{ label: 'Simple Item' }];
+            component.model.set([{ label: 'Simple Item' }]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -958,7 +969,7 @@ describe('TieredMenu', () => {
         });
 
         it('should handle deeply nested items', async () => {
-            component.model = [
+            component.model.set([
                 {
                     label: 'Level 1',
                     items: [
@@ -973,7 +984,7 @@ describe('TieredMenu', () => {
                         }
                     ]
                 }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -1008,7 +1019,7 @@ describe('TieredMenu', () => {
 
     describe('Cleanup', () => {
         it('should cleanup on destroy', () => {
-            const unbindSpy = spyOn(tieredMenu, 'unbindMatchMediaListener');
+            const unbindSpy = vi.spyOn(tieredMenu, 'unbindMatchMediaListener');
             tieredMenu.ngOnDestroy();
             expect(unbindSpy).toHaveBeenCalled();
         });
@@ -1220,10 +1231,10 @@ describe('TieredMenu', () => {
             @Component({
                 standalone: true,
                 imports: [TieredMenu],
-                template: `<p-tieredmenu [model]="model" [pt]="pt" [disabled]="disabled"></p-tieredmenu>`
+                template: `<p-tieredmenu [model]="model" [pt]="pt" [disabled]="disabled()"></p-tieredmenu>`
             })
             class PTInstanceTestComponent {
-                disabled = true;
+                disabled = signal(true);
                 model: MenuItem[] = [
                     {
                         label: 'File',
@@ -1265,7 +1276,7 @@ describe('TieredMenu', () => {
 
             it('should update PT when instance property changes', async () => {
                 const component = ptFixture.componentInstance;
-                component.disabled = false;
+                component.disabled.set(false);
                 ptFixture.changeDetectorRef.markForCheck();
                 await ptFixture.whenStable();
                 ptFixture.detectChanges();

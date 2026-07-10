@@ -14,8 +14,18 @@ describe('SelectButton', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SelectButton, SelectButtonModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, TestSelectButtonTemplateComponent, TestSelectButtonRefTemplateComponent],
-            declarations: [TestFormSelectButtonComponent, TestItemTemplateSelectButtonComponent],
+            imports: [
+                SelectButton,
+                SelectButtonModule,
+                FormsModule,
+                ReactiveFormsModule,
+                CommonModule,
+                SharedModule,
+                TestSelectButtonTemplateComponent,
+                TestSelectButtonRefTemplateComponent,
+                TestFormSelectButtonComponent,
+                TestItemTemplateSelectButtonComponent
+            ],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -189,8 +199,8 @@ describe('SelectButton', () => {
         });
 
         it('should emit onChange and onOptionClick events', () => {
-            spyOn(component.onChange, 'emit');
-            spyOn(component.onOptionClick, 'emit');
+            vi.spyOn(component.onChange, 'emit');
+            vi.spyOn(component.onOptionClick, 'emit');
 
             const originalEvent = new Event('click');
             const mockEvent = { originalEvent, checked: true };
@@ -348,7 +358,7 @@ describe('SelectButton', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             // Mock the disabled state by creating a spy
-            spyOn(component, '$disabled').and.returnValue(true);
+            vi.spyOn(component, '$disabled').mockReturnValue(true);
             const mockEvent = { originalEvent: new Event('click'), checked: true };
             const initialValue = component.value();
 
@@ -427,7 +437,8 @@ describe('SelectButton', () => {
 
 // Test Components
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SelectButton, ReactiveFormsModule],
     template: `
         <form [formGroup]="form">
             <p-selectbutton [options]="options" formControlName="selectedValue"> </p-selectbutton>
@@ -447,7 +458,8 @@ class TestFormSelectButtonComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [SelectButton, SharedModule],
     template: `
         <p-selectbutton [options]="options">
             <ng-template #item let-option let-index="index">
@@ -820,13 +832,12 @@ describe('SelectButton PassThrough Tests', () => {
     });
 
     describe('PT Case 5: Event binding', () => {
-        it('should handle onclick event through PT', (done) => {
+        it('should handle onclick event through PT', () => {
             let clicked = false;
             fixture.componentRef.setInput('pt', {
                 root: {
                     onclick: () => {
                         clicked = true;
-                        done();
                     }
                 }
             });

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -7,7 +7,8 @@ import { CommonModule } from '@angular/common';
 import type { DatePickerMonthChangeEvent, DatePickerYearChangeEvent } from 'primeng/types/datepicker';
 import { DatePicker } from './datepicker';
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-datepicker
             [(ngModel)]="selectedDate"
@@ -70,50 +71,314 @@ import { DatePicker } from './datepicker';
     `
 })
 class TestDatePickerComponent {
-    selectedDate: any = null as any;
-    dateFormat: string = 'dd/mm/yy';
-    placeholder: string = 'Select a date';
-    showTime: boolean = false;
-    showIcon: boolean = false;
-    showWeek: boolean = false;
-    disabled: boolean = false;
-    inline: boolean = false;
-    showButtonBar: boolean = false;
-    selectionMode: string = 'single';
-    minDate: Date | null = null as any;
-    maxDate: Date | null = null as any;
-    disabledDates: Date[] = [];
-    disabledDays: number[] = [];
-    firstDayOfWeek: number = 0;
-    numberOfMonths: number = 1;
-    view: string = 'date';
-    touchUI: boolean = false;
-    showOtherMonths: boolean = true;
-    selectOtherMonths: boolean = false;
-    timeOnly: boolean = false;
-    hourFormat: string = '24';
-    stepHour: number = 1;
-    stepMinute: number = 1;
-    stepSecond: number = 1;
-    showSeconds: boolean = false;
-    showOnFocus: boolean = true;
-    tabindex: number = 0;
-    iconDisplay: string = 'input';
-    icon: string | undefined = undefined as any;
-    showClear: boolean = false;
-    appendTo: any = null as any;
-    readonlyInput: boolean = false;
-    shortYearCutoff: string = '+10';
-    ariaLabel: string = 'Date picker';
-    ariaLabelledBy: string | undefined = undefined as any;
-    panelStyle: any = null as any;
-    panelStyleClass: string | undefined = undefined as any;
-    inputStyle: any = null as any;
-    inputStyleClass: string | undefined = undefined as any;
-    timeSeparator: string = ':';
-    multipleSeparator: string = ',';
-    rangeSeparator: string = '-';
-    keepInvalid: boolean = false;
+    private _selectedDate = signal<any>(null as any);
+    get selectedDate() {
+        return this._selectedDate();
+    }
+    set selectedDate(v: any) {
+        this._selectedDate.set(v);
+    }
+    private _dateFormat = signal<string>('dd/mm/yy');
+    get dateFormat() {
+        return this._dateFormat();
+    }
+    set dateFormat(v: string) {
+        this._dateFormat.set(v);
+    }
+    private _placeholder = signal<string>('Select a date');
+    get placeholder() {
+        return this._placeholder();
+    }
+    set placeholder(v: string) {
+        this._placeholder.set(v);
+    }
+    private _showTime = signal<boolean>(false);
+    get showTime() {
+        return this._showTime();
+    }
+    set showTime(v: boolean) {
+        this._showTime.set(v);
+    }
+    private _showIcon = signal<boolean>(false);
+    get showIcon() {
+        return this._showIcon();
+    }
+    set showIcon(v: boolean) {
+        this._showIcon.set(v);
+    }
+    private _showWeek = signal<boolean>(false);
+    get showWeek() {
+        return this._showWeek();
+    }
+    set showWeek(v: boolean) {
+        this._showWeek.set(v);
+    }
+    private _disabled = signal<boolean>(false);
+    get disabled() {
+        return this._disabled();
+    }
+    set disabled(v: boolean) {
+        this._disabled.set(v);
+    }
+    private _inline = signal<boolean>(false);
+    get inline() {
+        return this._inline();
+    }
+    set inline(v: boolean) {
+        this._inline.set(v);
+    }
+    private _showButtonBar = signal<boolean>(false);
+    get showButtonBar() {
+        return this._showButtonBar();
+    }
+    set showButtonBar(v: boolean) {
+        this._showButtonBar.set(v);
+    }
+    private _selectionMode = signal<string>('single');
+    get selectionMode() {
+        return this._selectionMode();
+    }
+    set selectionMode(v: string) {
+        this._selectionMode.set(v);
+    }
+    private _minDate = signal<Date | null>(null as any);
+    get minDate() {
+        return this._minDate();
+    }
+    set minDate(v: Date | null) {
+        this._minDate.set(v);
+    }
+    private _maxDate = signal<Date | null>(null as any);
+    get maxDate() {
+        return this._maxDate();
+    }
+    set maxDate(v: Date | null) {
+        this._maxDate.set(v);
+    }
+    private _disabledDates = signal<Date[]>([]);
+    get disabledDates() {
+        return this._disabledDates();
+    }
+    set disabledDates(v: Date[]) {
+        this._disabledDates.set(v);
+    }
+    private _disabledDays = signal<number[]>([]);
+    get disabledDays() {
+        return this._disabledDays();
+    }
+    set disabledDays(v: number[]) {
+        this._disabledDays.set(v);
+    }
+    private _firstDayOfWeek = signal<number>(0);
+    get firstDayOfWeek() {
+        return this._firstDayOfWeek();
+    }
+    set firstDayOfWeek(v: number) {
+        this._firstDayOfWeek.set(v);
+    }
+    private _numberOfMonths = signal<number>(1);
+    get numberOfMonths() {
+        return this._numberOfMonths();
+    }
+    set numberOfMonths(v: number) {
+        this._numberOfMonths.set(v);
+    }
+    private _view = signal<string>('date');
+    get view() {
+        return this._view();
+    }
+    set view(v: string) {
+        this._view.set(v);
+    }
+    private _touchUI = signal<boolean>(false);
+    get touchUI() {
+        return this._touchUI();
+    }
+    set touchUI(v: boolean) {
+        this._touchUI.set(v);
+    }
+    private _showOtherMonths = signal<boolean>(true);
+    get showOtherMonths() {
+        return this._showOtherMonths();
+    }
+    set showOtherMonths(v: boolean) {
+        this._showOtherMonths.set(v);
+    }
+    private _selectOtherMonths = signal<boolean>(false);
+    get selectOtherMonths() {
+        return this._selectOtherMonths();
+    }
+    set selectOtherMonths(v: boolean) {
+        this._selectOtherMonths.set(v);
+    }
+    private _timeOnly = signal<boolean>(false);
+    get timeOnly() {
+        return this._timeOnly();
+    }
+    set timeOnly(v: boolean) {
+        this._timeOnly.set(v);
+    }
+    private _hourFormat = signal<string>('24');
+    get hourFormat() {
+        return this._hourFormat();
+    }
+    set hourFormat(v: string) {
+        this._hourFormat.set(v);
+    }
+    private _stepHour = signal<number>(1);
+    get stepHour() {
+        return this._stepHour();
+    }
+    set stepHour(v: number) {
+        this._stepHour.set(v);
+    }
+    private _stepMinute = signal<number>(1);
+    get stepMinute() {
+        return this._stepMinute();
+    }
+    set stepMinute(v: number) {
+        this._stepMinute.set(v);
+    }
+    private _stepSecond = signal<number>(1);
+    get stepSecond() {
+        return this._stepSecond();
+    }
+    set stepSecond(v: number) {
+        this._stepSecond.set(v);
+    }
+    private _showSeconds = signal<boolean>(false);
+    get showSeconds() {
+        return this._showSeconds();
+    }
+    set showSeconds(v: boolean) {
+        this._showSeconds.set(v);
+    }
+    private _showOnFocus = signal<boolean>(true);
+    get showOnFocus() {
+        return this._showOnFocus();
+    }
+    set showOnFocus(v: boolean) {
+        this._showOnFocus.set(v);
+    }
+    private _tabindex = signal<number>(0);
+    get tabindex() {
+        return this._tabindex();
+    }
+    set tabindex(v: number) {
+        this._tabindex.set(v);
+    }
+    private _iconDisplay = signal<string>('input');
+    get iconDisplay() {
+        return this._iconDisplay();
+    }
+    set iconDisplay(v: string) {
+        this._iconDisplay.set(v);
+    }
+    private _icon = signal<string | undefined>(undefined as any);
+    get icon() {
+        return this._icon();
+    }
+    set icon(v: string | undefined) {
+        this._icon.set(v);
+    }
+    private _showClear = signal<boolean>(false);
+    get showClear() {
+        return this._showClear();
+    }
+    set showClear(v: boolean) {
+        this._showClear.set(v);
+    }
+    private _appendTo = signal<any>(null as any);
+    get appendTo() {
+        return this._appendTo();
+    }
+    set appendTo(v: any) {
+        this._appendTo.set(v);
+    }
+    private _readonlyInput = signal<boolean>(false);
+    get readonlyInput() {
+        return this._readonlyInput();
+    }
+    set readonlyInput(v: boolean) {
+        this._readonlyInput.set(v);
+    }
+    private _shortYearCutoff = signal<string>('+10');
+    get shortYearCutoff() {
+        return this._shortYearCutoff();
+    }
+    set shortYearCutoff(v: string) {
+        this._shortYearCutoff.set(v);
+    }
+    private _ariaLabel = signal<string>('Date picker');
+    get ariaLabel() {
+        return this._ariaLabel();
+    }
+    set ariaLabel(v: string) {
+        this._ariaLabel.set(v);
+    }
+    private _ariaLabelledBy = signal<string | undefined>(undefined as any);
+    get ariaLabelledBy() {
+        return this._ariaLabelledBy();
+    }
+    set ariaLabelledBy(v: string | undefined) {
+        this._ariaLabelledBy.set(v);
+    }
+    private _panelStyle = signal<any>(null as any);
+    get panelStyle() {
+        return this._panelStyle();
+    }
+    set panelStyle(v: any) {
+        this._panelStyle.set(v);
+    }
+    private _panelStyleClass = signal<string | undefined>(undefined as any);
+    get panelStyleClass() {
+        return this._panelStyleClass();
+    }
+    set panelStyleClass(v: string | undefined) {
+        this._panelStyleClass.set(v);
+    }
+    private _inputStyle = signal<any>(null as any);
+    get inputStyle() {
+        return this._inputStyle();
+    }
+    set inputStyle(v: any) {
+        this._inputStyle.set(v);
+    }
+    private _inputStyleClass = signal<string | undefined>(undefined as any);
+    get inputStyleClass() {
+        return this._inputStyleClass();
+    }
+    set inputStyleClass(v: string | undefined) {
+        this._inputStyleClass.set(v);
+    }
+    private _timeSeparator = signal<string>(':');
+    get timeSeparator() {
+        return this._timeSeparator();
+    }
+    set timeSeparator(v: string) {
+        this._timeSeparator.set(v);
+    }
+    private _multipleSeparator = signal<string>(',');
+    get multipleSeparator() {
+        return this._multipleSeparator();
+    }
+    set multipleSeparator(v: string) {
+        this._multipleSeparator.set(v);
+    }
+    private _rangeSeparator = signal<string>('-');
+    get rangeSeparator() {
+        return this._rangeSeparator();
+    }
+    set rangeSeparator(v: string) {
+        this._rangeSeparator.set(v);
+    }
+    private _keepInvalid = signal<boolean>(false);
+    get keepInvalid() {
+        return this._keepInvalid();
+    }
+    set keepInvalid(v: boolean) {
+        this._keepInvalid.set(v);
+    }
 
     onDateSelect(event: any) {}
     onDateChange(event: any) {}
@@ -130,7 +395,8 @@ class TestDatePickerComponent {
 }
 
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <form [formGroup]="form">
             <p-datepicker formControlName="date" [dateFormat]="'dd/mm/yy'" [placeholder]="'Select date'"></p-datepicker>
@@ -145,15 +411,20 @@ class TestReactiveFormDatePickerComponent {
 
 // #template - Comprehensive template test component with all 12 ContentChild projections
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <!-- Date template with context parameters -->
             <ng-template #date let-date>
                 <div class="custom-date" data-testid="date-template">
                     <span class="day">{{ date?.day }}</span>
-                    <span class="month" *ngIf="date?.month">{{ date?.month }}</span>
-                    <span class="year" *ngIf="date?.year">{{ date?.year }}</span>
+                    @if (date?.month) {
+                        <span class="month">{{ date?.month }}</span>
+                    }
+                    @if (date?.year) {
+                        <span class="year">{{ date?.year }}</span>
+                    }
                 </div>
             </ng-template>
 
@@ -225,26 +496,73 @@ class TestReactiveFormDatePickerComponent {
     `
 })
 class TestAllTemplatesDatePickerComponent {
-    selectedDate: Date | null = null as any;
-    showTime: boolean = false;
-    showIcon: boolean = false;
-    showClear: boolean = false;
-    view: string = 'date';
-    dateFormat: string = 'dd/mm/yy';
-    touchUI: boolean = false;
+    private _selectedDate = signal<Date | null>(null as any);
+    get selectedDate() {
+        return this._selectedDate();
+    }
+    set selectedDate(v: Date | null) {
+        this._selectedDate.set(v);
+    }
+    private _showTime = signal<boolean>(false);
+    get showTime() {
+        return this._showTime();
+    }
+    set showTime(v: boolean) {
+        this._showTime.set(v);
+    }
+    private _showIcon = signal<boolean>(false);
+    get showIcon() {
+        return this._showIcon();
+    }
+    set showIcon(v: boolean) {
+        this._showIcon.set(v);
+    }
+    private _showClear = signal<boolean>(false);
+    get showClear() {
+        return this._showClear();
+    }
+    set showClear(v: boolean) {
+        this._showClear.set(v);
+    }
+    private _view = signal<string>('date');
+    get view() {
+        return this._view();
+    }
+    set view(v: string) {
+        this._view.set(v);
+    }
+    private _dateFormat = signal<string>('dd/mm/yy');
+    get dateFormat() {
+        return this._dateFormat();
+    }
+    set dateFormat(v: string) {
+        this._dateFormat.set(v);
+    }
+    private _touchUI = signal<boolean>(false);
+    get touchUI() {
+        return this._touchUI();
+    }
+    set touchUI(v: boolean) {
+        this._touchUI.set(v);
+    }
 }
 
 // #template references only - Comprehensive template test component with all 12 ContentChild projections
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <!-- Date template with context parameters -->
             <ng-template #date let-date>
                 <div class="custom-date-ref" data-testid="date-ref-template">
                     <span class="day">{{ date?.day }}</span>
-                    <span class="month" *ngIf="date?.month">{{ date?.month }}</span>
-                    <span class="year" *ngIf="date?.year">{{ date?.year }}</span>
+                    @if (date?.month) {
+                        <span class="month">{{ date?.month }}</span>
+                    }
+                    @if (date?.year) {
+                        <span class="year">{{ date?.year }}</span>
+                    }
                 </div>
             </ng-template>
 
@@ -316,18 +634,61 @@ class TestAllTemplatesDatePickerComponent {
     `
 })
 class TestRefTemplatesDatePickerComponent {
-    selectedDate: Date | null = null as any;
-    showTime: boolean = false;
-    showIcon: boolean = false;
-    showClear: boolean = false;
-    view: string = 'date';
-    dateFormat: string = 'dd/mm/yy';
-    touchUI: boolean = false;
+    private _selectedDate = signal<Date | null>(null as any);
+    get selectedDate() {
+        return this._selectedDate();
+    }
+    set selectedDate(v: Date | null) {
+        this._selectedDate.set(v);
+    }
+    private _showTime = signal<boolean>(false);
+    get showTime() {
+        return this._showTime();
+    }
+    set showTime(v: boolean) {
+        this._showTime.set(v);
+    }
+    private _showIcon = signal<boolean>(false);
+    get showIcon() {
+        return this._showIcon();
+    }
+    set showIcon(v: boolean) {
+        this._showIcon.set(v);
+    }
+    private _showClear = signal<boolean>(false);
+    get showClear() {
+        return this._showClear();
+    }
+    set showClear(v: boolean) {
+        this._showClear.set(v);
+    }
+    private _view = signal<string>('date');
+    get view() {
+        return this._view();
+    }
+    set view(v: string) {
+        this._view.set(v);
+    }
+    private _dateFormat = signal<string>('dd/mm/yy');
+    get dateFormat() {
+        return this._dateFormat();
+    }
+    set dateFormat(v: string) {
+        this._dateFormat.set(v);
+    }
+    private _touchUI = signal<boolean>(false);
+    get touchUI() {
+        return this._touchUI();
+    }
+    set touchUI(v: boolean) {
+        this._touchUI.set(v);
+    }
 }
 
 // Legacy component for backward compatibility (deprecated - use separated versions above)
 @Component({
-    standalone: false,
+    standalone: true,
+    imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
             <ng-template #date let-date>
@@ -339,13 +700,55 @@ class TestRefTemplatesDatePickerComponent {
     `
 })
 class TestTemplatesDatePickerComponent {
-    selectedDate: Date | null = null as any;
-    showTime: boolean = false;
-    showIcon: boolean = false;
-    showClear: boolean = false;
-    view: string = 'date';
-    dateFormat: string = 'dd/mm/yy';
-    touchUI: boolean = false;
+    private _selectedDate = signal<Date | null>(null as any);
+    get selectedDate() {
+        return this._selectedDate();
+    }
+    set selectedDate(v: Date | null) {
+        this._selectedDate.set(v);
+    }
+    private _showTime = signal<boolean>(false);
+    get showTime() {
+        return this._showTime();
+    }
+    set showTime(v: boolean) {
+        this._showTime.set(v);
+    }
+    private _showIcon = signal<boolean>(false);
+    get showIcon() {
+        return this._showIcon();
+    }
+    set showIcon(v: boolean) {
+        this._showIcon.set(v);
+    }
+    private _showClear = signal<boolean>(false);
+    get showClear() {
+        return this._showClear();
+    }
+    set showClear(v: boolean) {
+        this._showClear.set(v);
+    }
+    private _view = signal<string>('date');
+    get view() {
+        return this._view();
+    }
+    set view(v: string) {
+        this._view.set(v);
+    }
+    private _dateFormat = signal<string>('dd/mm/yy');
+    get dateFormat() {
+        return this._dateFormat();
+    }
+    set dateFormat(v: string) {
+        this._dateFormat.set(v);
+    }
+    private _touchUI = signal<boolean>(false);
+    get touchUI() {
+        return this._touchUI();
+    }
+    set touchUI(v: boolean) {
+        this._touchUI.set(v);
+    }
 }
 
 describe('DatePicker', () => {
@@ -356,8 +759,17 @@ describe('DatePicker', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
-            declarations: [TestDatePickerComponent, TestReactiveFormDatePickerComponent, TestTemplatesDatePickerComponent, TestAllTemplatesDatePickerComponent, TestRefTemplatesDatePickerComponent],
+            imports: [
+                DatePicker,
+                FormsModule,
+                ReactiveFormsModule,
+                CommonModule,
+                TestDatePickerComponent,
+                TestReactiveFormDatePickerComponent,
+                TestTemplatesDatePickerComponent,
+                TestAllTemplatesDatePickerComponent,
+                TestRefTemplatesDatePickerComponent
+            ],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -428,8 +840,8 @@ describe('DatePicker', () => {
         });
 
         it('should handle date selection', async () => {
-            spyOn(testComponent, 'onDateSelect');
-            spyOn(testComponent, 'onDateChange');
+            vi.spyOn(testComponent, 'onDateSelect');
+            vi.spyOn(testComponent, 'onDateChange');
 
             const testDate = new Date(2023, 5, 15); // June 15, 2023
             testComponent.selectedDate = testDate;
@@ -511,7 +923,7 @@ describe('DatePicker', () => {
         });
 
         it('should emit onFocus event', () => {
-            spyOn(testComponent, 'onDateFocus');
+            vi.spyOn(testComponent, 'onDateFocus');
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.dispatchEvent(new FocusEvent('focus'));
@@ -520,7 +932,7 @@ describe('DatePicker', () => {
         });
 
         it('should emit onBlur event', () => {
-            spyOn(testComponent, 'onDateBlur');
+            vi.spyOn(testComponent, 'onDateBlur');
 
             const inputElement = testFixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.dispatchEvent(new FocusEvent('blur'));
@@ -924,7 +1336,7 @@ describe('DatePicker', () => {
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navForward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -947,7 +1359,7 @@ describe('DatePicker', () => {
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navBackward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -1012,7 +1424,7 @@ describe('DatePicker', () => {
 
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.switchToMonthView(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -1028,7 +1440,7 @@ describe('DatePicker', () => {
 
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.switchToYearView(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -1046,7 +1458,7 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const initialHour = datePickerComponent.currentHour();
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.incrementHour(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -1068,7 +1480,7 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const initialMinute = datePickerComponent.currentMinute();
 
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.incrementMinute(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
@@ -1147,7 +1559,7 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
 
             // Test Today button
-            const mockEvent = { preventDefault: jasmine.createSpy('preventDefault') };
+            const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.onTodayButtonClick(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
