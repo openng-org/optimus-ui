@@ -27,6 +27,7 @@
         "@angular/ssr": "catalog:angular22",
         "@docsearch/css": "^3.3.4",
         "@docsearch/js": "^3.3.4",
+        "@primeicons/angular": "catalog:",
         "@primeuix/themes": "catalog:",
         "@stackblitz/sdk": "1.9.0",
         "@types/express": "^4.17.17",
