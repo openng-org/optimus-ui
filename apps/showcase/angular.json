@@ -1,131 +1,131 @@
 {
-    "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
-    "version": 1,
-    "newProjectRoot": "projects",
-    "projects": {
-        "showcase": {
-            "projectType": "application",
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss"
-                }
-            },
-            "root": "",
-            "sourceRoot": "",
-            "prefix": "app",
-            "architect": {
-                "build": {
-                    "builder": "@angular-devkit/build-angular:application",
-                    "options": {
-                        "outputPath": "dist/showcase",
-                        "index": "index.html",
-                        "browser": "app/main.ts",
-                        "tsConfig": "./tsconfig.json",
-                        "inlineStyleLanguage": "scss",
-                        "assets": [
-                            "assets",
-                            {
-                                "glob": "**/*",
-                                "input": "public",
-                                "output": "/"
-                            }
-                        ],
-                        "stylePreprocessorOptions": {
-                            "sass": {
-                                "silenceDeprecations": [
-                                    "import"
-                                ]
-                            }
-                        },
-                        "styles": [
-                            "assets/styles/global.scss"
-                        ],
-                        "scripts": [],
-                        "allowedCommonJsDependencies": [
-                            "chart.js",
-                            "jspdf-autotable",
-                            "file-saver",
-                            "jspdf",
-                            "quill",
-                            "quill-delta",
-                            "core-js",
-                            "raf",
-                            "rgbcolor"
-                        ]
-                    },
-                    "configurations": {
-                        "production": {
-                            "outputHashing": "all",
-                            "server": "server/main.server.ts",
-                            "prerender": {
-                                "discoverRoutes": false,
-                                "routesFile": "router/routes.txt"
-                            },
-                            "ssr": {
-                                "entry": "server/server.ts"
-                            }
-                        },
-                        "development": {
-                            "optimization": false,
-                            "extractLicenses": false,
-                            "sourceMap": false,
-                            "namedChunks": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "./environments/environment.ts",
-                                    "with": "./environments/environment.development.ts"
-                                }
-                            ]
-                        },
-                        "development-ssr": {
-                            "optimization": false,
-                            "extractLicenses": false,
-                            "sourceMap": false,
-                            "namedChunks": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "./environments/environment.ts",
-                                    "with": "./environments/environment.development.ts"
-                                }
-                            ],
-                            "server": "server/main.server.ts",
-                            "prerender": {
-                                "discoverRoutes": false,
-                                "routesFile": "router/routes.txt"
-                            },
-                            "ssr": {
-                                "entry": "server/server.ts"
-                            }
-                        }
-                    },
-                    "defaultConfiguration": "production"
-                },
-                "serve": {
-                    "builder": "@angular-devkit/build-angular:dev-server",
-                    "options": {},
-                    "configurations": {
-                        "production": {
-                            "buildTarget": "showcase:build:production"
-                        },
-                        "development": {
-                            "buildTarget": "showcase:build:development"
-                        },
-                        "development-ssr": {
-                            "buildTarget": "showcase:build:development-ssr"
-                        }
-                    },
-                    "defaultConfiguration": "development"
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "buildTarget": "showcase:build"
-                    }
-                }
-            }
+  "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "showcase": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
         }
-    },
-    "cli": {
-        "analytics": false
+      },
+      "root": "",
+      "sourceRoot": "",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "outputPath": "dist/showcase",
+            "index": "index.html",
+            "browser": "app/main.ts",
+            "tsConfig": "./tsconfig.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "assets",
+              {
+                "glob": "**/*",
+                "input": "public",
+                "output": "/"
+              }
+            ],
+            "stylePreprocessorOptions": {
+              "sass": {
+                "silenceDeprecations": [
+                  "import"
+                ]
+              }
+            },
+            "styles": [
+              "assets/styles/global.scss"
+            ],
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+              "chart.js",
+              "jspdf-autotable",
+              "file-saver",
+              "jspdf",
+              "quill",
+              "quill-delta",
+              "core-js",
+              "raf",
+              "rgbcolor"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "all",
+              "server": "server/main.server.ts",
+              "prerender": {
+                "discoverRoutes": false,
+                "routesFile": "router/routes.txt"
+              },
+              "ssr": {
+                "entry": "server/server.ts"
+              }
+            },
+            "development": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": false,
+              "fileReplacements": [
+                {
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.development.ts"
+                }
+              ]
+            },
+            "development-ssr": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": false,
+              "namedChunks": false,
+              "fileReplacements": [
+                {
+                  "replace": "./environments/environment.ts",
+                  "with": "./environments/environment.development.ts"
+                }
+              ],
+              "server": "server/main.server.ts",
+              "prerender": {
+                "discoverRoutes": false,
+                "routesFile": "router/routes.txt"
+              },
+              "ssr": {
+                "entry": "server/server.ts"
+              }
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular/build:dev-server",
+          "options": {},
+          "configurations": {
+            "production": {
+              "buildTarget": "showcase:build:production"
+            },
+            "development": {
+              "buildTarget": "showcase:build:development"
+            },
+            "development-ssr": {
+              "buildTarget": "showcase:build:development-ssr"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular/build:extract-i18n",
+          "options": {
+            "buildTarget": "showcase:build"
+          }
+        }
+      }
     }
+  },
+  "cli": {
+    "analytics": false
+  }
 }
