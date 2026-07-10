@@ -858,6 +858,10 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
 
     toggleRowIndex: Nullable<number>;
 
+    anchorRowIndex: Nullable<number>;
+
+    rangeRowIndex: Nullable<number>;
+
     serializedValue: any[] | undefined | null;
 
     filteredNodes: Nullable<any[]>;
@@ -1559,9 +1563,26 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
         if (this.selectionMode()) {
             this.preventSelectionSetterPropagation = true;
             let rowNode = event.rowNode;
+
+            if (this.isMultipleSelectionMode() && (<KeyboardEvent>event.originalEvent).shiftKey && this.anchorRowIndex != null) {
+                DomHandler.clearSelection();
+                if (this.rangeRowIndex != null) {
+                    this.clearSelectionRange(event.originalEvent);
+                }
+
+                this.rangeRowIndex = this.findVisibleRowIndex(rowNode);
+                this.selectRange(event.originalEvent, this.rangeRowIndex);
+
+                this.tableService.onSelectionChange();
+                this.rowTouched = false;
+                return;
+            }
+
             let selected = this.isSelected((<any>rowNode).node);
             let metaSelection = this.rowTouched ? false : this.metaKeySelection();
             let dataKeyValue = this.dataKey() ? String(resolveFieldData((<TreeTableNode>rowNode.node).data, this.dataKey())) : null;
+            this.anchorRowIndex = this.findVisibleRowIndex(rowNode);
+            this.rangeRowIndex = this.anchorRowIndex;
 
             if (metaSelection) {
                 let keyboardEvent = <KeyboardEvent>event.originalEvent;
@@ -1698,6 +1719,91 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
             showContextMenu();
             this.onContextMenuSelect.emit({ originalEvent: event.originalEvent, node: node });
         }
+    }
+
+    getVisibleSerializedNodes() {
+        return (this.serializedValue || []).filter((rowNode) => rowNode.visible);
+    }
+
+    findVisibleRowIndex(rowNode: any) {
+        return this.getVisibleSerializedNodes().findIndex((serializedNode) => serializedNode.node === rowNode.node);
+    }
+
+    selectRange(event: MouseEvent | KeyboardEvent, rowIndex: number) {
+        let rangeStart, rangeEnd;
+
+        if (<number>this.anchorRowIndex > rowIndex) {
+            rangeStart = rowIndex;
+            rangeEnd = this.anchorRowIndex;
+        } else if (<number>this.anchorRowIndex < rowIndex) {
+            rangeStart = this.anchorRowIndex;
+            rangeEnd = rowIndex;
+        } else {
+            rangeStart = rowIndex;
+            rangeEnd = rowIndex;
+        }
+
+        let visibleRows = this.getVisibleSerializedNodes();
+        this._selection = this._selection || [];
+        for (let i = <number>rangeStart; i <= <number>rangeEnd; i++) {
+            let rangeRowNode = visibleRows[i];
+            if (rangeRowNode && !this.isSelected(rangeRowNode.node)) {
+                this._selection = [...this._selection, rangeRowNode.node];
+                let dataKeyValue = this.dataKey() ? String(resolveFieldData((<TreeTableNode>rangeRowNode.node).data, this.dataKey())) : null;
+                if (dataKeyValue) {
+                    this.selectedKeys[dataKeyValue] = 1;
+                }
+
+                this.onNodeSelect.emit({
+                    originalEvent: event,
+                    node: rangeRowNode.node,
+                    type: 'row',
+                    index: i
+                });
+            }
+        }
+        this.selectionChange.emit(this._selection);
+    }
+
+    clearSelectionRange(event: MouseEvent | KeyboardEvent) {
+        let rangeStart, rangeEnd;
+        let rangeRowIndex = <number>this.rangeRowIndex;
+        let anchorRowIndex = <number>this.anchorRowIndex;
+
+        if (rangeRowIndex > anchorRowIndex) {
+            rangeStart = anchorRowIndex;
+            rangeEnd = rangeRowIndex;
+        } else if (rangeRowIndex < anchorRowIndex) {
+            rangeStart = rangeRowIndex;
+            rangeEnd = anchorRowIndex;
+        } else {
+            rangeStart = rangeRowIndex;
+            rangeEnd = rangeRowIndex;
+        }
+
+        let visibleRows = this.getVisibleSerializedNodes();
+        for (let i = rangeStart; i <= rangeEnd; i++) {
+            let rangeRowNode = visibleRows[i];
+            if (!rangeRowNode) {
+                continue;
+            }
+
+            let selectionIndex = this.findIndexInSelection(rangeRowNode.node);
+            if (selectionIndex != -1) {
+                this._selection = this._selection.filter((val: TreeTableNode, index: number) => index != selectionIndex);
+                let dataKeyValue = this.dataKey() ? String(resolveFieldData((<TreeTableNode>rangeRowNode.node).data, this.dataKey())) : null;
+                if (dataKeyValue) {
+                    delete this.selectedKeys[dataKeyValue];
+                }
+
+                this.onNodeUnselect.emit({
+                    originalEvent: event,
+                    node: rangeRowNode.node,
+                    type: 'row'
+                });
+            }
+        }
+        this.selectionChange.emit(this._selection);
     }
 
     toggleNodeWithCheckbox(event: any) {

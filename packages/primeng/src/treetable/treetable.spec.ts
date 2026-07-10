@@ -399,6 +399,44 @@ describe('TreeTable', () => {
             expect(treetable.selectionChange.emit).toHaveBeenCalled();
         });
 
+        it('should select range of nodes with shift key in multiple selection mode', async () => {
+            const ttFixture = TestBed.createComponent(TreeTable);
+            const tt = ttFixture.componentInstance;
+            ttFixture.componentRef.setInput('value', basicTreeData);
+            ttFixture.componentRef.setInput('selectionMode', 'multiple');
+            await ttFixture.whenStable();
+            ttFixture.detectChanges();
+
+            const node1 = basicTreeData[0];
+            const node2 = basicTreeData[1];
+
+            const mockTarget = {
+                nodeName: 'TD',
+                closest: jasmine.createSpy('closest').and.returnValue(null)
+            };
+
+            tt.handleRowClick({
+                originalEvent: {
+                    target: mockTarget,
+                    button: 0
+                } as any,
+                rowNode: { node: node1 }
+            });
+
+            tt.handleRowClick({
+                originalEvent: {
+                    target: mockTarget,
+                    button: 0,
+                    shiftKey: true
+                } as any,
+                rowNode: { node: node2 }
+            });
+
+            expect(tt._selection.length).toBe(2);
+            expect(tt._selection).toContain(node1);
+            expect(tt._selection).toContain(node2);
+        });
+
         it('should emit selection change event', async () => {
             spyOn(treetable.selectionChange, 'emit');
 
