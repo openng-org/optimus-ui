@@ -619,6 +619,10 @@
             "icon": "pi pi-arrow-up",
             "children": [
                 {
+                    "name": "Updating to v22",
+                    "routerLink": "/migration/v22"
+                },
+                {
                     "name": "Updating to v21",
                     "routerLink": "/migration/v21"
                 },
