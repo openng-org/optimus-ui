@@ -122,7 +122,7 @@ const classes = {
     root: ({ instance }) => [
         'p-datatable p-component',
         {
-            'p-datatable-hoverable': instance.rowHover() || instance.selectionMode(),
+            'p-datatable-hoverable': instance.rowHover() ?? instance.selectionMode(),
             'p-datatable-resizable': instance.resizableColumns(),
             'p-datatable-resizable-fit': instance.resizableColumns() && instance.columnResizeMode() === 'fit',
             'p-datatable-scrollable': instance.scrollable(),
