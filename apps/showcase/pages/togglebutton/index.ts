@@ -4,6 +4,7 @@ import { CustomizedDoc } from '@/doc/togglebutton/customized-doc';
 import { DisabledDoc } from '@/doc/togglebutton/disabled-doc';
 import { InvalidDoc } from '@/doc/togglebutton/invalid-doc';
 import { ReactiveFormsDoc } from '@/doc/togglebutton/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/togglebutton/signalforms-doc';
 import { SizesDoc } from '@/doc/togglebutton/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/togglebutton/templatedrivenforms-doc';
 import { FluidDoc } from '@/doc/togglebutton/fluid-doc';
@@ -74,7 +75,8 @@ export class ToggleButtonDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

@@ -27,8 +27,8 @@ const classes = {
             'p-focus-visible': star + 1 === instance.focusedOptionIndex() && instance.isFocusVisibleItem
         }
     ],
-    onIcon: ({ instance }) => ['p-rating-icon p-rating-on-icon', { 'p-invalid': instance.invalid() }],
-    offIcon: ({ instance }) => ['p-rating-icon p-rating-off-icon', { 'p-invalid': instance.invalid() }]
+    onIcon: ({ instance }) => ['p-rating-icon p-rating-on-icon', { 'p-invalid': instance.$invalid() }],
+    offIcon: ({ instance }) => ['p-rating-icon p-rating-off-icon', { 'p-invalid': instance.$invalid() }]
 };
 
 @Injectable()

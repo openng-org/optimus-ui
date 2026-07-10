@@ -157,11 +157,6 @@ export class Checkbox extends BaseEditableHolder<CheckboxPassThrough> {
      */
     checkboxIcon = input<string>();
     /**
-     * When present, it specifies that the component cannot be edited.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
-    /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
@@ -246,7 +241,7 @@ export class Checkbox extends BaseEditableHolder<CheckboxPassThrough> {
 
     dataP = computed(() => {
         return this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             checked: this.checked(),
             disabled: this.$disabled(),
             filled: this.$variant() === 'filled',

@@ -678,7 +678,7 @@ export class CascadeSelect extends BaseEditableHolder<CascadeSelectPassThrough> 
     }
 
     onInputKeyDown(event: KeyboardEvent) {
-        if (this.$disabled() || this.loading()) {
+        if (this.$disabled() || this.readonly() || this.loading()) {
             event.preventDefault();
 
             return;
@@ -961,7 +961,7 @@ export class CascadeSelect extends BaseEditableHolder<CascadeSelectPassThrough> 
     }
 
     onContainerClick(event: MouseEvent) {
-        if (this.$disabled() || this.loading()) {
+        if (this.$disabled() || this.readonly() || this.loading()) {
             return;
         }
 
@@ -1145,6 +1145,11 @@ export class CascadeSelect extends BaseEditableHolder<CascadeSelectPassThrough> 
     }
 
     clear(event?: MouseEvent) {
+        if (this.readonly()) {
+            event && event.stopPropagation();
+            return;
+        }
+
         if (isNotEmpty(this.modelValue()) && this.showClear()) {
             this.updateModel(null);
             this.focusedOptionInfo.set({ index: -1, level: 0, parentKey: '' });

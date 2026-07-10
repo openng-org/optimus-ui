@@ -11,6 +11,7 @@ import { InvalidDoc } from '@/doc/treeselect/invalid-doc';
 import { LazyDoc } from '@/doc/treeselect/lazy-doc';
 import { MultipleDoc } from '@/doc/treeselect/multiple-doc';
 import { ReactiveFormsDoc } from '@/doc/treeselect/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/treeselect/signalforms-doc';
 import { SizesDoc } from '@/doc/treeselect/sizes-doc';
 import { TemplateDoc } from '@/doc/treeselect/template-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/treeselect/templatedrivenforms-doc';
@@ -71,7 +72,8 @@ export class TreeSelectDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

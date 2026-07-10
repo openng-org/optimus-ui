@@ -68,7 +68,7 @@ const classes = {
         'p-slider p-component',
         {
             'p-disabled': instance.$disabled(),
-            'p-invalid': instance.invalid(),
+            'p-invalid': instance.$invalid(),
             'p-slider-horizontal': instance.isHorizontal(),
             'p-slider-vertical': instance.isVertical(),
             'p-slider-animate': instance.animate()

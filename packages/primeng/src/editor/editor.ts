@@ -131,11 +131,6 @@ export class Editor extends BaseEditableHolder<EditorPassThrough> {
      * @group Props
      */
     debug = input<string>();
-    /**
-     * Whether to instantiate the editor to read-only mode.
-     * @group Props
-     */
-    readonly = input(false);
 
     /**
      * Callback to invoke when the quill modules are loaded.

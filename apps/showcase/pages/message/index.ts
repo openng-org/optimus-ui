@@ -1,6 +1,7 @@
 import { AppDoc } from '@/components/doc/app.doc';
 import { BasicDoc } from '@/doc/message/basic-doc';
 import { FormDoc } from '@/doc/message/form-doc';
+import { SignalFormsDoc } from '@/doc/message/signal-forms-doc';
 import { IconDoc } from '@/doc/message/icon-doc';
 import { UsageDoc } from '@/doc/message/usage-doc';
 import { OutlinedDoc } from '@/doc/message/outlined-doc';
@@ -68,7 +69,10 @@ export class MessageDemo {
                 {
                     id: 'forms',
                     label: 'Forms',
-                    component: FormDoc
+                    children: [
+                        { id: 'templatedriven', label: 'Template Driven', component: FormDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
+                    ]
                 },
                 {
                     id: 'dynamic',

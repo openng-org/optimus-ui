@@ -19,6 +19,7 @@ import { MultipleDoc } from '@/doc/datepicker/multiple-doc';
 import { MultipleMonthDoc } from '@/doc/datepicker/multiplemonths-doc';
 import { RangeDoc } from '@/doc/datepicker/range-doc';
 import { ReactiveFormsDoc } from '@/doc/datepicker/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/datepicker/signalforms-doc';
 import { SizesDoc } from '@/doc/datepicker/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/datepicker/templatedrivenforms-doc';
 import { TimeDoc } from '@/doc/datepicker/time-doc';
@@ -87,7 +88,8 @@ export class DatePickerDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

@@ -95,11 +95,6 @@ export class Rating extends BaseEditableHolder<RatingPassThrough> {
     }
 
     /**
-     * When present, changing the value is not possible.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
-    /**
      * Number of stars.
      * @group Props
      */

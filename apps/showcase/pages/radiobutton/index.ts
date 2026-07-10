@@ -5,6 +5,7 @@ import { FilledDoc } from '@/doc/radiobutton/filled-doc';
 import { GroupDoc } from '@/doc/radiobutton/group-doc';
 import { InvalidDoc } from '@/doc/radiobutton/invalid-doc';
 import { ReactiveFormsDoc } from '@/doc/radiobutton/reactiveforms-doc';
+import { SignalFormsDoc } from '@/doc/radiobutton/signalforms-doc';
 import { SizesDoc } from '@/doc/radiobutton/sizes-doc';
 import { TemplateDrivenFormsDoc } from '@/doc/radiobutton/templatedrivenforms-doc';
 import { UsageDoc } from '@/doc/radiobutton/usage-doc';
@@ -74,7 +75,8 @@ export class RadioButtonDemo {
                     label: 'Forms',
                     children: [
                         { id: 'templatedriven', label: 'Template Driven', component: TemplateDrivenFormsDoc },
-                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc }
+                        { id: 'reactive', label: 'Reactive Forms', component: ReactiveFormsDoc },
+                        { id: 'signal', label: 'Signal Forms', component: SignalFormsDoc }
                     ]
                 }
             ]

@@ -44,7 +44,7 @@ const classes = {
     root: ({ instance }) => [
         'p-autocomplete p-component p-inputwrapper',
         {
-            'p-invalid': instance.invalid(),
+            'p-invalid': instance.$invalid(),
             'p-focus': instance.focused(),
             'p-inputwrapper-filled': instance.$filled(),
             'p-inputwrapper-focus': (instance.focused() && !instance.$disabled()) || instance.autofocus() || instance.overlayVisible(),

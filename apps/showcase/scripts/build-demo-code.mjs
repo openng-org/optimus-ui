@@ -285,6 +285,7 @@ function extractInterfaceDefinitions(content) {
 
     // Only look at content before @Component decorator
     const componentIndex = content.indexOf('@Component');
+
     if (componentIndex === -1) return [];
 
     const beforeComponent = content.substring(0, componentIndex);
@@ -292,8 +293,10 @@ function extractInterfaceDefinitions(content) {
     // Find all interface definitions
     const interfaceRegex = /^(interface\s+(\w+)\s*\{[\s\S]*?\n\})/gm;
     let match;
+
     while ((match = interfaceRegex.exec(beforeComponent)) !== null) {
         const name = match[2];
+
         if (!seen.has(name)) {
             seen.add(name);
             interfaces.push(match[1].trim());
@@ -302,8 +305,10 @@ function extractInterfaceDefinitions(content) {
 
     // Also find type aliases
     const typeRegex = /^(type\s+(\w+)\s*=\s*[^;]+;)/gm;
+
     while ((match = typeRegex.exec(beforeComponent)) !== null) {
         const name = match[2];
+
         if (!seen.has(name)) {
             seen.add(name);
             interfaces.push(match[1].trim());
@@ -317,6 +322,7 @@ function extractInterfaceDefinitions(content) {
 function extractClassProperties(content) {
     // Find the class declaration start
     const classMatch = content.match(/export\s+class\s+\w+[^{]*\{/);
+
     if (!classMatch) return [];
 
     const classStartIndex = classMatch.index + classMatch[0].length;
@@ -329,6 +335,7 @@ function extractClassProperties(content) {
 
     // Find the earliest boundary
     let endBoundary = content.length;
+
     if (constructorIndex > classStartIndex) endBoundary = Math.min(endBoundary, constructorIndex);
     if (ngOnInitIndex > classStartIndex) endBoundary = Math.min(endBoundary, ngOnInitIndex);
     if (loadDemoIndex > classStartIndex) endBoundary = Math.min(endBoundary, loadDemoIndex);
@@ -346,17 +353,19 @@ function extractClassProperties(content) {
         const line = lines[lineIdx];
         // Match lines that start with exactly 4 spaces and a word character (property declaration)
         // Pattern 1: With type annotation - name: Type = value;
-        let propMatch = line.match(/^    ([\w]+)([!?]?):\s*([A-Za-z\[][\w<>\[\]|, ]*(?:\s*\|\s*[\w\[\]]+)*)(?:\s*=\s*(.+))?;?\s*$/);
+        let propMatch = line.match(/^ {4}([\w]+)([!?]?):\s*([A-Za-z[][\w<>[\]|, ]*(?:\s*\|\s*[\w[\]]+)*)(?:\s*=\s*(.+))?;?\s*$/);
 
         // Pattern 2: Without type annotation - name = value;
         if (!propMatch) {
-            const noTypeMatch = line.match(/^    ([\w]+)\s*=\s*(.+);?\s*$/);
+            const noTypeMatch = line.match(/^ {4}([\w]+)\s*=\s*(.+);?\s*$/);
+
             if (noTypeMatch) {
                 const defaultVal = noTypeMatch[2].trim().replace(/;$/, '');
                 let inferredType = 'any';
 
                 // Check for signal declarations: signal<Type>(initialValue)
                 const signalMatch = defaultVal.match(/^signal(<[^>]+>)?\((.*)?\)$/);
+
                 if (signalMatch) {
                     // For signals, the type IS the signal call itself, no separate type annotation needed
                     // We'll store the full signal declaration as both type and default value
@@ -365,6 +374,10 @@ function extractClassProperties(content) {
                 // Check for inject() pattern: inject(ServiceName)
                 else if (defaultVal.match(/^inject\(\w+\)$/)) {
                     propMatch = [null, noTypeMatch[1], '', '__inject__', defaultVal];
+                }
+                // Check for signal forms form() declarations: keep as-is, the type is inferred
+                else if (defaultVal.startsWith('form(')) {
+                    propMatch = [null, noTypeMatch[1], '', '__form__', defaultVal];
                 } else if (defaultVal === '[]' || defaultVal.startsWith('[')) {
                     inferredType = 'any[]';
                     propMatch = [null, noTypeMatch[1], '', inferredType, defaultVal];
@@ -404,6 +417,7 @@ function extractClassProperties(content) {
 
         // Skip injected services (they go in constructor) - unless using inject() pattern
         const isInjectPattern = propMatch[3] === '__inject__';
+
         if ((propName.endsWith('Service') || propName === 'cd') && !isInjectPattern) {
             continue;
         }
@@ -416,24 +430,28 @@ function extractClassProperties(content) {
             // Collect multiline arrays
             if (defaultValue.startsWith('[') && !defaultValue.endsWith(']')) {
                 let bracketCount = (defaultValue.match(/\[/g) || []).length - (defaultValue.match(/\]/g) || []).length;
+
                 while (bracketCount > 0 && lineIdx + 1 < lines.length) {
                     lineIdx++;
                     defaultValue += '\n' + lines[lineIdx];
                     bracketCount += (lines[lineIdx].match(/\[/g) || []).length;
                     bracketCount -= (lines[lineIdx].match(/\]/g) || []).length;
                 }
+
                 defaultValue = defaultValue.replace(/;$/, '');
             }
 
             // Collect multiline objects
             if (defaultValue && (defaultValue === '{' || (defaultValue.startsWith('{') && !defaultValue.endsWith('}')))) {
                 let braceCount = (defaultValue.match(/\{/g) || []).length - (defaultValue.match(/\}/g) || []).length;
+
                 while (braceCount > 0 && lineIdx + 1 < lines.length) {
                     lineIdx++;
                     defaultValue += '\n' + lines[lineIdx];
                     braceCount += (lines[lineIdx].match(/\{/g) || []).length;
                     braceCount -= (lines[lineIdx].match(/\}/g) || []).length;
                 }
+
                 defaultValue = defaultValue.replace(/;$/, '');
             }
 
@@ -441,13 +459,16 @@ function extractClassProperties(content) {
             if (defaultValue) {
                 let openParens = (defaultValue.match(/\(/g) || []).length;
                 let closeParens = (defaultValue.match(/\)/g) || []).length;
+
                 while (openParens !== closeParens && lineIdx + 1 < lines.length) {
                     lineIdx++;
                     defaultValue += '\n' + lines[lineIdx];
                     openParens = (defaultValue.match(/\(/g) || []).length;
                     closeParens = (defaultValue.match(/\)/g) || []).length;
                 }
+
                 defaultValue = defaultValue.replace(/;$/, '');
+
                 // If still unbalanced after exhausting lines, discard
                 if (openParens !== closeParens) {
                     defaultValue = undefined;
@@ -470,6 +491,7 @@ function extractClassProperties(content) {
 function extractConstructor(content, services = []) {
     // Find constructor with balanced braces
     const constructorStart = content.match(/constructor\s*\(([^)]*)\)\s*\{/);
+
     if (!constructorStart) return null;
 
     const params = constructorStart[1];
@@ -478,6 +500,7 @@ function extractConstructor(content, services = []) {
     // Find matching closing brace
     let braceCount = 1;
     let endIndex = startIndex;
+
     for (let i = startIndex; i < content.length && braceCount > 0; i++) {
         if (content[i] === '{') braceCount++;
         else if (content[i] === '}') braceCount--;
@@ -502,6 +525,7 @@ function extractConstructor(content, services = []) {
             if (p.includes('ChangeDetectorRef') || p.includes('PLATFORM_ID') || p.includes('DOCUMENT')) return false;
             // Keep other services
             if (p.includes('Service')) return true;
+
             return false;
         })
         .join(', ');
@@ -523,6 +547,7 @@ function extractConstructor(content, services = []) {
 // Extract method body with balanced braces
 function extractMethodBody(content, methodName) {
     const methodStart = content.match(new RegExp(`${methodName}\\s*\\(\\s*\\)\\s*(?::\\s*\\w+\\s*)?\\{`));
+
     if (!methodStart) return null;
 
     const startIndex = methodStart.index + methodStart[0].length;
@@ -530,6 +555,7 @@ function extractMethodBody(content, methodName) {
     // Find matching closing brace
     let braceCount = 1;
     let endIndex = startIndex;
+
     for (let i = startIndex; i < content.length && braceCount > 0; i++) {
         if (content[i] === '{') braceCount++;
         else if (content[i] === '}') braceCount--;
@@ -571,9 +597,11 @@ function extractOtherMethods(content) {
 
     // Content between code block end and extFiles (or end of class)
     let betweenCodeAndExtFiles = '';
+
     if (codeIndex > -1) {
         // Find end of code object using balanced braces
         const codeStart = content.indexOf('{', codeIndex);
+
         if (codeStart > -1) {
             let braceCount = 1;
             let inString = false;
@@ -598,12 +626,14 @@ function extractOtherMethods(content) {
                     if (char === '{') braceCount++;
                     else if (char === '}') braceCount--;
                 }
+
                 codeEnd = i;
             }
 
             // Get content after code block
             const afterCodeEnd = codeEnd + 1;
             const endBoundary = extFilesIndex > -1 ? extFilesIndex : content.length;
+
             if (afterCodeEnd < endBoundary) {
                 betweenCodeAndExtFiles = content.substring(afterCodeEnd, endBoundary);
             }
@@ -613,13 +643,14 @@ function extractOtherMethods(content) {
     const searchContent = beforeCode + '\n' + betweenCodeAndExtFiles;
 
     // Match method definitions
-    const methodRegex = /^\s{4}((?:async\s+)?[\w]+)\s*\(([^)]*)\)\s*(?::\s*([^\{]+))?\s*\{([\s\S]*?)\n\s{4}\}/gm;
+    const methodRegex = /^\s{4}((?:async\s+)?[\w]+)\s*\(([^)]*)\)\s*(?::\s*([^{]+))?\s*\{([\s\S]*?)\n\s{4}\}/gm;
     let match;
 
     const skipMethods = ['ngOnInit', 'loadDemoData', 'constructor', 'ngAfterViewChecked', 'ngAfterViewInit'];
 
     while ((match = methodRegex.exec(searchContent)) !== null) {
         const methodName = match[1].replace('async ', '');
+
         if (skipMethods.includes(methodName)) continue;
         if (seenMethods.has(methodName)) continue;
         seenMethods.add(methodName);
@@ -643,12 +674,14 @@ function extractOtherMethods(content) {
 function extractTemplate(content) {
     // Handle template: `...` (backtick template)
     const backtickMatch = content.match(/template:\s*`([\s\S]*?)`(?=\s*[,}]|\s*\/\/|\s*changeDetection)/);
+
     if (backtickMatch) {
         return backtickMatch[1];
     }
 
     // Handle template: '...' (single quote)
     const singleQuoteMatch = content.match(/template:\s*'([\s\S]*?)'(?=\s*[,}])/);
+
     if (singleQuoteMatch) {
         return singleQuoteMatch[1];
     }
@@ -667,8 +700,10 @@ function normalizeCodeIndent(text) {
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
+
         if (line.trim() === '') continue;
         const match = line.match(/^(\s*)/);
+
         if (match) {
             minIndent = Math.min(minIndent, match[1].length);
         }
@@ -678,14 +713,18 @@ function normalizeCodeIndent(text) {
     // and use that as the base to subtract
     if (minIndent === 0 && lines.length > 1) {
         let baseIndent = Infinity;
+
         for (let i = 1; i < lines.length; i++) {
             const line = lines[i];
+
             if (line.trim() === '') continue;
             const match = line.match(/^(\s*)/);
+
             if (match && match[1].length > 0) {
                 baseIndent = Math.min(baseIndent, match[1].length);
             }
         }
+
         // Subtract the base indent from all lines (except first which has 0)
         if (baseIndent !== Infinity && baseIndent > 0) {
             return lines
@@ -694,10 +733,12 @@ function normalizeCodeIndent(text) {
                     if (i === 0) return line;
                     const currentIndent = line.match(/^(\s*)/)[1].length;
                     const newIndent = Math.max(0, currentIndent - baseIndent);
+
                     return ' '.repeat(newIndent) + line.trimStart();
                 })
                 .join('\n');
         }
+
         return text;
     }
 
@@ -707,6 +748,7 @@ function normalizeCodeIndent(text) {
     return lines
         .map((line) => {
             if (line.trim() === '') return '';
+
             return line.slice(minIndent);
         })
         .join('\n');
@@ -718,6 +760,7 @@ function normalizeIndent(text) {
     if (!text) return text;
 
     const lines = text.split('\n');
+
     if (lines.length === 0) return text;
 
     // Find minimum indentation (ignoring empty lines and the first line if it has 0 indent)
@@ -726,6 +769,7 @@ function normalizeIndent(text) {
 
     for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
+
         if (line.trim() === '') continue;
 
         if (firstNonEmptyLineIndex === -1) {
@@ -733,13 +777,16 @@ function normalizeIndent(text) {
         }
 
         const match = line.match(/^(\s*)/);
+
         if (match) {
             const indent = match[1].length;
+
             // If it's the first non-empty line and has 0 indent, skip it for min calculation
             // (this handles cases where .trim() removed leading whitespace from first line)
             if (i === firstNonEmptyLineIndex && indent === 0) {
                 continue;
             }
+
             minIndent = Math.min(minIndent, indent);
         }
     }
@@ -758,9 +805,11 @@ function normalizeIndent(text) {
             if (line.trim() === '') return '';
             const match = line.match(/^(\s*)/);
             const currentIndent = match ? match[1].length : 0;
+
             if (currentIndent >= minIndent) {
                 return line.slice(minIndent);
             }
+
             return line;
         })
         .join('\n')
@@ -774,7 +823,7 @@ function extractDemoContent(template) {
     let html = template;
 
     // Remove app-docsectiontext
-    html = html.replace(/<app-docsectiontext[\s\S]*?<\/app-docsectiontext>/g, '');
+    html = html.replace(/<app-docsectiontext[\s\S]*?<\/app-docsectiontext\s*>/g, '');
 
     // Remove app-code (self-closing and regular)
     html = html.replace(/<app-code[^>]*><\/app-code>/g, '');
@@ -782,12 +831,14 @@ function extractDemoContent(template) {
 
     // Handle app-demo-wrapper - extract inner content
     const wrapperMatch = html.match(/<app-demo-wrapper[^>]*>([\s\S]*?)<\/app-demo-wrapper>/);
+
     if (wrapperMatch) {
         html = wrapperMatch[1];
     }
 
     // Handle p-deferred-demo wrapper - extract inner content
     const deferredMatch = html.match(/<p-deferred-demo[^>]*>([\s\S]*?)<\/p-deferred-demo>/);
+
     if (deferredMatch) {
         html = deferredMatch[1];
     }
@@ -804,99 +855,11 @@ function extractDemoContent(template) {
     return html || null;
 }
 
-// Extract content from inside a div with specific class, handling nested divs
-function extractDivContent(html, classPattern) {
-    const regex = new RegExp(`<div[^>]*class="[^"]*${classPattern}[^"]*"[^>]*>`);
-    const match = html.match(regex);
-    if (!match) return null;
-
-    const startIndex = match.index + match[0].length;
-    let depth = 1;
-    let i = startIndex;
-
-    // Find matching closing </div> using balanced counting
-    while (i < html.length && depth > 0) {
-        if (html.slice(i).startsWith('<div')) {
-            depth++;
-            i += 4;
-        } else if (html.slice(i).startsWith('</div>')) {
-            depth--;
-            if (depth === 0) break;
-            i += 6;
-        } else {
-            i++;
-        }
-    }
-
-    if (depth === 0) {
-        return html.slice(startIndex, i).trim();
-    }
-    return null;
-}
-
-// Extract basic code (just PrimeNG component without wrapper)
-function extractBasicCode(htmlContent) {
-    if (!htmlContent) return null;
-
-    let basic = htmlContent;
-
-    // Remove card wrapper div
-    const cardContent = extractDivContent(basic, 'card');
-    if (cardContent) {
-        basic = cardContent;
-    }
-
-    // Only remove flex/grid wrapper if it's the ONLY top-level element wrapping PrimeNG components
-    // Don't remove flex divs that are inside ng-template or other components
-    // Don't remove if there are sibling elements after the flex div
-    const trimmed = basic.trim();
-    const startsWithFlexDiv = /^<div[^>]*class="[^"]*(?:flex|grid)[^"]*"[^>]*>/.test(trimmed);
-    if (startsWithFlexDiv) {
-        const flexContent = extractDivContent(basic, '(?:flex|grid)');
-        if (flexContent) {
-            // Check if there's content AFTER the flex div (sibling elements)
-            const flexDivMatch = trimmed.match(/^<div[^>]*class="[^"]*(?:flex|grid)[^"]*"[^>]*>/);
-            if (flexDivMatch) {
-                const flexDivStart = flexDivMatch[0].length;
-                // Find the closing </div> for this flex div
-                let depth = 1;
-                let i = flexDivStart;
-                while (i < trimmed.length && depth > 0) {
-                    if (trimmed.slice(i).startsWith('<div')) {
-                        depth++;
-                        i += 4;
-                    } else if (trimmed.slice(i).startsWith('</div>')) {
-                        depth--;
-                        if (depth === 0) break;
-                        i += 6;
-                    } else {
-                        i++;
-                    }
-                }
-                const afterFlexDiv = trimmed.slice(i + 6).trim(); // +6 for '</div>'
-
-                // Only unwrap if there's nothing after the flex div
-                if (!afterFlexDiv) {
-                    // Only unwrap if the flex div directly contains PrimeNG components (not nested in templates)
-                    const hasPrimeNGDirect = /^[\s\S]*?<p-[a-z]/.test(flexContent);
-                    const hasNoTemplates = !flexContent.includes('<ng-template');
-                    const isSimpleWrapper = flexContent.split('<div').length <= 3;
-                    if (hasPrimeNGDirect && hasNoTemplates && isSimpleWrapper) {
-                        basic = flexContent;
-                    }
-                }
-            }
-        }
-    }
-
-    // Normalize indentation of the extracted content
-    return normalizeIndent(basic.trim());
-}
-
 // Extract existing code object from doc file using balanced brace matching
 function extractExistingCodeObject(content) {
     // Find the start of code: Code = {
     const codeStart = content.match(/code:\s*Code\s*=\s*\{/);
+
     if (!codeStart) return null;
 
     const startIndex = codeStart.index + codeStart[0].length;
@@ -935,20 +898,25 @@ function extractExistingCodeObject(content) {
 
     // Extract typescript
     const tsMatch = codeBlock.match(/typescript:\s*`([\s\S]*?)`/);
+
     if (tsMatch) code.typescript = tsMatch[1];
 
     // Extract data
     const dataMatch = codeBlock.match(/data:\s*`([\s\S]*?)`/);
+
     if (dataMatch) code.data = dataMatch[1];
 
     // Extract scss
     const scssMatch = codeBlock.match(/scss:\s*`([\s\S]*?)`/);
+
     if (scssMatch) code.scss = scssMatch[1];
 
     // Extract service
     const serviceMatch = codeBlock.match(/service:\s*\[([\s\S]*?)\]/);
+
     if (serviceMatch) {
         const services = serviceMatch[1].match(/'([^']+)'/g);
+
         if (services) {
             code.service = services.map((s) => s.replace(/'/g, ''));
         }
@@ -963,14 +931,17 @@ function detectDomainTypes(content) {
 
     // Look for domain type imports first
     const domainImportMatches = content.matchAll(/import\s*\{\s*([^}]+)\s*\}\s*from\s*['"`]@\/domain\/([^'"`]+)['"`]/g);
+
     for (const match of domainImportMatches) {
         const names = match[1].split(',').map((n) => n.trim());
         const domainPath = match[2];
+
         for (const name of names) {
             if (KNOWN_DOMAIN_TYPES[name]) {
                 if (!domainTypes[domainPath]) {
                     domainTypes[domainPath] = [];
                 }
+
                 if (!domainTypes[domainPath].includes(name)) {
                     domainTypes[domainPath].push(name);
                 }
@@ -981,10 +952,12 @@ function detectDomainTypes(content) {
     // Also check if domain types are used in the code but not imported
     for (const [typeName, path] of Object.entries(KNOWN_DOMAIN_TYPES)) {
         const typeRegex = new RegExp(`\\b${typeName}\\b`, 'g');
+
         if (typeRegex.test(content)) {
             if (!domainTypes[path]) {
                 domainTypes[path] = [];
             }
+
             if (!domainTypes[path].includes(typeName)) {
                 domainTypes[path].push(typeName);
             }
@@ -1002,10 +975,12 @@ function detectPrimeNGNamedExports(content) {
     for (const [exportName, modulePath] of Object.entries(PRIMENG_NAMED_EXPORTS)) {
         // Look for usage as type annotation (e.g., `: Table`, `Table[]`, `<Table>`)
         const typeRegex = new RegExp(`[:\\s<,]\\s*${exportName}\\b(?![a-zA-Z])`, 'g');
+
         if (typeRegex.test(content)) {
             if (!namedExports[modulePath]) {
                 namedExports[modulePath] = [];
             }
+
             if (!namedExports[modulePath].includes(exportName)) {
                 namedExports[modulePath].push(exportName);
             }
@@ -1023,8 +998,10 @@ function generateExtFilesFromDomainTypes(content) {
     // Detect domain types used in the content
     for (const [typeName, domainPath] of Object.entries(KNOWN_DOMAIN_TYPES)) {
         const typeRegex = new RegExp(`\\b${typeName}\\b`, 'g');
+
         if (typeRegex.test(content) && DOMAIN_TYPE_DEFINITIONS[domainPath]) {
             const filePath = `src/domain/${domainPath}.ts`;
+
             if (!addedPaths.has(filePath)) {
                 addedPaths.add(filePath);
                 extFiles.push({
@@ -1045,8 +1022,10 @@ function detectServices(content) {
 
     // Method 1: Look for imports from @/service/*
     const serviceImportMatches = content.matchAll(/import\s*\{\s*([^}]+)\s*\}\s*from\s*['"`]@\/service\/[^'"`]+['"`]/g);
+
     for (const match of serviceImportMatches) {
         const names = match[1].split(',').map((n) => n.trim());
+
         for (const name of names) {
             if (KNOWN_SERVICES.includes(name) && !services.includes(name)) {
                 services.push(name);
@@ -1056,12 +1035,15 @@ function detectServices(content) {
 
     // Method 2: Look for providers array in @Component
     const providersMatch = content.match(/providers:\s*\[([^\]]+)\]/);
+
     if (providersMatch) {
         const providerNames = providersMatch[1].split(',').map((p) => p.trim());
+
         for (const name of providerNames) {
             if (KNOWN_SERVICES.includes(name) && !services.includes(name)) {
                 services.push(name);
             }
+
             // Also check for PrimeNG API services
             if (PRIMENG_SERVICES.includes(name) && !primeNGServices.includes(name)) {
                 primeNGServices.push(name);
@@ -1079,6 +1061,7 @@ function detectPrimeNGModules(template) {
     // Check for p-* selectors
     for (const [selector, module] of Object.entries(SELECTOR_TO_MODULE)) {
         const regex = new RegExp(`<${selector}[\\s>]`, 'i');
+
         if (regex.test(template)) {
             modules.add(module);
         }
@@ -1163,6 +1146,7 @@ function generateTypescript(componentName, template, services = [], fileContent 
 
     // Angular core imports
     const angularCoreImports = ['Component'];
+
     if (needsOnInit) angularCoreImports.push('OnInit');
     if (hasInject) angularCoreImports.push('inject');
     if (hasSignals) angularCoreImports.push('signal');
@@ -1178,6 +1162,17 @@ function generateTypescript(componentName, template, services = [], fileContent 
         importStatements += `import { ReactiveFormsModule } from '@angular/forms';\n`;
     }
 
+    // Add Signal Forms imports if needed - reuse the original import statement
+    // (e.g. `import { email, form, FormField, required, type FieldTree } from '@angular/forms/signals';`)
+    const signalFormsImportMatch = fileContent.match(/import\s*\{[^}]+\}\s*from\s*['"`]@angular\/forms\/signals['"`];?/);
+    const usesFormField = /\bformField\b/.test(template);
+
+    if (signalFormsImportMatch) {
+        importStatements += `${signalFormsImportMatch[0].replace(/;?$/, ';')}\n`;
+    } else if (usesFormField) {
+        importStatements += `import { FormField } from '@angular/forms/signals';\n`;
+    }
+
     // Add PrimeNG modules (will be modified below to include named exports)
     const primeNGImports = primeModules.filter((m) => !['CommonModule', 'FormsModule', 'ReactiveFormsModule'].includes(m));
 
@@ -1188,6 +1183,7 @@ function generateTypescript(componentName, template, services = [], fileContent 
         const moduleLower = module.replace('Module', '').toLowerCase();
         // Check if there are named exports for this module
         const namedExportsForModule = primeNGNamedExportsEarly[moduleLower] || [];
+
         if (namedExportsForModule.length > 0) {
             // Combine module with named exports
             importStatements += `import { ${[...namedExportsForModule, module].join(', ')} } from 'primeng/${moduleLower}';\n`;
@@ -1209,21 +1205,26 @@ function generateTypescript(componentName, template, services = [], fileContent 
     // Detect and add PrimeNG API types (TreeNode, MenuItem, etc.) and services
     const usedApiTypes = [];
     const allContent = fileContent + (interfaces.length > 0 ? interfaces.join('\n') : '');
+
     for (const apiType of PRIMENG_API_TYPES) {
         // Check if type is used in properties, interfaces, or method signatures
         const typeRegex = new RegExp(`\\b${apiType}\\b`, 'g');
+
         if (typeRegex.test(allContent)) {
             usedApiTypes.push(apiType);
         }
     }
+
     // Combine API types with PrimeNG services for import (avoid duplicates)
     const apiImports = [...new Set([...usedApiTypes, ...primeNGServices])];
+
     if (apiImports.length > 0) {
         importStatements += `import { ${apiImports.join(', ')} } from 'primeng/api';\n`;
     }
 
     // Detect and add domain type imports (Customer, Product, etc.)
     const domainTypes = detectDomainTypes(fileContent);
+
     for (const [domainPath, types] of Object.entries(domainTypes)) {
         importStatements += `import { ${types.join(', ')} } from '@/domain/${domainPath}';\n`;
     }
@@ -1232,6 +1233,7 @@ function generateTypescript(componentName, template, services = [], fileContent 
     for (const [modulePath, exports] of Object.entries(primeNGNamedExportsEarly)) {
         const moduleNameBase = modulePath.charAt(0).toUpperCase() + modulePath.slice(1);
         const moduleName = moduleNameBase + 'Module';
+
         // Only add separate import if we don't already have the module imported
         if (!primeNGImports.includes(moduleName)) {
             importStatements += `import { ${exports.join(', ')} } from 'primeng/${modulePath}';\n`;
@@ -1240,16 +1242,19 @@ function generateTypescript(componentName, template, services = [], fileContent 
 
     // Detect and add @primeicons/angular imports from data-p-icon attributes
     const iconNames = [...new Set([...template.matchAll(/data-p-icon="([^"]+)"/g)].map((m) => m[1]))];
+
     for (const iconName of iconNames) {
         const className = iconName
             .split('-')
             .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
             .join('');
+
         importStatements += `import { ${className} } from '@primeicons/angular/${iconName}';\n`;
     }
 
     // Build imports array for decorator (actual modules, not ImportsModule)
     const decoratorImports = [
+        ...(usesFormField ? ['FormField'] : []),
         ...primeModules.filter((m) => m !== 'CommonModule'),
         ...iconNames.map((n) =>
             n
@@ -1268,6 +1273,7 @@ function generateTypescript(componentName, template, services = [], fileContent 
 
     // Build interface definitions
     let interfaceBlock = '';
+
     if (interfaces.length > 0) {
         interfaceBlock = '\n' + interfaces.join('\n\n') + '\n';
     }
@@ -1280,10 +1286,13 @@ function generateTypescript(componentName, template, services = [], fileContent 
 
     // Add inject() statements for services first (before other properties)
     const allServices = [...services, ...primeNGServices];
+
     if (allServices.length > 0) {
         classBody += '\n';
+
         for (const service of allServices) {
             const serviceName = service.charAt(0).toLowerCase() + service.slice(1);
+
             classBody += `    private ${serviceName} = inject(${service});\n`;
         }
     }
@@ -1291,9 +1300,10 @@ function generateTypescript(componentName, template, services = [], fileContent 
     // Add properties
     if (properties.length > 0) {
         if (allServices.length === 0) classBody += '\n';
+
         for (const prop of properties) {
-            if (prop.type === '__signal__' || prop.type === '__inject__') {
-                // Signal/inject properties: name = signal<Type>(value); or name = inject(Service);
+            if (prop.type === '__signal__' || prop.type === '__inject__' || prop.type === '__form__') {
+                // Signal/inject/form properties: name = signal<Type>(value); or name = inject(Service);
                 classBody += `    ${prop.name} = ${prop.defaultValue};\n`;
             } else if (prop.defaultValue) {
                 classBody += `    ${prop.name}${prop.optional}: ${prop.type} = ${prop.defaultValue};\n`;
@@ -1311,20 +1321,25 @@ function generateTypescript(componentName, template, services = [], fileContent 
     // Add ngOnInit if needed
     if (needsOnInit) {
         classBody += '\n    ngOnInit() {\n';
+
         if (ngOnInitBody) {
             // Normalize TypeScript code indentation (different from HTML)
             const normalizedBody = normalizeCodeIndent(ngOnInitBody);
+
             classBody += `        ${normalizedBody.replace(/\n/g, '\n        ')}\n`;
         } else if (loadDemoDataBody) {
             const normalizedBody = normalizeCodeIndent(loadDemoDataBody);
+
             classBody += `        ${normalizedBody.replace(/\n/g, '\n        ')}\n`;
         }
+
         classBody += '    }\n';
     }
 
     // Add other methods
     for (const method of otherMethods) {
         const returnType = method.returnType ? `: ${method.returnType}` : '';
+
         classBody += `\n    ${method.name}(${method.params})${returnType} {\n`;
         classBody += `        ${method.body.replace(/\n/g, '\n        ')}\n`;
         classBody += '    }\n';
@@ -1360,12 +1375,14 @@ function deriveSelectorFromFilename(fileName, componentDir) {
     // Remove doc suffix (handles both "basicdoc" and "basic-doc" patterns)
     let section = fileName.replace(/-?doc$/, '');
     const routeName = DIR_TO_ROUTE[componentDir] || componentDir;
+
     return `${routeName}-${section}-demo`;
 }
 
 // Extract the actual selector from a component file's @Component decorator
 function extractSelector(content) {
     const match = content.match(/selector:\s*['"]([^'"]+)['"]/);
+
     return match ? match[1] : null;
 }
 
@@ -1373,12 +1390,15 @@ function extractSelector(content) {
 // e.g., selector "template-driven-forms-doc" -> "select-template-driven-forms-demo"
 function deriveDemoKey(content, fileName, componentDir) {
     const selector = extractSelector(content);
+
     if (selector) {
         // Replace -doc suffix with -demo, prepend component dir
         const base = selector.replace(/-doc$/, '');
         const routeName = DIR_TO_ROUTE[componentDir] || componentDir;
+
         return `${routeName}-${base}-demo`;
     }
+
     // Fallback to filename-based derivation
     return deriveSelectorFromFilename(fileName, componentDir);
 }
@@ -1388,9 +1408,11 @@ function parseDocFile(filePath, componentDir) {
     const content = fs.readFileSync(filePath, 'utf-8');
 
     const template = extractTemplate(content);
+
     if (!template) return null;
 
     const demoContent = extractDemoContent(template);
+
     if (!demoContent) return null;
 
     // Try to get existing code object (for data, scss that can't be auto-generated)
@@ -1448,6 +1470,7 @@ async function main() {
     // Get all component directories
     const componentDirs = fs.readdirSync(DOCS_DIR).filter((dir) => {
         const fullPath = path.join(DOCS_DIR, dir);
+
         return fs.statSync(fullPath).isDirectory() && !SKIP_DIRS.includes(dir.toLowerCase());
     });
 
@@ -1472,6 +1495,7 @@ async function main() {
 
             try {
                 const demo = parseDocFile(filePath, componentDir);
+
                 if (demo && demo.key) {
                     demos[demo.key] = demo;
                     processedCount++;
@@ -1493,6 +1517,7 @@ async function main() {
 
     // Ensure output directory exists
     const outputDir = path.dirname(OUTPUT_PATH);
+
     if (!fs.existsSync(outputDir)) {
         fs.mkdirSync(outputDir, { recursive: true });
     }
