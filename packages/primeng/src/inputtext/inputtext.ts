@@ -74,6 +74,20 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
      * @group Props
      */
     invalid = input(undefined, { transform: booleanAttribute });
+    /**
+     * Whether the associated form field has been touched by the user.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    touched = input(undefined, { transform: booleanAttribute });
+
+    /**
+     * Invalid state used for styling. With classic manual bindings (`[invalid]="expr"`, no `touched`),
+     * `touched()` is undefined so this equals `invalid()`. With signal forms, `[formField]` binds
+     * `touched`, so the invalid styling is deferred until the field has been touched.
+     */
+    $invalid = computed(() => this.invalid() && (this.touched() ?? true));
 
     $variant = computed(() => this.variant() || this.config.inputVariant());
 
@@ -85,7 +99,7 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
 
     dataP = computed(() =>
         this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             fluid: this.hasFluid,
             filled: this.$variant() === 'filled',
             [this.pSize() as string]: this.pSize()

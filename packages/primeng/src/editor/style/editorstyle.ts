@@ -6,7 +6,7 @@ const classes = {
     root: ({ instance }) => [
         'p-editor',
         {
-            'p-invalid': instance.invalid()
+            'p-invalid': instance.$invalid()
         }
     ],
     toolbar: 'p-editor-toolbar',

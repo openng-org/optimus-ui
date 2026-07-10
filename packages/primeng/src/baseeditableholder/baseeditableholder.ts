@@ -1,5 +1,6 @@
 import { booleanAttribute, computed, Directive, input, signal } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
+import type { ValidationError } from '@angular/forms/signals';
 import { BaseModelHolder } from 'primeng/basemodelholder';
 
 @Directive({ standalone: true })
@@ -28,10 +29,38 @@ export class BaseEditableHolder<PT = any> extends BaseModelHolder<PT> implements
      * @group Props
      */
     name = input<string | undefined>();
+    /**
+     * When present, it specifies that the component cannot be edited.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    readonly = input(undefined, { transform: booleanAttribute });
+    /**
+     * Whether the associated form field has been touched by the user.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    touched = input(undefined, { transform: booleanAttribute });
+    /**
+     * Validation errors of the associated form field.
+     * Automatically bound by the signal forms `[formField]` directive.
+     * @defaultValue undefined
+     * @group Props
+     */
+    errors = input<readonly ValidationError.WithOptionalFieldTree[] | undefined>();
 
     _disabled = signal<boolean>(false);
 
     $disabled = computed(() => this.disabled() || this._disabled());
+
+    /**
+     * Invalid state used for styling. With classic manual bindings (`[invalid]="expr"`, no `touched`),
+     * `touched()` is undefined so this equals `invalid()`. With signal forms, `[formField]` binds
+     * `touched`, so the invalid styling is deferred until the field has been touched.
+     */
+    $invalid = computed(() => this.invalid() && (this.touched() ?? true));
 
     onModelChange: Function = () => {};
 

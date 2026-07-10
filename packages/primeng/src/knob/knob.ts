@@ -139,11 +139,6 @@ export class Knob extends BaseEditableHolder<KnobPassThrough> {
      */
     showValue = input(true, { transform: booleanAttribute });
     /**
-     * When present, it specifies that the component value cannot be edited.
-     * @group Props
-     */
-    readonly = input(false, { transform: booleanAttribute });
-    /**
      * Callback to invoke on value change.
      * @param {number} value - New value.
      * @group Emits

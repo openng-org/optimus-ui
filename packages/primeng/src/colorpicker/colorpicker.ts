@@ -213,7 +213,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     }
 
     onHueMousedown(event: MouseEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -225,7 +225,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     }
 
     onHueDragStart(event: TouchEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -234,7 +234,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     }
 
     onColorDragStart(event: TouchEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -259,7 +259,7 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     }
 
     onColorMousedown(event: MouseEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -383,6 +383,10 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     }
 
     onInputClick() {
+        if (this.readonly()) {
+            return;
+        }
+
         this.togglePanel();
     }
 
@@ -394,7 +398,9 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> {
     onInputKeydown(event: KeyboardEvent) {
         switch (event.code) {
             case 'Space':
-                this.togglePanel();
+                if (!this.readonly()) {
+                    this.togglePanel();
+                }
                 event.preventDefault();
                 break;
 

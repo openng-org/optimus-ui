@@ -35,7 +35,7 @@ const classes = {
             'p-inputnumber-horizontal': instance.showButtons() && instance.buttonLayout() === 'horizontal',
             'p-inputnumber-vertical': instance.showButtons() && instance.buttonLayout() === 'vertical',
             'p-inputnumber-fluid': instance.hasFluid,
-            'p-invalid': instance.invalid()
+            'p-invalid': instance.$invalid()
         }
     ],
     pcInputText: 'p-inputnumber-input',
@@ -43,13 +43,13 @@ const classes = {
     incrementButton: ({ instance }) => [
         'p-inputnumber-button p-inputnumber-increment-button',
         {
-            'p-disabled': instance.showButtons() && instance.max() != null && instance.maxlength()
+            'p-disabled': instance.showButtons() && instance.max() != null && instance.$maxLength()
         }
     ],
     decrementButton: ({ instance }) => [
         'p-inputnumber-button p-inputnumber-decrement-button',
         {
-            'p-disabled': instance.showButtons() && instance.min() != null && instance.minlength()
+            'p-disabled': instance.showButtons() && instance.min() != null && instance.$minLength()
         }
     ],
     clearIcon: 'p-inputnumber-clear-icon'

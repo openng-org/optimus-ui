@@ -60,7 +60,7 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
             [value]="formattedValue()"
             [style]="inputStyle()"
             [variant]="$variant()"
-            [invalid]="invalid()"
+            [invalid]="$invalid()"
             [attr.aria-valuemin]="min()"
             [attr.aria-valuemax]="max()"
             [attr.aria-valuenow]="value"
@@ -73,8 +73,8 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
             [attr.size]="inputSize()"
             [attr.name]="name()"
             [attr.autocomplete]="autocomplete()"
-            [attr.maxlength]="maxlength()"
-            [attr.minlength]="minlength()"
+            [attr.maxlength]="$maxLength()"
+            [attr.minlength]="$minLength()"
             [attr.tabindex]="tabindex()"
             [attr.aria-required]="ariaRequired()"
             [attr.min]="min()"
@@ -312,11 +312,6 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
      * @group Props
      */
     decrementButtonIcon = input<string>();
-    /**
-     * When present, it specifies that an input field is read-only.
-     * @group Props
-     */
-    readonly = input(undefined, { transform: booleanAttribute });
     /**
      * Determines whether the input field is empty.
      * @group Props
@@ -736,7 +731,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         let step = (this.step() ?? 1) * dir;
         let currentValue = this.parseValue(this.input()?.nativeElement.value) || 0;
         let newValue = this.validateValue((currentValue as number) + step);
-        const max = this.maxlength();
+        const max = this.$maxLength();
         if (max && max < this.formatValue(newValue).length) {
             return;
         }
@@ -1035,7 +1030,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             return;
         }
 
-        const max = this.maxlength();
+        const max = this.$maxLength();
 
         if (max && newValueStr.length > max) {
             return;
@@ -1054,8 +1049,8 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 return;
             }
             if (data) {
-                if (this.maxlength()) {
-                    data = data.toString().substring(0, this.maxlength());
+                if (this.$maxLength()) {
+                    data = data.toString().substring(0, this.$maxLength());
                 }
 
                 let filteredData = this.parseValue(data);
@@ -1354,7 +1349,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         } else {
             let selectionStart = this.input().nativeElement.selectionStart ?? 0;
             let selectionEnd = this.input().nativeElement.selectionEnd ?? 0;
-            const maxlength = this.maxlength();
+            const maxlength = this.$maxLength();
             if (maxlength && newValue.length > maxlength) {
                 newValue = newValue.slice(0, maxlength);
                 selectionStart = Math.min(selectionStart, maxlength);
@@ -1498,7 +1493,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     get dataP() {
         return this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             disabled: this.$disabled(),
             focus: this.focused,
             fluid: this.hasFluid,

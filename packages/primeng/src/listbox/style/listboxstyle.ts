@@ -48,7 +48,7 @@ const classes = {
         {
             'p-listbox-striped': instance.striped(),
             'p-disabled': instance.$disabled(),
-            'p-invalid': instance.invalid(),
+            'p-invalid': instance.$invalid(),
             'p-listbox-fluid': instance.fluid(),
             'p-listbox-dragging': instance.isDragging()
         }

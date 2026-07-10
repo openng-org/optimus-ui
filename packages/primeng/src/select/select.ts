@@ -132,12 +132,12 @@ export const SELECT_VALUE_ACCESSOR: any = {
                 (focus)="onInputFocus($event)"
                 (blur)="onInputBlur($event)"
                 [attr.name]="name()"
-                [attr.minlength]="minlength()"
+                [attr.minlength]="$minLength()"
                 [attr.min]="min()"
                 [attr.max]="max()"
-                [attr.pattern]="pattern()"
+                [attr.pattern]="$patternAttr()"
                 [attr.size]="inputSize()"
-                [attr.maxlength]="maxlength()"
+                [attr.maxlength]="$maxLength()"
                 [attr.required]="$required()"
                 [attr.readonly]="$readonly()"
                 [attr.disabled]="$disabledAttr()"
@@ -389,11 +389,6 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
      * @group Props
      */
     panelStyleClass = input<string>();
-    /**
-     * When present, it specifies that the component cannot be edited.
-     * @group Props
-     */
-    readonly = input(undefined, { transform: booleanAttribute });
     /**
      * When present, custom value instead of predefined options can be entered using the editable input field.
      * @group Props
@@ -1908,7 +1903,7 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
 
     get containerDataP() {
         return this.cn({
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             disabled: this.$disabled(),
             focus: this.focused(),
             fluid: this.hasFluid,

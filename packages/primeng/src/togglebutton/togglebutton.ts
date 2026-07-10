@@ -163,7 +163,7 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
     dataP = computed(() =>
         this.cn({
             checked: this.active(),
-            invalid: this.invalid(),
+            invalid: this.$invalid(),
             [this.size() as string]: this.size()
         })
     );
@@ -200,7 +200,7 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
 
     @HostListener('click', ['$event'])
     toggle(event: Event) {
-        if (!this.$disabled() && !(this.allowEmpty() === false && this.checked())) {
+        if (!this.$disabled() && !this.readonly() && !(this.allowEmpty() === false && this.checked())) {
             this.checked.set(!this.checked());
             this.writeModelValue(this.checked());
             this.onModelChange(this.checked());

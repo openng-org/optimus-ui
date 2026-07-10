@@ -731,7 +731,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     onClick(event: any) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
         const section = event.target?.getAttribute?.('data-pc-section');
@@ -747,6 +747,10 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     onKeyDown(event: KeyboardEvent) {
+        if (this.readonly()) {
+            return;
+        }
+
         switch (event.code) {
             //down
             case 'ArrowDown':
@@ -837,6 +841,11 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     clear(event: Event) {
+        if (this.readonly()) {
+            event.stopPropagation();
+            return;
+        }
+
         this._value.set(null);
         this.resetExpandedNodes();
         this.resetPartialSelected();

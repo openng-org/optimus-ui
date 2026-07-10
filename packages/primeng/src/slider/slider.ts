@@ -234,7 +234,7 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onMouseDown(event: Event, index?: number) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -257,7 +257,7 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onDragStart(event: TouchEvent, index?: number) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -288,7 +288,7 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onDrag(event: TouchEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -307,7 +307,7 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onDragEnd(event: TouchEvent) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -325,7 +325,7 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onBarClick(event: Event) {
-        if (this.$disabled()) {
+        if (this.$disabled() || this.readonly()) {
             return;
         }
 
@@ -341,6 +341,10 @@ export class Slider extends BaseEditableHolder<SliderPassThrough> {
     }
 
     onKeyDown(event: any, index?) {
+        if (this.readonly()) {
+            return;
+        }
+
         this.handleIndex = index;
 
         switch (event.code) {

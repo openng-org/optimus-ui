@@ -34,7 +34,7 @@ const classes = {
         {
             'p-treeselect-display-chip': instance.display() === 'chip',
             'p-disabled': instance.$disabled(),
-            'p-invalid': instance.invalid(),
+            'p-invalid': instance.$invalid(),
             'p-focus': instance.focused(),
             'p-variant-filled': instance.$variant() === 'filled',
             'p-inputwrapper-filled': !instance.emptyValue(),
