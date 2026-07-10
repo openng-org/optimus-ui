@@ -12,6 +12,10 @@ const style = /*css*/ `
     .p-panelmenu-item-link {
         outline: 0 none;
     }
+
+    .p-panelmenu-submenu .p-menuitem-separator {
+        border-block-start: 1px solid dt('content.border.color');
+    }
 `;
 
 const classes = {

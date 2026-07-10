@@ -187,6 +187,29 @@ class TestEmptyPanelMenuComponent {}
 
 @Component({
     standalone: false,
+    selector: 'test-separator-panelmenu',
+    template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
+})
+class TestSeparatorPanelMenuComponent {
+    model: MenuItem[] = [
+        {
+            label: 'Panel',
+            expanded: true,
+            items: [
+                { label: 'Item 1' },
+                { separator: true },
+                {
+                    label: 'Group',
+                    expanded: true,
+                    items: [{ label: 'Sub Item 1' }, { separator: true }, { label: 'Sub Item 2' }]
+                }
+            ]
+        }
+    ];
+}
+
+@Component({
+    standalone: false,
     selector: 'test-dynamic-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
 })
@@ -259,6 +282,7 @@ describe('PanelMenu', () => {
                 TestDisabledPanelMenuComponent,
                 TestStyledPanelMenuComponent,
                 TestEmptyPanelMenuComponent,
+                TestSeparatorPanelMenuComponent,
                 TestDynamicPanelMenuComponent,
                 TestCommandPanelMenuComponent,
                 TestKeyboardPanelMenuComponent
@@ -504,6 +528,18 @@ describe('PanelMenu', () => {
 
             const separators = fixture.debugElement.queryAll(By.css('li[role="separator"]'));
             expect(separators.length).toBe(1);
+        });
+
+        it('should render separators inside submenu items', async () => {
+            const separatorFixture = TestBed.createComponent(TestSeparatorPanelMenuComponent);
+            separatorFixture.detectChanges();
+            await separatorFixture.whenStable();
+
+            const separators = separatorFixture.debugElement.queryAll(By.css('li[role="separator"]'));
+            expect(separators.length).toBe(2);
+            separators.forEach((separator) => {
+                expect(separator.nativeElement.classList.contains('p-menuitem-separator')).toBe(true);
+            });
         });
     });
 
