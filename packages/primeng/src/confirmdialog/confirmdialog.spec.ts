@@ -199,8 +199,23 @@ class TestPositionConfirmDialogComponent {
 class TestConfirmationServiceComponent {
     acceptClicked = false;
     rejectClicked = false;
+    secondAcceptClicked = false;
 
     constructor(private confirmationService: ConfirmationService) {}
+
+    confirmChained() {
+        this.confirmationService.confirm({
+            message: 'First confirmation',
+            accept: () => {
+                this.confirmationService.confirm({
+                    message: 'Second confirmation',
+                    accept: () => {
+                        this.secondAcceptClicked = true;
+                    }
+                });
+            }
+        });
+    }
 
     confirm() {
         this.confirmationService.confirm({
@@ -833,6 +848,33 @@ describe('ConfirmDialog', () => {
             await new Promise((resolve) => setTimeout(resolve, 0));
 
             expect(serviceComponent.rejectClicked).toBe(true);
+        });
+
+        it('should show a confirmation requested from the accept callback of another confirmation', async () => {
+            const serviceFixture = TestBed.createComponent(TestConfirmationServiceComponent);
+            const serviceComponent = serviceFixture.componentInstance;
+            serviceFixture.changeDetectorRef.markForCheck();
+            await serviceFixture.whenStable();
+
+            serviceComponent.confirmChained();
+            serviceFixture.changeDetectorRef.markForCheck();
+            await serviceFixture.whenStable();
+
+            const confirmDialogInstance = serviceFixture.debugElement.query(By.directive(ConfirmDialog)).componentInstance;
+            expect(confirmDialogInstance.option('message')).toBe('First confirmation');
+
+            confirmDialogInstance.onAccept();
+            serviceFixture.changeDetectorRef.markForCheck();
+            await serviceFixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+
+            expect(confirmDialogInstance.visible()).toBe(true);
+            expect(confirmDialogInstance.option('message')).toBe('Second confirmation');
+
+            confirmDialogInstance.onAccept();
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            expect(serviceComponent.secondAcceptClicked).toBe(true);
         });
     });
 
