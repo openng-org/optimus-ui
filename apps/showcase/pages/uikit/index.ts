@@ -369,8 +369,7 @@ import { TooltipModule } from 'primeng/tooltip';
                     <div class="leading-normal mb-2 font-bold">How can I get support?</div>
                     <p class="mt-0 mb-12 p-0 leading-normal">
                         PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users can
-                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and
-                        <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/figma-ui-kit" class="doc-link">Forum</a>.
+                        seek assistance in our community via our public <a [href]="DISCORD_URL" class="doc-link">Discord</a> and <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/figma-ui-kit" class="doc-link">Forum</a>.
                     </p>
                 </div>
                 <div class="col-span-12 lg:col-span-4 px-2 lg:px-8">

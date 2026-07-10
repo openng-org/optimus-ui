@@ -11,8 +11,8 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         <app-docsectiontext>
             <h4>Configuration</h4>
             <p>
-                The <i>PrimeNGConfig</i> has been replaced by <i>{{ PROJECT_NAME }}</i> and the initial configuration is now done via the <i>providePrimeNG</i> provider during startup. See the <a href="/installation" class="">installation</a> section for an
-                example.
+                The <i>PrimeNGConfig</i> has been replaced by <i>{{ PROJECT_NAME }}</i> and the initial configuration is now done via the <i>providePrimeNG</i> provider during startup. See the <a href="/installation" class="">installation</a> section
+                for an example.
             </p>
 
             <h4>SASS Themes</h4>

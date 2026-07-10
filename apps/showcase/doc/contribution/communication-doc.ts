@@ -9,8 +9,8 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     template: `
         <app-docsectiontext>
             <p>
-                Join the Contributors channel on the <a [href]="DISCORD_URL" target="_blank" rel="noopener noreferrer">PrimeLand Discord</a> server to connect with {{ PROJECT_NAME }} staff and fellow contributors. In this channel, you
-                can discuss the areas you want to contribute to and receive feedback. This channel is open to everyone who'd like to contribute.
+                Join the Contributors channel on the <a [href]="DISCORD_URL" target="_blank" rel="noopener noreferrer">PrimeLand Discord</a> server to connect with {{ PROJECT_NAME }} staff and fellow contributors. In this channel, you can discuss the
+                areas you want to contribute to and receive feedback. This channel is open to everyone who'd like to contribute.
             </p>
         </app-docsectiontext>
     `
