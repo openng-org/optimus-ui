@@ -566,6 +566,29 @@ describe('Toast', () => {
 
             expect(toastInstance.breakpoints()).toEqual(component.breakpoints);
         });
+
+        it('should render a visible message in single mode', async () => {
+            const message: ToastMessageOptions = {
+                severity: 'info',
+                summary: 'Single Mode',
+                detail: 'Should be visible',
+                key: 'test'
+            };
+
+            messageService.add(message);
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            await new Promise((resolve) => setTimeout(resolve, 400));
+
+            const messageEl = fixture.debugElement.query(By.css('.p-toast-message'))?.nativeElement as HTMLElement;
+            expect(messageEl).toBeTruthy();
+
+            const computedStyle = getComputedStyle(messageEl);
+            expect(computedStyle.opacity).toBe('1');
+            expect(computedStyle.position).not.toBe('absolute');
+        });
     });
 
     describe('Animation and Lifecycle', () => {
