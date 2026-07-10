@@ -193,6 +193,13 @@ export class ButtonDirective extends BaseComponent {
         effect(() => {
             this.loading();
             this.severity();
+            this.text();
+            this.plain();
+            this.raised();
+            this.size();
+            this.outlined();
+            this.rounded();
+            this.hasFluid();
             if (this.initialized) {
                 this.setStyleClass();
             }
@@ -255,6 +262,8 @@ export class ButtonDirective extends BaseComponent {
     }
 
     private _internalClasses: string[] = Object.values(INTERNAL_BUTTON_CLASSES);
+
+    private _variantClasses: string[] = ['p-button-text', 'p-button-plain', 'p-button-raised', 'p-button-outlined', 'p-button-rounded', 'p-button-fluid', 'p-button-sm', 'p-button-lg', 'p-button-small', 'p-button-large'];
 
     pcFluid: Fluid | null = inject(Fluid, { optional: true, host: true, skipSelf: true });
 
@@ -344,7 +353,7 @@ export class ButtonDirective extends BaseComponent {
         const styleClass = this.getStyleClass();
         this.removeExistingSeverityClass();
 
-        this.htmlElement.classList.remove(...this._internalClasses);
+        this.htmlElement.classList.remove(...this._internalClasses, ...this._variantClasses);
         this.htmlElement.classList.add(...styleClass);
     }
 

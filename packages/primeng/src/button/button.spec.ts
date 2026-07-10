@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -179,6 +179,17 @@ class TestButtonDirectiveComponent {
     `
 })
 class TestButtonWithIconLabelDirectiveComponent {}
+
+// Button directive with dynamic properties
+@Component({
+    standalone: false,
+    template: ` <button pButton [outlined]="outlined()" [rounded]="rounded()" [severity]="severity()">Dynamic Button</button> `
+})
+class TestDynamicButtonDirectiveComponent {
+    outlined = signal(false);
+    rounded = signal(false);
+    severity = signal<any>(undefined);
+}
 
 // Loading Button Test
 @Component({
@@ -1388,7 +1399,7 @@ describe('ButtonDirective', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent],
+            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent, TestDynamicButtonDirectiveComponent],
             imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1442,6 +1453,30 @@ describe('ButtonDirective', () => {
             expect(buttonDirective.raised()).toBe(true);
             // CSS class application may vary in test environment
             expect(buttonDirective.raised()).toBe(true);
+        });
+
+        it('should update classes when variant properties change dynamically', async () => {
+            const dynamicFixture = TestBed.createComponent(TestDynamicButtonDirectiveComponent);
+            const dynamicComponent = dynamicFixture.componentInstance;
+            const dynamicElement: HTMLButtonElement = dynamicFixture.debugElement.query(By.css('button')).nativeElement;
+            dynamicFixture.detectChanges();
+            await dynamicFixture.whenStable();
+
+            expect(dynamicElement.classList.contains('p-button-outlined')).toBe(false);
+
+            dynamicComponent.outlined.set(true);
+            await dynamicFixture.whenStable();
+
+            expect(dynamicElement.classList.contains('p-button-outlined')).toBe(true);
+
+            dynamicComponent.outlined.set(false);
+            dynamicComponent.rounded.set(true);
+            dynamicComponent.severity.set('danger');
+            await dynamicFixture.whenStable();
+
+            expect(dynamicElement.classList.contains('p-button-outlined')).toBe(false);
+            expect(dynamicElement.classList.contains('p-button-rounded')).toBe(true);
+            expect(dynamicElement.classList.contains('p-button-danger')).toBe(true);
         });
     });
 
