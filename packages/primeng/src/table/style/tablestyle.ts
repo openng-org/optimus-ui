@@ -233,7 +233,8 @@ const classes = {
 
 const inlineStyles = {
     tableContainer: ({ instance }) => ({
-        'max-height': instance.virtualScroll() ? '' : instance.scrollHeight(),
+        'max-height': instance.virtualScroll() ? null : instance.scrollHeight(),
+        height: instance.virtualScroll() && instance.scrollHeight() != null && instance.scrollHeight() !== 'flex' ? instance.scrollHeight() : null,
         overflow: 'auto'
     }),
     thead: { position: 'sticky' },

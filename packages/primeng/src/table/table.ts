@@ -323,6 +323,7 @@ import { TABLE_INSTANCE, TableService } from './table-service';
     encapsulation: ViewEncapsulation.None,
     host: {
         '[class]': "cx('root')",
+        '[style.height]': 'virtualScrollViewportHeight',
         '[attr.data-p]': 'dataP'
     },
     hostDirectives: [Bind]
@@ -558,6 +559,11 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
      * @group Props
      */
     scrollHeight = input<string>();
+
+    get virtualScrollViewportHeight(): string | null {
+        const height = this.scrollHeight();
+        return this.virtualScroll() && height != null && height !== 'flex' ? height : null;
+    }
     /**
      * Whether the data should be loaded on demand during scroll.
      * @group Props
