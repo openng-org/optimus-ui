@@ -640,10 +640,6 @@
             "icon": "pi pi-search",
             "children": [
                 {
-                    "name": "About Us",
-                    "routerLink": "/team"
-                },
-                {
                     "name": "Roadmap",
                     "routerLink": "/roadmap"
                 },
