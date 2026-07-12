@@ -5,7 +5,6 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
-import { BlockSectionComponent } from './blocksection.component';
 import { FeaturesSectionComponent } from './featuressection.component';
 import { FooterSectionComponent } from './footersection.component';
 import { HeroSectionComponent } from './herosection.component';
@@ -18,7 +17,7 @@ import { ButtonModule } from '@openng/optimus-ui/button';
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
-    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, BlockSectionComponent, TemplateSectionComponent, FooterSectionComponent]
+    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, TemplateSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {
     subscription!: Subscription;

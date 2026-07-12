@@ -590,12 +590,6 @@
             "routerLink": "/templates"
         },
         {
-            "name": "PrimeBlocks",
-            "icon": "pi pi-server",
-            "href": "https://primeblocks.org",
-            "badge": "NEW"
-        },
-        {
             "name": "Migration",
             "icon": "pi pi-arrow-up",
             "children": [
