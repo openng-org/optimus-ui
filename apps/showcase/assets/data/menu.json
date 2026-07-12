@@ -567,11 +567,6 @@
 
         },
         {
-            "name": "Templates",
-            "icon": "pi pi-star",
-            "routerLink": "/templates"
-        },
-        {
             "name": "Migration",
             "icon": "pi pi-arrow-up",
             "children": [

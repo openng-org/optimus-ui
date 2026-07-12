@@ -36,7 +36,7 @@ const useStackBlitz = (props: Props) => {
     const project = {
         title: title,
         template: 'node',
-        description: 'PrimeNG is an open source UI library for Angular featuring a rich set of 80+ components, a theme designer, various theme alternatives such as Material, Bootstrap, Tailwind, premium templates and professional support.',
+        description: 'PrimeNG is an open source UI library for Angular featuring a rich set of 80+ components, a theme designer, various theme alternatives such as Material, Bootstrap, Tailwind.',
         files: _files
     };
 

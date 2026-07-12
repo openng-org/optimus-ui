@@ -94,13 +94,6 @@ export class AppDocSectionNav implements OnInit {
             href: 'https://primeblocks.org'
         },
         {
-            lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/templates-menu-light.jpg',
-            darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/templates-menu-dark.jpg',
-            title: 'Templates',
-            details: 'Highly customizable application templates to get started in no time with style. Designed and implemented by PrimeTek.',
-            routerLink: '/templates'
-        },
-        {
             lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/themedesigner-menu-light.jpg',
             darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/themedesigner-menu-dark.jpg',
             title: 'Theme Designer',

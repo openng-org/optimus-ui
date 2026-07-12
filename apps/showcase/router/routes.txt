@@ -105,16 +105,6 @@
 /table
 /tabs
 /tag
-/templates
-/templates/apollo
-/templates/atlantis
-/templates/avalon
-/templates/diamond
-/templates/freya
-/templates/poseidon
-/templates/sakai
-/templates/ultima
-/templates/verona
 /terminal
 /theming
 /tieredmenu

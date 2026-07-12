@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs';
 import { FeaturesSectionComponent } from './featuressection.component';
 import { FooterSectionComponent } from './footersection.component';
 import { HeroSectionComponent } from './herosection.component';
-import { TemplateSectionComponent } from './templatesection.component';
 import { ThemeSectionComponent } from './themesection.component';
 import { UsersSectionComponent } from './userssection.component';
 import { ButtonModule } from '@openng/optimus-ui/button';
@@ -17,7 +16,7 @@ import { ButtonModule } from '@openng/optimus-ui/button';
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
-    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, TemplateSectionComponent, FooterSectionComponent]
+    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {
     subscription!: Subscription;
