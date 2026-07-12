@@ -33,9 +33,7 @@ export class RouterDoc implements OnInit {
                     [
                         {
                             label: 'RouterLink',
-                            items: [
-                                { label: 'Theming', routerLink: '/theming' },
-                            ]
+                            items: [{ label: 'Theming', routerLink: '/theming' }]
                         }
                     ]
                 ]
