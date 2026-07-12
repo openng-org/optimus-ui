@@ -54,13 +54,6 @@ export class PoseidonPage {
             src: 'https://primefaces.org/cdn/primeng/images/templates/poseidon/nextgen/poseidon-responsive.png'
         },
         {
-            title: 'Support',
-            description: `PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users
-            can seek assistance in our community via our public <a href="https://discord.com/invite/gzKFYnpmCY">Discord</a> and
-            <a href="https://github.com/orgs/primefaces/discussions/categories/primeng-templates" class="doc-link">Forum</a>.`,
-            src: 'https://primefaces.org/cdn/primeng/images/templates/common/support.png'
-        },
-        {
             title: 'Top Notch Quality',
             description: 'Superior standards with 100% compatibility for strict mode and linting tools.',
             src: 'https://primefaces.org/cdn/primeng/images/templates/common/quality.png',

@@ -60,13 +60,6 @@ export class AtlantisPage {
             darkSrc: 'https://primefaces.org/cdn/primeng/images/templates/common/cross-browser-dark.png'
         },
         {
-            title: 'Support',
-            description: `PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users
-            can seek assistance in our community via our public <a href="https://discord.com/invite/gzKFYnpmCY">Discord</a> and
-            <a href="https://github.com/orgs/primefaces/discussions/categories/primeng-templates" class="doc-link">Forum</a>.`,
-            src: 'https://primefaces.org/cdn/primeng/images/templates/common/support.png'
-        },
-        {
             title: 'Full SaSS Support',
             description: 'Sass is utilized for the application to provide simplicity and flexibility.',
             src: 'https://primefaces.org/cdn/primeng/images/templates/common/quality.png',

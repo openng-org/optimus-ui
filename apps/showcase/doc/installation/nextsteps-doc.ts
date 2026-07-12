@@ -12,7 +12,6 @@ import { RouterModule } from '@angular/router';
             <ul class="leading-relaxed">
                 <li><a [routerLink]="'/configuration'" class="doc-link">Global configuration</a></li>
                 <li><a [routerLink]="'/theming'" class="doc-link">Customization of styles</a></li>
-                <li><a [routerLink]="'/support'" class="doc-link">Getting support</a></li>
             </ul>
         </app-docsectiontext>
     `

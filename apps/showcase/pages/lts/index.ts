@@ -35,7 +35,6 @@ import { TagModule } from 'primeng/tag';
                 <div class="text-2xl text-surface-900 dark:text-surface-0 font-semibold mb-4">Version Support</div>
                 <p class="m-0 leading-normal mb-8 text-secondary text-lg text-surface-800 dark:text-surface-50">
                     <b>STS</b> means open source short term support whereas <b>LTS</b> stands for commercial long term support. Legacy versions are only supported by
-                    <a [routerLink]="['/support']" class="text-primary font-medium hover:underline">PrimeNG PRO.</a>
                 </p>
 
                 <div class="doc-tablewrapper">
@@ -335,9 +334,9 @@ import { LicenseManager } from 'primeng/api';
 export class AppComponent implements OnInit {
 
     ngOnInit() {
-        LicenseManager.verify('LICENSE_KEY', 'PASS_KEY');    
+        LicenseManager.verify('LICENSE_KEY', 'PASS_KEY');
     }
-        
+
 }`
     };
 

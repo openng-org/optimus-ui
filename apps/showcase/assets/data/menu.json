@@ -628,10 +628,6 @@
                 {
                     "name": "Long Term Support",
                     "routerLink": "/lts"
-                },
-                {
-                    "name": "PRO Support",
-                    "routerLink": "/support"
                 }
             ]
         },
