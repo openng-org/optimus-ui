@@ -827,6 +827,15 @@ describe('AutoComplete', () => {
             }
         });
 
+        it('should type the selected value', () => {
+            const selectEvent: AutoCompleteSelectEvent<(typeof mockCountries)[number]> = {
+                originalEvent: new Event('click'),
+                value: mockCountries[0]
+            };
+
+            expect(selectEvent.value.code).toBe('AF');
+        });
+
         it('should emit onFocus event', async () => {
             const inputElement = testFixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.dispatchEvent(new Event('focus'));
