@@ -601,10 +601,6 @@
                     "name": "Forum",
                     "href": "https://github.com/orgs/primefaces/discussions"
                 },
-                {
-                    "name": "Long Term Support",
-                    "routerLink": "/lts"
-                }
             ]
         },
         {

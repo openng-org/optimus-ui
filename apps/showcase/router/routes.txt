@@ -60,7 +60,6 @@
 /keyfilter
 /knob
 /listbox
-/lts
 /megamenu
 /menu
 /menubar

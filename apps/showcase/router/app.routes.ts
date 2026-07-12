@@ -159,7 +159,6 @@ export const routes: Routes = [
                 loadChildren: () => import('@/pages/keyfilter/routes')
             },
             { path: 'listbox', loadChildren: () => import('@/pages/listbox/routes') },
-            { path: 'lts', loadChildren: () => import('@/pages/lts/routes') },
             {
                 path: 'megamenu',
                 loadChildren: () => import('@/pages/megamenu/routes')
