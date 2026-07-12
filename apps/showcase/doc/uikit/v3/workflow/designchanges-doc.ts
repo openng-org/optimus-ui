@@ -30,9 +30,6 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                     If you notice missing or incomplete exports on your first attempt, try running the export again from the beginning. This is a known issue with Tokens Studio and often resolves on the second attempt. For more detailed guidance, see
                     the <a href="https://docs.tokens.studio/figma/export" target="_blank" rel="noopener noreferrer">official documentation</a>.
                 </p>
-                <div class="mt-8 p-8 bg-surface-0 dark:bg-surface-900 rounded-2xl border border-surface" style="max-width: 48rem">
-                    <img src="https://primefaces.org/cdn/uikit/designchanges-1.png" alt="designchanges-1" class="w-full" />
-                </div>
             </li>
             <li class="py-4">
                 <div class="font-bold">Get Updates on Consumer Files</div>

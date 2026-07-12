@@ -94,13 +94,6 @@ export class AppDocSectionNav implements OnInit {
             href: 'https://primeblocks.org'
         },
         {
-            lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/primeone-menu-light.jpg',
-            darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/primeone-menu-dark.jpg',
-            title: 'Figma UI Kit',
-            details: 'The official Figma UI Kit for Prime UI libraries, the essential resource for designing with PrimeOne components.',
-            routerLink: '/uikit'
-        },
-        {
             lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/templates-menu-light.jpg',
             darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/templates-menu-dark.jpg',
             title: 'Templates',

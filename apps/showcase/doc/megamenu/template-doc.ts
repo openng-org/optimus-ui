@@ -112,17 +112,6 @@ export class TemplateDoc implements OnInit {
                                 { label: 'Investors', icon: 'pi pi-globe', subtext: 'Subtext of item' }
                             ]
                         }
-                    ],
-                    [
-                        {
-                            items: [
-                                {
-                                    image: 'https://primefaces.org/cdn/primeng/images/uikit/uikit-system.png',
-                                    label: 'GET STARTED',
-                                    subtext: 'Build spectacular apps in no time.'
-                                }
-                            ]
-                        }
                     ]
                 ]
             },

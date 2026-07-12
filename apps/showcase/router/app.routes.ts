@@ -287,7 +287,6 @@ export const routes: Routes = [
                 path: 'virtualscroller',
                 loadChildren: () => import('@/pages/scroller/routes')
             },
-            { path: 'uikit', loadChildren: () => import('@/pages/uikit/routes') },
             { path: 'autofocus', loadChildren: () => import('@/pages/autofocus/routes') },
             { path: 'overlay', loadChildren: () => import('@/pages/overlay/routes') },
             {
