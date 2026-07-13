@@ -21,7 +21,7 @@ export class TabPanelStyle extends BaseStyle {
  *
  * Tab is a helper component for Tabs component.
  *
- * [Live Demo](https://www.primeng.org/tabs/)
+ * [Live Demo](https://optimus.openng.org/tabs/)
  *
  * @module tabstyle
  *

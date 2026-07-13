@@ -4,7 +4,7 @@ import { Theme, ThemeService } from '@openng/optimus-ui-styled';
 import { cn, getKeyValue, isArray, isFunction, isNotEmpty, isString, mergeProps, resolve, toFlatCase, uuid } from '@openng/optimus-ui-utils';
 import type { Lifecycle, PassThroughOptions } from '@openng/optimus-ui/api';
 import { Base, BaseStyle } from '@openng/optimus-ui/base';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { BaseComponentStyle } from './style/basecomponentstyle';
 
 export const PARENT_INSTANCE = new InjectionToken<BaseComponent>('PARENT_INSTANCE');
@@ -26,7 +26,7 @@ export class BaseComponent<PT = any> implements Lifecycle {
 
     public renderer: Renderer2 = inject(Renderer2);
 
-    public config: PrimeNG = inject(PrimeNG);
+    public config: Optimus = inject(Optimus);
 
     public $parentInstance: BaseComponent | undefined = inject(PARENT_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 

@@ -1227,9 +1227,9 @@ describe('ScrollTop', () => {
         });
     });
 
-    describe('PassThrough - Case 7: Test from PrimeNGConfig', () => {
-        it('should apply global pt configuration from PrimeNGConfig', () => {
-            const { providePrimeNG } = require('@openng/optimus-ui/config');
+    describe('PassThrough - Case 7: Test from OptimusConfig', () => {
+        it('should apply global pt configuration from OptimusConfig', () => {
+            const { provideOptimus } = require('@openng/optimus-ui/config');
 
             @Component({
                 standalone: false,
@@ -1247,7 +1247,7 @@ describe('ScrollTop', () => {
                 providers: [
                     provideZonelessChangeDetection(),
                     { provide: PLATFORM_ID, useValue: 'browser' },
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             scrolltop: {
                                 host: 'GLOBAL_HOST_CLASS',
@@ -1272,7 +1272,7 @@ describe('ScrollTop', () => {
         });
 
         it('should merge local pt with global pt configuration', () => {
-            const { providePrimeNG } = require('@openng/optimus-ui/config');
+            const { provideOptimus } = require('@openng/optimus-ui/config');
 
             @Component({
                 standalone: false,
@@ -1287,7 +1287,7 @@ describe('ScrollTop', () => {
                 providers: [
                     provideZonelessChangeDetection(),
                     { provide: PLATFORM_ID, useValue: 'browser' },
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             scrolltop: {
                                 host: 'GLOBAL_HOST_CLASS'

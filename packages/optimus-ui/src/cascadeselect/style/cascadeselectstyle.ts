@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${cascadeselect_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-cascadeselect.ng-invalid.ng-dirty:not(.ng-untouched):not(.ng-pristine) {
         border-color: dt('cascadeselect.invalid.border.color');
     }
@@ -87,7 +87,7 @@ export class CascadeSelectStyle extends BaseStyle {
  *
  * CascadeSelect is a form component to select a value from a nested structure of options.
  *
- * [Live Demo](https://www.primeng.org/cascadeselect/)
+ * [Live Demo](https://optimus.openng.org/cascadeselect/)
  *
  * @module cascadeselectstyle
  *

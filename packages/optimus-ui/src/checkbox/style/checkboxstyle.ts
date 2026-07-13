@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${checkbox_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     p-checkBox.ng-invalid.ng-dirty .p-checkbox-box,
     p-check-box.ng-invalid.ng-dirty .p-checkbox-box,
     p-checkbox.ng-invalid.ng-dirty .p-checkbox-box {
@@ -43,7 +43,7 @@ export class CheckboxStyle extends BaseStyle {
  *
  * Checkbox is an extension to standard checkbox element with theming.
  *
- * [Live Demo](https://www.primeng.org/checkbox/)
+ * [Live Demo](https://optimus.openng.org/checkbox/)
  *
  * @module checkboxstyle
  *

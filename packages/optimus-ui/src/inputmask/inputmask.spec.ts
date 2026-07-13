@@ -1356,15 +1356,15 @@ describe('InputMask', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+        describe('Case 7: Test from OptimusConfig', () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     imports: [InputMask, FormsModule],
                     providers: [
                         provideZonelessChangeDetection(),
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     inputmask: {

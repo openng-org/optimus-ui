@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${multiselect_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
    .p-multiselect.ng-invalid.ng-dirty {
         border-color: dt('multiselect.invalid.border.color');
     }
@@ -82,7 +82,7 @@ export class MultiSelectStyle extends BaseStyle {
  *
  * MultiSelect is used to select multiple items from a collection.
  *
- * [Live Demo](https://www.primeng.org/multiselect/)
+ * [Live Demo](https://optimus.openng.org/multiselect/)
  *
  * @module multiselectstyle
  *

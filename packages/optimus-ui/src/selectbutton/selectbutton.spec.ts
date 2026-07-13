@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { SelectButton, SelectButtonModule } from './selectbutton';
 
 describe('SelectButton', () => {
@@ -891,14 +891,14 @@ describe('SelectButton PassThrough Tests', () => {
         });
     });
 
-    describe('PT Case 7: Global PT from PrimeNGConfig', () => {
+    describe('PT Case 7: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration to all instances', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 host: { 'aria-label': 'GLOBAL_ARIA_LABEL' },
@@ -927,7 +927,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule, TestMultipleInstancesComponent],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 root: {
@@ -961,7 +961,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 hooks: {
@@ -992,7 +992,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 hooks: {
@@ -1023,7 +1023,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 hooks: {
@@ -1056,7 +1056,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 hooks: {
@@ -1089,7 +1089,7 @@ describe('SelectButton PassThrough Tests', () => {
                 imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             selectButton: {
                                 hooks: {

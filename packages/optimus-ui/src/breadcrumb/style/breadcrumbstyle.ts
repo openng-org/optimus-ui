@@ -26,7 +26,7 @@ export class BreadCrumbStyle extends BaseStyle {
  *
  * Breadcrumb provides contextual information about page hierarchy.
  *
- * [Live Demo](https://www.primeng.org/breadcrumb/)
+ * [Live Demo](https://optimus.openng.org/breadcrumb/)
  *
  * @module breadcrumbstyle
  *

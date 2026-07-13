@@ -1430,7 +1430,7 @@ describe('ConfirmDialog', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `
@@ -1452,7 +1452,7 @@ describe('ConfirmDialog', () => {
                 }
             }
 
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     declarations: [TestPTCase7GlobalComponent],
@@ -1461,7 +1461,7 @@ describe('ConfirmDialog', () => {
                         ConfirmationService,
                         provideZonelessChangeDetection(),
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     confirmdialog: {

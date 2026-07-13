@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${accordion_style}
 
-/* For PrimeNG */
+/* For Optimus */
 .p-accordionheader-toggle-icon.icon-start {
     order: -1;
 }
@@ -55,7 +55,7 @@ export class AccordionStyle extends BaseStyle {
  *
  * Accordion groups a collection of contents in tabs.
  *
- * [Live Demo](https://www.primeng.org/accordion/)
+ * [Live Demo](https://optimus.openng.org/accordion/)
  *
  * @module accordionstyle
  *

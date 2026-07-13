@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { InputIcon } from './inputicon';
 import { IconField } from '@openng/optimus-ui/iconfield';
 import { InputText } from '@openng/optimus-ui/inputtext';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
     standalone: true,
@@ -186,14 +186,14 @@ describe('InputIcon PassThrough Tests', () => {
         });
     });
 
-    describe('PT Case 5: Global PT from PrimeNGConfig', () => {
+    describe('PT Case 5: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [InputIcon, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputIcon: {
                                 host: { 'aria-label': 'GLOBAL_LABEL' },
@@ -221,7 +221,7 @@ describe('InputIcon PassThrough Tests', () => {
                 imports: [InputIcon, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputIcon: {
                                 hooks: {

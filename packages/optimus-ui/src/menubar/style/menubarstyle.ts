@@ -50,7 +50,7 @@ export class MenuBarStyle extends BaseStyle {
  *
  * Menubar is a horizontal menu component.
  *
- * [Live Demo](https://www.primeng.org/menubar/)
+ * [Live Demo](https://optimus.openng.org/menubar/)
  *
  * @module menubarstyle
  *

@@ -20,7 +20,7 @@ export class ScrollTopStyle extends BaseStyle {
  *
  * ScrollTop gets displayed after a certain scroll position and used to navigates to the top of the page quickly.
  *
- * [Live Demo](https://www.primeng.org/scrolltop/)
+ * [Live Demo](https://optimus.openng.org/scrolltop/)
  *
  * @module scrolltopstyle
  *

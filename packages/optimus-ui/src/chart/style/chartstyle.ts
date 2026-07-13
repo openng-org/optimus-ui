@@ -22,7 +22,7 @@ export class ChartStyle extends BaseStyle {
  *
  * Chart groups a collection of contents in tabs.
  *
- * [Live Demo](https://www.primeng.org/chart/)
+ * [Live Demo](https://optimus.openng.org/chart/)
  *
  * @module chartstyle
  *

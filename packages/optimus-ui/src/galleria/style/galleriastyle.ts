@@ -93,7 +93,7 @@ export class GalleriaStyle extends BaseStyle {
  *
  * Galleria is an advanced content gallery component.
  *
- * [Live Demo](https://www.primeng.org/galleria/)
+ * [Live Demo](https://optimus.openng.org/galleria/)
  *
  * @module galleriastyle
  *

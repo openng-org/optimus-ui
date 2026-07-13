@@ -50,7 +50,7 @@ export class TieredMenuStyle extends BaseStyle {
  *
  * TieredMenu displays submenus in nested overlays.
  *
- * [Live Demo](https://www.primeng.org/menu/)
+ * [Live Demo](https://optimus.openng.org/menu/)
  *
  * @module tieredmenustyle
  *

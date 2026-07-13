@@ -40,7 +40,7 @@ export class PanelStyle extends BaseStyle {
  *
  * Panel is a container with the optional content toggle feature.
  *
- * [Live Demo](https://www.primeng.org/panel/)
+ * [Live Demo](https://optimus.openng.org/panel/)
  *
  * @module panelstyle
  *

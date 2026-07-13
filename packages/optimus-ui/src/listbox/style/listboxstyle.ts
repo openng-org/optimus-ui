@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${listbox_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-listbox.ng-invalid.ng-dirty {
         border-color: dt('listbox.invalid.border.color');
     }
@@ -84,7 +84,7 @@ export class ListBoxStyle extends BaseStyle {
  *
  * ListBox is used to select one or more values from a list of items.
  *
- * [Live Demo](https://www.primeng.org/listbox/)
+ * [Live Demo](https://optimus.openng.org/listbox/)
  *
  * @module listboxstyle
  *

@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${iftalabel_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-iftalabel:has(.ng-invalid.ng-dirty) label {
         color: dt('iftalabel.invalid.color');
     }
@@ -28,7 +28,7 @@ export class IftaLabelStyle extends BaseStyle {
  *
  * IftaLabel visually integrates a label within its form element.
  *
- * [Live Demo](https://www.primeng.org/iftalabel/)
+ * [Live Demo](https://optimus.openng.org/iftalabel/)
  *
  * @module iftalabelstyle
  *

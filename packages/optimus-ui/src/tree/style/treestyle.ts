@@ -48,7 +48,7 @@ export class TreeStyle extends BaseStyle {
  *
  * Tree is used to display hierarchical data.
  *
- * [Live Demo](https://www.primeng.org/tree/)
+ * [Live Demo](https://optimus.openng.org/tree/)
  *
  * @module treestyle
  *

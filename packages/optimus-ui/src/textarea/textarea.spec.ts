@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { TextareaPassThrough } from '@openng/optimus-ui/types/textarea';
 import { Textarea } from './textarea';
 
@@ -580,14 +580,14 @@ describe('Textarea', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global pt configuration', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     imports: [TestPTTextareaComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 textarea: {
                                     host: { 'aria-label': 'GLOBAL_ARIA_LABEL' }
@@ -608,13 +608,13 @@ describe('Textarea', () => {
                 expect(el.getAttribute('aria-label')).toBe('GLOBAL_ARIA_LABEL');
             });
 
-            it('should apply global css from PrimeNGConfig', async () => {
+            it('should apply global css from OptimusConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     imports: [TestPTTextareaComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 textarea: {
                                     root: 'GLOBAL_CLASS',

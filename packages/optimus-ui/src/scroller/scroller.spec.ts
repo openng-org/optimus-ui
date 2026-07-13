@@ -3,7 +3,7 @@ import { Component, DebugElement, input, provideZonelessChangeDetection } from '
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import type { ScrollerLazyLoadEvent, ScrollerScrollEvent, ScrollerScrollIndexChangeEvent } from '@openng/optimus-ui/types/scroller';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Scroller } from './scroller';
@@ -4164,7 +4164,7 @@ describe('Scroller', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: true,
                 imports: [CommonModule, Scroller],
@@ -4182,13 +4182,13 @@ describe('Scroller', () => {
                 items2 = ['B1', 'B2'];
             }
 
-            it('should apply global PT from PrimeNGConfig', async () => {
+            it('should apply global PT from OptimusConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 virtualScroller: {
                                     root: { 'aria-label': 'GLOBAL_SCROLLER_LABEL', class: 'GLOBAL_CLASS' }
@@ -4216,7 +4216,7 @@ describe('Scroller', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 virtualScroller: {
                                     root: { class: 'GLOBAL_ROOT' },

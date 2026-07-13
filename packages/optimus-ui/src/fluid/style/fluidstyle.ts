@@ -16,7 +16,7 @@ export class FluidStyle extends BaseStyle {
  *
  * Fluid is a layout component to make descendant components span full width of their container.
  *
- * [Live Demo](https://www.primeng.org/fluid/)
+ * [Live Demo](https://optimus.openng.org/fluid/)
  *
  * @module fluidstyle
  *

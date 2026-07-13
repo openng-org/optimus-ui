@@ -27,7 +27,7 @@ export class TerminalStyle extends BaseStyle {
  *
  * Terminal is a text based user interface.
  *
- * [Live Demo](https://www.primeng.org/terminal)
+ * [Live Demo](https://optimus.openng.org/terminal)
  *
  * @module terminalstyle
  *

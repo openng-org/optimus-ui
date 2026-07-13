@@ -2,7 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { effect, inject, Injectable, signal, untracked } from '@angular/core';
 import { Theme, ThemeService } from '@openng/optimus-ui-styled';
 import { BaseStyle } from '@openng/optimus-ui/base';
-import type { ThemeConfigType } from './primeng.types';
+import type { ThemeConfigType } from './optimus.types';
 
 @Injectable({ providedIn: 'root' })
 export class ThemeProvider {

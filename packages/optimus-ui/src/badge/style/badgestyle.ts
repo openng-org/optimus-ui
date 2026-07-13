@@ -6,7 +6,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${badge_style}
 
-    /* For PrimeNG (directive)*/
+    /* For Optimus (directive)*/
     .p-overlay-badge {
         position: relative;
     }
@@ -60,7 +60,7 @@ export class BadgeStyle extends BaseStyle {
  *
  * Badge represents people using icons, labels and images.
  *
- * [Live Demo](https://www.primeng.org/badge)
+ * [Live Demo](https://optimus.openng.org/badge)
  *
  * @module badgestyle
  *

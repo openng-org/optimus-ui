@@ -1767,7 +1767,7 @@ describe('ConfirmPopup', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `
@@ -1790,7 +1790,7 @@ describe('ConfirmPopup', () => {
                 }
             }
 
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     declarations: [TestPTCase7GlobalComponent],
@@ -1800,7 +1800,7 @@ describe('ConfirmPopup', () => {
                         OverlayService,
                         provideZonelessChangeDetection(),
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     confirmpopup: {

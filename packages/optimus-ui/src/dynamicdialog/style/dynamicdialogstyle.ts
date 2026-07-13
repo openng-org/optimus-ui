@@ -10,7 +10,7 @@ export class DynamicDialogStyle extends DialogStyle {
  *
  * DynamicDialog is a container to display content in an overlay window.
  *
- * [Live Demo](https://www.primeng.org/dynamicdialog)
+ * [Live Demo](https://optimus.openng.org/dynamicdialog)
  *
  * @module dynamicdialogstyle
  *

@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${autocomplete_style}
 
-/* For PrimeNG */
+/* For Optimus */
 p-autoComplete.ng-invalid.ng-dirty .p-autocomplete-input,
 p-autoComplete.ng-invalid.ng-dirty .p-autocomplete-input-multiple,
 p-auto-complete.ng-invalid.ng-dirty .p-autocomplete-input,
@@ -101,7 +101,7 @@ export class AutoCompleteStyle extends BaseStyle {
  *
  * AutoComplete is an input component that provides real-time suggestions while being typed.
  *
- * [Live Demo](https://www.primeng.org/autocomplete/)
+ * [Live Demo](https://optimus.openng.org/autocomplete/)
  *
  * @module autocompletestyle
  *

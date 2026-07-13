@@ -61,7 +61,7 @@ export class PaginatorStyle extends BaseStyle {
  *
  * Paginator is a generic component to display content in paged format.
  *
- * [Live Demo](https://www.primeng.org/paginator)
+ * [Live Demo](https://optimus.openng.org/paginator)
  *
  * @module paginatorstyle
  *

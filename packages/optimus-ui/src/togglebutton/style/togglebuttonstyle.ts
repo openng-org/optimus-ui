@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${togglebutton_style}
 
-    /* For PrimeNG (iconPos) */
+    /* For Optimus (iconPos) */
     .p-togglebutton-icon-right {
         order: 1;
     }
@@ -47,7 +47,7 @@ export class ToggleButtonStyle extends BaseStyle {
  *
  * ToggleButton is used to select a boolean value using a button.
  *
- * [Live Demo](https://www.primeng.org/togglebutton/)
+ * [Live Demo](https://optimus.openng.org/togglebutton/)
  *
  * @module togglebuttonstyle
  *

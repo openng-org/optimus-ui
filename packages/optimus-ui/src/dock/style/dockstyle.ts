@@ -37,7 +37,7 @@ export class DockStyle extends BaseStyle {
  *
  * Dock is a navigation component consisting of menuitems.
  *
- * [Live Demo](https://www.primeng.org/dock/)
+ * [Live Demo](https://optimus.openng.org/dock/)
  *
  * @module dockstyle
  *

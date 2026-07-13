@@ -33,7 +33,7 @@ export class DataViewStyle extends BaseStyle {
  *
  * DataView displays data in grid or list layout with pagination and sorting features.
  *
- * [Live Demo](https://www.primeng.org/dataview/)
+ * [Live Demo](https://optimus.openng.org/dataview/)
  *
  * @module dataviewstyle
  *

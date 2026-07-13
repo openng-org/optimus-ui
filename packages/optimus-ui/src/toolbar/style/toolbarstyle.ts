@@ -22,7 +22,7 @@ export class ToolbarStyle extends BaseStyle {
  *
  * Toolbar is a grouping component for buttons and other content.
  *
- * [Live Demo](https://www.primeng.org/toolbar/)
+ * [Live Demo](https://optimus.openng.org/toolbar/)
  *
  * @module toolbarstyle
  *

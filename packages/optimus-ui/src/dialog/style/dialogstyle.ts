@@ -70,7 +70,7 @@ export class DialogStyle extends BaseStyle {
  *
  * Dialog is a container to display content in an overlay window.
  *
- * [Live Demo](https://www.primeng.org/dialog)
+ * [Live Demo](https://optimus.openng.org/dialog)
  *
  * @module dialogstyle
  *

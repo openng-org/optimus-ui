@@ -22,7 +22,7 @@ export class KnobStyle extends BaseStyle {
  *
  * Knob is a form component to define number inputs with a dial.
  *
- * [Live Demo](https://www.primeng.org/knob/)
+ * [Live Demo](https://optimus.openng.org/knob/)
  *
  * @module knobstyle
  *

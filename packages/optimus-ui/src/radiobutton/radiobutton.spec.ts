@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { By } from '@angular/platform-browser';
 import { RadioButton } from './radiobutton';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 // Basic RadioButton test component
 @Component({
@@ -1000,7 +1000,7 @@ describe('RadioButton', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `<p-radiobutton name="test" value="option1" [(ngModel)]="selectedValue"></p-radiobutton>`
@@ -1016,7 +1016,7 @@ describe('RadioButton', () => {
                     declarations: [TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 radioButton: {
                                     root: 'GLOBAL_ROOT_CLASS',

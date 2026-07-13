@@ -32,7 +32,7 @@ export class TagStyle extends BaseStyle {
  *
  * Tag component is used to categorize content.
  *
- * [Live Demo](https://www.primeng.org/tag)
+ * [Live Demo](https://optimus.openng.org/tag)
  *
  * @module tagstyle
  *

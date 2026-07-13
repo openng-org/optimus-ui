@@ -40,7 +40,7 @@ export class DividerStyle extends BaseStyle {
  *
  * Divider is used to separate contents.
  *
- * [Live Demo](https://primeng.org/divider)
+ * [Live Demo](https://optimus.openng.org/divider)
  *
  * @module dividerstyle
  *

@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { Knob } from './knob';
 
 // Temel test component'i
@@ -1088,7 +1088,7 @@ describe('Knob', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value"></p-knob>`
@@ -1104,7 +1104,7 @@ describe('Knob', () => {
                     declarations: [TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 knob: {
                                     host: 'GLOBAL_HOST_CLASS',

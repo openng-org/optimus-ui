@@ -31,7 +31,7 @@ export class SkeletonStyle extends BaseStyle {
  *
  * Skeleton is a placeholder to display instead of the actual content.
  *
- * [Live Demo](https://www.primeng.org/skeleton/)
+ * [Live Demo](https://optimus.openng.org/skeleton/)
  *
  * @module skeletonstyle
  *

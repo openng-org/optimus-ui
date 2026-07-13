@@ -21,7 +21,7 @@ export class StepItemStyle extends BaseStyle {
  *
  * Stepper is a component that streamlines a wizard-like workflow, organizing content into coherent steps and visually guiding users through a numbered progression in a multi-step process.
  *
- * [Live Demo](https://www.primeng.org/stepper/)
+ * [Live Demo](https://optimus.openng.org/stepper/)
  *
  * @module stepitemstyle
  *

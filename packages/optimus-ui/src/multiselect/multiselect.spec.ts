@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, NgForm, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { BehaviorSubject, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { MultiSelect, MultiSelectModule } from './multiselect';
@@ -3324,7 +3324,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: 'custom-root-class',
@@ -3356,7 +3356,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: {
@@ -3396,7 +3396,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: 'string-root',
@@ -3427,7 +3427,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: ({ instance }: any) => ({
@@ -3461,7 +3461,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: {
@@ -3514,7 +3514,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: 'global-root',
@@ -3551,7 +3551,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: 'MY-MultiSelect',
@@ -3581,7 +3581,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 pcHeaderCheckbox: ({ context }: any) => ({
@@ -3614,7 +3614,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 option: ({ context }: any) => ({
@@ -3654,7 +3654,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 root: 'pt-root',
@@ -3690,7 +3690,7 @@ describe('MultiSelect Complex Edge Cases', () => {
                 providers: [
                     provideNoopAnimations(),
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             multiselect: {
                                 pcChip: {

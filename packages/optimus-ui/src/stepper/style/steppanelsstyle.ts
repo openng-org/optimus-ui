@@ -16,7 +16,7 @@ export class StepPanelsStyle extends BaseStyle {
  *
  * StepPanel is a helper component for Stepper component.
  *
- * [Live Demo](https://www.primeng.org/stepper/)
+ * [Live Demo](https://optimus.openng.org/stepper/)
  *
  * @module steppanelsstyle
  *

@@ -21,7 +21,7 @@ export class ProgressSpinnerStyle extends BaseStyle {
  *
  * ProgressSpinner is a process status indicator.
  *
- * [Live Demo](https://www.primeng.org/progressspinner)
+ * [Live Demo](https://optimus.openng.org/progressspinner)
  *
  * @module progressspinnerstyle
  *

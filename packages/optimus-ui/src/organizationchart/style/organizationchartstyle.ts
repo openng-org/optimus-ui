@@ -31,7 +31,7 @@ export class OrganizationChartStyle extends BaseStyle {
  *
  * OrganizationChart visualizes hierarchical organization data.
  *
- * [Live Demo](https://www.primeng.org/organizationchart)
+ * [Live Demo](https://optimus.openng.org/organizationchart)
  *
  * @module organizationchartstyle
  *

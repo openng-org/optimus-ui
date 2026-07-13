@@ -28,7 +28,7 @@ export class SplitterStyle extends BaseStyle {
  *
  * Splitter is utilized to separate and resize panels.
  *
- * [Live Demo](https://www.primeng.org/splitter/)
+ * [Live Demo](https://optimus.openng.org/splitter/)
  *
  * @module splitterstyle
  *

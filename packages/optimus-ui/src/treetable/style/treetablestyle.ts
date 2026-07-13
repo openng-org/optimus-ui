@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const style = /*css*/ `
-/* For PrimeNG */
+/* For Optimus */
 .p-treetable {
     position: relative;
 }
@@ -589,7 +589,7 @@ export class TreeTableStyle extends BaseStyle {
  *
  * TreeTable is used to display hierarchical data in tabular format.
  *
- * [Live Demo](https://www.primeng.org/treetable/)
+ * [Live Demo](https://optimus.openng.org/treetable/)
  *
  * @module treetablestyle
  *

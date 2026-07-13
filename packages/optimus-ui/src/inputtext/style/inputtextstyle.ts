@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${inputtext_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
    .p-inputtext.ng-invalid.ng-dirty {
         border-color: dt('inputtext.invalid.border.color');
     }
@@ -42,7 +42,7 @@ export class InputTextStyle extends BaseStyle {
  *
  * InputText renders a text field to enter data.
  *
- * [Live Demo](https://www.primeng.org/inputtext/)
+ * [Live Demo](https://optimus.openng.org/inputtext/)
  *
  * @module inputtextstyle
  *

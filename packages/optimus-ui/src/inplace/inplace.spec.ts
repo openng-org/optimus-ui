@@ -166,11 +166,11 @@ class TestInplaceTemplatesComponent {}
 
 @Component({
     standalone: false,
-    selector: 'test-inplace-primeng-templates',
+    selector: 'test-inplace-optimus-templates',
     template: `
         <p-inplace>
             <ng-template pTemplate="display">
-                <span class="p-template-display">PrimeNG Template Display</span>
+                <span class="p-template-display">Optimus Template Display</span>
             </ng-template>
             <ng-template pTemplate="content" let-closeCallback="closeCallback">
                 <div class="p-template-content">
@@ -184,7 +184,7 @@ class TestInplaceTemplatesComponent {}
         </p-inplace>
     `
 })
-class TestInplacePrimeNGTemplatesComponent {}
+class TestInplaceOptimusTemplatesComponent {}
 
 @Component({
     standalone: false,
@@ -276,7 +276,7 @@ describe('Inplace', () => {
                 TestInplaceActiveStateComponent,
                 TestInplaceStyleClassComponent,
                 TestInplaceTemplatesComponent,
-                TestInplacePrimeNGTemplatesComponent,
+                TestInplaceOptimusTemplatesComponent,
                 TestInplaceKeyboardComponent,
                 TestInplaceComplexContentComponent,
                 TestInplaceDynamicComponent
@@ -846,13 +846,13 @@ describe('Inplace', () => {
         });
     });
 
-    describe('PrimeNG Templates', () => {
-        let fixture: ComponentFixture<TestInplacePrimeNGTemplatesComponent>;
+    describe('Optimus Templates', () => {
+        let fixture: ComponentFixture<TestInplaceOptimusTemplatesComponent>;
         let inplaceComponent: Inplace;
         let element: HTMLElement;
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(TestInplacePrimeNGTemplatesComponent);
+            fixture = TestBed.createComponent(TestInplaceOptimusTemplatesComponent);
             fixture.detectChanges();
 
             const inplaceDebugElement = fixture.debugElement.query(By.directive(Inplace));
@@ -869,7 +869,7 @@ describe('Inplace', () => {
         it('should render pTemplate display', () => {
             const pTemplateDisplay = element.querySelector('.p-template-display');
             expect(pTemplateDisplay).toBeTruthy();
-            expect(pTemplateDisplay?.textContent?.trim()).toBe('PrimeNG Template Display');
+            expect(pTemplateDisplay?.textContent?.trim()).toBe('Optimus Template Display');
         });
 
         it('should render pTemplate content when activated', async () => {

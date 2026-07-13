@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${floatlabel_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-floatlabel:has(.ng-invalid.ng-dirty) label {
         color: dt('floatlabel.invalid.color');
     }
@@ -35,7 +35,7 @@ export class FloatLabelStyle extends BaseStyle {
  *
  * FloatLabel visually integrates a label with its form element.
  *
- * [Live Demo](https://www.primeng.org/floatlabel/)
+ * [Live Demo](https://optimus.openng.org/floatlabel/)
  *
  * @module floatlabelstyle
  *

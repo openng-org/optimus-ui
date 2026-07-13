@@ -2994,7 +2994,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `
@@ -3004,7 +3004,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
             })
             class TestPTCase7GlobalComponent {}
 
-            it('should apply global PT configuration from PrimeNGConfig to multiple instances', async () => {
+            it('should apply global PT configuration from OptimusConfig to multiple instances', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     declarations: [TestPTCase7GlobalComponent],
@@ -3012,7 +3012,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
                     providers: [
                         MessageService,
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     fileupload: {

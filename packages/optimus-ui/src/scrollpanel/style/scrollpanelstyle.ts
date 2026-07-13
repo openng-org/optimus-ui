@@ -31,7 +31,7 @@ export class ScrollPanelStyle extends BaseStyle {
  *
  * ScrollPanel is a cross browser, lightweight and themable alternative to native browser scrollbar.
  *
- * [Live Demo](https://www.primeng.org/scrollpanel/)
+ * [Live Demo](https://optimus.openng.org/scrollpanel/)
  *
  * @module scrollpanelstyle
  *

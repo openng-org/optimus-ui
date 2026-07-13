@@ -20,7 +20,7 @@ export class InputOtpStyle extends BaseStyle {
  *
  * InputOtp is used to enter one time passwords.
  *
- * [Live Demo](https://www.primeng.org/inputotp/)
+ * [Live Demo](https://optimus.openng.org/inputotp/)
  *
  * @module inputotpstyle
  *

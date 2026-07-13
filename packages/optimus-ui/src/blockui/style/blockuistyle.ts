@@ -24,7 +24,7 @@ export class BlockUiStyle extends BaseStyle {
  *
  * BlockUI represents people using icons, labels and images.
  *
- * [Live Demo](https://www.primeng.org/blockui)
+ * [Live Demo](https://optimus.openng.org/blockui)
  *
  * @module blockuistyle
  *

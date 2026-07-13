@@ -67,7 +67,7 @@ export class CarouselStyle extends BaseStyle {
  *
  * Carousel is a content slider featuring various customization options.
  *
- * [Live Demo](https://www.primeng.org/carousel/)
+ * [Live Demo](https://optimus.openng.org/carousel/)
  *
  * @module carouselstyle
  *

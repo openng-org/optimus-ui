@@ -434,17 +434,17 @@ export class FileUpload extends BaseComponent<FileUploadPassThrough> implements 
      */
     @Input({ transform: numberAttribute }) previewWidth: number = 50;
     /**
-     * Label of the choose button. Defaults to PrimeNG Locale configuration.
+     * Label of the choose button. Defaults to Optimus Locale configuration.
      * @group Props
      */
     @Input() chooseLabel: string | undefined;
     /**
-     * Label of the upload button. Defaults to PrimeNG Locale configuration.
+     * Label of the upload button. Defaults to Optimus Locale configuration.
      * @group Props
      */
     @Input() uploadLabel: string | undefined;
     /**
-     * Label of the cancel button. Defaults to PrimeNG Locale configuration.
+     * Label of the cancel button. Defaults to Optimus Locale configuration.
      * @group Props
      */
     @Input() cancelLabel: string | undefined;
@@ -484,7 +484,7 @@ export class FileUpload extends BaseComponent<FileUploadPassThrough> implements 
      */
     @Input() headers: HttpHeaders | undefined;
     /**
-     * Whether to use the default upload or a manual implementation defined in uploadHandler callback. Defaults to PrimeNG Locale configuration.
+     * Whether to use the default upload or a manual implementation defined in uploadHandler callback. Defaults to Optimus Locale configuration.
      * @group Props
      */
     @Input({ transform: booleanAttribute }) customUpload: boolean | undefined;

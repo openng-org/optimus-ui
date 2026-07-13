@@ -93,7 +93,7 @@ export class MegaMenuStyle extends BaseStyle {
  *
  * MegaMenu is navigation component that displays submenus together.
  *
- * [Live Demo](https://www.primeng.org/megamenu/)
+ * [Live Demo](https://optimus.openng.org/megamenu/)
  *
  * @module megamenustyle
  *

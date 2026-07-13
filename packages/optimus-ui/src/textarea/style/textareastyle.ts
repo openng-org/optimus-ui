@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${textarea_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-textarea.ng-invalid.ng-dirty {
         border-color: dt('textarea.invalid.border.color');
     }
@@ -42,7 +42,7 @@ export class TextareaStyle extends BaseStyle {
  *
  * Textarea is a multi-line text input element.
  *
- * [Live Demo](https://www.primeng.org/textarea/)
+ * [Live Demo](https://optimus.openng.org/textarea/)
  *
  * @module textareastyle
  *

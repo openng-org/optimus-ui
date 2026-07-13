@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${inputgroup_style}
 
-    /*For PrimeNG*/
+    /*For Optimus */
 
     .p-inputgroup > .p-component,
     .p-inputgroup > .p-inputwrapper > .p-component,
@@ -60,7 +60,7 @@ export class InputGroupStyle extends BaseStyle {
  *
  * InputGroup displays text, icon, buttons and other content can be grouped next to an input.
  *
- * [Live Demo](https://www.primeng.org/inputgroup/)
+ * [Live Demo](https://optimus.openng.org/inputgroup/)
  *
  * @module inputgroupstyle
  *

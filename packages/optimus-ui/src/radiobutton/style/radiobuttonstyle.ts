@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${radiobutton_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     p-radioButton.ng-invalid.ng-dirty .p-radiobutton-box,
     p-radio-button.ng-invalid.ng-dirty .p-radiobutton-box,
     p-radiobutton.ng-invalid.ng-dirty .p-radiobutton-box {
@@ -43,7 +43,7 @@ export class RadioButtonStyle extends BaseStyle {
  *
  * RadioButton is an extension to standard radio button element with theming.
  *
- * [Live Demo](https://www.primeng.org/radiobutton/)
+ * [Live Demo](https://optimus.openng.org/radiobutton/)
  *
  * @module radiobuttonstyle
  *

@@ -4,7 +4,7 @@ import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import {
     PickListMoveAllToSourceEvent,
     PickListMoveAllToTargetEvent,
@@ -1314,7 +1314,7 @@ describe('PickList', () => {
             });
         });
 
-        describe('Case 5: Test from PrimeNGConfig', () => {
+        describe('Case 5: Test from OptimusConfig', () => {
             @Component({
                 standalone: true,
                 imports: [PickList],
@@ -1336,7 +1336,7 @@ describe('PickList', () => {
                     imports: [PickList],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 picklist: {
                                     host: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL' }
@@ -1363,7 +1363,7 @@ describe('PickList', () => {
                     imports: [PickList],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 picklist: {
                                     host: { class: 'GLOBAL_CLASS' },

@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { SliderChangeEvent, SliderSlideEndEvent } from '@openng/optimus-ui/types/slider';
 import { Slider, SliderModule } from './slider';
 
@@ -1428,7 +1428,7 @@ describe('Slider', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
                     standalone: true,
@@ -1444,7 +1444,7 @@ describe('Slider', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 slider: {
                                     root: { 'data-test': 'global-slider' },

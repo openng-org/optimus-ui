@@ -36,7 +36,7 @@ import { OverlayStyle } from './style/overlaystyle';
 const OVERLAY_INSTANCE = new InjectionToken<Overlay>('OVERLAY_INSTANCE');
 
 /**
- * This API allows overlay components to be controlled from the PrimeNG. In this way, all overlay components in the application can have the same behavior.
+ * This API allows overlay components to be controlled from Optimus. In this way, all overlay components in the application can have the same behavior.
  * @group Components
  */
 @Component({

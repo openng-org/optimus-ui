@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { TreeNode } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { of } from 'rxjs';
 import { TreeTable, TreeTableModule } from './treetable';
 
@@ -3736,7 +3736,7 @@ describe('TreeTable PT', () => {
     });
 });
 
-// Case 11: Global PT from PrimeNGConfig
+// Case 11: Global PT from OptimusConfig
 describe('TreeTable Global PT', () => {
     let fixture: ComponentFixture<TreeTable>;
 
@@ -3745,7 +3745,7 @@ describe('TreeTable Global PT', () => {
             imports: [TreeTableModule],
             providers: [
                 provideZonelessChangeDetection(),
-                providePrimeNG({
+                provideOptimus({
                     pt: {
                         treeTable: {
                             host: { 'aria-label': 'GLOBAL_ARIA_LABEL' },

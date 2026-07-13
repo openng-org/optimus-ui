@@ -36,7 +36,7 @@ export class ChipStyle extends BaseStyle {
  *
  * Chip represents people using icons, labels and images.
  *
- * [Live Demo](https://www.primeng.org/chip)
+ * [Live Demo](https://optimus.openng.org/chip)
  *
  * @module chipstyle
  *

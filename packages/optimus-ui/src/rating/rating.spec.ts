@@ -6,7 +6,7 @@ import { By } from '@angular/platform-browser';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { Rating } from './rating';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 // Basic Rating test component
 @Component({
@@ -1337,7 +1337,7 @@ describe('Rating', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value"></p-rating>`
@@ -1353,7 +1353,7 @@ describe('Rating', () => {
                     declarations: [TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 rating: {
                                     host: 'GLOBAL_HOST_CLASS',

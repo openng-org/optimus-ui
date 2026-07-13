@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${select_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-select-label.p-placeholder {
         color: dt('select.placeholder.color');
     }
@@ -81,7 +81,7 @@ export class SelectStyle extends BaseStyle {
  *
  * Select also known as Select, is used to choose an item from a collection of options.
  *
- * [Live Demo](https://www.primeng.org/select/)
+ * [Live Demo](https://optimus.openng.org/select/)
  *
  * @module selectstyle
  *

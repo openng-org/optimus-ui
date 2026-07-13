@@ -23,7 +23,7 @@ export class ConfirmDialogStyle extends BaseStyle {
  *
  * ConfirmDialog uses a Dialog UI with confirmDialog method or <ConfirmDialog> tag.
  *
- * [Live Demo](https://www.primeng.org/confirmdialog)
+ * [Live Demo](https://optimus.openng.org/confirmdialog)
  *
  * @module confirmdialogstyle
  *

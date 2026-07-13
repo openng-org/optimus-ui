@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${datatable_style}
 
-/* For PrimeNG */
+/* For Optimus */
 .p-datatable-scrollable-table > .p-datatable-thead {
     top: 0;
     z-index: 2;
@@ -256,7 +256,7 @@ export class TableStyle extends BaseStyle {
  *
  * DataTable displays data in tabular format.
  *
- * [Live Demo](https://www.primeng.org/table/)
+ * [Live Demo](https://optimus.openng.org/table/)
  *
  * @module tablestyle
  *

@@ -22,7 +22,7 @@ export class TabStyle extends BaseStyle {
  *
  * Tabs facilitates seamless switching between different views.
  *
- * [Live Demo](https://www.primeng.org/tabs/)
+ * [Live Demo](https://optimus.openng.org/tabs/)
  *
  * @module tabsstyle
  *

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroup } from './inputgroup';
 import { InputGroupAddon } from '@openng/optimus-ui/inputgroupaddon';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
     standalone: true,
@@ -393,14 +393,14 @@ describe('InputGroup PassThrough Tests', () => {
         });
     });
 
-    describe('PT Case 6: Global PT from PrimeNGConfig', () => {
+    describe('PT Case 6: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [InputGroup, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputGroup: {
                                 host: { 'aria-label': 'GLOBAL_LABEL' },
@@ -428,7 +428,7 @@ describe('InputGroup PassThrough Tests', () => {
                 imports: [InputGroup, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputGroup: {
                                 hooks: {

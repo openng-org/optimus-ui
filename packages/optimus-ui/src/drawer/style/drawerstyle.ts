@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${drawer_style}
 
-/** For PrimeNG **/
+/** For Optimus **/
 .p-drawer {
     position: fixed;
 }
@@ -123,7 +123,7 @@ export class DrawerStyle extends BaseStyle {
  *
  * Drawer is a panel component displayed as an overlay at the edges of the screen.
  *
- * [Live Demo](https://www.primeng.org/drawer)
+ * [Live Demo](https://optimus.openng.org/drawer)
  *
  * @module drawerstyle
  *

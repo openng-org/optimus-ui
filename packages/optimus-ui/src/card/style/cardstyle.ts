@@ -34,7 +34,7 @@ export class CardStyle extends BaseStyle {
  *
  * Card is a flexible container component.
  *
- * [Live Demo](https://www.primeng.org/card/)
+ * [Live Demo](https://optimus.openng.org/card/)
  *
  * @module cardstyle
  *

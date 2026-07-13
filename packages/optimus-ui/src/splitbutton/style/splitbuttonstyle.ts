@@ -30,7 +30,7 @@ export class SplitButtonStyle extends BaseStyle {
  *
  * SplitButton groups a set of commands in an overlay with a default command.
  *
- * [Live Demo](https://www.primeng.org/splitbutton/)
+ * [Live Demo](https://optimus.openng.org/splitbutton/)
  *
  * @module splitbuttonstyle
  *

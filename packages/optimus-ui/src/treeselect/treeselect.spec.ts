@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { SharedModule, TreeNode } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { TreeSelectNodeCollapseEvent, TreeSelectNodeExpandEvent } from '@openng/optimus-ui/types/treeselect';
 import { BehaviorSubject } from 'rxjs';
 import { TreeSelect, TreeSelectModule } from './treeselect';
@@ -1406,7 +1406,7 @@ describe('TreeSelect', () => {
                 imports: [TreeSelectModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             treeSelect: {
                                 root: 'custom-root-class',
@@ -1433,7 +1433,7 @@ describe('TreeSelect', () => {
                 imports: [TreeSelectModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             treeSelect: {
                                 root: { class: 'pt-root-test' },
@@ -1458,7 +1458,7 @@ describe('TreeSelect', () => {
                 imports: [TreeSelectModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             treeSelect: {
                                 root: 'string-root',
@@ -1487,7 +1487,7 @@ describe('TreeSelect', () => {
                 imports: [TreeSelectModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             treeSelect: {
                                 root: {
@@ -1516,7 +1516,7 @@ describe('TreeSelect', () => {
                 imports: [TreeSelectModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             treeSelect: {
                                 root: 'global-root',

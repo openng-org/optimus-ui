@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const theme = /*css*/ `
     ${style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-orderlist-controls-right .p-orderlist-controls {
         order: 2;
     }
@@ -29,7 +29,7 @@ export class OrderListStyle extends BaseStyle {
  *
  * OrderList is used to maneged the order of a collection.
  *
- * [Live Demo](https://primeng.org/orderlist)
+ * [Live Demo](https://optimus.openng.org/orderlist)
  *
  * @module orderliststyle
  *

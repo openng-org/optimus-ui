@@ -25,7 +25,7 @@ export class MessageStyle extends BaseStyle {
  *
  * Message groups a collection of contents in tabs.
  *
- * [Live Demo](https://www.primeng.org/message/)
+ * [Live Demo](https://optimus.openng.org/message/)
  *
  * @module messagestyle
  *

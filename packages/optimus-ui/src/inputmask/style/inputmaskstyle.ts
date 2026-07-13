@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const style = /*css*/ `
-    /* For PrimeNG */
+    /* For Optimus */
     p-inputmask {
         position: relative;
     }
@@ -64,7 +64,7 @@ export class InputMaskStyle extends BaseStyle {
  *
  * InputMask component is used to enter input in a certain format such as numeric, date, currency, email and phone.
  *
- * [Live Demo](https://www.primeng.org/inputmask/)
+ * [Live Demo](https://optimus.openng.org/inputmask/)
  *
  * @module inputmaskstyle
  *

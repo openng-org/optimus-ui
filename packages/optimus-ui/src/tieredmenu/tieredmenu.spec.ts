@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuItem } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { Tooltip } from '@openng/optimus-ui/tooltip';
 import { TieredMenu } from './tieredmenu';
 
@@ -1331,7 +1331,7 @@ describe('TieredMenu', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: true,
                 imports: [TieredMenu],
@@ -1351,7 +1351,7 @@ describe('TieredMenu', () => {
                     imports: [PTGlobalConfigTestComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 tieredMenu: {
                                     root: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL', class: 'GLOBAL_ROOT_CLASS' },

@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuItem, SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { Dock } from './dock';
 
 @Component({
@@ -1281,7 +1281,7 @@ describe('Dock', () => {
             expect(contentEls.length).toBeGreaterThan(0);
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: true,
                 imports: [Dock],
@@ -1300,7 +1300,7 @@ describe('Dock', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 dock: {
                                     root: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL' },
@@ -1316,7 +1316,7 @@ describe('Dock', () => {
                 });
             });
 
-            it('should apply global PT configuration from PrimeNG config', async () => {
+            it('should apply global PT configuration from Optimus config', async () => {
                 const globalFixture = TestBed.createComponent(TestGlobalPTComponent);
                 globalFixture.changeDetectorRef.markForCheck();
                 await globalFixture.whenStable();
@@ -1354,7 +1354,7 @@ describe('Dock', () => {
                     imports: [TestMergedPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 dock: {
                                     root: { 'aria-label': 'GLOBAL_LABEL' }

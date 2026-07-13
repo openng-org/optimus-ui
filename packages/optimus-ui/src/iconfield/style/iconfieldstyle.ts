@@ -25,7 +25,7 @@ export class IconFieldStyle extends BaseStyle {
  *
  * IconField wraps an input and an icon.
  *
- * [Live Demo](https://www.primeng.org/iconfield/)
+ * [Live Demo](https://optimus.openng.org/iconfield/)
  *
  * @module iconfieldstyle
  *

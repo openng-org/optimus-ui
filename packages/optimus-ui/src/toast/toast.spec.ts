@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { MessageService, PrimeTemplate, SharedModule, ToastMessageOptions } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { Toast, ToastItem } from './toast';
 
 // Test Components for different scenarios
@@ -1173,7 +1173,7 @@ describe('Toast', () => {
         });
     });
 
-    describe('Toast PassThrough - Case 7: Test from PrimeNGConfig', () => {
+    describe('Toast PassThrough - Case 7: Test from OptimusConfig', () => {
         @Component({
             standalone: false,
             template: `
@@ -1183,7 +1183,7 @@ describe('Toast', () => {
         })
         class TestToastGlobalPtComponent {}
 
-        it('should apply global pt configuration from PrimeNGConfig', async () => {
+        it('should apply global pt configuration from OptimusConfig', async () => {
             await TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [Toast],
@@ -1191,7 +1191,7 @@ describe('Toast', () => {
                 providers: [
                     MessageService,
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             toast: {
                                 host: 'GLOBAL_HOST_CLASS',
@@ -1228,7 +1228,7 @@ describe('Toast', () => {
                 providers: [
                     MessageService,
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             toast: {
                                 host: 'GLOBAL_HOST_CLASS'

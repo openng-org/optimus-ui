@@ -47,7 +47,7 @@ export class MenuStyle extends BaseStyle {
  *
  * Menu is a navigation / command component that supports dynamic and static positioning.
  *
- * [Live Demo](https://www.primeng.org/menu/)
+ * [Live Demo](https://optimus.openng.org/menu/)
  *
  * @module menustyle
  *

@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${buttongroup_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-buttongroup p-button:focus .p-button {
         position: relative;
         z-index: 1;
@@ -48,7 +48,7 @@ export class ButtonGroupStyle extends BaseStyle {
  *
  * A set of Buttons can be displayed together using the ButtonGroup component.
  *
- * [Live Demo](https://www.primeng.org/button/)
+ * [Live Demo](https://optimus.openng.org/button/)
  *
  * @module buttongroupstyle
  *

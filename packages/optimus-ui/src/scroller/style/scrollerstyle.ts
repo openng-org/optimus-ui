@@ -94,7 +94,7 @@ export class ScrollerStyle extends BaseStyle {
  *
  * VirtualScroller is a performant approach to handle huge data efficiently.
  *
- * [Live Demo](https://www.primeng.org/scroller/)
+ * [Live Demo](https://optimus.openng.org/scroller/)
  *
  * @module scrollerstyle
  *

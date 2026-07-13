@@ -16,7 +16,7 @@ export class AvatarGroupStyle extends BaseStyle {
  *
  * A set of Avatars can be displayed together using the AvatarGroup component.
  *
- * [Live Demo](https://www.primeng.org/avatar/)
+ * [Live Demo](https://optimus.openng.org/avatar/)
  *
  * @module avatargroupstyle
  *

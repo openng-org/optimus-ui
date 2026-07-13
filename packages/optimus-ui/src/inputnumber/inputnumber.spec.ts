@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import type { InputNumberInputEvent } from '@openng/optimus-ui/types/inputnumber';
 import { InputNumber, InputNumberModule } from './inputnumber';
 
@@ -1364,7 +1364,7 @@ describe('InputNumber', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `
@@ -1377,14 +1377,14 @@ describe('InputNumber', () => {
                 value2: number = 200;
             }
 
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     imports: [InputNumberModule, FormsModule, CommonModule],
                     declarations: [TestPTCase7GlobalComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 inputNumber: {
                                     root: { class: 'GLOBAL_ROOT_CLASS' },

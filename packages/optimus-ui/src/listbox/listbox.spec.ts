@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { ListboxChangeEvent } from '@openng/optimus-ui/types/listbox';
 import { BehaviorSubject, Observable, delay, of } from 'rxjs';
 import { Listbox } from './listbox';
@@ -2372,7 +2372,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from v', () => {
             @Component({
                 standalone: true,
                 imports: [Listbox, FormsModule],
@@ -2395,7 +2395,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
                     providers: [
                         provideZonelessChangeDetection(),
                         provideNoopAnimations(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 listbox: {
                                     host: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL' }
@@ -2423,7 +2423,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
                     providers: [
                         provideZonelessChangeDetection(),
                         provideNoopAnimations(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 listbox: {
                                     host: { class: 'GLOBAL_CLASS' },

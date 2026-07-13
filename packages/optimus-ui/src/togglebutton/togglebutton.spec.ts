@@ -5,7 +5,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { By } from '@angular/platform-browser';
 
 import { SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { ToggleButtonChangeEvent } from '@openng/optimus-ui/types/togglebutton';
 import { ToggleButton } from './togglebutton';
 
@@ -1278,7 +1278,7 @@ describe('ToggleButton', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
                     standalone: true,
@@ -1294,7 +1294,7 @@ describe('ToggleButton', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 toggleButton: {
                                     root: { 'data-test': 'global-togglebutton' },

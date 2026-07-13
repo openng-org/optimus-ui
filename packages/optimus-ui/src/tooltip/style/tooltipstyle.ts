@@ -21,7 +21,7 @@ export class TooltipStyle extends BaseStyle {
  *
  * Tooltip directive provides advisory information for a component.
  *
- * [Live Demo](https://www.primeng.org/tooltip)
+ * [Live Demo](https://optimus.openng.org/tooltip)
  *
  * @module tooltipstyle
  *

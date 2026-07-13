@@ -25,7 +25,7 @@ export class ConfirmPopupStyle extends BaseStyle {
  *
  * ConfirmPopup displays a confirmation overlay displayed relatively to its target.
  *
- * [Live Demo](https://www.primeng.org/confirmpopup)
+ * [Live Demo](https://optimus.openng.org/confirmpopup)
  *
  * @module confirmpopupstyle
  *

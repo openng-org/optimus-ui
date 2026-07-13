@@ -25,7 +25,7 @@ export class TimelineStyle extends BaseStyle {
  *
  * Timeline visualizes a series of chained events.
  *
- * [Live Demo](https://primeng.org/timeline)
+ * [Live Demo](https://optimus.openng.org/timeline)
  *
  * @module timelinestyle
  *

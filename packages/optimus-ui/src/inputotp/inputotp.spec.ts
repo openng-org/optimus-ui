@@ -3,7 +3,7 @@ import { Component, DebugElement, provideZonelessChangeDetection } from '@angula
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputOtp, InputOtpChangeEvent } from './inputotp';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 // Temel test component'i
 @Component({
@@ -849,14 +849,14 @@ describe('InputOtp PassThrough Tests', () => {
         });
     });
 
-    describe('PT Case 5: Global PT from PrimeNGConfig', () => {
+    describe('PT Case 5: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [InputOtp, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputOtp: {
                                 host: { 'aria-label': 'GLOBAL_LABEL' },
@@ -884,7 +884,7 @@ describe('InputOtp PassThrough Tests', () => {
                 imports: [InputOtp, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             inputOtp: {
                                 hooks: {

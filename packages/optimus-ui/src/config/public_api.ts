@@ -1,4 +1,4 @@
-export * from './primeng';
-export * from './primeng.types';
-export * from './provideprimeng';
+export * from './optimus';
+export * from './optimus.types';
+export * from './provide-optimuss';
 export * from './themeprovider';

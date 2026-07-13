@@ -26,7 +26,7 @@ export class EditorStyle extends BaseStyle {
  *
  * Editor groups a collection of contents in tabs.
  *
- * [Live Demo](https://www.primeng.org/editor/)
+ * [Live Demo](https://optimus.openng.org/editor/)
  *
  * @module editorstyle
  *

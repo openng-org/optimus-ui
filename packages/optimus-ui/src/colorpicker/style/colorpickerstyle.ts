@@ -33,7 +33,7 @@ export class ColorPickerStyle extends BaseStyle {
  *
  * ColorPicker groups a collection of contents in tabs.
  *
- * [Live Demo](https://www.primeng.org/colorpicker/)
+ * [Live Demo](https://optimus.openng.org/colorpicker/)
  *
  * @module colorpickerstyle
  *

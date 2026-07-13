@@ -29,7 +29,7 @@ export class AvatarStyle extends BaseStyle {
  *
  * Avatar represents people using icons, labels and images.
  *
- * - [Live Demo](https://primeng.org/avatar)
+ * - [Live Demo](https://optimus.openng.org/avatar)
  *
  * @module avatarstyle
  *

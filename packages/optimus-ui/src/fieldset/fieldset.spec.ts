@@ -2,7 +2,7 @@ import { Component, DebugElement, provideZonelessChangeDetection } from '@angula
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { FieldsetAfterToggleEvent, FieldsetBeforeToggleEvent } from '@openng/optimus-ui/types/fieldset';
 import { Fieldset } from './fieldset';
 
@@ -1072,7 +1072,7 @@ describe('Fieldset', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: true,
                 imports: [Fieldset],
@@ -1089,7 +1089,7 @@ describe('Fieldset', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 fieldset: {
                                     root: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL' },
@@ -1101,7 +1101,7 @@ describe('Fieldset', () => {
                 });
             });
 
-            it('should apply global PT configuration from PrimeNG config', () => {
+            it('should apply global PT configuration from Optimus config', () => {
                 const globalFixture = TestBed.createComponent(TestGlobalPTComponent);
                 globalFixture.detectChanges();
 

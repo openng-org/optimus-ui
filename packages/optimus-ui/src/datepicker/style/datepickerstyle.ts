@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${datepicker_style}
 
-/* For PrimeNG */
+/* For Optimus */
 .p-datepicker.ng-invalid.ng-dirty .p-inputtext {
     border-color: dt('inputtext.invalid.border.color');
 }
@@ -127,7 +127,7 @@ export class DatePickerStyle extends BaseStyle {
  *
  * DatePicker is a form component to work with dates.
  *
- * [Live Demo](https://www.primeng.org/datepicker/)
+ * [Live Demo](https://optimus.openng.org/datepicker/)
  *
  * @module datepickerstyle
  *

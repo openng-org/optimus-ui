@@ -6,7 +6,7 @@ import { By } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { AutoFocus } from '@openng/optimus-ui/autofocus';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { ToggleSwitchChangeEvent } from '@openng/optimus-ui/types/toggleswitch';
 import { ToggleSwitch, ToggleSwitchModule } from './toggleswitch';
 
@@ -1241,7 +1241,7 @@ describe('PassThrough (PT) Tests', () => {
         });
     });
 
-    describe('Case 7: Global PT from PrimeNGConfig', () => {
+    describe('Case 7: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration', async () => {
             @Component({
                 standalone: true,
@@ -1257,7 +1257,7 @@ describe('PassThrough (PT) Tests', () => {
                 imports: [TestGlobalPTComponent],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             toggleSwitch: {
                                 root: { 'data-test': 'global-toggleswitch' },

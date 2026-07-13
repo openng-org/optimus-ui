@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { ButtonModule } from '@openng/optimus-ui/button';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import type { CarouselPageEvent, CarouselResponsiveOptions } from '@openng/optimus-ui/types/carousel';
 import { Carousel } from './carousel';
 
@@ -1236,7 +1236,7 @@ describe('Carousel', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             let fixture: ComponentFixture<Carousel>;
             let carouselInstance: Carousel;
 
@@ -1246,7 +1246,7 @@ describe('Carousel', () => {
                     imports: [CommonModule, Carousel, SharedModule, PrimeTemplate, ButtonModule],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 carousel: {
                                     root: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL', class: 'GLOBAL_CAROUSEL_CLASS' },
@@ -1265,7 +1265,7 @@ describe('Carousel', () => {
                 fixture.detectChanges();
             });
 
-            it('should apply global PT from PrimeNGConfig', () => {
+            it('should apply global PT from OptimusConfig', () => {
                 const rootElement = fixture.nativeElement;
                 expect(rootElement.getAttribute('aria-label')).toBe('TEST_GLOBAL_ARIA_LABEL');
                 expect(rootElement.className).toContain('GLOBAL_CAROUSEL_CLASS');

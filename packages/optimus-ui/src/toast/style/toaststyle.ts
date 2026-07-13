@@ -59,7 +59,7 @@ export class ToastStyle extends BaseStyle {
  *
  * Toast is used to display messages in an overlay.
  *
- * [Live Demo](https://www.primeng.org/toast/)
+ * [Live Demo](https://optimus.openng.org/toast/)
  *
  * @module toaststyle
  *

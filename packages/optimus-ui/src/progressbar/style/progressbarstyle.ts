@@ -27,7 +27,7 @@ export class ProgressBarStyle extends BaseStyle {
  *
  * ProgressBar is a process status indicator.
  *
- * [Live Demo](https://www.primeng.org/progressbar)
+ * [Live Demo](https://optimus.openng.org/progressbar)
  *
  * @module progressbarstyle
  *

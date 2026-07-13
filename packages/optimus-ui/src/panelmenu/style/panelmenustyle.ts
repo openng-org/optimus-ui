@@ -4,7 +4,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 
 const style = /*css*/ `
     ${panelmenu_style}
-    /*For PrimeNG*/
+    /*For Optimus */
 
 
     .p-panelmenu-root-list,
@@ -62,7 +62,7 @@ export class PanelMenuStyle extends BaseStyle {
  *
  * PanelMenu is a hybrid of Accordion and Tree components.
  *
- * [Live Demo](https://www.primeng.org/panelmenu/)
+ * [Live Demo](https://optimus.openng.org/panelmenu/)
  *
  * @module panelmenustyle
  *

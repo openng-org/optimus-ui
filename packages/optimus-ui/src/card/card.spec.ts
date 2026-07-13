@@ -1334,8 +1334,8 @@ describe('Card', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 @Component({
                     standalone: false,
                     template: `
@@ -1352,7 +1352,7 @@ describe('Card', () => {
                     providers: [
                         provideZonelessChangeDetection(),
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     card: {

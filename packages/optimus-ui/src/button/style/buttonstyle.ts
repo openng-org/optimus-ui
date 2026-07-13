@@ -55,7 +55,7 @@ export class ButtonStyle extends BaseStyle {
  *
  * Button is an extension to standard button element with icons and theming.
  *
- * [Live Demo](https://www.primeng.org/button/)
+ * [Live Demo](https://optimus.openng.org/button/)
  *
  * @module buttonstyle
  *

@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${password_style}
 
-/* For PrimeNG */
+/* For Optimus */
 .p-password-overlay {
     min-width: 100%;
 }
@@ -99,7 +99,7 @@ export class PasswordStyle extends BaseStyle {
  *
  * Password displays strength indicator for password fields.
  *
- * [Live Demo](https://www.primeng.org/password/)
+ * [Live Demo](https://optimus.openng.org/password/)
  *
  * @module passwordstyle
  *

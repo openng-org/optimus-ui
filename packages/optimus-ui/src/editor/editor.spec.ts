@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import type { EditorBlurEvent, EditorChangeEvent, EditorFocusEvent, EditorInitEvent, EditorSelectionChangeEvent, EditorTextChangeEvent } from '@openng/optimus-ui/types/editor';
 import { Editor } from './editor';
 // Test Components for different scenarios
@@ -1100,7 +1100,7 @@ describe('Editor', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
                     standalone: true,
@@ -1116,7 +1116,7 @@ describe('Editor', () => {
                     imports: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 editor: {
                                     root: { 'aria-label': 'TEST_GLOBAL_ARIA_LABEL' },
@@ -1159,7 +1159,7 @@ describe('Editor', () => {
                 });
             });
 
-            it('should apply global CSS from PrimeNGConfig', async () => {
+            it('should apply global CSS from OptimusConfig', async () => {
                 @Component({
                     standalone: true,
                     imports: [Editor, FormsModule],
@@ -1173,7 +1173,7 @@ describe('Editor', () => {
                     imports: [TestGlobalCSSComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 editor: {
                                     root: 'GLOBAL_CSS_CLASS'

@@ -46,7 +46,7 @@ export class BaseIconStyle extends BaseStyle {
 }
 /**
  *
- * [Live Demo](https://www.primeng.org/)
+ * [Live Demo](https:/optimus.openng.org/)
  *
  * @module baseiconstyle
  *

@@ -959,13 +959,13 @@ describe('Image', () => {
             });
         });
 
-        describe('Case 8: Test from PrimeNGConfig', () => {
+        describe('Case 8: Test from OptimusConfig', () => {
             beforeEach(() => {
                 TestBed.resetTestingModule();
             });
 
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
-                const { providePrimeNG } = await import('@openng/optimus-ui/config');
+            it('should apply global PT configuration from OptimusConfig', async () => {
+                const { provideOptimus } = await import('@openng/optimus-ui/config');
 
                 @Component({
                     standalone: false,
@@ -984,7 +984,7 @@ describe('Image', () => {
                     declarations: [TestGlobalPTComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 image: {
                                     root: {

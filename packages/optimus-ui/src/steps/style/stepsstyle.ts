@@ -29,7 +29,7 @@ export class StepsStyle extends BaseStyle {
  *
  * Steps components is an indicator for the steps in a wizard workflow. Example below uses nested routes with Steps.
  *
- * [Live Demo](https://www.primeng.org/steps/)
+ * [Live Demo](https://optimus.openng.org/steps/)
  *
  * @module stepsstyle
  *

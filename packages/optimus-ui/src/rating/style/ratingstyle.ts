@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${rating_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     p-rating.ng-invalid.ng-dirty > .p-rating > .p-rating-icon {
         stroke: dt('rating.invalid.icon.color');
     }
@@ -44,7 +44,7 @@ export class RatingStyle extends BaseStyle {
  *
  * Rating component is a star based selection input.
  *
- * [Live Demo](https://www.primeng.org/rating/)
+ * [Live Demo](https://optimus.openng.org/rating/)
  *
  * @module ratingstyle
  *

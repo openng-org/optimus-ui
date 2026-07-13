@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${treeselect_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
 
     .p-treeselect.ng-invalid.ng-dirty {
         border-color: dt('treeselect.invalid.border.color');
@@ -79,7 +79,7 @@ export class TreeSelectStyle extends BaseStyle {
  *
  * TreeSelect is a form component to choose from hierarchical data.
  *
- * [Live Demo](https://www.primeng.org/treeselect/)
+ * [Live Demo](https://optimus.openng.org/treeselect/)
  *
  * @module treeselectstyle
  *

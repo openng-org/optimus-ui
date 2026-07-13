@@ -45,7 +45,7 @@ export class ToggleSwitchStyle extends BaseStyle {
  *
  * ToggleSwitch is used to select a boolean value.
  *
- * [Live Demo](https://www.primeng.org/toggleswitch/)
+ * [Live Demo](https://optimus.openng.org/toggleswitch/)
  *
  * @module toggleswitchstyle
  *

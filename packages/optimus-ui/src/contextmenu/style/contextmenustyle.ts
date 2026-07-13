@@ -43,7 +43,7 @@ export class ContextMenuStyle extends BaseStyle {
  * ContextMenu displays an overlay menu on right click of its target. Note that components like DataTable has special integration with ContextMenu.
  * Refer to documentation of the individual documentation of the with context menu support.
  *
- * [Live Demo](https://www.primeng.org/contextmenu/)
+ * [Live Demo](https://optimus.openng.org/contextmenu/)
  *
  * @module contextmenustyle
  *

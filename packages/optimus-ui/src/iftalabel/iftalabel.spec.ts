@@ -3,7 +3,7 @@ import { Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IftaLabel } from './iftalabel';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
     standalone: true,
@@ -213,14 +213,14 @@ describe('IftaLabel PassThrough Tests', () => {
         });
     });
 
-    describe('PT Case 5: Global PT from PrimeNGConfig', () => {
+    describe('PT Case 5: Global PT from OptimusConfig', () => {
         it('should apply global PT configuration', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
                 imports: [IftaLabel, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             iftaLabel: {
                                 host: { 'aria-label': 'GLOBAL_LABEL' },
@@ -248,7 +248,7 @@ describe('IftaLabel PassThrough Tests', () => {
                 imports: [IftaLabel, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             iftaLabel: {
                                 hooks: {

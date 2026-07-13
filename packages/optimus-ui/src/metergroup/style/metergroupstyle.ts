@@ -38,7 +38,7 @@ export class MeterGroupStyle extends BaseStyle {
  *
  * MeterGroup is a group of process status indicators.
  *
- * [Live Demo](https://www.primeng.org/metergroup)
+ * [Live Demo](https://optimus.openng.org/metergroup)
  *
  * @module metergroupstyle
  *

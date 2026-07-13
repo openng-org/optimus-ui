@@ -37,7 +37,7 @@ export class SliderStyle extends BaseStyle {
  *
  * Slider is a component to provide input with a drag handle.
  *
- * [Live Demo](https://www.primeng.org/slider/)
+ * [Live Demo](https://optimus.openng.org/slider/)
  *
  * @module sliderstyle
  *

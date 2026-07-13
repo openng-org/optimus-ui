@@ -24,7 +24,7 @@ export class PickListStyle extends BaseStyle {
  *
  * PickList is used to reorder items between different lists.
  *
- * [Live Demo](https://www.primeng.org/picklist)
+ * [Live Demo](https://optimus.openng.org/picklist)
  *
  * @module pickliststyle
  *

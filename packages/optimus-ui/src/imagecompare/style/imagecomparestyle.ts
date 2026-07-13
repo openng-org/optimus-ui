@@ -20,7 +20,7 @@ export class ImageCompareStyle extends BaseStyle {
  *
  * ImageCompare compares two images side by side with a slider.
  *
- * [Live Demo](https://www.primeng.org/imagecompare/)
+ * [Live Demo](https://optimus.openng.org/imagecompare/)
  *
  * @module imagecomparestyle
  *

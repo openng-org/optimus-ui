@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { MapperPipe, Password, PasswordDirective, PasswordModule } from './password';
 
 // Test Components
@@ -1644,7 +1644,7 @@ describe('PasswordDirective', () => {
             });
         });
 
-        describe('Case 7: Global PT from PrimeNGConfig', () => {
+        describe('Case 7: Global PT from OptimusConfig', () => {
             it('should have global pt configuration available', async () => {
                 await TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
@@ -1652,7 +1652,7 @@ describe('PasswordDirective', () => {
                     declarations: [TestPTPasswordDirectiveComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 password: {
                                     host: { 'aria-label': 'DIRECTIVE_GLOBAL_ARIA_LABEL', class: 'DIRECTIVE_GLOBAL_CLASS' },
@@ -1680,7 +1680,7 @@ describe('PasswordDirective', () => {
                     declarations: [TestPTPasswordDirectiveComponent],
                     providers: [
                         provideZonelessChangeDetection(),
-                        providePrimeNG({
+                        provideOptimus({
                             pt: {
                                 password: {
                                     host: { 'data-global-directive': 'shared', class: 'GLOBAL_SHARED_CLASS' }
@@ -2205,7 +2205,7 @@ describe('Password PassThrough Tests', () => {
         });
     });
 
-    describe('Case 7: Global PT from PrimeNGConfig', () => {
+    describe('Case 7: Global PT from OptimusConfig', () => {
         it('should apply global pt configuration', async () => {
             await TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
@@ -2213,7 +2213,7 @@ describe('Password PassThrough Tests', () => {
                 declarations: [TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             password: {
                                 host: { 'aria-label': 'GLOBAL_ARIA_LABEL' },
@@ -2240,7 +2240,7 @@ describe('Password PassThrough Tests', () => {
                 declarations: [TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             password: {
                                 root: { class: 'GLOBAL_CSS_CLASS' },
@@ -2268,7 +2268,7 @@ describe('Password PassThrough Tests', () => {
                 declarations: [TestPTPasswordComponent],
                 providers: [
                     provideZonelessChangeDetection(),
-                    providePrimeNG({
+                    provideOptimus({
                         pt: {
                             password: {
                                 root: { 'data-global': 'shared' }

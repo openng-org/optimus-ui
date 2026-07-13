@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${inputnumber_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     p-inputNumber.ng-invalid.ng-dirty > .p-inputtext,
     p-input-number.ng-invalid.ng-dirty > .p-inputtext,
     p-inputnumber.ng-invalid.ng-dirty > .p-inputtext {
@@ -68,7 +68,7 @@ export class InputNumberStyle extends BaseStyle {
  *
  * InputNumber is an input component to provide numerical input.
  *
- * [Live Demo](https://www.primeng.org/inputnumber/)
+ * [Live Demo](https:/optimus.openng.org/inputnumber/)
  *
  * @module inputnumberstyle
  *

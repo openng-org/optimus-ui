@@ -44,7 +44,7 @@ export class ImageStyle extends BaseStyle {
  *
  * Displays an image with preview and tranformation options. For multiple image, see Galleria.
  *
- * [Live Demo](https://www.primeng.org/image/)
+ * [Live Demo](https://optimus.openng.org/image/)
  *
  * @module imagestyle
  *

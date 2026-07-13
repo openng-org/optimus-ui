@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${ripple_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-ripple {
         overflow: hidden;
         position: relative;
@@ -40,7 +40,7 @@ export class RippleStyle extends BaseStyle {
  *
  * Ripple directive adds ripple effect to the host element.
  *
- * [Live Demo](https://www.primeng.org/ripple)
+ * [Live Demo](https://optimus.openng.org/ripple)
  *
  * @module ripplestyle
  *

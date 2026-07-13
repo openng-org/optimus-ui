@@ -32,7 +32,7 @@ export class FieldsetStyle extends BaseStyle {
  *
  * Fieldset is a grouping component with the optional content toggle feature.
  *
- * [Live Demo](https://www.primeng.org/fieldset/)
+ * [Live Demo](https://optimus.openng.org/fieldset/)
  *
  * @module fieldsetstyle
  *

@@ -1378,7 +1378,7 @@ describe('Drawer', () => {
             });
         });
 
-        describe('Case 7: Test from PrimeNGConfig', () => {
+        describe('Case 7: Test from OptimusConfig', () => {
             @Component({
                 standalone: false,
                 template: `
@@ -1391,7 +1391,7 @@ describe('Drawer', () => {
                 visible2 = true;
             }
 
-            it('should apply global PT configuration from PrimeNGConfig', async () => {
+            it('should apply global PT configuration from OptimusConfig', async () => {
                 TestBed.resetTestingModule();
                 await TestBed.configureTestingModule({
                     declarations: [TestPTCase7GlobalComponent],
@@ -1399,7 +1399,7 @@ describe('Drawer', () => {
                     providers: [
                         provideZonelessChangeDetection(),
                         {
-                            provide: 'providePrimeNG',
+                            provide: 'provideOptimus',
                             useValue: {
                                 pt: {
                                     drawer: {

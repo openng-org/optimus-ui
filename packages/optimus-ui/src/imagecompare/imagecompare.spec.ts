@@ -746,8 +746,8 @@ describe('ImageCompare', () => {
             });
         });
 
-        describe('Case 7: PrimeNGConfig', () => {
-            // Skipping this test as PrimeNG config PT requires specific configuration
+        describe('Case 7: OptimusConfig', () => {
+            // Skipping this test as Optimus config PT requires specific configuration
             // that conflicts with the existing TestBed setup
             it('should be able to configure global PT (skipped)', () => {
                 // This test would require a separate test file or different setup

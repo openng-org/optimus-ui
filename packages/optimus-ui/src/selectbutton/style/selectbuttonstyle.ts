@@ -5,7 +5,7 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
     ${selectbutton_style}
 
-    /* For PrimeNG */
+    /* For Optimus */
     .p-selectbutton.ng-invalid.ng-dirty {
         outline: 1px solid dt('selectbutton.invalid.border.color');
         outline-offset: 0;
@@ -35,7 +35,7 @@ export class SelectButtonStyle extends BaseStyle {
  *
  * SelectButton is used to choose single or multiple items from a list using buttons.
  *
- * [Live Demo](https://www.primeng.org/selectbutton/)
+ * [Live Demo](https://optimus.openng.org/selectbutton/)
  *
  * @module selectbuttonstyle
  *
