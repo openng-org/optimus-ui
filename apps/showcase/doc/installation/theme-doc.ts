@@ -14,13 +14,13 @@ export class ThemeDoc {
     code: Code = {
         typescript: `import { ApplicationConfig } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import Aura from '@openng/optimus-ui-themes/aura';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideAnimationsAsync(),
-        providePrimeNG({
+        provideOptimus({
             theme: Aura
         })
     ]

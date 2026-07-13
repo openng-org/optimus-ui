@@ -25,7 +25,7 @@ import { Component } from '@angular/core';
 })
 export class DarkModeDoc {
     code1 = {
-        typescript: `providePrimeNG({
+        typescript: `provideOptimus({
     theme: {
         preset: Aura,
         options: {

@@ -6,7 +6,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { APP_INITIALIZER, ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { ConfirmationService, MessageService } from '@openng/optimus-ui/api';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 function initializeDemoCode(demoCodeService: DemoCodeService) {
     return () => demoCodeService.loadDemos();
@@ -17,7 +17,7 @@ export const appConfig: ApplicationConfig = {
         provideZonelessChangeDetection(),
         provideRouter(routes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' })), // withEnabledBlockingInitialNavigation()
         provideHttpClient(withFetch()),
-        providePrimeNG({
+        provideOptimus({
             theme: Noir,
             ripple: false
         }),

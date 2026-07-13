@@ -1013,13 +1013,13 @@ const getAngularApp = (props: Props = {}) => {
 import { ${componentName} } from './app/${selector}';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { ApplicationConfig } from '@angular/core';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import Aura from '@openng/optimus-ui-themes/aura';
 
   export const appConfig: ApplicationConfig = {
       providers: [
       provideHttpClient(withFetch()),
-      providePrimeNG({
+      provideOptimus({
           theme: { preset: Aura, options: { darkModeSelector: '.p-dark' } },
       }),
     ],

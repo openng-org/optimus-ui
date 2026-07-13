@@ -7,7 +7,7 @@ Application wide configuration for PrimeNG.
 The nonce value to use on dynamically generated style elements in core.
 
 ```typescript
-providePrimeNG({ 
+provideOptimus({ 
     csp: {
         nonce: '...'
     }
@@ -121,17 +121,17 @@ Defines the default location of the overlays; self refers to the host element an
 
 ## Provider-
 
-The initial configuration is defined by the providePrimeNG provider during application startup.
+The initial configuration is defined by the provideOptimus provider during application startup.
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
+import { provideOptimus } from 'primeng/config';
 
 export const appConfig: ApplicationConfig = {
     providers: [
         provideAnimationsAsync(),
-        providePrimeNG({ /* options */ })
+        provideOptimus({ /* options */ })
     ]
 };
 ```

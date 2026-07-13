@@ -31,7 +31,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 export class ColorSchemeDoc {
     code1 = {
         typescript: `import { bootstrapApplication } from '@angular/platform-browser';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { definePreset } from '@openng/optimus-ui-themes';
 import Aura from '@openng/optimus-ui-themes/aura';
 import { AppComponent } from './app/app.component';
@@ -51,7 +51,7 @@ const MyPreset = definePreset(Aura, {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        providePrimeNG({
+        provideOptimus({
             theme: {
                 preset: MyPreset
             }

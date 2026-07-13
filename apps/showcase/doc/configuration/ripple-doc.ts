@@ -16,7 +16,7 @@ import { AppCode } from '@/components/doc/app.code';
 })
 export class RippleDoc {
     code: Code = {
-        typescript: `providePrimeNG({ 
+        typescript: `provideOptimus({
     ripple: true
 })`
     };

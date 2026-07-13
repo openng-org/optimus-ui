@@ -34,11 +34,11 @@ import { Component } from '@angular/core';
 export class PTOptionsDoc {
     codeGlobal: Code = {
         typescript: `import { ApplicationConfig } from '@angular/core';
-import { providePrimeNG } from '@openng/optimus-ui/config';
+import { provideOptimus } from '@openng/optimus-ui/config';
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        providePrimeNG({
+        provideOptimus({
             pt: {
                 panel: {
                     header: {

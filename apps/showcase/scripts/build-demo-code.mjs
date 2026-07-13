@@ -108,7 +108,7 @@ const PRIMENG_API_TYPES = [
     'FilterService',
     'MessageService',
     'ConfirmationService',
-    'PrimeNGConfig',
+    'OptimusConfig',
     'TreeTableNode',
     'ConfirmEventType',
     'SortEvent',

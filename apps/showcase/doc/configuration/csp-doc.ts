@@ -16,7 +16,7 @@ import { AppCode } from '@/components/doc/app.code';
 })
 export class CspDoc {
     code: Code = {
-        typescript: `providePrimeNG({ 
+        typescript: `provideOptimus({
     csp: {
         nonce: '...'
     }

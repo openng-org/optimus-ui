@@ -20,7 +20,7 @@ import { AppCode } from '@/components/doc/app.code';
 })
 export class ZIndexDoc {
     code: Code = {
-        typescript: `import { PrimeNGConfig } from '@openng/optimus-ui/api';
+        typescript: `import { OptimusConfig } from '@openng/optimus-ui/api';
 
 @Component({
     selector: 'app-root',
@@ -28,10 +28,10 @@ export class ZIndexDoc {
 })
 export class AppComponent implements OnInit {
 
-    constructor(private primengConfig: PrimeNGConfig) {}
+    constructor(private optimusConfig: OptimusConfig) {}
 
     ngOnInit() {
-        this.primengConfig.zIndex = {
+        this.optimusConfig.zIndex = {
             modal: 1100,    // dialog, sidebar
             overlay: 1000,  // dropdown, overlaypanel
             menu: 1000,     // overlay menus

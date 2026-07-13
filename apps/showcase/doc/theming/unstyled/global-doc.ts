@@ -24,7 +24,7 @@ export class GlobalDoc {
 
 export const appConfig: ApplicationConfig = {
     providers: [
-        providePrimeNG({
+        provideOptimus({
             unstyled: true,
             pt: {
                 button: {
