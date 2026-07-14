@@ -16,7 +16,7 @@ export class UseStyle {
         const { immediate = true, manual = false, name = `style_${++_id}`, id = undefined, media = undefined, nonce = undefined, first = false, props = {} } = options;
 
         if (!this.document) return;
-        styleRef = (this.document.querySelector(`style[data-optimus-style-id="${name}"]`) || (id && this.document.getElementById(id)) || this.document.createElement('style')) as HTMLStyleElement;
+        styleRef = (this.document.querySelector(`style[data-primeng-style-id="${name}"]`) || (id && this.document.getElementById(id)) || this.document.createElement('style')) as HTMLStyleElement;
 
         if (styleRef) {
             if (!styleRef.isConnected) {
@@ -31,7 +31,7 @@ export class UseStyle {
                     type: 'text/css',
                     media,
                     nonce,
-                    'data-optimus-style-id': name
+                    'data-primeng-style-id': name
                 });
             }
 
