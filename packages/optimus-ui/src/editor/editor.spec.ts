@@ -1201,7 +1201,7 @@ describe('Editor', () => {
                 expect(editorRoot.classList.contains('GLOBAL_CSS_CLASS')).toBe(true);
 
                 // Check if global CSS style tag was injected
-                const styleTag = document.head.querySelector('style[data-primeng-global-css]');
+                const styleTag = document.head.querySelector('style[data-optimus-global-css]');
                 if (styleTag) {
                     expect(styleTag.textContent).toContain('.p-editor-toolbar');
                     expect(styleTag.textContent).toContain('border: 1px solid red !important');

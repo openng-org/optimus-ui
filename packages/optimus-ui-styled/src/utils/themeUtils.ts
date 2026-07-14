@@ -182,7 +182,7 @@ export default {
                     const _css = minifyCSS((value as any).css);
                     const id = `${key}-variables`;
 
-                    acc.push(`<style type="text/css" data-primevue-style-id="${id}" ${_props}>${_css}</style>`); // @todo data-primevue -> data-primeui check in primevue usestyle
+                    acc.push(`<style type="text/css" data-optimus-style-id="${id}" ${_props}>${_css}</style>`);
                 }
 
                 return acc;
@@ -196,7 +196,7 @@ export default {
             .reduce((acc: any, [k, v]) => acc.push(`${k}="${v}"`) && acc, [])
             .join(' ');
 
-        return preset_css ? `<style type="text/css" data-primevue-style-id="${name}-variables" ${_props}>${minifyCSS(preset_css)}</style>` : ''; // @todo check
+        return preset_css ? `<style type="text/css" data-optimus-style-id="${name}-variables" ${_props}>${minifyCSS(preset_css)}</style>` : '';
     },
     createTokens(obj: any = {}, defaults: any, parentKey: string = '', parentPath: string = '', tokens: any = {}) {
         const computedFn = function (this: any, colorScheme: string, tokenPathMap: any = {}, stack: string[] = []) {
