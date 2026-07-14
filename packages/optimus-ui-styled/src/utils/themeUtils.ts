@@ -163,7 +163,7 @@ export default {
         const { cssLayer } = options;
 
         if (cssLayer) {
-            const order = resolve(cssLayer.order || cssLayer.name || 'primeui', params);
+            const order = resolve(cssLayer.order || cssLayer.name || 'optimus', params);
 
             return `@layer ${order}`;
         }
@@ -345,8 +345,8 @@ export default {
 
             if (cssLayer) {
                 const layerOptions = {
-                    name: 'primeui',
-                    order: 'primeui'
+                    name: 'optimus',
+                    order: 'optimus'
                 };
 
                 isObject(cssLayer) && (layerOptions.name = resolve((cssLayer as any).name, { name, type }));
