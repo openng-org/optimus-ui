@@ -26,7 +26,7 @@ export class AppNewsComponent {
             if (itemString) {
                 const item = JSON.parse(itemString);
 
-                if (!item.hiddenNews || item.hiddenNews !== News.id) {
+                if (!item.hiddenNews || item.hiddenNews !== (News as any).id) {
                     this.configService.newsActive.set(true);
                     this.announcement = News;
                 } else {

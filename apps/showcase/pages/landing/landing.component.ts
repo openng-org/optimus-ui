@@ -1,22 +1,21 @@
-import { AppNewsComponent } from '@/components/layout/news/app.news.component';
 import { AppTopBarComponent } from '@/components/layout/topbar/app.topbar.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { ButtonModule } from '@openng/optimus-ui/button';
 import { Subscription } from 'rxjs';
 import { FeaturesSectionComponent } from './featuressection.component';
 import { FooterSectionComponent } from './footersection.component';
 import { HeroSectionComponent } from './herosection.component';
 import { ThemeSectionComponent } from './themesection.component';
 import { UsersSectionComponent } from './userssection.component';
-import { ButtonModule } from '@openng/optimus-ui/button';
 
 @Component({
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
-    imports: [CommonModule, AppNewsComponent, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, FooterSectionComponent]
+    imports: [CommonModule, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, UsersSectionComponent, ThemeSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {
     subscription!: Subscription;

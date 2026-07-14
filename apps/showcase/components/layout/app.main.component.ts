@@ -7,7 +7,6 @@ import { PrimeNG } from '@openng/optimus-ui/config';
 import { DomHandler } from '@openng/optimus-ui/dom';
 import { AppFooterComponent } from './footer/app.footer.component';
 import { AppMenuComponent } from './menu/app.menu.component';
-import { AppNewsComponent } from './news/app.news.component';
 import { AppTopBarComponent } from './topbar/app.topbar.component';
 
 @Component({
@@ -29,7 +28,7 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
         </div>
     `,
     standalone: true,
-    imports: [RouterOutlet, AppFooterComponent, CommonModule, AppNewsComponent, AppMenuComponent, AppTopBarComponent]
+    imports: [RouterOutlet, AppFooterComponent, CommonModule, AppMenuComponent, AppTopBarComponent]
 })
 export class AppMainComponent {
     configService: AppConfigService = inject(AppConfigService);
