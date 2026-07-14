@@ -20,7 +20,6 @@ export default function toElement(ref: unknown): HTMLElement | undefined {
     let target: unknown = ref;
     target = (ref as { nativeElement: unknown }).nativeElement;
 
-
     // function pattern: resolve the element if it's a function that returns an element
     target = resolve(target);
 
