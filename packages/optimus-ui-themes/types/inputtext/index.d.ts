@@ -219,7 +219,7 @@ export declare namespace InputTextTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

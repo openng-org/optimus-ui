@@ -48,7 +48,7 @@ export declare namespace SplitButtonTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

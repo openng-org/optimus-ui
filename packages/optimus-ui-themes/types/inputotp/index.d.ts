@@ -66,7 +66,7 @@ export declare namespace InputOtpTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

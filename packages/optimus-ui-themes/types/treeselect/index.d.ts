@@ -303,7 +303,7 @@ export declare namespace TreeSelectTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

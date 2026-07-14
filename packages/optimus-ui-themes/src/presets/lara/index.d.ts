@@ -10,7 +10,7 @@ import type { Preset } from '@openng/optimus-ui-themes/types';
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

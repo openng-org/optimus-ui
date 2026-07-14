@@ -42,7 +42,7 @@ export declare namespace SelectButtonTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

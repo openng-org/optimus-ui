@@ -10,7 +10,7 @@ import type { NoraBaseDesignTokens } from './base/index.d';
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */

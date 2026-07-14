@@ -54,7 +54,7 @@ export declare namespace ProgressSpinnerTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- * 
+ *
  * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */
