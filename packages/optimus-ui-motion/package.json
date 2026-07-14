@@ -3,7 +3,7 @@
     "version": "0.0.10",
     "author": "OpenNG",
     "description": "Motion utilities for Optimus UI Libraries",
-    "keywords": ["motion", "animation", "transition", "composition utilities", "optimus-ui"],
+    "keywords": ["motion", "animation", "transition", "composition utilities", "optimus-ui", "angular"],
     "license": "MIT",
     "repository": {
         "type": "git",
