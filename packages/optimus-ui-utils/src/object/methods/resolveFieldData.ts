@@ -12,7 +12,6 @@ export default function resolveFieldData(data: any, field: any): any {
 
         if (isNotEmpty(value)) return value;
     } catch {
-        // Performance optimization: https://github.com/primefaces/primereact/issues/4797
         // do nothing and continue to other methods to resolve field data
     }
 

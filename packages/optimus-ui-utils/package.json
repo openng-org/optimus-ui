@@ -1,17 +1,17 @@
 {
     "name": "@openng/optimus-ui-utils",
     "version": "0.7.2",
-    "author": "PrimeTek Informatics",
-    "description": "Utility functions and helpers for PrimeUI Libraries",
-    "keywords": ["utilities", "helpers", "primeng", "primereact", "primevue", "primeuix"],
+    "author": "OpenNG",
+    "description": "Utility functions and helpers for Optimus UI Libraries",
+    "keywords": ["utilities", "helpers", "optimus-ui", "angular"],
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/primefaces/primeuix.git",
+        "url": "git+https://github.com/openng-org/optimus-ui.git",
         "directory": "packages/utils"
     },
     "bugs": {
-        "url": "https://github.com/primefaces/primeuix/issues"
+        "url": "https://github.com/openng-org/optimus-ui/issues"
     },
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",
