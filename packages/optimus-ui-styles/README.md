@@ -1,1 +1,1 @@
-# PrimeUIX Styles
+# Optimus UI Styles
