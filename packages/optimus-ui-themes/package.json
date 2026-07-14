@@ -1,25 +1,23 @@
 {
     "name": "@openng/optimus-ui-themes",
     "version": "2.0.3",
-    "author": "PrimeTek Informatics",
-    "description": "Themes for PrimeUI Libraries",
+    "author": "OpenNG",
+    "description": "Themes for Optimus UI Libraries",
     "keywords": [
         "themes",
         "css",
         "style utilities",
-        "primeng",
-        "primereact",
-        "primevue",
-        "primeuix"
+        "optimus-ui",
+        "angular"
     ],
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/primefaces/primeuix.git",
+        "url": "git+https://github.com/openng-org/optimus-ui.git",
         "directory": "packages/themes"
     },
     "bugs": {
-        "url": "https://github.com/primefaces/primeuix/issues"
+        "url": "https://github.com/openng-org/optimus-ui/issues"
     },
     "main": "./dist/index.mjs",
     "module": "./dist/index.mjs",

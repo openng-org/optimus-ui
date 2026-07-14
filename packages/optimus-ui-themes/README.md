@@ -1,1 +1,1 @@
-# PrimeUIX Themes
+# Optimus UI Themes

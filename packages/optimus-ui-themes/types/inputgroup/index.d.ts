@@ -66,13 +66,8 @@ export declare namespace InputGroupTokenSections {
  * @see
  * --- ---
  * **Compatible Libraries**
- *
- * [![PrimeNG](https://i.postimg.cc/63f7jVST/primeng-icon-24.png)](https://primeng.org/theming/styled)
- * [![PrimeVue](https://i.postimg.cc/cC1vVgyh/primevue-icon-24.png)](https://primevue.org/theming/styled)
- * --- ---
- * **Figma UI Kit**
- *
- * [PrimeNG](https://primeng.org/uikit) | [PrimeVue](https://primevue.org/uikit)
+ * 
+ * [Optimus UI](https://optimus.openng.org/theming/styled)
  *
  */
 export interface InputGroupDesignTokens extends DesignTokens<InputGroupDesignTokens> {

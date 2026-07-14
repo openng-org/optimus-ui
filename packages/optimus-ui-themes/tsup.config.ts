@@ -36,7 +36,7 @@ export default defineConfig([
     },
     ...themes.map<Options>((theme) => {
         const name = theme.charAt(0).toUpperCase() + theme.slice(1);
-        const globalName = `PrimeUIX.Themes.${name}`;
+        const globalName = `Optimus.Themes.${name}`;
 
         return {
             entry: {

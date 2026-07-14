@@ -71,7 +71,7 @@ const findInNamespaces = (doc, module, name) => {
 
 async function run() {
     const app = await TypeDoc.Application.bootstrapWithPlugins({
-        name: 'PrimeUIX-Themes',
+        name: 'Optimus-Themes',
         entryPoints: ['types'],
         entryPointStrategy: 'expand',
         hideGenerator: true,
@@ -103,7 +103,7 @@ async function run() {
         });
 
         if (!fs.existsSync(OUTPUT_PATH)) fs.mkdirSync(OUTPUT_PATH);
-        const metadata = `/***************** PrimeUIX Tokens (Auto-Generated) *****************/
+        const metadata = `/***************** Optimus UI Tokens (Auto-Generated) *****************/
 export interface TokenMetaData {
     description: string;
     tokens: {
