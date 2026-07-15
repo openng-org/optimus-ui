@@ -590,11 +590,11 @@
             "children": [
                 {
                     "name": "Discord Server",
-                    "href": "https://discord.gg/gzKFYnpmCY"
+                    "href": "https://discord.gg/angular"
                 },
                 {
-                    "name": "Forum",
-                    "href": "https://github.com/orgs/primefaces/discussions"
+                    "name": "GitHub Discussions",
+                    "href": "https://github.com/openng-org/optimus-ui/discussions"
                 }
             ]
         },
