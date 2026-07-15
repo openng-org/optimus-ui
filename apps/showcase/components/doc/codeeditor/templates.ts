@@ -391,7 +391,7 @@ import Aura from '@openng/optimus-ui-themes/aura';
 import Lara from '@openng/optimus-ui-themes/lara';
 import Material from '@openng/optimus-ui-themes/material';
 import Nora from '@openng/optimus-ui-themes/nora';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { SelectButtonModule } from '@openng/optimus-ui/selectbutton';
 import { StyleClassModule } from '@openng/optimus-ui/styleclass';
 import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
@@ -498,7 +498,7 @@ export class ThemeSwitcher {
 
   platformId = inject(PLATFORM_ID);
 
-  config: PrimeNG = inject(PrimeNG);
+  config: Optimus = inject(Optimus);
 
   themeState = signal<ThemeState>(null);
 
@@ -996,7 +996,7 @@ const getAngularApp = (props: Props = {}) => {
 <html lang="en">
     <head>
         <meta charset="utf-8">
-        <title>PrimeNG ${componentName}</title>
+        <title>Optimus UI ${componentName}</title>
         <base href="/">
 
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -1049,7 +1049,7 @@ import Aura from '@openng/optimus-ui-themes/aura';
         'package.json': {
             content: {
                 name: `optimus-ui-${selector}`,
-                description: `PrimeNG ${componentName}`,
+                description: `Optimus UI ${componentName}`,
                 license: 'MIT',
                 keywords: [],
                 scripts: {
@@ -1081,7 +1081,7 @@ import Aura from '@openng/optimus-ui-themes/aura';
         });
     }
 
-    return { files, title: `PrimeNG ${componentName}` };
+    return { files, title: `Optimus UI ${componentName}` };
 };
 
 export { getAngularApp };

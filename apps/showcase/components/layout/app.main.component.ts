@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { DomHandler } from '@openng/optimus-ui/dom';
 import { AppFooterComponent } from './footer/app.footer.component';
 import { AppMenuComponent } from './menu/app.menu.component';
@@ -33,7 +33,7 @@ import { AppTopBarComponent } from './topbar/app.topbar.component';
 export class AppMainComponent {
     configService: AppConfigService = inject(AppConfigService);
 
-    primeng: PrimeNG = inject(PrimeNG);
+    config: Optimus = inject(Optimus);
 
     isNewsActive = computed(() => false);
 

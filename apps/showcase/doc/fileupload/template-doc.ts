@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageService } from '@openng/optimus-ui/api';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { FileUploadModule } from '@openng/optimus-ui/fileupload';
 import { ToastModule } from '@openng/optimus-ui/toast';
 import { ButtonModule } from '@openng/optimus-ui/button';
@@ -90,7 +90,7 @@ export class TemplateDoc {
     totalSizePercent: number = 0;
 
     constructor(
-        private config: PrimeNG,
+        private config: Optimus,
         private messageService: MessageService
     ) {}
 

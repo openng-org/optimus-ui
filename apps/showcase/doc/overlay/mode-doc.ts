@@ -17,7 +17,7 @@ import { Component } from '@angular/core';
 export class ModeDoc {
     code2 = {
         typescript: `import { OverlayOptions, ResponsiveOverlayDirectionType } from '@openng/optimus-ui/api';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 
 const responsiveOptions: ResponsiveOverlayOptions = {
     // style?: any;                                     // Style of component in given breakpoint or media query
@@ -30,7 +30,7 @@ const responsiveOptions: ResponsiveOverlayOptions = {
     // hideOnEscape?: boolean;                          // Hides overlay when escape key pressed.
 }
 
-this.primeng.overlayOptions: OverlayOptions = {
+this.config.overlayOptions: OverlayOptions = {
     responsive: responsiveOptions
 };`
     };

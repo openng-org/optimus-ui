@@ -9,7 +9,7 @@ import { AvatarGroupModule } from '@openng/optimus-ui/avatargroup';
 import { BadgeModule } from '@openng/optimus-ui/badge';
 import { ButtonModule } from '@openng/optimus-ui/button';
 import { Checkbox } from '@openng/optimus-ui/checkbox';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { DividerModule } from '@openng/optimus-ui/divider';
 import { FileUpload } from '@openng/optimus-ui/fileupload';
 import { InputNumber } from '@openng/optimus-ui/inputnumber';
@@ -501,7 +501,7 @@ export class CardsApp {
     items: any;
 
     constructor(
-        private config: PrimeNG,
+        private config: Optimus,
         private messageService: MessageService
     ) {}
 

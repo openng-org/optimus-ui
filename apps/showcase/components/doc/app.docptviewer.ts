@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, computed, ElementRef, inject, input, InputSignal, viewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { addClass, find, removeClass } from '@openng/optimus-ui-utils/dom';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { AppDocSectionText } from './app.docsectiontext';
 
 interface DocItem {
@@ -83,7 +83,7 @@ export const getPTOptions = (name) => {
     template: `
         <app-docsectiontext>
             <p>
-                Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a PrimeNG component not a DOM element. Visit the
+                Some sections may not be visible due to the availability of the particular feature. Section names that start with the <i>pc</i> prefix indicate that the element is a Optimus UI component not a DOM element. Visit the
                 <a routerLink="/passthrough">pass-through</a> documentation for more information.
             </p>
         </app-docsectiontext>
@@ -115,7 +115,7 @@ export class AppDocPtViewer {
 
     container = viewChild<ElementRef>('container');
 
-    primeng: PrimeNG = inject(PrimeNG);
+    config: Optimus = inject(Optimus);
 
     hoveredElements: any[] = [];
 
@@ -138,7 +138,7 @@ export class AppDocPtViewer {
 
         if (label.includes('pc')) {
             let reservedNames = ['Decrement', 'File', 'Increment', 'JumpToPage', 'Maximize', 'Node', 'Option', 'Prev', 'Remove', 'RowPerPage', 'Source', 'Target', 'MoveAllTo', 'MoveAll', 'MoveTop', 'MoveTo'];
-            let whiteList = [...reservedNames, ...Object.keys(this.primeng.translation), ...Object.keys(this.primeng.translation.aria)];
+            let whiteList = [...reservedNames, ...Object.keys(this.config.translation), ...Object.keys(this.config.translation.aria)];
             let elemName = label.replace('pc', '');
 
             if (elemName.includes('FilterContainer')) elemName = elemName.replace('FilterContainer', 'IconField');

@@ -13,7 +13,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule",
@@ -32,7 +32,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule"
@@ -49,7 +49,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule"
@@ -66,7 +66,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule"
@@ -83,7 +83,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule",
@@ -101,7 +101,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AccordionModule"
@@ -118,7 +118,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -133,7 +133,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -150,7 +150,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -165,7 +165,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -183,7 +183,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -206,7 +206,7 @@
         "services": [
           "CountryService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -225,7 +225,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -243,7 +243,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -266,7 +266,7 @@
         "services": [
           "CountryService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -289,7 +289,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -307,7 +307,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -325,7 +325,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -344,7 +344,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -364,7 +364,7 @@
         "services": [
           "CountryService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -382,7 +382,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -400,7 +400,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -419,7 +419,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -437,7 +437,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -455,7 +455,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -473,7 +473,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -491,7 +491,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -509,7 +509,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AutoCompleteModule",
@@ -529,7 +529,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -552,7 +552,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -567,7 +567,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule"
@@ -584,7 +584,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -601,7 +601,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -618,7 +618,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -635,7 +635,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -652,7 +652,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -669,7 +669,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -686,7 +686,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -703,7 +703,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -718,7 +718,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -733,7 +733,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule"
@@ -750,7 +750,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BadgeModule"
@@ -767,7 +767,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BadgeModule"
@@ -784,7 +784,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -799,7 +799,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "OverlayBadgeModule"
@@ -816,7 +816,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -831,7 +831,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -848,7 +848,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BadgeModule"
@@ -865,7 +865,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TooltipModule"
@@ -882,7 +882,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BlockUIModule",
@@ -900,7 +900,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BlockUIModule",
@@ -919,7 +919,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BreadcrumbModule"
@@ -936,7 +936,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BreadcrumbModule"
@@ -953,7 +953,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BreadcrumbModule"
@@ -970,7 +970,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -987,7 +987,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1004,7 +1004,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1021,7 +1021,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1038,7 +1038,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1055,7 +1055,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1072,7 +1072,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1089,7 +1089,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1106,7 +1106,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1123,7 +1123,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1140,7 +1140,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1157,7 +1157,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1174,7 +1174,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1191,7 +1191,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1208,7 +1208,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -1226,7 +1226,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1243,7 +1243,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1260,7 +1260,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -1277,7 +1277,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -1292,7 +1292,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CardModule"
@@ -1309,7 +1309,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -1329,7 +1329,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -1356,7 +1356,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -1383,7 +1383,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -1410,7 +1410,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -1435,7 +1435,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1456,7 +1456,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -1476,7 +1476,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1494,7 +1494,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1515,7 +1515,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule"
@@ -1532,7 +1532,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1550,7 +1550,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1569,7 +1569,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1587,7 +1587,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1606,7 +1606,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1624,7 +1624,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule"
@@ -1641,7 +1641,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1659,7 +1659,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CascadeSelectModule",
@@ -1677,7 +1677,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -1692,7 +1692,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1709,7 +1709,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1726,7 +1726,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1743,7 +1743,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -1758,7 +1758,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1775,7 +1775,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1792,7 +1792,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1809,7 +1809,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -1824,7 +1824,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1841,7 +1841,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1858,7 +1858,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1875,7 +1875,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1892,7 +1892,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1909,7 +1909,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChartModule"
@@ -1926,7 +1926,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -1941,7 +1941,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -1962,7 +1962,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -1980,7 +1980,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2001,7 +2001,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2019,7 +2019,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2037,7 +2037,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2055,7 +2055,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2073,7 +2073,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2091,7 +2091,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2110,7 +2110,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2128,7 +2128,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -2146,7 +2146,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2161,7 +2161,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChipModule"
@@ -2178,7 +2178,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChipModule"
@@ -2195,7 +2195,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChipModule"
@@ -2212,7 +2212,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ChipModule"
@@ -2229,7 +2229,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2244,7 +2244,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2259,7 +2259,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2280,7 +2280,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2301,7 +2301,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2319,7 +2319,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2337,7 +2337,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2355,7 +2355,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ColorPickerModule",
@@ -2373,7 +2373,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2388,7 +2388,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CommonModule"
@@ -2405,7 +2405,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2420,7 +2420,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CommonModule"
@@ -2437,7 +2437,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2460,7 +2460,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2482,7 +2482,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2504,7 +2504,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2526,7 +2526,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2541,7 +2541,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2556,7 +2556,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2578,7 +2578,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2593,7 +2593,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2615,7 +2615,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2630,7 +2630,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "ConfirmationService",
           "MessageService"
         ],
@@ -2652,7 +2652,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2667,7 +2667,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2692,7 +2692,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ContextMenuModule"
@@ -2709,7 +2709,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ContextMenuModule"
@@ -2726,7 +2726,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -2748,7 +2748,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ContextMenuModule"
@@ -2765,7 +2765,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2782,7 +2782,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2811,7 +2811,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2838,7 +2838,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2866,7 +2866,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2895,7 +2895,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -2920,7 +2920,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -2935,7 +2935,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -2953,7 +2953,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -2971,7 +2971,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -2989,7 +2989,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3004,7 +3004,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3025,7 +3025,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -3042,7 +3042,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3060,7 +3060,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3081,7 +3081,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3099,7 +3099,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3117,7 +3117,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3135,7 +3135,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3153,7 +3153,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3171,7 +3171,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3186,7 +3186,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3205,7 +3205,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3223,7 +3223,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3241,7 +3241,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3260,7 +3260,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3278,7 +3278,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3296,7 +3296,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3314,7 +3314,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3333,7 +3333,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3351,7 +3351,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3366,7 +3366,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3384,7 +3384,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3403,7 +3403,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3421,7 +3421,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3440,7 +3440,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DatePickerModule",
@@ -3458,7 +3458,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3473,7 +3473,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3488,7 +3488,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3507,7 +3507,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -3527,7 +3527,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3545,7 +3545,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3564,7 +3564,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3584,7 +3584,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3602,7 +3602,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3620,7 +3620,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3638,7 +3638,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3657,7 +3657,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3676,7 +3676,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3691,7 +3691,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DividerModule"
@@ -3708,7 +3708,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DividerModule"
@@ -3725,7 +3725,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3744,7 +3744,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DividerModule"
@@ -3761,7 +3761,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DividerModule"
@@ -3778,7 +3778,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3793,7 +3793,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DockModule",
@@ -3817,7 +3817,7 @@
           "NodeService",
           "PhotoService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -3843,7 +3843,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -3858,7 +3858,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -3880,7 +3880,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -3904,7 +3904,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -3928,7 +3928,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -3950,7 +3950,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -3969,7 +3969,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -3987,7 +3987,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4005,7 +4005,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -4025,7 +4025,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4043,7 +4043,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4061,7 +4061,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4076,7 +4076,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "DialogService",
           "MessageService"
         ],
@@ -4102,7 +4102,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "EditorModule",
@@ -4123,7 +4123,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "EditorModule",
@@ -4141,7 +4141,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "EditorModule",
@@ -4162,7 +4162,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "EditorModule",
@@ -4180,7 +4180,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "EditorModule",
@@ -4198,7 +4198,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4213,7 +4213,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FieldsetModule"
@@ -4230,7 +4230,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -4248,7 +4248,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FieldsetModule"
@@ -4265,7 +4265,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4276,11 +4276,11 @@
       "component": "fileupload",
       "section": "template",
       "code": {
-        "typescript": "import { Component, inject } from '@angular/core';\nimport { BadgeModule } from '@openng/optimus-ui/badge';\nimport { ButtonModule } from '@openng/optimus-ui/button';\nimport { FileUploadModule } from '@openng/optimus-ui/fileupload';\nimport { ProgressBarModule } from '@openng/optimus-ui/progressbar';\nimport { ToastModule } from '@openng/optimus-ui/toast';\nimport { PrimeNG } from '@openng/optimus-ui/config';\nimport { MessageService } from '@openng/optimus-ui/api';\n\n@Component({\n    template: `\n        <app-docsectiontext>\n            <p>\n                Uploader UI is customizable using a ng-template called <i>file</i> that gets the <a href=\"https://www.w3.org/TR/FileAPI/\">File</a> instance as the implicit variable. Second ng-template named <i>content</i> can be used to place custom\n                content inside the content section which would be useful to implement a user interface to manage the uploaded files such as removing them. This template gets the selected files as the implicit variable. Third and final ng-template\n                option is <i>toolbar</i> to display custom content at toolbar.\n            </p></app-docsectiontext\n        >\n        <div class=\"card\">\n            <p-toast />\n            <p-fileupload name=\"myfile[]\" url=\"https://www.primefaces.org/cdn/api/upload.php\" [multiple]=\"true\" accept=\"image/*\" maxFileSize=\"1000000\" (onUpload)=\"onTemplatedUpload()\" (onSelect)=\"onSelectedFiles($event)\">\n                <ng-template #header let-files let-chooseCallback=\"chooseCallback\" let-clearCallback=\"clearCallback\" let-uploadCallback=\"uploadCallback\">\n                    <div class=\"flex flex-wrap justify-between items-center flex-1 gap-4\">\n                        <div class=\"flex gap-2\">\n                            <p-button (onClick)=\"choose($event, chooseCallback)\" icon=\"pi pi-images\" [rounded]=\"true\" [outlined]=\"true\" />\n                            <p-button (onClick)=\"uploadEvent(uploadCallback)\" icon=\"pi pi-cloud-upload\" [rounded]=\"true\" [outlined]=\"true\" severity=\"success\" [disabled]=\"!files || files.length === 0\" />\n                            <p-button (onClick)=\"clearCallback()\" icon=\"pi pi-times\" [rounded]=\"true\" [outlined]=\"true\" severity=\"danger\" [disabled]=\"!files || files.length === 0\" />\n                        </div>\n                        <p-progressbar [value]=\"totalSizePercent\" [showValue]=\"false\" class=\"w-full\" class=\"md:w-20rem h-1 w-full md:ml-auto\">\n                            <span class=\"whitespace-nowrap\">{{ totalSize }}B / 1Mb</span>\n                        </p-progressbar>\n                    </div>\n                </ng-template>\n                <ng-template #content let-files let-uploadedFiles=\"uploadedFiles\" let-removeFileCallback=\"removeFileCallback\" let-removeUploadedFileCallback=\"removeUploadedFileCallback\">\n                    <div class=\"flex flex-col gap-8 pt-4\">\n                        <div *ngIf=\"files?.length > 0\">\n                            <h5>Pending</h5>\n                            <div class=\"flex flex-wrap gap-4\">\n                                <div *ngFor=\"let file of files; let i = index\" class=\"p-8 rounded-border flex flex-col border border-surface items-center gap-4\">\n                                    <div>\n                                        <img role=\"presentation\" [alt]=\"file.name\" [src]=\"file.objectURL\" width=\"100\" height=\"50\" />\n                                    </div>\n                                    <span class=\"font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden\">{{ file.name }}</span>\n                                    <div>{{ formatSize(file.size) }}</div>\n                                    <p-badge value=\"Pending\" severity=\"warn\" />\n                                    <p-button icon=\"pi pi-times\" (click)=\"onRemoveTemplatingFile($event, file, removeFileCallback, index)\" [outlined]=\"true\" [rounded]=\"true\" severity=\"danger\" />\n                                </div>\n                            </div>\n                        </div>\n                        <div *ngIf=\"uploadedFiles?.length > 0\">\n                            <h5>Completed</h5>\n                            <div class=\"flex flex-wrap gap-4\">\n                                <div *ngFor=\"let file of uploadedFiles; let i = index\" class=\"card m-0 px-12 flex flex-col border border-surface items-center gap-4\">\n                                    <div>\n                                        <img role=\"presentation\" [alt]=\"file.name\" [src]=\"file.objectURL\" width=\"100\" height=\"50\" />\n                                    </div>\n                                    <span class=\"font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden\">{{ file.name }}</span>\n                                    <div>{{ formatSize(file.size) }}</div>\n                                    <p-badge value=\"Completed\" class=\"mt-4\" severity=\"success\" />\n                                    <p-button icon=\"pi pi-times\" (onClick)=\"removeUploadedFileCallback(index)\" [outlined]=\"true\" [rounded]=\"true\" severity=\"danger\" />\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </ng-template>\n                <ng-template #file></ng-template>\n                <ng-template #empty>\n                    <div class=\"flex items-center justify-center flex-col\">\n                        <i class=\"pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color\"></i>\n                        <p class=\"mt-6 mb-0\">Drag and drop files to here to upload.</p>\n                    </div>\n                </ng-template>\n            </p-fileupload>\n        </div>\n    `,\n    standalone: true,\n    imports: [BadgeModule, ButtonModule, FileUploadModule, ProgressBarModule, ToastModule],\n    providers: [MessageService]\n})\nexport class FileuploadTemplateDemo {\n    private messageService = inject(MessageService);\n    files: any[] = [];\n    totalSize: number = 0;\n    totalSizePercent: number = 0;\n\n    onRemoveTemplatingFile(event, file, removeFileCallback, index) {\n        removeFileCallback(event, index);\n        this.totalSize -= parseInt(this.formatSize(file.size));\n        this.totalSizePercent = this.totalSize / 10;\n    }\n\n    onClearTemplatingUpload(clear) {\n        clear();\n        this.totalSize = 0;\n        this.totalSizePercent = 0;\n    }\n\n    onTemplatedUpload() {\n        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });\n    }\n\n    onSelectedFiles(event) {\n        this.files = event.currentFiles;\n        this.files.forEach((file) => {\n            this.totalSize += parseInt(this.formatSize(file.size));\n        });\n        this.totalSizePercent = this.totalSize / 10;\n    }\n\n    uploadEvent(callback) {\n        callback();\n    }\n\n    formatSize(bytes) {\n        const k = 1024;\n        const dm = 3;\n        const sizes = this.config.translation.fileSizeTypes;\n        if (bytes === 0) {\n            return `0 ${sizes[0]}`;\n        }\n        \n        const i = Math.floor(Math.log(bytes) / Math.log(k));\n        const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));\n        \n        return `${formattedSize} ${sizes[i]}`;\n    }\n}"
+        "typescript": "import { Component, inject } from '@angular/core';\nimport { BadgeModule } from '@openng/optimus-ui/badge';\nimport { ButtonModule } from '@openng/optimus-ui/button';\nimport { FileUploadModule } from '@openng/optimus-ui/fileupload';\nimport { ProgressBarModule } from '@openng/optimus-ui/progressbar';\nimport { ToastModule } from '@openng/optimus-ui/toast';\nimport { Optimus } from '@openng/optimus-ui/config';\nimport { MessageService } from '@openng/optimus-ui/api';\n\n@Component({\n    template: `\n        <app-docsectiontext>\n            <p>\n                Uploader UI is customizable using a ng-template called <i>file</i> that gets the <a href=\"https://www.w3.org/TR/FileAPI/\">File</a> instance as the implicit variable. Second ng-template named <i>content</i> can be used to place custom\n                content inside the content section which would be useful to implement a user interface to manage the uploaded files such as removing them. This template gets the selected files as the implicit variable. Third and final ng-template\n                option is <i>toolbar</i> to display custom content at toolbar.\n            </p></app-docsectiontext\n        >\n        <div class=\"card\">\n            <p-toast />\n            <p-fileupload name=\"myfile[]\" url=\"https://www.primefaces.org/cdn/api/upload.php\" [multiple]=\"true\" accept=\"image/*\" maxFileSize=\"1000000\" (onUpload)=\"onTemplatedUpload()\" (onSelect)=\"onSelectedFiles($event)\">\n                <ng-template #header let-files let-chooseCallback=\"chooseCallback\" let-clearCallback=\"clearCallback\" let-uploadCallback=\"uploadCallback\">\n                    <div class=\"flex flex-wrap justify-between items-center flex-1 gap-4\">\n                        <div class=\"flex gap-2\">\n                            <p-button (onClick)=\"choose($event, chooseCallback)\" icon=\"pi pi-images\" [rounded]=\"true\" [outlined]=\"true\" />\n                            <p-button (onClick)=\"uploadEvent(uploadCallback)\" icon=\"pi pi-cloud-upload\" [rounded]=\"true\" [outlined]=\"true\" severity=\"success\" [disabled]=\"!files || files.length === 0\" />\n                            <p-button (onClick)=\"clearCallback()\" icon=\"pi pi-times\" [rounded]=\"true\" [outlined]=\"true\" severity=\"danger\" [disabled]=\"!files || files.length === 0\" />\n                        </div>\n                        <p-progressbar [value]=\"totalSizePercent\" [showValue]=\"false\" class=\"w-full\" class=\"md:w-20rem h-1 w-full md:ml-auto\">\n                            <span class=\"whitespace-nowrap\">{{ totalSize }}B / 1Mb</span>\n                        </p-progressbar>\n                    </div>\n                </ng-template>\n                <ng-template #content let-files let-uploadedFiles=\"uploadedFiles\" let-removeFileCallback=\"removeFileCallback\" let-removeUploadedFileCallback=\"removeUploadedFileCallback\">\n                    <div class=\"flex flex-col gap-8 pt-4\">\n                        <div *ngIf=\"files?.length > 0\">\n                            <h5>Pending</h5>\n                            <div class=\"flex flex-wrap gap-4\">\n                                <div *ngFor=\"let file of files; let i = index\" class=\"p-8 rounded-border flex flex-col border border-surface items-center gap-4\">\n                                    <div>\n                                        <img role=\"presentation\" [alt]=\"file.name\" [src]=\"file.objectURL\" width=\"100\" height=\"50\" />\n                                    </div>\n                                    <span class=\"font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden\">{{ file.name }}</span>\n                                    <div>{{ formatSize(file.size) }}</div>\n                                    <p-badge value=\"Pending\" severity=\"warn\" />\n                                    <p-button icon=\"pi pi-times\" (click)=\"onRemoveTemplatingFile($event, file, removeFileCallback, index)\" [outlined]=\"true\" [rounded]=\"true\" severity=\"danger\" />\n                                </div>\n                            </div>\n                        </div>\n                        <div *ngIf=\"uploadedFiles?.length > 0\">\n                            <h5>Completed</h5>\n                            <div class=\"flex flex-wrap gap-4\">\n                                <div *ngFor=\"let file of uploadedFiles; let i = index\" class=\"card m-0 px-12 flex flex-col border border-surface items-center gap-4\">\n                                    <div>\n                                        <img role=\"presentation\" [alt]=\"file.name\" [src]=\"file.objectURL\" width=\"100\" height=\"50\" />\n                                    </div>\n                                    <span class=\"font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden\">{{ file.name }}</span>\n                                    <div>{{ formatSize(file.size) }}</div>\n                                    <p-badge value=\"Completed\" class=\"mt-4\" severity=\"success\" />\n                                    <p-button icon=\"pi pi-times\" (onClick)=\"removeUploadedFileCallback(index)\" [outlined]=\"true\" [rounded]=\"true\" severity=\"danger\" />\n                                </div>\n                            </div>\n                        </div>\n                    </div>\n                </ng-template>\n                <ng-template #file></ng-template>\n                <ng-template #empty>\n                    <div class=\"flex items-center justify-center flex-col\">\n                        <i class=\"pi pi-cloud-upload !border-2 !rounded-full !p-8 !text-4xl !text-muted-color\"></i>\n                        <p class=\"mt-6 mb-0\">Drag and drop files to here to upload.</p>\n                    </div>\n                </ng-template>\n            </p-fileupload>\n        </div>\n    `,\n    standalone: true,\n    imports: [BadgeModule, ButtonModule, FileUploadModule, ProgressBarModule, ToastModule],\n    providers: [MessageService]\n})\nexport class FileuploadTemplateDemo {\n    private messageService = inject(MessageService);\n    files: any[] = [];\n    totalSize: number = 0;\n    totalSizePercent: number = 0;\n\n    onRemoveTemplatingFile(event, file, removeFileCallback, index) {\n        removeFileCallback(event, index);\n        this.totalSize -= parseInt(this.formatSize(file.size));\n        this.totalSizePercent = this.totalSize / 10;\n    }\n\n    onClearTemplatingUpload(clear) {\n        clear();\n        this.totalSize = 0;\n        this.totalSizePercent = 0;\n    }\n\n    onTemplatedUpload() {\n        this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded', life: 3000 });\n    }\n\n    onSelectedFiles(event) {\n        this.files = event.currentFiles;\n        this.files.forEach((file) => {\n            this.totalSize += parseInt(this.formatSize(file.size));\n        });\n        this.totalSizePercent = this.totalSize / 10;\n    }\n\n    uploadEvent(callback) {\n        callback();\n    }\n\n    formatSize(bytes) {\n        const k = 1024;\n        const dm = 3;\n        const sizes = this.config.translation.fileSizeTypes;\n        if (bytes === 0) {\n            return `0 ${sizes[0]}`;\n        }\n        \n        const i = Math.floor(Math.log(bytes) / Math.log(k));\n        const formattedSize = parseFloat((bytes / Math.pow(k, i)).toFixed(dm));\n        \n        return `${formattedSize} ${sizes[i]}`;\n    }\n}"
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -4304,7 +4304,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -4324,7 +4324,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -4345,7 +4345,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -4365,7 +4365,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -4387,7 +4387,7 @@
         "services": [
           "CarService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "FilterService"
         ],
         "extFiles": [
@@ -4416,7 +4416,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4431,7 +4431,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4446,7 +4446,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4461,7 +4461,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -4480,7 +4480,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -4499,7 +4499,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -4518,7 +4518,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule"
@@ -4535,7 +4535,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4559,7 +4559,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule",
@@ -4581,7 +4581,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4600,7 +4600,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4620,7 +4620,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4639,7 +4639,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4658,7 +4658,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4677,7 +4677,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule",
@@ -4698,7 +4698,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4717,7 +4717,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4736,7 +4736,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4755,7 +4755,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4774,7 +4774,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4793,7 +4793,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -4816,7 +4816,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4835,7 +4835,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule"
@@ -4854,7 +4854,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4874,7 +4874,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -4894,7 +4894,7 @@
         "services": [
           "PhotoService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "GalleriaModule",
@@ -4912,7 +4912,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -4927,7 +4927,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -4944,7 +4944,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelModule"
@@ -4961,7 +4961,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelModule"
@@ -4978,7 +4978,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -4996,7 +4996,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IconFieldModule",
@@ -5015,7 +5015,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IconFieldModule",
@@ -5035,7 +5035,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IconFieldModule",
@@ -5056,7 +5056,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -5077,7 +5077,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IconFieldModule",
@@ -5096,7 +5096,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -5115,7 +5115,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -5134,7 +5134,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageModule"
@@ -5151,7 +5151,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageModule"
@@ -5168,7 +5168,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageModule"
@@ -5185,7 +5185,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageModule"
@@ -5202,7 +5202,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageCompareModule"
@@ -5219,7 +5219,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ImageCompareModule"
@@ -5236,7 +5236,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -5253,7 +5253,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -5276,7 +5276,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InplaceModule",
@@ -5295,7 +5295,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/photo.ts",
@@ -5317,7 +5317,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InplaceModule"
@@ -5334,7 +5334,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -5349,7 +5349,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputGroupModule",
@@ -5367,7 +5367,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -5387,7 +5387,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -5407,7 +5407,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CheckboxModule",
@@ -5428,7 +5428,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -5448,7 +5448,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -5469,7 +5469,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -5491,7 +5491,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5510,7 +5510,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5529,7 +5529,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -5551,7 +5551,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5570,7 +5570,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5589,7 +5589,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5608,7 +5608,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -5628,7 +5628,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5647,7 +5647,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -5667,7 +5667,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5686,7 +5686,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5705,7 +5705,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputMaskModule",
@@ -5723,7 +5723,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -5742,7 +5742,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -5757,7 +5757,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5775,7 +5775,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5796,7 +5796,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5814,7 +5814,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5835,7 +5835,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5853,7 +5853,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5871,7 +5871,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5889,7 +5889,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5907,7 +5907,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -5926,7 +5926,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5944,7 +5944,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -5963,7 +5963,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5981,7 +5981,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -5999,7 +5999,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -6017,7 +6017,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -6035,7 +6035,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputNumberModule",
@@ -6053,7 +6053,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -6068,7 +6068,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6089,7 +6089,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6107,7 +6107,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6125,7 +6125,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -6145,7 +6145,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6166,7 +6166,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6184,7 +6184,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6202,7 +6202,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputOtpModule",
@@ -6220,7 +6220,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -6235,7 +6235,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -6256,7 +6256,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6274,7 +6274,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -6295,7 +6295,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6313,7 +6313,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6331,7 +6331,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -6350,7 +6350,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6368,7 +6368,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6386,7 +6386,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6404,7 +6404,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -6423,7 +6423,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6441,7 +6441,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6459,7 +6459,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -6477,7 +6477,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -6492,7 +6492,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule"
@@ -6509,7 +6509,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule"
@@ -6526,7 +6526,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -6541,7 +6541,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6562,7 +6562,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6580,7 +6580,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6598,7 +6598,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6616,7 +6616,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6634,7 +6634,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6652,7 +6652,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6673,7 +6673,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -6692,7 +6692,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6710,7 +6710,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6728,7 +6728,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6746,7 +6746,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "KnobModule",
@@ -6764,7 +6764,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -6779,7 +6779,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6797,7 +6797,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6818,7 +6818,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -6841,7 +6841,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6862,7 +6862,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6880,7 +6880,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6898,7 +6898,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -6921,7 +6921,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6939,7 +6939,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6957,7 +6957,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6975,7 +6975,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -6993,7 +6993,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -7011,7 +7011,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ListboxModule",
@@ -7029,7 +7029,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -7044,7 +7044,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MegaMenuModule"
@@ -7061,7 +7061,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -7082,7 +7082,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MegaMenuModule"
@@ -7099,7 +7099,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MegaMenuModule"
@@ -7116,7 +7116,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -7131,7 +7131,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -7152,7 +7152,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MenuModule"
@@ -7169,7 +7169,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7189,7 +7189,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7208,7 +7208,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7228,7 +7228,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MenuModule"
@@ -7245,7 +7245,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -7260,7 +7260,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -7282,7 +7282,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MenubarModule"
@@ -7299,7 +7299,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7319,7 +7319,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MenubarModule"
@@ -7336,7 +7336,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -7351,7 +7351,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7368,7 +7368,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7385,7 +7385,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7402,7 +7402,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7419,7 +7419,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -7437,7 +7437,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -7455,7 +7455,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputMaskModule",
@@ -7475,7 +7475,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -7494,7 +7494,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7511,7 +7511,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule"
@@ -7528,7 +7528,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7545,7 +7545,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -7565,7 +7565,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7582,7 +7582,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7599,7 +7599,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7616,7 +7616,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7633,7 +7633,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MeterGroupModule"
@@ -7650,7 +7650,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7669,7 +7669,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7692,7 +7692,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -7716,7 +7716,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7734,7 +7734,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -7757,7 +7757,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7775,7 +7775,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7793,7 +7793,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -7812,7 +7812,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7830,7 +7830,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7848,7 +7848,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -7867,7 +7867,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7885,7 +7885,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7903,7 +7903,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7921,7 +7921,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7939,7 +7939,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7957,7 +7957,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -7975,7 +7975,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -7992,7 +7992,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8017,7 +8017,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8042,7 +8042,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8067,7 +8067,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8089,7 +8089,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8104,7 +8104,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8119,7 +8119,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8134,7 +8134,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8149,7 +8149,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -8166,7 +8166,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8181,7 +8181,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8196,7 +8196,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8211,7 +8211,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -8228,7 +8228,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8243,7 +8243,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -8265,7 +8265,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PaginatorModule"
@@ -8282,7 +8282,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PaginatorModule"
@@ -8299,7 +8299,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PaginatorModule"
@@ -8316,7 +8316,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8331,7 +8331,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelModule"
@@ -8348,7 +8348,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -8368,7 +8368,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelModule"
@@ -8385,7 +8385,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8400,7 +8400,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BadgeModule",
@@ -8420,7 +8420,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -8439,7 +8439,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelMenuModule"
@@ -8456,7 +8456,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -8474,7 +8474,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -8494,7 +8494,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PanelMenuModule"
@@ -8511,7 +8511,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8526,7 +8526,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8544,7 +8544,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -8567,7 +8567,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "DividerModule",
@@ -8586,7 +8586,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8604,7 +8604,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -8627,7 +8627,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8645,7 +8645,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8663,7 +8663,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8681,7 +8681,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -8700,7 +8700,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8718,7 +8718,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -8737,7 +8737,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8755,7 +8755,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8773,7 +8773,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8791,7 +8791,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "PasswordModule",
@@ -8809,7 +8809,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8824,7 +8824,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -8841,7 +8841,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8866,7 +8866,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8891,7 +8891,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -8913,7 +8913,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -8931,7 +8931,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -8949,7 +8949,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -8970,7 +8970,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -8998,7 +8998,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -9018,7 +9018,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9033,7 +9033,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ProgressBarModule"
@@ -9050,7 +9050,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9069,7 +9069,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9089,7 +9089,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ProgressBarModule"
@@ -9106,7 +9106,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9121,7 +9121,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9136,7 +9136,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9151,7 +9151,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9166,7 +9166,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9189,7 +9189,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9207,7 +9207,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9230,7 +9230,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9248,7 +9248,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9266,7 +9266,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9284,7 +9284,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9303,7 +9303,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RadioButtonModule",
@@ -9321,7 +9321,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9336,7 +9336,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9354,7 +9354,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9377,7 +9377,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9395,7 +9395,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9413,7 +9413,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -9436,7 +9436,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9454,7 +9454,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9472,7 +9472,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RatingModule",
@@ -9490,7 +9490,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9505,7 +9505,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RippleModule"
@@ -9522,7 +9522,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "RippleModule"
@@ -9539,7 +9539,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule",
@@ -9558,7 +9558,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -9577,7 +9577,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule",
@@ -9596,7 +9596,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "VirtualScrollerModule",
@@ -9614,7 +9614,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "VirtualScrollerModule",
@@ -9632,7 +9632,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "VirtualScrollerModule",
@@ -9650,7 +9650,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "VirtualScrollerModule",
@@ -9668,7 +9668,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "VirtualScrollerModule",
@@ -9686,7 +9686,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ScrollPanelModule"
@@ -9703,7 +9703,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ScrollPanelModule"
@@ -9720,7 +9720,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9735,7 +9735,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ScrollTopModule"
@@ -9752,7 +9752,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ScrollTopModule"
@@ -9769,7 +9769,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -9784,7 +9784,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9802,7 +9802,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9823,7 +9823,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -9843,7 +9843,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9861,7 +9861,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9882,7 +9882,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9900,7 +9900,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9918,7 +9918,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9936,7 +9936,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9955,7 +9955,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9973,7 +9973,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -9991,7 +9991,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10010,7 +10010,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -10033,7 +10033,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10051,7 +10051,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10069,7 +10069,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10087,7 +10087,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -10113,7 +10113,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10131,7 +10131,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10149,7 +10149,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -10167,7 +10167,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -10182,7 +10182,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -10203,7 +10203,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10221,7 +10221,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10239,7 +10239,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -10260,7 +10260,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10278,7 +10278,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10296,7 +10296,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10314,7 +10314,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10332,7 +10332,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10350,7 +10350,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -10365,7 +10365,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule"
@@ -10382,7 +10382,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule"
@@ -10399,7 +10399,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule",
@@ -10417,7 +10417,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule"
@@ -10434,7 +10434,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -10449,7 +10449,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SliderModule",
@@ -10467,7 +10467,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -10488,7 +10488,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SliderModule",
@@ -10506,7 +10506,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -10527,7 +10527,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SliderModule",
@@ -10545,7 +10545,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SliderModule",
@@ -10564,7 +10564,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectButtonModule",
@@ -10583,7 +10583,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SliderModule",
@@ -10601,7 +10601,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -10616,7 +10616,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10636,7 +10636,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10657,7 +10657,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10677,7 +10677,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10697,7 +10697,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10717,7 +10717,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10737,7 +10737,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10757,7 +10757,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -10772,7 +10772,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10792,7 +10792,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10812,7 +10812,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10832,7 +10832,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10852,7 +10852,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10872,7 +10872,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10892,7 +10892,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10912,7 +10912,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10932,7 +10932,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10952,7 +10952,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10972,7 +10972,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -10992,7 +10992,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -11012,7 +11012,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -11027,7 +11027,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SplitterModule"
@@ -11044,7 +11044,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SplitterModule"
@@ -11061,7 +11061,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SplitterModule"
@@ -11078,7 +11078,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SplitterModule"
@@ -11095,7 +11095,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -11110,7 +11110,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -11128,7 +11128,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -11151,7 +11151,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -11169,7 +11169,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -11187,7 +11187,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -11202,7 +11202,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -11220,7 +11220,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -11237,7 +11237,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule"
@@ -11256,7 +11256,7 @@
         "services": [
           "CarService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/car.ts",
@@ -11282,7 +11282,7 @@
         "services": [
           "CarService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/car.ts",
@@ -11307,7 +11307,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11331,7 +11331,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11359,7 +11359,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11382,7 +11382,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -11399,7 +11399,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11425,7 +11425,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11449,7 +11449,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11477,7 +11477,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11503,7 +11503,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11529,7 +11529,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11553,7 +11553,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -11580,7 +11580,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11606,7 +11606,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -11642,7 +11642,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -11676,7 +11676,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11701,7 +11701,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11725,7 +11725,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11749,7 +11749,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService",
           "ConfirmationService"
         ],
@@ -11792,7 +11792,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11816,7 +11816,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11841,7 +11841,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11865,7 +11865,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11891,7 +11891,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11913,7 +11913,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11938,7 +11938,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -11962,7 +11962,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -11986,7 +11986,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12010,7 +12010,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12036,7 +12036,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12063,7 +12063,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12089,7 +12089,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12121,7 +12121,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12156,7 +12156,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12182,7 +12182,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12209,7 +12209,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12233,7 +12233,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12267,7 +12267,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -12295,7 +12295,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12322,7 +12322,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [
@@ -12350,7 +12350,7 @@
         "services": [
           "CustomerService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12374,7 +12374,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12398,7 +12398,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12420,7 +12420,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12444,7 +12444,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12468,7 +12468,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12494,7 +12494,7 @@
         "services": [
           "ProductService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -12516,7 +12516,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12533,7 +12533,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12550,7 +12550,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12567,7 +12567,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12584,7 +12584,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12601,7 +12601,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -12620,7 +12620,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -12638,7 +12638,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TabsModule"
@@ -12655,7 +12655,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -12670,7 +12670,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12692,7 +12692,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TagModule"
@@ -12709,7 +12709,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TagModule"
@@ -12726,7 +12726,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TagModule"
@@ -12743,7 +12743,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TagModule"
@@ -12760,7 +12760,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -12775,7 +12775,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -12794,7 +12794,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/customer.ts",
@@ -12820,7 +12820,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "CommonModule"
@@ -12837,7 +12837,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SelectModule",
@@ -12856,7 +12856,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TerminalModule"
@@ -12873,7 +12873,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -12888,7 +12888,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -12908,7 +12908,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -12925,7 +12925,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -12945,7 +12945,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -12960,7 +12960,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -12977,7 +12977,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -12995,7 +12995,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -13012,7 +13012,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -13030,7 +13030,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -13047,7 +13047,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13062,7 +13062,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FormsModule"
@@ -13079,7 +13079,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13094,7 +13094,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13109,7 +13109,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "BadgeModule",
@@ -13129,7 +13129,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TieredMenuModule"
@@ -13146,7 +13146,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -13164,7 +13164,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13184,7 +13184,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TieredMenuModule"
@@ -13201,7 +13201,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13216,7 +13216,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -13236,7 +13236,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TimelineModule"
@@ -13253,7 +13253,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TimelineModule"
@@ -13270,7 +13270,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TimelineModule"
@@ -13287,7 +13287,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TimelineModule"
@@ -13304,7 +13304,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13325,7 +13325,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13345,7 +13345,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13366,7 +13366,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13387,7 +13387,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13407,7 +13407,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13428,7 +13428,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13449,7 +13449,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13469,7 +13469,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13490,7 +13490,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13510,7 +13510,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -13530,7 +13530,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -13551,7 +13551,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13569,7 +13569,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -13590,7 +13590,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13608,7 +13608,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13626,7 +13626,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13644,7 +13644,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13662,7 +13662,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleButtonModule",
@@ -13680,7 +13680,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13695,7 +13695,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -13716,7 +13716,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -13735,7 +13735,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -13756,7 +13756,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -13774,7 +13774,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -13792,7 +13792,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -13810,7 +13810,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -13828,7 +13828,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13843,7 +13843,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "AvatarModule",
@@ -13862,7 +13862,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -13884,7 +13884,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -13899,7 +13899,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -13917,7 +13917,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -13935,7 +13935,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -13953,7 +13953,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -13971,7 +13971,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -13989,7 +13989,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "InputTextModule",
@@ -14009,7 +14009,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14028,7 +14028,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14045,7 +14045,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14064,7 +14064,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14083,7 +14083,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ToggleSwitchModule",
@@ -14102,7 +14102,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14121,7 +14121,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14140,7 +14140,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -14162,7 +14162,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -14182,7 +14182,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -14205,7 +14205,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14224,7 +14224,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeModule"
@@ -14241,7 +14241,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "TreeDragDropService"
         ],
         "extFiles": [],
@@ -14260,7 +14260,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [
+        "optimusServices": [
           "TreeDragDropService"
         ],
         "extFiles": [],
@@ -14281,7 +14281,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14301,7 +14301,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -14324,7 +14324,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -14345,7 +14345,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14365,7 +14365,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MessageModule",
@@ -14388,7 +14388,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14406,7 +14406,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14426,7 +14426,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14446,7 +14446,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IftaLabelModule",
@@ -14467,7 +14467,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14487,7 +14487,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "FloatLabelModule",
@@ -14508,7 +14508,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14528,7 +14528,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14548,7 +14548,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14568,7 +14568,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14588,7 +14588,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14608,7 +14608,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeSelectModule",
@@ -14626,7 +14626,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": []
       }
@@ -14643,7 +14643,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -14663,7 +14663,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14682,7 +14682,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule",
@@ -14702,7 +14702,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14721,7 +14721,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14740,7 +14740,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14759,7 +14759,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14778,7 +14778,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -14799,7 +14799,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14818,7 +14818,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14837,7 +14837,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14856,7 +14856,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14875,7 +14875,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14892,7 +14892,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -14910,7 +14910,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14929,7 +14929,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "SkeletonModule",
@@ -14949,7 +14949,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14968,7 +14968,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -14987,7 +14987,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15006,7 +15006,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "ButtonModule",
@@ -15027,7 +15027,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "IconFieldModule",
@@ -15049,7 +15049,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule",
@@ -15071,7 +15071,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15090,7 +15090,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15109,7 +15109,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [
+        "optimusServices": [
           "MessageService"
         ],
         "extFiles": [],
@@ -15130,7 +15130,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule",
@@ -15150,7 +15150,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "MultiSelectModule",
@@ -15171,7 +15171,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15190,7 +15190,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15209,7 +15209,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"
@@ -15226,7 +15226,7 @@
       },
       "metadata": {
         "services": [],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [
           {
             "path": "src/domain/product.ts",
@@ -15250,7 +15250,7 @@
         "services": [
           "NodeService"
         ],
-        "primeNGServices": [],
+        "optimusServices": [],
         "extFiles": [],
         "imports": [
           "TreeTableModule"

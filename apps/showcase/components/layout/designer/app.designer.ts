@@ -4,7 +4,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { DesignerService } from '@/service/designerservice';
 import { AppConfigService } from '@/service/appconfigservice';
 import { ToastModule } from '@openng/optimus-ui/toast';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 import { ConfirmDialogModule } from '@openng/optimus-ui/confirmdialog';
 import { DesignDashboard } from '@/components/layout/designer/dashboard/designdashboard';
 import { DesignCreateTheme } from '@/components/layout/designer/create/designcreatetheme';
@@ -59,7 +59,7 @@ export class AppDesigner implements OnInit {
 
     configService = inject(AppConfigService);
 
-    config: PrimeNG = inject(PrimeNG);
+    config: Optimus = inject(Optimus);
 
     activeView = computed(() => this.designerService.designer().activeView);
 

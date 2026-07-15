@@ -9,7 +9,7 @@ import { AppCode } from '@/components/doc/app.code';
     imports: [AppDocSectionText, AppCode],
     template: `
         <app-docsectiontext>
-            <p>Inject the <i>PrimeNG</i> to your application to update the initial configuration at runtime.</p>
+            <p>Inject the <i>Optimus</i> to your application to update the initial configuration at runtime.</p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `
@@ -17,7 +17,7 @@ import { AppCode } from '@/components/doc/app.code';
 export class DynamicDoc {
     code: Code = {
         typescript: `import { Component, OnInit } from '@angular/core';
-import { PrimeNG } from '@openng/optimus-ui/config';
+import { Optimus } from '@openng/optimus-ui/config';
 
 @Component({
     selector: 'app-root',
@@ -25,10 +25,10 @@ import { PrimeNG } from '@openng/optimus-ui/config';
 })
 export class AppComponent implements OnInit {
 
-    constructor(private primeng: PrimeNG) {}
+    constructor(private config: Optimus) {}
 
     ngOnInit() {
-        this.primeng.ripple.set(true);
+        this.config.ripple.set(true);
     }
 }`
     };
