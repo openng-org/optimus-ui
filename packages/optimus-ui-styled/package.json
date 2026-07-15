@@ -8,7 +8,7 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/openng-org/optimus-ui.git",
-        "directory": "packages/styled"
+        "directory": "packages/optimus-ui-styled"
     },
     "bugs": {
         "url": "https://github.com/openng-org/optimus-ui/issues"
