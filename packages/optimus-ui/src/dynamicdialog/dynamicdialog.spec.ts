@@ -420,9 +420,9 @@ describe('DynamicDialog', () => {
 
         afterEach(() => {
             // Cleanup DOM elements
-            const containers = document.body.querySelectorAll('div');
+            const containers = document.body.querySelectorAll('div:not(.jasmine-results):not(#jasmine-content)');
             containers.forEach((container) => {
-                if (container.parentElement === document.body) {
+                if (container.parentElement === document.body && !container.classList.contains('jasmine-results')) {
                     document.body.removeChild(container);
                 }
             });
