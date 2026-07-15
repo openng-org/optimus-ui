@@ -8,7 +8,7 @@
     "repository": {
         "type": "git",
         "url": "git+https://github.com/openng-org/optimus-ui.git",
-        "directory": "packages/motion"
+        "directory": "packages/optimus-ui-motion"
     },
     "bugs": {
         "url": "https://github.com/openng-org/optimus-ui/issues"
