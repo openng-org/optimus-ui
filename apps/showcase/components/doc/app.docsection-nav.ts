@@ -86,20 +86,6 @@ export class AppDocSectionNav implements OnInit {
     ad = null;
 
     ads = [
-        {
-            lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/primeblocks-menu-light.jpg',
-            darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/primeblocks-menu-dark.jpg',
-            title: 'PrimeBlocks',
-            details: '490+ ready to use UI blocks crafted with PrimeNG and Tailwind CSS.',
-            href: 'https://primeblocks.org'
-        },
-        {
-            lightImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/themedesigner-menu-light.jpg',
-            darkImage: 'https://fqjltiegiezfetthbags.supabase.co/storage/v1/object/public/common.images/ads/themedesigner-menu-dark.jpg',
-            title: 'Theme Designer',
-            details: 'Theme Designer is the ultimate tool to customize and design your own themes featuring a visual editor, Figma to theme code, cloud storage, and migration assistant.',
-            routerLink: '/designer'
-        }
     ];
 
     private readonly document = inject(DOCUMENT);

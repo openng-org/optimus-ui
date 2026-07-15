@@ -1,5 +1,4 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { DesignerService } from '@/service/designerservice';
 import { isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, effect, inject, OnInit, PLATFORM_ID } from '@angular/core';
 import { AppCode } from '@/components/doc/app.code';
@@ -29,15 +28,11 @@ export class StackedBarDoc implements OnInit {
 
     configService = inject(AppConfigService);
 
-    designerService = inject(DesignerService);
-
     constructor(private cd: ChangeDetectorRef) {}
 
     themeEffect = effect(() => {
         if (this.configService.transitionComplete()) {
-            if (this.designerService.preset()) {
-                this.initChart();
-            }
+            this.initChart();
         }
     });
 

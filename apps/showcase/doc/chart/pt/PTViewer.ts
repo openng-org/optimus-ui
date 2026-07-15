@@ -1,6 +1,5 @@
 import { AppDocPtViewer, getPTOptions } from '@/components/doc/app.docptviewer';
 import { AppConfigService } from '@/service/appconfigservice';
-import { DesignerService } from '@/service/designerservice';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ChangeDetectorRef, Component, effect, inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -25,15 +24,11 @@ export class PTViewer {
 
     configService = inject(AppConfigService);
 
-    designerService = inject(DesignerService);
-
     constructor(private cd: ChangeDetectorRef) {}
 
     themeEffect = effect(() => {
         if (this.configService.transitionComplete()) {
-            if (this.designerService.preset()) {
-                this.initChart();
-            }
+            this.initChart();
         }
     });
 

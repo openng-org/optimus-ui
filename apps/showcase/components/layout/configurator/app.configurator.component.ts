@@ -1,5 +1,4 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { DesignerService } from '@/service/designerservice';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -105,8 +104,6 @@ export class AppConfiguratorComponent {
     platformId = inject(PLATFORM_ID);
 
     presets = Object.keys(presets);
-
-    designerService = inject(DesignerService);
 
     onRTLChange(value: boolean) {
         this.configService.appState.update((state) => ({ ...state, RTL: value }));

@@ -1,4 +1,3 @@
-import { AppDesigner } from '@/components/layout/designer/app.designer';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CarService } from '@/service/carservice';
 import { CountryService } from '@/service/countryservice';
@@ -15,9 +14,9 @@ import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-root',
-    template: `<router-outlet></router-outlet> <app-designer />`,
+    template: `<router-outlet></router-outlet>`,
     standalone: true,
-    imports: [RouterOutlet, FormsModule, ReactiveFormsModule, HttpClientModule, AppDesigner],
+    imports: [RouterOutlet, FormsModule, ReactiveFormsModule, HttpClientModule],
     providers: [
         CarService,
         CountryService,

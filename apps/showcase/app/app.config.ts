@@ -1,6 +1,5 @@
 import { routes } from '@/router/app.routes';
 import { DemoCodeService } from '@/service/democodeservice';
-import { DesignerService } from '@/service/designerservice';
 import Noir from '@/themes/app-theme';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { APP_INITIALIZER, ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
@@ -22,7 +21,6 @@ export const appConfig: ApplicationConfig = {
             ripple: false
         }),
         MessageService,
-        DesignerService,
         ConfirmationService,
         {
             provide: APP_INITIALIZER,

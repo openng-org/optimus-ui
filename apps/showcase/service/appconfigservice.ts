@@ -14,8 +14,6 @@ export class AppConfigService {
         RTL: false
     });
 
-    designerActive = signal(false);
-
     newsActive = signal(false);
 
     document = inject(DOCUMENT);
@@ -76,13 +74,5 @@ export class AppConfigService {
 
     showNews() {
         this.newsActive.set(true);
-    }
-
-    showDesigner() {
-        this.designerActive.set(true);
-    }
-
-    hideDesigner() {
-        this.designerActive.set(false);
     }
 }
