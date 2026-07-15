@@ -620,10 +620,6 @@
                     "icon": "pi pi-users"
                 },
                 {
-                    "name": "Store",
-                    "href": "https://primeui.store"
-                },
-                {
                     "name": "Twitter",
                     "href": "https://twitter.com/prime_ng"
                 },
