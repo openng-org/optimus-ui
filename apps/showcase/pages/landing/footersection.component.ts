@@ -51,15 +51,6 @@ import { RouterModule } from '@angular/router';
                         <ul class="list-none p-0 m-0">
                             <li class="font-bold mt-8 lg:mt-0 mb-8">Resources</li>
                             <li class="mb-6">
-                                <a
-                                    href="https://www.youtube.com/channel/UCTgmp69aBOlLnPEqlUyetWw"
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"
-                                    >PrimeTV</a
-                                >
-                            </li>
-                            <li class="mb-6">
                                 <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"
                                     >Source Code</a
                                 >
