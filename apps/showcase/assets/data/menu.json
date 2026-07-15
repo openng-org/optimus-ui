@@ -630,10 +630,6 @@
                 {
                     "name": "Newsletter",
                     "href": "https://www.primefaces.org/newsletter"
-                },
-                {
-                    "name": "PrimeGear",
-                    "href": "https://gear.primefaces.org"
                 }
             ]
         }
