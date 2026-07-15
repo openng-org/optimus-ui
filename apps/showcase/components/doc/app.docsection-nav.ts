@@ -85,8 +85,7 @@ export class AppDocSectionNav implements OnInit {
 
     ad = null;
 
-    ads = [
-    ];
+    ads = [];
 
     private readonly document = inject(DOCUMENT);
     private readonly platformId = inject(PLATFORM_ID);
