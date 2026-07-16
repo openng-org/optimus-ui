@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { FieldsetAfterToggleEvent, FieldsetBeforeToggleEvent } from '@openng/opt
 import { Fieldset } from './fieldset';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Fieldset],
     template: `
@@ -51,6 +52,7 @@ class TestFieldsetComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Fieldset],
     template: `
@@ -74,6 +76,7 @@ class TestFieldsetComponent {
 class TestTemplateFieldsetComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Fieldset],
     template: `
@@ -1029,6 +1032,7 @@ describe('Fieldset', () => {
         describe('Case 6: Inline test', () => {
             it('should apply inline PT with string class', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Fieldset],
                     template: `<p-fieldset [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-fieldset>`
@@ -1051,6 +1055,7 @@ describe('Fieldset', () => {
 
             it('should apply inline PT with object class', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Fieldset],
                     template: `<p-fieldset [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }"></p-fieldset>`
@@ -1074,6 +1079,7 @@ describe('Fieldset', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Fieldset],
                 template: `
@@ -1125,6 +1131,7 @@ describe('Fieldset', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Fieldset],
                     template: `<p-fieldset [pt]="{ root: { class: 'LOCAL_CLASS' } }"></p-fieldset>`

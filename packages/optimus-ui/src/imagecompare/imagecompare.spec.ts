@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ImageCompare, ImageCompareModule } from './imagecompare';
 import { SharedModule } from '@openng/optimus-ui/api';
 
@@ -11,6 +11,7 @@ const mockImages = {
 };
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-imagecompare [tabindex]="tabindex" [ariaLabel]="ariaLabel" [ariaLabelledby]="ariaLabelledby">
@@ -34,6 +35,7 @@ class TestBasicImageCompareComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-imagecompare>
@@ -54,6 +56,7 @@ class TestPTemplateImageCompareComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div dir="rtl">
@@ -76,6 +79,7 @@ class TestRTLImageCompareComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-imagecompare class="responsive-container">
@@ -93,6 +97,7 @@ class TestCustomContentImageCompareComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-imagecompare [pt]="pt" [tabindex]="tabindex" [ariaLabel]="ariaLabel">

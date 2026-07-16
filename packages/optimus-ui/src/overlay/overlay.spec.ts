@@ -1,4 +1,4 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -7,6 +7,7 @@ import { Overlay } from './overlay';
 describe('Overlay', () => {
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Overlay],
             template: `<p-overlay [visible]="visible()" [mode]="mode()" [pt]="pt()">

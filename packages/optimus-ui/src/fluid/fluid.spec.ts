@@ -1,10 +1,11 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Fluid, FluidModule } from './fluid';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-fluid',
     template: `<p-fluid></p-fluid>`
@@ -12,6 +13,7 @@ import { Fluid, FluidModule } from './fluid';
 class TestBasicFluidComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-with-content',
     template: `
@@ -23,6 +25,7 @@ class TestBasicFluidComponent {}
 class TestFluidWithContentComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-with-form-controls',
     template: `
@@ -48,6 +51,7 @@ class TestFluidWithContentComponent {}
 class TestFluidWithFormControlsComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-nested-fluid',
     template: `
@@ -65,6 +69,7 @@ class TestFluidWithFormControlsComponent {}
 class TestNestedFluidComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-with-optimus-components',
     template: `
@@ -91,6 +96,7 @@ class TestNestedFluidComponent {}
 class TestFluidWithOptimusComponentsComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-responsive',
     template: `
@@ -114,6 +120,7 @@ class TestFluidWithOptimusComponentsComponent {}
 class TestFluidResponsiveComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-dynamic-content',
     template: `
@@ -145,6 +152,7 @@ class TestFluidDynamicContentComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-fluid-complex-layout',
     template: `
@@ -706,6 +714,7 @@ describe('Fluid', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Fluid],
             template: `<p-fluid [pt]="pt()"><div class="test-content">Test Content</div></p-fluid>`

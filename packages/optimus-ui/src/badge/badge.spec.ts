@@ -1,10 +1,11 @@
-import { Component, DebugElement, ElementRef, input, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, ElementRef, input, provideZonelessChangeDetection, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { Badge, BadgeDirective, BadgeModule } from './badge';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-badge',
     template: `<p-badge></p-badge>`
@@ -12,6 +13,7 @@ import { Badge, BadgeDirective, BadgeModule } from './badge';
 class TestBasicBadgeComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-value-badge',
     template: `<p-badge [value]="value"></p-badge>`
@@ -21,6 +23,7 @@ class TestValueBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-size-badge',
     template: `<p-badge [badgeSize]="badgeSize" value="1"></p-badge>`
@@ -30,6 +33,7 @@ class TestSizeBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-severity-badge',
     template: `<p-badge [severity]="severity" value="1"></p-badge>`
@@ -39,6 +43,7 @@ class TestSeverityBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-badge',
     template: `<p-badge [badgeDisabled]="disabled" value="1"></p-badge>`
@@ -48,6 +53,7 @@ class TestDisabledBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-badge',
     template: `<p-badge [styleClass]="styleClass" value="1"></p-badge>`
@@ -57,6 +63,7 @@ class TestStyleClassBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-directive-badge',
     template: `<button #button pBadge [value]="value">Button</button>`
@@ -67,6 +74,7 @@ class TestDirectiveBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-directive-size-badge',
     template: `<button pBadge [value]="value" [size]="size">Button</button>`
@@ -77,6 +85,7 @@ class TestDirectiveSizeBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-directive-severity-badge',
     template: `<button pBadge [value]="value" [severity]="severity">Button</button>`
@@ -87,6 +96,7 @@ class TestDirectiveSeverityBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-directive-disabled-badge',
     template: `<button pBadge [value]="value" [badgeDisabled]="disabled">Button</button>`
@@ -97,6 +107,7 @@ class TestDirectiveDisabledBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-directive-style-badge',
     template: `<button pBadge [value]="value" [badgeStyle]="badgeStyle" [badgeStyleClass]="badgeStyleClass">Button</button>`
@@ -108,6 +119,7 @@ class TestDirectiveStyleBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-deprecated-size-badge',
     template: `<button pBadge [value]="value" [size]="size">Button</button>`
@@ -118,6 +130,7 @@ class TestDeprecatedSizeBadgeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-badge',
     template: ` <p-badge [value]="value" [badgeSize]="badgeSize" [severity]="severity" [badgeDisabled]="disabled" [styleClass]="styleClass"> </p-badge> `
@@ -942,6 +955,7 @@ describe('Badge', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Badge],
             template: `<p-badge [value]="value()" [badgeSize]="badgeSize()" [severity]="severity()" [pt]="pt()"></p-badge>`

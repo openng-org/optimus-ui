@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,12 +6,14 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 import { Divider, DividerModule } from './divider';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-divider></p-divider> `
 })
 class TestBasicDividerComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-divider [layout]="layout" [type]="type" [align]="align" [styleClass]="styleClass">
@@ -27,6 +29,7 @@ class TestCustomDividerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-divider layout="horizontal" type="solid" align="left">
@@ -43,6 +46,7 @@ class TestCustomDividerComponent {
 class TestHorizontalDividerComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div style="height: 200px; display: flex;">
@@ -65,6 +69,7 @@ class TestHorizontalDividerComponent {}
 class TestVerticalDividerComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-divider>
@@ -79,6 +84,7 @@ class TestVerticalDividerComponent {}
 class TestComplexContentDividerComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-divider [layout]="layout" [type]="type" [align]="align">
@@ -1074,6 +1080,7 @@ describe('Divider', () => {
         describe('Case 6: Inline test', () => {
             it('should apply inline PT with string class', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-divider [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-divider>`
                 })
@@ -1096,6 +1103,7 @@ describe('Divider', () => {
 
             it('should apply inline PT with object class', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-divider [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }"></p-divider>`
                 })
@@ -1119,6 +1127,7 @@ describe('Divider', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-divider></p-divider>
@@ -1172,6 +1181,7 @@ describe('Divider', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-divider [pt]="{ root: { class: 'LOCAL_CLASS' } }"></p-divider>`
                 })

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ const mockImageSrc = 'https://primefaces.org/cdn/primeng/images/galleria/galleri
 const mockPreviewImageSrc = 'https://primefaces.org/cdn/primeng/images/galleria/galleria2.jpg';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [height]="height" [srcSet]="srcSet" [sizes]="sizes" [loading]="loading" [imageClass]="imageClass" [imageStyle]="imageStyle" [styleClass]="styleClass" (onImageError)="onImageError($event)">
@@ -35,6 +36,7 @@ class TestBasicImageComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-image
@@ -75,6 +77,7 @@ class TestPreviewImageComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true">
@@ -113,6 +116,7 @@ class TestTemplateImageComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-image [src]="src" [alt]="alt" [width]="width" [preview]="true">
@@ -916,6 +920,7 @@ describe('Image', () => {
 
             it('should accept inline PT with string class', () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-image [src]="src" [pt]="{ root: 'TEST_INLINE_CLASS' }" />`
                 })
@@ -938,6 +943,7 @@ describe('Image', () => {
 
             it('should accept inline PT with object class', () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-image [src]="src" [pt]="{ root: { class: 'TEST_INLINE_OBJECT_CLASS' } }" />`
                 })
@@ -968,6 +974,7 @@ describe('Image', () => {
                 const { provideOptimus } = await import('@openng/optimus-ui/config');
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `
                         <p-image [src]="src1" />

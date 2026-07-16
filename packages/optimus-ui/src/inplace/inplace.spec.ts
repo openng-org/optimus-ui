@@ -1,4 +1,4 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { ButtonModule } from '@openng/optimus-ui/button';
 import { Inplace, InplaceContent, InplaceDisplay, InplaceModule } from './inplace';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-inplace',
     template: `
@@ -24,6 +25,7 @@ import { Inplace, InplaceContent, InplaceDisplay, InplaceModule } from './inplac
 class TestBasicInplaceComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-with-events',
     template: `
@@ -51,6 +53,7 @@ class TestInplaceWithEventsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-disabled',
     template: `
@@ -69,6 +72,7 @@ class TestInplaceDisabledComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-closable',
     template: `
@@ -89,6 +93,7 @@ class TestInplaceClosableComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-prevent-click',
     template: `
@@ -107,6 +112,7 @@ class TestInplacePreventClickComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-active-state',
     template: `
@@ -125,6 +131,7 @@ class TestInplaceActiveStateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-style-class',
     template: `
@@ -143,6 +150,7 @@ class TestInplaceStyleClassComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-templates',
     template: `
@@ -165,6 +173,7 @@ class TestInplaceStyleClassComponent {
 class TestInplaceTemplatesComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-optimus-templates',
     template: `
@@ -187,6 +196,7 @@ class TestInplaceTemplatesComponent {}
 class TestInplaceOptimusTemplatesComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-keyboard',
     template: `
@@ -203,6 +213,7 @@ class TestInplaceOptimusTemplatesComponent {}
 class TestInplaceKeyboardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-complex-content',
     template: `
@@ -241,6 +252,7 @@ class TestInplaceComplexContentComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-inplace-dynamic',
     template: `
@@ -1259,6 +1271,7 @@ describe('Inplace', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Inplace, InplaceDisplay, InplaceContent],
             template: `<p-inplace [active]="active()" [closable]="closable()" [disabled]="disabled()" [closeIcon]="closeIcon()" [pt]="pt()">

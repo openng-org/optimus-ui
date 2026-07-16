@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { Dialog } from './dialog';
 
 // Basic Dialog Test Component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog
@@ -137,6 +138,7 @@ class TestBasicDialogComponent {
 
 // Dialog with pTemplate Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true">
@@ -167,6 +169,7 @@ class TestPTemplateDialogComponent {
 
 // Dialog with #template Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true" [maximizable]="true">
@@ -197,6 +200,7 @@ class TestHashTemplateDialogComponent {
 
 // Dialog with Headless Template
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible">
@@ -216,6 +220,7 @@ class TestHeadlessDialogComponent {
 
 // Dialog for Position Testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible" [position]="position" header="Position Test">
@@ -230,6 +235,7 @@ class TestPositionDialogComponent {
 
 // Dialog for Maximizable Testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible" [maximizable]="maximizable" header="Maximizable Test" (onMaximize)="onMaximize($event)">
@@ -249,6 +255,7 @@ class TestMaximizableDialogComponent {
 
 // Dialog for Accessibility Testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dialog [(visible)]="visible" [modal]="true" header="Accessibility Test" [closeAriaLabel]="closeAriaLabel" [role]="role" [focusTrap]="focusTrap">
@@ -1313,6 +1320,7 @@ describe('Dialog', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1361,6 +1369,7 @@ describe('Dialog', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1417,6 +1426,7 @@ describe('Dialog', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1464,6 +1474,7 @@ describe('Dialog', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" [maximizable]="isMaximizable" header="Test Dialog">Content</p-dialog>`
             })
@@ -1512,6 +1523,7 @@ describe('Dialog', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1561,6 +1573,7 @@ describe('Dialog', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="{ mask: 'INLINE_MASK_CLASS', header: 'INLINE_HEADER_CLASS' }" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1569,6 +1582,7 @@ describe('Dialog', () => {
             }
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="{ mask: { class: 'INLINE_MASK_OBJECT_CLASS' }, content: { class: 'INLINE_CONTENT_CLASS' } }" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })
@@ -1625,6 +1639,7 @@ describe('Dialog', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-dialog [visible]="visible1" header="Dialog 1">Content 1</p-dialog>
@@ -1668,6 +1683,7 @@ describe('Dialog', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-dialog [pt]="pt" [visible]="visible" header="Test Dialog">Content</p-dialog>`
             })

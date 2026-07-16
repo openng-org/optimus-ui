@@ -1,10 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, computed, provideZonelessChangeDetection, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ClassNamesModule } from './classnames';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pClass]="stringClass" data-testid="string"></div>
         <div [pClass]="arrayClass" data-testid="array"></div>
@@ -106,6 +107,7 @@ describe('PClass Directive', () => {
 });
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <div [pClass]="conditionalClasses()" data-testid="conditional"></div>
         <div [pClass]="comboClasses()" data-testid="combo"></div>

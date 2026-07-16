@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { MenuItem, SharedModule } from '@openng/optimus-ui/api';
 import { PanelMenu } from './panelmenu';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-panelmenu [id]="id" [model]="model" [multiple]="multiple" [transitionOptions]="transitionOptions" [styleClass]="styleClass" [tabindex]="tabindex"> </p-panelmenu> `
 })
@@ -39,6 +40,7 @@ class TestBasicPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-multiple-panelmenu',
     template: ` <p-panelmenu [model]="model" [multiple]="true"> </p-panelmenu> `
@@ -59,6 +61,7 @@ class TestMultiplePanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panelmenu [model]="model">
@@ -78,6 +81,7 @@ class TestTemplatePanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panelmenu [model]="model">
@@ -100,6 +104,7 @@ class TestIconTemplatePanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panelmenu [model]="model">
@@ -122,6 +127,7 @@ class TestContentItemTemplatePanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
@@ -146,6 +152,7 @@ class TestRouterPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
@@ -166,6 +173,7 @@ class TestDisabledPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-panelmenu',
     template: ` <p-panelmenu [model]="model" styleClass="custom-panel" [transitionOptions]="transitionOptions"> </p-panelmenu> `
@@ -182,6 +190,7 @@ class TestStyledPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-empty-panelmenu',
     template: ` <p-panelmenu [model]="[]"> </p-panelmenu> `
@@ -189,6 +198,7 @@ class TestStyledPanelMenuComponent {
 class TestEmptyPanelMenuComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
@@ -207,6 +217,7 @@ class TestDynamicPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-command-panelmenu',
     template: ` <p-panelmenu [model]="model"> </p-panelmenu> `
@@ -231,6 +242,7 @@ class TestCommandPanelMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-keyboard-panelmenu',
     template: ` <p-panelmenu [model]="model" [tabindex]="0"> </p-panelmenu> `

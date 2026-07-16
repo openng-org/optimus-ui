@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, provideZonelessChangeDetection, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -19,6 +19,7 @@ import { Popover } from './popover';
 // }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
@@ -73,6 +74,7 @@ class TestBasicPopoverComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
@@ -92,6 +94,7 @@ class TestTemplatePopoverComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>
@@ -111,6 +114,7 @@ class TestPTemplatePopoverComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button #targetButton (click)="popover.toggle($event)">Toggle</button>

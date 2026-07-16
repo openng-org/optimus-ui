@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputGroup } from './inputgroup';
@@ -7,6 +7,7 @@ import { InputGroupAddon } from '@openng/optimus-ui/inputgroupaddon';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
     template: `
@@ -23,6 +24,7 @@ class TestBasicInputGroupComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
     template: `
@@ -39,6 +41,7 @@ class TestStyledInputGroupComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputGroup, InputGroupAddon, FormsModule],
     template: `
@@ -243,6 +246,7 @@ describe('InputGroup', () => {
         it('should handle empty addon content', () => {
             // Create a component with empty addon
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [InputGroup, InputGroupAddon, FormsModule],
                 template: `

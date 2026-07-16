@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import { CommonModule } from '@angular/common';
 import type { DatePickerMonthChangeEvent, DatePickerYearChangeEvent } from '@openng/optimus-ui/types/datepicker';
 import { DatePicker } from './datepicker';
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-datepicker
@@ -134,6 +135,7 @@ class TestDatePickerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -149,6 +151,7 @@ class TestReactiveFormDatePickerComponent {
 
 // pTemplate only - Comprehensive template test component with all 12 ContentChild projections
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
@@ -240,6 +243,7 @@ class TestPTemplatesDatePickerComponent {
 
 // #template references only - Comprehensive template test component with all 12 ContentChild projections
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
@@ -331,6 +335,7 @@ class TestRefTemplatesDatePickerComponent {
 
 // Legacy component for backward compatibility (deprecated - use separated versions above)
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
