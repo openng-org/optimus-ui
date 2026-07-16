@@ -30,5 +30,5 @@ export class AppFooterComponent {
     readonly licenseUrl = `${GITHUB_REPO_URL}/blob/main/LICENSE.md`;
 
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    version = require('@/package.json').version;
+    readonly version = require('@/package.json').version;
 }
