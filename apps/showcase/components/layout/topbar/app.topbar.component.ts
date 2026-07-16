@@ -109,7 +109,7 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
         </div>
     </div>`
 })
-class AppTopBarComponent implements OnDestroy {
+export class AppTopBarComponent implements OnDestroy {
     @Input({ transform: booleanAttribute }) showConfigurator = true;
 
     @Input({ transform: booleanAttribute }) showMenuButton = true;
