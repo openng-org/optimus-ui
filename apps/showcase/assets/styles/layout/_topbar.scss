@@ -200,7 +200,15 @@
 
                 li {
                     margin: 2px;
+                }
 
+                .version-tag {
+                    font-weight: bold;
+                    background-color: var(--p-surface-50);
+                    padding: 0.5rem 0.25rem;
+                    text-align: center;
+                    cursor: default;
+                    white-space: nowrap;
                 }
 
                 a {

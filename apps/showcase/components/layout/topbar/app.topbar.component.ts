@@ -1,4 +1,5 @@
-import Versions from '@/assets/data/versions.json';
+import PrimeNGVersions from '@/assets/data/primeng_versions.json';
+import OptimusUIVersions from '@/assets/data/optimusui_versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
@@ -74,16 +75,28 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
                         type="button"
                         class="topbar-item version-item"
                     >
-                        <span class="version-text">{{ versions ? versions[0].name : 'Latest' }}</span>
+                        <span class="version-text">{{ optimusuiVersions ? optimusuiVersions[0].name : 'Latest' }}</span>
                         <span class="version-icon pi pi-angle-down"></span>
                     </button>
                     <div class="versions-panel hidden">
                         <ul>
-                            <li role="none" *ngFor="let v of versions">
-                                <a [href]="v.url">
-                                    <span>{{ v.version }}</span>
-                                </a>
-                            </li>
+                            <li class="version-tag">Optimus UI</li>
+                            @for (v of optimusuiVersions; track v.version) {
+                                <li role="none">
+                                    <a [href]="v.url">
+                                        <span>{{ v.version }}</span>
+                                    </a>
+                                </li>
+                            }
+
+                            <li class="version-tag">PrimeNG</li>
+                            @for (v of primengVersions; track v.version) {
+                                <li role="none">
+                                    <a [href]="v.url">
+                                        <span>{{ v.version }}</span>
+                                    </a>
+                                </li>
+                            }
                         </ul>
                     </div>
                 </li>
@@ -96,12 +109,13 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
         </div>
     </div>`
 })
-export class AppTopBarComponent implements OnDestroy {
+class AppTopBarComponent implements OnDestroy {
     @Input({ transform: booleanAttribute }) showConfigurator = true;
 
     @Input({ transform: booleanAttribute }) showMenuButton = true;
 
-    versions: any[] = Versions;
+    primengVersions: any[] = PrimeNGVersions;
+    optimusuiVersions: any[] = OptimusUIVersions;
 
     scrollListener: VoidFunction | null;
 
