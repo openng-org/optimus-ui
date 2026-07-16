@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -7,6 +7,7 @@ import { ColorPickerChangeEvent } from '@openng/optimus-ui/types/colorpicker';
 import { ColorPicker } from './colorpicker';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-colorpicker
@@ -59,6 +60,7 @@ class TestBasicColorPickerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -86,6 +88,7 @@ class TestReactiveFormColorPickerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div>
@@ -106,6 +109,7 @@ class TestFormatColorPickerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-colorpicker [(ngModel)]="color" [inline]="true" [disabled]="disabled" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
@@ -121,6 +125,7 @@ class TestInlineColorPickerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-colorpicker [(ngModel)]="color" [disabled]="disabled" [autofocus]="autofocus" [inputId]="inputId" [tabindex]="tabindex" [defaultColor]="defaultColor" (onChange)="onColorChange($event)"> </p-colorpicker> `
 })
@@ -1320,6 +1325,7 @@ describe('ColorPicker', () => {
         // Case 7: Inline PT test
         it('PT Case 7: should work with inline PT binding - string values', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ColorPicker, FormsModule],
                 template: `
@@ -1357,6 +1363,7 @@ describe('ColorPicker', () => {
 
         it('PT Case 7: should work with inline PT binding - object values', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ColorPicker, FormsModule],
                 template: `
@@ -1532,6 +1539,7 @@ describe('ColorPicker', () => {
 
         it('PT Case 8d: should apply to multiple instances from global config', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ColorPicker, FormsModule],
                 template: `

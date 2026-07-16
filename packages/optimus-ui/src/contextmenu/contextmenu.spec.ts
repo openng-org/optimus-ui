@@ -1,4 +1,4 @@
-import { Component, DebugElement, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -7,6 +7,7 @@ import { MenuItem, SharedModule } from '@openng/optimus-ui/api';
 import { ContextMenu } from './contextmenu';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-contextmenu
@@ -55,6 +56,7 @@ class TestBasicContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-target-contextmenu',
     template: `
@@ -72,6 +74,7 @@ class TestTargetContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-global-contextmenu',
     template: ` <p-contextmenu [model]="model" [global]="true"></p-contextmenu> `
@@ -81,6 +84,7 @@ class TestGlobalContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-contextmenu [model]="nestedModel">
@@ -108,6 +112,7 @@ class TestItemTemplateContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-contextmenu [model]="model">
@@ -122,6 +127,7 @@ class TestPTemplateContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-contextmenu [model]="model">
@@ -141,6 +147,7 @@ class TestSubmenuIconTemplateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-contextmenu',
     template: ` <p-contextmenu [model]="routerModel"></p-contextmenu> `
@@ -158,6 +165,7 @@ class TestRouterContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-contextmenu',
     template: ` <p-contextmenu [style]="customStyle" styleClass="custom-contextmenu"></p-contextmenu> `
@@ -171,6 +179,7 @@ class TestStyledContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-minimal-contextmenu',
     template: `<p-contextmenu></p-contextmenu>`
@@ -178,6 +187,7 @@ class TestStyledContextMenuComponent {
 class TestMinimalContextMenuComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-contextmenu',
     template: ` <p-contextmenu [model]="dynamicModel"></p-contextmenu> `
@@ -199,6 +209,7 @@ class TestDynamicContextMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-items-contextmenu',
     template: ` <p-contextmenu [model]="disabledModel"></p-contextmenu> `
@@ -208,6 +219,7 @@ class TestDisabledItemsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     selector: 'test-target-component',
     template: '<div>Target Page</div>'
@@ -1231,6 +1243,7 @@ describe('ContextMenu', () => {
 
         describe('Case 1: Basic PT - Root and RootList', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ContextMenu],
                 template: `<p-contextmenu #cm [model]="model" [pt]="pt" [global]="true"></p-contextmenu>`
@@ -1284,6 +1297,7 @@ describe('ContextMenu', () => {
 
         describe('Case 2: PT with Objects - Root only', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ContextMenu],
                 template: `<p-contextmenu #cm [model]="model" [pt]="pt" [global]="true"></p-contextmenu>`
@@ -1358,6 +1372,7 @@ describe('ContextMenu', () => {
 
         describe('Case 3: PT Mixed - Root only', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ContextMenu],
                 template: `<p-contextmenu #cm [model]="model" [pt]="pt" [global]="true"></p-contextmenu>`
@@ -1408,6 +1423,7 @@ describe('ContextMenu', () => {
 
         describe('Case 4: ContextMenuSub getPTOptions - Basic String PT Test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ContextMenu],
                 template: `<p-contextmenu #cm [model]="model" [pt]="pt" [global]="true"></p-contextmenu>`
@@ -1476,6 +1492,7 @@ describe('ContextMenu', () => {
 
         describe('Case 5: ContextMenuSub getPTOptions - Object PT with Context', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ContextMenu],
                 template: `<p-contextmenu #cm [model]="model" [pt]="pt" [global]="true"></p-contextmenu>`

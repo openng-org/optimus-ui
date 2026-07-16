@@ -1,6 +1,6 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -18,6 +18,7 @@ import {
 import { PickList } from './picklist';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-picklist
@@ -1272,6 +1273,7 @@ describe('PickList', () => {
 
         describe('Case 4: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [PickList],
                 template: `<p-picklist [source]="source" [target]="target" [pt]="{ host: 'INLINE_HOST_CLASS' }" />`
@@ -1293,6 +1295,7 @@ describe('PickList', () => {
             });
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [PickList],
                 template: `<p-picklist [source]="source" [target]="target" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' } }" />`
@@ -1316,6 +1319,7 @@ describe('PickList', () => {
 
         describe('Case 5: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [PickList],
                 template: `

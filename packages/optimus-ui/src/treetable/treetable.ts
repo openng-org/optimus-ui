@@ -127,6 +127,7 @@ export class TreeTableService {
  * @group Components
  */
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-treeTable, p-treetable, p-tree-table',
     standalone: false,
     template: `
@@ -2359,6 +2360,7 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: '[pTreeTableBody]',
     standalone: false,
     template: `
@@ -2440,6 +2442,7 @@ export class TTBody extends BaseComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: '[ttScrollableView]',
     standalone: false,
     template: `
@@ -3699,6 +3702,7 @@ export class TTEditableColumn extends BaseComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-treeTableCellEditor, p-treetablecelleditor, p-treetable-cell-editor',
     standalone: false,
     template: `
@@ -3977,6 +3981,7 @@ export class TTRow extends BaseComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-treeTableToggler, p-treetabletoggler, p-treetable-toggler',
     standalone: false,
     template: `

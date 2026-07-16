@@ -1,4 +1,4 @@
-import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 import { Dock } from './dock';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-dock [id]="id" [model]="model" [position]="position" [styleClass]="styleClass" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" [breakpoint]="breakpoint" (onFocus)="onFocus($event)" (onBlur)="onBlur($event)"> </p-dock> `
 })
@@ -33,6 +34,7 @@ class TestBasicDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-position-dock',
     template: ` <p-dock [model]="model" [position]="position"></p-dock> `
@@ -46,6 +48,7 @@ class TestPositionDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-dock',
     template: ` <p-dock [model]="routerModel"></p-dock> `
@@ -64,6 +67,7 @@ class TestRouterDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-item-template-dock',
     template: `
@@ -85,6 +89,7 @@ class TestItemTemplateDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-ptemplate-dock',
     template: `
@@ -100,6 +105,7 @@ class TestPTemplateDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-items-dock',
     template: ` <p-dock [model]="disabledModel"></p-dock> `
@@ -109,6 +115,7 @@ class TestDisabledItemsDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-dock',
     template: ` <p-dock [model]="model" [styleClass]="customStyleClass"></p-dock> `
@@ -119,6 +126,7 @@ class TestStyledDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-minimal-dock',
     template: `<p-dock></p-dock>`
@@ -126,6 +134,7 @@ class TestStyledDockComponent {
 class TestMinimalDockComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-dock',
     template: ` <p-dock [model]="dynamicModel"></p-dock> `
@@ -147,6 +156,7 @@ class TestDynamicDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-command-dock',
     template: ` <p-dock [model]="commandModel"></p-dock> `
@@ -166,6 +176,7 @@ class TestCommandDockComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     template: '<div>Target Page</div>'
 })
@@ -1283,6 +1294,7 @@ describe('Dock', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Dock],
                 template: `
@@ -1342,6 +1354,7 @@ describe('Dock', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Dock],
                     template: `<p-dock [model]="model" [pt]="{ root: { class: 'LOCAL_CLASS' } }"></p-dock>`

@@ -1,10 +1,11 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputText } from './inputtext';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [(ngModel)]="value" placeholder="Enter text" /> `
@@ -14,6 +15,7 @@ class TestBasicInputTextComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [(ngModel)]="content" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" placeholder="Advanced input" /> `
@@ -27,6 +29,7 @@ class TestAdvancedInputTextComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputText, ReactiveFormsModule],
     template: ` <input type="email" pInputText [formControl]="emailControl" /> `
@@ -36,6 +39,7 @@ class TestReactiveFormInputTextComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="password" pInputText [(ngModel)]="password" /> `
@@ -45,6 +49,7 @@ class TestPasswordInputComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [pt]="pt" [invalid]="invalid" [fluid]="fluid" [variant]="variant" [(ngModel)]="value" /> `

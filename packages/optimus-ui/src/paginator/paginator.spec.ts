@@ -1,5 +1,5 @@
 import { TestBed, ComponentFixture } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, ViewChild } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,7 @@ import { PaginatorState } from '@openng/optimus-ui/types/paginator';
 
 // Test component for basic paginator functionality
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-paginator
@@ -74,6 +75,7 @@ class TestBasicPaginatorComponent {
 
 // Test component for template testing with pTemplate
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-paginator [rows]="10" [totalRecords]="100" [first]="0">
@@ -105,6 +107,7 @@ class TestPTemplatePaginatorComponent {
 
 // Test component for ContentChild template references
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-paginator [rows]="10" [totalRecords]="100" [first]="0" [rowsPerPageOptions]="[5, 10, 20]">
@@ -136,6 +139,7 @@ class TestContentChildPaginatorComponent {
 
 // Test component for jump to page and dropdown templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-paginator [rows]="10" [totalRecords]="100" [first]="0" [showJumpToPageDropdown]="true" [jumpToPageItemTemplate]="jumpTemplate" [dropdownItemTemplate]="dropdownTemplate" [rowsPerPageOptions]="rowsPerPageOptions">
@@ -1328,6 +1332,7 @@ describe('Paginator', () => {
 
 // Test component for dynamic values
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-paginator

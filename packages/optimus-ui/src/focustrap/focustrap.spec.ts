@@ -1,10 +1,11 @@
-import { Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { FocusTrap, FocusTrapModule } from './focustrap';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-focus-trap',
     template: `
@@ -18,6 +19,7 @@ import { FocusTrap, FocusTrapModule } from './focustrap';
 class TestBasicFocusTrapComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-focus-trap',
     template: `
@@ -32,6 +34,7 @@ class TestDisabledFocusTrapComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-focus-trap',
     template: `
@@ -55,6 +58,7 @@ class TestDynamicFocusTrapComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-nested-focus-trap',
     template: `
@@ -74,6 +78,7 @@ class TestDynamicFocusTrapComponent {
 class TestNestedFocusTrapComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-complex-focus-trap',
     template: `
@@ -99,6 +104,7 @@ class TestComplexFocusTrapComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-empty-focus-trap',
     template: `
@@ -111,6 +117,7 @@ class TestComplexFocusTrapComponent {
 class TestEmptyFocusTrapComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-conditional-focus-trap',
     template: `

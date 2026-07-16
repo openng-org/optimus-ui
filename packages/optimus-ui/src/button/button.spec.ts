@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from './button';
 
 // Basic Button Component Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-button
@@ -81,6 +82,7 @@ class TestBasicButtonComponent {
 
 // Button with Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-button [loading]="loading">
@@ -104,6 +106,7 @@ class TestTemplatePButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-button>
@@ -126,6 +129,7 @@ class TestContentTemplateButtonComponent {}
 
 // Button Directive Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button
@@ -170,6 +174,7 @@ class TestButtonDirectiveComponent {
 
 // Button with pButtonIcon and pButtonLabel directives
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <button pButton>
@@ -182,6 +187,7 @@ class TestButtonWithIconLabelDirectiveComponent {}
 
 // Loading Button Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-button [label]="label" [loading]="loading" [loadingIcon]="loadingIcon" (onClick)="toggleLoading()"> </p-button> `
 })
@@ -197,6 +203,7 @@ class TestLoadingButtonComponent {
 
 // Severity Button Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="button-group">
@@ -215,6 +222,7 @@ class TestSeverityButtonComponent {}
 
 // Button Variants Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="variant-buttons">
@@ -233,6 +241,7 @@ class TestButtonVariantsComponent {}
 
 // Badge Button Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-button label="Messages" icon="pi pi-envelope" [badge]="badge" [badgeSeverity]="badgeSeverity"> </p-button> `
 })
@@ -243,6 +252,7 @@ class TestBadgeButtonComponent {
 
 // Icon Button Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="icon-buttons">

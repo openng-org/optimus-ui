@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, provideZonelessChangeDetection, signal, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, provideZonelessChangeDetection, signal, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, NgForm, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -25,6 +25,7 @@ interface Country {
 
 // Basic test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-multiselect
@@ -190,6 +191,7 @@ class TestBasicMultiSelectComponent {
 
 // Form integration test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -223,6 +225,7 @@ class TestFormMultiSelectComponent {
 
 // Template test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
@@ -274,6 +277,7 @@ class TestTemplateMultiSelectComponent {
 
 // Grouped options test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-multiselect [options]="groupedOptions" [(ngModel)]="selectedCities" [group]="true" optionLabel="name" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select Cities"></p-multiselect> `
 })
@@ -304,6 +308,7 @@ class TestGroupedMultiSelectComponent {
 
 // Content child test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
@@ -346,6 +351,7 @@ class TestContentChildMultiSelectComponent {
 
 // Virtual scroll test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name" [virtualScroll]="true" [virtualScrollItemSize]="40" [scrollHeight]="'200px'" [lazy]="lazy" (onLazyLoad)="onLazyLoad($event)"></p-multiselect> `
 })
@@ -1745,6 +1751,7 @@ describe('MultiSelect Virtual Scrolling', () => {
 
 // Dynamic Data Sources Test Component - Tests signals, observables, getters, async pipes, late-loading
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="test-dynamic-data">
@@ -1970,6 +1977,7 @@ class TestDynamicDataSourcesMultiSelectComponent {
 
 // Comprehensive Form Integration Test Component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="comprehensive-form-tests">
@@ -2129,6 +2137,7 @@ class TestComprehensiveFormMultiSelectComponent {
 
 // ViewChild Properties Test Component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="viewchild-tests">
@@ -2248,6 +2257,7 @@ class TestViewChildMultiSelectComponent {
 
 // Complex Edge Cases Test Component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="edge-cases-tests">

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -18,6 +18,7 @@ const mockImages = [
 
 // Test Components for different scenarios
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria
@@ -103,6 +104,7 @@ class TestBasicGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images" [fullScreen]="true" [visible]="true">
@@ -120,6 +122,7 @@ class TestFullScreenGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images" [autoPlay]="true" [circular]="true" [transitionInterval]="1000">
@@ -134,6 +137,7 @@ class TestAutoPlayGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images" [responsiveOptions]="responsiveOptions">
@@ -153,6 +157,7 @@ class TestResponsiveGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images" [showIndicators]="true" [showThumbnails]="false">
@@ -167,6 +172,7 @@ class TestIndicatorsGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images" [numVisible]="3">
@@ -193,6 +199,7 @@ class TestTemplateGalleriaComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-galleria [value]="images">

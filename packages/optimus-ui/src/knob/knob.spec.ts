@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -8,6 +8,7 @@ import { Knob } from './knob';
 
 // Temel test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Knob, FormsModule],
     template: `<p-knob [(ngModel)]="value" />`
@@ -18,6 +19,7 @@ class TestBasicKnobComponent {
 
 // Reactive form test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Knob, ReactiveFormsModule],
     template: ` <p-knob [formControl]="knobControl" [min]="min" [max]="max" [step]="step" (onChange)="onKnobChange($event)" /> `
@@ -36,6 +38,7 @@ class TestReactiveFormKnobComponent {
 
 // Gelişmiş özellikler test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Knob, FormsModule],
     template: `
@@ -85,6 +88,7 @@ class TestAdvancedKnobComponent {
 
 // Keyboard navigation test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Knob, FormsModule],
     template: ` <p-knob [(ngModel)]="value" [min]="0" [max]="100" [step]="1" /> `
@@ -95,6 +99,7 @@ class TestKeyboardKnobComponent {
 
 // Template test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Knob, FormsModule],
     template: ` <p-knob [(ngModel)]="temperature" [min]="0" [max]="40" [valueTemplate]="'{value}°C'" /> `
@@ -793,6 +798,7 @@ describe('Knob', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
@@ -850,6 +856,7 @@ describe('Knob', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
@@ -900,6 +907,7 @@ describe('Knob', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
@@ -941,6 +949,7 @@ describe('Knob', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [min]="0" [max]="100" [showValue]="true" [pt]="pt"></p-knob>`
             })
@@ -991,6 +1000,7 @@ describe('Knob', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
@@ -1036,6 +1046,7 @@ describe('Knob', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: 'INLINE_HOST_CLASS', svg: 'INLINE_SVG_CLASS' }"></p-knob>`
             })
@@ -1062,6 +1073,7 @@ describe('Knob', () => {
             });
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' }, svg: { class: 'SVG_INLINE_CLASS' } }"></p-knob>`
             })
@@ -1090,6 +1102,7 @@ describe('Knob', () => {
 
         describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value"></p-knob>`
             })
@@ -1128,6 +1141,7 @@ describe('Knob', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [pt]="pt"></p-knob>`
             })
@@ -1171,6 +1185,7 @@ describe('Knob', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-knob [(ngModel)]="value" [showValue]="true" [pt]="pt"></p-knob>`
             })

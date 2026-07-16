@@ -12,6 +12,7 @@ import { InplaceStyle } from './style/inplacestyle';
 const INPLACE_INSTANCE = new InjectionToken<Inplace>('INPLACE_INSTANCE');
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-inplacedisplay, p-inplaceDisplay',
     standalone: true,
     imports: [CommonModule],
@@ -20,6 +21,7 @@ const INPLACE_INSTANCE = new InjectionToken<Inplace>('INPLACE_INSTANCE');
 export class InplaceDisplay extends BaseComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-inplacecontent, p-inplaceContent',
     standalone: true,
     imports: [CommonModule],

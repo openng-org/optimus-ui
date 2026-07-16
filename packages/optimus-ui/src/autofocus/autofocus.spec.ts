@@ -1,9 +1,10 @@
-import { Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, PLATFORM_ID, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { AutoFocus, AutoFocusModule } from './autofocus';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-autofocus',
     template: `<input type="text" pAutoFocus />`
@@ -11,6 +12,7 @@ import { AutoFocus, AutoFocusModule } from './autofocus';
 class TestBasicAutofocusComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-disabled',
     template: `<input type="text" [pAutoFocus]="false" />`
@@ -18,6 +20,7 @@ class TestBasicAutofocusComponent {}
 class TestAutofocusDisabledComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-enabled',
     template: `<input type="text" [pAutoFocus]="true" />`
@@ -25,6 +28,7 @@ class TestAutofocusDisabledComponent {}
 class TestAutofocusEnabledComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-dynamic',
     template: `<input type="text" [pAutoFocus]="autofocusEnabled" />`
@@ -34,6 +38,7 @@ class TestAutofocusDynamicComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-button',
     template: `<button [pAutoFocus]="true">Focus Button</button>`
@@ -41,6 +46,7 @@ class TestAutofocusDynamicComponent {
 class TestAutofocusButtonComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-div',
     template: `<div tabindex="0" [pAutoFocus]="true">Focusable Div</div>`
@@ -48,6 +54,7 @@ class TestAutofocusButtonComponent {}
 class TestAutofocusDivComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-multiple-elements',
     template: `
@@ -63,6 +70,7 @@ class TestAutofocusMultipleElementsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-no-focusable-elements',
     template: `
@@ -75,6 +83,7 @@ class TestAutofocusMultipleElementsComponent {
 class TestAutofocusNoFocusableElementsComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-nested-focusable',
     template: `
@@ -92,6 +101,7 @@ class TestAutofocusNoFocusableElementsComponent {}
 class TestAutofocusNestedFocusableComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-conditional',
     template: `
@@ -107,6 +117,7 @@ class TestAutofocusConditionalComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-after-content-change',
     template: `
@@ -123,6 +134,7 @@ class TestAutofocusAfterContentChangeComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-autofocus-dialog-simulation',
     template: `

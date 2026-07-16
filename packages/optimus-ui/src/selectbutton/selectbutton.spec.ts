@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -422,6 +422,7 @@ describe('SelectButton', () => {
 
 // Test Components
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -442,6 +443,7 @@ class TestFormSelectButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-selectbutton [options]="options">
@@ -460,6 +462,7 @@ class TestPrimeTemplateSelectButtonComponent {
 
 // SelectButton pTemplate component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [SelectButton, FormsModule, CommonModule, SharedModule],
     template: `
@@ -485,6 +488,7 @@ class TestSelectButtonPTemplateComponent {
 
 // SelectButton #template reference component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [SelectButton, FormsModule, CommonModule, SharedModule],
     template: `
@@ -1163,6 +1167,7 @@ describe('SelectButton PassThrough Tests', () => {
 
 // Test components for inline PT tests
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [SelectButton, FormsModule, CommonModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: 'INLINE_STRING' }" />`
@@ -1172,6 +1177,7 @@ class TestInlineStringPTComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [SelectButton, FormsModule, CommonModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', 'data-inline': 'true' } }" />`
@@ -1181,6 +1187,7 @@ class TestInlineObjectPTComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [SelectButton, FormsModule, CommonModule],
     template: `

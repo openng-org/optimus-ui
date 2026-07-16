@@ -1,15 +1,17 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Ripple } from './ripple';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<button pRipple class="test-button">Click me</button>`
 })
 class TestBasicRippleComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<div pRipple class="test-div" [style]="style">Ripple Div</div>`
 })
@@ -18,6 +20,7 @@ class TestStyledRippleComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div pRipple class="multiple-ripple-1">First</div>
@@ -28,6 +31,7 @@ class TestStyledRippleComponent {
 class TestMultipleRippleComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div pRipple class="nested-container">
@@ -39,6 +43,7 @@ class TestMultipleRippleComponent {}
 class TestNestedRippleComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<div pRipple [style]="style" [class]="styleClass">Custom Styled Ripple</div>`
 })

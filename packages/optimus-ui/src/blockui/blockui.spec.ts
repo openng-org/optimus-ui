@@ -1,4 +1,4 @@
-import { Component, ElementRef, input, provideZonelessChangeDetection, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, input, provideZonelessChangeDetection, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { SharedModule } from '@openng/optimus-ui/api';
 import { BlockUI, BlockUIModule } from './blockui';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-blockui',
     template: `<p-blockui></p-blockui>`
@@ -13,6 +14,7 @@ import { BlockUI, BlockUIModule } from './blockui';
 class TestBasicBlockUIComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-blocked-blockui',
     template: `<p-blockui [blocked]="blocked"></p-blockui>`
@@ -22,6 +24,7 @@ class TestBlockedBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-auto-zindex-blockui',
     template: `<p-blockui [blocked]="blocked" [autoZIndex]="autoZIndex" [baseZIndex]="baseZIndex"></p-blockui>`
@@ -33,6 +36,7 @@ class TestAutoZIndexBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-blockui',
     template: `<p-blockui [blocked]="blocked" [styleClass]="styleClass"></p-blockui>`
@@ -43,6 +47,7 @@ class TestStyleClassBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-content-blockui',
     template: `
@@ -56,6 +61,7 @@ class TestContentBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-template-blockui',
     template: `
@@ -71,6 +77,7 @@ class TestTemplateBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-target-blockui',
     template: `
@@ -87,6 +94,7 @@ class TestTargetBlockUIComponent {
 
 // Mock component that implements BlockableUI interface
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'mock-blockable',
     template: `<div #blockableElement class="blockable-content"><ng-content></ng-content></div>`
@@ -100,6 +108,7 @@ class MockBlockableComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-blockable-target-blockui',
     template: `
@@ -115,6 +124,7 @@ class TestBlockableTargetBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-invalid-target-blockui',
     template: `
@@ -128,6 +138,7 @@ class TestInvalidTargetBlockUIComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-blockui',
     template: `
@@ -744,6 +755,7 @@ describe('BlockUI', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [BlockUI],
             template: `<p-blockui [blocked]="blocked()" [autoZIndex]="autoZIndex()" [baseZIndex]="baseZIndex()" [pt]="pt()"></p-blockui>`

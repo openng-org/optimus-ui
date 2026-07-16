@@ -1,4 +1,4 @@
-import { Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -2942,6 +2942,7 @@ describe('TreeTable', () => {
 // Test Components
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-treetable
@@ -3128,6 +3129,7 @@ class TestBasicTreeTableComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-treetable [value]="value" [columns]="columns">
@@ -3165,6 +3167,7 @@ class TestTemplatesTreeTableComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-treetable #treetable [value]="value" [columns]="columns"> </p-treetable> `
 })
@@ -3794,6 +3797,7 @@ describe('TreeTable Global PT', () => {
 
 // Case 12: Inline PT test with template
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     template: `
         <p-treetable [value]="nodes" [scrollable]="true" scrollHeight="200px" [pt]="{ host: 'INLINE_HOST_CLASS', scrollableWrapper: 'INLINE_WRAPPER_CLASS' }">
             <ng-template #header>

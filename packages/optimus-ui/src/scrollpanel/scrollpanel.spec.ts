@@ -1,10 +1,11 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ScrollPanel } from './scrollpanel';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-scrollpanel [styleClass]="styleClass" [step]="step" style="width: 400px; height: 200px;">
@@ -23,6 +24,7 @@ class TestScrollPanelComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-scrollpanel style="width: 300px; height: 150px;">
@@ -38,6 +40,7 @@ class TestScrollPanelComponent {
 class TestTemplateScrollPanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-scrollpanel style="width: 280px; height: 120px;">
@@ -53,6 +56,7 @@ class TestTemplateScrollPanelComponent {}
 class TestContentTemplateScrollPanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-scrollpanel style="width: 250px; height: 100px;">
@@ -63,6 +67,7 @@ class TestContentTemplateScrollPanelComponent {}
 class TestNoScrollScrollPanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-scrollpanel [pt]="pt" style="width: 400px; height: 200px;">

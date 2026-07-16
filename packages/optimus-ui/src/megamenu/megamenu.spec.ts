@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 import { MegaMenu } from './megamenu';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-megamenu
@@ -78,6 +79,7 @@ class TestBasicMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-vertical-megamenu',
     template: ` <p-megamenu [model]="verticalModel" orientation="vertical"></p-megamenu> `
@@ -110,6 +112,7 @@ class TestVerticalMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-megamenu',
     template: ` <p-megamenu [model]="routerModel"></p-megamenu> `
@@ -147,6 +150,7 @@ class TestRouterMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-template-megamenu',
     template: `
@@ -180,6 +184,7 @@ class TestTemplateMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-ptemplate-megamenu',
     template: `
@@ -204,6 +209,7 @@ class TestPTemplateMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-megamenu',
     template: ` <p-megamenu [model]="disabledModel"></p-megamenu> `
@@ -213,6 +219,7 @@ class TestDisabledMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-megamenu',
     template: ` <p-megamenu [model]="model" [styleClass]="customStyleClass"></p-megamenu> `
@@ -223,6 +230,7 @@ class TestStyledMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-minimal-megamenu',
     template: `<p-megamenu></p-megamenu>`
@@ -230,6 +238,7 @@ class TestStyledMegaMenuComponent {
 class TestMinimalMegaMenuComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-megamenu',
     template: ` <p-megamenu [model]="dynamicModel"></p-megamenu> `
@@ -251,6 +260,7 @@ class TestDynamicMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-command-megamenu',
     template: ` <p-megamenu [model]="commandModel"></p-megamenu> `
@@ -288,6 +298,7 @@ class TestCommandMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-responsive-megamenu',
     template: ` <p-megamenu [model]="model" [breakpoint]="breakpoint"></p-megamenu> `
@@ -298,6 +309,7 @@ class TestResponsiveMegaMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     template: '<div>Target Page</div>'
 })
