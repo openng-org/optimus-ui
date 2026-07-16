@@ -31,8 +31,8 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
         "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
-        "build:package": "tsup",
-        "build:dev:package": "tsup --watch",
+        "build:package": "tsdown",
+        "build:dev:package": "tsdown --watch",
         "dev:link": "pnpm link --global && npm link"
     },
     "dependencies": {

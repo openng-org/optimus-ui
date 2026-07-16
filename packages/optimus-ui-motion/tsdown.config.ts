@@ -1,4 +1,4 @@
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -7,9 +7,11 @@ export default defineConfig({
     format: ['esm'],
     outDir: 'dist',
     dts: true,
-    external: [/^@openng\/optimus-ui-(.*)$/],
+    target: false,
+    deps: {
+        neverBundle: [/^@openng\/optimus-ui-(.*)$/]
+    },
     minify: isProduction,
     sourcemap: isProduction,
-    splitting: false,
     clean: isProduction
 });

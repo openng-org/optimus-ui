@@ -1,5 +1,5 @@
 import { globSync } from 'glob';
-import { defineConfig, type Options } from 'tsup';
+import { defineConfig, type UserConfig } from 'tsdown';
 
 const isProduction = process.env.NODE_ENV === 'production';
 const themes: string[] = [];
@@ -23,18 +23,16 @@ export default defineConfig([
         dts: {
             entry: ['src/index.ts']
         },
-        external: [/^@openng\/optimus-ui-(.*)$/],
-        minify: isProduction ? 'terser' : false,
+        target: false,
+        deps: {
+            neverBundle: [/^@openng\/optimus-ui-(.*)$/]
+        },
+        // oxc's mangler has no terser-style `reserved` list, so keep names intact
+        minify: isProduction ? { compress: true, mangle: false, codegen: true } : false,
         sourcemap: isProduction,
-        splitting: false,
-        clean: isProduction,
-        terserOptions: {
-            mangle: {
-                reserved: ['theme', 'style', 'css']
-            }
-        }
+        clean: isProduction
     },
-    ...themes.map<Options>((theme) => {
+    ...themes.map<UserConfig>((theme) => {
         const name = theme.charAt(0).toUpperCase() + theme.slice(1);
         const globalName = `Optimus.Themes.${name}`;
 
@@ -45,20 +43,18 @@ export default defineConfig([
             format: ['iife'],
             outDir: 'umd',
             globalName,
-            minify: 'terser',
+            dts: false,
+            target: false,
+            minify: { compress: true, mangle: false, codegen: true },
             watch: false,
-            clean: isProduction,
-            terserOptions: {
-                mangle: {
-                    reserved: ['theme', 'style', 'css']
-                }
+            clean: false,
+            outputOptions: {
+                // tsdown appends an `.iife` suffix by default; keep the plain `<theme>.js` name
+                entryFileNames: '[name].js'
             },
-            outExtension: () => ({ js: `.js` }),
-            esbuildOptions(options) {
-                options.footer = {
-                    // https://github.com/egoist/tsup/issues/710
-                    js: `${globalName} = ${globalName}.default || ${globalName};`
-                };
+            footer: {
+                // https://github.com/egoist/tsup/issues/710
+                js: `${globalName} = ${globalName}.default || ${globalName};`
             }
         };
     }),
@@ -69,9 +65,9 @@ export default defineConfig([
         format: ['esm'],
         outDir: 'tokens',
         dts: true,
-        minify: isProduction ? 'terser' : false,
+        target: false,
+        minify: isProduction ? { compress: true, mangle: false, codegen: true } : false,
         sourcemap: isProduction,
-        splitting: false,
         clean: isProduction
     }
 ]);
