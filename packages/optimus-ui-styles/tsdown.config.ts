@@ -1,5 +1,5 @@
 import { globSync } from 'glob';
-import { defineConfig } from 'tsup';
+import { defineConfig } from 'tsdown';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -16,16 +16,15 @@ export default defineConfig([
         entry,
         format: ['esm'],
         outDir: 'dist',
-        external: [/^@openng\/optimus-ui-(.*)$/],
-        minify: isProduction ? 'terser' : false,
+        dts: false,
+        target: false,
+        deps: {
+            neverBundle: [/^@openng\/optimus-ui-(.*)$/]
+        },
+        // oxc's mangler has no terser-style `reserved` list, so keep names intact
+        minify: isProduction ? { compress: true, mangle: false, codegen: true } : false,
         sourcemap: isProduction,
-        splitting: false,
-        clean: isProduction,
-        terserOptions: {
-            mangle: {
-                reserved: ['theme', 'style', 'css']
-            }
-        }
+        clean: isProduction
     },
     {
         entry: {
@@ -35,9 +34,12 @@ export default defineConfig([
         format: ['esm'],
         outDir: 'dist',
         dts: true,
-        external: [/^@openng\/optimus-ui-(.*)$/],
+        target: false,
+        deps: {
+            neverBundle: [/^@openng\/optimus-ui-(.*)$/]
+        },
         minify: isProduction,
         sourcemap: isProduction,
-        splitting: false
+        clean: false
     }
 ]);

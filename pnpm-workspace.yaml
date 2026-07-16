@@ -11,9 +11,6 @@ allowBuilds:
   lmdb: true
   msgpackr-extract: true
 
-patchedDependencies:
-  'tsup@8.5.1': patches/tsup@8.5.1.patch
-
 catalog:
   'tailwindcss-primeui': ^0.6.1
   'primeicons': ^7.0.0
@@ -43,3 +40,4 @@ catalogs:
 
 minimumReleaseAgeExclude:
   - pnpm@11.13.1
+  - tsdown@0.22.9
