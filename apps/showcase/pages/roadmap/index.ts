@@ -1,145 +1,60 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { TimelineModule } from '@openng/optimus-ui/timeline';
 
 @Component({
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, TimelineModule],
     template: `
         <div>
             <div class="doc-intro">
                 <h1>Roadmap</h1>
                 <p>
-                    At <a href="https://www.primetek.com.tr/" target="_blank" rel="noopener noreferrer" class="text-primary font-medium hover:underline">PrimeTek</a>, we are passionate about improving PrimeNG and would like to share our ideas for
-                    2026 (Year 10) with the community. These are planned to be implemented in parallel to the regular maintenance work of the library involving review of issue tickets, PRs, LTS updates and PrimeNG PRO support. Based on semantic
-                    versioning guidelines, PrimeNG updates will be backward compatible with a clear migration path when necessary.
+                    This community fork is meant to provide a MIT sustainable version of the now closed-source PrimeNG library. Priorities are fixing bugs and providing new versions to match major angular version compatibility. Feature requests will
+                    be triaged but implemented only with the help of community contributions.
                 </p>
             </div>
 
-            <div class="overflow-auto">
-                <div style="min-width: 1200px">
-                    <div class="flex gap-4 mb-4">
-                        <div class="shrink-0 w-56"></div>
-                        <div class="flex-1 bg-gray-500 text-white font-bold text-center p-4 text-xl rounded">Q1</div>
-                        <div class="flex-1 bg-gray-500 text-white font-bold text-center p-4 text-xl rounded">Q2</div>
-                        <div class="flex-1 bg-gray-500 text-white font-bold text-center p-4 text-xl rounded">Q3</div>
-                        <div class="flex-1 bg-gray-500 text-white font-bold text-center p-4 text-xl rounded">Q4</div>
-                    </div>
-                    <div class="flex flex-col gap-4">
-                        <div class="flex gap-4 border-b border-surface-200 dark:border-surface-700 pb-4">
-                            <div class="shrink-0 p-4 bg-blue-500 text-white rounded font-bold text-lg flex items-center justify-center w-56">COMPONENTS</div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Internal Refactor</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Component Updates</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Enhanced Menus, ColorPicker, Org Chart, Toast. Brand new CommandMenu component.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeUI+</h2>
-                                    <p class="mt-0 mb-4 leading-normal">New TextEditor and Event Calendar components.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Theming API Enhancements</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Significant performance and devex updates.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeIcons Update</h2>
-                                    <p class="mt-0 mb-4 leading-normal">100+ new icons.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeUI+</h2>
-                                    <p class="mt-0 mb-4 leading-normal">PrimeCharts, Advanced DataGrid, PDF Viewer and Gantt Chart.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Internal Refactor</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeNG v22</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Angular v22 compatible version.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeUI+</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Timeline, Diagram and File Manager.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Internal Refactor</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4 ">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Internal Refactor</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Refactor of internal component implementations with modern Angular APIs.</p>
-                                </div>
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-blue-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">PrimeNG v23</h2>
-                                    <p class="mt-0 mb-4 leading-normal">Angular v23 compatible version.</p>
-                                </div>
-                            </div>
+            <div class="card mt-8">
+                <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+                    <ng-template #content let-event>
+                        <div class="p-4 mb-4 border rounded-xl shadow-sm bg-surface-0 dark:bg-surface-900 border-surface-200 dark:border-surface-800">
+                            <h3 class="text-xl font-semibold mb-2 mt-0">{{ event.title }}</h3>
+                            <p *ngIf="event.description" class="text-surface-600 dark:text-surface-400 m-0">{{ event.description }}</p>
+                            <ul *ngIf="event.features" class="mt-2 mb-0 list-inside list-disc text-surface-600 dark:text-surface-400">
+                                <li *ngFor="let feature of event.features" class="mb-1">{{ feature }}</li>
+                            </ul>
                         </div>
-                        <div class="flex gap-4 border-b border-surface pb-4">
-                            <div class="shrink-0 p-4 bg-indigo-500 text-white rounded font-bold text-lg flex items-center justify-center w-56">FIGMA UI Kit</div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-indigo-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">UI Kit v4</h2>
-                                    <p class="mt-0 leading-normal">Migration from Tokens Studio to Figma Variables.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-indigo-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">New Design Tokens</h2>
-                                    <p class="mt-0 leading-normal">New tokens such as typography and spacing.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col"></div>
-                            <div class="flex-1 flex gap-4 flex-col"></div>
-                        </div>
-                        <div class="flex gap-4 border-b border-surface pb-4">
-                            <div class="shrink-0 p-4 bg-violet-500 text-white rounded font-bold text-lg flex items-center justify-center w-56">TEMPLATES</div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-violet-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Maintenance and Quality</h2>
-                                    <p class="mt-0 leading-normal">Focus on improving the quality with maintenance updates.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex gap-4 border-b border-surface pb-4">
-                            <div class="shrink-0 p-4 bg-orange-500 text-white rounded font-bold text-lg flex items-center justify-center w-56">PRIMEBLOCKS</div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-orange-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Maintenance and Quality</h2>
-                                    <p class="mt-0 leading-normal">Focus on improving the quality with maintenance updates.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col">
-                                <div class="p-4 bg-surface-0 dark:bg-surface-900 rounded border-orange-500 border-l-4">
-                                    <h2 class="text-lg font-bold mt-0 mb-2">Block Builder</h2>
-                                    <p class="mt-0 leading-normal">AI Based PrimeBlock builder.</p>
-                                </div>
-                            </div>
-                            <div class="flex-1 flex gap-4 flex-col"></div>
-                            <div class="flex-1 flex gap-4 flex-col"></div>
-                        </div>
-                    </div>
-                </div>
+                    </ng-template>
+                </p-timeline>
             </div>
         </div>
     `
 })
 export class RoadmapDemo {
+    events: any[];
+
     constructor(
         private titleService: Title,
         private metaService: Meta
     ) {
-        this.titleService.setTitle('Roadmap - PrimeNG');
-        this.metaService.updateTag({ name: 'description', content: 'PrimeNG Roadmap' });
+        this.titleService.setTitle('Roadmap - Optimus UI');
+        this.metaService.updateTag({ name: 'description', content: 'Optimus UI Roadmap' });
+
+        this.events = [
+            {
+                title: 'v1',
+                features: ['Rebranded from PrimeNG', 'Angular v21 compatible', 'ng add support for seamless installation', 'Schematic to migrate from PrimeNG']
+            },
+            {
+                title: 'v2',
+                features: ['Angular v22 compatible']
+            },
+            {
+                title: 'Catchup step',
+                features: ['Triage and address existing 900+ open issues', 'Modernize the library to Angular modern APIs']
+            }
+        ];
     }
 }
