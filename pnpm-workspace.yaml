@@ -13,9 +13,6 @@ allowBuilds:
   lmdb: true
   msgpackr-extract: true
 
-patchedDependencies:
-  'tsup@8.5.1': patches/tsup@8.5.1.patch
-
 catalog:
   '@openng/icons': ^1.0.0
 
