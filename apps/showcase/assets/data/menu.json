@@ -591,10 +591,6 @@
                     "name": "Contribution",
                     "routerLink": "/contribution",
                     "icon": "pi pi-users"
-                },
-                {
-                    "name": "Twitter",
-                    "href": "https://twitter.com/prime_ng"
                 }
             ]
         }

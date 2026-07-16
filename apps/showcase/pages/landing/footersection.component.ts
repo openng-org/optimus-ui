@@ -56,9 +56,6 @@ import { RouterModule } from '@angular/router';
                                 >
                             </li>
                             <li class="mb-6">
-                                <a href="https://twitter.com/prime_ng" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Twitter</a>
-                            </li>
-                            <li class="mb-6">
                                 <a href="mailto:contact@primetek.com.tr" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Contact Us</a>
                             </li>
                         </ul>
@@ -70,9 +67,6 @@ import { RouterModule } from '@angular/router';
                 <div class="flex flex-wrap justify-between py-12 gap-8">
                     <img ngSrc="logo.svg" height="40" width="200" alt="" />
                     <div class="flex items-center gap-2">
-                        <a href="https://twitter.com/prime_ng" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
-                            <i class="pi pi-twitter"></i>
-                        </a>
                         <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-github"></i>
                         </a>
