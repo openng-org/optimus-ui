@@ -1,6 +1,6 @@
 import { HttpEventType } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -738,6 +738,7 @@ describe('FileUpload', () => {
 
 // Test Components for Template Testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -754,6 +755,7 @@ describe('FileUpload', () => {
 class TestPTemplateHeaderComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -770,6 +772,7 @@ class TestPTemplateHeaderComponent {}
 class TestHashHeaderComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -787,6 +790,7 @@ class TestHashHeaderComponent {}
 class TestPTemplateContentComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -804,6 +808,7 @@ class TestPTemplateContentComponent {}
 class TestHashContentComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -818,6 +823,7 @@ class TestHashContentComponent {}
 class TestPTemplateFileComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -830,6 +836,7 @@ class TestPTemplateFileComponent {}
 class TestPTemplateEmptyComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
@@ -844,6 +851,7 @@ class TestPTemplateEmptyComponent {}
 class TestPTemplateFileLabelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -862,6 +870,7 @@ class TestPTemplateFileLabelComponent {}
 class TestPTemplateIconsComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -877,6 +886,7 @@ class TestPTemplateIconsComponent {}
 class TestPTemplateToolbarComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload" [files]="files">
@@ -901,6 +911,7 @@ class TestFileRemoveIconComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -930,6 +941,7 @@ class TestContextObjectsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -961,6 +973,7 @@ class TestContentContextComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-fileupload mode="basic" name="testFile[]" url="https://test.com/upload">
@@ -1630,6 +1643,7 @@ describe('FileUpload Advanced Template Combinations', () => {
 
     describe('Mixed Template Usage', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -1794,6 +1808,7 @@ describe('FileUpload Advanced Template Combinations', () => {
 
     describe('Template Context Validation', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-fileupload mode="advanced" name="testFile[]" url="https://test.com/upload">
@@ -2699,6 +2714,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
@@ -2744,6 +2760,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
@@ -2799,6 +2816,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
@@ -2844,6 +2862,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" [name]="fileName" url="./upload" [disabled]="isDisabled"></p-fileupload>`
             })
@@ -2891,6 +2910,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })
@@ -2938,12 +2958,14 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="{ root: 'INLINE_ROOT_CLASS', header: 'INLINE_HEADER_CLASS' }" name="test" url="./upload"></p-fileupload>`
             })
             class TestPTCase6InlineComponent {}
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, content: { class: 'INLINE_CONTENT_CLASS' } }" name="test" url="./upload"></p-fileupload>`
             })
@@ -2996,6 +3018,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-fileupload name="file1" url="./upload"></p-fileupload>
@@ -3043,6 +3066,7 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-fileupload [pt]="pt" name="test" url="./upload"></p-fileupload>`
             })

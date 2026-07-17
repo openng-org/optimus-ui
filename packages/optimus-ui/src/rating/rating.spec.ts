@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 
 // Basic Rating test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, FormsModule],
     template: `
@@ -59,6 +60,7 @@ class TestBasicRatingComponent {
 
 // Reactive form test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, ReactiveFormsModule],
     template: `
@@ -77,6 +79,7 @@ class TestReactiveRatingComponent {
 
 // Template test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, FormsModule],
     template: `
@@ -96,6 +99,7 @@ class TestTemplateRatingComponent {
 
 // Advanced features test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, FormsModule],
     template: ` <p-rating [(ngModel)]="value" [stars]="numberOfStars" [readonly]="isReadonly" [disabled]="isDisabled" [name]="name" [required]="required" (onRate)="onAdvancedRate($event)" /> `
@@ -117,6 +121,7 @@ class TestAdvancedRatingComponent {
 
 // Rating pTemplate component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, FormsModule, CommonModule, SharedModule],
     template: `
@@ -140,6 +145,7 @@ class TestRatingPTemplateComponent {
 
 // Rating #template reference component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [Rating, FormsModule, CommonModule, SharedModule],
     template: `
@@ -1070,6 +1076,7 @@ describe('Rating', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
@@ -1114,6 +1121,7 @@ describe('Rating', () => {
 
         describe('Case 2: Object with class, style, data attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
@@ -1156,6 +1164,7 @@ describe('Rating', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
@@ -1192,6 +1201,7 @@ describe('Rating', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [stars]="5" [pt]="pt"></p-rating>`
             })
@@ -1237,6 +1247,7 @@ describe('Rating', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
@@ -1283,6 +1294,7 @@ describe('Rating', () => {
 
         describe('Case 6: Inline PT', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="{ host: 'INLINE_HOST_CLASS', option: 'INLINE_OPTION_CLASS' }"></p-rating>`
             })
@@ -1310,6 +1322,7 @@ describe('Rating', () => {
             });
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' }, option: { class: 'OPTION_INLINE_CLASS' } }"></p-rating>`
             })
@@ -1339,6 +1352,7 @@ describe('Rating', () => {
 
         describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value"></p-rating>`
             })
@@ -1378,6 +1392,7 @@ describe('Rating', () => {
 
         describe('Case 8: PT Hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })
@@ -1423,6 +1438,7 @@ describe('Rating', () => {
 
         describe('PT Section Coverage', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-rating [(ngModel)]="value" [pt]="pt"></p-rating>`
             })

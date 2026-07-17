@@ -1,4 +1,4 @@
-import { Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, NO_ERRORS_SCHEMA, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { BreadcrumbItemClickEvent } from '@openng/optimus-ui/types/breadcrumb';
 import { Breadcrumb } from './breadcrumb';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-breadcrumb [model]="model" [home]="home" [style]="style" [styleClass]="styleClass" [homeAriaLabel]="homeAriaLabel" (onItemClick)="onItemClick($event)"> </p-breadcrumb> `
 })
@@ -30,6 +31,7 @@ class TestBasicBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-static-breadcrumb',
     template: ` <p-breadcrumb [model]="model" [home]="home"> </p-breadcrumb> `
@@ -43,6 +45,7 @@ class TestStaticBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-breadcrumb [model]="model" [home]="home">
@@ -64,6 +67,7 @@ class TestItemTemplateBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-breadcrumb [model]="model" [home]="home">
@@ -79,6 +83,7 @@ class TestPTemplateItemBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-breadcrumb [model]="model" [home]="home">
@@ -94,6 +99,7 @@ class TestSeparatorTemplateBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-breadcrumb [model]="model" [home]="home">
@@ -109,6 +115,7 @@ class TestPTemplateSeparatorBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-breadcrumb',
     template: ` <p-breadcrumb [model]="routerModel" [home]="routerHome"> </p-breadcrumb> `
@@ -122,6 +129,7 @@ class TestRouterBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-breadcrumb',
     template: ` <p-breadcrumb [style]="customStyle" styleClass="custom-breadcrumb"> </p-breadcrumb> `
@@ -135,6 +143,7 @@ class TestStyledBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-minimal-breadcrumb',
     template: ` <p-breadcrumb></p-breadcrumb> `
@@ -142,6 +151,7 @@ class TestStyledBreadcrumbComponent {
 class TestMinimalBreadcrumbComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-breadcrumb',
     template: ` <p-breadcrumb [model]="dynamicModel" [home]="dynamicHome"> </p-breadcrumb> `
@@ -160,6 +170,7 @@ class TestDynamicBreadcrumbComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     selector: 'test-target-component',
     template: '<div>Target Page</div>'

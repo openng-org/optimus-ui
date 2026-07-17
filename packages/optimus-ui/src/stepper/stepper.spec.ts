@@ -1,10 +1,11 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Step, StepItem, StepList, StepPanel, StepPanels, Stepper } from './stepper';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-stepper [(value)]="value" [linear]="linear" [transitionOptions]="transitionOptions">
@@ -35,6 +36,7 @@ class TestStepperComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-stepper [value]="1">
@@ -58,6 +60,7 @@ class TestVerticalStepperComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-stepper [(value)]="value">
@@ -90,6 +93,7 @@ class TestTemplateStepperComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-stepper [value]="1" [pt]="pt">

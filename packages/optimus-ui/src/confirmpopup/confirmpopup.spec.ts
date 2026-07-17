@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { ConfirmPopup } from './confirmpopup';
 
 // Basic ConfirmPopup Component Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup
@@ -59,6 +60,7 @@ class TestBasicConfirmPopupComponent {
 
 // ConfirmPopup with pTemplate Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup>
@@ -102,6 +104,7 @@ class TestTemplatePConfirmPopupComponent {
 
 // ConfirmPopup with #template Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup>
@@ -145,6 +148,7 @@ class TestContentTemplateConfirmPopupComponent {
 
 // ConfirmPopup with Multiple Keys
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup key="popup1"></p-confirmpopup>
@@ -184,6 +188,7 @@ class TestMultipleKeysComponent {
 
 // ConfirmPopup Focus Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup [defaultFocus]="defaultFocus"></p-confirmpopup>
@@ -205,6 +210,7 @@ class TestFocusConfirmPopupComponent {
 
 // ConfirmPopup Button Properties Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-button-properties-confirmpopup',
     template: `
@@ -231,6 +237,7 @@ class TestButtonPropertiesComponent {
 
 // ConfirmPopup Position Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmpopup></p-confirmpopup>
@@ -252,6 +259,7 @@ class TestPositionConfirmPopupComponent {
 
 // ConfirmPopup Accessibility Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-accessibility-confirmpopup',
     template: `
@@ -1369,6 +1377,7 @@ describe('ConfirmPopup', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test"></p-confirmpopup>
@@ -1429,6 +1438,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test"></p-confirmpopup>
@@ -1498,6 +1508,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test"></p-confirmpopup>
@@ -1558,6 +1569,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test" [visible]="isVisible"></p-confirmpopup>
@@ -1620,6 +1632,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test"></p-confirmpopup>
@@ -1681,6 +1694,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="{ root: 'INLINE_ROOT_CLASS', content: 'INLINE_CONTENT_CLASS' }" key="test"></p-confirmpopup>
@@ -1701,6 +1715,7 @@ describe('ConfirmPopup', () => {
             }
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="{ root: { class: 'INLINE_ROOT_OBJECT_CLASS' }, message: { class: 'INLINE_MESSAGE_CLASS' } }" key="test"></p-confirmpopup>
@@ -1769,6 +1784,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup key="test1"></p-confirmpopup>
@@ -1823,6 +1839,7 @@ describe('ConfirmPopup', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmpopup [pt]="pt" key="test"></p-confirmpopup>

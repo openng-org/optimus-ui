@@ -1,16 +1,18 @@
-import { Component, DebugElement, provideZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Card, CardModule } from './card';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<p-card></p-card>`
 })
 class TestBasicCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card [header]="header" [subheader]="subheader" [styleClass]="styleClass" [style]="style">
@@ -26,6 +28,7 @@ class TestCustomCardComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card>
@@ -50,6 +53,7 @@ class TestCustomCardComponent {
 class TestTemplateCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card>
@@ -66,6 +70,7 @@ class TestTemplateCardComponent {}
 class TestFacetCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card>
@@ -96,6 +101,7 @@ class TestContentChildCardComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card header="Simple Header" subheader="Simple Subheader">
@@ -106,6 +112,7 @@ class TestContentChildCardComponent {
 class TestSimpleTextCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card [header]="header" [subheader]="subheader">
@@ -122,6 +129,7 @@ class TestDynamicCardComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card>
@@ -151,6 +159,7 @@ class TestDynamicCardComponent {
 class TestComplexCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card header="Header Only">
@@ -161,6 +170,7 @@ class TestComplexCardComponent {}
 class TestHeaderOnlyCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card subheader="Subheader Only">
@@ -171,6 +181,7 @@ class TestHeaderOnlyCardComponent {}
 class TestSubheaderOnlyCardComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-card>
@@ -1275,6 +1286,7 @@ describe('Card', () => {
         describe('PT with Footer Section', () => {
             it('should apply PT class to footer section when footer content exists', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `
                         <p-card [pt]="pt">
@@ -1305,6 +1317,7 @@ describe('Card', () => {
 
             it('should apply PT class to header section', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `
                         <p-card [pt]="pt">
@@ -1337,6 +1350,7 @@ describe('Card', () => {
         describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration from OptimusConfig', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `
                         <p-card header="Card 1"></p-card>
@@ -1374,6 +1388,7 @@ describe('Card', () => {
 
             it('should merge local PT with global PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="localPt" header="Test"></p-card>`
                 })
@@ -1405,6 +1420,7 @@ describe('Card', () => {
                 let hookExecuted = false;
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt"></p-card>`
                 })
@@ -1436,6 +1452,7 @@ describe('Card', () => {
                 let beforeMountExecuted = false;
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt"></p-card>`
                 })
@@ -1466,6 +1483,7 @@ describe('Card', () => {
                 let contentInitExecuted = false;
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt"></p-card>`
                 })
@@ -1496,6 +1514,7 @@ describe('Card', () => {
                 const executedHooks: string[] = [];
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt"></p-card>`
                 })
@@ -1532,6 +1551,7 @@ describe('Card', () => {
         describe('Advanced PT Scenarios', () => {
             it('should apply PT with all sections', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `
                         <p-card [pt]="pt" [header]="'Test Header'" [subheader]="'Test Subheader'">
@@ -1591,6 +1611,7 @@ describe('Card', () => {
 
             it('should handle PT with function returning classes based on instance', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt" [header]="header"></p-card>`
                 })
@@ -1619,6 +1640,7 @@ describe('Card', () => {
 
             it('should handle dynamic PT updates', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt"></p-card>`
                 })
@@ -1709,6 +1731,7 @@ describe('Card', () => {
 
             it('should handle PT function with instance-based styles', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: false,
                     template: `<p-card [pt]="pt" [header]="header" [subheader]="subheader"></p-card>`
                 })

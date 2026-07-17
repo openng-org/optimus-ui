@@ -1,8 +1,9 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "baseUrl": "./",
         "outDir": "./out-tsc/app",
+        // TS 6 defaults rootDir to the tsconfig dir; widen it so paths-mapped optimus-ui sources are allowed
+        "rootDir": "../..",
         "types": ["node"],
         "strict": false,
         "paths": {

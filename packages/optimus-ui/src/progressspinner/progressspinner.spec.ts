@@ -1,9 +1,10 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ProgressSpinner } from './progressspinner';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<p-progressspinner [strokeWidth]="strokeWidth" [fill]="fill" [animationDuration]="animationDuration" [ariaLabel]="ariaLabel" [styleClass]="styleClass"> </p-progressspinner>`
 })
@@ -16,6 +17,7 @@ class TestBasicProgressSpinnerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<p-progressspinner [style]="style" [styleClass]="styleClass"></p-progressspinner>`
 })
@@ -25,6 +27,7 @@ class TestStyleProgressSpinnerComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<p-progressspinner strokeWidth="4" fill="red" animationDuration="3s" ariaLabel="Loading content"> </p-progressspinner>`
 })
@@ -495,6 +498,7 @@ describe('ProgressSpinner', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [ProgressSpinner],
             template: `<p-progressspinner [strokeWidth]="strokeWidth()" [fill]="fill()" [animationDuration]="animationDuration()" [ariaLabel]="ariaLabel()" [pt]="pt()"></p-progressspinner>`

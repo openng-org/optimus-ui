@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, ViewChild, signal, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, signal, provideZonelessChangeDetection } from '@angular/core';
 import { By } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { DataView } from './dataview';
 import { PaginatorModule } from '@openng/optimus-ui/paginator';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dataview
@@ -118,6 +119,7 @@ class TestBasicDataViewComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dataview [value]="products">
@@ -145,6 +147,7 @@ class TestHeaderFooterDataViewComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dataview [value]="products" [paginator]="true" [rows]="2">
@@ -178,6 +181,7 @@ class TestTemplatesDataViewComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dataview [value]="products()" [layout]="layout">
@@ -1625,6 +1629,7 @@ describe('DataView', () => {
 
 // Test component for dynamic values
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-dataview

@@ -60,8 +60,8 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
         "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
-        "build:package": "pnpm run type:check && pnpm run build:tokens && tsup && pnpm run build:postbuild",
-        "build:dev:package": "pnpm run build:tokens && tsup --watch && pnpm run build:postbuild",
+        "build:package": "pnpm run type:check && pnpm run build:tokens && tsdown && pnpm run build:postbuild",
+        "build:dev:package": "pnpm run build:tokens && tsdown --watch && pnpm run build:postbuild",
         "build:postbuild": "node ./scripts/postbuild.mjs",
         "build:tokens": "node ./scripts/build-tokens.mjs",
         "type:check": "tsc --noEmit",

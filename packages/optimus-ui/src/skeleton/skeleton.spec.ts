@@ -1,11 +1,13 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
+import { provideOptimus } from '@openng/optimus-ui/config';
 import { Skeleton, SkeletonModule } from './skeleton';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-skeleton',
     template: `<p-skeleton [shape]="shape" [animation]="animation" [width]="width" [height]="height"></p-skeleton>`
@@ -18,6 +20,7 @@ class TestBasicSkeletonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-shapes',
     template: ` <p-skeleton [shape]="shape" [size]="size" [borderRadius]="borderRadius" [animation]="animation"> </p-skeleton> `
@@ -30,6 +33,7 @@ class TestSkeletonShapesComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-dimensions',
     template: ` <p-skeleton [width]="width" [height]="height" [size]="size" [shape]="shape"> </p-skeleton> `
@@ -42,6 +46,7 @@ class TestSkeletonDimensionsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-animations',
     template: ` <p-skeleton [animation]="animation" [shape]="shape"> </p-skeleton> `
@@ -52,6 +57,7 @@ class TestSkeletonAnimationsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-styling',
     template: ` <p-skeleton [styleClass]="styleClass" [shape]="shape" [borderRadius]="borderRadius"> </p-skeleton> `
@@ -63,6 +69,7 @@ class TestSkeletonStylingComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-card-layout',
     template: `
@@ -79,6 +86,7 @@ class TestSkeletonStylingComponent {
 class TestSkeletonCardLayoutComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-data-table',
     template: `
@@ -106,6 +114,7 @@ class TestSkeletonDataTableComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-empty',
     template: `<p-skeleton></p-skeleton>`
@@ -113,6 +122,7 @@ class TestSkeletonDataTableComponent {
 class TestSkeletonEmptyComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-skeleton-dynamic',
     template: ` <p-skeleton [shape]="dynamicShape" [animation]="dynamicAnimation" [width]="dynamicWidth" [height]="dynamicHeight" [size]="dynamicSize" [borderRadius]="dynamicBorderRadius" [styleClass]="dynamicStyleClass"> </p-skeleton> `
@@ -725,6 +735,7 @@ describe('Skeleton', () => {
     describe('Performance', () => {
         it('should handle multiple skeletons efficiently', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <div *ngFor="let item of items; trackBy: trackByFn">
@@ -786,6 +797,7 @@ describe('Skeleton', () => {
     describe('Complex Scenarios', () => {
         it('should handle nested skeleton layouts', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <div class="container">
@@ -830,6 +842,7 @@ describe('Skeleton', () => {
 
         it('should work with conditional rendering', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <div *ngIf="showSkeletons">
@@ -940,6 +953,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 1: Simple string classes', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
@@ -983,6 +997,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 2: Objects', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
@@ -1042,6 +1057,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 3: Mixed object and string values', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
@@ -1084,6 +1100,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 4: Use variables from instance', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [shape]="shape" [animation]="animation" [pt]="pt"></p-skeleton> `
         })
@@ -1155,6 +1172,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 5: Event binding', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })
@@ -1222,12 +1240,14 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 6: Inline test', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="{ host: 'INLINE_HOST_CLASS' }"></p-skeleton> `
         })
         class TestSkeletonInlineStringPtComponent {}
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="{ host: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid green' } } }"></p-skeleton> `
         })
@@ -1269,9 +1289,8 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 7: Test from OptimusConfig', () => {
         it('should apply global pt configuration from OptimusConfig', () => {
-            const { provideOptimus } = require('@openng/optimus-ui/config');
-
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-skeleton></p-skeleton>
@@ -1311,9 +1330,8 @@ describe('Skeleton', () => {
         });
 
         it('should merge local pt with global pt configuration', () => {
-            const { provideOptimus } = require('@openng/optimus-ui/config');
-
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: ` <p-skeleton [pt]="{ host: 'LOCAL_HOST_CLASS', root: 'LOCAL_ROOT_CLASS' }"></p-skeleton> `
             })
@@ -1348,6 +1366,7 @@ describe('Skeleton', () => {
 
     describe('PassThrough - Case 8: Test hooks', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-skeleton [pt]="pt"></p-skeleton> `
         })

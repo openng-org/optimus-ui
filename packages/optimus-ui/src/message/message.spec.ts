@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
@@ -7,6 +7,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 import { Message } from './message';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-message
@@ -53,6 +54,7 @@ class TestBasicMessageComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-message [closable]="true">
@@ -68,6 +70,7 @@ class TestBasicMessageComponent {
 class TestContainerTemplateComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-message [closable]="true">
@@ -84,6 +87,7 @@ class TestContainerTemplateComponent {}
 class TestIconTemplatesComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-message [closable]="true">
@@ -105,6 +109,7 @@ class TestIconTemplatesComponent {}
 class TestPTemplateComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-message [closable]="true" [severity]="'error'">
@@ -1440,12 +1445,14 @@ describe('Message', () => {
 
     describe('PassThrough - Case 6: Inline test', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `<p-message [pt]="{ root: 'INLINE_ROOT_CLASS' }" [text]="'Inline Test'"></p-message>`
         })
         class TestInlineStringComponent {}
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `<p-message [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid blue' } } }" [text]="'Inline Test'"></p-message>`
         })
@@ -1483,6 +1490,7 @@ describe('Message', () => {
 
     describe('PassThrough - Case 7: Test from OptimusConfig', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-message [text]="'First Message'" [closable]="true"></p-message>
@@ -1555,6 +1563,7 @@ describe('Message', () => {
 
         it('should merge local pt with global pt configuration', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `<p-message [pt]="{ root: 'LOCAL_ROOT_CLASS', content: 'LOCAL_CONTENT_CLASS' }" [text]="'Test'"></p-message>`
             })

@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { ConfirmDialog } from './confirmdialog';
 
 // Basic ConfirmDialog Component Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmdialog
@@ -90,6 +91,7 @@ class TestBasicConfirmDialogComponent {
 
 // ConfirmDialog with pTemplate Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmdialog>
@@ -136,6 +138,7 @@ class TestTemplatePConfirmDialogComponent {}
 
 // ConfirmDialog with #template Templates
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmdialog>
@@ -181,6 +184,7 @@ class TestContentTemplateConfirmDialogComponent {}
 
 // ConfirmDialog Position Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-confirmdialog [position]="position" [visible]="visible"> </p-confirmdialog> `
 })
@@ -191,6 +195,7 @@ class TestPositionConfirmDialogComponent {
 
 // ConfirmDialog with ConfirmationService
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmdialog></p-confirmdialog>
@@ -230,6 +235,7 @@ class TestConfirmationServiceComponent {
 
 // ConfirmDialog Accessibility Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-confirmdialog [visible]="true" [acceptAriaLabel]="acceptAriaLabel" [rejectAriaLabel]="rejectAriaLabel" [closeAriaLabel]="closeAriaLabel" header="Accessibility Test" message="Test message"> </p-confirmdialog> `
 })
@@ -241,6 +247,7 @@ class TestAccessibilityConfirmDialogComponent {
 
 // ConfirmDialog Button Properties Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-confirmdialog
@@ -267,6 +274,7 @@ class TestButtonPropertiesComponent {
 
 // ConfirmDialog Events Test
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-confirmdialog [visible]="visible" (onHide)="onHide($event)"> </p-confirmdialog> `
 })
@@ -1046,6 +1054,7 @@ describe('ConfirmDialog', () => {
     describe('PT (PassThrough) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
@@ -1099,6 +1108,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
@@ -1161,6 +1171,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
@@ -1216,6 +1227,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test" [visible]="isVisible"></p-confirmdialog>
@@ -1276,6 +1288,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>
@@ -1336,6 +1349,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="{ pcDialog: 'INLINE_DIALOG_CLASS', message: 'INLINE_MESSAGE_CLASS' }" key="test"></p-confirmdialog>
@@ -1355,6 +1369,7 @@ describe('ConfirmDialog', () => {
             }
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="{ pcDialog: { class: 'INLINE_DIALOG_OBJECT_CLASS' }, icon: { class: 'INLINE_ICON_CLASS' } }" key="test"></p-confirmdialog>
@@ -1432,6 +1447,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog key="test1"></p-confirmdialog>
@@ -1485,6 +1501,7 @@ describe('ConfirmDialog', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-confirmdialog [pt]="pt" key="test"></p-confirmdialog>

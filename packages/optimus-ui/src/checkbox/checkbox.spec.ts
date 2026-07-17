@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -15,6 +15,7 @@ const mockIngredients = [
 ];
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-checkbox
@@ -87,6 +88,7 @@ class TestBasicCheckboxComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
@@ -116,6 +118,7 @@ class TestReactiveFormCheckboxComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-checkbox [(ngModel)]="selectedIngredients" *ngFor="let ingredient of ingredients; let i = index" [value]="ingredient.value" [inputId]="'ingredient-' + i" [name]="'pizza'" (onChange)="onSelectionChange($event)"> </p-checkbox> `
 })
@@ -131,6 +134,7 @@ class TestMultipleCheckboxComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-checkbox [(ngModel)]="value" [binary]="true" [disabled]="disabled" (onChange)="onSelectionChange($event)">
@@ -152,6 +156,7 @@ class TestTemplateCheckboxComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-checkbox [(ngModel)]="value" [binary]="true" [indeterminate]="indeterminate" [trueValue]="customTrueValue" [falseValue]="customFalseValue" (onChange)="onSelectionChange($event)"> </p-checkbox> `
 })
@@ -169,6 +174,7 @@ class TestIndeterminateCheckboxComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-checkbox [(ngModel)]="value" [binary]="true" [variant]="variant" [size]="size" inputId="styled-checkbox" [styleClass]="styleClass" [inputStyle]="inputStyle" [inputClass]="inputClass" (onChange)="onSelectionChange($event)"> </p-checkbox>
@@ -191,6 +197,7 @@ class TestStyledCheckboxComponent {
 
 // Checkbox pTemplate component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-checkbox [(ngModel)]="checked" [binary]="true" [value]="value">
@@ -211,6 +218,7 @@ class TestCheckboxPTemplateComponent {
 
 // Checkbox #template reference component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-checkbox [(ngModel)]="checked" [binary]="true" [value]="value">

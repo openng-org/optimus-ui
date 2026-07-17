@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -9,6 +9,7 @@ import { map, take } from 'rxjs/operators';
 import { Select } from './select';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-select
@@ -101,6 +102,7 @@ class TestBasicSelectComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -124,6 +126,7 @@ class TestReactiveFormSelectComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-select [options]="groupedOptions" [(ngModel)]="selectedCity" optionLabel="cname" optionValue="code" [group]="true" optionGroupLabel="label" optionGroupChildren="items" placeholder="Select a city"> </p-select> `
 })
@@ -150,6 +153,7 @@ class TestGroupedSelectComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with templates" [filter]="filter" [showClear]="showClear" [loading]="loading">
@@ -216,6 +220,7 @@ class TestSelectPTemplateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code" placeholder="Select with template refs" [filter]="filter" [showClear]="showClear" [loading]="loading">
@@ -278,6 +283,7 @@ class TestSelectRefTemplateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-select [options]="dynamicOptions()" [(ngModel)]="selectedValue" optionLabel="label" optionValue="value" [placeholder]="dynamicPlaceholder()" [disabled]="dynamicDisabled()" [loading]="dynamicLoading()"> </p-select> `
 })
@@ -315,6 +321,7 @@ class TestDynamicSelectComponent {
 
 // Dynamic data sources test component (signals, observables, async pipes)
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="dynamic-test-container">
@@ -549,6 +556,7 @@ class TestDynamicDataSourcesComponent {
 
 // Comprehensive FormControl test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="form-test-container">
@@ -664,6 +672,7 @@ class TestComprehensiveFormComponent {
 
 // Comprehensive ViewChild properties test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="viewchild-test-container">
@@ -696,6 +705,7 @@ class TestViewChildComponent {
 
 // Complex edge cases test component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="edge-cases-container">
@@ -3211,6 +3221,7 @@ describe('Select Advanced Accessibility', () => {
 // PassThrough (PT) Tests
 describe('Select PT (PassThrough)', () => {
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: true,
         imports: [CommonModule, FormsModule, Select],
         template: `

@@ -1,9 +1,10 @@
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Bind } from './bind';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-bind',
     template: `<div [pBind]="attrs"></div>`
@@ -13,6 +14,7 @@ class TestBasicBindComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-attributes',
     template: `<div [pBind]="attrs"></div>`
@@ -26,6 +28,7 @@ class TestBindAttributesComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-classes',
     template: `<div [pBind]="attrs"></div>`
@@ -37,6 +40,7 @@ class TestBindClassesComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-classes-array',
     template: `<div [pBind]="attrs"></div>`
@@ -48,6 +52,7 @@ class TestBindClassesArrayComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-classes-object',
     template: `<div [pBind]="attrs"></div>`
@@ -63,6 +68,7 @@ class TestBindClassesObjectComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-styles',
     template: `<div [pBind]="attrs"></div>`
@@ -77,6 +83,7 @@ class TestBindStylesComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-listeners',
     template: `<div [pBind]="attrs"></div>`
@@ -92,6 +99,7 @@ class TestBindListenersComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-mixed',
     template: `<div [pBind]="attrs" class="existing-class" style="margin: 10px;"></div>`
@@ -111,6 +119,7 @@ class TestBindMixedComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-bind-dynamic',
     template: `<div [pBind]="attrs"></div>`
@@ -131,6 +140,7 @@ class TestBindDynamicComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-set-attrs',
     template: `<div [pBind]="undefined"></div>`

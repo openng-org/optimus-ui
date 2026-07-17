@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import type { EditorBlurEvent, EditorChangeEvent, EditorFocusEvent, EditorInitEv
 import { Editor } from './editor';
 // Test Components for different scenarios
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-editor
@@ -79,6 +80,7 @@ class TestBasicEditorComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-editor [(ngModel)]="text">
@@ -96,6 +98,7 @@ class TestCustomToolbarComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-editor [(ngModel)]="text">
@@ -114,6 +117,7 @@ class TestPTemplateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-editor [(ngModel)]="text" [readonly]="true"> </p-editor> `
 })
@@ -122,6 +126,7 @@ class TestReadonlyComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-editor [(ngModel)]="text" [modules]="customModules" [formats]="customFormats"> </p-editor> `
 })
@@ -745,6 +750,7 @@ describe('Editor', () => {
     describe('PassThrough (PT) Tests', () => {
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Editor, FormsModule],
                 template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`
@@ -789,6 +795,7 @@ describe('Editor', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Editor, FormsModule],
                 template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`
@@ -859,6 +866,7 @@ describe('Editor', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Editor, FormsModule],
                 template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`
@@ -914,6 +922,7 @@ describe('Editor', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Editor, FormsModule],
                 template: `<p-editor [(ngModel)]="text" [readonly]="isReadonly" [placeholder]="placeholder" [pt]="pt"></p-editor>`
@@ -987,6 +996,7 @@ describe('Editor', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Editor, FormsModule],
                 template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`
@@ -1048,6 +1058,7 @@ describe('Editor', () => {
         describe('Case 6: Inline PT test', () => {
             it('should apply inline string PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text" [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-editor>`
@@ -1074,6 +1085,7 @@ describe('Editor', () => {
 
             it('should apply inline object PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid red' } } }"></p-editor>`
@@ -1103,6 +1115,7 @@ describe('Editor', () => {
         describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text1"></p-editor><p-editor [(ngModel)]="text2"></p-editor>`
@@ -1161,6 +1174,7 @@ describe('Editor', () => {
 
             it('should apply global CSS from OptimusConfig', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text"></p-editor>`
@@ -1214,6 +1228,7 @@ describe('Editor', () => {
                 const hookCalls: string[] = [];
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`
@@ -1263,6 +1278,7 @@ describe('Editor', () => {
                 const hookEvents: { section: string; hook: string }[] = [];
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Editor, FormsModule],
                     template: `<p-editor [(ngModel)]="text" [pt]="pt"></p-editor>`

@@ -46,8 +46,8 @@
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
         "build:dev": "cross-env NODE_ENV=development INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:dev:package",
-        "build:package": "pnpm run build:prebuild && tsup",
-        "build:dev:package": "pnpm run build:prebuild && tsup --watch",
+        "build:package": "pnpm run build:prebuild && tsdown",
+        "build:dev:package": "pnpm run build:prebuild && tsdown --watch",
         "build:prebuild": "node ./scripts/prebuild.mjs",
         "type:check": "tsc --noEmit",
         "dev:link": "pnpm link --global && npm link"

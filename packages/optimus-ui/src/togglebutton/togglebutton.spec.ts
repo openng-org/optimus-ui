@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { ToggleButtonChangeEvent } from '@openng/optimus-ui/types/togglebutton';
 import { ToggleButton } from './togglebutton';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-togglebutton
@@ -57,6 +58,7 @@ class TestBasicToggleButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="toggleForm">
@@ -78,6 +80,7 @@ class TestReactiveToggleButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-togglebutton [(ngModel)]="checked">
@@ -92,6 +95,7 @@ class TestTemplateToggleButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-togglebutton [(ngModel)]="checked">
@@ -106,6 +110,7 @@ class TestIconTemplateToggleButtonComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-togglebutton [(ngModel)]="checked" [onIcon]="onIcon" [offIcon]="offIcon" [iconPos]="iconPos"> </p-togglebutton> `
 })
@@ -118,6 +123,7 @@ class TestIconToggleButtonComponent {
 
 // ToggleButton pTemplate component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [ToggleButton, FormsModule, CommonModule, SharedModule],
     template: `
@@ -142,6 +148,7 @@ class TestToggleButtonPTemplateComponent {
 
 // ToggleButton #template reference component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [ToggleButton, FormsModule, CommonModule, SharedModule],
     template: `
@@ -979,6 +986,7 @@ describe('ToggleButton', () => {
 
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ToggleButton, FormsModule],
                 template: `<p-togglebutton [(ngModel)]="checked" [pt]="pt"></p-togglebutton>`
@@ -1016,6 +1024,7 @@ describe('ToggleButton', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ToggleButton, FormsModule],
                 template: `<p-togglebutton [(ngModel)]="checked" onIcon="pi pi-check" offIcon="pi pi-times" [pt]="pt"></p-togglebutton>`
@@ -1082,6 +1091,7 @@ describe('ToggleButton', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ToggleButton, FormsModule],
                 template: `<p-togglebutton [(ngModel)]="checked" onIcon="pi pi-check" [pt]="pt"></p-togglebutton>`
@@ -1129,6 +1139,7 @@ describe('ToggleButton', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ToggleButton, FormsModule],
                 template: `<p-togglebutton [(ngModel)]="checked" [disabled]="disabled" [pt]="pt"></p-togglebutton>`
@@ -1187,6 +1198,7 @@ describe('ToggleButton', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [ToggleButton, FormsModule],
                 template: `<p-togglebutton [(ngModel)]="checked" [pt]="pt"></p-togglebutton>`
@@ -1230,6 +1242,7 @@ describe('ToggleButton', () => {
         describe('Case 6: Inline PT test', () => {
             it('should apply inline string PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [ToggleButton, FormsModule],
                     template: `<p-togglebutton [(ngModel)]="checked" [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-togglebutton>`
@@ -1254,6 +1267,7 @@ describe('ToggleButton', () => {
 
             it('should apply inline object PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [ToggleButton, FormsModule],
                     template: `<p-togglebutton [(ngModel)]="checked" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid red' } } }"></p-togglebutton>`
@@ -1281,6 +1295,7 @@ describe('ToggleButton', () => {
         describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [ToggleButton, FormsModule],
                     template: `<p-togglebutton [(ngModel)]="checked1"></p-togglebutton><p-togglebutton [(ngModel)]="checked2"></p-togglebutton>`
@@ -1341,6 +1356,7 @@ describe('ToggleButton', () => {
                 const hookCalls: string[] = [];
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [ToggleButton, FormsModule],
                     template: `<p-togglebutton [(ngModel)]="checked" [pt]="pt"></p-togglebutton>`

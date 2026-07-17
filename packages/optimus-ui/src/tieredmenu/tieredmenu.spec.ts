@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -10,6 +10,7 @@ import { Tooltip } from '@openng/optimus-ui/tooltip';
 import { TieredMenu } from './tieredmenu';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `<p-tieredmenu [model]="model" [styleClass]="styleClass" [style]="style" [popup]="popup" [disabled]="disabled" [autoDisplay]="autoDisplay"></p-tieredmenu>`
 })
@@ -36,6 +37,7 @@ class TestBasicTieredMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tieredmenu #menu [model]="model" [popup]="true"></p-tieredmenu>
@@ -69,6 +71,7 @@ class TestPopupTieredMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tieredmenu [model]="model">
@@ -95,6 +98,7 @@ class TestTemplateTieredMenuComponent {
 
 // Test Component for #item template approach
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tieredmenu [model]="model">
@@ -121,6 +125,7 @@ class TestContentTemplateTieredMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-disabled-tieredmenu',
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
@@ -135,6 +140,7 @@ class TestDisabledTieredMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-router-tieredmenu',
     template: `<p-tieredmenu [model]="model"></p-tieredmenu>`
@@ -158,6 +164,7 @@ class TestRouterTieredMenuComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-breakpoint-tieredmenu',
     template: `<p-tieredmenu [model]="model" [breakpoint]="breakpoint"></p-tieredmenu>`
@@ -1035,6 +1042,7 @@ describe('TieredMenu', () => {
 
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt"></p-tieredmenu>`
@@ -1102,6 +1110,7 @@ describe('TieredMenu', () => {
 
         describe('Case 2: Objects (class, style, data-p, aria)', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt"></p-tieredmenu>`
@@ -1173,6 +1182,7 @@ describe('TieredMenu', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt"></p-tieredmenu>`
@@ -1230,6 +1240,7 @@ describe('TieredMenu', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt" [disabled]="disabled"></p-tieredmenu>`
@@ -1289,6 +1300,7 @@ describe('TieredMenu', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt"></p-tieredmenu>`
@@ -1333,6 +1345,7 @@ describe('TieredMenu', () => {
 
         describe('Case 7: Test from OptimusConfig', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `
@@ -1387,6 +1400,7 @@ describe('TieredMenu', () => {
 
         describe('Case 8: Test hooks', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [TieredMenu],
                 template: `<p-tieredmenu [model]="model" [pt]="pt"></p-tieredmenu>`
@@ -1429,6 +1443,7 @@ describe('TieredMenu', () => {
 
             it('should apply inline PT with string', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [TieredMenu],
                     template: `<p-tieredmenu [model]="model" [pt]="{ root: 'INLINE_STRING_CLASS' }"></p-tieredmenu>`
@@ -1451,6 +1466,7 @@ describe('TieredMenu', () => {
 
             it('should apply inline PT with object', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [TieredMenu],
                     template: `<p-tieredmenu [model]="model" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }"></p-tieredmenu>`

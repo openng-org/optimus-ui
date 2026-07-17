@@ -1,4 +1,4 @@
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
@@ -8,6 +8,7 @@ import { PanelAfterToggleEvent, PanelBeforeToggleEvent } from '@openng/optimus-u
 import { Panel } from './panel';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panel
@@ -57,6 +58,7 @@ class TestBasicPanelComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panel header="Template Panel" [toggleable]="true">
@@ -81,6 +83,7 @@ class TestBasicPanelComponent {
 class TestTemplatesPanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panel header="Facet Panel" [toggleable]="true">
@@ -97,6 +100,7 @@ class TestTemplatesPanelComponent {}
 class TestFacetsPanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-panel header="Keyboard Panel" [toggleable]="true" [collapsed]="false">
