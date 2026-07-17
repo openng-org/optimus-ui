@@ -95,7 +95,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                         >
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 border border-primary rounded-xl flex items-center justify-center">
-                                    <img ngSrc="logo-icon.svg" height="20" width="24" />
+                                    <img ngSrc="logo-icon.svg" height="30" width="30" />
                                 </div>
                                 <div
                                     [ngClass]="{
