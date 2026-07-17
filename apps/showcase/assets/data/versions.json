@@ -1,0 +1,38 @@
+[
+    {
+        "label": "Optimus UI",
+        "value": "optimusui",
+        "items": [
+            {
+                "label": "v1",
+                "value": "https://optimus.openng.org"
+            }
+        ]
+    },
+    {
+        "label": "PrimeNG",
+        "value": "primeng",
+        "items": [
+            {
+                "label": "v21",
+                "value": "https://v21.primeng.org"
+            },
+            {
+                "label": "v20",
+                "value": "https://v20.primeng.org"
+            },
+            {
+                "label": "v19",
+                "value": "https://v19.primeng.org"
+            },
+            {
+                "label": "v18",
+                "value": "https://v18.primeng.org"
+            },
+            {
+                "label": "v17",
+                "value": "https://v17.primeng.org"
+            }
+        ]
+    }
+]

@@ -163,68 +163,11 @@
             }
         }
 
-        .version-item {
-            width: auto;
-            padding: 0.5rem;
-
-            .version-text {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-
-            .version-icon {
-                margin-left: .25rem;
-                color: var(--text-secondary-color);
-            }
-        }
-
-        .versions-panel {
-            padding: .25rem;
-            background-color: var(--overlay-background);
-            position: absolute;
-            right: 0;
-            top: calc(100% + 2px);
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            transform-origin: center top;
-
-            ul {
-                padding: 0;
-                margin: 0;
-                list-style-type: none;
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-
-                li {
-                    margin: 2px;
-                }
-
-                .version-tag {
-                    font-weight: bold;
-                    background-color: var(--p-surface-50);
-                    padding: 0.5rem 0.25rem;
-                    text-align: center;
-                    cursor: default;
-                    white-space: nowrap;
-                }
-
-                a {
-                    display: inline-flex;
-                    padding: 0.5rem .75rem;
-                    border-radius: 6px;
-                    width: 100%;
-                    overflow: hidden;
-                    color: var(--text-color);
-                    white-space: nowrap;
-
-                    &:hover {
-                        background-color: var(--hover-background);
-                    }
-                }
-            }
+        .version-group {
+            font-weight: bold;
+            background-color: var(--p-surface-50);
+            text-align: center;
+            white-space: nowrap;
         }
     }
 }

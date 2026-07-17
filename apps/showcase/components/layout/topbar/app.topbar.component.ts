@@ -1,5 +1,4 @@
-import PrimeNGVersions from '@/assets/data/primeng_versions.json';
-import OptimusUIVersions from '@/assets/data/optimusui_versions.json';
+import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
@@ -9,11 +8,12 @@ import { RouterModule } from '@angular/router';
 import docsearch from '@docsearch/js';
 import { DomHandler } from '@openng/optimus-ui/dom';
 import { StyleClass } from '@openng/optimus-ui/styleclass';
+import { SelectModule } from '@openng/optimus-ui/select';
 
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [CommonModule, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent, NgOptimizedImage],
+    imports: [CommonModule, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent, SelectModule, NgOptimizedImage],
     template: `<div class="layout-topbar">
         <div class="layout-topbar-inner">
             <div class="layout-topbar-logo-container">
@@ -65,40 +65,18 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
                     <app-configurator />
                 </li>
                 <li>
-                    <button
-                        pStyleClass="@next"
-                        enterFromClass="hidden"
-                        enterActiveClass="px-overlay-enter-active"
-                        leaveToClass="hidden"
-                        leaveActiveClass="px-overlay-leave-active"
-                        [hideOnOutsideClick]="true"
-                        type="button"
-                        class="topbar-item version-item"
+                    <p-select
+                        [(ngModel)]="selectedVersion"
+                        [options]="versions"
+                        [group]="true"
+                        (onChange)="onVersionChange($event)"
+                        [pt]="{
+                            optionGroup: {
+                                class: 'version-group'
+                            }
+                        }"
                     >
-                        <span class="version-text">{{ optimusuiVersions ? optimusuiVersions[0].name : 'Latest' }}</span>
-                        <span class="version-icon pi pi-angle-down"></span>
-                    </button>
-                    <div class="versions-panel hidden">
-                        <ul>
-                            <li class="version-tag">Optimus UI</li>
-                            @for (v of optimusuiVersions; track v.version) {
-                                <li role="none">
-                                    <a [href]="v.url">
-                                        <span>{{ v.version }}</span>
-                                    </a>
-                                </li>
-                            }
-
-                            <li class="version-tag">PrimeNG</li>
-                            @for (v of primengVersions; track v.version) {
-                                <li role="none">
-                                    <a [href]="v.url">
-                                        <span>{{ v.version }}</span>
-                                    </a>
-                                </li>
-                            }
-                        </ul>
-                    </div>
+                    </p-select>
                 </li>
                 <li *ngIf="showMenuButton" class="menu-button">
                     <button type="button" class="topbar-item menu-button" (click)="toggleMenu()" aria-label="Menu">
@@ -114,8 +92,8 @@ export class AppTopBarComponent implements OnDestroy {
 
     @Input({ transform: booleanAttribute }) showMenuButton = true;
 
-    primengVersions: any[] = PrimeNGVersions;
-    optimusuiVersions: any[] = OptimusUIVersions;
+    versions: any[] = Versions;
+    selectedVersion = this.versions[0].items[0].value;
 
     scrollListener: VoidFunction | null;
 
@@ -183,5 +161,11 @@ export class AppTopBarComponent implements OnDestroy {
 
     ngOnDestroy() {
         this.unbindScrollListener();
+    }
+
+    onVersionChange(event: any) {
+        if (event?.value && event.value.startsWith('http')) {
+            window.location.href = event.value;
+        }
     }
 }
