@@ -1,4 +1,5 @@
 import { AppConfigService } from '@/service/appconfigservice';
+import { GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -61,7 +62,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                         <span>Get Started</span>
                         <i class="pi pi-arrow-right ms-4"></i>
                     </a>
-                    <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="linkbox">
+                    <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="linkbox">
                         <span>Give a Star</span>
                         <i class="pi pi-star-fill ms-4 text-yellow-500"></i>
                     </a>
@@ -366,6 +367,8 @@ import { OverviewApp } from './samples/overviewapp.component';
     `
 })
 export class HeroSectionComponent implements OnInit, OnDestroy {
+    readonly githubRepoUrl = GITHUB_REPO_URL;
+
     selectedSampleOption;
 
     sampleOptions;

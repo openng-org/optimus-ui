@@ -1,3 +1,4 @@
+import { GITHUB_REPO_HEAD } from '@/utils/constants';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, inject, input, OnInit, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
@@ -62,12 +63,12 @@ export class AppDocCopyMarkdown implements OnInit {
         if (this.docType() === 'page') {
             // For pages, use the full route path for nested pages like theming/styled
             const docPath = this.routePath || this.currentComponentName;
-            return `https://github.com/primefaces/primeng/tree/master/apps/showcase/doc/${docPath}/`;
+            return `${GITHUB_REPO_HEAD}/apps/showcase/doc/${docPath}/`;
         }
         if (this.currentComponentName) {
-            return `https://github.com/primefaces/primeng/tree/master/apps/showcase/doc/${this.currentComponentName}/`;
+            return `${GITHUB_REPO_HEAD}/apps/showcase/doc/${this.currentComponentName}/`;
         }
-        return 'https://github.com/primefaces/primeng/tree/master/apps/showcase/';
+        return `${GITHUB_REPO_HEAD}/apps/showcase/`;
     }
 
     get chatGPTLink(): string {

@@ -1,6 +1,7 @@
 import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
 import { afterNextRender, booleanAttribute, Component, computed, ElementRef, Inject, Input, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -29,17 +30,17 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
                     <div id="docsearch"></div>
                 </li>
                 <li>
-                    <a href="https://github.com/primefaces/primeng" target="_blank" rel="noopener noreferrer" class="topbar-item">
+                    <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="https://discord.gg/gzKFYnpmCY" target="_blank" rel="noopener noreferrer" class="topbar-item">
+                    <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-discord text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
                 <li>
-                    <a href="https://github.com/orgs/primefaces/discussions" target="_blank" rel="noopener noreferrer" class="topbar-item">
+                    <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-comments text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
@@ -97,6 +98,10 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
     </div>`
 })
 export class AppTopBarComponent implements OnDestroy {
+    readonly githubRepoUrl = GITHUB_REPO_URL;
+    readonly githubDiscussionsUrl = GITHUB_DISCUSSIONS_URL;
+    readonly discordUrl = DISCORD_URL;
+
     @Input({ transform: booleanAttribute }) showConfigurator = true;
 
     @Input({ transform: booleanAttribute }) showMenuButton = true;

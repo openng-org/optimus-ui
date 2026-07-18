@@ -199,7 +199,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     showDelay: 1000
                 },
                 icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
-                url: 'https://github.com/primefaces/primeng'
+                url: 'https://github.com/openng-org/optimus-ui'
             },
             {
                 label: 'Trash',

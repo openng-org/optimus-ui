@@ -26,8 +26,8 @@ import { Component } from '@angular/core';
 })
 export class IntroductionDoc {
     code1: Code = {
-        typescript: `git clone https://github.com/primefaces/primeng.git
-cd primeng`
+        typescript: `git clone https://github.com/openng-org/optimus-ui.git
+cd optimus-ui`
     };
     code2: Code = {
         typescript: `pnpm run setup

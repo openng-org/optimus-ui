@@ -43,7 +43,7 @@ import { TemplateHeroRectangle } from './templateherorectangle';
                         </a>
                     </div>
                     <div class="flex items-center gap-4 mt-6">
-                        <a [href]="templateHeroData?.supportHref ?? 'https://github.com/orgs/primefaces/discussions/categories/primeng-templates'" target="_blank" class="flex items-center gap-2 text-primary-contrast lg:text-base text-sm">
+                        <a [href]="templateHeroData?.supportHref ?? 'https://github.com/openng-org/optimus-ui/discussions'" target="_blank" class="flex items-center gap-2 text-primary-contrast lg:text-base text-sm">
                             <i class="pi pi-github " style="font-size: 1rem;"></i>
                             <span class="hover:underline">{{ templateHeroData?.free ? 'Open Issues' : 'Community' }}</span>
                         </a>
