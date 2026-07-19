@@ -141,7 +141,7 @@ function testStackBlitzFileGeneration(demos) {
 
             // Test: Optimus UI module imports removed
             const hasNoDirectModuleImport = !modified.includes("from '@openng/optimus-ui/select';") || modified.includes('ImportsModule');
-            allPassed &= logTest('PrimeNG direct imports removed', !modified.match(/import\s+\{[^}]*Module[^}]*\}\s+from\s+'@openng\/optimus-ui\//));
+            allPassed &= logTest('Optimus UI direct imports removed', !modified.match(/import\s+\{[^}]*Module[^}]*\}\s+from\s+'@openng\/optimus-ui\//));
         }
 
         // Test: Metadata has services if needed

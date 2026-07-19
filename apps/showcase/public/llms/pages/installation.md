@@ -1,20 +1,20 @@
 # Installation
 
-Setting up PrimeNG in an Angular CLI project.
+Setting up Optimus UI in an Angular CLI project.
 
 ## Download-
 
-PrimeNG is available for download on the npm registry .
+Optimus UI is available for download on the npm registry .
 
 ```bash
 # Using npm
-npm install primeng @openng/optimus-ui-themes
+npm install @openng/optimus-ui @openng/optimus-ui-themes
 
 # Using yarn
-yarn add primeng @openng/optimus-ui-themes
+yarn add @openng/optimus-ui @openng/optimus-ui-themes
 
 # Using pnpm
-pnpm add primeng @openng/optimus-ui-themes
+pnpm add @openng/optimus-ui @openng/optimus-ui-themes
 ```
 
 ## Examples-
@@ -23,7 +23,7 @@ An example starter with Angular CLI is available at GitHub .
 
 ## Nextsteps-
 
-Welcome to the Prime UI Ecosystem! Once you have PrimeNG up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Customization of styles
+Welcome to the Prime UI Ecosystem! Once you have Optimus UI up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Customization of styles
 
 ## Provider-
 
@@ -47,7 +47,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Theme-
 
-Configure PrimeNG to use a theme like Aura.
+Configure Optimus UI to use a theme like Aura.
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
@@ -71,5 +71,5 @@ Verify your setup by adding a component such as Button. Each component can be im
 
 ## Videos
 
-Angular CLI is the recommended way to build Angular applications with PrimeNG.
+Angular CLI is the recommended way to build Angular applications with Optimus UI.
 

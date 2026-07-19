@@ -1,6 +1,6 @@
 # Unstyled Mode
 
-Theming PrimeNG with alternative styling approaches.
+Theming Optimus UI with alternative styling approaches.
 
 ## Architecture-
 
@@ -8,7 +8,7 @@ The term unstyled is used to define an alternative styling approach instead of t
 
 ## Example-
 
-Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The tailwindcss-primeui even provides special variants such as p-outlined: , p-vertical for the PrimeNG components. The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the pass through section in the button documentation to familiarize yourself with the component's internal structure and PassThrough attributes. In this example, we'll target the root , label and icon elements to apply custom styles.
+Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The tailwindcss-primeui even provides special variants such as p-outlined: , p-vertical for the Optimus UI components. The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the pass through section in the button documentation to familiarize yourself with the component's internal structure and PassThrough attributes. In this example, we'll target the root , label and icon elements to apply custom styles.
 
 ## Global-
 
@@ -35,4 +35,4 @@ export const appConfig: ApplicationConfig = {
 
 ## Setup-
 
-Unstyled mode is enabled for the whole suite by enabling unstyled option during PrimeNG installation. Alternatively even in the default styled mode, a particular component can still be used as unstyled by adding the unstyled prop of the component.
+Unstyled mode is enabled for the whole suite by enabling unstyled option during Optimus UI installation. Alternatively even in the default styled mode, a particular component can still be used as unstyled by adding the unstyled prop of the component.

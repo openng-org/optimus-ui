@@ -17,10 +17,10 @@ import { StyleClass } from '@openng/optimus-ui/styleclass';
     template: `<div class="layout-topbar">
         <div class="layout-topbar-inner">
             <div class="layout-topbar-logo-container">
-                <a [routerLink]="['/']" class="layout-topbar-logo" aria-label="PrimeNG Logo">
+                <a [routerLink]="['/']" class="layout-topbar-logo" aria-label="Optimus UI Logo">
                     <img ngSrc="logo.svg" height="40" width="200" />
                 </a>
-                <a [routerLink]="['/']" class="layout-topbar-icon" aria-label="PrimeNG Logo">
+                <a [routerLink]="['/']" class="layout-topbar-icon" aria-label="Optimus UI Logo">
                     <img ngSrc="logo-icon.svg" height="32" width="32" />
                 </a>
             </div>

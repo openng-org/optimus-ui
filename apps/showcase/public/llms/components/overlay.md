@@ -1,6 +1,6 @@
-# Overlay API - PrimeNG
+# Overlay API - Optimus UI
 
-This API allows overlay components to be controlled from the PrimeNG. In this way, all overlay components in the application can have the same behavior.
+This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.
 
 ## Accessibility
 

@@ -1,6 +1,6 @@
 # Icons
 
-PrimeIcons is the default icon library of PrimeNG with over 250 open source icons.
+PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.
 
 ## Basic-
 
@@ -16,24 +16,24 @@ Constants API is available to reference icons easily when used programmatically.
 
 ```typescript
 import { Component } from '@angular/core';
-import { PrimeIcons, MenuItem } from '@openng/optimus-ui/api';
+import { OpenngIcons, MenuItem } from '@openng/optimus-ui/api';
 
 @Component({
-    selector: 'prime-icons-constants-demo',
-    templateUrl: './prime-icons-constants-demo.html'
+    selector: 'openng-icons-constants-demo',
+    templateUrl: './openng-icons-constants-demo.html'
 })
-export class PrimeIconsConstantsDemo {
+export class OpenngIconsConstantsDemo {
     items: MenuItem[];
 
     ngOnInit() {
         this.items = [
             {
                 label: 'New',
-                icon: PrimeIcons.PLUS,
+                icon: OpenngIcons.PLUS,
             },
             {
                 label: 'Delete',
-                icon: PrimeIcons.TRASH
+                icon: OpenngIcons.TRASH
             }
         ];
     }

@@ -1,14 +1,14 @@
-# LLMs.txt - PrimeNG
+# LLMs.txt - Optimus UI
 
-LLM-optimized documentation endpoints for PrimeNG components.
+LLM-optimized documentation endpoints for Optimus UI components.
 
 ## /llms-full.txt
 
-The llms-full.txt file is a complete list of all the pages in the PrimeNG documentation. It is used to help AI models understand the entire documentation set.
+The llms-full.txt file is a complete list of all the pages in the Optimus UI documentation. It is used to help AI models understand the entire documentation set.
 
 ## /llms.txt
 
-The llms.txt file is an industry standard that helps AI models better understand and navigate the PrimeNG documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.
+The llms.txt file is an industry standard that helps AI models better understand and navigate the Optimus UI documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.
 
 ## markdownextension-doc
 

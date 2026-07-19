@@ -1,6 +1,6 @@
 # Angular Tooltip Component
 
-Tooltip directive provides advisory information for a component. Tooltip is integrated within various PrimeNG components.
+Tooltip directive provides advisory information for a component. Tooltip is integrated within various Optimus UI components.
 
 ## Accessibility
 

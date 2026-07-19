@@ -1,6 +1,6 @@
 # Configuration
 
-Application wide configuration for PrimeNG.
+Application wide configuration for Optimus UI.
 
 ## Csp-
 
@@ -148,7 +148,7 @@ provideOptimus({
 
 ## Theme-
 
-PrimeNG provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the theming documentation for details.
+Optimus UI provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the theming documentation for details.
 
 ```typescript
 import { ApplicationConfig } from '@angular/core';
@@ -176,7 +176,7 @@ export const appConfig: ApplicationConfig = {
 
 ## Zindex-
 
-ZIndexes are managed automatically to make sure layering of overlay components work seamlessly when combining multiple components. Still there may be cases where you'd like to configure the configure default values such as a custom layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. PrimeNG configuration offers the zIndex property to customize the default values for components categories. Default values are described below and can be customized when setting up PrimeNG.
+ZIndexes are managed automatically to make sure layering of overlay components work seamlessly when combining multiple components. Still there may be cases where you'd like to configure the configure default values such as a custom layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. Optimus UI configuration offers the zIndex property to customize the default values for components categories. Default values are described below and can be customized when setting up Optimus UI.
 
 ```typescript
 import { OptimusConfig } from '@openng/optimus-ui/api';

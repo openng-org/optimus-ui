@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-07-18",
+  "generatedAt": "2026-07-20",
   "components": [
     {
       "name": "accordion",
@@ -9607,7 +9607,7 @@
         {
           "id": "locale",
           "label": "Locale",
-          "description": "Locale for different languages and formats is defined globally, refer to the PrimeNG Locale configuration for more information.",
+          "description": "Locale for different languages and formats is defined globally, refer to the Optimus UI Locale configuration for more information.",
           "examples": null
         },
         {
@@ -20192,19 +20192,19 @@
     },
     {
       "name": "llms",
-      "title": "LLMs.txt - PrimeNG",
-      "description": "LLM-optimized documentation endpoints for PrimeNG components.",
+      "title": "LLMs.txt - Optimus UI",
+      "description": "LLM-optimized documentation endpoints for Optimus UI components.",
       "sections": [
         {
           "id": "llmsfulltxt",
           "label": "/llms-full.txt",
-          "description": "The llms-full.txt file is a complete list of all the pages in the PrimeNG documentation. It is used to help AI models understand the entire documentation set.",
+          "description": "The llms-full.txt file is a complete list of all the pages in the Optimus UI documentation. It is used to help AI models understand the entire documentation set.",
           "examples": null
         },
         {
           "id": "llmstxt",
           "label": "/llms.txt",
-          "description": "The llms.txt file is an industry standard that helps AI models better understand and navigate the PrimeNG documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.",
+          "description": "The llms.txt file is an industry standard that helps AI models better understand and navigate the Optimus UI documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.",
           "examples": null
         },
         {
@@ -25226,8 +25226,8 @@
     },
     {
       "name": "overlay",
-      "title": "Overlay API - PrimeNG",
-      "description": "This API allows overlay components to be controlled from the PrimeNG. In this way, all overlay components in the application can have the same behavior.",
+      "title": "Overlay API - Optimus UI",
+      "description": "This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.",
       "sections": [
         {
           "id": "accessibility",
@@ -39981,7 +39981,7 @@
     {
       "name": "tooltip",
       "title": "Angular Tooltip Component",
-      "description": "Tooltip directive provides advisory information for a component. Tooltip is integrated within various PrimeNG components.",
+      "description": "Tooltip directive provides advisory information for a component. Tooltip is integrated within various Optimus UI components.",
       "sections": [
         {
           "id": "accessibility",
@@ -43903,14 +43903,14 @@
       "name": "installation",
       "path": "installation",
       "title": "Installation",
-      "description": "Setting up PrimeNG in an Angular CLI project.",
+      "description": "Setting up Optimus UI in an Angular CLI project.",
       "sections": [
         {
           "id": "download-",
           "label": "Download-",
-          "description": "PrimeNG is available for download on the npm registry .",
+          "description": "Optimus UI is available for download on the npm registry .",
           "examples": {
-            "command": "# Using npm\nnpm install primeng @openng/optimus-ui-themes\n\n# Using yarn\nyarn add primeng @openng/optimus-ui-themes\n\n# Using pnpm\npnpm add primeng @openng/optimus-ui-themes"
+            "command": "# Using npm\nnpm install @openng/optimus-ui @openng/optimus-ui-themes\n\n# Using yarn\nyarn add @openng/optimus-ui @openng/optimus-ui-themes\n\n# Using pnpm\npnpm add @openng/optimus-ui @openng/optimus-ui-themes"
           }
         },
         {
@@ -43922,7 +43922,7 @@
         {
           "id": "nextsteps-",
           "label": "Nextsteps-",
-          "description": "Welcome to the Prime UI Ecosystem! Once you have PrimeNG up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Customization of styles",
+          "description": "Welcome to the Prime UI Ecosystem! Once you have Optimus UI up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Customization of styles",
           "examples": null
         },
         {
@@ -43936,7 +43936,7 @@
         {
           "id": "theme-",
           "label": "Theme-",
-          "description": "Configure PrimeNG to use a theme like Aura.",
+          "description": "Configure Optimus UI to use a theme like Aura.",
           "examples": {
             "typescript": "import { ApplicationConfig } from '@angular/core';\nimport { provideAnimationsAsync } from '@angular/platform-browser/animations/async';\nimport { provideOptimus } from '@openng/optimus-ui/config';\nimport Aura from '@openng/optimus-ui-themes/aura';\n\nexport const appConfig: ApplicationConfig = {\n    providers: [\n        provideAnimationsAsync(),\n        provideOptimus({\n            theme: Aura\n        })\n    ]\n};"
           }
@@ -43950,7 +43950,7 @@
         {
           "id": "videos/videos",
           "label": "Videos",
-          "description": "Angular CLI is the recommended way to build Angular applications with PrimeNG.",
+          "description": "Angular CLI is the recommended way to build Angular applications with Optimus UI.",
           "examples": null
         }
       ]
@@ -43959,7 +43959,7 @@
       "name": "configuration",
       "path": "configuration",
       "title": "Configuration",
-      "description": "Application wide configuration for PrimeNG.",
+      "description": "Application wide configuration for Optimus UI.",
       "sections": [
         {
           "id": "csp-",
@@ -44044,7 +44044,7 @@
         {
           "id": "theme-",
           "label": "Theme-",
-          "description": "PrimeNG provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the theming documentation for details.",
+          "description": "Optimus UI provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the theming documentation for details.",
           "examples": {
             "typescript": "import { ApplicationConfig } from '@angular/core';\nimport { provideAnimationsAsync } from '@angular/platform-browser/animations/async';\nimport { provideOptimus } from '@openng/optimus-ui/config';\n\nimport Aura from '@openng/optimus-ui-themes/aura';\n\nexport const appConfig: ApplicationConfig = {\n    providers: [\n        provideAnimationsAsync(),\n        provideOptimus({\n            theme: {\n                preset: Aura,\n                options: {\n                    prefix: 'p',\n                    darkModeSelector: 'system',\n                    cssLayer: false\n                }\n            }\n        })\n    ]\n};"
           }
@@ -44052,7 +44052,7 @@
         {
           "id": "zindex-",
           "label": "Zindex-",
-          "description": "ZIndexes are managed automatically to make sure layering of overlay components work seamlessly when combining multiple components. Still there may be cases where you'd like to configure the configure default values such as a custom layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. PrimeNG configuration offers the zIndex property to customize the default values for components categories. Default values are described below and can be customized when setting up PrimeNG.",
+          "description": "ZIndexes are managed automatically to make sure layering of overlay components work seamlessly when combining multiple components. Still there may be cases where you'd like to configure the configure default values such as a custom layout where header section is fixed. In a case like this, dropdown needs to be displayed below the application header but a modal dialog should be displayed above. Optimus UI configuration offers the zIndex property to customize the default values for components categories. Default values are described below and can be customized when setting up Optimus UI.",
           "examples": {
             "typescript": "import { OptimusConfig } from '@openng/optimus-ui/api';\n\n@Component({\n    selector: 'app-root',\n    templateUrl: './app.component.html'\n})\nexport class AppComponent implements OnInit {\n\n    constructor(private optimusConfig: OptimusConfig) {}\n\n    ngOnInit() {\n        this.optimusConfig.zIndex = {\n            modal: 1100,    // dialog, sidebar\n            overlay: 1000,  // dropdown, overlaypanel\n            menu: 1000,     // overlay menus\n            tooltip: 1100   // tooltip\n        };\n    }\n}"
           }
@@ -44068,7 +44068,7 @@
         {
           "id": "architecture-",
           "label": "Architecture-",
-          "description": "PrimeNG is a design agnostic library so unlike some other UI libraries it does not enforce a certain styling such as material design. Styling is decoupled from the components using the themes instead. A theme consists of two parts; base and preset . The base is the style rules with CSS variables as placeholders whereas the preset is a set of design tokens to feed a base by mapping the tokens to CSS variables. A base may be configured with different presets, currently Aura, Material, Lara and Nora are the available built-in options. The core of the styled mode architecture is based on a concept named design token , a preset defines the token configuration in 3 tiers; primitive , semantic and component . Primitive Tokens Primitive tokens have no context, a color palette is a good example for a primitive token such as blue-50 to blue-900 . A token named blue-500 may be used as the primary color, the background of a message however on its own, the name of the token does not indicate context. Usually they are utilized by the semantic tokens. Semantic Tokens Semantic tokens define content and their names indicate where they are utilized, a well known example of a semantic token is the primary.color . Semantic tokens map to primitive tokens or other semantic tokens. The colorScheme token group is a special variable to define tokens based on the color scheme active in the application, this allows defining different tokens based on the color scheme like dark mode. Component Tokens Component tokens are isolated tokens per component such as inputtext.background or button.color that map to the semantic tokens. As an example, button.background component token maps to the primary.color semantic token which maps to the green.500 primitive token. Best Practices Use primitive tokens when defining the core color palette and semantic tokens to specify the common design elements such as focus ring, primary colors and surfaces. Components tokens should only be used when customizing a specific component. By defining your own design tokens as a custom preset, you'll be able to define your own style without touching CSS. Overriding the PrimeNG components using style classes is not a best practice and should be the last resort, design tokens are the suggested approach.",
+          "description": "Optimus UI is a design agnostic library so unlike some other UI libraries it does not enforce a certain styling such as material design. Styling is decoupled from the components using the themes instead. A theme consists of two parts; base and preset . The base is the style rules with CSS variables as placeholders whereas the preset is a set of design tokens to feed a base by mapping the tokens to CSS variables. A base may be configured with different presets, currently Aura, Material, Lara and Nora are the available built-in options. The core of the styled mode architecture is based on a concept named design token , a preset defines the token configuration in 3 tiers; primitive , semantic and component . Primitive Tokens Primitive tokens have no context, a color palette is a good example for a primitive token such as blue-50 to blue-900 . A token named blue-500 may be used as the primary color, the background of a message however on its own, the name of the token does not indicate context. Usually they are utilized by the semantic tokens. Semantic Tokens Semantic tokens define content and their names indicate where they are utilized, a well known example of a semantic token is the primary.color . Semantic tokens map to primitive tokens or other semantic tokens. The colorScheme token group is a special variable to define tokens based on the color scheme active in the application, this allows defining different tokens based on the color scheme like dark mode. Component Tokens Component tokens are isolated tokens per component such as inputtext.background or button.color that map to the semantic tokens. As an example, button.background component token maps to the primary.color semantic token which maps to the green.500 primitive token. Best Practices Use primitive tokens when defining the core color palette and semantic tokens to specify the common design elements such as focus ring, primary colors and surfaces. Components tokens should only be used when customizing a specific component. By defining your own design tokens as a custom preset, you'll be able to define your own style without touching CSS. Overriding the Optimus UI components using style classes is not a best practice and should be the last resort, design tokens are the suggested approach.",
           "examples": null
         },
         {
@@ -44098,13 +44098,13 @@
         {
           "id": "darkmode-",
           "label": "Darkmode-",
-          "description": "PrimeNG uses the system as the default darkModeSelector in theme configuration. If you have a dark mode switch in your application, set the darkModeSelector to the selector you utilize such as .my-app-dark so that PrimeNG can fit in seamlessly with your color scheme. Following is a very basic example implementation of a dark mode switch, you may extend it further by involving prefers-color-scheme to retrieve it from the system initially and use localStorage to make it stateful. See this article for more information. In case you prefer to use dark mode all the time, apply the darkModeSelector initially and never change it. It is also possible to disable dark mode completely using false or none as the value of the selector.",
+          "description": "Optimus UI uses the system as the default darkModeSelector in theme configuration. If you have a dark mode switch in your application, set the darkModeSelector to the selector you utilize such as .my-app-dark so that Optimus UI can fit in seamlessly with your color scheme. Following is a very basic example implementation of a dark mode switch, you may extend it further by involving prefers-color-scheme to retrieve it from the system initially and use localStorage to make it stateful. See this article for more information. In case you prefer to use dark mode all the time, apply the darkModeSelector initially and never change it. It is also possible to disable dark mode completely using false or none as the value of the selector.",
           "examples": null
         },
         {
           "id": "definepreset-",
           "label": "Definepreset-",
-          "description": "The definePreset utility is used to customize an existing preset during the PrimeNG setup. The first parameter is the preset to customize and the second is the design tokens to override.",
+          "description": "The definePreset utility is used to customize an existing preset during the Optimus UI setup. The first parameter is the preset to customize and the second is the design tokens to override.",
           "examples": null
         },
         {
@@ -44164,7 +44164,7 @@
         {
           "id": "presets-",
           "label": "Presets-",
-          "description": "Aura, Material, Lara and Nora are the available built-in options, created to demonstrate the power of the design-agnostic theming. Aura is PrimeTek's own vision, Material follows Google Material Design v2, Lara is based on Bootstrap and Nora is inspired by enterprise applications. Visit the source code to learn more about the structure of presets. You may use them out of the box with modifications or utilize them as reference in case you need to build your own presets from scratch.",
+          "description": "Aura, Material, Lara and Nora are the available built-in options, created to demonstrate the power of the design-agnostic theming. Aura is an unique design system, Material follows Google Material Design v2, Lara is based on Bootstrap and Nora is inspired by enterprise applications. Visit the source code to learn more about the structure of presets. You may use them out of the box with modifications or utilize them as reference in case you need to build your own presets from scratch.",
           "examples": null
         },
         {
@@ -44176,13 +44176,13 @@
         {
           "id": "reset-",
           "label": "Reset-",
-          "description": "In case PrimeNG components have visual issues in your application, a Reset CSS may be the culprit. CSS layers would be an efficient solution that involves enabling the PrimeNG layer, wrapping the Reset CSS in another layer and defining the layer order. This way, your Reset CSS does not get in the way of PrimeNG components.",
+          "description": "In case Optimus UI components have visual issues in your application, a Reset CSS may be the culprit. CSS layers would be an efficient solution that involves enabling the Optimus UI layer, wrapping the Reset CSS in another layer and defining the layer order. This way, your Reset CSS does not get in the way of Optimus UI components.",
           "examples": null
         },
         {
           "id": "scale-",
           "label": "Scale-",
-          "description": "PrimeNG UI component use rem units, 1rem equals to the font size of the html element which is 16px by default. Use the root font-size to adjust the size of the components globally. This website uses 14px as the base so it may differ from your application if your base font size is different.",
+          "description": "Optimus UI UI component use rem units, 1rem equals to the font size of the html element which is 16px by default. Use the root font-size to adjust the size of the components globally. This website uses 14px as the base so it may differ from your application if your base font size is different.",
           "examples": null
         },
         {
@@ -44194,7 +44194,7 @@
         {
           "id": "specificity-",
           "label": "Specificity-",
-          "description": "The &#64;layer is a standard CSS feature to define cascade layers for a customizable order of precedence. If you need to become more familiar with layers, visit the documentation at MDN to begin with. The cssLayer is disabled by default, when it is enabled at theme configuration, PrimeNG wraps the built-in style classes under the primeng cascade layer to make the library styles easy to override. CSS in your app without a layer has the highest CSS specificity, so you'll be able to override styles regardless of the location or how strong a class is written.",
+          "description": "The &#64;layer is a standard CSS feature to define cascade layers for a customizable order of precedence. If you need to become more familiar with layers, visit the documentation at MDN to begin with. The cssLayer is disabled by default, when it is enabled at theme configuration, Optimus UI wraps the built-in style classes under the optimus cascade layer to make the library styles easy to override. CSS in your app without a layer has the highest CSS specificity, so you'll be able to override styles regardless of the location or how strong a class is written.",
           "examples": null
         },
         {
@@ -44241,7 +44241,7 @@
       "name": "unstyled",
       "path": "theming/unstyled",
       "title": "Unstyled Mode",
-      "description": "Theming PrimeNG with alternative styling approaches.",
+      "description": "Theming Optimus UI with alternative styling approaches.",
       "sections": [
         {
           "id": "architecture-",
@@ -44252,7 +44252,7 @@
         {
           "id": "example-",
           "label": "Example-",
-          "description": "Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The tailwindcss-primeui even provides special variants such as p-outlined: , p-vertical for the PrimeNG components. The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the pass through section in the button documentation to familiarize yourself with the component's internal structure and PassThrough attributes. In this example, we'll target the root , label and icon elements to apply custom styles.",
+          "description": "Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The tailwindcss-primeui even provides special variants such as p-outlined: , p-vertical for the Optimus UI components. The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the pass through section in the button documentation to familiarize yourself with the component's internal structure and PassThrough attributes. In this example, we'll target the root , label and icon elements to apply custom styles.",
           "examples": null
         },
         {
@@ -44266,13 +44266,7 @@
         {
           "id": "setup-",
           "label": "Setup-",
-          "description": "Unstyled mode is enabled for the whole suite by enabling unstyled option during PrimeNG installation. Alternatively even in the default styled mode, a particular component can still be used as unstyled by adding the unstyled prop of the component.",
-          "examples": null
-        },
-        {
-          "id": "voltui-",
-          "label": "Voltui-",
-          "description": "Tailwind CSS is perfect fit for the unstyled mode, PrimeTek has even initiated a new UI library called Volt UI based on the unstyled PrimeVue and Tailwind CSS v4. Volt follows the code ownership model where the components are located in the application codebase rather than node_modules. All components within Volt are essentially wrapped versions of the unstyled equivalents, with an added layer of theming through Tailwind CSS v4. This approach, along with the templating features, offers complete control over the theming and presentation. Volt will also be available for PrimeReact. In the future, PrimeTek may bring Volt to Angular via PrimeNG if there is significant community demand. Currently, Volt-Vue can serve as a reference when styling your unstyled PrimeNG components with Tailwind CSS.",
+          "description": "Unstyled mode is enabled for the whole suite by enabling unstyled option during Optimus UI installation. Alternatively even in the default styled mode, a particular component can still be used as unstyled by adding the unstyled prop of the component.",
           "examples": null
         }
       ]
@@ -44281,7 +44275,7 @@
       "name": "icons",
       "path": "icons",
       "title": "Icons",
-      "description": "PrimeIcons is the default icon library of PrimeNG with over 250 open source icons.",
+      "description": "PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.",
       "sections": [
         {
           "id": "basic-",
@@ -44300,7 +44294,7 @@
           "label": "Constants-",
           "description": "Constants API is available to reference icons easily when used programmatically.",
           "examples": {
-            "typescript": "import { Component } from '@angular/core';\nimport { PrimeIcons, MenuItem } from '@openng/optimus-ui/api';\n\n@Component({\n    selector: 'prime-icons-constants-demo',\n    templateUrl: './prime-icons-constants-demo.html'\n})\nexport class PrimeIconsConstantsDemo {\n    items: MenuItem[];\n\n    ngOnInit() {\n        this.items = [\n            {\n                label: 'New',\n                icon: PrimeIcons.PLUS,\n            },\n            {\n                label: 'Delete',\n                icon: PrimeIcons.TRASH\n            }\n        ];\n    }\n}"
+            "typescript": "import { Component } from '@angular/core';\nimport { OpenngIcons, MenuItem } from '@openng/optimus-ui/api';\n\n@Component({\n    selector: 'openng-icons-constants-demo',\n    templateUrl: './openng-icons-constants-demo.html'\n})\nexport class OpenngIconsConstantsDemo {\n    items: MenuItem[];\n\n    ngOnInit() {\n        this.items = [\n            {\n                label: 'New',\n                icon: OpenngIcons.PLUS,\n            },\n            {\n                label: 'Delete',\n                icon: OpenngIcons.TRASH\n            }\n        ];\n    }\n}"
           }
         },
         {
@@ -44349,7 +44343,7 @@
       "name": "customicons",
       "path": "customicons",
       "title": "Custom Icons",
-      "description": "Use custom icons with PrimeNG components.",
+      "description": "Use custom icons with Optimus UI components.",
       "sections": [
         {
           "id": "fontawesome-",
@@ -44404,7 +44398,7 @@
         {
           "id": "introduction-",
           "label": "Introduction-",
-          "description": "In traditional 3rd party UI libraries, users are limited to the API provided by component author. This API commonly consists of inputs, outputs, and content projection. Whenever a requirement emerges for a new customization option in the API, the component author needs to develop and publish it with a new release. Vision of PrimeTek is \"Your Components, Not Ours\" . The pass through feature is a key element to implement this vision by exposing the component internals in order to apply arbitrary attributes and listeners to the DOM elements. The primary advantage of this approach is that it frees you from being restricted by the main component API. We recommend considering the pass-through feature whenever you need to tailor a component that lacks a built-in feature for your specific requirement. Each component has a special pt property to define an object with keys corresponding to the available DOM elements. A value of a key can either be a string, an object or a function to define the arbitrary properties such as styling, aria, data-* or custom attributes for the element. If the value is a string or a function that returns a string, it serves as a shorthand for a style class definition. Every component documentation has a dedicated segment to document the available section names in the interactive PT Viewer. Panel Example In this example, a Panel is customized with various options through pt . The styling is overriden with Tailwind CSS and header receives custom attributes along with a click event. The attributes passed to the header are not available in the component API, thanks to PassThrough feature, this is no longer an issue as you are not limited to the component api. Note that, you may avoid the ! based overrides in Tailwind classes if you setup CSS Layers with PrimeNG. Visit the Override section at Tailwind integration for examples.",
+          "description": "In traditional 3rd party UI libraries, users are limited to the API provided by component author. This API commonly consists of inputs, outputs, and content projection. Whenever a requirement emerges for a new customization option in the API, the component author needs to develop and publish it with a new release. The pass through feature is a key element to implement this vision by exposing the component internals in order to apply arbitrary attributes and listeners to the DOM elements. The primary advantage of this approach is that it frees you from being restricted by the main component API. We recommend considering the pass-through feature whenever you need to tailor a component that lacks a built-in feature for your specific requirement. Each component has a special pt property to define an object with keys corresponding to the available DOM elements. A value of a key can either be a string, an object or a function to define the arbitrary properties such as styling, aria, data-* or custom attributes for the element. If the value is a string or a function that returns a string, it serves as a shorthand for a style class definition. Every component documentation has a dedicated segment to document the available section names in the interactive PT Viewer. Panel Example In this example, a Panel is customized with various options through pt . The styling is overriden with Tailwind CSS and header receives custom attributes along with a click event. The attributes passed to the header are not available in the component API, thanks to PassThrough feature, this is no longer an issue as you are not limited to the component api. Note that, you may avoid the ! based overrides in Tailwind classes if you setup CSS Layers with Optimus UI. Visit the Override section at Tailwind integration for examples.",
           "examples": null
         },
         {
@@ -44416,7 +44410,7 @@
         {
           "id": "pcprefix-",
           "label": "Pcprefix-",
-          "description": "A UI component may also use other UI components, in this case section names are prefixed with pc (Prime Component) to denote the PrimeNG component begin used. This distinguishes components from standard DOM elements and indicating the necessity for a nested structure. For example, the badge section is identified as pcBadge because the button component incorporates the badge component internally.",
+          "description": "A UI component may also use other UI components, in this case section names are prefixed with pc (Prime Component) to denote the Optimus UI component begin used. This distinguishes components from standard DOM elements and indicating the necessity for a nested structure. For example, the badge section is identified as pcBadge because the button component incorporates the badge component internally.",
           "examples": null
         },
         {
@@ -44431,7 +44425,7 @@
       "name": "tailwind",
       "path": "tailwind",
       "title": "Tailwind CSS",
-      "description": "Integration between PrimeNG and Tailwind CSS.",
+      "description": "Integration between Optimus UI and Tailwind CSS.",
       "sections": [
         {
           "id": "animations-",
@@ -44442,13 +44436,13 @@
         {
           "id": "colorpalette-",
           "label": "Colorpalette-",
-          "description": "PrimeNG color palette as utility classes.",
+          "description": "Optimus UI color palette as utility classes.",
           "examples": null
         },
         {
           "id": "darkmode-",
           "label": "Darkmode-",
-          "description": "In styled mode, PrimeNG uses the system as the default darkModeSelector in theme configuration. If you have a dark mode switch in your application, ensure that darkModeSelector is aligned with the Tailwind dark variant for seamless integration. Note that, this particular configuration isn't required if you're utilizing the default system color scheme. Suppose that, the darkModeSelector is set as my-app-dark in PrimeNG. Tailwind v4 Add a custom variant for dark with a custom selector. Tailwind v3 Use the plugins option in your Tailwind config file to configure the plugin.",
+          "description": "In styled mode, Optimus UI uses the system as the default darkModeSelector in theme configuration. If you have a dark mode switch in your application, ensure that darkModeSelector is aligned with the Tailwind dark variant for seamless integration. Note that, this particular configuration isn't required if you're utilizing the default system color scheme. Suppose that, the darkModeSelector is set as my-app-dark in Optimus UI. Tailwind v4 Add a custom variant for dark with a custom selector. Tailwind v3 Use the plugins option in your Tailwind config file to configure the plugin.",
           "examples": null
         },
         {
@@ -44460,13 +44454,13 @@
         {
           "id": "form-",
           "label": "Form-",
-          "description": "Using Tailwind utilities for the responsive layout of a form with PrimeNG components.",
+          "description": "Using Tailwind utilities for the responsive layout of a form with Optimus UI components.",
           "examples": null
         },
         {
           "id": "headless-",
           "label": "Headless-",
-          "description": "A headless PrimeNG dialog with a custom UI.",
+          "description": "A headless Optimus UI dialog with a custom UI.",
           "examples": null
         },
         {
@@ -44478,13 +44472,13 @@
         {
           "id": "overview-",
           "label": "Overview-",
-          "description": "Tailwind CSS is a popular CSS framework based on a utility-first design. The core provides flexible CSS classes with predefined CSS rules to build your own UI elements. For example, instead of an opinionated btn class as in Bootstrap, Tailwind offers primitive classes like bg-blue-500 , rounded and p-4 to apply a button. A set of reusable classes can also be grouped as a Tailwind CSS component and there are even a couple of libraries that take this approach to build components specifically for Tailwind. Tailwind is an outstanding CSS library, however it lacks a true comprehensive UI suite when combined with Angular, this is where PrimeNG comes in by providing a wide range of highly accessible and feature rich UI component library. The core of PrimeNG does not depend on Tailwind CSS.",
+          "description": "Tailwind CSS is a popular CSS framework based on a utility-first design. The core provides flexible CSS classes with predefined CSS rules to build your own UI elements. For example, instead of an opinionated btn class as in Bootstrap, Tailwind offers primitive classes like bg-blue-500 , rounded and p-4 to apply a button. A set of reusable classes can also be grouped as a Tailwind CSS component and there are even a couple of libraries that take this approach to build components specifically for Tailwind. Tailwind is an outstanding CSS library, however it lacks a true comprehensive UI suite when combined with Angular, this is where Optimus UI comes in by providing a wide range of highly accessible and feature rich UI component library. The core of Optimus UI does not depend on Tailwind CSS.",
           "examples": null
         },
         {
           "id": "plugin-",
           "label": "Plugin-",
-          "description": "The tailwindcss-primeui is an official plugin by PrimeTek to provide first class integration between a Prime UI library like PrimeNG and Tailwind CSS. It is designed to work both in styled and unstyled modes. In styled mode, for instance the semantic colors such as primary and surfaces are provided as Tailwind utilities e.g. bg-primary , text-surface-500 , text-muted-color . If you haven't already done so, start by integrating Tailwind into your project. Detailed steps for this process can be found in the Tailwind documentation . After successfully installing Tailwind, proceed with the installation of the PrimeUI plugin. This single npm package comes with two libraries: the CSS version is compatible with Tailwind v4, while the JS version is designed for Tailwind v3. Tailwind v4 In the CSS file that contains the tailwindcss import, add the tailwindcss-primeui import as well. For a comprehensive starter guide, review the primeng-quickstart-tailwind repository which demonstrates the integration. Tailwind v3 Use the plugins option in your Tailwind config file to configure the plugin.",
+          "description": "The tailwindcss-primeui is a plugin to provide first class integration between Optimus UI and Tailwind CSS. It is designed to work both in styled and unstyled modes. In styled mode, for instance the semantic colors such as primary and surfaces are provided as Tailwind utilities e.g. bg-primary , text-surface-500 , text-muted-color . If you haven't already done so, start by integrating Tailwind into your project. Detailed steps for this process can be found in the Tailwind documentation . After successfully installing Tailwind, proceed with the installation of the PrimeUI plugin. This single npm package comes with two libraries: the CSS version is compatible with Tailwind v4, while the JS version is designed for Tailwind v3. Tailwind v4 In the CSS file that contains the tailwindcss import, add the tailwindcss-primeui import as well. For a comprehensive starter guide, review the primeng-quickstart-tailwind repository which demonstrates the integration. Tailwind v3 Use the plugins option in your Tailwind config file to configure the plugin.",
           "examples": null
         }
       ]
@@ -44493,18 +44487,18 @@
       "name": "llms",
       "path": "llms",
       "title": "LLMs.txt",
-      "description": "LLM-optimized documentation endpoints for PrimeNG components.",
+      "description": "LLM-optimized documentation endpoints for Optimus UI components.",
       "sections": [
         {
           "id": "llmsfulltxt-",
           "label": "Llmsfulltxt-",
-          "description": "The llms-full.txt file is a complete list of all the pages in the PrimeNG documentation. It is used to help AI models understand the entire documentation set.",
+          "description": "The llms-full.txt file is a complete list of all the pages in the Optimus UI documentation. It is used to help AI models understand the entire documentation set.",
           "examples": null
         },
         {
           "id": "llmstxt-",
           "label": "Llmstxt-",
-          "description": "The llms.txt file is an industry standard that helps AI models better understand and navigate the PrimeNG documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.",
+          "description": "The llms.txt file is an industry standard that helps AI models better understand and navigate the Optimus UI documentation. It lists key pages in a structured format, making it easier for LLMs to retrieve relevant information.",
           "examples": null
         },
         {
@@ -44519,7 +44513,7 @@
       "name": "accessibility",
       "path": "guides/accessibility",
       "title": "Accessibility",
-      "description": "PrimeNG has WCAG 2.1 AA level compliance.",
+      "description": "Optimus UI has WCAG 2.1 AA level compliance.",
       "sections": [
         {
           "id": "colors-",
@@ -44548,13 +44542,13 @@
         {
           "id": "waiaria-",
           "label": "Waiaria-",
-          "description": "ARIA refers to \"Accessible Rich Internet Applications\" is a suite to fill the gap where semantic HTML is inadequate. These cases are mainly related to rich UI components/widgets. Although browser support for rich UI components such as a datepicker or colorpicker has been improved over the past years many web developers still utilize UI components derived from standard HTML elements created by them or by other projects like PrimeNG. These types of components must provide keyboard and screen reader support, the latter case is where the WAI-ARIA is utilized. ARIA consists of roles, properties and attributes. Roles define what the element is mainly used for e.g. checkbox , dialog , tablist whereas States and Properties define the metadata of the element like aria-checked , aria-disabled . Consider the following case of a native checkbox. It has built-in keyboard and screen reader support. A fancy checkbox with css animations might look more appealing but accessibility might be lacking. Checkbox below may display a checked font icon with animations however it is not tabbable, cannot be checked with space key and cannot be read by a reader. One alternative is using ARIA roles for readers and use javascript for keyboard support. Notice the usage of aria-labelledby as a replacement of the label tag with for. However the best practice is combining semantic HTML for accessibility while keeping the design for UX. This approach involves hiding a native checkbox for accessibility and using javascript events to update its state. Notice the usage of p-sr-only that hides the elements from the user but not from the screen reader. A working sample is the PrimeNG checkbox that is tabbable, keyboard accessible and is compliant with a screen reader. Instead of ARIA roles it relies on a hidden native checkbox. Remember Me",
+          "description": "ARIA refers to \"Accessible Rich Internet Applications\" is a suite to fill the gap where semantic HTML is inadequate. These cases are mainly related to rich UI components/widgets. Although browser support for rich UI components such as a datepicker or colorpicker has been improved over the past years many web developers still utilize UI components derived from standard HTML elements created by them or by other projects like Optimus UI. These types of components must provide keyboard and screen reader support, the latter case is where the WAI-ARIA is utilized. ARIA consists of roles, properties and attributes. Roles define what the element is mainly used for e.g. checkbox , dialog , tablist whereas States and Properties define the metadata of the element like aria-checked , aria-disabled . Consider the following case of a native checkbox. It has built-in keyboard and screen reader support. A fancy checkbox with css animations might look more appealing but accessibility might be lacking. Checkbox below may display a checked font icon with animations however it is not tabbable, cannot be checked with space key and cannot be read by a reader. One alternative is using ARIA roles for readers and use javascript for keyboard support. Notice the usage of aria-labelledby as a replacement of the label tag with for. However the best practice is combining semantic HTML for accessibility while keeping the design for UX. This approach involves hiding a native checkbox for accessibility and using javascript events to update its state. Notice the usage of p-sr-only that hides the elements from the user but not from the screen reader. A working sample is the Optimus UI checkbox that is tabbable, keyboard accessible and is compliant with a screen reader. Instead of ARIA roles it relies on a hidden native checkbox. Remember Me",
           "examples": null
         },
         {
           "id": "wcag-",
           "label": "Wcag-",
-          "description": "WCAG refers to Web Content Accessibility Guideline , a standard managed by the WAI (Web Accessibility Initiative) of W3C (World Wide Web Consortium). WCAG consists of recommendations for making the web content more accessible. PrimeNG components aim high level of WCAG compliancy in the near future. Various countries around the globe have governmental policies regarding web accessibility as well. Most well known of these are Section 508 in the US and Web Accessibility Directive of the European Union.",
+          "description": "WCAG refers to Web Content Accessibility Guideline , a standard managed by the WAI (Web Accessibility Initiative) of W3C (World Wide Web Consortium). WCAG consists of recommendations for making the web content more accessible. Optimus UI components aim high level of WCAG compliancy in the near future. Various countries around the globe have governmental policies regarding web accessibility as well. Most well known of these are Section 508 in the US and Web Accessibility Directive of the European Union.",
           "examples": null
         }
       ]
@@ -44563,7 +44557,7 @@
       "name": "animations",
       "path": "guides/animations",
       "title": "Animations",
-      "description": "Built-in CSS animations for PrimeNG components.",
+      "description": "Built-in CSS animations for Optimus UI components.",
       "sections": [
         {
           "id": "anchoredoverlays-",
@@ -44592,7 +44586,7 @@
         {
           "id": "introduction-",
           "label": "Introduction-",
-          "description": "Various PrimeNG Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations. Animations are defined using a combination of style classes and keyframes. The ⁠ .&#123;classname&#125;-enter-active and ⁠ .&#123;classname&#125;-leave-active classes specify the animation name, duration, and easing function. You can customize animations globally by overriding the default animation classes, affecting all components. Alternatively, you can apply scoped classes to individual components to modify their animations independently. For demo purposes, this second approach is used throughout the next sections.",
+          "description": "Various Optimus UI Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations. Animations are defined using a combination of style classes and keyframes. The ⁠ .&#123;classname&#125;-enter-active and ⁠ .&#123;classname&#125;-leave-active classes specify the animation name, duration, and easing function. You can customize animations globally by overriding the default animation classes, affecting all components. Alternatively, you can apply scoped classes to individual components to modify their animations independently. For demo purposes, this second approach is used throughout the next sections.",
           "examples": null
         },
         {
@@ -44607,120 +44601,18 @@
       "name": "rtl",
       "path": "guides/rtl",
       "title": "RTL",
-      "description": "Right-to-left support for PrimeNG components.",
+      "description": "Right-to-left support for Optimus UI components.",
       "sections": [
         {
           "id": "configuration-",
           "label": "Configuration-",
-          "description": "The PrimeNG components natively support Right-to-Left (RTL) text direction through a modern CSS implementation utilizing FlexBox and classes like *-inline-start and *-block-end . Consequently, no JavaScript configuration is necessary; setting the document's text direction to RTL is sufficient to enable this feature. The RTL setting can either be set using the dir attribute or with the direction style property.",
+          "description": "The Optimus UI components natively support Right-to-Left (RTL) text direction through a modern CSS implementation utilizing FlexBox and classes like *-inline-start and *-block-end . Consequently, no JavaScript configuration is necessary; setting the document's text direction to RTL is sufficient to enable this feature. The RTL setting can either be set using the dir attribute or with the direction style property.",
           "examples": null
         },
         {
           "id": "limitations-",
           "label": "Limitations-",
           "description": "RTL is widely supported by the UI suite except the Galleria and Carousel components. These components will be enhanced with a modern implementation in upcoming versions with built-in support for RTL.",
-          "examples": null
-        }
-      ]
-    },
-    {
-      "name": "v19",
-      "path": "migration/v19",
-      "title": "Migration v19",
-      "description": "Migration guide to PrimeNG v19.",
-      "sections": [
-        {
-          "id": "breakingchanges",
-          "label": "Breakingchanges",
-          "description": "Configuration The PrimeNGConfig has been replaced by PrimeNG and the initial configuration is now done via the providePrimeNG provider during startup. See the installation section for an example. SASS Themes The styled mode theming has been reimplemented from scratch based on an all-new architecture. The theme.css and the primeng/resources do not exist anymore, so any imports of these assets needs to be removed. If you had a custom theme for v17, the theme needs to be recreated using the new APIs. See the customization section at styled mode for details. Removed Components TriStateCheckbox | Use Checkbox with indeterminate option. DataViewLayoutOptions | Use SelectButton instead. pAnimate | Use pAnimateOnScroll instead. Removed Files Themes under the primeng/resources path, migration to new styled mode is necessary. Messages and Message Messages component is deprecated due to unnecessary role of being just a wrapper around multiple message instances and it's replaced with the new Message . Instead of message, users now need to loop through their custom array to display multiple messages to achieve same behavior. The spacing, closable and life properties of the Message have breaking changes to provide Message functionality. Default margin is removed, closable is false by default and messages do not disappear automatically. Message Interface Message interface in primeng/api is renamed as ToastMessageOptions due to name collision with the Message component. Removed Features Sidebar/Drawer size property is removed, use a responsive class utilty as replacement, demos have new examples. Removed Style Classes .p-link , use a button in link mode. .p-highlight , each component have its own class such as .p-select-option-selected . .p-fluid , use the new built-in fluid property of the supported components or the Fluid component. PrimeFlex CSS In case you are using PrimeFlex CSS library, upgrade to PrimeFlex v4 since PrimeFlex v3 is not compatible with PrimeNG v18+",
-          "examples": null
-        },
-        {
-          "id": "deprecatedcomponents",
-          "label": "Deprecatedcomponents",
-          "description": "Deprecated Components Components that are deprecated since their functionality is provided by other components. Chips | Use AutoComplete with multiple enabled and typeahead disabled. TabMenu | Use Tabs without panels. Steps | Use Stepper without panels. InlineMessage | Use Message component. TabView | Use the new Tabs components. Accordion | Use with the new AccordionHeader and AccordionContent components. Messages | Use with the new Message component. pDefer | Use Angular defer instead.",
-          "examples": null
-        },
-        {
-          "id": "migrationoverview",
-          "label": "Migrationoverview",
-          "description": "At PrimeTek, we have been developing UI component libraries since 2008. The web continues to undergo technological advancements, and as a result, we have to modernize and update our libraries to stay relevant. PrimeNG v18 is the next-generation version that fully embraces modern Web APIs and removes technical debt like the legacy-styled mode. Every component has been reviewed and enhanced. The most notable feature is the new styled mode implementation. Previous iterations use SASS at an external repo called PrimeNG-sass-theme which requires compilation of a theme.css a file. This file had to be included in the application and need to be swapped at runtime for basic tasks like dark mode or primary color changes. In v18, styled mode is now part of the core, SASS is not used at all, and a new design token based architecture that fully utilizes CSS variables has been created. The new API is modern and superior to the legacy styled mode. Names of some of the components have been changed to more common alternatives for example, Popover replaced OverlayPanel and InputSwitch is now called ToggleSwitch . Each component has been reviewed for a consistent naming between CSS class names and sections. An example would be the option element of a Select component that uses p-select-option for the class name. Components have been utilized more within other components, for instance Dialog close button is not actually a PrimeNG button so that closeButtonProps can be used to enable the features of button like outlined, raised and more.",
-          "examples": null
-        },
-        {
-          "id": "renamedcomponents",
-          "label": "Renamedcomponents",
-          "description": "Renamed Components Old names are deprecated but still functional, migrate to new import paths instead e.g. primeng/calendar becomes primeng/datepicker . Calendar -&gt; DatePicker . Dropdown -&gt; Select . InputSwitch -&gt; ToggleSwitch . OverlayPanel -&gt; Popover . Sidebar -&gt; Drawer .",
-          "examples": null
-        }
-      ]
-    },
-    {
-      "name": "v20",
-      "path": "migration/v20",
-      "title": "Migration v20",
-      "description": "Migration guide to PrimeNG v20.",
-      "sections": [
-        {
-          "id": "backwardcompatible",
-          "label": "Backwardcompatible",
-          "description": "Form Enhancements In this iteration, all form components have been reviewed and new demos for template-driven and reactive forms have been added. During this work, limitations have been identified and resolved as well. In addition, we've introduced a new property named invalid to the form components that you may use style a component as invalid. In previous versions, form components style themselves as invalid using a built-in style like the following. This style is opinionated as it is specifally for invalid and dirty states ignoring other potential UX requirements like touched/untouched or form submit. In v20, the new invalid provides full control to highlight a component a invalid. This styling change is backward compatible, meaning the opinionated ng-invalid.ng-dirty class is still included however in future versions, it will be removed. PrimeUIX Themes PrimeUIX is a shared package between all Prime libraries, this shared approach allows PrimeTek teams to share theming and the Design team who is responsible for the Figma UI Kit to work on a single design file, which is the single source of truth. Prior to v20, PrimeNG has its own fork in default styles and for the design tokens {{ '@' }}primeng/themes package is required. With v20, PrimeNG receives the styles from {{ '@' }}openng/optimus-ui-styles under the hood and the design tokens as theme presets are loaded from {{ '@' }}openng/optimus-ui-themes . The components need to be adjusted to fit in the PrimeUIX theming by using the host element where applicable, as a result for the components that use host element (&lt;p-* /&gt;) as their main container, the styleClass became obselete since native class attribute is already available on the custom element. Refer to the documentation of a particular component to find out if styleClass is deprecated. All of these changes are backward compatible, {{ '@' }}primeng/themes use {{ '@' }}openng/optimus-ui-themes internally, and migration is easy as replacing the dependency {{ '@' }}primeng/themes with {{ '@' }}openng/optimus-ui-themes in your application.",
-          "examples": null
-        },
-        {
-          "id": "breaking",
-          "label": "Breaking",
-          "description": "Our team has put in great deal of effort while updating PrimeNG, and there are no filed breaking changes in v20.",
-          "examples": null
-        },
-        {
-          "id": "deprecations",
-          "label": "Deprecations",
-          "description": "The following items are marked as deprecated. API Deprecated Since Replacement Removal Status @primeng/themes v20 @openng/optimus-ui-themes v22 pTemplate v20 ng-template with a template reference variable v22 styleClass *(for host enabled components) v20 class v22 Global inputStyle config v20 inputVariant v22 CamelCase Selectors v20 Kebab case v22 pButton iconPos, loadingIcon, icon and label properties v20 pButtonIcon and pButtonLabel directives v22 pButton buttonProps property v20 Use button properties directly on the element v22 p-button badgeClass property v20 badgeSeverity property v22 AutoComplete minLength property v20 minQueryLength v22 OrganizationChart preserveSpace property v20 Obselete property, had no use v22 Paginator dropdownAppendTo property v20 appendTo v22 Message text and escape properties v20 Content projection v22 Password maxLength property v20 maxlength property v22 TreeSelect containerStyle/containerStyleClass properties v20 style and class v22 Table responsiveLayout property v20 Always defaults to scroll, stack mode needs custom implementation v22 TreeSelect default template v20 value template v22 pBadge directive v20 OverlayBadge component v22 clearFilterIcon template of Table v20 Obsolete, not utilized. v22 Inplace closable property. v20 Use templating with closeCallback . v22",
-          "examples": null
-        },
-        {
-          "id": "overview",
-          "label": "Overview",
-          "description": "PrimeNG v20 is an evolution rather than a revolution compared to v18/v19 that introduced the brand new theming architecture. V20 focuses on form enhancements along with the primeuix migration for shared theming between all Prime projects including PrimeVue, PrimeReact and the upcoming projects such as PrimeUI web components. As of v20, PrimeNG has switched PrimeNG to semantic versioning, and as a result changes are iterative, with a smooth migration strategy and no breaking changes. In the future versions, same approach will be put in action and migrations will be trivial with no breaking changes.",
-          "examples": null
-        },
-        {
-          "id": "removals",
-          "label": "Removals",
-          "description": "The list of items that were deprecated in previous releases and removed in this iteration. API Deprecated Since Replacement Status in v20 Calendar v18 DatePicker Dropdown v18 Select InputSwitch v18 ToggleSwitch OverlayPanel v18 Popover Sidebar v18 Drawer Chips v18 AutoComplete in multiple mode without typehead option TabMenu v18 Tabs without panels Steps v18 Stepper without panels Messages v18 Message InlineMessage v18 Message TabView v18 Tabs Accordion activeIndex property v18 value property Accordion headerAriaLevel property v18 AccordionHeader aria-level attribute AccordionTab v18 AccordionPanel, AccordionHeader, AccordionContent AutoComplete field property v18 optionLabel property AutoComplete itemSize property v18 virtualScrollItemSize property pDefer v18 Angular deferred views pAutoFocus autofocus property v18 Default attribute directive {{ '[pAutoFocus]=\"true|false\"' }} Badge size property v18 badgeSize property DatePicker monthNavigator, yearNavigator, yearRange, locale properties v18 Obsolete, not utilized. Dialog positionLeft, responsive, breakpoint properties v18 Obsolete, not utilized. InputMask autoFocus property v18 autofocus property. MultiSelect checkicon template v18 headercheckboxicon and itemcheckboxicon . MultiSelect/Select baseZIndex, autoZIndex, showTransitionOptions, hideTransitionOptions v14 overlayOptions property Rating onCancel event and cancelIcon template v18 Obsolete, not utilized. MultiSelect defaultLabel property v18 placeholder property. MultiSelect/Select itemSize property v18 virtualScrollItemSize property Select autoDisplayFirst property v17 Set initial value by model instead TreeSelect showTransitionOptions, hideTransitionOptions v14 overlayOptions property Panel expandIcon and collapseIcon properties v18 headericons template StyleClass enterClass/leaveClass properties v18 enterFromClass and leaveFromClass properties Table scrollDirection property 14 Obsolete, not utilized. Table responsive property 14 An horizontal scroll is displayed for smaller screens Table/TreeTable virtualRowHeight property v18 virtualScrollItemSize property Table autoLayout property v18 Table always uses autoLayout as implementation requirement Tree virtualNodeHeight property v18 virtualScrollItemSize property",
-          "examples": null
-        }
-      ]
-    },
-    {
-      "name": "v21",
-      "path": "migration/v21",
-      "title": "Migration v21",
-      "description": "Migration guide to PrimeNG v21.",
-      "sections": [
-        {
-          "id": "breaking",
-          "label": "Breaking",
-          "description": "Beginning with PrimeNG v20, PrimeTek adopted a no-breaking-change policy for incremental major version updates. PrimeNG v21 maintains this policy with one exception: due to the deprecation of Angular's animations package in Angular v20.2, we have migrated to native CSS-based animations. Consequently, the showTransitionOptions and hideTransitionOptions properties that belong to the animations api are deprecated in v21 and no longer functional. v21 will not cause an error as the properties still exist, however your customizations will be ignored. If you currently use these properties for animation customization, please refer to the new animations documentation for the updated approach. Other than this case, v21 should be a drop-in replacement. If you face with any issues during upgrade, please report an issue using at GitHub.",
-          "examples": null
-        },
-        {
-          "id": "deprecations",
-          "label": "Deprecations",
-          "description": "The following items are marked as deprecated. API Deprecated Since Replacement Removal Status showTransitionOptions v21 Native CSS animatons v22 hideTransitionOptions v21 Native CSS animatons v22 Directive PT attribute names e.g. ptInputText v21 PT suffix at the end e.g. pInputTextPT v22 contextMenuSelectionMode v21 \"joint\" mode will be removed in favor of the \"separate\". Applies to Tree, TreeTable and Table. v22",
-          "examples": null
-        },
-        {
-          "id": "removals",
-          "label": "Removals",
-          "description": "This version contains no API removals. For a list of APIs scheduled for removal in v22, refer to the v20 deprecations section.",
-          "examples": null
-        },
-        {
-          "id": "whatsnew",
-          "label": "Whatsnew",
-          "description": "PrimeNG v21 represents a major advancement in PrimeTek's product vision. Key highlights of this release include: PassThrough attributes for enhanced customization. Unstyled Mode for complete styling flexibility. Modern CSS-based animations . The deprecated provideAnimationsAsync is safe to remove. Initial zoneless support for improved performance. AI-enhanced documentation for better developer experience. Notes The internal packages @openng/optimus-ui-styles and @openng/optimus-ui-themes should be version 2.0.2 or higher. These packages are updated automatically with a fresh install. If you encounter any issues with visuals or animations, please verify that you are using the correct versions of these packages.",
           "examples": null
         }
       ]

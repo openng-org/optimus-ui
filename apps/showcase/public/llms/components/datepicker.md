@@ -460,7 +460,7 @@ export class DatepickerInvalidDemo {
 
 ## Locale
 
-Locale for different languages and formats is defined globally, refer to the PrimeNG Locale configuration for more information.
+Locale for different languages and formats is defined globally, refer to the Optimus UI Locale configuration for more information.
 
 ## Mask
 

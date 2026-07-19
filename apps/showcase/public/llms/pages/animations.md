@@ -1,6 +1,6 @@
 # Animations
 
-Built-in CSS animations for PrimeNG components.
+Built-in CSS animations for Optimus UI components.
 
 ## Anchoredoverlays-
 
@@ -20,7 +20,7 @@ Individual animations can be reduced and even disabled completely using the anim
 
 ## Introduction-
 
-Various PrimeNG Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations. Animations are defined using a combination of style classes and keyframes. The ⁠ .&#123;classname&#125;-enter-active and ⁠ .&#123;classname&#125;-leave-active classes specify the animation name, duration, and easing function. You can customize animations globally by overriding the default animation classes, affecting all components. Alternatively, you can apply scoped classes to individual components to modify their animations independently. For demo purposes, this second approach is used throughout the next sections.
+Various Optimus UI Components utilize native CSS animations to provide an enhanced user experience. The default animations are based on the best practices recommended by the usability experts. In case you need to customize the default animations, this documentation covers the entire set of built-in animations. Animations are defined using a combination of style classes and keyframes. The ⁠ .&#123;classname&#125;-enter-active and ⁠ .&#123;classname&#125;-leave-active classes specify the animation name, duration, and easing function. You can customize animations globally by overriding the default animation classes, affecting all components. Alternatively, you can apply scoped classes to individual components to modify their animations independently. For demo purposes, this second approach is used throughout the next sections.
 
 ## Reference-
 

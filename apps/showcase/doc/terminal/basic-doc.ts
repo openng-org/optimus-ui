@@ -15,7 +15,7 @@ import { AppCode } from '@/components/doc/app.code';
         </app-docsectiontext>
         <div class="card">
             <p>Enter "<strong>date</strong>" to display the current date, "<strong>greet &#123;0&#125;</strong>" for a message and "<strong>random</strong>" to get a random number.</p>
-            <p-terminal welcomeMessage="Welcome to Optimus UI" prompt="primeng $" />
+            <p-terminal welcomeMessage="Welcome to Optimus UI" prompt="optimus $" />
         </div>
         <app-code></app-code>
     `,
