@@ -67,6 +67,18 @@ jobs:
               run: |
                   pnpm install
 
+            - name: Cache Playwright browsers
+              uses: actions/cache@v4
+              with:
+                  path: ~/.cache/ms-playwright
+                  key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+                  restore-keys: |
+                      playwright-${{ runner.os }}-
+
+            - name: Install Playwright Chromium
+              run: |
+                  pnpm --filter @openng/optimus-ui exec playwright install --with-deps chromium
+
             - name: Code Format
               id: codeFormat
               run: |
@@ -76,6 +88,11 @@ jobs:
               id: unitTest
               run: |
                   pnpm run test:unit
+
+            - name: Unit Test (vitest)
+              id: unitTestVitest
+              run: |
+                  pnpm run test:vitest
 
             - name: Build
               id: build
