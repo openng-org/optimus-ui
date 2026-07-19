@@ -35,6 +35,7 @@
         "lint": "eslint --ext \".js,.mjs,.ts,.mts\" --ignore-path .gitignore . --cache",
         "lint:fix": "eslint --fix --ext \".js,.mjs,.ts,.mts\" --ignore-path .gitignore .",
         "test:unit": "pnpm run build:optimus-ui && pnpm --filter @openng/optimus-ui test:unit",
+        "test:vitest": "pnpm run build:optimus-ui && pnpm --filter @openng/optimus-ui test:vitest",
         "test:coverage": "pnpm run build:optimus-ui && pnpm --filter @openng/optimus-ui test:unit --code-coverage"
     },
     "devDependencies": {

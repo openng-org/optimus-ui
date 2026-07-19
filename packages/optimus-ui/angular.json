@@ -5,6 +5,7 @@
     "projects": {
         "optimus-ui": {
             "root": "src",
+            "sourceRoot": "src",
             "projectType": "library",
             "architect": {
                 "build": {
@@ -14,11 +15,29 @@
                         "tsConfig": "tsconfig.json"
                     }
                 },
+                "build-test": {
+                    "builder": "@angular/build:application",
+                    "options": {
+                        "tsConfig": "tsconfig.vitest.json",
+                        "aot": false
+                    }
+                },
                 "test": {
                     "builder": "@angular-devkit/build-angular:karma",
                     "options": {
                         "tsConfig": "tsconfig.spec.json",
                         "scripts": []
+                    }
+                },
+                "test-vitest": {
+                    "builder": "@angular/build:unit-test",
+                    "options": {
+                        "runner": "vitest",
+                        "buildTarget": "optimus-ui:build-test",
+                        "tsConfig": "tsconfig.vitest.json",
+                        "browsers": ["ChromiumHeadless"],
+                        "include": ["**/*.test.ts"],
+                        "runnerConfig": "vitest.config.mts"
                     }
                 },
                 "lint": {

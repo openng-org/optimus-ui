@@ -1,0 +1,17 @@
+{
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "strictNullChecks": true,
+        "outDir": "./out-tsc/vitest",
+        "types": ["vitest/globals"]
+    },
+    "include": ["src/**/*.test.ts", "src/**/*.d.ts"],
+    "angularCompilerOptions": {
+        "disableTypeScriptVersionCheck": true,
+        "fullTemplateTypeCheck": false,
+        "strictTemplates": false,
+        "enableI18nLegacyMessageIdFormat": false,
+        "strictInjectionParameters": true,
+        "strictInputAccessModifiers": true
+    }
+}

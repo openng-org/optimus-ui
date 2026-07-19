@@ -38,15 +38,22 @@
         "lint": "ng lint",
         "test:unit": "ng test optimus-ui --watch=false --browsers=ChromeHeadless",
         "test:unit:watch": "ng test optimus-ui",
-        "test:unit:coverage": "ng test optimus-ui --coverage"
+        "test:unit:coverage": "ng test optimus-ui --coverage",
+        "test:vitest": "ng run optimus-ui:test-vitest --watch=false",
+        "test:vitest:watch": "ng run optimus-ui:test-vitest --watch",
+        "test:vitest:coverage": "ng run optimus-ui:test-vitest --watch=false --coverage"
     },
     "devDependencies": {
+        "@angular/build": "catalog:angular21",
+        "@vitest/browser-playwright": "^4.0.8",
+        "@vitest/coverage-v8": "^4.0.8",
         "karma": "~6.4.4",
         "karma-chrome-launcher": "~3.2.0",
         "karma-coverage": "~2.2.1",
         "karma-jasmine": "~5.1.0",
         "karma-jasmine-html-reporter": "~2.1.0",
-        "tslib": "^2.8.1"
+        "tslib": "^2.8.1",
+        "vitest": "^4.0.8"
     },
     "peerDependencies": {
         "@angular/cdk": "catalog:angular21",
