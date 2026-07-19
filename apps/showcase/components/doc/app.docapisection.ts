@@ -14,7 +14,7 @@ import { AppDocSectionNav } from './app.docsection-nav';
     template: ` <div class="doc-main">
             <div class="doc-intro">
                 <h1>{{ header }} {{ !header.toLowerCase().includes('api') ? 'API' : null }}</h1>
-                <p>API defines helper props, events and others for the PrimeNG {{ header }} module.</p>
+                <p>API defines helper props, events and others for the Optimus UI {{ header }} module.</p>
             </div>
             <app-docsection [apiDocs]="_docs()"></app-docsection>
         </div>

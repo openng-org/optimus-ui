@@ -10,7 +10,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [CommonModule, AppDoc],
-    template: `<app-doc docTitle="Getting Started - PrimeNG" header="Installation" description="Setting up PrimeNG in an Angular CLI project." [docs]="docs" docType="page"></app-doc>`
+    template: `<app-doc docTitle="Getting Started - Optimus UI" header="Installation" description="Setting up Optimus UI in an Angular CLI project." [docs]="docs" docType="page"></app-doc>`
 })
 export class InstallationDemo {
     docs = [
@@ -38,11 +38,6 @@ export class InstallationDemo {
             id: 'nextsteps',
             label: 'Next Steps',
             component: NextStepsDoc
-        } /*,
-        {
-            id: 'videos',
-            label: 'Videos',
-            component: VideosDoc,
-        },*/
+        }
     ];
 }

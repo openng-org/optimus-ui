@@ -55,7 +55,7 @@ import { OverviewApp } from './samples/overviewapp.component';
             <div class="flex flex-col items-center">
                 <h1 class="text-5xl font-bold text-center xl:text-left leading-tight">The Next-Gen UI Suite for <span class="font-bold text-primary">Angular</span></h1>
                 <p class="text-center mt-0 mb-8 text-surface-500 dark:text-surface-400 font-medium text-xl leading-relaxed lg:px-56">
-                    Enhance your web applications with PrimeNG's comprehensive suite of customizable, feature-rich UI components. With PrimeNG, turning your development vision into reality has never been easier.
+                    Enhance your web applications with Optimus UI's comprehensive suite of customizable, feature-rich UI components. With Optimus UI, turning your development vision into reality has never been easier.
                 </p>
                 <div class="flex items-center gap-4">
                     <a [routerLink]="'installation'" class="linkbox linkbox-primary">

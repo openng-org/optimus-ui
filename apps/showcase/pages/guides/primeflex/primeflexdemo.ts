@@ -9,7 +9,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     selector: 'css-layer',
     standalone: true,
     imports: [AppDoc],
-    template: `<app-doc docTitle="PrimeFlex - PrimeNG" header="Introduction" [docs]="docs" description="Moving from PrimeFlex to Tailwind CSS."></app-doc>`
+    template: `<app-doc docTitle="PrimeFlex - Optimus UI" header="Introduction" [docs]="docs" description="Moving from PrimeFlex to Tailwind CSS."></app-doc>`
 })
 export class PrimeFlexDemoComponent {
     docs = [

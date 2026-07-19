@@ -7,7 +7,7 @@ import { AppDocSectionText } from './app.docsectiontext';
     standalone: true,
     imports: [CommonModule, AppDocSectionText],
     template: `<app-docsectiontext title="Built-in Presets" id="built-in-presets" [level]="3">
-        <p>PrimeNG offers various preset options that allow you to customize the component's styling to match your application's design system. Below you'll find links to the implementation and type definitions for each preset.</p>
+        <p>Optimus UI offers various preset options that allow you to customize the component's styling to match your application's design system. Below you'll find links to the implementation and type definitions for each preset.</p>
         <div class="doc-tablewrapper mt-4">
             <table class="doc-preset-table">
                 <thead>
@@ -24,7 +24,7 @@ import { AppDocSectionText } from './app.docsectiontext';
                         <td [class]="'doc-option-preset-name-{{preset.toLowerCase()}}'">{{ preset }}</td>
                         <td [class]="'doc-option-preset-implementation-{{preset.toLowerCase()}}'">
                             <a
-                                href="https://github.com/primefaces/primeuix/blob/main/packages/themes/src/presets/{{ preset.toLowerCase() }}/{{ data }}/index.ts"
+                                href="https://github.com/openng-org/optimus-ui/blob/main/packages/optimus-ui-themes/src/presets/{{ preset.toLowerCase() }}/{{ data }}/index.ts"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="inline-flex rounded-full px-3 py-1 bg-surface-200 hover:bg-surface-300 transition-all duration-200 gap-2 items-center text-sm dark:bg-surface-800 dark:hover:bg-surface-700"
@@ -35,7 +35,7 @@ import { AppDocSectionText } from './app.docsectiontext';
                         </td>
                         <td [class]="'doc-option-preset-type-{{preset.toLowerCase()}}'">
                             <a
-                                href="https://github.com/primefaces/primeuix/blob/main/packages/themes/src/presets/{{ preset.toLowerCase() }}/{{ data }}/index.d.ts"
+                                href="https://github.com/openng-org/optimus-ui/blob/main/packages/optimus-ui-themes/src/presets/{{ preset.toLowerCase() }}/{{ data }}/index.d.ts"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="inline-flex rounded-full px-3 py-1 bg-surface-200 hover:bg-surface-300 transition-all duration-200 gap-2 items-center text-sm dark:bg-surface-800 dark:hover:bg-surface-700"

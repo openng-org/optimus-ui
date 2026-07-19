@@ -14,7 +14,7 @@ import { TextareaModule } from '@openng/optimus-ui/textarea';
     imports: [CommonModule, FormsModule, AppDocSectionText, AppCode, InputTextModule, SelectModule, DatePickerModule, TextareaModule],
     template: `
         <app-docsectiontext>
-            <p>Using Tailwind utilities for the responsive layout of a form with PrimeNG components.</p>
+            <p>Using Tailwind utilities for the responsive layout of a form with Optimus UI components.</p>
         </app-docsectiontext>
         <div class="card flex sm:justify-center">
             <div class="flex flex-col gap-6 w-full sm:w-auto">

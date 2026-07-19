@@ -7,7 +7,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     standalone: true,
     imports: [CommonModule, AppDocSectionText],
     template: `
-        <app-docsectiontext> <p>PrimeNG color palette as utility classes.</p></app-docsectiontext>
+        <app-docsectiontext> <p>Optimus UI color palette as utility classes.</p></app-docsectiontext>
         <div class="card">
             <div class="flex flex-col gap-12">
                 <ul class="p-0 m-0 list-none flex sm:flex-col gap-4 flex-wrap sm:flex-nowrap">

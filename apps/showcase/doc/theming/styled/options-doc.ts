@@ -45,7 +45,7 @@ export class OptionsDoc {
         typescript: `options: {
     cssLayer: {
         name: 'primeng',
-        order: 'app-styles, primeng, another-css-library'
+        order: 'app-styles, optimus, another-css-library'
     }
 }`
     };

@@ -17,12 +17,12 @@ import { AppCode } from '@/components/doc/app.code';
 export class DownloadDoc {
     code: Code = {
         command: `# Using npm
-npm install primeng @openng/optimus-ui-themes
+npm install @openng/optimus-ui @openng/optimus-ui-themes
 
 # Using yarn
-yarn add primeng @openng/optimus-ui-themes
+yarn add @openng/optimus-ui @openng/optimus-ui-themes
 
 # Using pnpm
-pnpm add primeng @openng/optimus-ui-themes`
+pnpm add @openng/optimus-ui @openng/optimus-ui-themes`
     };
 }

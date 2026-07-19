@@ -8,7 +8,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc title="Custom Icons - PrimeNG" header="Custom Icons" description="PrimeNG components can be used with any icon library using the templating features." [docs]="docs" docType="page"></app-doc>`
+    template: ` <app-doc title="Custom Icons - Optimus UI" header="Custom Icons" description="Optimus UI components can be used with any icon library using the templating features." [docs]="docs" docType="page"></app-doc>`
 })
 export class CustomIconsDemo {
     docs = [

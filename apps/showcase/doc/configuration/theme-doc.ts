@@ -10,7 +10,7 @@ import { RouterModule } from '@angular/router';
     imports: [RouterModule, AppDocSectionText, AppCode],
     template: `
         <app-docsectiontext>
-            <p>PrimeNG provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the <a routerLink="/theming">theming</a> documentation for details.</p>
+            <p>Optimus UI provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the <a routerLink="/theming">theming</a> documentation for details.</p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `

@@ -33,7 +33,7 @@ export class AppDocCopyMarkdown implements OnInit {
         if (isPlatformBrowser(this.platformId)) {
             return this.document.location.origin;
         }
-        return 'https://primeng.org';
+        return 'https://optimus.openng.org';
     }
 
     get currentComponentName(): string {

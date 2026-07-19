@@ -14,7 +14,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     template: `<app-doc
         docTitle="Angular Tooltip Component"
         header="Tooltip"
-        description="Tooltip directive provides advisory information for a component. Tooltip is integrated within various PrimeNG components."
+        description="Tooltip directive provides advisory information for a component. Tooltip is integrated within various Optimus UI components."
         [docs]="docs"
         [apiDocs]="['Tooltip', 'TooltipOptions']"
         [ptDocs]="ptComponent"

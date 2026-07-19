@@ -12,7 +12,7 @@ import { CheckboxModule } from '@openng/optimus-ui/checkbox';
         <app-docsectiontext>
             <p>
                 ARIA refers to "Accessible Rich Internet Applications" is a suite to fill the gap where semantic HTML is inadequate. These cases are mainly related to rich UI components/widgets. Although browser support for rich UI components such as
-                a datepicker or colorpicker has been improved over the past years many web developers still utilize UI components derived from standard HTML elements created by them or by other projects like PrimeNG. These types of components must
+                a datepicker or colorpicker has been improved over the past years many web developers still utilize UI components derived from standard HTML elements created by them or by other projects like Optimus UI. These types of components must
                 provide keyboard and screen reader support, the latter case is where the WAI-ARIA is utilized.
             </p>
             <p>
@@ -38,7 +38,7 @@ import { CheckboxModule } from '@openng/optimus-ui/checkbox';
                 that hides the elements from the user but not from the screen reader.
             </p>
             <app-code [code]="code4" [hideToggleCode]="true"></app-code>
-            <p class="doc-section-description mt-4">A working sample is the PrimeNG checkbox that is tabbable, keyboard accessible and is compliant with a screen reader. Instead of ARIA roles it relies on a hidden native checkbox.</p>
+            <p class="doc-section-description mt-4">A working sample is the Optimus UI checkbox that is tabbable, keyboard accessible and is compliant with a screen reader. Instead of ARIA roles it relies on a hidden native checkbox.</p>
             <div class="card flex items-center">
                 <label for="binary" class="mr-2">Remember Me</label>
                 <p-checkbox inputId="binary" [binary]="true"></p-checkbox>

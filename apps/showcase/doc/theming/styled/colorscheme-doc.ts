@@ -19,7 +19,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             <app-code [code]="code2" [hideToggleCode]="true" [importCode]="true" [hideStackBlitz]="true"></app-code>
             <div class="font-bold my-4">Best Practices</div>
             <ul class="leading-normal list-disc list-inside mb-4">
-                <li>Check how tokens are defined in the preset before customizing from the <a href="https://github.com/primefaces/primeuix/tree/main/packages/themes/src/presets" target="_blank" rel="noopener noreferrer">source</a>.</li>
+                <li>Check how tokens are defined in the preset before customizing from the <a href="https://github.com/openng-org/optimus-ui/blob/main/packages/optimus-ui-themes/src/presets" target="_blank" rel="noopener noreferrer">source</a>.</li>
                 <li>Always maintain the same structure (direct value or colorScheme) as the original preset.</li>
                 <li>Consider both light and dark mode values when overriding scheme-dependent tokens.</li>
             </ul>

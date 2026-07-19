@@ -19,7 +19,7 @@ interface City {
         <app-docsectiontext>
             <p>
                 Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The <i>tailwindcss-primeui</i> even provides special
-                variants such as <i>p-outlined:</i>, <i>p-vertical</i> for the PrimeNG components.
+                variants such as <i>p-outlined:</i>, <i>p-vertical</i> for the Optimus UI components.
             </p>
             <p>
                 The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the
@@ -49,10 +49,10 @@ export class ExampleDoc {
     label="Search"
     icon="pi pi-search"
     [unstyled]="true"
-    [pt]="{ 
-        root: 'bg-teal-500 hover:bg-teal-700 active:bg-teal-900 cursor-pointer py-2 px-4 rounded-full border-0 flex gap-2', 
-        label: 'text-white font-bold text-lg', 
-        icon: 'text-white !text-xl' 
+    [pt]="{
+        root: 'bg-teal-500 hover:bg-teal-700 active:bg-teal-900 cursor-pointer py-2 px-4 rounded-full border-0 flex gap-2',
+        label: 'text-white font-bold text-lg',
+        icon: 'text-white !text-xl'
     }"
 />`
     };

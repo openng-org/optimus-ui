@@ -50,8 +50,8 @@ export class OverrideDoc {
         preset: Aura,
         options: {
             cssLayer: {
-                name: 'primeng',
-                order: 'theme, base, primeng'
+                name: 'optimus',
+                order: 'theme, base, optimus'
             }
         }
     }
@@ -70,7 +70,7 @@ export class OverrideDoc {
         options: {
             cssLayer: {
                 name: 'primeng',
-                order: 'tailwind-base, primeng, tailwind-utilities'
+                order: 'tailwind-base, optimus, tailwind-utilities'
             }
         }
     }
@@ -78,7 +78,7 @@ export class OverrideDoc {
     };
 
     code6 = {
-        typescript: `@layer tailwind-base, primeng, tailwind-utilities;
+        typescript: `@layer tailwind-base, optimus, tailwind-utilities;
 
 @layer tailwind-base {
   @tailwind base;

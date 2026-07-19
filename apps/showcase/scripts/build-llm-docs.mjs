@@ -68,13 +68,13 @@ const GUIDE_PAGES = [
         route: 'installation',
         docPath: 'installation',
         title: 'Installation',
-        description: 'Setting up PrimeNG in an Angular CLI project.'
+        description: 'Setting up Optimus UI in an Angular CLI project.'
     },
     {
         route: 'configuration',
         docPath: 'configuration',
         title: 'Configuration',
-        description: 'Application wide configuration for PrimeNG.'
+        description: 'Application wide configuration for Optimus UI.'
     },
     {
         route: 'theming/styled',
@@ -86,19 +86,19 @@ const GUIDE_PAGES = [
         route: 'theming/unstyled',
         docPath: 'theming/unstyled',
         title: 'Unstyled Mode',
-        description: 'Theming PrimeNG with alternative styling approaches.'
+        description: 'Theming Optimus UI with alternative styling approaches.'
     },
     {
         route: 'icons',
         docPath: 'icons',
         title: 'Icons',
-        description: 'PrimeIcons is the default icon library of PrimeNG with over 250 open source icons.'
+        description: 'PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.'
     },
     {
         route: 'customicons',
         docPath: 'customicons',
         title: 'Custom Icons',
-        description: 'Use custom icons with PrimeNG components.'
+        description: 'Use custom icons with Optimus UI components.'
     },
     {
         route: 'passthrough',
@@ -110,49 +110,31 @@ const GUIDE_PAGES = [
         route: 'tailwind',
         docPath: 'tailwind',
         title: 'Tailwind CSS',
-        description: 'Integration between PrimeNG and Tailwind CSS.'
+        description: 'Integration between Optimus UI and Tailwind CSS.'
     },
     {
         route: 'llms',
         docPath: 'llms',
         title: 'LLMs.txt',
-        description: 'LLM-optimized documentation endpoints for PrimeNG components.'
+        description: 'LLM-optimized documentation endpoints for Optimus UI components.'
     },
     {
         route: 'guides/accessibility',
         docPath: 'guides/accessibility',
         title: 'Accessibility',
-        description: 'PrimeNG has WCAG 2.1 AA level compliance.'
+        description: 'Optimus UI has WCAG 2.1 AA level compliance.'
     },
     {
         route: 'guides/animations',
         docPath: 'guides/animations',
         title: 'Animations',
-        description: 'Built-in CSS animations for PrimeNG components.'
+        description: 'Built-in CSS animations for Optimus UI components.'
     },
     {
         route: 'guides/rtl',
         docPath: 'guides/rtl',
         title: 'RTL',
-        description: 'Right-to-left support for PrimeNG components.'
-    },
-    {
-        route: 'migration/v19',
-        docPath: 'migration/v19',
-        title: 'Migration v19',
-        description: 'Migration guide to PrimeNG v19.'
-    },
-    {
-        route: 'migration/v20',
-        docPath: 'migration/v20',
-        title: 'Migration v20',
-        description: 'Migration guide to PrimeNG v20.'
-    },
-    {
-        route: 'migration/v21',
-        docPath: 'migration/v21',
-        title: 'Migration v21',
-        description: 'Migration guide to PrimeNG v21.'
+        description: 'Right-to-left support for Optimus UI components.'
     }
 ];
 
@@ -927,7 +909,7 @@ function generateJsonOutput(components, apiDocs, guidePages = []) {
  * Generate combined Markdown output for AI context
  */
 function generateMarkdownOutput(components, apiDocs, guidePages = []) {
-    let markdown = '# PrimeNG Documentation\n\n';
+    let markdown = '# Optimus UI Documentation\n\n';
     markdown += `Generated: ${new Date().toISOString().split('T')[0]}\n\n`;
     markdown += '---\n\n';
 
@@ -1019,7 +1001,7 @@ function generateMarkdownOutput(components, apiDocs, guidePages = []) {
  * Generate llms.txt index file
  */
 function generateLlmsTxt(components, pages = []) {
-    let content = '# PrimeNG\n\n';
+    let content = '# Optimus UI\n\n';
     content += '> The Most Complete Angular UI Component Library\n\n';
 
     // Add Guides section
@@ -1027,7 +1009,7 @@ function generateLlmsTxt(components, pages = []) {
         content += '## Guides\n\n';
 
         for (const page of pages) {
-            content += `- [${page.title}](https://primeng.org/${page.route}): ${page.description}\n`;
+            content += `- [${page.title}](https://optimus.openng.org/${page.route}): ${page.description}\n`;
         }
 
         content += '\n';
@@ -1039,7 +1021,7 @@ function generateLlmsTxt(components, pages = []) {
     const sorted = [...components].sort((a, b) => a.title.localeCompare(b.title));
 
     for (const comp of sorted) {
-        content += `- [${comp.title}](https://primeng.org/${comp.name}): ${comp.description}\n`;
+        content += `- [${comp.title}](https://optimus.openng.org/${comp.name}): ${comp.description}\n`;
     }
 
     const outputPath = path.join(OUTPUT_DIR, 'llms.txt');
@@ -1238,7 +1220,7 @@ function generatePageMarkdownFiles(pages) {
  * Main execution
  */
 function main() {
-    console.log('🚀 Building PrimeNG LLM Documentation...\n');
+    console.log('🚀 Building Optimus UI LLM Documentation...\n');
 
     console.log('📦 Loading demos.json...');
     demosData = loadDemosJson();

@@ -27,5 +27,5 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     `
 })
 export class CustomToolbarDoc {
-    text: string = '<div>Hello World!</div><div>PrimeNG <b>Editor</b> Rocks</div><div><br></div>';
+    text: string = '<div>Hello World!</div><div>Optimus UI <b>Editor</b> Rocks</div><div><br></div>';
 }

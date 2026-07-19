@@ -11,7 +11,7 @@ import { DarkModeDoc } from '@/doc/tailwind/darkmode-doc';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Tailwind CSS - PrimeNG" header="Tailwind CSS" description="Integration between PrimeNG and Tailwind CSS." [docs]="docs" docType="page"></app-doc>`,
+    template: `<app-doc docTitle="Tailwind CSS - Optimus UI" header="Tailwind CSS" description="Integration between Optimus UI and Tailwind CSS." [docs]="docs" docType="page"></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })
@@ -45,7 +45,7 @@ export class TailwindDemo {
         {
             id: 'samples',
             label: 'Samples',
-            description: 'Example uses cases with PrimeNG and Tailwind CSS.',
+            description: 'Example uses cases with Optimus UI and Tailwind CSS.',
             children: [
                 {
                     id: 'color-palette',

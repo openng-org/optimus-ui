@@ -15,9 +15,9 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            title="Angular Icon Library - PrimeNG"
+            title="Angular Icon Library"
             header="Icons"
-            description="PrimeIcons is the default icon library of PrimeNG with over 250 open source icons developed by PrimeTek. PrimeIcons library is optional as PrimeNG components can use any icon with templating."
+            description="OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons. OpenNG Icons library is optional as Optimus UI components can use any icon with templating."
             [docs]="docs"
             docType="page"
         ></app-doc>

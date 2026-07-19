@@ -76,9 +76,9 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
         <div class="w-8/12 xl:w-6/12 border-x border-surface flex flex-col">
             <div class="flex items-center p-4 gap-7 border-b border-surface">
                 <div class="flex items-center">
-                    <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar-primetek.png" styleClass="mr-2 av" size="large" shape="circle" />
+                    <p-avatar image="logo-icon.svg" styleClass="mr-2 av" size="large" shape="circle" />
                     <div class="flex-1">
-                        <div class="text-color leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">PrimeTek</div>
+                        <div class="text-color leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">OpenNG</div>
                         <div class="text-muted-color leading-5 line-clamp-1 mt-1">Cody Fisher, Esther Howard, Jerome Bell, Kristin Watson, Ronald Richards, Darrell Steward</div>
                     </div>
                 </div>
@@ -144,9 +144,9 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
         </div>
         <div class="w-3/12 xl:block hidden min-w-40 py-6 px-3 overflow-auto">
             <div class="flex flex-col items-center justify-center">
-                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar-primetek.png" styleClass="w-32 h-32" size="xlarge" shape="circle" />
-                <div class="leading-6 font-medium text-color mt-4 w-full text-center">PrimeTek</div>
-                <div class="leading-5 text-sm text-muted-color mt-1 w-full text-center">&#64;primetek</div>
+                <p-avatar image="logo-icon.svg" styleClass="w-32 h-32" size="xlarge" shape="circle" />
+                <div class="leading-6 font-medium text-color mt-4 w-full text-center">OpenNG</div>
+                <div class="leading-5 text-sm text-muted-color mt-1 w-full text-center">&#64;openng</div>
                 <div class="flex items-center justify-center flex-wrap gap-1 mt-4">
                     <p-button icon="pi pi-phone text-muted-color" severity="secondary" text />
                     <p-button icon="pi pi-video text-muted-color" severity="secondary" text />
@@ -234,7 +234,7 @@ export class ChatApp {
 
     mediaOptions: string[] = ['Media', 'Link', 'Docs'];
 
-    activeChat: string = 'PrimeTek Team';
+    activeChat: string = 'Optimus UI Team';
 
     menuItems: MenuItem[] | undefined;
 
@@ -268,13 +268,13 @@ export class ChatApp {
                 lastMessage: "Hey there! I've heard about PrimeVue. Any cool tips for getting started?"
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar-primetek.png',
-                name: 'PrimeTek Team',
+                image: 'logo-icon.svg',
+                name: 'OpenNG Team',
                 capName: 'PT',
                 active: undefined,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: "Let's implement PrimeNG. Elevating our UI game! 🚀"
+                lastMessage: "Let's implement Optimus UI. Elevating our UI game! 🚀"
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
@@ -283,7 +283,7 @@ export class ChatApp {
                 active: true,
                 unreadMessageCount: 4,
                 time: '11.15',
-                lastMessage: "Absolutely! PrimeNG's documentation is gold—simplifies our UI work."
+                lastMessage: "Absolutely! Optimus UI's documentation is gold—simplifies our UI work."
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
@@ -292,7 +292,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: "Interesting! PrimeNG sounds amazing. What's your favorite feature?"
+                lastMessage: "Interesting! Optimus UI sounds amazing. What's your favorite feature?"
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
@@ -301,7 +301,7 @@ export class ChatApp {
                 active: true,
                 unreadMessageCount: 9,
                 time: '11.15',
-                lastMessage: 'Quick one, team! Anyone using PrimeNG for mobile app development?'
+                lastMessage: 'Quick one, team! Anyone using Optimus UI for mobile app development?'
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg',
@@ -310,7 +310,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: "Just explored PrimeNG's themes. Can we talk about those stunning designs? 😍"
+                lastMessage: "Just explored Optimus UI's themes. Can we talk about those stunning designs? 😍"
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar6.png',
@@ -319,7 +319,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: 'PrimeNG is a game-changer, right? What are your thoughts, folks?'
+                lastMessage: 'Optimus UI is a game-changer, right? What are your thoughts, folks?'
             },
             {
                 image: '',
@@ -328,7 +328,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: "Jumping in! PrimeNG's community forum is buzzing. Any engaging discussions?"
+                lastMessage: "Jumping in! Optimus UI's community forum is buzzing. Any engaging discussions?"
             },
             {
                 image: '',
@@ -337,7 +337,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: 'Sharing a quick win-PrimeNG tutorials are leveling up my UI skills. 👩‍💻'
+                lastMessage: 'Sharing a quick win, Optimus UI tutorials are leveling up my UI skills. 👩‍💻'
             },
             {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png',
@@ -346,7 +346,7 @@ export class ChatApp {
                 active: false,
                 unreadMessageCount: 0,
                 time: '11.15',
-                lastMessage: "Reflecting on PrimeNG's impact on our workflow. What's your take?"
+                lastMessage: "Reflecting on Optimus UI's impact on our workflow. What's your take?"
             }
         ];
         this.chatMessages = [
@@ -366,7 +366,7 @@ export class ChatApp {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
                 capName: 'A',
                 type: 'received',
-                message: 'PrimeNG rocks! Simplifies UI dev with versatile components.'
+                message: 'Optimus UI rocks! Simplifies UI dev with versatile components.'
             },
             {
                 id: 3,
@@ -483,7 +483,7 @@ export class ChatApp {
                 image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png',
                 capName: 'H',
                 type: 'sent',
-                message: "That's great advice. It's amazing how much detail and thought has gone into making PrimeNG such a powerful tool for developers."
+                message: "That's great advice. It's amazing how much detail and thought has gone into making Optimus UI such a powerful tool for developers."
             }
         ];
         this.chatMedia = [

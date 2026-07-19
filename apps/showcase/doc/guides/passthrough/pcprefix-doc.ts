@@ -11,7 +11,7 @@ import { PanelModule } from '@openng/optimus-ui/panel';
     template: `
         <app-docsectiontext>
             <p>
-                A UI component may also use other UI components, in this case section names are prefixed with <i>pc</i> (Prime Component) to denote the PrimeNG component begin used. This distinguishes components from standard DOM elements and
+                A UI component may also use other UI components, in this case section names are prefixed with <i>pc</i> (Prime Component) to denote the Optimus UI component begin used. This distinguishes components from standard DOM elements and
                 indicating the necessity for a nested structure. For example, the <i>badge</i> section is identified as <i>pcBadge</i> because the button component incorporates the badge component internally.
             </p>
         </app-docsectiontext>

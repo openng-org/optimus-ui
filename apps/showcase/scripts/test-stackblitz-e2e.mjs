@@ -201,7 +201,7 @@ function validateTypeScript(tsContent, filePath, selector) {
         // Should not have direct optimus-ui imports when using ImportsModule
         const directImports = tsContent.match(/import\s+\{[^}]*Module[^}]*\}\s+from\s+'@openng\/optimus-ui\/[^']+'/g);
         if (directImports) {
-            errors.push('Has direct PrimeNG module imports alongside ImportsModule');
+            errors.push('Has direct Optimus UI module imports alongside ImportsModule');
         }
     }
 

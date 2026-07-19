@@ -7,7 +7,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     imports: [AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>PrimeNG is a community-driven project backed by the expertise and sponsorship of PrimeTek, and we appreciate any help you can provide. Here are some areas where you can contribute:</p>
+            <p>Optimus UI is a community-driven project backed by the expertise and sponsorship of OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute:</p>
             <h3>Issue Triage</h3>
             <p>Help us manage issues by;</p>
             <ul class="list-disc list-inside line-height-3 px-10 m-0">

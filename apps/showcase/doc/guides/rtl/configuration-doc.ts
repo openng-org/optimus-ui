@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                The PrimeNG components natively support Right-to-Left (RTL) text direction through a modern CSS implementation utilizing FlexBox and classes like <i>*-inline-start</i> and <i>*-block-end</i>. Consequently, no JavaScript configuration
+                The Optimus UI components natively support Right-to-Left (RTL) text direction through a modern CSS implementation utilizing FlexBox and classes like <i>*-inline-start</i> and <i>*-block-end</i>. Consequently, no JavaScript configuration
                 is necessary; setting the document's text direction to RTL is sufficient to enable this feature.
             </p>
             <p>The RTL setting can either be set using the <i>dir</i> attribute or with the <i>direction</i> style property.</p>

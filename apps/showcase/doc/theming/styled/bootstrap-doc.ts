@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 })
 export class BootstrapDoc {
     code = {
-        typescript: `@layer bootstrap-reboot, primeng;
+        typescript: `@layer bootstrap-reboot, optimus;
 
 @import "bootstrap-reboot.css" layer(bootstrap-rebooot);`
     };

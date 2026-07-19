@@ -7502,8 +7502,8 @@
     ],
     "height": 1024,
     "metadata": {
-        "name": "primeicons",
-        "url": "https://github.com/primefaces/primeicons",
+        "name": "openng-icons",
+        "url": "https://github.com/openng-org/icons",
         "designer": "",
         "license": "MIT",
         "licenseURL": "https://opensource.org/licenses/MIT"
@@ -7519,10 +7519,10 @@
                 "fontFamily": "primeicons",
                 "majorVersion": 1,
                 "minorVersion": 0,
-                "copyright": "PrimeTek Informatics",
+                "copyright": "OpenNG",
                 "designer": "",
-                "description": "Icon Library for Prime UI Libraries",
-                "fontURL": "https://github.com/primefaces/primeicons",
+                "description": "Icon Library for UI Libraries",
+                "fontURL": "https://github.com/openng-org/icons",
                 "license": "MIT",
                 "licenseURL": "https://opensource.org/licenses/MIT"
             },
