@@ -11,8 +11,8 @@ import { TimelineModule } from '@openng/optimus-ui/timeline';
             <div class="doc-intro">
                 <h1>Roadmap</h1>
                 <p>
-                    This community fork is meant to provide a MIT sustainable version of the now closed-source Optimus UI library. Priorities are fixing bugs and providing new versions to match major angular version compatibility. Feature requests will
-                    be triaged but implemented only with the help of community contributions.
+                    This community fork is meant to provide a MIT sustainable version of the now closed-source Optimus UI library. Priorities are fixing bugs and providing new versions to match major angular version compatibility. Feature requests
+                    will be triaged but implemented only with the help of community contributions.
                 </p>
             </div>
 

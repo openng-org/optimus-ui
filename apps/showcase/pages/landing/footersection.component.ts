@@ -18,9 +18,7 @@ import { RouterModule } from '@angular/router';
                                 <a [routerLink]="['installation']" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"> Get Started </a>
                             </li>
                             <li class="mb-6">
-                                <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"
-                                    >Examples</a
-                                >
+                                <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Examples</a>
                             </li>
                         </ul>
                     </div>
@@ -28,9 +26,7 @@ import { RouterModule } from '@angular/router';
                         <ul class="list-none p-0 m-0">
                             <li class="font-bold mb-8">Support</li>
                             <li class="mb-6">
-                                <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"
-                                    >GitHub Discussions</a
-                                >
+                                <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">GitHub Discussions</a>
                             </li>
                             <li class="mb-6">
                                 <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Discord</a>
@@ -52,9 +48,7 @@ import { RouterModule } from '@angular/router';
                         <ul class="list-none p-0 m-0">
                             <li class="font-bold mt-8 lg:mt-0 mb-8">Resources</li>
                             <li class="mb-6">
-                                <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300"
-                                    >Source Code</a
-                                >
+                                <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Source Code</a>
                             </li>
                             <li class="mb-6">
                                 <a href="mailto:contact@openng.org" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Contact Us</a>

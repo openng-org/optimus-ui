@@ -9,10 +9,7 @@ import { Component } from '@angular/core';
     imports: [AppCode, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>
-                Optimus UI is a popular Angular UI library maintained by OpenNG and dedicated to provide high-quality, versatile, and accessible UI
-                components that help developers build better applications faster.
-            </p>
+            <p>Optimus UI is a popular Angular UI library maintained by OpenNG and dedicated to provide high-quality, versatile, and accessible UI components that help developers build better applications faster.</p>
             <h3>Development Setup</h3>
             <p>To begin with, clone the Optimus UI repository from GitHub:</p>
             <app-code [code]="code1" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>

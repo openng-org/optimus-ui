@@ -15,9 +15,8 @@ import { Panel, PanelModule, PanelPassThrough } from '@openng/optimus-ui/panel';
                 the API, the component author needs to develop and publish it with a new release.
             </p>
             <p>
-                The pass through feature is a key element to implement this vision by exposing the component internals in order to apply arbitrary attributes and listeners to the DOM elements.
-                The primary advantage of this approach is that it frees you from being restricted by the main component API. We recommend considering the pass-through feature whenever you need to tailor a component that lacks a built-in feature for
-                your specific requirement.
+                The pass through feature is a key element to implement this vision by exposing the component internals in order to apply arbitrary attributes and listeners to the DOM elements. The primary advantage of this approach is that it frees
+                you from being restricted by the main component API. We recommend considering the pass-through feature whenever you need to tailor a component that lacks a built-in feature for your specific requirement.
             </p>
             <p>
                 Each component has a special <i>pt</i> property to define an object with keys corresponding to the available DOM elements. A value of a key can either be a string, an object or a function to define the arbitrary properties such as

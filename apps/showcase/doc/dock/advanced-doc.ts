@@ -1,18 +1,18 @@
+import { AppCode } from '@/components/doc/app.code';
+import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { NodeService } from '@/service/nodeservice';
 import { PhotoService } from '@/service/photoservice';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MenuItem, MessageService } from '@openng/optimus-ui/api';
-import { TerminalModule, TerminalService } from '@openng/optimus-ui/terminal';
-import { Subscription } from 'rxjs';
-import { Dock } from '@openng/optimus-ui/dock';
 import { DialogModule } from '@openng/optimus-ui/dialog';
+import { Dock } from '@openng/optimus-ui/dock';
 import { GalleriaModule } from '@openng/optimus-ui/galleria';
 import { MenubarModule } from '@openng/optimus-ui/menubar';
+import { TerminalModule, TerminalService } from '@openng/optimus-ui/terminal';
 import { ToastModule } from '@openng/optimus-ui/toast';
 import { TooltipModule } from '@openng/optimus-ui/tooltip';
 import { TreeModule } from '@openng/optimus-ui/tree';
-import { AppCode } from '@/components/doc/app.code';
-import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'advanced-doc',
@@ -199,7 +199,6 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     showDelay: 1000
                 },
                 icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
-                url: 'https://github.com/openng-org/optimus-ui'
                 url: 'https://github.com/openng-org/optimus-ui'
             },
             {
