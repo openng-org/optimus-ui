@@ -16,6 +16,24 @@
         position: relative;
         z-index: 1100;
         font-size: 1rem;
+
+        .landing-announcement-text {
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .landing-announcement-link {
+            color: inherit;
+            text-decoration: underline;
+            font-weight: bold;
+            line-height: 1.5;
+        }
+
+        .landing-announcement-version {
+            font-weight: 500;
+            line-height: 1.5;
+            margin-left: 0.5rem;
+        }
     }
 
     .box {
