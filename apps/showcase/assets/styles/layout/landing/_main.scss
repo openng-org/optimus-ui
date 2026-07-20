@@ -3,6 +3,21 @@
     padding-top: 4rem;
     background-color: var(--ground-background);
 
+    .landing-announcement {
+        background-color: var(--primary-color);
+        color: var(--primary-contrast-color);
+        padding: 1rem;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        position: relative;
+        z-index: 1100;
+        font-size: 1rem;
+    }
+
     .box {
         border: 1px solid var(--border-color);
         border-radius: 10px;
