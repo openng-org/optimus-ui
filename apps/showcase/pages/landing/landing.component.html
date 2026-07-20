@@ -1,5 +1,9 @@
 <div class="landing" [ngClass]="landingClass()">
-    <!-- <app-news /> -->
+    <div style="background-color: var(--primary-color); color: var(--primary-contrast-color); padding: 1rem; text-align: center; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 0.5rem; position: relative; z-index: 1100; font-size: 1rem;">
+        <span style="font-weight: 600; line-height: 1.5;">Optimus UI is a community MIT licensed fork of PrimeNG, now closed source and using a commercial license.</span>
+        <a href="https://primeui.dev/nextchapter" target="_blank" rel="noopener noreferrer" style="color: inherit; text-decoration: underline; font-weight: bold; line-height: 1.5;">Read their announcement</a>
+        <span style="font-weight: 500; line-height: 1.5; margin-left: 0.5rem;">Optimus UI supports Angular v21+</span>
+    </div>
     <app-topbar [showConfigurator]="true" [showMenuButton]="false" />
     <hero-section />
     <features-section />
