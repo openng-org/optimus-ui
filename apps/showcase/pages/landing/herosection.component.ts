@@ -47,8 +47,7 @@ import { OverviewApp } from './samples/overviewapp.component';
         DrawerModule,
         OverlayBadgeModule,
         KnobModule,
-        ButtonModule,
-        NgOptimizedImage
+        ButtonModule
     ],
     template: `
         <section class="landing-hero py-20 px-8 lg:px-20">
@@ -96,7 +95,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                         >
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 border border-primary rounded-xl flex items-center justify-center">
-                                    <img ngSrc="logo-icon.svg" height="30" width="30" />
+                                    <span class="h-[30px] w-[30px] bg-[var(--p-primary-color)] [mask:url('/logo-icon.svg')_center/contain_no-repeat] [-webkit-mask:url('/logo-icon.svg')_center/contain_no-repeat]"></span>
                                 </div>
                                 <div
                                     [ngClass]="{

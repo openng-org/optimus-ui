@@ -2,7 +2,7 @@ import Versions from '@/assets/data/versions.json';
 import { AppConfiguratorComponent } from '@/components/layout/configurator/app.configurator.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
-import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { afterNextRender, booleanAttribute, Component, computed, ElementRef, Inject, Input, OnDestroy, Renderer2 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -14,15 +14,15 @@ import { SelectModule } from '@openng/optimus-ui/select';
 @Component({
     selector: 'app-topbar',
     standalone: true,
-    imports: [CommonModule, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent, SelectModule, NgOptimizedImage],
+    imports: [CommonModule, FormsModule, StyleClass, RouterModule, AppConfiguratorComponent, SelectModule],
     template: `<div class="layout-topbar">
         <div class="layout-topbar-inner">
             <div class="layout-topbar-logo-container">
                 <a [routerLink]="['/']" class="layout-topbar-logo" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo.svg" height="40" width="200" />
+                    <div class="h-[50px] w-[200px] bg-surface-950 dark:bg-surface-50 [mask:url('/logo.svg')_center/100%_100%_no-repeat] [-webkit-mask:url('/logo.svg')_center/100%_100%_no-repeat]"></div>
                 </a>
                 <a [routerLink]="['/']" class="layout-topbar-icon" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo-icon.svg" height="32" width="32" />
+                    <div class="h-[32px] w-[32px] bg-surface-950 dark:bg-surface-50 [mask:url('/logo-icon.svg')_center/100%_100%_no-repeat] [-webkit-mask:url('/logo-icon.svg')_center/100%_100%_no-repeat]"></div>
                 </a>
             </div>
 

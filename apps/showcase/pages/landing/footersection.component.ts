@@ -1,12 +1,12 @@
 import { DISCORD_URL, GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'footer-section',
     standalone: true,
-    imports: [CommonModule, RouterModule, NgOptimizedImage],
+    imports: [CommonModule, RouterModule],
     template: `
         <section class="landing-footer pt-20 px-8 lg:px-20">
             <div class="landing-footer-container">
@@ -60,7 +60,7 @@ import { RouterModule } from '@angular/router';
                 <hr class="section-divider" />
 
                 <div class="flex flex-wrap justify-between py-12 gap-8">
-                    <img ngSrc="logo.svg" height="40" width="200" alt="" />
+                    <div class="h-[50px] w-[200px] bg-surface-950 dark:bg-surface-50 [mask:url('/logo.svg')_center/100%_100%_no-repeat] [-webkit-mask:url('/logo.svg')_center/100%_100%_no-repeat]"></div>
                     <div class="flex items-center gap-2">
                         <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-github"></i>

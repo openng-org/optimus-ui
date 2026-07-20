@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-primary">
                 <span class="font-bold text-9xl"> 4 </span>
                 <div class="flex items-center justify-center bg-primary text-primary-contrast rounded-full w-28 h-28">
-                    <i class="pi pi-prime !text-6xl"></i>
+                    <span class="h-[70px] w-[70px] bg-surface-0 dark:bg-surface-950 [mask:url('/logo-icon.svg')_center/contain_no-repeat] [-webkit-mask:url('/logo-icon.svg')_center/contain_no-repeat]"></span>
                 </div>
                 <span class="font-bold text-9xl"> 4 </span>
             </div>
