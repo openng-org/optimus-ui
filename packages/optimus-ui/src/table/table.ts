@@ -6177,12 +6177,12 @@ export class ColumnFilter extends BaseComponent {
 
     onOverlayAnimationAfterLeave(event: MotionEvent) {
         this.restoreOverlayAppend();
+        ZIndexUtils.clear(this.overlay);
         this.onOverlayHide();
         this.renderOverlay.set(false);
         if (this.overlaySubscription) {
             this.overlaySubscription.unsubscribe();
         }
-        ZIndexUtils.clear(this.overlay);
 
         this.onHide.emit({ originalEvent: event as any });
     }
