@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const outputPath = path.resolve(__dirname, '../../../apps/showcase/doc/apidoc/');
+const outputPath = path.resolve(__dirname, '../../../apps/docs/doc/apidoc/');
 
 const staticMessages = {
     methods: "Defines methods that can be accessed by the component's reference.",

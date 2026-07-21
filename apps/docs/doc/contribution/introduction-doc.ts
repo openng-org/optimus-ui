@@ -13,7 +13,7 @@ import { Component } from '@angular/core';
             <h3>Development Setup</h3>
             <p>To begin with, clone the Optimus UI repository from GitHub:</p>
             <app-code [code]="code1" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
-            <p style="margin-top: 1rem;">Then run the showcase in your local environment at <i>http://localhost:4200/</i>.</p>
+            <p style="margin-top: 1rem;">Then run the documentation app in your local environment at <i>http://localhost:4200/</i>.</p>
             <app-code [code]="code2" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
             <h3>Project Structure</h3>
             <p>Optimus UI's project structure is organized as follows:</p>
@@ -32,7 +32,7 @@ pnpm run dev`
     };
     code3: Code = {
         typescript: `- app
-  - showcase                // documentation
+  - docs                    // documentation
   - packages/optimus-ui              // main directory of components and directives`
     };
 }

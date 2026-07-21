@@ -1,6 +1,6 @@
 {
     "version": 2,
-    "name": "showcase",
+    "name": "docs",
     "rewrites": [
         {
             "source": "/(.*)",
@@ -9,7 +9,7 @@
     ],
     "functions": {
         "api/index.mjs": {
-            "includeFiles": "dist/showcase/**"
+            "includeFiles": "dist/docs/**"
         }
     },
     "git": {

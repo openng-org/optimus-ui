@@ -202,7 +202,7 @@ importers:
         specifier: catalog:angular21
         version: 5.9.3
 
-  apps/showcase:
+  apps/docs:
     dependencies:
       autoprefixer:
         specifier: ^10.4.20

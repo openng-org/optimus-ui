@@ -24,7 +24,7 @@ This is a pnpm-based monorepo.
 
 ```bash
 pnpm run setup   # clean install + git hooks
-pnpm run dev     # run the showcase app locally
+pnpm run dev     # run the docs app locally
 ```
 
 Useful scripts:

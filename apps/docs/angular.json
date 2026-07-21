@@ -3,7 +3,7 @@
     "version": 1,
     "newProjectRoot": "projects",
     "projects": {
-        "showcase": {
+        "docs": {
             "projectType": "application",
             "schematics": {
                 "@schematics/angular:component": {
@@ -17,7 +17,7 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:application",
                     "options": {
-                        "outputPath": "dist/showcase",
+                        "outputPath": "dist/docs",
                         "index": "index.html",
                         "browser": "app/main.ts",
                         "tsConfig": "./tsconfig.json",
@@ -110,13 +110,13 @@
                     "options": {},
                     "configurations": {
                         "production": {
-                            "buildTarget": "showcase:build:production"
+                            "buildTarget": "docs:build:production"
                         },
                         "development": {
-                            "buildTarget": "showcase:build:development"
+                            "buildTarget": "docs:build:development"
                         },
                         "development-ssr": {
-                            "buildTarget": "showcase:build:development-ssr"
+                            "buildTarget": "docs:build:development-ssr"
                         }
                     },
                     "defaultConfiguration": "development"
@@ -124,7 +124,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "buildTarget": "showcase:build"
+                        "buildTarget": "docs:build"
                     }
                 }
             }

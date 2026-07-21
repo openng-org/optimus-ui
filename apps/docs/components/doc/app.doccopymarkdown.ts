@@ -63,12 +63,12 @@ export class AppDocCopyMarkdown implements OnInit {
         if (this.docType() === 'page') {
             // For pages, use the full route path for nested pages like theming/styled
             const docPath = this.routePath || this.currentComponentName;
-            return `${GITHUB_REPO_HEAD}/apps/showcase/doc/${docPath}/`;
+            return `${GITHUB_REPO_HEAD}/apps/docs/doc/${docPath}/`;
         }
         if (this.currentComponentName) {
-            return `${GITHUB_REPO_HEAD}/apps/showcase/doc/${this.currentComponentName}/`;
+            return `${GITHUB_REPO_HEAD}/apps/docs/doc/${this.currentComponentName}/`;
         }
-        return `${GITHUB_REPO_HEAD}/apps/showcase/`;
+        return `${GITHUB_REPO_HEAD}/apps/docs/`;
     }
 
     get chatGPTLink(): string {
