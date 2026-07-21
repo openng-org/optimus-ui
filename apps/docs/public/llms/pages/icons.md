@@ -48,10 +48,6 @@ The icon library is available at npm, run the following command to download it t
 npm install @openng/icons
 ```
 
-## Figma-
-
-PrimeIcons library is now available on Figma Community . By adding them as a library, you can easily use these icons in your designs.
-
 ## Import-
 
 CSS file of the icon library needs to be imported in styles.scss of your application.
