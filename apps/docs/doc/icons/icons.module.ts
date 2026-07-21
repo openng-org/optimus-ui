@@ -8,7 +8,6 @@ import { BasicDoc } from './basicdoc';
 import { ColorDoc } from './colordoc';
 import { ConstantsDoc } from './constantsdoc';
 import { DownloadDoc } from './downloaddoc';
-import { FigmaDoc } from './figmadoc';
 import { ImportDoc } from './importdoc';
 import { ListDoc } from './listdoc';
 import { SizeDoc } from './sizedoc';
@@ -16,7 +15,7 @@ import { SpinDoc } from './spindoc';
 
 @NgModule({
     imports: [CommonModule, RouterModule, AppCodeModule, AppDocModule, MenuModule],
-    declarations: [BasicDoc, ColorDoc, ConstantsDoc, DownloadDoc, ImportDoc, ListDoc, SizeDoc, SpinDoc, FigmaDoc],
+    declarations: [BasicDoc, ColorDoc, ConstantsDoc, DownloadDoc, ImportDoc, ListDoc, SizeDoc, SpinDoc],
     exports: [AppDocModule]
 })
 export class IconsDocModule {}
