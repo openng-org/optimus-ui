@@ -46,6 +46,32 @@ Useful scripts:
 5. Follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages (`fix:`, `feat:`, `chore:`, ...) — this is enforced via commitlint.
 6. Open a PR describing the change and, if it fixes a bug, the steps to reproduce it.
 
+## Releasing (maintainers)
+
+Releases are fully automated by the [Release workflow](.github/workflows/release.yml) and driven by git tags:
+
+```bash
+git checkout main && git pull
+git tag 1.0.0-rc.2
+git push origin 1.0.0-rc.2
+```
+
+Pushing a semver tag (with or without a leading `v`) publishes **all** packages in `packages/*` to npm under that exact version — whether they changed or not — and then:
+
+1. prepends a section to `CHANGELOG.md` generated from the conventional commits since the previous release tag,
+2. commits the version bumps and changelog back to `main` as `chore(release): <tag>`,
+3. creates a GitHub release with the same notes.
+
+The npm dist-tag is derived from the version: `1.2.3` → `latest`, `1.0.0-rc.2` → `rc`, `1.0.0-beta.1` → `beta`.
+
+Publishing authenticates via [npm trusted publishing (OIDC)](https://docs.npmjs.com/trusted-publishers/) — no npm token is stored in the repository or its secrets. Each `@openng/*` package must have a trusted publisher configured on npmjs.com pointing at this repository and the `release.yml` workflow file; renaming that file breaks publishing until the configuration is updated.
+
+Notes:
+
+- The tag must point to a commit that is on `main`, otherwise the workflow aborts before publishing anything.
+- Versions that already reached npm cannot be republished; if a run fails halfway, prefer tagging a new rc/patch version over re-running.
+- Preview the generated changelog section locally with `node scripts/generate-changelog.mjs --tag <tag> --dry-run`.
+
 ## Reporting issues
 
 Open an issue with a clear description and, ideally, a minimal reproduction (StackBlitz, CodeSandbox, or a small repo). For bugs, include the PrimeNG/Open Prime version, Angular version, and browser.
