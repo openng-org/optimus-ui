@@ -136,10 +136,11 @@ export interface AutoCompleteDropdownClickEvent {
 }
 /**
  * Custom select event.
+ * @template T Type of selected value.
  * @see {@link AutoComplete.onSelect}
  * @group Events
  */
-export interface AutoCompleteSelectEvent {
+export interface AutoCompleteSelectEvent<T = any> {
     /**
      * Browser event.
      */
@@ -147,7 +148,7 @@ export interface AutoCompleteSelectEvent {
     /**
      * Selected value.
      */
-    value: any;
+    value: T;
 }
 /**
  * Custom unselect event.
