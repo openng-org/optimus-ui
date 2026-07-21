@@ -39,7 +39,7 @@ export function app(): express.Express {
 
     // Pages that have their own markdown files (not components)
     // These are defined in GUIDE_PAGES in build-llm-docs.mjs
-    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'v19', 'v20']);
+    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl']);
 
     // Serve markdown files - handles both components and pages
     server.get('/:name.md', (req, res, next) => {
@@ -70,7 +70,7 @@ export function app(): express.Express {
         res.send(content);
     });
 
-    // Serve nested page markdown files (e.g., /theming/styled.md, /guides/accessibility.md, /migration/v19.md)
+    // Serve nested page markdown files (e.g., /theming/styled.md, /guides/accessibility.md)
     // Using regex pattern to properly match .md extension in nested paths
     server.get(/^\/([^/]+)\/([^/]+)\.md$/, (req, res, next) => {
         const page = req.params[1]; // Second capture group is the page name
