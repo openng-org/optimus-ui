@@ -552,6 +552,149 @@ describe('InputNumber', () => {
         });
     });
 
+
+    describe('Spin with maxlength', () => {
+        it('should spin when the plain value fits maxlength even if the formatted value is longer', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('maxlength', 3);
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.detectChanges();
+
+            component.spin(new Event('mousedown'), 1);
+
+            expect(component.value).toBe(1);
+            expect(component.input().nativeElement.value).toBe('1.00');
+        });
+
+        it('should allow decrementing a value that already exceeds maxlength', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('maxlength', 3);
+            fixture.detectChanges();
+
+            component.input().nativeElement.value = '5,000';
+            component.spin(new Event('mousedown'), -1);
+
+            expect(component.value).toBe(4999);
+        });
+
+        it('should not spin beyond maxlength', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('maxlength', 3);
+            fixture.detectChanges();
+
+            component.input().nativeElement.value = '999';
+            component.spin(new Event('mousedown'), 1);
+
+            expect(component.value).toBeUndefined();
+            expect(component.input().nativeElement.value).toBe('999');
+        });
+    });
+
+    describe('Button Disabled Style', () => {
+        it('should style increment button as disabled when value reaches max', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 10;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+        });
+
+        it('should style decrement button as disabled when value reaches min', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 0;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+        });
+
+        it('should not style buttons as disabled when value is between min and max', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('min', 0);
+            fixture.componentRef.setInput('max', 10);
+            component.value = 5;
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(false);
+        });
+
+        it('should style both buttons as disabled when the component is disabled', () => {
+            fixture.componentRef.setInput('showButtons', true);
+            fixture.componentRef.setInput('disabled', true);
+            fixture.detectChanges();
+
+            const incrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-increment-button'));
+            const decrementBtn = fixture.debugElement.query(By.css('.p-inputnumber-decrement-button'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+        });
+    });
+
+    describe('Leading Zero', () => {
+        const pressBackspaceAt = (inputEl: HTMLInputElement, position: number) => {
+            inputEl.setSelectionRange(position, position);
+            inputEl.dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+        };
+
+        it('should keep leading zeros while editing when leadingZero is enabled', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('leadingZero', true);
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.detectChanges();
+
+            const inputEl = component.input().nativeElement;
+            inputEl.value = '305.00';
+            pressBackspaceAt(inputEl, 1);
+
+            expect(inputEl.value).toBe('05.00');
+            expect(component.value).toBe(5);
+        });
+
+        it('should remove leading zeros while editing by default', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.detectChanges();
+
+            const inputEl = component.input().nativeElement;
+            inputEl.value = '305.00';
+            pressBackspaceAt(inputEl, 1);
+
+            expect(inputEl.value).toBe('5.00');
+            expect(component.value).toBe(5);
+        });
+
+        it('should normalize leading zeros when the input loses focus', () => {
+            fixture.componentRef.setInput('locale', 'en-US');
+            fixture.componentRef.setInput('leadingZero', true);
+            fixture.componentRef.setInput('minFractionDigits', 2);
+            fixture.detectChanges();
+
+            const inputEl = component.input().nativeElement;
+            inputEl.value = '305.00';
+            pressBackspaceAt(inputEl, 1);
+            inputEl.dispatchEvent(new FocusEvent('blur'));
+
+            expect(inputEl.value).toBe('5.00');
+            expect(component.value).toBe(5);
+        });
+    });
+
     describe('Clear Functionality', () => {
         let testComponent: TestBasicInputNumberComponent;
         let testFixture: ComponentFixture<TestBasicInputNumberComponent>;
