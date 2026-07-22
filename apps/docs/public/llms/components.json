@@ -23674,9 +23674,14 @@
             "description": "Custom filter icon template."
           },
           {
+            "name": "chipremoveicon",
+            "type": "TemplateRef<MultiSelectChipIconTemplateContext>",
+            "description": "Custom chip remove icon template to customize the remove icon of the chip."
+          },
+          {
             "name": "removetokenicon",
             "type": "TemplateRef<MultiSelectChipIconTemplateContext>",
-            "description": "Custom remove token icon template."
+            "description": "Custom remove token icon template. (deprecated: use chipremoveicon instead)"
           },
           {
             "name": "chipicon",

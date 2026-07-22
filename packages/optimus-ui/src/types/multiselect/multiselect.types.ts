@@ -422,8 +422,13 @@ export interface MultiSelectTemplates<T = any> {
      */
     chipicon(context: MultiSelectChipIconTemplateContext): TemplateRef<MultiSelectChipIconTemplateContext>;
     /**
+     * Custom chip remove icon template to customize the remove icon of the chip.
+     * @param {Object} context - icon context.
+     */
+    chipremoveicon(context: MultiSelectChipIconTemplateContext): TemplateRef<MultiSelectChipIconTemplateContext>;
+    /**
      * Custom remove token icon template.
-     * @deprecated Use chipicon instead.
+     * @deprecated Use chipremoveicon instead.
      * @param {Object} context - icon context.
      */
     removetokenicon(context: MultiSelectChipIconTemplateContext): TemplateRef<MultiSelectChipIconTemplateContext>;
