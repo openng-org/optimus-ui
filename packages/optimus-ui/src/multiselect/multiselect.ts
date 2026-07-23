@@ -236,19 +236,12 @@ export class MultiSelectItem extends BaseComponent {
                         } @else {
                             <div #token *ngFor="let item of chipSelectedItems(); let i = index" [pBind]="ptm('chipItem')" [class]="cx('chipItem')">
                                 <p-chip [pt]="ptm('pcChip')" [unstyled]="unstyled()" [class]="cx('pcChip')" [label]="getLabelByValue(item)" [removable]="!$disabled() && !readonly" (onRemove)="removeOption(item, $event)" [removeIcon]="chipIcon">
-                                    <ng-container *ngIf="chipIconTemplate || _chipIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate">
+                                    <span *ngIf="chipIconTemplate || _chipIconTemplate" [class]="cx('chipIcon')" [attr.aria-hidden]="true" [pBind]="ptm('chipIcon')">
+                                        <ng-container *ngTemplateOutlet="chipIconTemplate || _chipIconTemplate; context: { class: 'p-multiselect-chip-icon' }"></ng-container>
+                                    </span>
+                                    <ng-container *ngIf="chipRemoveIconTemplate || _chipRemoveIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate">
                                         <ng-template #removeicon>
-                                            <ng-container *ngIf="!$disabled() && !readonly">
-                                                <span
-                                                    [class]="cx('chipIcon')"
-                                                    *ngIf="chipIconTemplate || _chipIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate"
-                                                    (click)="removeOption(item, $event)"
-                                                    [attr.aria-hidden]="true"
-                                                    [pBind]="ptm('chipIcon')"
-                                                >
-                                                    <ng-container *ngTemplateOutlet="chipIconTemplate || _chipIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate; context: { class: 'p-multiselect-chip-icon' }"></ng-container>
-                                                </span>
-                                            </ng-container>
+                                            <ng-container *ngTemplateOutlet="chipRemoveIconTemplate || _chipRemoveIconTemplate || removeTokenIconTemplate || _removeTokenIconTemplate; context: { class: 'p-multiselect-chip-icon' }"></ng-container>
                                         </ng-template>
                                     </ng-container>
                                 </p-chip>
@@ -1031,7 +1024,14 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
     @ContentChild('filtericon', { descendants: false }) filterIconTemplate: TemplateRef<void> | undefined;
 
     /**
+     * Custom chip remove icon template to customize the remove icon of the chip.
+     * @group Templates
+     */
+    @ContentChild('chipremoveicon', { descendants: false }) chipRemoveIconTemplate: TemplateRef<MultiSelectChipIconTemplateContext> | undefined;
+
+    /**
      * Custom remove token icon template.
+     * @deprecated Use chipremoveicon instead.
      * @group Templates
      */
     @ContentChild('removetokenicon', { descendants: false }) removeTokenIconTemplate: TemplateRef<MultiSelectChipIconTemplateContext> | undefined;
@@ -1089,6 +1089,8 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
     _loadingIconTemplate: TemplateRef<void> | undefined;
 
     _filterIconTemplate: TemplateRef<void> | undefined;
+
+    _chipRemoveIconTemplate: TemplateRef<MultiSelectChipIconTemplateContext> | undefined;
 
     _removeTokenIconTemplate: TemplateRef<MultiSelectChipIconTemplateContext> | undefined;
 
@@ -1164,6 +1166,10 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
                 case 'filtericon':
                     this._filterIconTemplate = item.template;
+                    break;
+
+                case 'chipremoveicon':
+                    this._chipRemoveIconTemplate = item.template;
                     break;
 
                 case 'removetokenicon':
