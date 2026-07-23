@@ -114,13 +114,13 @@ function reportLeftovers(tree: Tree, context: SchematicContext): void {
             .toString()
             .split('\n')
             .forEach((line, index) => {
-                if (/primeng|primeicons|@primeuix|tailwindcss-primeui/i.test(line)) {
+                if (/primeng|primeicons|@primeuix|tailwindcss-primeui|primelocale/i.test(line)) {
                     leftovers.push(`${path}:${index + 1}  ${line.trim()}`);
                 }
             });
     });
     if (leftovers.length > 0) {
-        context.logger.warn('The following references to primeng/primeicons/@primeuix/tailwindcss-primeui could not be migrated automatically and need manual review:');
+        context.logger.warn('The following references to primeng/primeicons/@primeuix/tailwindcss-primeui/primelocale could not be migrated automatically and need manual review:');
         for (const leftover of leftovers) {
             context.logger.warn(`  ${leftover}`);
         }
