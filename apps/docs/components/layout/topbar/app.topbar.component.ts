@@ -138,9 +138,9 @@ export class AppTopBarComponent implements OnDestroy {
 
     initDocSearch() {
         docsearch({
-            appId: 'XG1L2MUWT9',
-            apiKey: '0c7d92ce7c38649263123110162ac181',
-            indexName: 'primeng',
+            appId: 'X3M9GFEM8Z',
+            apiKey: 'ce715b53658d2e2190d8751fad64e8e9',
+            indexName: 'Optimus UI Documentation',
             container: '#docsearch'
         });
     }
