@@ -544,16 +544,8 @@
             "icon": "pi pi-arrow-up",
             "children": [
                 {
-                    "name": "Updating to v21",
-                    "routerLink": "/migration/v21"
-                },
-                {
-                    "name": "Updating to v20",
-                    "routerLink": "/migration/v20"
-                },
-                {
-                    "name": "Updating to v19",
-                    "routerLink": "/migration/v19"
+                    "name": "From PrimeNG",
+                    "routerLink": "/migration/primeng"
                 }
             ]
         },

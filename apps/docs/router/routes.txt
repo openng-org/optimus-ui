@@ -115,6 +115,4 @@
 /tree
 /treeselect
 /treetable
-/migration/v21
-/migration/v20
-/migration/v19
+/migration/primeng
