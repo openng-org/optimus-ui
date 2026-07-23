@@ -6,7 +6,8 @@ import { By } from '@angular/platform-browser';
 
 import { SharedModule } from '@openng/optimus-ui/api';
 import { Select } from '@openng/optimus-ui/select';
-import { Table, TableModule, TableService } from './table';
+import { ZIndexUtils } from '@openng/optimus-ui/utils';
+import { ColumnFilter, Table, TableModule, TableService } from './table';
 
 describe('Table', () => {
     let component: Table;
@@ -384,6 +385,26 @@ describe('Table', () => {
         it('should render column filters', () => {
             const columnFilters = testFixture.debugElement.queryAll(By.css('p-columnFilter'));
             expect(columnFilters.length).toBe(2);
+        });
+
+        it('should not leave stale ZIndexUtils entries after the filter overlay closes', () => {
+            const columnFilter: ColumnFilter = testFixture.debugElement.query(By.directive(ColumnFilter)).componentInstance;
+            const baseZIndex = columnFilter.config.zIndex.overlay;
+
+            const openOverlay = () => {
+                const overlay = document.createElement('div');
+                document.body.appendChild(overlay);
+                columnFilter.overlay = overlay;
+                ZIndexUtils.set('overlay', overlay, baseZIndex);
+                return ZIndexUtils.get(overlay);
+            };
+
+            const firstZIndex = openOverlay();
+            columnFilter.onOverlayAnimationAfterLeave({ element: columnFilter.overlay } as any);
+            const secondZIndex = openOverlay();
+            columnFilter.onOverlayAnimationAfterLeave({ element: columnFilter.overlay } as any);
+
+            expect(secondZIndex).toBe(firstZIndex);
         });
     });
 
