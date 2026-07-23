@@ -29,6 +29,12 @@ describe('mapModuleSpecifier', () => {
         expect(mapModuleSpecifier('tailwindcss-primeui/v4/index.css')).toBe('@openng/optimus-ui-tailwindcss/v4/index.css');
     });
 
+    it('maps primelocale including subpaths', () => {
+        expect(mapModuleSpecifier('primelocale')).toBe('@openng/optimus-ui-locale');
+        expect(mapModuleSpecifier('primelocale/de.json')).toBe('@openng/optimus-ui-locale/de.json');
+        expect(mapModuleSpecifier('primelocale/js/de.js')).toBe('@openng/optimus-ui-locale/js/de.js');
+    });
+
     it('leaves unrelated specifiers alone', () => {
         expect(mapModuleSpecifier('primeng-extensions')).toBeNull();
         expect(mapModuleSpecifier('@angular/core')).toBeNull();
@@ -42,7 +48,8 @@ describe('swapDependencies', () => {
                 primeng: '^21.0.2',
                 '@primeuix/themes': '^1.2.0',
                 'tailwindcss-primeui': '^0.6.1',
-                primeicons: '^7.0.0'
+                primeicons: '^7.0.0',
+                primelocale: '^2.4.0'
             }
         };
         const result = swapDependencies(pkg);
@@ -56,7 +63,9 @@ describe('swapDependencies', () => {
         expect(pkg.dependencies['@openng/optimus-ui-tailwindcss']).toBe(VERSIONS['@openng/optimus-ui-tailwindcss']);
         expect(pkg.dependencies['primeicons']).toBeUndefined();
         expect(pkg.dependencies['@openng/icons']).toBe(VERSIONS['@openng/icons']);
-        expect(result.removed.sort()).toEqual(['@primeuix/themes', 'primeicons', 'primeng', 'tailwindcss-primeui']);
+        expect(pkg.dependencies['primelocale']).toBeUndefined();
+        expect(pkg.dependencies['@openng/optimus-ui-locale']).toBe(VERSIONS['@openng/optimus-ui-locale']);
+        expect(result.removed.sort()).toEqual(['@primeuix/themes', 'primeicons', 'primelocale', 'primeng', 'tailwindcss-primeui']);
     });
 
     it('handles devDependencies and reports no change when nothing matches', () => {

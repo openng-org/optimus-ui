@@ -406,6 +406,13 @@ importers:
         version: 3.2.7(@types/node@22.19.19)(jiti@2.7.0)(less@4.6.4)(lightningcss@1.32.0)(sass@1.99.0)(supports-color@9.4.0)(terser@5.46.0)(yaml@2.9.0)
     publishDirectory: dist
 
+  packages/optimus-ui-locale:
+    devDependencies:
+      typescript:
+        specifier: catalog:angular21
+        version: 5.9.3
+    publishDirectory: dist
+
   packages/optimus-ui-motion:
     dependencies:
       '@openng/optimus-ui-utils':

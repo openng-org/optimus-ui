@@ -8,7 +8,8 @@ const PRIMENG_PKG = {
         '@angular/core': '^21.0.0',
         primeng: '^21.0.2',
         '@primeuix/themes': '^1.2.0',
-        'tailwindcss-primeui': '^0.6.1'
+        'tailwindcss-primeui': '^0.6.1',
+        primelocale: '^2.4.0'
     }
 };
 
@@ -68,6 +69,8 @@ describe('migrate-from-primeng', () => {
         expect(rootPkg.dependencies['@openng/optimus-ui-themes']).toBe(VERSIONS['@openng/optimus-ui-themes']);
         expect(rootPkg.dependencies['tailwindcss-primeui']).toBeUndefined();
         expect(rootPkg.dependencies['@openng/optimus-ui-tailwindcss']).toBe(VERSIONS['@openng/optimus-ui-tailwindcss']);
+        expect(rootPkg.dependencies.primelocale).toBeUndefined();
+        expect(rootPkg.dependencies['@openng/optimus-ui-locale']).toBe(VERSIONS['@openng/optimus-ui-locale']);
 
         const libPkg = JSON.parse(result.readContent('/libs/ui/package.json'));
         expect(libPkg.dependencies['@openng/optimus-ui-styled']).toBe(VERSIONS['@openng/optimus-ui-styled']);
@@ -205,5 +208,17 @@ describe('migrate-from-primeng', () => {
         });
         const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
         expect(result.readContent('/tailwind.config.cjs')).toContain("require('@openng/optimus-ui-tailwindcss')");
+    });
+
+    it('rewrites primelocale imports including JSON subpaths', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/src/app/locale.ts': `import { de } from 'primelocale';\nimport ja from 'primelocale/ja.json';\nexport const locales = { de, ja };\n`
+        });
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        const content = result.readContent('/src/app/locale.ts');
+        expect(content).toContain(`import { de } from '@openng/optimus-ui-locale';`);
+        expect(content).toContain(`import ja from '@openng/optimus-ui-locale/ja.json';`);
+        expect(content).not.toContain('primelocale');
     });
 });

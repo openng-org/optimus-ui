@@ -1,0 +1,76 @@
+{
+    "name": "@openng/optimus-ui-locale",
+    "version": "1.0.0-rc.1",
+    "author": "OpenNg",
+    "description": "i18n and l7n locales for Optimus UI components",
+    "homepage": "https://www.openng.org/",
+    "license": "MIT",
+    "type": "module",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/openng-org/optimus-ui.git",
+        "directory": "packages/optimus-ui-locale"
+    },
+    "bugs": {
+        "url": "https://github.com/openng-org/optimus-ui/issues"
+    },
+    "keywords": [
+        "openng",
+        "angular",
+        "i18n",
+        "l7n",
+        "optimus-ui",
+        "locale"
+    ],
+    "sideEffects": false,
+    "main": "./dist/cjs/all.js",
+    "module": "./dist/js/all.js",
+    "types": "./dist/js/all.d.ts",
+    "exports": {
+        "./*.json": "./src/*.json",
+        ".": {
+            "types": "./dist/js/all.d.ts",
+            "import": "./dist/js/all.js",
+            "require": "./dist/cjs/all.js"
+        }
+    },
+    "publishConfig": {
+        "main": "./cjs/all.js",
+        "module": "./js/all.js",
+        "types": "./js/all.d.ts",
+        "exports": {
+            "./*.json": "./*.json",
+            ".": {
+                "types": "./js/all.d.ts",
+                "module": "./js/all.js",
+                "import": "./js/all.js",
+                "require": "./cjs/all.js"
+            },
+            "./js/*.js": {
+                "types": "./js/*.d.ts",
+                "module": "./js/*.js",
+                "import": "./js/*.js",
+                "require": "./cjs/*.js"
+            },
+            "./cjs/*.js": {
+                "types": "./js/*.d.ts",
+                "module": "./js/*.js",
+                "import": "./js/*.js",
+                "require": "./cjs/*.js"
+            }
+        },
+        "directory": "dist",
+        "linkDirectory": false,
+        "access": "public"
+    },
+    "scripts": {
+        "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
+        "build:package": "pnpm run build:prebuild && node ./scripts/genimports.mjs && tsc && pnpm run build:postbuild",
+        "build:prebuild": "node ./scripts/prebuild.mjs",
+        "build:postbuild": "node ./scripts/postbuild.mjs",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "devDependencies": {
+        "typescript": "catalog:angular21"
+    }
+}
