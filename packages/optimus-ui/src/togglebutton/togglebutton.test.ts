@@ -390,7 +390,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.size).toBe('large');
+            expect(toggleButtonInstance.size()).toBe('large');
         });
     });
 
