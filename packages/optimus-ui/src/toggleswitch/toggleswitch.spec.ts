@@ -560,6 +560,37 @@ describe('ToggleSwitch', () => {
             expect(component.styleClass).toBe('custom-toggle');
         });
 
+        it('should not apply size classes by default', () => {
+            fixture.detectChanges();
+
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-sm')).toBe(false);
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-lg')).toBe(false);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-sm')).toBe(false);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-lg')).toBe(false);
+        });
+
+        it('should apply small size classes', async () => {
+            fixture.componentRef.setInput('size', 'small');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-sm')).toBe(true);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-sm')).toBe(true);
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-lg')).toBe(false);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-lg')).toBe(false);
+        });
+
+        it('should apply large size classes', async () => {
+            fixture.componentRef.setInput('size', 'large');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-lg')).toBe(true);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-lg')).toBe(true);
+            expect(fixture.nativeElement.classList.contains('p-toggleswitch-sm')).toBe(false);
+            expect(fixture.nativeElement.classList.contains('p-inputfield-sm')).toBe(false);
+        });
+
         it('should handle inputId', () => {
             component.inputId = 'my-toggle-input';
             fixture.detectChanges();
