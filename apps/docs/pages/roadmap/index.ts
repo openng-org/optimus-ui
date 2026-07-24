@@ -25,6 +25,7 @@ import { TimelineModule } from '@openng/optimus-ui/timeline';
                             <ul *ngIf="event.features" class="mt-2 mb-0 list-inside list-disc text-surface-600 dark:text-surface-400">
                                 <li *ngFor="let feature of event.features" class="mb-1">{{ feature }}</li>
                             </ul>
+                            <a *ngIf="event.link" [href]="event.link" target="_blank" rel="noopener" class="mt-3 inline-block text-primary hover:underline">View milestone</a>
                         </div>
                     </ng-template>
                 </p-timeline>
@@ -45,15 +46,18 @@ export class RoadmapDemo {
         this.events = [
             {
                 title: 'v1',
-                features: ['Rebranded from Optimus UI', 'Angular v21 compatible', 'ng add support for seamless installation', 'Schematic to migrate from Optimus UI']
+                features: ['Rebranded from Optimus UI', 'Angular v21 compatible', 'ng add support for seamless installation', 'Schematic to migrate from Optimus UI'],
+                link: 'https://github.com/openng-org/optimus-ui/milestone/8'
             },
             {
                 title: 'v2',
-                features: ['Angular v22 compatible']
+                features: ['Angular v22 compatible'],
+                link: 'https://github.com/openng-org/optimus-ui/milestone/10'
             },
             {
                 title: 'Catchup step',
-                features: ['Triage and address existing 900+ open issues', 'Modernize the library to Angular modern APIs']
+                features: ['Triage and address existing 900+ open issues', 'Modernize the library to Angular modern APIs'],
+                link: 'https://github.com/openng-org/optimus-ui/milestone/9'
             },
             {
                 title: 'Enhancement step',
