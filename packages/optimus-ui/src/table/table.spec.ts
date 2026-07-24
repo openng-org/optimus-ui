@@ -262,9 +262,42 @@ describe('Table', () => {
         ];
     }
 
+    @Component({
+        standalone: false,
+        template: `
+            <p-table [value]="products" [resizableColumns]="true" columnResizeMode="expand" [scrollable]="true">
+                <ng-template #header>
+                    <tr>
+                        <th colspan="2">Product</th>
+                        <th>Inventory</th>
+                    </tr>
+                    <tr>
+                        <th pResizableColumn>Name</th>
+                        <th pResizableColumn>Price</th>
+                        <th pResizableColumn>Category</th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-product>
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.category }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestGroupedResizableHeaderComponent {
+        products = [
+            { id: '1001', name: 'Gaming Laptop', price: 1299.99, category: 'Electronics' },
+            { id: '1002', name: 'Wireless Mouse', price: 29.99, category: 'Accessories' },
+            { id: '1003', name: 'Mechanical Keyboard', price: 149.99, category: 'Accessories' }
+        ];
+    }
+
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [Table, TestBasicTableComponent, TestSelectionTableComponent, TestSortingTableComponent, TestFilteringTableComponent, TestVirtualScrollTableComponent, TestLazyLoadTableComponent, TestTemplatesTableComponent],
+            declarations: [Table, TestBasicTableComponent, TestSelectionTableComponent, TestSortingTableComponent, TestGroupedResizableHeaderComponent, TestFilteringTableComponent, TestVirtualScrollTableComponent, TestLazyLoadTableComponent, TestTemplatesTableComponent],
             imports: [CommonModule, FormsModule, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
         }).compileComponents();
@@ -362,6 +395,23 @@ describe('Table', () => {
         it('should have sortable columns', () => {
             const sortableColumns = testFixture.debugElement.queryAll(By.css('[pSortableColumn]'));
             expect(sortableColumns.length).toBe(3);
+        });
+    });
+
+    describe('Column Resize', () => {
+        it('should measure the active resize header row when grouped headers are used', async () => {
+            const testFixture = TestBed.createComponent(TestGroupedResizableHeaderComponent);
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const tableInstance = testFixture.debugElement.query(By.directive(Table)).componentInstance as Table;
+            const actualHeaderCells = testFixture.nativeElement.querySelectorAll('thead tr:last-child th');
+            const allHeaderCells = testFixture.nativeElement.querySelectorAll('thead th');
+
+            (tableInstance as any).resizeColumnElement = actualHeaderCells[1];
+
+            expect(allHeaderCells.length).toBe(5);
+            expect((tableInstance as any)._totalTableWidth().length).toBe(3);
         });
     });
 
