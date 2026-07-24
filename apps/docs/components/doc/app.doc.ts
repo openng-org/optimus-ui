@@ -1,6 +1,8 @@
 import { Doc } from '@/domain/doc';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, OnChanges, OnInit, Renderer2, signal, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { switchMap, from, catchError, of, map } from 'rxjs';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { AppDocService } from './app.doc.service';
@@ -8,11 +10,13 @@ import { AppDocApiSection } from './app.docapisection';
 import { AppDocFeaturesSection } from './app.docfeaturessection';
 import { AppDocPtSection } from './app.docptsection';
 import { AppDocThemingSection } from './app.docthemingsection';
+import { Tag } from '@openng/optimus-ui/tag';
+import { AppDocIssuesSection } from './app.docissuessection';
 
 @Component({
     selector: 'app-doc',
     standalone: true,
-    imports: [CommonModule, AppDocFeaturesSection, AppDocApiSection, AppDocThemingSection, AppDocPtSection],
+    imports: [CommonModule, AppDocFeaturesSection, AppDocApiSection, AppDocThemingSection, AppDocPtSection, Tag, AppDocIssuesSection],
     providers: [AppDocService],
     template: ` <div class="doc-component">
         <ul class="doc-tabmenu">
@@ -34,6 +38,11 @@ import { AppDocThemingSection } from './app.docthemingsection';
             @if (ptDocs()) {
                 <li [ngClass]="{ 'doc-tabmenu-active': docService.activeTab() === 3 }">
                     <button type="button" (click)="activateTab(3)">PASSTHROUGH</button>
+                </li>
+            }
+            @if (isComponentDoc() && githubIssuesCount() > 0) {
+                <li [ngClass]="{ 'doc-tabmenu-active': docService.activeTab() === 4 }">
+                    <button type="button" (click)="activateTab(4)" style="display: flex; gap: 0.5rem; align-items: center;">KNOWN ISSUES <p-tag [value]="githubIssuesCount()?.toString()" severity="danger" /></button>
                 </li>
             }
         </ul>
@@ -62,6 +71,11 @@ import { AppDocThemingSection } from './app.docthemingsection';
             @if (ptDocs()) {
                 @defer (when docService.activeTab() === 3) {
                     <app-docptsection [ptComponent]="ptDocs()" [componentName]="_componentName()" class="doc-tabpanel" [ngStyle]="{ display: docService.activeTab() === 3 ? 'flex' : 'none' }" />
+                }
+            }
+            @if (isComponentDoc() && githubIssuesCount() > 0) {
+                @defer (when docService.activeTab() === 4) {
+                    <app-docissuessection [count]="githubIssuesCount() ?? 0" [componentName]="_componentName()" [githubUrl]="githubIssuesUrl()" class="doc-tabpanel" [ngStyle]="{ display: docService.activeTab() === 4 ? 'flex' : 'none' }" />
                 }
             }
         </div>
@@ -97,6 +111,25 @@ export class AppDoc implements OnInit, OnChanges {
     docService = inject(AppDocService);
 
     activeTab = signal<number>(0);
+
+    githubIssuesUrl = computed(() => {
+        const name = this._componentName();
+        return name ? `https://github.com/openng-org/optimus-ui/issues?q=${encodeURIComponent(`is:issue state:open label:"Component: ${name}"`)}` : null;
+    });
+
+    githubIssuesCount = toSignal(
+        toObservable(this._componentName).pipe(
+            switchMap((name) => {
+                if (!name) return of(0);
+                const query = encodeURIComponent(`repo:openng-org/optimus-ui is:issue state:open label:"Component: ${name}"`);
+                return from(fetch(`https://api.github.com/search/issues?q=${query}&per_page=1`).then((res) => res.json())).pipe(
+                    map((data: any) => data.total_count ?? 0),
+                    catchError(() => of(0))
+                );
+            })
+        ),
+        { initialValue: 0 }
+    );
 
     router = inject(Router);
 
