@@ -1,4 +1,4 @@
-import { Rule, SchematicContext, SchematicsException, Tree, schematic } from '@angular-devkit/schematics';
+import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { addRootProvider, readWorkspace } from '@schematics/angular/utility';
 import { isObservable, lastValueFrom } from 'rxjs';
@@ -24,14 +24,20 @@ function manualInstructions(theme: Theme): string {
      (bootstrapApplication providers, or an NgModule's providers array).`;
 }
 
+/**
+ * Sets up Optimus UI in a fresh (non-PrimeNG) project. Migrating an existing PrimeNG workspace is
+ * a separate concern handled by the `migrate-from-primeng` schematic
+ * (`ng generate @openng/optimus-ui:migrate-from-primeng`) — when primeng is detected, ng-add
+ * points the user there and makes no changes.
+ */
 export function ngAdd(options: Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
         if (!tree.read('/package.json')) {
             throw new SchematicsException('Could not read /package.json.');
         }
         if (hasPrimeng(tree)) {
-            context.logger.info('primeng detected — running the migrate-from-primeng schematic.');
-            return schematic('migrate-from-primeng', { skipInstall: options.skipInstall ?? false });
+            context.logger.warn('primeng detected — ng-add only sets up Optimus UI in new projects, so no changes were made.\n' + 'To migrate this workspace, run: ng generate @openng/optimus-ui:migrate-from-primeng');
+            return tree;
         }
         return freshSetup(options);
     };

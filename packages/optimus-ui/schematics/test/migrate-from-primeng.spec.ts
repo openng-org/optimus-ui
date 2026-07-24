@@ -37,6 +37,12 @@ describe('migrate-from-primeng', () => {
         await expect(runner.runSchematic('migrate-from-primeng', { skipInstall: true }, createAppTree())).rejects.toThrow(/not installed/);
     });
 
+    it('aborts when the primeng version is unparseable (e.g. "latest")', async () => {
+        const runner = createRunner();
+        const tree = primengTree({}, { ...PRIMENG_PKG, dependencies: { ...PRIMENG_PKG.dependencies, primeng: 'latest' } });
+        await expect(runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree)).rejects.toThrow(/could not be parsed/);
+    });
+
     it('proceeds on old versions with --force', async () => {
         const runner = createRunner();
         const tree = primengTree({}, { ...PRIMENG_PKG, dependencies: { ...PRIMENG_PKG.dependencies, primeng: '^19.0.0' } });

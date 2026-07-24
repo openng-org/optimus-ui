@@ -94,18 +94,21 @@ describe('ng-add', () => {
         expect(result.readContent('/src/app/app.config.ts')).not.toContain('provideOptimus');
     });
 
-    it('primeng project: runs the migration instead', async () => {
+    it('primeng project: warns, points to migrate-from-primeng, and makes no changes', async () => {
         const runner = createRunner();
-        const tree = createAppTree(
-            { '/src/app/app.config.ts': `import { providePrimeNG } from 'primeng/config';\nexport const appConfig = { providers: [providePrimeNG()] };\n` },
-            { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } }
-        );
+        const appConfig = `import { providePrimeNG } from 'primeng/config';\nexport const appConfig = { providers: [providePrimeNG()] };\n`;
+        const tree = createAppTree({ '/src/app/app.config.ts': appConfig }, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
+        const logs: string[] = [];
+        runner.logger.subscribe((entry) => logs.push(entry.message));
+
         const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
 
+        expect(logs.join('\n')).toContain('primeng detected');
+        expect(logs.join('\n')).toContain('ng generate @openng/optimus-ui:migrate-from-primeng');
         const pkg = JSON.parse(result.readContent('/package.json'));
-        expect(pkg.dependencies.primeng).toBeUndefined();
-        expect(pkg.dependencies['@openng/optimus-ui']).toBe(VERSIONS['@openng/optimus-ui']);
-        expect(result.readContent('/src/app/app.config.ts')).toContain('provideOptimus()');
+        expect(pkg.dependencies.primeng).toBe('^21.0.2');
+        expect(pkg.dependencies['@openng/optimus-ui-themes']).toBeUndefined();
+        expect(result.readContent('/src/app/app.config.ts')).toBe(appConfig);
     });
 
     it('schedules an install task unless skipInstall is set', async () => {
@@ -114,27 +117,23 @@ describe('ng-add', () => {
         expect(runner.tasks.some((t) => t.name === 'node-package')).toBe(true);
     });
 
-    it('primeng only in a workspace sub-package: chains to the migration', async () => {
+    it('primeng project: schedules no install task', async () => {
         const runner = createRunner();
-        const tree = createAppTree({
-            '/libs/app/package.json': JSON.stringify({ name: 'app-lib', dependencies: { primeng: '^21.0.2' } }, null, 2) + '\n'
-        });
+        const tree = createAppTree({}, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
+        await runner.runSchematic('ng-add', {}, tree);
+        expect(runner.tasks.some((t) => t.name === 'node-package')).toBe(false);
+    });
+
+    it('primeng only in a workspace sub-package: still warns and makes no changes', async () => {
+        const runner = createRunner();
+        const libPkgRaw = JSON.stringify({ name: 'app-lib', dependencies: { primeng: '^21.0.2' } }, null, 2) + '\n';
+        const tree = createAppTree({ '/libs/app/package.json': libPkgRaw });
         const logs: string[] = [];
         runner.logger.subscribe((entry) => logs.push(entry.message));
 
         const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
         expect(logs.join('\n')).toContain('primeng detected');
-        const libPkg = JSON.parse(result.readContent('/libs/app/package.json'));
-        expect(libPkg.dependencies.primeng).toBeUndefined();
-        expect(libPkg.dependencies['@openng/optimus-ui']).toBe(VERSIONS['@openng/optimus-ui']);
-    });
-
-    it('primeng pinned to "latest" in a workspace sub-package: still chains to the migration, which rejects on the unparseable version', async () => {
-        const runner = createRunner();
-        const tree = createAppTree({
-            '/libs/app/package.json': JSON.stringify({ name: 'app-lib', dependencies: { primeng: 'latest' } }, null, 2) + '\n'
-        });
-
-        await expect(runner.runSchematic('ng-add', { skipInstall: true }, tree)).rejects.toThrow(/primeng is not installed in this workspace \(or its version could not be parsed\)\. Use --force to run the code migration anyway\./);
+        expect(result.readContent('/libs/app/package.json')).toBe(libPkgRaw);
+        expect(JSON.parse(result.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
     });
 });

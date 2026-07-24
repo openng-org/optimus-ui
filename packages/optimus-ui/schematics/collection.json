@@ -2,7 +2,7 @@
     "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
     "schematics": {
         "ng-add": {
-            "description": "Add Optimus UI to a project, or migrate an existing PrimeNG project.",
+            "description": "Set up Optimus UI in a new (non-PrimeNG) project. To migrate a PrimeNG project, use the migrate-from-primeng schematic.",
             "factory": "./ng-add/index#ngAdd",
             "schema": "./ng-add/schema.json"
         },
