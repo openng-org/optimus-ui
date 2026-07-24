@@ -31,6 +31,12 @@ import { SelectModule } from '@openng/optimus-ui/select';
                     <div id="docsearch"></div>
                 </li>
                 <li>
+                    <button type="button" class="topbar-item" id="ask-ai" style="width: 6rem;">
+                        <i class="pi pi-sparkles" style="margin-right: 0.5rem;"></i>
+                        Ask AI
+                    </button>
+                </li>
+                <li>
                     <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
                     </a>
