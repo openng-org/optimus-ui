@@ -53,6 +53,16 @@ class TestBasicRadioComponent {
     }
 }
 
+// RadioButton with the autofocus input left unbound (default/undefined)
+@Component({
+    standalone: true,
+    imports: [RadioButton, FormsModule],
+    template: ` <p-radiobutton name="test-unset-autofocus" value="option1" [(ngModel)]="selectedValue" /> `
+})
+class TestUnsetAutofocusRadioComponent {
+    selectedValue: any = null as any;
+}
+
 // Radio group test component
 @Component({
     standalone: true,
@@ -489,6 +499,22 @@ describe('RadioButton', () => {
             await fixture.whenStable();
 
             expect(radioInstance.checked).toBe(true);
+        });
+    });
+
+    describe('Autofocus Attribute Regression', () => {
+        it('should not set the autofocus attribute when autofocus is left unset', async () => {
+            await TestBed.configureTestingModule({
+                imports: [TestUnsetAutofocusRadioComponent],
+                providers: [provideZonelessChangeDetection()]
+            }).compileComponents();
+
+            const fixture = TestBed.createComponent(TestUnsetAutofocusRadioComponent);
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            const inputElement = fixture.debugElement.query(By.css('input[type="radio"]')).nativeElement;
+            expect(inputElement.hasAttribute('autofocus')).toBe(false);
         });
     });
 

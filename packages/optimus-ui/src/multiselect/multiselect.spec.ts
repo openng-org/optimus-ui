@@ -407,6 +407,11 @@ describe('MultiSelect', () => {
             expect(multiSelect).toBeTruthy();
         });
 
+        it('should not set the autofocus attribute when autofocus is left unset', () => {
+            const focusInput = fixture.debugElement.query(By.css('input[role="combobox"]'));
+            expect(focusInput.nativeElement.hasAttribute('autofocus')).toBe(false);
+        });
+
         it('should have default values', () => {
             expect(multiSelect.filter).toBe(true);
             expect(multiSelect.showToggleAll).toBe(true);
@@ -416,6 +421,7 @@ describe('MultiSelect', () => {
             expect(multiSelect.lazy).toBe(false);
             expect(multiSelect.loading).toBe(false);
             expect(multiSelect.autofocusFilter).toBe(false);
+            expect(multiSelect.autofocus).toBeUndefined();
             expect(multiSelect.display).toBe('comma');
             expect(multiSelect.showClear).toBe(true);
             expect(multiSelect.autoOptionFocus).toBe(false);

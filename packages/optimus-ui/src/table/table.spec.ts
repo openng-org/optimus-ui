@@ -385,6 +385,15 @@ describe('Table', () => {
             const columnFilters = testFixture.debugElement.queryAll(By.css('p-columnFilter'));
             expect(columnFilters.length).toBe(2);
         });
+
+        it('should not set the autofocus attribute on column filter menu buttons', () => {
+            const filterButtons = testFixture.debugElement.queryAll(By.css('.p-datatable-column-filter-button'));
+            expect(filterButtons.length).toBeGreaterThan(0);
+
+            for (const filterButton of filterButtons) {
+                expect(filterButton.nativeElement.hasAttribute('autofocus')).toBe(false);
+            }
+        });
     });
 
     describe('Virtual Scroll Functionality', () => {

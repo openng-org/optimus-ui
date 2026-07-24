@@ -13,6 +13,9 @@ allowBuilds:
   lmdb: true
   msgpackr-extract: true
 
+overrides:
+  postcss: '>=8.5.18'
+
 catalog:
   '@openng/icons': ^1.0.0
 
