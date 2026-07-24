@@ -9,6 +9,7 @@ allowBuilds:
   '@parcel/watcher': true
   core-js: true
   esbuild: true
+  lefthook: true
   lmdb: true
   msgpackr-extract: true
 

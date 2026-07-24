@@ -23,7 +23,7 @@ If `git am` fails because the patch doesn't apply cleanly (files diverged), fall
 This is a pnpm-based monorepo.
 
 ```bash
-pnpm run setup   # clean install + git hooks
+pnpm install     # install deps + git hooks (via lefthook)
 pnpm run dev     # run the docs app locally
 ```
 
