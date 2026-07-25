@@ -875,6 +875,79 @@ describe('Breadcrumb', () => {
             expect(breadcrumbInstance.home?.tooltipOptions?.tooltipLabel).toBe('Home tooltip');
             expect(breadcrumbInstance.model?.[0]?.tooltipOptions?.tooltipLabel).toBe('Item tooltip');
         });
+
+        it('should mark the last item link with aria-current="page"', async () => {
+            component.home = undefined;
+            component.model = [
+                { label: 'Electronics', url: '/electronics' },
+                { label: 'Laptops', url: '/laptops' }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const itemLinks = fixture.debugElement.queryAll(By.css('.p-breadcrumb-item-link'));
+
+            expect(itemLinks.length).toBe(2);
+            expect(itemLinks[0].nativeElement.hasAttribute('aria-current')).toBe(false);
+            expect(itemLinks[1].nativeElement.getAttribute('aria-current')).toBe('page');
+        });
+
+        it('should mark the last visible item link with aria-current="page" when trailing items are hidden', async () => {
+            component.home = undefined;
+            component.model = [
+                { label: 'Electronics', url: '/electronics' },
+                { label: 'Laptops', url: '/laptops' },
+                { label: 'Hidden', url: '/hidden', visible: false }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const itemLinks = fixture.debugElement.queryAll(By.css('.p-breadcrumb-item-link'));
+
+            expect(itemLinks.length).toBe(2);
+            expect(itemLinks[0].nativeElement.hasAttribute('aria-current')).toBe(false);
+            expect(itemLinks[1].nativeElement.getAttribute('aria-current')).toBe('page');
+        });
+
+        it('should mark the last item link with aria-current="page" when items use routerLink', async () => {
+            const routerFixture = TestBed.createComponent(TestRouterBreadcrumbComponent);
+            routerFixture.detectChanges();
+
+            await router.navigate(['/products', 'category']);
+
+            await routerFixture.whenStable();
+
+            routerFixture.detectChanges();
+
+            const itemLinks = routerFixture.debugElement.queryAll(By.css('.p-breadcrumb-item-link'));
+            const lastLink = itemLinks[itemLinks.length - 1];
+
+            expect(lastLink.nativeElement.textContent.trim()).toBe('Category');
+            expect(lastLink.nativeElement.getAttribute('aria-current')).toBe('page');
+        });
+
+        it('should not mark a routerLink item as current while it is not the active route', async () => {
+            const routerFixture = TestBed.createComponent(TestRouterBreadcrumbComponent);
+            routerFixture.detectChanges();
+
+            await router.navigate(['/products']);
+
+            await routerFixture.whenStable();
+
+            routerFixture.detectChanges();
+
+            const itemLinks = routerFixture.debugElement.queryAll(By.css('.p-breadcrumb-item-link'));
+            const lastLink = itemLinks[itemLinks.length - 1];
+
+            expect(lastLink.nativeElement.textContent.trim()).toBe('Category');
+            expect(lastLink.nativeElement.hasAttribute('aria-current')).toBe(false);
+        });
     });
 
     describe('Edge Cases', () => {

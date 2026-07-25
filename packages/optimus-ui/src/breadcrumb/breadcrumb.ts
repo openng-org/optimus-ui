@@ -108,6 +108,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                                 [attr.title]="menuitem?.title"
                                 [attr.tabindex]="menuitem?.disabled ? null : menuitem?.tabindex || '0'"
                                 [attr.data-automationid]="menuitem?.automationId"
+                                [attr.aria-current]="isCurrentPage(i) ? 'page' : undefined"
                                 [pBind]="getPTOptions(menuitem, i, 'itemLink')"
                             >
                                 <ng-container *ngIf="!itemTemplate && !_itemTemplate">
@@ -142,6 +143,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                                 [skipLocationChange]="menuitem?.skipLocationChange"
                                 [replaceUrl]="menuitem?.replaceUrl"
                                 [state]="menuitem?.state"
+                                [ariaCurrentWhenActive]="isCurrentPage(i) ? 'page' : undefined"
                                 [pBind]="getPTOptions(menuitem, i, 'itemLink')"
                             >
                                 <span *ngIf="menuitem?.icon" [class]="cn(cx('itemIcon'), menuitem?.icon, menuitem?.iconClass)" [ngStyle]="menuitem?.iconStyle" [pBind]="getPTOptions(menuitem, i, 'itemIcon')"></span>
@@ -280,6 +282,20 @@ export class Breadcrumb extends BaseComponent<BreadcrumbPassThrough> {
                 index
             }
         });
+    }
+
+    isCurrentPage(index: number): boolean {
+        if (!this.model) {
+            return false;
+        }
+
+        for (let i = this.model.length - 1; i >= 0; i--) {
+            if (this.model[i]?.visible !== false) {
+                return i === index;
+            }
+        }
+
+        return false;
     }
 }
 
