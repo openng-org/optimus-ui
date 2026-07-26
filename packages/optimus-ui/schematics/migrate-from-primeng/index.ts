@@ -2,7 +2,7 @@ import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devk
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { createIgnoreMatcher, IgnoreMatcher } from '../utils/gitignore';
 import { mapAssetReference, SPECIFIER_RENAMES } from '../utils/mappings';
-import { findPrimengMajor, SKIP_DIRS, swapDependencies } from '../utils/package-json';
+import { findPrimengMajor, hasPrimeflex, SKIP_DIRS, swapDependencies } from '../utils/package-json';
 import { renameStylesheetLayers, rewriteSource } from '../utils/rewrite';
 import { Schema } from './schema';
 
@@ -72,12 +72,29 @@ export function migrateFromPrimeng(options: Schema): Rule {
         }
 
         reportLeftovers(tree, context, isIgnored);
+        warnAboutPrimeflex(tree, context);
 
         if (!options.skipInstall) {
             context.addTask(new NodePackageInstallTask());
         }
         return tree;
     };
+}
+
+/**
+ * PrimeFlex is an independent utility-CSS library that this schematic does not migrate. If the
+ * workspace also depends on it, point the user at the dedicated `migrate-from-primeflex` schematic,
+ * which translates PrimeFlex classes to Tailwind (Optimus UI's recommended utility layer).
+ */
+function warnAboutPrimeflex(tree: Tree, context: SchematicContext): void {
+    if (!hasPrimeflex(tree)) {
+        return;
+    }
+    context.logger.warn(
+        'PrimeFlex detected in this workspace. PrimeFlex is a separate utility-CSS library and is not migrated by this schematic. ' +
+            'Optimus UI recommends Tailwind CSS — run the following to translate your PrimeFlex classes:\n' +
+            '  ng generate @openng/optimus-ui:migrate-from-primeflex'
+    );
 }
 
 function checkVersionGate(tree: Tree, options: Schema): void {

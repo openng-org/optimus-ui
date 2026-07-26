@@ -10,6 +10,11 @@
             "description": "Migrate a PrimeNG v21 project to Optimus UI (including PrimeIcons to @openng/icons).",
             "factory": "./migrate-from-primeng/index#migrateFromPrimeng",
             "schema": "./migrate-from-primeng/schema.json"
+        },
+        "migrate-from-primeflex": {
+            "description": "Translate PrimeFlex utility classes to their Tailwind CSS equivalents across Angular templates.",
+            "factory": "./migrate-from-primeflex/index#migrateFromPrimeflex",
+            "schema": "./migrate-from-primeflex/schema.json"
         }
     }
 }

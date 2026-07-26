@@ -343,6 +343,31 @@ describe('migrate-from-primeng', () => {
         expect(result.readContent('/tailwind.config.cjs')).toContain("require('@openng/optimus-ui-tailwindcss')");
     });
 
+    it('warns to run migrate-from-primeflex when primeflex is also present', async () => {
+        const runner = createRunner();
+        const tree = primengTree({}, { ...PRIMENG_PKG, dependencies: { ...PRIMENG_PKG.dependencies, primeflex: '^3.3.1' } });
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+        await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        expect(warnings.join('\n')).toContain('migrate-from-primeflex');
+    });
+
+    it('does not mention migrate-from-primeflex when primeflex is absent', async () => {
+        const runner = createRunner();
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+        await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, primengTree());
+        expect(warnings.join('\n')).not.toContain('migrate-from-primeflex');
+    });
+
     it('rewrites primelocale imports including JSON subpaths', async () => {
         const runner = createRunner();
         const tree = primengTree({

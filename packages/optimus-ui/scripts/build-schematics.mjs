@@ -36,7 +36,10 @@ execSync('npx tsc -p tsconfig.json', { cwd: schematicsDir, stdio: 'inherit' });
 
 fs.copySync(path.join(schematicsDir, 'collection.json'), path.join(outDir, 'collection.json'));
 fs.copySync(path.join(schematicsDir, 'utils/versions.json'), path.join(outDir, 'utils/versions.json'));
-for (const name of ['ng-add', 'migrate-from-primeng']) {
+// tsc does not emit imported .json files, so copy the PrimeFlex -> Tailwind dictionary that
+// utils/primeflex.ts requires at runtime.
+fs.copySync(path.join(schematicsDir, 'utils/primeflex-translations.json'), path.join(outDir, 'utils/primeflex-translations.json'));
+for (const name of ['ng-add', 'migrate-from-primeng', 'migrate-from-primeflex']) {
     fs.copySync(path.join(schematicsDir, name, 'schema.json'), path.join(outDir, name, 'schema.json'));
 }
 
