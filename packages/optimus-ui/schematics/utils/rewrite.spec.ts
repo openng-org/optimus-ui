@@ -121,3 +121,51 @@ describe('rewriteSource — identifier renames', () => {
         expect(text).toContain(`const svc = new Optimus();`);
     });
 });
+
+describe('rewriteSource — cssLayer names', () => {
+    it('rewrites the primeng token in cssLayer name and order', () => {
+        const { text, changed } = rw(
+            `import { providePrimeNG } from 'primeng/config';\n` + `export const appConfig = { providers: [providePrimeNG({ theme: { preset: Aura, options: { cssLayer: { name: 'primeng', order: 'theme, base, primeng' } } } })] };\n`
+        );
+        expect(changed).toBe(true);
+        expect(text).toContain(`name: 'optimus'`);
+        expect(text).toContain(`order: 'theme, base, optimus'`);
+        expect(text).not.toContain(`primeng'`);
+    });
+
+    it('only rewrites the standalone primeng token, preserving other layer names', () => {
+        const { text } = rw(`const c = { cssLayer: { order: 'tailwind-base, primeng, tailwind-utilities' } };\n`);
+        expect(text).toContain(`order: 'tailwind-base, optimus, tailwind-utilities'`);
+    });
+
+    it('preserves the quote style of the layer strings', () => {
+        const { text } = rw(`const c = { cssLayer: { name: "primeng" } };\n`);
+        expect(text).toContain(`name: "optimus"`);
+    });
+
+    it('rewrites cssLayer even without any primeng imports in the file', () => {
+        const { text, changed } = rw(`export const opts = { cssLayer: { name: 'primeng' } };\n`);
+        expect(changed).toBe(true);
+        expect(text).toContain(`name: 'optimus'`);
+    });
+
+    it('leaves cssLayer untouched when it holds no primeng token', () => {
+        const input = `const c = { cssLayer: { name: 'app', order: 'theme, app' } };\n`;
+        const { text, changed } = rw(input);
+        expect(changed).toBe(false);
+        expect(text).toBe(input);
+    });
+
+    it('ignores a primeng token in a string that is not a cssLayer name/order', () => {
+        const input = `const c = { cssLayer: { name: 'app', label: 'primeng theme' } };\n`;
+        const { text, changed } = rw(input);
+        expect(changed).toBe(false);
+        expect(text).toBe(input);
+    });
+
+    it('does not treat a boolean cssLayer as an object', () => {
+        const input = `const c = { cssLayer: true };\n`;
+        const { changed } = rw(input);
+        expect(changed).toBe(false);
+    });
+});

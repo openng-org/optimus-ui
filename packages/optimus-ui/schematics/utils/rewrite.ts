@@ -87,6 +87,8 @@ export function rewriteSource(fileName: string, text: string): { text: string; c
         visitUsages(sourceFile);
     }
 
+    rewriteCssLayerNames(sourceFile, text, edits);
+
     if (edits.length === 0) {
         return { text, changed: false };
     }
@@ -172,4 +174,40 @@ function usageReplacement(node: ts.Identifier, newName: string): string | null {
         return `${node.text}: ${newName}`;
     }
     return newName;
+}
+
+// PrimeNG's default CSS cascade layer is named `primeng`. Users who enable the theme's cssLayer
+// option with an explicit name/order carry that token into their app config, e.g.
+//   cssLayer: { name: 'primeng', order: 'theme, base, primeng' }
+const CSS_LAYER_TOKEN_RE = /\bprimeng\b/g;
+
+function rewriteCssLayerNames(sourceFile: ts.SourceFile, text: string, edits: Edit[]): void {
+    const visit = (node: ts.Node): void => {
+        if (ts.isPropertyAssignment(node) && propertyKeyText(node.name) === 'cssLayer' && ts.isObjectLiteralExpression(node.initializer)) {
+            for (const prop of node.initializer.properties) {
+                if (!ts.isPropertyAssignment(prop) || !ts.isStringLiteralLike(prop.initializer)) {
+                    continue;
+                }
+                const key = propertyKeyText(prop.name);
+                if (key !== 'name' && key !== 'order') {
+                    continue;
+                }
+                const literal = prop.initializer;
+                const replaced = literal.text.replace(CSS_LAYER_TOKEN_RE, 'optimus');
+                if (replaced === literal.text) {
+                    continue;
+                }
+                const quote = text[literal.getStart(sourceFile)];
+                edits.push({ start: literal.getStart(sourceFile), end: literal.getEnd(), replacement: `${quote}${replaced}${quote}` });
+            }
+        }
+        ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+}
+
+// The text of an object-literal property key when it is a plain identifier or string literal
+// (name, "name", 'name'); null for computed or numeric keys.
+function propertyKeyText(name: ts.PropertyName): string | null {
+    return ts.isIdentifier(name) || ts.isStringLiteral(name) ? name.text : null;
 }

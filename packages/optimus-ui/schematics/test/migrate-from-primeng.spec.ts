@@ -100,6 +100,25 @@ describe('migrate-from-primeng', () => {
         expect(component).toContain(`inject(Optimus)`);
     });
 
+    it('rewrites the primeng cssLayer name and order in the theme config', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/src/app/app.config.ts':
+                `import { ApplicationConfig } from '@angular/core';\n` +
+                `import { providePrimeNG } from 'primeng/config';\n` +
+                `import Aura from '@primeuix/themes/aura';\n\n` +
+                `export const appConfig: ApplicationConfig = {\n` +
+                `    providers: [providePrimeNG({ theme: { preset: Aura, options: { cssLayer: { name: 'primeng', order: 'theme, base, primeng' } } } })]\n` +
+                `};\n`
+        });
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+
+        const appConfig = result.readContent('/src/app/app.config.ts');
+        expect(appConfig).toContain(`import { provideOptimus } from '@openng/optimus-ui/config';`);
+        expect(appConfig).toContain(`cssLayer: { name: 'optimus', order: 'theme, base, optimus' }`);
+        expect(appConfig).not.toContain('primeng');
+    });
+
     it('migrates primeicons: dependency, stylesheet imports, and angular.json styles', async () => {
         const runner = createRunner();
         const tree = primengTree(
