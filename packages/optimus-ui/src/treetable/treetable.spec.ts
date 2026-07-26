@@ -6,7 +6,7 @@ import { By } from '@angular/platform-browser';
 import { TreeNode } from '@openng/optimus-ui/api';
 import { provideOptimus } from '@openng/optimus-ui/config';
 import { of } from 'rxjs';
-import { TreeTable, TreeTableModule } from './treetable';
+import { TreeTable, TreeTableModule, TTScrollableView } from './treetable';
 
 describe('TreeTable', () => {
     let component: TestBasicTreeTableComponent;
@@ -3846,5 +3846,142 @@ describe('TreeTable Inline PT', () => {
 
         const host = fixture.nativeElement.querySelector('p-treetable');
         expect(host?.classList.contains('INLINE_HOST_CLASS')).toBe(true);
+    });
+});
+
+// Case 13: frozen columns resolved after the scrollable views are initialized
+@Component({
+    standalone: false,
+    template: `
+        <p-treetable [value]="nodes" [columns]="scrollableCols" [frozenColumns]="frozenCols" [scrollable]="true" [virtualScroll]="virtualScroll" [virtualScrollItemSize]="34" scrollHeight="200px" frozenWidth="200px">
+            <ng-template #header let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">{{ col.header }}</th>
+                </tr>
+            </ng-template>
+            <ng-template #body let-rowData="rowData" let-columns="columns">
+                <tr>
+                    <td *ngFor="let col of columns">{{ rowData[col.field] }}</td>
+                </tr>
+            </ng-template>
+        </p-treetable>
+    `
+})
+class TestAsyncFrozenColumnsComponent {
+    virtualScroll = true;
+
+    nodes: TreeNode[] = Array.from({ length: 50 }, (_, i) => ({
+        data: { name: `Row ${i}`, size: `${i}kb`, type: 'File' }
+    }));
+
+    frozenCols: any[] | null = null;
+
+    scrollableCols = [
+        { field: 'size', header: 'Size' },
+        { field: 'type', header: 'Type' }
+    ];
+}
+
+describe('TreeTable Frozen Columns Scroll Sync', () => {
+    let fixture: ComponentFixture<TestAsyncFrozenColumnsComponent>;
+
+    async function build(virtualScroll: boolean) {
+        await TestBed.configureTestingModule({
+            declarations: [TestAsyncFrozenColumnsComponent],
+            imports: [TreeTableModule],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestAsyncFrozenColumnsComponent);
+        fixture.componentInstance.virtualScroll = virtualScroll;
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    }
+
+    async function settle() {
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    }
+
+    function unfrozenView(): TTScrollableView {
+        return fixture.debugElement
+            .queryAll(By.directive(TTScrollableView))
+            .map((debugElement) => debugElement.componentInstance as TTScrollableView)
+            .find((view) => !view.frozen)!;
+    }
+
+    function frozenBodyElement(selector: string): Element | null {
+        return fixture.nativeElement.querySelector(`.p-treetable-frozen-view ${selector}`);
+    }
+
+    afterEach(() => TestBed.resetTestingModule());
+
+    it('should resolve the frozen sibling body when frozen columns arrive after init (virtual scroll)', async () => {
+        await build(true);
+
+        const unfrozen = unfrozenView();
+        expect(unfrozen.frozenSiblingBody).toBeFalsy();
+
+        fixture.componentInstance.frozenCols = [{ field: 'name', header: 'Name' }];
+        await settle();
+        await settle();
+
+        expect(unfrozenView().frozenSiblingBody).toBe(frozenBodyElement('[data-pc-name="virtualscroller"]')!);
+    });
+
+    it('should resolve the frozen sibling body when frozen columns arrive after init (without virtual scroll)', async () => {
+        await build(false);
+
+        fixture.componentInstance.frozenCols = [{ field: 'name', header: 'Name' }];
+        await settle();
+        await settle();
+
+        expect(unfrozenView().frozenSiblingBody).toBe(frozenBodyElement('[data-pc-section="scrollablebody"]')!);
+    });
+
+    it('should mark the sibling view as unfrozen once frozen columns arrive', async () => {
+        await build(true);
+
+        expect(fixture.nativeElement.querySelector('.p-treetable-unfrozen-view')).toBeNull();
+
+        fixture.componentInstance.frozenCols = [{ field: 'name', header: 'Name' }];
+        await settle();
+        await settle();
+
+        expect(fixture.nativeElement.querySelector('.p-treetable-unfrozen-view')).toBeTruthy();
+    });
+
+    it('should propagate the vertical scroll position to the frozen sibling body', async () => {
+        await build(true);
+
+        fixture.componentInstance.frozenCols = [{ field: 'name', header: 'Name' }];
+        await settle();
+        await settle();
+
+        const unfrozen = unfrozenView();
+        const frozenBody = { scrollTop: 0 } as unknown as Element;
+        unfrozen.frozenSiblingBody = frozenBody;
+
+        unfrozen.onBodyScroll({ target: { scrollTop: 340, scrollLeft: 0 } });
+
+        expect(frozenBody.scrollTop).toBe(340);
+    });
+
+    it('should release the frozen sibling body when frozen columns are removed', async () => {
+        await build(true);
+
+        fixture.componentInstance.frozenCols = [{ field: 'name', header: 'Name' }];
+        await settle();
+        await settle();
+        expect(unfrozenView().frozenSiblingBody).toBeTruthy();
+
+        fixture.componentInstance.frozenCols = null;
+        await settle();
+        await settle();
+
+        expect(unfrozenView().frozenSiblingBody).toBeNull();
+        expect(fixture.nativeElement.querySelector('.p-treetable-unfrozen-view')).toBeNull();
     });
 });
