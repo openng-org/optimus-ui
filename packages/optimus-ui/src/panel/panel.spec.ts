@@ -347,7 +347,7 @@ describe('Panel', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            const toggleButton = testFixture.debugElement.query(By.css('p-button'));
+            const toggleButton = testFixture.debugElement.query(By.css('p-button button'));
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe((!panelInstance.collapsed).toString());
 
             testComponent.collapsed = true;
@@ -475,12 +475,12 @@ describe('Panel', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            const toggleButton = testFixture.debugElement.query(By.css('p-button'));
+            const toggleButton = testFixture.debugElement.query(By.css('p-button button'));
             const contentContainer = testFixture.debugElement.query(By.css('.p-panel-content-container'));
 
-            expect(toggleButton.nativeElement.getAttribute('role')).toBe('button');
-            expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBeTruthy();
-            expect(toggleButton.nativeElement.getAttribute('aria-controls')).toBeTruthy();
+            expect(toggleButton.nativeElement.tagName).toBe('BUTTON');
+            expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe('true');
+            expect(toggleButton.nativeElement.getAttribute('aria-controls')).toBe(contentContainer.nativeElement.id);
             expect(toggleButton.nativeElement.getAttribute('aria-label')).toBe(testComponent.header);
 
             expect(contentContainer.nativeElement.getAttribute('role')).toBe('region');
@@ -493,7 +493,7 @@ describe('Panel', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            const toggleButton = testFixture.debugElement.query(By.css('p-button'));
+            const toggleButton = testFixture.debugElement.query(By.css('p-button button'));
             expect(toggleButton.nativeElement.getAttribute('aria-expanded')).toBe((!panelInstance.collapsed).toString());
 
             testComponent.collapsed = true;
