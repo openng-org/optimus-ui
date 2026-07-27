@@ -2,6 +2,7 @@ import { AccessibilityDoc } from '@/doc/picklist/accessibility-doc';
 import { BasicDoc } from '@/doc/picklist/basic-doc';
 import { FilterDoc } from '@/doc/picklist/filter-doc';
 import { ImportDoc } from '@/doc/picklist/import-doc';
+import { LazyDoc } from '@/doc/picklist/lazy-doc';
 import { PTComponent } from '@/doc/picklist/pt/PTComponent';
 import { TemplateDoc } from '@/doc/picklist/template-doc';
 import { Component } from '@angular/core';
@@ -34,6 +35,11 @@ export class PickListDemo {
             id: 'template',
             label: 'Template',
             component: TemplateDoc
+        },
+        {
+            id: 'lazy',
+            label: 'Lazy Load',
+            component: LazyDoc
         },
         {
             id: 'accessibility',

@@ -22,13 +22,14 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { find, findIndexInList, isEmpty, setAttribute, uuid } from '@openng/optimus-ui-utils';
-import { FilterService, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
+import { FilterService, PrimeTemplate, ScrollerOptions, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { ButtonModule, ButtonProps } from '@openng/optimus-ui/button';
 import { AngleDoubleDownIcon, AngleDoubleLeftIcon, AngleDoubleRightIcon, AngleDoubleUpIcon, AngleDownIcon, AngleLeftIcon, AngleRightIcon, AngleUpIcon } from '@openng/optimus-ui/icons';
 import { Listbox, ListboxChangeEvent } from '@openng/optimus-ui/listbox';
 import { Ripple } from '@openng/optimus-ui/ripple';
+import { ScrollerLazyLoadEvent } from '@openng/optimus-ui/scroller';
 import { Nullable, VoidListener } from '@openng/optimus-ui/ts-helpers';
 import {
     PickListFilterOptions,
@@ -169,6 +170,11 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [filterPlaceHolder]="sourceFilterPlaceholder"
                     [dragdrop]="dragdrop"
                     [dropListData]="source()"
+                    [lazy]="sourceLazy"
+                    [virtualScroll]="sourceVirtualScroll"
+                    [virtualScrollItemSize]="sourceVirtualScrollItemSize"
+                    [virtualScrollOptions]="sourceVirtualScrollOptions"
+                    (onLazyLoad)="onSourceLazyLoad.emit($event)"
                     (onDrop)="onDrop($event, SOURCE_LIST)"
                     (onFilter)="onFilter($event.originalEvent, SOURCE_LIST)"
                     [pt]="ptm('pcListbox')"
@@ -312,6 +318,11 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [filterPlaceHolder]="targetFilterPlaceholder"
                     [dragdrop]="dragdrop"
                     [dropListData]="target()"
+                    [lazy]="targetLazy"
+                    [virtualScroll]="targetVirtualScroll"
+                    [virtualScrollItemSize]="targetVirtualScrollItemSize"
+                    [virtualScrollOptions]="targetVirtualScrollOptions"
+                    (onLazyLoad)="onTargetLazyLoad.emit($event)"
                     (onDrop)="onDrop($event, TARGET_LIST)"
                     (onFilter)="onFilter($event.originalEvent, TARGET_LIST)"
                     [pt]="ptm('pcListbox')"
@@ -612,6 +623,47 @@ export class PickList extends BaseComponent {
     @Input({ transform: booleanAttribute }) disabled: boolean;
 
     /**
+     * Defines if data of source list is loaded and interacted with in a lazy manner.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) sourceLazy: boolean = false;
+    /**
+     * Defines if data of target list is loaded and interacted with in a lazy manner.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) targetLazy: boolean = false;
+    /**
+     * Whether to use the virtual scroller feature for the source list to render the items lazily.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) sourceVirtualScroll: boolean | undefined;
+    /**
+     * Whether to use the virtual scroller feature for the target list to render the items lazily.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) targetVirtualScroll: boolean | undefined;
+    /**
+     * Height of an item in the source list for VirtualScrolling.
+     * @group Props
+     */
+    @Input({ transform: numberAttribute }) sourceVirtualScrollItemSize: number | undefined;
+    /**
+     * Height of an item in the target list for VirtualScrolling.
+     * @group Props
+     */
+    @Input({ transform: numberAttribute }) targetVirtualScrollItemSize: number | undefined;
+    /**
+     * Whether to use the scroller feature for the source list. The properties of scroller component can be used like an object in it.
+     * @group Props
+     */
+    @Input() sourceVirtualScrollOptions: ScrollerOptions | undefined;
+    /**
+     * Whether to use the scroller feature for the target list. The properties of scroller component can be used like an object in it.
+     * @group Props
+     */
+    @Input() targetVirtualScrollOptions: ScrollerOptions | undefined;
+
+    /**
      * Name of the disabled field of a target option or function to determine disabled state.
      * @group Props
      */
@@ -780,6 +832,20 @@ export class PickList extends BaseComponent {
      * @group Emits
      */
     @Output() onTargetFilter: EventEmitter<PickListTargetFilterEvent> = new EventEmitter<PickListTargetFilterEvent>();
+
+    /**
+     * Callback to invoke on lazy load of the source list, requires the virtualScroll to be enabled.
+     * @param {ScrollerLazyLoadEvent} event - Scroller lazy load event.
+     * @group Emits
+     */
+    @Output() onSourceLazyLoad: EventEmitter<ScrollerLazyLoadEvent> = new EventEmitter<ScrollerLazyLoadEvent>();
+
+    /**
+     * Callback to invoke on lazy load of the target list, requires the virtualScroll to be enabled.
+     * @param {ScrollerLazyLoadEvent} event - Scroller lazy load event.
+     * @group Emits
+     */
+    @Output() onTargetLazyLoad: EventEmitter<ScrollerLazyLoadEvent> = new EventEmitter<ScrollerLazyLoadEvent>();
 
     /**
      * Callback to invoke when the list is focused
