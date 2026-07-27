@@ -24,8 +24,8 @@ import { PickListModule } from '@openng/optimus-ui/picklist';
                 [sourceLazy]="true"
                 [sourceVirtualScroll]="true"
                 [sourceVirtualScrollItemSize]="41"
-                sourceStyle="height: 20rem"
-                targetStyle="height: 20rem"
+                [sourceStyle]="{ height: '20rem' }"
+                [targetStyle]="{ height: '20rem' }"
                 (onSourceLazyLoad)="onSourceLazyLoad($event)"
             >
                 <ng-template let-item #item>
@@ -39,7 +39,7 @@ import { PickListModule } from '@openng/optimus-ui/picklist';
 export class LazyDoc {
     totalSourceCount = 10000;
 
-    sourceProducts = signal<any[]>(Array.from({ length: this.totalSourceCount }, () => undefined));
+    sourceProducts = signal<any[]>(Array.from({ length: this.totalSourceCount }, () => ({}) as any));
 
     targetProducts = signal<any[]>([]);
 
