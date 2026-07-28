@@ -23,6 +23,10 @@ import { AppCode } from '@/components/doc/app.code';
                 After rewriting, the schematic scans the workspace and prints a report of any remaining <i>primeng</i>, <i>primeicons</i> or <i>&#64;primeuix</i> references it could not migrate automatically, with file and line numbers. Review these
                 manually using the tables in the manual migration section below.
             </p>
+            <p>
+                Files your <i>.gitignore</i> excludes are left alone, so coverage reports and build output are neither rewritten nor reported. The report itself is printed before the CLI lists the files it created and updated — that list only covers
+                what the migration changed for you, so scroll back up to the warnings before you build.
+            </p>
         </app-docsectiontext>
     `
 })
