@@ -31,6 +31,18 @@ export const IDENTIFIER_RENAMES: ReadonlyMap<string, string> = new Map([
 // manifests (and the pnpm-workspace.yaml catalog for @openng/icons) — never edit it by hand.
 export const VERSIONS: Readonly<Record<string, string>> = generatedVersions;
 
+// A stylesheet `@import`/`@plugin`/`url(...)` reference, or an entry in the styles array of
+// angular.json/project.json, is a path rather than a module specifier — it may carry a webpack
+// tilde or a node_modules/ prefix that has to survive the rename.
+const PACKAGE_PREFIX_RE = /^(.*(?:node_modules\/|~))?(.*)$/;
+
+export function mapAssetReference(reference: string): string | null {
+    const match = PACKAGE_PREFIX_RE.exec(reference);
+    const prefix = match?.[1] ?? '';
+    const mapped = mapModuleSpecifier(match?.[2] ?? reference);
+    return mapped === null ? null : `${prefix}${mapped}`;
+}
+
 export function mapModuleSpecifier(spec: string): string | null {
     const renamed = SPECIFIER_RENAMES.get(spec);
     if (renamed !== undefined) {

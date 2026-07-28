@@ -244,6 +244,24 @@ describe('migrate-from-primeng', () => {
         expect(combined).not.toContain('could not be migrated automatically');
     });
 
+    it('rewrites package references in stylesheets, including the Tailwind entrypoint', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/src/tailwind.css': `@import 'tailwindcss';\n@import 'tailwindcss-primeui';\n@plugin "tailwindcss-primeui";\n`,
+            '/src/styles.scss': `@use '~primeng/resources/primeng.css';\n@import url(node_modules/primeicons/primeicons.css);\n`
+        });
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        expect(result.readContent('/src/tailwind.css')).toBe(`@import 'tailwindcss';\n@import '@openng/optimus-ui-tailwindcss';\n@plugin "@openng/optimus-ui-tailwindcss";\n`);
+        expect(result.readContent('/src/styles.scss')).toBe(`@use '~@openng/optimus-ui/resources/primeng.css';\n@import url(node_modules/@openng/icons/openng-icons.css);\n`);
+    });
+
+    it('leaves declaration values that merely look like a package alone', async () => {
+        const runner = createRunner();
+        const styles = `.icon { font-family: 'primeicons'; content: 'primeng'; }\n[class^='pi-'] { speak: none; }\n`;
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, primengTree({ '/src/styles.scss': styles }));
+        expect(result.readContent('/src/styles.scss')).toBe(styles);
+    });
+
     it('schedules an install task unless skipInstall is set', async () => {
         const runner = createRunner();
         await runner.runSchematic('migrate-from-primeng', {}, primengTree());
