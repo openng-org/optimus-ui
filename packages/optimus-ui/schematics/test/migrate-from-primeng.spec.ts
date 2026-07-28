@@ -213,6 +213,37 @@ describe('migrate-from-primeng', () => {
         expect(result.readContent('/generated/api.ts')).toBe(content);
     });
 
+    it('closes the leftover report with a reminder to review it', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/src/styles.scss': `/* uses primeng theme vars */\n`
+        });
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+        await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        const combined = warnings.join('\n');
+        expect(combined).toContain('1 reference in 1 file');
+        expect(combined).toContain('still need manual review');
+        expect(combined).toContain('CREATE/UPDATE');
+        expect(combined).toContain('https://www.openng.org/migration/primeng');
+    });
+
+    it('says so when there is nothing left to review', async () => {
+        const runner = createRunner();
+        const messages: string[] = [];
+        runner.logger.subscribe((entry) => {
+            messages.push(`${entry.level}: ${entry.message}`);
+        });
+        await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, primengTree());
+        const combined = messages.join('\n');
+        expect(combined).toContain('nothing left to review');
+        expect(combined).not.toContain('could not be migrated automatically');
+    });
+
     it('schedules an install task unless skipInstall is set', async () => {
         const runner = createRunner();
         await runner.runSchematic('migrate-from-primeng', {}, primengTree());

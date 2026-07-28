@@ -109,8 +109,11 @@ function isLockfile(path: string): boolean {
     return LOCKFILE_NAMES.has(basename);
 }
 
+const MIGRATION_GUIDE_URL = 'https://www.openng.org/migration/primeng';
+
 function reportLeftovers(tree: Tree, context: SchematicContext, isIgnored: IgnoreMatcher): void {
     const leftovers: string[] = [];
+    const files = new Set<string>();
     tree.visit((path, entry) => {
         if (SKIP_DIRS.test(path) || !entry || isLockfile(path) || isIgnored(path) || !REPORT_EXTENSIONS.some((ext) => path.endsWith(ext))) {
             return;
@@ -121,13 +124,21 @@ function reportLeftovers(tree: Tree, context: SchematicContext, isIgnored: Ignor
             .forEach((line, index) => {
                 if (/primeng|primeicons|@primeuix|tailwindcss-primeui|primelocale/i.test(line)) {
                     leftovers.push(`${path}:${index + 1}  ${line.trim()}`);
+                    files.add(path);
                 }
             });
     });
-    if (leftovers.length > 0) {
-        context.logger.warn('The following references to primeng/primeicons/@primeuix/tailwindcss-primeui/primelocale could not be migrated automatically and need manual review:');
-        for (const leftover of leftovers) {
-            context.logger.warn(`  ${leftover}`);
-        }
+    if (leftovers.length === 0) {
+        context.logger.info('No leftover primeng/primeicons/@primeuix/tailwindcss-primeui/primelocale references found — nothing left to review.');
+        return;
     }
+    const summary = `${leftovers.length} reference${leftovers.length === 1 ? '' : 's'} in ${files.size} file${files.size === 1 ? '' : 's'}`;
+    context.logger.warn(`The following ${summary} could not be migrated automatically and need manual review:`);
+    for (const leftover of leftovers) {
+        context.logger.warn(`  ${leftover}`);
+    }
+    // The CLI prints its CREATE/UPDATE list once the rule returns, which pushes the report above
+    // out of sight. Close with a reminder that the file list is not the whole story.
+    context.logger.warn(`\nMigration done, but ${summary} still need manual review. Scroll up to the list above — the CREATE/UPDATE lines that follow only cover what was migrated for you.`);
+    context.logger.warn(`Manual migration tables: ${MIGRATION_GUIDE_URL}`);
 }
