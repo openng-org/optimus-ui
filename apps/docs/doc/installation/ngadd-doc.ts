@@ -2,11 +2,12 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'ngadd-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode],
+    imports: [AppDocSectionText, AppCode, RouterModule],
     template: `
         <app-docsectiontext>
             <p>The recommended way to add Optimus UI to an Angular CLI workspace is a single command.</p>
@@ -21,7 +22,7 @@ import { Component } from '@angular/core';
             <app-code [code]="flagsCode" [hideToggleCode]="true"></app-code>
             <p>
                 If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing <i>primeng</i> dependency it makes no
-                changes at all and points you at the migration schematic.
+                changes at all and points you at the <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a>, which covers the <i>migrate-from-primeng</i> schematic.
             </p>
         </app-docsectiontext>
     `
