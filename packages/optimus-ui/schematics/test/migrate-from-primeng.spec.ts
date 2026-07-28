@@ -181,6 +181,38 @@ describe('migrate-from-primeng', () => {
         expect(warnings.join('\n')).toContain('/src/styles.scss:1');
     });
 
+    it('ignores files that .gitignore excludes', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/.gitignore': 'coverage/\n/build\n',
+            '/coverage/lcov-report/app.component.ts.html': `<span>import { ButtonModule } from 'primeng/button';</span>\n`,
+            '/build/vendor.js': `require('primeng/button');\n`,
+            '/src/styles.scss': `/* uses primeng theme vars */\n`
+        });
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+        await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        const combined = warnings.join('\n');
+        expect(combined).not.toContain('/coverage/');
+        expect(combined).not.toContain('/build/');
+        expect(combined).toContain('/src/styles.scss:1');
+    });
+
+    it('does not rewrite git-ignored sources', async () => {
+        const runner = createRunner();
+        const content = `import { ButtonModule } from 'primeng/button';\n`;
+        const tree = primengTree({
+            '/.gitignore': 'generated/\n',
+            '/generated/api.ts': content
+        });
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+        expect(result.readContent('/generated/api.ts')).toBe(content);
+    });
+
     it('schedules an install task unless skipInstall is set', async () => {
         const runner = createRunner();
         await runner.runSchematic('migrate-from-primeng', {}, primengTree());

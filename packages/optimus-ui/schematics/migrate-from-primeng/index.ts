@@ -1,5 +1,6 @@
 import { Rule, SchematicContext, SchematicsException, Tree } from '@angular-devkit/schematics';
 import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
+import { createIgnoreMatcher, IgnoreMatcher } from '../utils/gitignore';
 import { SPECIFIER_RENAMES } from '../utils/mappings';
 import { findPrimengMajor, SKIP_DIRS, swapDependencies } from '../utils/package-json';
 import { rewriteSource } from '../utils/rewrite';
@@ -20,11 +21,15 @@ export function migrateFromPrimeng(options: Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
         checkVersionGate(tree, options);
 
+        // Coverage reports, build output and other git-ignored files are not the user's source:
+        // rewriting them is pointless and reporting them buries the leftovers that do matter.
+        const isIgnored = createIgnoreMatcher(tree);
+
         const packageJsonPaths: string[] = [];
         const sourcePaths: string[] = [];
         const assetReferencePaths: string[] = [];
         tree.visit((path) => {
-            if (SKIP_DIRS.test(path)) {
+            if (SKIP_DIRS.test(path) || isIgnored(path)) {
                 return;
             }
             const basename = path.slice(path.lastIndexOf('/') + 1);
@@ -51,7 +56,7 @@ export function migrateFromPrimeng(options: Schema): Rule {
             migrateAssetReferences(tree, path);
         }
 
-        reportLeftovers(tree, context);
+        reportLeftovers(tree, context, isIgnored);
 
         if (!options.skipInstall) {
             context.addTask(new NodePackageInstallTask());
@@ -104,10 +109,10 @@ function isLockfile(path: string): boolean {
     return LOCKFILE_NAMES.has(basename);
 }
 
-function reportLeftovers(tree: Tree, context: SchematicContext): void {
+function reportLeftovers(tree: Tree, context: SchematicContext, isIgnored: IgnoreMatcher): void {
     const leftovers: string[] = [];
     tree.visit((path, entry) => {
-        if (SKIP_DIRS.test(path) || !entry || isLockfile(path) || !REPORT_EXTENSIONS.some((ext) => path.endsWith(ext))) {
+        if (SKIP_DIRS.test(path) || !entry || isLockfile(path) || isIgnored(path) || !REPORT_EXTENSIONS.some((ext) => path.endsWith(ext))) {
             return;
         }
         entry.content
