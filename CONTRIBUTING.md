@@ -44,33 +44,33 @@ Useful scripts:
 3. Add or update unit tests for the affected component(s).
 4. Run `pnpm run lint` and `pnpm run test:unit` before opening the PR.
 5. Follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages (`fix:`, `feat:`, `chore:`, ...) — this is enforced via commitlint.
-6. Open a PR describing the change and, if it fixes a bug, the steps to reproduce it.
+6. If your change affects a published package (`packages/*`), run `pnpm changeset` and commit the generated file. Pick the bump type (`patch` for fixes, `minor` for features, `major` for breaking changes) and write the summary for library users — it becomes the changelog entry. Docs-only or CI-only changes don't need one.
+7. Open a PR describing the change and, if it fixes a bug, the steps to reproduce it.
 
 ## Releasing (maintainers)
 
-Releases are fully automated by the [Release workflow](.github/workflows/release.yml) and driven by git tags:
+Releases are fully automated by the [Release workflow](.github/workflows/release.yml) using [Changesets](https://github.com/changesets/changesets). No tags to push, no versions to pick:
+
+1. PRs land on `main` carrying changeset files (see "Making a change" above).
+2. The workflow keeps a **"Version Packages" PR** open that applies all pending changesets: it bumps every `@openng/*` package in lockstep (they are `fixed` in `.changeset/config.json`), prepends the aggregated section to the root `CHANGELOG.md` (via `pnpm run version`) and deletes the applied changeset files.
+3. **Merging that PR is the release.** The workflow builds the packages, publishes them to npm, tags the release (`<version>`, matching this repo's historical unprefixed tags) and creates a GitHub release with the changelog section as notes.
+
+**Prereleases:** while `.changeset/pre.json` is committed, every release is an rc (`1.0.0-rc.N`) published under the `rc` dist-tag. When ready to cut the stable release:
 
 ```bash
-git checkout main && git pull
-git tag 1.0.0-rc.2
-git push origin 1.0.0-rc.2
+pnpm changeset pre exit   # then commit and merge; the next Version Packages PR is 1.0.0
 ```
 
-Pushing a semver tag (with or without a leading `v`) publishes **all** packages in `packages/*` to npm under that exact version — whether they changed or not — and then:
-
-1. prepends a section to `CHANGELOG.md` generated from the conventional commits since the previous release tag,
-2. commits the version bumps and changelog back to `main` as `chore(release): <tag>`,
-3. creates a GitHub release with the same notes.
-
-The npm dist-tag is derived from the version: `1.2.3` → `latest`, `1.0.0-rc.2` → `rc`, `1.0.0-beta.1` → `beta`.
+(Re-enter later with `pnpm changeset pre enter <tag>` for a future beta/rc cycle.)
 
 Publishing authenticates via [npm trusted publishing (OIDC)](https://docs.npmjs.com/trusted-publishers/) — no npm token is stored in the repository or its secrets. Each `@openng/*` package must have a trusted publisher configured on npmjs.com pointing at this repository and the `release.yml` workflow file; renaming that file breaks publishing until the configuration is updated.
 
 Notes:
 
-- The tag must point to a commit that is on `main`, otherwise the workflow aborts before publishing anything.
-- Versions that already reached npm cannot be republished; if a run fails halfway, prefer tagging a new rc/patch version over re-running.
-- Preview the generated changelog section locally with `node scripts/generate-changelog.mjs --tag <tag> --dry-run`.
+- Versions that already reached npm cannot be republished; if a publish run fails halfway, re-run the workflow — already-published packages are skipped, tagging and the GitHub release are idempotent.
+- Preview what the next release will look like with `pnpm changeset status` (pending changesets) or by inspecting the Version Packages PR diff.
+- The repo setting **"Allow GitHub Actions to create and approve pull requests"** (Settings → Actions → General) must stay enabled for the Version Packages PR to be created.
+- Consider installing the [changeset-bot](https://github.com/apps/changeset-bot) GitHub app: it comments on PRs that are missing a changeset without blocking them.
 
 ## Reporting issues
 

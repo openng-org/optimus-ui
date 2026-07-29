@@ -1,0 +1,14 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "showcase": "1.0.0-rc.1",
+    "@openng/optimus-ui": "1.0.0-rc.1",
+    "@openng/optimus-ui-motion": "1.0.0-rc.1",
+    "@openng/optimus-ui-styled": "1.0.0-rc.1",
+    "@openng/optimus-ui-styles": "1.0.0-rc.1",
+    "@openng/optimus-ui-themes": "1.0.0-rc.1",
+    "@openng/optimus-ui-utils": "1.0.0-rc.1"
+  },
+  "changesets": []
+}
