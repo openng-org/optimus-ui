@@ -119,6 +119,33 @@ describe('migrate-from-primeng', () => {
         expect(appConfig).not.toContain('primeng');
     });
 
+    it('renames @layer declarations in stylesheets to match the rewritten cssLayer config', async () => {
+        const runner = createRunner();
+        const tree = primengTree({
+            '/src/app/app.config.ts':
+                `import { ApplicationConfig } from '@angular/core';\n` +
+                `import { providePrimeNG } from 'primeng/config';\n` +
+                `import Aura from '@primeuix/themes/aura';\n\n` +
+                `export const appConfig: ApplicationConfig = {\n` +
+                `    providers: [providePrimeNG({ theme: { preset: Aura, options: { cssLayer: { name: 'primeng', order: 'theme, base, primeng, primeng-overwrites' } } } })]\n` +
+                `};\n`,
+            '/src/primeng-overwrites.scss': `@layer primeng-overwrites {\n    .p-button { margin: 0; }\n}\n`,
+            '/src/styles.scss': `@layer theme, base, primeng, primeng-overwrites;\n@import url(overrides.css) layer(primeng);\n`
+        });
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, tree);
+
+        expect(result.readContent('/src/app/app.config.ts')).toContain(`cssLayer: { name: 'optimus', order: 'theme, base, optimus, optimus-overwrites' }`);
+        expect(result.readContent('/src/primeng-overwrites.scss')).toBe(`@layer optimus-overwrites {\n    .p-button { margin: 0; }\n}\n`);
+        expect(result.readContent('/src/styles.scss')).toBe(`@layer theme, base, optimus, optimus-overwrites;\n@import url(overrides.css) layer(optimus);\n`);
+    });
+
+    it('leaves stylesheet @layer declarations alone when no cssLayer config was rewritten', async () => {
+        const runner = createRunner();
+        const styles = `@layer theme, app;\n@layer app {\n    .btn { color: red; }\n}\n`;
+        const result = await runner.runSchematic('migrate-from-primeng', { skipInstall: true }, primengTree({ '/src/styles.scss': styles }));
+        expect(result.readContent('/src/styles.scss')).toBe(styles);
+    });
+
     it('migrates primeicons: dependency, stylesheet imports, and angular.json styles', async () => {
         const runner = createRunner();
         const tree = primengTree(

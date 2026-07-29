@@ -3,7 +3,7 @@ import { NodePackageInstallTask } from '@angular-devkit/schematics/tasks';
 import { createIgnoreMatcher, IgnoreMatcher } from '../utils/gitignore';
 import { mapAssetReference, SPECIFIER_RENAMES } from '../utils/mappings';
 import { findPrimengMajor, SKIP_DIRS, swapDependencies } from '../utils/package-json';
-import { rewriteSource } from '../utils/rewrite';
+import { renameStylesheetLayers, rewriteSource } from '../utils/rewrite';
 import { Schema } from './schema';
 
 const REPORT_EXTENSIONS = ['.ts', '.mts', '.js', '.mjs', '.html', '.scss', '.css', '.sass', '.less', '.json', '.md'];
@@ -53,15 +53,22 @@ export function migrateFromPrimeng(options: Schema): Rule {
         for (const path of packageJsonPaths) {
             migratePackageJson(tree, context, path);
         }
+        // Layer tokens renamed inside cssLayer name/order strings (e.g. primeng-overwrites →
+        // optimus-overwrites), collected across all sources so the matching `@layer` declarations
+        // in stylesheets can be renamed to keep following the configured order.
+        const layerRenames = new Map<string, string>();
         for (const path of sourcePaths) {
             const original = tree.read(path)!.toString();
-            const { text, changed } = rewriteSource(path, original);
+            const { text, changed, layerRenames: fileLayerRenames } = rewriteSource(path, original);
+            for (const [from, to] of fileLayerRenames) {
+                layerRenames.set(from, to);
+            }
             if (changed) {
                 tree.overwrite(path, text);
             }
         }
         for (const path of assetReferencePaths) {
-            migrateAssetReferences(tree, path);
+            migrateAssetReferences(tree, path, layerRenames);
         }
 
         reportLeftovers(tree, context, isIgnored);
@@ -98,7 +105,7 @@ function migratePackageJson(tree: Tree, context: SchematicContext, path: string)
     context.logger.info(`${path}: replaced ${result.removed.join(', ')} with ${result.added.join(', ')}`);
 }
 
-function migrateAssetReferences(tree: Tree, path: string): void {
+function migrateAssetReferences(tree: Tree, path: string, layerRenames: ReadonlyMap<string, string>): void {
     let text = tree.read(path)!.toString();
     let changed = false;
     for (const [from, to] of SPECIFIER_RENAMES) {
@@ -120,6 +127,11 @@ function migrateAssetReferences(tree: Tree, path: string): void {
     } else {
         text = text.replace(STYLE_AT_RULE_RE, (match, rule: string, quote: string, value: string) => rewrite(value, (mapped) => `${rule}${quote}${mapped}${quote}`, match));
         text = text.replace(URL_REFERENCE_RE, (match, quote: string, value: string) => rewrite(value, (mapped) => `url(${quote}${mapped}${quote})`, match));
+        const layered = renameStylesheetLayers(text, layerRenames);
+        if (layered.changed) {
+            text = layered.text;
+            changed = true;
+        }
     }
     if (changed) {
         tree.overwrite(path, text);
