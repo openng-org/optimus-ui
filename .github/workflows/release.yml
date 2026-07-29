@@ -83,6 +83,10 @@ jobs:
                       /^## \[/ { if (found) exit; if (index($0, "[" ver "]")) { found = 1; next } }
                       found { print }
                   ' CHANGELOG.md > /tmp/release-notes.md
+                  if ! grep -q '[^[:space:]]' /tmp/release-notes.md; then
+                      echo "::error::Could not extract release notes for $VERSION from CHANGELOG.md"
+                      exit 1
+                  fi
                   EXTRA_ARGS=()
                   case "$VERSION" in *-*) EXTRA_ARGS+=(--prerelease);; esac
                   if gh release view "$VERSION" > /dev/null 2>&1; then

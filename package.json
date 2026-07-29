@@ -18,7 +18,7 @@
         "link": "pnpm --filter './packages/*' dev:link",
         "changeset": "changeset",
         "version": "node scripts/version.mjs",
-        "release": "pnpm run build:optimus-ui && pnpm run build:lib && changeset publish",
+        "release": "pnpm run build:optimus-ui && pnpm run build:lib && pnpm --filter @openng/optimus-ui test:unit && changeset publish",
         "build": "cross-env NODE_ENV=production pnpm run build:check && pnpm run build:packages",
         "build:check": "pnpm run format:check && pnpm run security:check",
         "build:packages": "pnpm run build:optimus-ui && pnpm run build:lib && pnpm run build:themes && pnpm run build:docs && pnpm run build:showcase",

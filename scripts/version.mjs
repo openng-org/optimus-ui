@@ -72,9 +72,17 @@ if (version === previousVersion) {
     process.exit(0);
 }
 
-// Sync the (private) root package.json version, preserving file formatting.
+// Sync the (private) root package.json version, preserving file formatting. Anchored on the
+// exact previous version string so it can never clobber another "version" key (e.g. the
+// "version" script), regardless of key order in the file.
 const rootManifest = path.join(rootDir, 'package.json');
-fs.writeFileSync(rootManifest, fs.readFileSync(rootManifest, 'utf8').replace(/"version"\s*:\s*"[^"]*"/, `"version": "${version}"`));
+const rootSource = fs.readFileSync(rootManifest, 'utf8');
+const rootAnchor = `"version": "${previousVersion}"`;
+if (!rootSource.includes(rootAnchor)) {
+    console.error(`Root package.json is out of sync: expected ${rootAnchor}. Fix it manually and re-run.`);
+    process.exit(1);
+}
+fs.writeFileSync(rootManifest, rootSource.replace(rootAnchor, `"version": "${version}"`));
 
 // Prepend the aggregated changelog section.
 const url = repoUrl();
