@@ -3,19 +3,20 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
 import { Component } from '@angular/core';
+import { Cog, Spinner } from '@primeicons/angular';
 
 @Component({
     selector: 'spin-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode, AppDemoWrapper],
+    imports: [AppDocSectionText, AppCode, AppDemoWrapper, Spinner, Cog],
     template: `
         <app-docsectiontext>
-            <p>Special <i>pi-spin</i> class applies infinite rotation to an icon.</p>
+            <p>Use a spin animation utility like <i>animate-spin</i> from Tailwind apply rotation.</p>
         </app-docsectiontext>
         <app-demo-wrapper>
             <div class="flex justify-center gap-4">
-                <i class="pi pi-spin pi-spinner" style="font-size: 1.75rem"></i>
-                <i class="pi pi-spin pi-cog" style="font-size: 1.75rem"></i>
+                <svg data-p-icon="spinner" class="animate-spin" [size]="28"></svg>
+                <svg data-p-icon="cog" class="animate-spin" [size]="28"></svg>
             </div>
             <app-code [code]="code" [hideToggleCode]="true"></app-code>
         </app-demo-wrapper>
@@ -23,7 +24,7 @@ import { Component } from '@angular/core';
 })
 export class SpinDoc {
     code: Code = {
-        html: `<i class="pi pi-spin pi-spinner" style="font-size: 1.75rem"></i>
-<i class="pi pi-spin pi-cog" style="font-size: 1.75rem"></i>`
+        html: `<svg data-p-icon="spinner" class="animate-spin" [size]="28"></svg>
+<svg data-p-icon="cog" class="animate-spin" [size]="28"></svg>`
     };
 }
