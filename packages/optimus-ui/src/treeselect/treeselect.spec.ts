@@ -1294,6 +1294,34 @@ describe('TreeSelect', () => {
             expect(treeSelectInstance.filterMode).toBe('lenient');
         });
 
+        it('should emit onFilter and update filteredNodes when the user types in the filter input', async () => {
+            testComponent.filter = true;
+            testComponent.filterBy = 'label';
+            testComponent.filterMode = 'lenient';
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const dropdown = testFixture.debugElement.query(By.css('.p-treeselect-dropdown'));
+            dropdown.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const filterInput = testFixture.debugElement.query(By.css('input[type="search"]'));
+            filterInput.nativeElement.value = 'Work';
+            filterInput.nativeElement.dispatchEvent(new Event('input'));
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            expect(testComponent.filterEvent).not.toBeNull();
+            expect(testComponent.filterEvent.filter).toBe('Work');
+
+            const treeSelectInstance = testFixture.debugElement.query(By.directive(TreeSelect)).componentInstance;
+            expect(treeSelectInstance.filterValue).toBe('Work');
+            expect(treeSelectInstance.filteredNodes).toEqual(testComponent.filterEvent.filteredValue);
+        });
+
         it('should handle empty state properly', async () => {
             testComponent.options = [];
             testComponent.emptyMessage = 'No nodes available';
