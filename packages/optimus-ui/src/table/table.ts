@@ -1650,8 +1650,8 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
 
     sortMultiple() {
         if (this.groupRowsBy) {
-            if (!this._multiSortMeta) this._multiSortMeta = [this.getGroupRowsMeta()];
-            else if ((<SortMeta[]>this.multiSortMeta)[0].field !== this.groupRowsBy) this._multiSortMeta = [this.getGroupRowsMeta(), ...this._multiSortMeta];
+            if (!this._multiSortMeta || !this._multiSortMeta.length) this._multiSortMeta = [this.getGroupRowsMeta()];
+            else if (this._multiSortMeta[0].field !== this.groupRowsBy) this._multiSortMeta = [this.getGroupRowsMeta(), ...this._multiSortMeta];
         }
         if (this.multiSortMeta && this.multiSortMeta.length > 0) {
             if (this.lazy) {
