@@ -38,7 +38,7 @@ export function translateClassList(value: string): { value: string; changed: boo
 }
 
 /**
- * Translates every quoted string literal found inside a class-binding expression
+ * Translates every single- or double-quoted string literal found inside a class-binding expression
  * (`[class]`/`[ngClass]`) as a class list. Covers the common Angular shapes:
  *   [ngClass]="'grid col-6'"                    -> string operand
  *   [ngClass]="{ 'grid col-6': active }"        -> object keys
