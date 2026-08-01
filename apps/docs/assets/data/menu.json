@@ -44,7 +44,6 @@
         {
             "name": "AI Tools",
             "icon": "pi pi-sparkles",
-            "badge": "NEW",
             "children": [
                 {
                     "name": "LLMs.txt",
@@ -423,8 +422,7 @@
                         },
                         {
                             "name": "Bind",
-                            "routerLink": "/bind",
-                            "badge": "NEW"
+                            "routerLink": "/bind"
                         },
                         {
                             "name": "BlockUI",
@@ -436,8 +434,7 @@
                         },
                         {
                             "name": "ClassNames",
-                            "routerLink": "/classnames",
-                            "badge": "NEW"
+                            "routerLink": "/classnames"
                         },
                         {
                             "name": "DragDrop",
@@ -511,8 +508,7 @@
         {
             "name": "Pass Through",
             "icon": "pi pi-directions",
-            "routerLink": "/passthrough",
-            "badge": "NEW"
+            "routerLink": "/passthrough"
         },
         {
             "name": "Guides",
@@ -524,8 +520,7 @@
                 },
                 {
                     "name": "Animations",
-                    "routerLink": "/guides/animations",
-                    "badge": "NEW"
+                    "routerLink": "/guides/animations"
                 },
                 {
                     "name": "PrimeFlex",
