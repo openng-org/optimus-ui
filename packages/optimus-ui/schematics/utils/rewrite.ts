@@ -234,7 +234,7 @@ function rewriteCssLayerNames(sourceFile: ts.SourceFile, text: string, edits: Ed
 const LAYER_AT_RULE_RE = /(@layer\b)([^{;}]*)(?=[{;])/g;
 // The `layer(name)` function of `@import url(...) layer(name);`. The bare `layer` keyword
 // (anonymous layer) has no name to rename.
-const LAYER_FUNCTION_RE = /(\blayer\(\s*)([^)]*)(?=\))/g;
+const LAYER_FUNCTION_RE = /(@import\b[^;{]*?\blayer\(\s*)([^)]*)(?=\))/g;
 
 /**
  * Renames CSS cascade layer tokens in the `@layer` preludes and `@import ... layer(...)` clauses
