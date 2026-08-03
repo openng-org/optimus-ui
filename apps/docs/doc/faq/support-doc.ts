@@ -30,7 +30,10 @@ import { RouterModule } from '@angular/router';
             </p>
 
             <h3>How does versioning work?</h3>
-            <p>Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the <a href="https://github.com/openng-org/optimus-ui/releases" target="_blank" rel="noopener noreferrer">GitHub releases</a>.</p>
+            <p>
+                Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the
+                <a href="https://github.com/openng-org/optimus-ui/releases" target="_blank" rel="noopener noreferrer">GitHub releases</a>.
+            </p>
         </app-docsectiontext>
     `
 })
