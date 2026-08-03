@@ -48,6 +48,10 @@
                 {
                     "name": "LLMs.txt",
                     "routerLink": "/llms"
+                },
+                {
+                    "name": "MCP Server",
+                    "routerLink": "/mcp"
                 }
             ]
         },

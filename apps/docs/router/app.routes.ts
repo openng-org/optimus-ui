@@ -301,6 +301,7 @@ export const routes: Routes = [
             },
             { path: 'guides', loadChildren: () => import('@/pages/guides/routes') },
             { path: 'llms', loadChildren: () => import('@/pages/llms/routes') },
+            { path: 'mcp', loadChildren: () => import('@/pages/mcp/routes') },
             {
                 path: 'migration',
                 loadChildren: () => import('@/pages/migration/routes')
