@@ -25,61 +25,68 @@ export interface MenuItem {
 @Component({
     selector: 'app-menu',
     template: ` <aside>
-        <ul class="topbar-items drawer-quickactions">
-            <li>
-                <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
-                    <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
-                </a>
-            </li>
-            <li>
-                <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="topbar-item" aria-label="Angular community Discord" title="Angular community Discord">
-                    <i class="pi pi-discord text-surface-700 dark:text-surface-100"></i>
-                </a>
-            </li>
-            <li>
-                <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
-                    <i class="pi pi-comments text-surface-700 dark:text-surface-100"></i>
-                </a>
-            </li>
-            <li>
-                <button type="button" class="topbar-item" (click)="toggleDarkMode()" aria-label="Toggle dark mode">
-                    <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
-                </button>
-            </li>
-            <li class="relative">
-                <button
-                    type="button"
-                    class="topbar-item config-item"
-                    enterActiveClass="px-overlay-enter-active"
-                    enterFromClass="hidden"
-                    leaveActiveClass="px-overlay-leave-active"
-                    leaveToClass="hidden"
-                    pStyleClass="@next"
-                    [hideOnOutsideClick]="true"
-                    aria-label="Customize theme"
-                >
-                    <i class="pi pi-palette"></i>
-                </button>
-                <app-configurator />
-            </li>
-            <li class="drawer-version-select">
-                <p-select
-                    [(ngModel)]="selectedVersion"
-                    [options]="versions"
-                    [group]="true"
-                    (onChange)="onVersionChange($event)"
-                    [pt]="{
-                        optionGroup: {
-                            class: 'version-group'
-                        }
-                    }"
-                >
-                </p-select>
-            </li>
-        </ul>
         <nav>
             <ol class="layout-menu">
                 <li *ngFor="let item of menu; let i = index" app-menuitem [item]="item" [root]="true"></li>
+
+                <li class="drawer-quickaction drawer-quickaction-divider">
+                    <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer">
+                        <div class="menu-icon">
+                            <i class="pi pi-github"></i>
+                        </div>
+                        <span>GitHub</span>
+                    </a>
+                </li>
+                <li class="drawer-quickaction">
+                    <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" aria-label="Angular community Discord" title="Angular community Discord">
+                        <div class="menu-icon">
+                            <i class="pi pi-discord"></i>
+                        </div>
+                        <span>Discord</span>
+                    </a>
+                </li>
+                <li class="drawer-quickaction">
+                    <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer">
+                        <div class="menu-icon">
+                            <i class="pi pi-comments"></i>
+                        </div>
+                        <span>Discussions</span>
+                    </a>
+                </li>
+                <li class="drawer-quickaction">
+                    <button type="button" (click)="toggleDarkMode()">
+                        <div class="menu-icon">
+                            <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
+                        </div>
+                        <span>{{ isDarkMode() ? 'Light Mode' : 'Dark Mode' }}</span>
+                    </button>
+                </li>
+                <li class="drawer-quickaction relative">
+                    <button type="button" enterActiveClass="px-overlay-enter-active" enterFromClass="hidden" leaveActiveClass="px-overlay-leave-active" leaveToClass="hidden" pStyleClass="@next" [hideOnOutsideClick]="true">
+                        <div class="menu-icon">
+                            <i class="pi pi-palette"></i>
+                        </div>
+                        <span>Customize Theme</span>
+                    </button>
+                    <app-configurator />
+                </li>
+                <li class="drawer-quickaction drawer-version-row">
+                    <div class="menu-icon">
+                        <i class="pi pi-tag"></i>
+                    </div>
+                    <p-select
+                        [(ngModel)]="selectedVersion"
+                        [options]="versions"
+                        [group]="true"
+                        (onChange)="onVersionChange($event)"
+                        [pt]="{
+                            optionGroup: {
+                                class: 'version-group'
+                            }
+                        }"
+                    >
+                    </p-select>
+                </li>
             </ol>
         </nav>
     </aside>`,
