@@ -31,32 +31,32 @@ import { SelectModule } from '@openng/optimus-ui/select';
                     <div id="docsearch"></div>
                 </li>
                 <li>
-                    <button type="button" class="topbar-item" id="ask-ai" style="width: 6rem;">
-                        <i class="pi pi-sparkles" style="margin-right: 0.5rem;"></i>
-                        Ask AI
+                    <button type="button" class="topbar-item ask-ai-button" id="ask-ai" aria-label="Ask AI">
+                        <i class="pi pi-sparkles"></i>
+                        <span class="ask-ai-label">Ask AI</span>
                     </button>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="topbar-item" aria-label="Angular community Discord" title="Angular community Discord">
                         <i class="pi pi-discord text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-comments text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <button type="button" class="topbar-item" (click)="toggleDarkMode()">
                         <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
                     </button>
                 </li>
-                <li *ngIf="showConfigurator" class="relative">
+                <li *ngIf="showConfigurator" class="relative topbar-desktop-item">
                     <button
                         type="button"
                         class="topbar-item config-item"
@@ -71,7 +71,7 @@ import { SelectModule } from '@openng/optimus-ui/select';
                     </button>
                     <app-configurator />
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <p-select
                         [(ngModel)]="selectedVersion"
                         [options]="versions"
