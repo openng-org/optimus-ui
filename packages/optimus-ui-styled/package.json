@@ -1,6 +1,6 @@
 {
     "name": "@openng/optimus-ui-styled",
-    "version": "1.0.0-rc.2",
+    "version": "1.0.0",
     "author": "OpenNG",
     "description": "Styled utilities for Optimus UI Libraries",
     "keywords": ["styled", "css", "style utilities", "optimus", "angular"],
