@@ -413,12 +413,14 @@ importers:
       vitest:
         specifier: ^4.0.8
         version: 4.1.10(@types/node@22.19.19)(@vitest/browser-playwright@4.1.10)(@vitest/coverage-v8@4.1.10)(vite@7.3.6(@types/node@22.19.19)(jiti@2.7.0)(less@4.6.4)(lightningcss@1.32.0)(sass@1.99.0)(terser@5.46.2)(yaml@2.9.0))
+    publishDirectory: dist
 
   packages/optimus-ui-locale:
     devDependencies:
       typescript:
         specifier: catalog:angular22
         version: 6.0.3
+    publishDirectory: dist
 
   packages/optimus-ui-motion:
     dependencies:
@@ -450,6 +452,7 @@ importers:
       tailwindcss:
         specifier: ^3.4.10
         version: 3.4.19(yaml@2.9.0)
+    publishDirectory: dist
 
   packages/optimus-ui-themes:
     dependencies:
