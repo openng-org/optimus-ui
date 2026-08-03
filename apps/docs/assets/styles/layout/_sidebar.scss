@@ -244,3 +244,10 @@
         }
     }
 }
+
+// The landing page has no persistent docs sidebar — its app-menu instance
+// only exists to back the mobile hamburger drawer, so keep it out of the
+// desktop layout entirely (shown again below 1199px in _responsive.scss).
+.landing-menu {
+    display: none;
+}
