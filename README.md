@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+
 # Optimus UI
 
 **A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.**

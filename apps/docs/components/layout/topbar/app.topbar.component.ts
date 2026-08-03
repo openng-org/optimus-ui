@@ -19,10 +19,10 @@ import { SelectModule } from '@openng/optimus-ui/select';
         <div class="layout-topbar-inner">
             <div class="layout-topbar-logo-container">
                 <a [routerLink]="['/']" class="layout-topbar-logo" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo.svg" height="40" width="200" />
+                    <img ngSrc="logo.svg" height="40" width="200" class="dark:invert" />
                 </a>
                 <a [routerLink]="['/']" class="layout-topbar-icon" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo-icon.svg" height="32" width="32" />
+                    <img ngSrc="logo-icon.svg" height="32" width="32" class="dark:invert" />
                 </a>
             </div>
 

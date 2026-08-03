@@ -40,6 +40,10 @@
     .layout-topbar-logo {
         display: inline-flex;
 
+        img {
+            padding: 2rem;
+        }
+
         svg {
             width: 120px;
         }
