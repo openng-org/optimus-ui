@@ -44,16 +44,18 @@
             }
         }
 
-        .ask-ai-button {
-            width: 2rem;
-        }
+        .topbar-items {
+            .ask-ai-button {
+                width: 2rem;
+            }
 
-        .ask-ai-label {
-            display: none;
-        }
+            .ask-ai-label {
+                display: none;
+            }
 
-        .topbar-desktop-item {
-            display: none;
+            .topbar-desktop-item {
+                display: none;
+            }
         }
     }
 
