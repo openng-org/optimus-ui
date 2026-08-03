@@ -37,7 +37,8 @@
                         "tsConfig": "tsconfig.vitest.json",
                         "browsers": ["ChromiumHeadless"],
                         "include": ["**/*.test.ts"],
-                        "runnerConfig": "vitest.config.mts"
+                        "runnerConfig": "vitest.config.mts",
+                        "reporters": ["default", ["junit", { "outputFile": "reports/junit/vitest.xml" }]]
                     }
                 },
                 "lint": {

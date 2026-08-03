@@ -45,6 +45,7 @@ jobs:
         permissions:
             issues: write
             pull-requests: write
+            checks: write # action-junit-report publishes the results as a check run
         runs-on: ubuntu-latest
 
         strategy:
@@ -84,8 +85,11 @@ jobs:
               run: |
                   pnpm run format:check
 
-            - name: Unit Test
+            # Both suites run to completion even when one fails, so the report below
+            # always covers both. The gate step afterwards fails the job.
+            - name: Unit Test (jasmine)
               id: unitTest
+              continue-on-error: true
               run: |
                   pnpm run test:unit
 
@@ -96,8 +100,33 @@ jobs:
 
             - name: Unit Test (vitest)
               id: unitTestVitest
+              continue-on-error: true
               run: |
                   pnpm run test:vitest
+
+            - name: Publish test report
+              if: always()
+              uses: mikepenz/action-junit-report@v5
+              with:
+                  report_paths: 'packages/optimus-ui/reports/junit/*.xml'
+                  check_name: 'Test Results'
+                  detailed_summary: true
+                  include_passed: false
+                  fail_on_failure: false
+
+            - name: Upload test reports
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: junit-reports
+                  path: packages/optimus-ui/reports/junit/*.xml
+                  if-no-files-found: warn
+
+            - name: Fail if any unit test failed
+              if: steps.unitTest.outcome == 'failure' || steps.unitTestVitest.outcome == 'failure'
+              run: |
+                  echo "jasmine: ${{ steps.unitTest.outcome }} / vitest: ${{ steps.unitTestVitest.outcome }}"
+                  exit 1
 
             - name: Build
               id: build

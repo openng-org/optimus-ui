@@ -62,3 +62,6 @@ packages/optimus-ui/schematics/utils/versions.json
 # vitest browser-mode failure artifacts
 .vitest-attachments
 __screenshots__
+
+# junit test reports
+reports
