@@ -71,6 +71,6 @@
         "dev:link": "pnpm link --global && npm link"
     },
     "devDependencies": {
-        "typescript": "catalog:angular21"
+        "typescript": "catalog:angular22"
     }
 }
