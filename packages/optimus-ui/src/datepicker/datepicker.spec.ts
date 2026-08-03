@@ -506,6 +506,14 @@ describe('DatePicker', () => {
             const inputElement = testFixture.debugElement.query(By.css('input'));
             expect(inputElement.nativeElement.className).toContain('custom-input');
         });
+
+        it('should not set the autofocus attribute when autofocus is left unset', async () => {
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const inputElement = testFixture.debugElement.query(By.css('input'));
+            expect(inputElement.nativeElement.hasAttribute('autofocus')).toBe(false);
+        });
     });
 
     describe('Event Handling', () => {

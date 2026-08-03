@@ -141,6 +141,14 @@ describe('Slider', () => {
             expect(component.autofocus).toBe(true);
         });
 
+        it('should not set the autofocus attribute on the handle when autofocus is left unset', async () => {
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            const handle = fixture.debugElement.query(By.css('[data-pc-section="handle"]'));
+            expect(handle.nativeElement.hasAttribute('autofocus')).toBe(false);
+        });
+
         it('should initialize handle values array', () => {
             expect(component.handleValues).toEqual([]);
             expect(component.handleIndex).toBe(0);

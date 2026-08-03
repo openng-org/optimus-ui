@@ -308,6 +308,14 @@ describe('Button', () => {
             expect(buttonInstance.autofocus).toBe(false);
         });
 
+        it('should not set the autofocus attribute when autofocus is left unset', () => {
+            const standaloneFixture = TestBed.createComponent(Button);
+            standaloneFixture.detectChanges();
+
+            const standaloneButtonElement = standaloneFixture.debugElement.query(By.css('button')).nativeElement;
+            expect(standaloneButtonElement.hasAttribute('autofocus')).toBe(false);
+        });
+
         it('should render with correct attributes', () => {
             expect(buttonElement.tagName.toLowerCase()).toBe('button');
             expect(buttonElement.type).toBe('button');
