@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -19,7 +20,7 @@ interface City {
         <app-docsectiontext>
             <p>
                 Unstyled components require styling using your preferred approach. We recommend using Tailwind CSS with PassThrough attributes, a combination that works seamlessly together. The <i>tailwindcss-primeui</i> even provides special
-                variants such as <i>p-outlined:</i>, <i>p-vertical</i> for the PrimeNG components.
+                variants such as <i>p-outlined:</i>, <i>p-vertical</i> for the {{ PROJECT_NAME }} components.
             </p>
             <p>
                 The example below demonstrates how to style a button component with Tailwind CSS using PassThrough attributes. Before you begin, refer to the
@@ -44,6 +45,8 @@ interface City {
     `
 })
 export class ExampleDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code: Code = {
         html: `<p-button
     label="Search"

@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["es2018", "dom"],
+    "declaration": true,
+    "moduleResolution": "node",
+    "ignoreDeprecations": "6.0",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strictNullChecks": true,
+    "target": "es2018",
+    "outDir": "./dist/schematics",
+    "rootDir": "./schematics",
+    "types": ["node", "jasmine"]
+  },
+  "include": [
+    "schematics/**/*"
+  ]
+}

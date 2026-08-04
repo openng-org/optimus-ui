@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDoc } from '@/components/doc/app.doc';
 import { ArchitectureDoc } from '@/doc/theming/unstyled/architecture-doc';
 import { ExampleDoc } from '@/doc/theming/unstyled/example-doc';
@@ -7,11 +8,13 @@ import { VoltUIDoc } from '@/doc/theming/unstyled/voltui-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Unstyled Mode" header="Unstyled" description="Theming PrimeNG with alternative styling approaches." [docs]="docs" docType="page"></app-doc>`,
+    template: `<app-doc docTitle="Unstyled Mode" header="Unstyled" description="Theming {{ PROJECT_NAME }} with alternative styling approaches." [docs]="docs" docType="page"></app-doc>`,
     imports: [AppDoc],
     standalone: true
 })
 export class ThemingUnstyledDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'architecture',

@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
 
@@ -9,9 +10,11 @@ import { Component } from '@angular/core';
         <app-docsectiontext>
             <p>
                 Locale for different languages and formats is defined globally, refer to the
-                <a href="/configuration/#locale">PrimeNG Locale</a> configuration for more information.
+                <a href="/configuration/#locale">{{ PROJECT_NAME }} Locale</a> configuration for more information.
             </p>
         </app-docsectiontext>
     `
 })
-export class LocaleDoc {}
+export class LocaleDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

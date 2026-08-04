@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -8,9 +9,9 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     template: `
         <app-docsectiontext>
             <h3>Component Information</h3>
-            <p>Tools for exploring and understanding PrimeNG components.</p>
+            <p>Tools for exploring and understanding {{ PROJECT_NAME }} components.</p>
             <ul class="leading-loose list-disc ml-6">
-                <li><i>list_components</i> : List all PrimeNG components with categories</li>
+                <li><i>list_components</i> : List all {{ PROJECT_NAME }} components with categories</li>
                 <li><i>get_component</i> : Get detailed info about a specific component</li>
                 <li><i>search_components</i> : Search components by name or description</li>
                 <li><i>get_component_props</i> : Get all props for a component</li>
@@ -41,18 +42,18 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             </ul>
 
             <h3>Documentation & Guides</h3>
-            <p>Tools for accessing PrimeNG documentation and guides.</p>
+            <p>Tools for accessing {{ PROJECT_NAME }} documentation and guides.</p>
             <ul class="leading-loose list-disc ml-6">
                 <li><i>list_guides</i> : List all guides and documentation pages</li>
                 <li><i>get_guide</i> : Get a specific guide by name</li>
-                <li><i>get_configuration</i> : Get PrimeNG configuration options</li>
+                <li><i>get_configuration</i> : Get {{ PROJECT_NAME }} configuration options</li>
                 <li><i>get_installation</i> : Get installation instructions</li>
                 <li><i>get_accessibility_guide</i> : Get accessibility guide</li>
                 <li><i>get_accessibility_info</i> : Get accessibility info for a component</li>
             </ul>
 
             <h3>Migration</h3>
-            <p>Tools for upgrading between PrimeNG versions.</p>
+            <p>Tools for upgrading between {{ PROJECT_NAME }} versions.</p>
             <ul class="leading-loose list-disc ml-6">
                 <li><i>get_migration_guide</i> : Get migration guide overview</li>
                 <li><i>migrate_v18_to_v19</i> : v18 to v19 migration guide</li>
@@ -73,4 +74,6 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         </app-docsectiontext>
     `
 })
-export class ToolsDoc {}
+export class ToolsDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

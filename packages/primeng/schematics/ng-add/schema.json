@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "$id": "PrimeNGNgAddSchema",
+  "title": "PrimeNG ng-add Options Schema",
+  "type": "object",
+  "properties": {
+    "theme": {
+      "type": "string",
+      "description": "Choose a PrimeNG theme.",
+      "enum": ["aura", "lora", "material", "nora"],
+      "default": "aura",
+      "x-prompt": {
+        "message": "Which PrimeNG theme would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "aura", "label": "Aura" },
+          { "value": "lora", "label": "Lora" },
+          { "value": "material", "label": "Material" },
+          { "value": "nora", "label": "Nora" }
+        ]
+      }
+    }
+  },
+  "required": []
+}

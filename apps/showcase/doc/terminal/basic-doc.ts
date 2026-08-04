@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component, OnDestroy } from '@angular/core';
 import { TerminalService } from 'primeng/terminal';
 import { TerminalModule } from 'primeng/terminal';
@@ -16,13 +17,15 @@ import { AppDemoWrapper } from '@/components/doc/app.demowrapper';
         </app-docsectiontext>
         <app-demo-wrapper>
             <p>Enter "<strong>date</strong>" to display the current date, "<strong>greet &#123;0&#125;</strong>" for a message and "<strong>random</strong>" to get a random number.</p>
-            <p-terminal welcomeMessage="Welcome to PrimeNG" prompt="primeng $" />
+            <p-terminal welcomeMessage="Welcome to {{ PROJECT_NAME }}" prompt="primeng $" />
             <app-code></app-code>
         </app-demo-wrapper>
     `,
     providers: [TerminalService]
 })
 export class BasicDoc implements OnDestroy {
+    PROJECT_NAME = PROJECT_NAME;
+
     subscription: Subscription;
 
     constructor(private terminalService: TerminalService) {

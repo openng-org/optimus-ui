@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { BenefitsDoc } from '@/doc/contribution/benefits-doc';
 import { IntroductionDoc } from '@/doc/contribution/introduction-doc';
@@ -11,9 +12,11 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Contribution - PrimeNG" header="Contribution Guide" description="Welcome to the PrimeNG Contribution Guide and thank you for considering contributing." [docs]="docs"></app-doc> `
+    template: ` <app-doc docTitle="Contribution - {{ PROJECT_NAME }}" header="Contribution Guide" description="Welcome to the {{ PROJECT_NAME }} Contribution Guide and thank you for considering contributing." [docs]="docs"></app-doc> `
 })
 export class ContributionDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'introduction',

@@ -13,6 +13,7 @@
     "bugs": {
         "url": "https://github.com/primefaces/primeng/issues"
     },
+    "schematics": "./schematics/collection.json",
     "keywords": [
         "primeng",
         "angular",
@@ -30,9 +31,10 @@
     },
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
-        "build:package": "pnpm run build:prebuild && ng build primeng && pnpm run build:postbuild",
+        "build:package": "pnpm run build:prebuild && ng build primeng && pnpm run build:schematics && pnpm run build:postbuild",
         "build:prebuild": "node ./scripts/prebuild.mjs",
         "build:postbuild": "node ./scripts/postbuild.mjs",
+        "build:schematics": "tsc -p tsconfig.schematics.json",
         "dev:link": "pnpm link --global && npm link",
         "lint": "ng lint",
         "test:unit": "ng test primeng --watch=false --browsers=ChromeHeadless",
@@ -40,6 +42,8 @@
         "test:unit:coverage": "ng test primeng --coverage"
     },
     "devDependencies": {
+        "@angular-devkit/core": "catalog:angular22",
+        "@angular-devkit/schematics": "catalog:angular22",
         "karma": "~6.4.4",
         "karma-chrome-launcher": "~3.2.0",
         "karma-coverage": "~2.2.1",

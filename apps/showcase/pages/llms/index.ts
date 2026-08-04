@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { LlmsTxtDoc } from '@/doc/llms/llmstxt-doc';
 import { LlmsFullTxtDoc } from '@/doc/llms/llmsfulltxt-doc';
 import { MarkdownExtensionDoc } from '@/doc/llms/markdownextension-doc';
@@ -8,9 +9,11 @@ import { AppDoc } from '@/components/doc/app.doc';
     selector: 'llms-demo',
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="LLMs.txt - PrimeNG" header="LLMs.txt" description="LLM-optimized documentation endpoints for PrimeNG components." [docs]="docs" docType="page"></app-doc> `
+    template: ` <app-doc docTitle="LLMs.txt - {{ PROJECT_NAME }}" header="LLMs.txt" description="LLM-optimized documentation endpoints for {{ PROJECT_NAME }} components." [docs]="docs" docType="page"></app-doc> `
 })
 export class LLMsDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'llmstxt',

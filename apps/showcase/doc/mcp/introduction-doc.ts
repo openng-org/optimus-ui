@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 
@@ -9,7 +10,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         <app-docsectiontext>
             <p>
                 <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener noreferrer">Model Context Protocol (MCP)</a> is an open standard that enables AI models to connect with external <i>tools</i> and <i>data sources</i>. The
-                PrimeNG MCP server provides AI assistants with comprehensive access to:
+                {{ PROJECT_NAME }} MCP server provides AI assistants with comprehensive access to:
             </p>
             <ul class="leading-loose list-disc ml-6">
                 <li>Component documentation including <i>props</i>, <i>events</i>, <i>templates</i>, and <i>methods</i></li>
@@ -21,4 +22,6 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         </app-docsectiontext>
     `
 })
-export class IntroductionDoc {}
+export class IntroductionDoc {
+    PROJECT_NAME = PROJECT_NAME;
+}

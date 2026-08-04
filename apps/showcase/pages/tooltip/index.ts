@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AccessibilityDoc } from '@/doc/tooltip/accessibility-doc';
 import { AutoHideDoc } from '@/doc/tooltip/autohide-doc';
 import { CustomDoc } from '@/doc/tooltip/custom-doc';
@@ -14,7 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     template: `<app-doc
         docTitle="Angular Tooltip Component"
         header="Tooltip"
-        description="Tooltip directive provides advisory information for a component. Tooltip is integrated within various PrimeNG components."
+        description="Tooltip directive provides advisory information for a component. Tooltip is integrated within various {{ PROJECT_NAME }} components."
         [docs]="docs"
         [apiDocs]="['Tooltip', 'TooltipOptions']"
         [ptDocs]="ptComponent"
@@ -25,6 +26,8 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc]
 })
 export class TooltipDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     heroDoc = PositionDoc;
 
     docs = [

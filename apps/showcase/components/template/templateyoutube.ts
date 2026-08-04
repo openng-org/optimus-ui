@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { DialogModule } from 'primeng/dialog';
@@ -46,7 +47,7 @@ import { DialogModule } from 'primeng/dialog';
                 </div>
                 <p-dialog header="Video Content" [(visible)]="youtubeVideoVisible" (onHide)="youtubeVideoVisible = false" [style]="{ width: '70vw' }">
                     <div class="template-youtube-video">
-                        <iframe [src]="iframeSrc" title="PrimeNG 2023 Roadmap" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe [src]="iframeSrc" title="{{ PROJECT_NAME }} 2023 Roadmap" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </p-dialog>
             </div>
@@ -56,6 +57,8 @@ import { DialogModule } from 'primeng/dialog';
     encapsulation: ViewEncapsulation.None
 })
 export class TemplateYoutube {
+    PROJECT_NAME = PROJECT_NAME;
+
     @Input() imgSrc: string;
     title: string[] = ['Integration with', 'Existing Vite Applications'];
     description: string = 'Only the folders that are related to the layout needs to move in to your project. We‘ve already created a short tutorial with details for Sakai Vue. The both templates have the same implementation.';

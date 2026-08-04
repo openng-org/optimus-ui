@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
@@ -11,7 +12,7 @@ import { InputTextModule } from 'primeng/inputtext';
     imports: [AppDocSectionText, AppCode, ButtonModule, DialogModule, InputTextModule],
     template: `
         <app-docsectiontext>
-            <p>A headless PrimeNG dialog with a custom UI.</p>
+            <p>A headless {{ PROJECT_NAME }} dialog with a custom UI.</p>
         </app-docsectiontext>
         <div class="card flex justify-center">
             <p-button (click)="showDialog()" icon="pi pi-user" label="Login" />
@@ -67,6 +68,8 @@ import { InputTextModule } from 'primeng/inputtext';
     `
 })
 export class HeadlessDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     visible: boolean = false;
 
     showDialog() {

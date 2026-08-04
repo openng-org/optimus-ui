@@ -13,7 +13,9 @@ export function app(): express.Express {
     const indexHtml = join(serverDistFolder, 'index.server.html');
     const llmsFolder = join(browserDistFolder, 'llms');
 
-    const commonEngine = new CommonEngine();
+    const commonEngine = new CommonEngine({
+        allowedHosts: ['*.vercel.app']
+    });
 
     server.set('view engine', 'html');
     server.set('views', browserDistFolder);

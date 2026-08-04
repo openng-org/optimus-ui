@@ -1,3 +1,4 @@
+import { DISCORD_URL, GITHUB_DISCUSSIONS_URL } from '@/utils/constants';
 import { TemplateConfiguration } from '@/components/template/templateconfiguration';
 import { TemplateFeatures } from '@/components/template/templatefeatures';
 import { TemplateFeaturesAnimation } from '@/components/template/templatefeaturesanimation/templatefeaturesanimation';
@@ -34,6 +35,9 @@ import { AtlantisSeparator } from './atlantisseparator';
     </div>`
 })
 export class AtlantisPage {
+    DISCORD_URL = DISCORD_URL;
+    GITHUB_DISCUSSIONS_URL = GITHUB_DISCUSSIONS_URL;
+
     atlantisLogo = AtlantisLogo;
 
     templateHeroData = {
@@ -62,8 +66,8 @@ export class AtlantisPage {
         {
             title: 'Support',
             description: `PrimeTek offers assistance with account management and licensing issues, with the expectation that users have the necessary technical knowledge to use our products, as we do not offer technical support or consulting. Users
-            can seek assistance in our community via our public <a href="https://discord.com/invite/gzKFYnpmCY">Discord</a> and
-            <a href="https://github.com/orgs/primefaces/discussions/categories/primeng-templates" class="doc-link">Forum</a>.`,
+            can seek assistance in our community via our public <a [href]="DISCORD_URL">Discord</a> and
+            <a href="{{ GITHUB_DISCUSSIONS_URL }}/categories/primeng-templates" class="doc-link">Forum</a>.`,
             src: 'https://primefaces.org/cdn/primeng/images/templates/common/support.png'
         },
         {

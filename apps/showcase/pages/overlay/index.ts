@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppDoc } from '@/components/doc/app.doc';
 import { AccessibilityDoc } from '@/doc/overlay/accessibility-doc';
 import { AppendToDoc } from '@/doc/overlay/appendto-doc';
@@ -16,9 +17,9 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Overlay API - PrimeNG"
+        docTitle="Overlay API - {{ PROJECT_NAME }}"
         header="Overlay API"
-        description="This API allows overlay components to be controlled from the PrimeNG. In this way, all overlay components in the application can have the same behavior."
+        description="This API allows overlay components to be controlled from the {{ PROJECT_NAME }}. In this way, all overlay components in the application can have the same behavior."
         [docs]="docs"
         [apiDocs]="['Overlay', 'OverlayOptions']"
         [ptDocs]="ptComponent"
@@ -29,6 +30,8 @@ import { Component } from '@angular/core';
     imports: [AppDoc]
 })
 export class OverlayDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     ptComponent = PTComponent;
     heroDoc = OverlayBasicDemo;
     docs = [

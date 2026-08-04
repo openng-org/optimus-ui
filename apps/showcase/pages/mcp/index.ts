@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { IntroductionDoc } from '@/doc/mcp/introduction-doc';
 import { ClaudeCodeDoc } from '@/doc/mcp/claudecode-doc';
 import { VSCodeDoc } from '@/doc/mcp/vscode-doc';
@@ -16,15 +17,17 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="MCP Server - PrimeNG"
+            docTitle="MCP Server - {{ PROJECT_NAME }}"
             header="MCP Server"
-            description="Model Context Protocol (MCP) server for PrimeNG component library. Provides AI assistants with comprehensive access to PrimeNG component documentation."
+            description="Model Context Protocol (MCP) server for {{ PROJECT_NAME }} component library. Provides AI assistants with comprehensive access to {{ PROJECT_NAME }} component documentation."
             [docs]="docs"
             docType="page"
         ></app-doc>
     `
 })
 export class MCPDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'introduction',

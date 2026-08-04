@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { BasicDoc } from '@/doc/icons/basic-doc';
 import { ColorDoc } from '@/doc/icons/color-doc';
 import { ConstantsDoc } from '@/doc/icons/constants-doc';
@@ -15,9 +16,9 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            title="Angular Icon Library - PrimeNG"
+            title="Angular Icon Library - {{ PROJECT_NAME }}"
             header="Icons"
-            description="PrimeIcons is the default icon library of PrimeNG with over 250 open source icons developed by PrimeTek. PrimeIcons library is optional as PrimeNG components can use any icon with templating."
+            description="PrimeIcons is the default icon library of {{ PROJECT_NAME }} with over 250 open source icons developed by PrimeTek. PrimeIcons library is optional as {{ PROJECT_NAME }} components can use any icon with templating."
             [docs]="docs"
             [heroDoc]="heroDoc"
             docType="page"
@@ -26,6 +27,8 @@ import { AppDoc } from '@/components/doc/app.doc';
     styleUrls: ['./iconsdemo.component.scss']
 })
 export class IconsDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     heroDoc = BasicDoc;
 
     docs = [

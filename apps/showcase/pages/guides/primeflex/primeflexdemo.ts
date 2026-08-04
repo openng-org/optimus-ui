@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { CompatibilityDoc } from '@/doc/guides/primeflex/compatibility-doc';
 import { MigrationDoc } from '@/doc/guides/primeflex/migration-doc';
 import { OverviewDoc } from '@/doc/guides/primeflex/overview-doc';
@@ -9,9 +10,11 @@ import { AppDoc } from '@/components/doc/app.doc';
     selector: 'css-layer',
     standalone: true,
     imports: [AppDoc],
-    template: `<app-doc docTitle="PrimeFlex - PrimeNG" header="Introduction" [docs]="docs" description="Moving from PrimeFlex to Tailwind CSS."></app-doc>`
+    template: `<app-doc docTitle="PrimeFlex - {{ PROJECT_NAME }}" header="Introduction" [docs]="docs" description="Moving from PrimeFlex to Tailwind CSS."></app-doc>`
 })
 export class PrimeFlexDemoComponent {
+    PROJECT_NAME = PROJECT_NAME;
+
     docs = [
         {
             id: 'overview',

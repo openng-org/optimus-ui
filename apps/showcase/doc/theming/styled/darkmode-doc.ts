@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -10,8 +11,8 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                PrimeNG uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, set the <i>darkModeSelector</i> to the selector you utilize such as
-                <i>.my-app-dark</i> so that PrimeNG can fit in seamlessly with your color scheme.
+                {{ PROJECT_NAME }} uses the <i>system</i> as the default <i>darkModeSelector</i> in theme configuration. If you have a dark mode switch in your application, set the <i>darkModeSelector</i> to the selector you utilize such as
+                <i>.my-app-dark</i> so that {{ PROJECT_NAME }} can fit in seamlessly with your color scheme.
             </p>
             <app-code [code]="code1" [hideToggleCode]="true"></app-code>
             <p class="mt-4">
@@ -38,6 +39,8 @@ import { Component } from '@angular/core';
     `
 })
 export class DarkModeDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code1: Code = {
         typescript: `providePrimeNG({
     theme: {

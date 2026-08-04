@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { ApiDoc } from '@/doc/filterservice/api-doc';
 import { BuiltInConstraintsDoc } from '@/doc/filterservice/builtinconstraints-doc';
 import { CustomConstraintsDoc } from '@/doc/filterservice/customconstraints-doc';
@@ -9,9 +10,11 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="FilterService - PrimeNG" header="FilterService" description="FilterService is a helper utility to filter collections against constraints." [docs]="docs" [heroDoc]="heroDoc"></app-doc>`
+    template: ` <app-doc docTitle="FilterService - {{ PROJECT_NAME }}" header="FilterService" description="FilterService is a helper utility to filter collections against constraints." [docs]="docs" [heroDoc]="heroDoc"></app-doc>`
 })
 export class FilterServiceDemo {
+    PROJECT_NAME = PROJECT_NAME;
+
     heroDoc = BuiltInConstraintsDoc;
 
     docs = [

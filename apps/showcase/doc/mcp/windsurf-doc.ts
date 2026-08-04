@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCodeModule } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -9,13 +10,15 @@ import { Component } from '@angular/core';
     imports: [AppCodeModule, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>Edit <i>~/.codeium/windsurf/mcp_config.json</i> to add the PrimeNG MCP server.</p>
+            <p>Edit <i>~/.codeium/windsurf/mcp_config.json</i> to add the {{ PROJECT_NAME }} MCP server.</p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
         <p class="doc-section-description">See <a href="https://docs.windsurf.com/windsurf/cascade/mcp" class="font-medium hover:underline text-primary" target="_blank" rel="noopener noreferrer">Windsurf MCP Documentation</a> for more details.</p>
     `
 })
 export class WindsurfDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code: Code = {
         typescript: `{
     "mcpServers": {

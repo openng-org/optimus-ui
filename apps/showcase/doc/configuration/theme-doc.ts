@@ -1,3 +1,4 @@
+import { PROJECT_NAME } from '@/utils/constants';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Code } from '@/domain/code';
@@ -10,12 +11,14 @@ import { RouterModule } from '@angular/router';
     imports: [RouterModule, AppDocSectionText, AppCode],
     template: `
         <app-docsectiontext>
-            <p>PrimeNG provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the <a routerLink="/theming">theming</a> documentation for details.</p>
+            <p>{{ PROJECT_NAME }} provides 4 predefined themes out of the box; Aura, Material, Lara and Nora. See the <a routerLink="/theming">theming</a> documentation for details.</p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `
 })
 export class ThemeDoc {
+    PROJECT_NAME = PROJECT_NAME;
+
     code: Code = {
         typescript: `import { ApplicationConfig } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
