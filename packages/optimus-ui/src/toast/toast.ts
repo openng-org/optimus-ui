@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -39,7 +39,7 @@ const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
 @Component({
     selector: 'p-toastItem',
     standalone: true,
-    imports: [CommonModule, CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind, MotionModule],
+    imports: [CheckIcon, ExclamationTriangleIcon, InfoCircleIcon, TimesIcon, TimesCircleIcon, SharedModule, Bind, MotionModule, NgClass, NgIf, NgTemplateOutlet],
     template: `
         <div
             #container
@@ -255,7 +255,7 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
 @Component({
     selector: 'p-toast',
     standalone: true,
-    imports: [CommonModule, ToastItem, SharedModule],
+    imports: [ToastItem, SharedModule, NgFor],
     template: `
         <p-toastItem
             *ngFor="let msg of messages; let i = index"

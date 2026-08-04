@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -45,7 +45,7 @@ type SplitButtonIconPosition = 'left' | 'right';
 @Component({
     selector: 'p-splitbutton, p-splitButton, p-split-button',
     standalone: true,
-    imports: [CommonModule, ButtonDirective, TieredMenu, AutoFocus, ChevronDownIcon, Ripple, TooltipModule, SharedModule],
+    imports: [ButtonDirective, TieredMenu, AutoFocus, ChevronDownIcon, Ripple, TooltipModule, SharedModule, NgIf, NgTemplateOutlet],
     template: `
         <ng-container *ngIf="contentTemplate || _contentTemplate; else defaultButton">
             <button

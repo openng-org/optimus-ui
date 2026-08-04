@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChild, ContentChildren, ElementRef, forwardRef, inject, InjectionToken, Input, NgModule, QueryList, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ContentChild, ContentChildren, forwardRef, inject, InjectionToken, Input, NgModule, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { getOuterHeight } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -12,7 +12,7 @@ const METERGROUP_INSTANCE = new InjectionToken<MeterGroup>('METERGROUP_INSTANCE'
 @Component({
     selector: 'p-meterGroupLabel, p-metergrouplabel',
     standalone: true,
-    imports: [CommonModule, SharedModule, Bind],
+    imports: [SharedModule, Bind, NgClass, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <ol [class]="cx('labelList')" [pBind]="ptm('labelList')" [attr.data-p]="dataP">
             <li *ngFor="let labelItem of value; let index = index; trackBy: parentInstance.trackByFn" [class]="cx('label')" [pBind]="ptm('label')">
@@ -56,7 +56,7 @@ export class MeterGroupLabel extends BaseComponent<MeterGroupPassThrough> {
 @Component({
     selector: 'p-meterGroup, p-metergroup, p-meter-group',
     standalone: true,
-    imports: [CommonModule, MeterGroupLabel, SharedModule, Bind],
+    imports: [MeterGroupLabel, SharedModule, Bind, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         @if (labelPosition === 'start') {
             <p-meterGroupLabel

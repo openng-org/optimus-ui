@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -41,7 +41,7 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
 @Component({
     selector: 'p-megaMenuSub, p-megamenu-sub, ul[pMegaMenuSub]',
     standalone: true,
-    imports: [CommonModule, RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, Bind],
+    imports: [RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, Bind, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <li *ngIf="submenu" [class]="cn(cx('submenuLabel'), getItemProp(submenu, 'class'))" [style]="getItemProp(submenu, 'style')" role="presentation" [pBind]="ptm('submenuLabel')">
             {{ getItemLabel(submenu) }}
@@ -376,7 +376,7 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
 @Component({
     selector: 'p-megaMenu, p-megamenu, p-mega-menu',
     standalone: true,
-    imports: [CommonModule, RouterModule, MegaMenuSub, TooltipModule, BarsIcon, BadgeModule, SharedModule, Bind],
+    imports: [RouterModule, MegaMenuSub, TooltipModule, BarsIcon, BadgeModule, SharedModule, Bind, NgIf, NgTemplateOutlet],
     template: `
         <div [class]="cx('start')" *ngIf="startTemplate || _startTemplate" [pBind]="ptm('start')">
             <ng-container *ngTemplateOutlet="startTemplate || _startTemplate"></ng-container>

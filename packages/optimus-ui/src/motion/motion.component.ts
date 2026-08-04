@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { afterRenderEffect, Component, computed, effect, inject, InjectionToken, input, output, signal, untracked } from '@angular/core';
 import { type ClassNameOptions, createMotion, resolveDuration, type MotionEvent, type MotionInstance, type MotionOptions, type MotionPhase } from '@openng/optimus-ui-motion';
 import { nextFrame } from '@openng/optimus-ui-utils';
@@ -17,7 +16,7 @@ const MOTION_INSTANCE = new InjectionToken<Motion>('MOTION_INSTANCE');
 @Component({
     selector: 'p-motion',
     standalone: true,
-    imports: [CommonModule, BindModule],
+    imports: [BindModule],
     template: `
         @if (rendered()) {
             <ng-content />

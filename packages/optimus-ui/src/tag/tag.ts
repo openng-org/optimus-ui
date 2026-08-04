@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgClass, NgTemplateOutlet } from '@angular/common';
 import { AfterContentInit, booleanAttribute, ChangeDetectionStrategy, Component, ContentChild, ContentChildren, inject, InjectionToken, Input, NgModule, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -15,7 +15,7 @@ const TAG_INSTANCE = new InjectionToken<Tag>('TAG_INSTANCE');
 @Component({
     selector: 'p-tag',
     standalone: true,
-    imports: [CommonModule, SharedModule, Bind],
+    imports: [SharedModule, Bind, NgClass, NgIf, NgTemplateOutlet],
     template: `
         <ng-content></ng-content>
         <ng-container *ngIf="!iconTemplate && !_iconTemplate">

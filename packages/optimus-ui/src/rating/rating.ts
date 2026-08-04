@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -45,7 +45,7 @@ export const RATING_VALUE_ACCESSOR: any = {
  */
 @Component({
     selector: 'p-rating',
-    imports: [CommonModule, AutoFocus, StarFillIcon, StarIcon, SharedModule, BindModule],
+    imports: [AutoFocus, StarFillIcon, StarIcon, SharedModule, BindModule, NgClass, NgIf, NgStyle, NgTemplateOutlet],
     standalone: true,
     template: `
         <ng-template ngFor [ngForOf]="starsArray" let-star let-i="index">

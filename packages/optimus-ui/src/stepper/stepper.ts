@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -23,6 +22,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 
+import { NgTemplateOutlet } from '@angular/common';
 import { MotionOptions } from '@openng/optimus-ui-motion';
 import { find, findIndexInList, uuid } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
@@ -75,7 +75,7 @@ export interface StepPanelContentTemplateContext {
 @Component({
     selector: 'p-step-list',
     standalone: true,
-    imports: [CommonModule, BindModule],
+    imports: [BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
@@ -107,7 +107,7 @@ export class StepList extends BaseComponent<StepListPassThrough> {
 @Component({
     selector: 'p-stepper-separator',
     standalone: true,
-    imports: [CommonModule, BindModule],
+    imports: [BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
@@ -138,7 +138,7 @@ export class StepperSeparator extends BaseComponent<StepperSeparatorPassThrough>
 @Component({
     selector: 'p-step-item',
     standalone: true,
-    imports: [CommonModule, BindModule],
+    imports: [BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
@@ -196,7 +196,7 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
 @Component({
     selector: 'p-step',
     standalone: true,
-    imports: [CommonModule, StepperSeparator, SharedModule, BindModule],
+    imports: [StepperSeparator, SharedModule, BindModule, NgTemplateOutlet],
     template: `
         @if (!content && !_contentTemplate) {
             <button
@@ -320,7 +320,7 @@ export class Step extends BaseComponent<StepPassThrough> {
 @Component({
     selector: 'p-step-panel',
     standalone: true,
-    imports: [CommonModule, StepperSeparator, SharedModule, BindModule, MotionModule],
+    imports: [StepperSeparator, SharedModule, BindModule, MotionModule, NgTemplateOutlet],
     template: `
         <p-motion [visible]="active()" name="p-collapsible" [disabled]="!isVertical()" [options]="computedMotionOptions()">
             <div [class]="cx('contentWrapper')" [pBind]="ptm('contentWrapper')">
@@ -424,7 +424,7 @@ export class StepPanel extends BaseComponent<StepPanelPassThrough> {
 @Component({
     selector: 'p-step-panels',
     standalone: true,
-    imports: [CommonModule, SharedModule, BindModule],
+    imports: [SharedModule, BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
@@ -455,7 +455,7 @@ export class StepPanels extends BaseComponent<StepPanelsPassThrough> {
 @Component({
     selector: 'p-stepper',
     standalone: true,
-    imports: [CommonModule, SharedModule, BindModule],
+    imports: [SharedModule, BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,

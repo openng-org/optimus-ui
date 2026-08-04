@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -72,7 +72,7 @@ export const SELECT_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'p-selectItem',
     standalone: true,
-    imports: [CommonModule, SharedModule, Ripple, CheckIcon, BlankIcon, BindModule],
+    imports: [SharedModule, Ripple, CheckIcon, BlankIcon, BindModule, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <li
             [id]="id"
@@ -174,7 +174,7 @@ export class SelectItem extends BaseComponent {
 @Component({
     selector: 'p-select',
     standalone: true,
-    imports: [CommonModule, SelectItem, Overlay, Tooltip, AutoFocus, TimesIcon, ChevronDownIcon, SearchIcon, InputText, IconField, InputIcon, Scroller, SharedModule, BindModule],
+    imports: [SelectItem, Overlay, Tooltip, AutoFocus, TimesIcon, ChevronDownIcon, SearchIcon, InputText, IconField, InputIcon, Scroller, SharedModule, BindModule, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <span
             #focusInput
