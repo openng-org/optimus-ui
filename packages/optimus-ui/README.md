@@ -1,4 +1,6 @@
 <div align="center">
+  <img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+
   <h1>Optimus UI</h1>
   <p><strong>A rich set of open-source UI Components for Angular</strong></p>
 

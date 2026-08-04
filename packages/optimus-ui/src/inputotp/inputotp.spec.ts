@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormControl, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputOtp, InputOtpChangeEvent } from './inputotp';
@@ -7,6 +7,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 
 // Temel test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputOtp, FormsModule],
     template: `<p-inputotp [(ngModel)]="value" [length]="length" />`
@@ -18,6 +19,7 @@ class TestBasicInputOtpComponent {
 
 // Reactive form test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputOtp, ReactiveFormsModule],
     template: ` <p-inputotp [formControl]="otpControl" [length]="length" (onChange)="onOtpChange($event)" /> `
@@ -34,6 +36,7 @@ class TestReactiveFormInputOtpComponent {
 
 // Gelişmiş özellikler test component'i
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputOtp, FormsModule],
     template: `
@@ -81,6 +84,7 @@ class TestAdvancedInputOtpComponent {
 
 // InputOTP pTemplate component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputOtp, FormsModule],
     template: `
@@ -111,6 +115,7 @@ class TestInputOtpPTemplateComponent {
 
 // InputOTP #template reference component
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputOtp, FormsModule],
     template: `

@@ -78,6 +78,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'li[pMultiSelectItem]',
     standalone: true,
     imports: [Checkbox, FormsModule, SharedModule, NgIf, NgTemplateOutlet],

@@ -58,6 +58,7 @@ export class MenubarService {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-menubarSub, p-menubarsub, [pMenubarSub]',
     standalone: true,
     imports: [RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, BindModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],

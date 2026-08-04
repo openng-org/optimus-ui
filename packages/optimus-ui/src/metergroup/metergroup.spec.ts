@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,6 +6,7 @@ import { MeterItem } from '@openng/optimus-ui/types/metergroup';
 import { MeterGroup, MeterGroupLabel, MeterGroupModule } from './metergroup';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-metergroup',
     template: `<p-metergroup [value]="value" [min]="min" [max]="max"></p-metergroup>`
@@ -22,6 +23,7 @@ class TestBasicMeterGroupComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-orientations',
     template: ` <p-metergroup [value]="value" [orientation]="orientation" [labelPosition]="labelPosition" [labelOrientation]="labelOrientation"> </p-metergroup> `
@@ -37,6 +39,7 @@ class TestMeterGroupOrientationsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-templates',
     template: `
@@ -71,6 +74,7 @@ class TestMeterGroupTemplatesComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-with-icons',
     template: ` <p-metergroup [value]="value" [min]="min" [max]="max"> </p-metergroup> `
@@ -86,6 +90,7 @@ class TestMeterGroupWithIconsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-empty',
     template: `<p-metergroup [value]="value"></p-metergroup>`
@@ -95,6 +100,7 @@ class TestMeterGroupEmptyComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-dynamic',
     template: ` <p-metergroup [value]="value" [min]="min" [max]="max" [styleClass]="styleClass"> </p-metergroup> `

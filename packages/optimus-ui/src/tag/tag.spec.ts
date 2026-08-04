@@ -1,10 +1,11 @@
-import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Tag } from './tag';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-tag [value]="value" [icon]="icon" [severity]="severity" [rounded]="rounded" [styleClass]="styleClass"> </p-tag> `
 })
@@ -17,12 +18,14 @@ class TestBasicTagComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-tag value="Icon Tag" icon="pi pi-check"></p-tag> `
 })
 class TestIconTagComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tag value="Template Tag">
@@ -35,6 +38,7 @@ class TestIconTagComponent {}
 class TestIconTemplateTagComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tag value="PTemplate Tag">
@@ -47,6 +51,7 @@ class TestIconTemplateTagComponent {}
 class TestPTemplateTagComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tag>
@@ -57,12 +62,14 @@ class TestPTemplateTagComponent {}
 class TestContentProjectionTagComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-tag value="Success Tag" severity="success" icon="pi pi-check" [rounded]="true"> </p-tag> `
 })
 class TestSeverityTagComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-tag [value]="value" [severity]="severity" [style]="style" [styleClass]="styleClass"> </p-tag> `
 })
@@ -74,6 +81,7 @@ class TestStyleTagComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tag value="Multiple Icons">
@@ -1055,6 +1063,7 @@ describe('Tag', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Tag],
             template: `<p-tag [value]="value()" [icon]="icon()" [severity]="severity()" [rounded]="rounded()" [pt]="pt()"></p-tag>`

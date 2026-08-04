@@ -39,6 +39,7 @@ const PANELMENU_INSTANCE = new InjectionToken<PanelMenu>('PANELMENU_INSTANCE');
 const PANELMENUSUB_INSTANCE = new InjectionToken<PanelMenuSub>('PANELMENUSUB_INSTANCE');
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'ul[pPanelMenuSub]',
     imports: [RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     standalone: true,

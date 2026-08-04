@@ -40,6 +40,10 @@
     .layout-topbar-logo {
         display: inline-flex;
 
+        img {
+            padding: 2rem;
+        }
+
         svg {
             width: 120px;
         }
@@ -94,6 +98,11 @@
             i, span {
                 color: var(--text-color);
             }
+        }
+
+        .ask-ai-button {
+            width: 6rem;
+            gap: 0.5rem;
         }
 
         .config-item {

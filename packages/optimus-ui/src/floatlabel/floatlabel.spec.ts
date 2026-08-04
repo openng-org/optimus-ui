@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { FloatLabel } from './floatlabel';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `
@@ -20,6 +21,7 @@ class TestBasicFloatLabelComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `
@@ -585,6 +587,7 @@ describe('FloatLabel PassThrough Tests', () => {
 
 // Test components for inline PT tests
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `<p-floatlabel [pt]="{ root: 'INLINE_STRING' }"><input /></p-floatlabel>`
@@ -592,6 +595,7 @@ describe('FloatLabel PassThrough Tests', () => {
 class TestInlineStringPTComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `<p-floatlabel [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', 'data-inline': 'true' } }"><input /></p-floatlabel>`
@@ -599,6 +603,7 @@ class TestInlineStringPTComponent {}
 class TestInlineObjectPTComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [FloatLabel, FormsModule],
     template: `

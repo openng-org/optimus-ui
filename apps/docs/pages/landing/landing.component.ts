@@ -1,8 +1,10 @@
+import { AppMenuComponent } from '@/components/layout/menu/app.menu.component';
 import { AppTopBarComponent } from '@/components/layout/topbar/app.topbar.component';
 import { AppConfigService } from '@/service/appconfigservice';
 import { CommonModule } from '@angular/common';
 import { Component, computed, OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
+import { DomHandler } from '@openng/optimus-ui/dom';
 import { ButtonModule } from '@openng/optimus-ui/button';
 import { Subscription } from 'rxjs';
 import { FeaturesSectionComponent } from './featuressection.component';
@@ -14,7 +16,7 @@ import { ThemeSectionComponent } from './themesection.component';
     selector: 'landing',
     standalone: true,
     templateUrl: './landing.component.html',
-    imports: [CommonModule, AppTopBarComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, ThemeSectionComponent, FooterSectionComponent]
+    imports: [CommonModule, AppTopBarComponent, AppMenuComponent, ButtonModule, HeroSectionComponent, FeaturesSectionComponent, ThemeSectionComponent, FooterSectionComponent]
 })
 export class LandingComponent implements OnInit {
     subscription!: Subscription;
@@ -22,6 +24,8 @@ export class LandingComponent implements OnInit {
     isNewsActive = computed(() => this.configService.newsActive());
 
     isDarkMode = computed(() => this.configService.appState().darkTheme);
+
+    isMenuActive = computed(() => this.configService.appState().menuActive);
 
     landingClass = computed(() => {
         return {
@@ -36,6 +40,11 @@ export class LandingComponent implements OnInit {
         private metaService: Meta,
         private titleService: Title
     ) {}
+
+    hideMenu() {
+        this.configService.hideMenu();
+        DomHandler.unblockBodyScroll('blocked-scroll');
+    }
 
     ngOnInit() {
         this.titleService.setTitle('Optimus UI - Angular UI Component Library');

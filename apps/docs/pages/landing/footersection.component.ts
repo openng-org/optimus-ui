@@ -57,7 +57,7 @@ import { RouterModule } from '@angular/router';
                 <hr class="section-divider" />
 
                 <div class="flex flex-wrap justify-between py-12 gap-8">
-                    <img ngSrc="logo.svg" height="40" width="200" alt="" />
+                    <img ngSrc="logo.svg" height="40" width="200" alt="" class="dark:invert" />
                     <div class="flex items-center gap-2">
                         <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="linkbox linkbox-icon">
                             <i class="pi pi-github"></i>

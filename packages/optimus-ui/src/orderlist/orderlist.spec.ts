@@ -1,6 +1,6 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -24,6 +24,7 @@ interface Product {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist
@@ -144,6 +145,7 @@ class TestBasicOrderListComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="products">
@@ -193,6 +195,7 @@ class TestTemplatesOrderListComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="[]" [filterBy]="'name'">
@@ -208,6 +211,7 @@ class TestTemplatesOrderListComponent {
 class TestEmptyTemplatesOrderListComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="products" [dragdrop]="true" [selection]="selection" [(ngModel)]="selection">
@@ -227,6 +231,7 @@ class TestDragDropOrderListComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="products" [filterBy]="'name,category'" filterPlaceholder="Filter products">
@@ -246,6 +251,7 @@ class TestFilterOrderListComponent {
 
 // Comprehensive template testing component for pTemplate approach
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="products" [selection]="selection" [filterBy]="filterBy">
@@ -313,6 +319,7 @@ class TestComprehensiveTemplatesOrderListComponent {
 
 // ContentChild template testing component for #template approach
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-orderlist [value]="products" [selection]="selection" [filterBy]="filterBy">

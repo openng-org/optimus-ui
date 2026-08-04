@@ -1,10 +1,11 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { Splitter } from './splitter';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-splitter
@@ -55,6 +56,7 @@ class TestSplitterComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-splitter>
@@ -73,6 +75,7 @@ class TestSplitterComponent {
 class TestThreePanelComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-splitter [panelSizes]="[20, 80]">
@@ -95,6 +98,7 @@ class TestThreePanelComponent {}
 class TestNestedSplitterComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-splitter [pt]="pt">

@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+</div>
+
 # @openng/optimus-ui-tailwindcss
 
 Tailwind CSS utilities for [Optimus UI](https://github.com/openng-org/optimus-ui) — first-class integration between Optimus UI theming and Tailwind CSS, plus the animation utilities missing from core Tailwind.
