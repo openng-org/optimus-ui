@@ -29,7 +29,7 @@ import { RouterModule } from '@angular/router';
                                 <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">GitHub Discussions</a>
                             </li>
                             <li class="mb-6">
-                                <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Angular Discord</a>
+                                <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="text-surface-500 dark:text-surface-400 font-medium hover:text-primary rounded transition-all duration-300">Discord</a>
                             </li>
                         </ul>
                     </div>
