@@ -1152,6 +1152,12 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         return this.optionValue ? undefined : this.dataKey;
     }
 
+    findOptionByValue(value: any) {
+        const options = this.visibleOptions();
+
+        return options.find((option: any) => equals(value, option, this.equalityKey())) ?? options.find((option: any) => equals(value, this.getOptionValue(option)));
+    }
+
     onContainerClick(event) {
         if (this.$disabled() || this.loading || this.isInputClicked(event) || this.isDropdownClicked(event)) {
             return;
@@ -1790,7 +1796,15 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
     }
 
     getOptionLabel(option: any) {
-        return this.optionLabel ? resolveFieldData(option, this.optionLabel) : option && option.label != undefined ? option.label : option;
+        if (this.optionLabel) {
+            const label = resolveFieldData(option, this.optionLabel);
+
+            if (label != undefined) {
+                return label;
+            }
+        }
+
+        return option && option.label != undefined ? option.label : option;
     }
 
     getOptionValue(option) {
@@ -1877,13 +1891,10 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      */
     writeControlValue(value: any, setModelValue: (value: any) => void): void {
         if (this.multiple) {
-            const resolved = (value || []).map((val: any) => {
-                const match = this.visibleOptions().find((option: any) => equals(val, option, this.equalityKey()));
-                return match ?? val;
-            });
+            const resolved = (value || []).map((val: any) => this.findOptionByValue(val) ?? val);
             setModelValue(isEmpty(value) ? value : resolved);
         } else {
-            const option = this.visibleOptions().find((option: any) => equals(value, option, this.equalityKey()));
+            const option = this.findOptionByValue(value);
             setModelValue(isEmpty(option) ? value : option);
         }
 
