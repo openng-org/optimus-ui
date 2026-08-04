@@ -49,7 +49,7 @@
     "emptyMessage": "沒有可用項目",
     "emptySearchMessage": "沒有相關搜尋結果",
     "emptySelectionMessage": "沒有選取的項目",
-    "endsWith": "結束於",
+    "endsWith": "以...結尾",
     "equals": "等於",
     "fileChosenMessage": "{0} 個檔案",
     "fileSizeTypes": [
@@ -125,7 +125,7 @@
     "searchMessage": "{0} 個相關結果",
     "selectionMessage": "已選取 {0} 個項目",
     "showMonthAfterYear": true,
-    "startsWith": "開始於",
+    "startsWith": "以...開頭",
     "strong": "強",
     "today": "今日",
     "upload": "上傳",
