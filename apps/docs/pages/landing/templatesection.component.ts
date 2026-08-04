@@ -2,13 +2,12 @@ import { AppConfigService } from '@/service/appconfigservice';
 import { SPARKED_DEMO_URL, SPARKED_REPO_URL } from '@/utils/constants';
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { AnimateOnScrollModule } from '@openng/optimus-ui/animateonscroll';
 
 @Component({
     selector: 'template-section',
     standalone: true,
-    imports: [CommonModule, RouterModule, AnimateOnScrollModule],
+    imports: [CommonModule, AnimateOnScrollModule],
     template: `
         <section class="landing-template py-20">
             <div class="section-header">Application Template</div>

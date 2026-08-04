@@ -23,12 +23,8 @@ import { ButtonModule } from '@openng/optimus-ui/button';
                 <li>A CRUD sample page and a full UI kit showcase covering forms, tables, lists, charts, menus and overlays</li>
             </ul>
             <div class="flex flex-wrap gap-2 mt-4">
-                <a [href]="sparkedDemoUrl" target="_blank" rel="noopener noreferrer">
-                    <p-button label="Live Demo" icon="pi pi-external-link" />
-                </a>
-                <a [href]="sparkedRepoUrl" target="_blank" rel="noopener noreferrer">
-                    <p-button label="Source Code" icon="pi pi-github" severity="secondary" [outlined]="true" />
-                </a>
+                <a pButton label="Live Demo" icon="pi pi-external-link" [href]="sparkedDemoUrl" target="_blank" rel="noopener noreferrer"></a>
+                <a pButton label="Source Code" icon="pi pi-github" severity="secondary" [outlined]="true" [href]="sparkedRepoUrl" target="_blank" rel="noopener noreferrer"></a>
             </div>
             <img [src]="screenshot()" alt="Sparked dashboard built with Optimus UI" class="w-full mt-6 rounded-border border border-surface" loading="lazy" />
         </app-docsectiontext>
