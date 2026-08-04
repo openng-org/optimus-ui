@@ -14,7 +14,8 @@ import { Component } from '@angular/core';
                 with an added layer of theming through Tailwind CSS v4. This approach, along with the templating features, offers complete control over the theming and presentation.
             </p>
             <p>
-                Volt will also be available for PrimeReact. In the future, PrimeTek may bring Volt to Angular via {{ PROJECT_NAME }} if there is significant community demand. Currently, Volt-Vue can serve as a reference when styling your unstyled {{ PROJECT_NAME }}
+                Volt will also be available for PrimeReact. In the future, PrimeTek may bring Volt to Angular via {{ PROJECT_NAME }} if there is significant community demand. Currently, Volt-Vue can serve as a reference when styling your unstyled
+                {{ PROJECT_NAME }}
                 components with Tailwind CSS.
             </p>
         </app-docsectiontext>

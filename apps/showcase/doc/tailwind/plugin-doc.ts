@@ -24,8 +24,8 @@ import { Component } from '@angular/core';
             <p>In the CSS file that contains the tailwindcss import, add the <i>tailwindcss-primeui</i> import as well.</p>
             <app-code [code]="code2" [importCode]="true" [hideToggleCode]="true" [hideStackBlitz]="true" />
             <p class="mt-4">
-                For a comprehensive starter guide, review the <a href="{{ GITHUB_REPO_URL }}-examples/tree/main/primeng-quickstart-tailwind" target="_blank" rel="noopener noreferrer">primeng-quickstart-tailwind</a> repository which
-                demonstrates the integration.
+                For a comprehensive starter guide, review the <a href="{{ GITHUB_REPO_URL }}-examples/tree/main/primeng-quickstart-tailwind" target="_blank" rel="noopener noreferrer">primeng-quickstart-tailwind</a> repository which demonstrates the
+                integration.
             </p>
             <h3>Tailwind v3</h3>
             <p>Use the plugins option in your Tailwind config file to configure the plugin.</p>

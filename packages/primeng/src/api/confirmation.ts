@@ -1,4 +1,5 @@
 import { EventEmitter } from '@angular/core';
+import type { ButtonProps } from 'primeng/button';
 import type { ConfirmEventType } from './confirmaeventtype';
 
 /**
@@ -94,15 +95,15 @@ export interface Confirmation {
     /**
      * Accept button properties.
      */
-    acceptButtonProps?: any; // @todo: discuss - ButtonProps type causes circular dependency
+    acceptButtonProps?: ButtonProps;
     /**
      * Reject button properties.
      */
-    rejectButtonProps?: any; // @todo: discuss - ButtonProps type causes circular dependency
+    rejectButtonProps?: ButtonProps;
     /**
      * Close button properties.
      */
-    closeButtonProps?: any; // @todo: discuss - ButtonProps type causes circular dependency
+    closeButtonProps?: ButtonProps;
     /**
      * Defines if the dialog is closable.
      */

@@ -10,7 +10,9 @@ import { AppCode } from '@/components/doc/app.code';
     imports: [AppDocSectionText, AppCode],
     template: `
         <app-docsectiontext>
-            <p>Inject the <i>{{ PROJECT_NAME }}</i> to your application to update the initial configuration at runtime.</p>
+            <p>
+                Inject the <i>{{ PROJECT_NAME }}</i> to your application to update the initial configuration at runtime.
+            </p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `
