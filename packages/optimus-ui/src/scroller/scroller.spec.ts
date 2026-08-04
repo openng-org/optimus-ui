@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -3918,7 +3917,7 @@ describe('Scroller', () => {
     describe('PassThrough (PT) Tests', () => {
         @Component({
             standalone: true,
-            imports: [CommonModule, Scroller],
+            imports: [Scroller],
             template: `
                 <p-scroller [items]="items()" [itemSize]="itemSize()" [pt]="pt()" [showLoader]="showLoader()" [loading]="loading()">
                     <ng-template #item let-item>
@@ -4127,7 +4126,7 @@ describe('Scroller', () => {
         describe('Case 6: Inline PT test', () => {
             @Component({
                 standalone: true,
-                imports: [CommonModule, Scroller],
+                imports: [Scroller],
                 template: `<p-scroller [items]="items" [itemSize]="50" [pt]="{ root: 'INLINE_TEST_CLASS' }">
                     <ng-template #item let-item>{{ item }}</ng-template>
                 </p-scroller>`
@@ -4147,7 +4146,7 @@ describe('Scroller', () => {
             it('should apply inline PT with object', async () => {
                 @Component({
                     standalone: true,
-                    imports: [CommonModule, Scroller],
+                    imports: [Scroller],
                     template: `<p-scroller [items]="items" [itemSize]="50" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }">
                         <ng-template #item let-item>{{ item }}</ng-template>
                     </p-scroller>`
@@ -4167,7 +4166,7 @@ describe('Scroller', () => {
         describe('Case 7: Global PT from OptimusConfig', () => {
             @Component({
                 standalone: true,
-                imports: [CommonModule, Scroller],
+                imports: [Scroller],
                 template: `
                     <p-scroller [items]="items1" [itemSize]="50">
                         <ng-template #item let-item>{{ item }}</ng-template>

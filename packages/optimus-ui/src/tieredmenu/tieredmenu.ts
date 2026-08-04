@@ -1,4 +1,4 @@
-import { isPlatformBrowser, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -48,7 +48,7 @@ const TIEREDMENUSUB_INSTANCE = new InjectionToken<TieredMenuSub>('TIEREDMENUSUB_
 @Component({
     selector: 'p-tieredMenuSub, p-tieredmenusub',
     standalone: true,
-    imports: [RouterModule, Ripple, TooltipModule, AngleRightIcon, SharedModule, BindModule, MotionModule, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [RouterModule, Ripple, TooltipModule, AngleRightIcon, SharedModule, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         @if (render()) {
             <ul

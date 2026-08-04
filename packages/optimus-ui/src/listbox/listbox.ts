@@ -1,5 +1,5 @@
 import { CDK_DRAG_CONFIG, CdkDragDrop, DragDropModule, moveItemInArray } from '@angular/cdk/drag-drop';
-import { NgIf, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgIf, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     ChangeDetectionStrategy,
     Component,
@@ -72,7 +72,7 @@ export const LISTBOX_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'p-listbox, p-listBox, p-list-box',
     standalone: true,
-    imports: [Ripple, Scroller, InputIcon, SearchIcon, Checkbox, CheckIcon, IconField, InputText, BlankIcon, FormsModule, SharedModule, DragDropModule, BindModule, NgClass, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [Ripple, Scroller, InputIcon, SearchIcon, Checkbox, CheckIcon, IconField, InputText, BlankIcon, FormsModule, SharedModule, DragDropModule, BindModule, NgFor, NgClass, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <span
             #firstHiddenFocusableElement

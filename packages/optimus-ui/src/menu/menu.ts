@@ -1,4 +1,4 @@
-import { isPlatformBrowser, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -161,7 +161,7 @@ export class MenuItemContent extends BaseComponent {
 @Component({
     selector: 'p-menu',
     standalone: true,
-    imports: [RouterModule, MenuItemContent, TooltipModule, BadgeModule, SharedModule, SafeHtmlPipe, BindModule, MotionModule, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [RouterModule, MenuItemContent, TooltipModule, BadgeModule, SharedModule, SafeHtmlPipe, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         @if (!popup || overlayVisible) {
             <div

@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -119,7 +119,7 @@ class TestIconToggleButtonComponent {
 // ToggleButton pTemplate component
 @Component({
     standalone: true,
-    imports: [ToggleButton, FormsModule, CommonModule, SharedModule],
+    imports: [ToggleButton, FormsModule, SharedModule, NgClass],
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <!-- Icon template with pTemplate -->
@@ -143,7 +143,7 @@ class TestToggleButtonPTemplateComponent {
 // ToggleButton #template reference component
 @Component({
     standalone: true,
-    imports: [ToggleButton, FormsModule, CommonModule, SharedModule],
+    imports: [ToggleButton, FormsModule, SharedModule, NgClass],
     template: `
         <p-togglebutton [(ngModel)]="checked">
             <!-- Icon template with #template reference -->

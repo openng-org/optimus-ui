@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -118,7 +118,7 @@ class TestAdvancedRatingComponent {
 // Rating pTemplate component
 @Component({
     standalone: true,
-    imports: [Rating, FormsModule, CommonModule, SharedModule],
+    imports: [Rating, FormsModule, SharedModule, NgClass],
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
             <!-- On icon template with pTemplate directive -->
@@ -141,7 +141,7 @@ class TestRatingPTemplateComponent {
 // Rating #template reference component
 @Component({
     standalone: true,
-    imports: [Rating, FormsModule, CommonModule, SharedModule],
+    imports: [Rating, FormsModule, SharedModule, NgClass],
     template: `
         <p-rating [(ngModel)]="value" [stars]="stars">
             <!-- On icon template with #template reference -->

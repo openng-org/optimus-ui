@@ -1,4 +1,4 @@
-import { NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -61,7 +61,7 @@ export const CASCADESELECT_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'ul[pCascadeSelectSub]',
     standalone: true,
-    imports: [Ripple, AngleRightIcon, SharedModule, Bind, NgIf, NgTemplateOutlet],
+    imports: [Ripple, AngleRightIcon, SharedModule, Bind, NgFor, NgIf, NgTemplateOutlet],
     template: `
         <ng-template ngFor let-processedOption [ngForOf]="options" let-i="index">
             <li

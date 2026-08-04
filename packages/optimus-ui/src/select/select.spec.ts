@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -808,7 +807,7 @@ describe('Select', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [
                 TestBasicSelectComponent,
                 TestReactiveFormSelectComponent,
@@ -1460,7 +1459,7 @@ describe('Select - Reactive Forms Integration', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestReactiveFormSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1542,7 +1541,7 @@ describe('Select - Grouped Options', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestGroupedSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1593,7 +1592,7 @@ describe('Select - pTemplate Content Projection', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestSelectPTemplateComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1811,7 +1810,7 @@ describe('Select - #template Reference Content Projection', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestSelectRefTemplateComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1985,7 +1984,7 @@ describe('Select - Dynamic and Signal-based Properties', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestDynamicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2107,7 +2106,7 @@ describe('Select - Performance and Large Datasets', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestBasicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2174,7 +2173,7 @@ describe('Select Dynamic Data Sources', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestDynamicDataSourcesComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2391,7 +2390,7 @@ describe('Select Comprehensive Form Integration', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestComprehensiveFormComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2631,7 +2630,7 @@ describe('Select ViewChild Properties', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, Select],
+            imports: [FormsModule, Select],
             declarations: [TestViewChildComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2732,7 +2731,7 @@ describe('Select Complex Edge Cases', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, Select],
+            imports: [FormsModule, Select],
             declarations: [TestComplexEdgeCasesComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -2972,7 +2971,7 @@ describe('Select Advanced Accessibility', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
+            imports: [FormsModule, ReactiveFormsModule, Select],
             declarations: [TestBasicSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -3212,7 +3211,7 @@ describe('Select Advanced Accessibility', () => {
 describe('Select PT (PassThrough)', () => {
     @Component({
         standalone: true,
-        imports: [CommonModule, FormsModule, Select],
+        imports: [FormsModule, Select],
         template: `
             <p-select
                 [options]="options"

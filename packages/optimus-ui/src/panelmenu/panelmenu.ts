@@ -40,7 +40,7 @@ const PANELMENUSUB_INSTANCE = new InjectionToken<PanelMenuSub>('PANELMENUSUB_INS
 
 @Component({
     selector: 'ul[pPanelMenuSub]',
-    imports: [RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     standalone: true,
     template: `
         <ng-template ngFor let-processedItem let-index="index" [ngForOf]="items">

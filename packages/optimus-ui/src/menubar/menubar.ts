@@ -1,4 +1,4 @@
-import { DOCUMENT, isPlatformBrowser, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -60,7 +60,7 @@ export class MenubarService {
 @Component({
     selector: 'p-menubarSub, p-menubarsub, [pMenubarSub]',
     standalone: true,
-    imports: [RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, BindModule, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, BindModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <ng-template ngFor let-processedItem [ngForOf]="items" let-index="index">
             <li

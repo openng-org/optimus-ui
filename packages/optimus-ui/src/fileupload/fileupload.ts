@@ -1,4 +1,4 @@
-import { isPlatformBrowser, NgIf, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { isPlatformBrowser, NgFor, NgIf, NgClass, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { HttpClient, HttpEvent, HttpEventType, HttpHeaders } from '@angular/common/http';
 import {
     booleanAttribute,
@@ -124,7 +124,7 @@ export class FileContent extends BaseComponent {
 @Component({
     selector: 'p-fileupload, p-fileUpload',
     standalone: true,
-    imports: [Button, ProgressBar, Message, PlusIcon, UploadIcon, TimesIcon, SharedModule, FileContent, Bind, NgClass, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [Button, ProgressBar, Message, PlusIcon, UploadIcon, TimesIcon, SharedModule, FileContent, Bind, NgFor, NgClass, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <div [class]="cn(cx('root'), styleClass)" [ngStyle]="style" *ngIf="mode === 'advanced'" [pBind]="ptm('root')">
             <input [attr.aria-label]="browseFilesLabel" #advancedfileinput type="file" (change)="onFileSelect($event)" [multiple]="multiple" [accept]="accept" [disabled]="disabled || isChooseDisabled()" [attr.title]="''" [pBind]="ptm('input')" />

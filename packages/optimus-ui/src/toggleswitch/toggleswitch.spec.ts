@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { AutoFocus } from '@openng/optimus-ui/autofocus';
 import { provideOptimus } from '@openng/optimus-ui/config';
@@ -16,7 +15,7 @@ describe('ToggleSwitch', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ToggleSwitch, ToggleSwitchModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, AutoFocus, TestToggleSwitchPTemplateComponent, TestToggleSwitchRefTemplateComponent],
+            imports: [ToggleSwitch, ToggleSwitchModule, FormsModule, ReactiveFormsModule, SharedModule, AutoFocus, TestToggleSwitchPTemplateComponent, TestToggleSwitchRefTemplateComponent],
             declarations: [TestBasicToggleSwitchComponent, TestFormToggleSwitchComponent, TestTemplateToggleSwitchComponent, TestPrimeTemplateToggleSwitchComponent, TestRequiredToggleSwitchComponent, TestNamedToggleSwitchComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -703,7 +702,7 @@ class TestNamedToggleSwitchComponent {
 // ToggleSwitch pTemplate component
 @Component({
     standalone: true,
-    imports: [ToggleSwitch, FormsModule, CommonModule, SharedModule],
+    imports: [ToggleSwitch, FormsModule, SharedModule],
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <!-- Handle template with pTemplate -->
@@ -723,7 +722,7 @@ class TestToggleSwitchPTemplateComponent {
 // ToggleSwitch #template reference component
 @Component({
     standalone: true,
-    imports: [ToggleSwitch, FormsModule, CommonModule, SharedModule],
+    imports: [ToggleSwitch, FormsModule, SharedModule],
     template: `
         <p-toggleswitch [(ngModel)]="checked">
             <!-- Handle template with #template reference -->

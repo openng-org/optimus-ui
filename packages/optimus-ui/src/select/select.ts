@@ -1,4 +1,4 @@
-import { NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
+import { NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     AfterViewChecked,
     AfterViewInit,
@@ -174,7 +174,7 @@ export class SelectItem extends BaseComponent {
 @Component({
     selector: 'p-select',
     standalone: true,
-    imports: [SelectItem, Overlay, Tooltip, AutoFocus, TimesIcon, ChevronDownIcon, SearchIcon, InputText, IconField, InputIcon, Scroller, SharedModule, BindModule, NgIf, NgStyle, NgTemplateOutlet],
+    imports: [SelectItem, Overlay, Tooltip, AutoFocus, TimesIcon, ChevronDownIcon, SearchIcon, InputText, IconField, InputIcon, Scroller, SharedModule, BindModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <span
             #focusInput
