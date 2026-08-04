@@ -33,6 +33,19 @@
     "ng-add": {
         "save": "dependencies"
     },
+    "ng-update": {
+        "migrations": "./schematics/migrations.json",
+        "packageGroup": [
+            "@openng/optimus-ui",
+            "@openng/optimus-ui-locale",
+            "@openng/optimus-ui-motion",
+            "@openng/optimus-ui-styled",
+            "@openng/optimus-ui-styles",
+            "@openng/optimus-ui-tailwindcss",
+            "@openng/optimus-ui-themes",
+            "@openng/optimus-ui-utils"
+        ]
+    },
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
         "build:package": "pnpm run build:prebuild && ng build optimus-ui && pnpm run build:postbuild",
