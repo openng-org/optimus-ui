@@ -22,7 +22,7 @@ import { RouterModule } from '@angular/router';
             <app-code [code]="flagsCode" [hideToggleCode]="true"></app-code>
             <p>
                 If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing <i>primeng</i> dependency it makes no
-                changes at all and points you at the <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a>, which covers the <i>migrate-from-primeng</i> schematic.
+                changes to your code and points you at the <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a>, which covers the <i>migrate-from-primeng</i> schematic. It does not run that schematic for you.
             </p>
         </app-docsectiontext>
     `
