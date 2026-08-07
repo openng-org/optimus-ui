@@ -1,3 +1,4 @@
+import StableVersion from '@/assets/data/stable-version.json';
 import { GITHUB_DISCUSSIONS_URL, GITHUB_REPO_URL } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -29,6 +30,5 @@ export class AppFooterComponent {
 
     readonly licenseUrl = `${GITHUB_REPO_URL}/blob/main/LICENSE.md`;
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    readonly version = require('@/package.json').version;
+    readonly version = StableVersion.version;
 }
