@@ -73,6 +73,24 @@ export function hasPrimeng(tree: Tree): boolean {
 }
 
 /**
+ * Scans every package.json in the workspace tree (skipping node_modules/dist/.angular/.git/out-tsc)
+ * and returns true if `primeflex` is a key in `dependencies` or `devDependencies` of any of them.
+ * Used to nudge users toward the `migrate-from-primeflex` schematic.
+ */
+export function hasPrimeflex(tree: Tree): boolean {
+    let found = false;
+    visitWorkspacePackageJsons(tree, (pkg) => {
+        if (found) {
+            return;
+        }
+        if ('primeflex' in (pkg.dependencies ?? {}) || 'primeflex' in (pkg.devDependencies ?? {})) {
+            found = true;
+        }
+    });
+    return found;
+}
+
+/**
  * Walks every package.json in the workspace tree (skipping node_modules/dist/.angular/.git/out-tsc),
  * invoking `visitor` with each successfully-parsed package.json contents.
  */

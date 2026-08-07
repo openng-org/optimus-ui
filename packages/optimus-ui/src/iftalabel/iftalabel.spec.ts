@@ -1,11 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IftaLabel } from './iftalabel';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IftaLabel, FormsModule],
     template: `
@@ -20,6 +21,7 @@ class TestBasicIftaLabelComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IftaLabel, FormsModule],
     template: `

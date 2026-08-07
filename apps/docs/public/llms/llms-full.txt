@@ -1,6 +1,6 @@
 # Optimus UI Documentation
 
-Generated: 2026-07-28
+Generated: 2026-08-04
 
 ---
 
@@ -28,7 +28,7 @@ Once you have Optimus UI up and running, we recommend exploring the following re
 
 ## Ngadd-
 
-The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes at all and points you at the migration guide, which covers the migrate-from-primeng schematic.
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes at all and points you at the migration guide , which covers the migrate-from-primeng schematic.
 
 ## Prerequisites-
 
@@ -771,7 +771,7 @@ Is Optimus UI free? Will it stay free? Yes, and yes. Every package is MIT licens
 
 ## Support-
 
-Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. Optimus UI does not run its own Discord — the Discord links here point to the general Angular community server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the changelog.
+Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. For real-time chat, join the Optimus UI Discord server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the GitHub releases .
 
 ---
 
@@ -815,7 +815,7 @@ Contributing to Optimus UI comes with several benefits. Being part of an open-so
 
 ## Helpneeded-
 
-Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Angular community Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
+Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Optimus UI Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
 
 ## Introduction-
 
@@ -25623,7 +25623,7 @@ Paginator displays data in paged format and provides navigation between pages.
 
 ## Accessibility
 
-Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a dropdown component, refer to the dropdown documentation for accessibility details. Additionally, the dropdown uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the dropdown documentation for more details about keyboard support.
+Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a Select component, refer to the Select documentation for accessibility details. Additionally, the Select uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the Select documentation for more details about keyboard support.
 
 ## Basic
 

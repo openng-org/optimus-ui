@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -13,6 +13,7 @@ describe('Table', () => {
     let fixture: ComponentFixture<Table>;
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [dataKey]="'id'">
@@ -58,6 +59,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [selection]="selectedProducts" [selectionMode]="'multiple'" [dataKey]="'id'">
@@ -89,6 +91,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [sortMode]="'multiple'">
@@ -118,6 +121,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [globalFilterFields]="['name', 'category']">
@@ -163,6 +167,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [virtualScroll]="true" [virtualScrollItemSize]="46" [scrollHeight]="'400px'">
@@ -192,6 +197,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products" [lazy]="true" [totalRecords]="totalRecords" [paginator]="true" [rows]="10" (onLazyLoad)="loadProducts($event)">
@@ -227,6 +233,7 @@ describe('Table', () => {
     }
 
     @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
             <p-table [value]="products">
@@ -647,6 +654,7 @@ describe('Table', () => {
         };
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-table
@@ -1093,6 +1101,7 @@ describe('Table', () => {
         });
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-table [value]="products" [dataKey]="'id'" editMode="cell">
@@ -1358,6 +1367,7 @@ describe('Table', () => {
 
         it('should not navigate when disabled', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: `
                     <p-table [value]="products" [dataKey]="'id'" editMode="cell">

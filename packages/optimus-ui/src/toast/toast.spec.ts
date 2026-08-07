@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,6 +9,7 @@ import { Toast, ToastItem } from './toast';
 
 // Test Components for different scenarios
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-toast
@@ -52,6 +53,7 @@ class TestBasicToastComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-toast [key]="'template-test'">
@@ -67,6 +69,7 @@ class TestBasicToastComponent {
 class TestMessageTemplateComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-toast [key]="'headless-test'">
@@ -82,6 +85,7 @@ class TestMessageTemplateComponent {}
 class TestHeadlessTemplateComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-toast [key]="'ptemplate-test'">
@@ -103,6 +107,7 @@ class TestHeadlessTemplateComponent {}
 class TestPTemplateComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: ` <p-toast [key]="'position-test'" [position]="position"> </p-toast> `
 })
@@ -835,6 +840,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 1: Simple string classes', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="pt"></p-toast> `
         })
@@ -881,6 +887,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 2: Objects', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="pt"></p-toast> `
         })
@@ -943,6 +950,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 3: Mixed object and string values', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="pt"></p-toast> `
         })
@@ -987,6 +995,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 4: Use variables from instance', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [position]="position" [pt]="pt"></p-toast> `
         })
@@ -1060,6 +1069,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 5: Event binding', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="pt"></p-toast> `
         })
@@ -1130,12 +1140,14 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 6: Inline test', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="{ host: 'INLINE_HOST_CLASS' }"></p-toast> `
         })
         class TestToastInlineStringPtComponent {}
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid green' } } }"></p-toast> `
         })
@@ -1175,6 +1187,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 7: Test from OptimusConfig', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-toast [key]="'toast1'"></p-toast>
@@ -1216,6 +1229,7 @@ describe('Toast', () => {
 
         it('should merge local pt with global pt configuration', async () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: false,
                 template: ` <p-toast [key]="'pt-test'" [pt]="{ host: 'LOCAL_HOST_CLASS', root: 'LOCAL_ROOT_CLASS' }"></p-toast> `
             })
@@ -1250,6 +1264,7 @@ describe('Toast', () => {
 
     describe('Toast PassThrough - Case 8: Test hooks', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: ` <p-toast [key]="'pt-test'" [pt]="pt"></p-toast> `
         })
@@ -2066,6 +2081,7 @@ describe('ToastItem', () => {
 
     describe('PassThrough - Case 6: Inline test', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-toastItem
@@ -2083,6 +2099,7 @@ describe('ToastItem', () => {
         }
 
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: false,
             template: `
                 <p-toastItem
