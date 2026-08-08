@@ -1,4 +1,4 @@
-import { Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { TabList } from './tablist';
@@ -6,6 +6,7 @@ import { Tabs } from './tabs';
 import { TabsModule } from './tabs.module';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tabs [(value)]="value" [scrollable]="scrollable" [lazy]="lazy" [selectOnFocus]="selectOnFocus" [showNavigators]="showNavigators" [tabindex]="tabindex">
@@ -39,6 +40,7 @@ class TestTabsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tabs [(value)]="value" [scrollable]="true">
@@ -84,6 +86,7 @@ class TestScrollableTabsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tabs [(value)]="value" [lazy]="true">
@@ -111,6 +114,7 @@ class TestLazyTabsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tabs [(value)]="value" [scrollable]="true">
@@ -156,6 +160,7 @@ class TestContentChildIconsTabsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tabs [value]="1" [pt]="pt">

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule, FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputMask, InputMaskModule, InputMaskDirective } from './inputmask';
@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 
 // Test Components
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-inputmask
@@ -76,6 +77,7 @@ class TestBasicInputMaskComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -93,6 +95,7 @@ class TestFormInputMaskComponent {
 
 // Comprehensive template test component with clearicon ContentChild projection
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-inputmask [mask]="mask" [(ngModel)]="value" [showClear]="showClear" [placeholder]="placeholder" [autoClear]="autoClear" [unmask]="unmask">
@@ -113,6 +116,7 @@ class TestTemplateInputMaskComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div>
@@ -1326,6 +1330,7 @@ describe('InputMask', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [InputMask, FormsModule],
                 template: `<p-inputmask [mask]="'999-99-9999'" [pt]="{ pcInputText: { root: 'INLINE_PT_CLASS' } }" />`
@@ -1341,6 +1346,7 @@ describe('InputMask', () => {
             });
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [InputMask, FormsModule],
                 template: `<p-inputmask [mask]="'999-99-9999'" [pt]="{ pcInputText: { root: { class: 'INLINE_PT_OBJECT_CLASS' } } }" />`
@@ -1552,6 +1558,7 @@ describe('InputMask', () => {
 
 // Test Host Components for Directive
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputMaskDirective, FormsModule],
     template: `<input [pInputMask]="mask" [(ngModel)]="value" />`
@@ -1562,6 +1569,7 @@ class DirectiveBasicTestComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputMaskDirective, ReactiveFormsModule],
     template: `<input [pInputMask]="mask" [formControl]="control" />`
@@ -1572,6 +1580,7 @@ class DirectiveReactiveFormTestComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputMaskDirective, FormsModule],
     template: ` <input [pInputMask]="mask" [(ngModel)]="value" [slotChar]="slotChar" [autoClear]="autoClear" [attr.readonly]="readonly ? '' : null" [keepBuffer]="keepBuffer" [characterPattern]="characterPattern" (onComplete)="onComplete()" /> `

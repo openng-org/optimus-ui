@@ -5,7 +5,7 @@ module.exports = function (config) {
     config.set({
         basePath: '',
         frameworks: ['jasmine', '@angular-devkit/build-angular'],
-        plugins: [require('karma-jasmine'), require('karma-chrome-launcher'), require('karma-jasmine-html-reporter'), require('karma-coverage'), require('@angular-devkit/build-angular/plugins/karma')],
+        plugins: [require('karma-jasmine'), require('karma-chrome-launcher'), require('karma-jasmine-html-reporter'), require('karma-coverage'), require('karma-junit-reporter'), require('@angular-devkit/build-angular/plugins/karma')],
         client: {
             clearContext: false, // leave Jasmine Spec Runner output visible in browser
             jasmine: {
@@ -18,7 +18,12 @@ module.exports = function (config) {
             subdir: '.',
             reporters: [{ type: 'html' }, { type: 'text-summary' }]
         },
-        reporters: ['progress', 'kjhtml'],
+        junitReporter: {
+            outputDir: require('path').join(__dirname, './reports/junit'),
+            outputFile: 'jasmine.xml',
+            useBrowserName: false // keep test ids runner-agnostic so both suites can be compared
+        },
+        reporters: ['progress', 'kjhtml', 'junit'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

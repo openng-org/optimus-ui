@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { InputIcon } from './inputicon';
@@ -8,6 +8,7 @@ import { InputText } from '@openng/optimus-ui/inputtext';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
     template: `
@@ -22,6 +23,7 @@ class TestBasicInputIconComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
     template: `

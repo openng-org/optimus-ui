@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DomHandler } from '@openng/optimus-ui/dom';
@@ -10,6 +10,7 @@ import { DynamicDialogRef } from './dynamicdialog-ref';
 
 // Test components to be used in dynamic dialogs
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="test-component">
@@ -35,6 +36,7 @@ class TestDialogContentComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="nested-dialog-content">
@@ -60,6 +62,7 @@ class NestedDialogContentComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="dialog-within-dialog-content">
@@ -77,6 +80,7 @@ class DialogWithinDialogComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="maximizable-content">
@@ -93,6 +97,7 @@ class MaximizableDialogComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="resizable-content">
@@ -105,6 +110,7 @@ class MaximizableDialogComponent {
 class ResizableDialogComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <div class="draggable-content">

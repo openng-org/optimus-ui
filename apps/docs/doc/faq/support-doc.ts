@@ -1,4 +1,5 @@
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { DISCORD_URL } from '@/utils/constants';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
@@ -25,13 +26,18 @@ import { RouterModule } from '@angular/router';
 
             <h3>Where do I ask questions?</h3>
             <p>
-                GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. Optimus UI does not run its own Discord — the Discord links here point to the general Angular community
-                server.
+                GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. For real-time chat, join the
+                <a [href]="discordUrl" target="_blank" rel="noopener noreferrer">Optimus UI Discord</a> server.
             </p>
 
             <h3>How does versioning work?</h3>
-            <p>Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the changelog.</p>
+            <p>
+                Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the
+                <a href="https://github.com/openng-org/optimus-ui/releases" target="_blank" rel="noopener noreferrer">GitHub releases</a>.
+            </p>
         </app-docsectiontext>
     `
 })
-export class FaqSupportDoc {}
+export class FaqSupportDoc {
+    readonly discordUrl = DISCORD_URL;
+}

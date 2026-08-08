@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+</div>
+
 # Optimus UI Locale
 
 i18n and l7n locales for the components of [Optimus UI](https://www.openng.org/), vendored from the community supported [PrimeLocale](https://github.com/primefaces/primelocale) repository.

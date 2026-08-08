@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rewriteSource } from './rewrite';
+import { renameStylesheetLayers, rewriteSource } from './rewrite';
 
 const rw = (text: string) => rewriteSource('/src/test.ts', text);
 
@@ -167,5 +167,65 @@ describe('rewriteSource — cssLayer names', () => {
         const input = `const c = { cssLayer: true };\n`;
         const { changed } = rw(input);
         expect(changed).toBe(false);
+    });
+
+    it('rewrites custom layer names carrying the primeng token, like primeng-overwrites', () => {
+        const { text } = rw(`const c = { cssLayer: { name: 'primeng', order: 'theme, base, primeng, primeng-overwrites' } };\n`);
+        expect(text).toContain(`order: 'theme, base, optimus, optimus-overwrites'`);
+    });
+
+    it('collects the renamed layer tokens for the stylesheet pass', () => {
+        const { layerRenames } = rw(`const c = { cssLayer: { name: 'primeng', order: 'theme, base, primeng, primeng-overwrites' } };\n`);
+        expect(layerRenames.get('primeng')).toBe('optimus');
+        expect(layerRenames.get('primeng-overwrites')).toBe('optimus-overwrites');
+        expect(layerRenames.size).toBe(2);
+    });
+
+    it('collects no layer renames when cssLayer holds no primeng token', () => {
+        const { layerRenames } = rw(`const c = { cssLayer: { name: 'app', order: 'theme, app' } };\n`);
+        expect(layerRenames.size).toBe(0);
+    });
+});
+
+describe('renameStylesheetLayers', () => {
+    const RENAMES = new Map([
+        ['primeng', 'optimus'],
+        ['primeng-overwrites', 'optimus-overwrites']
+    ]);
+
+    it('renames a renamed layer in an @layer block declaration', () => {
+        const { text, changed } = renameStylesheetLayers(`@layer primeng-overwrites {\n    .btn { color: red; }\n}\n`, RENAMES);
+        expect(changed).toBe(true);
+        expect(text).toBe(`@layer optimus-overwrites {\n    .btn { color: red; }\n}\n`);
+    });
+
+    it('renames layers in an @layer ordering statement', () => {
+        const { text } = renameStylesheetLayers(`@layer theme, base, primeng, primeng-overwrites;\n`, RENAMES);
+        expect(text).toBe(`@layer theme, base, optimus, optimus-overwrites;\n`);
+    });
+
+    it('renames the layer of an @import ... layer(...) clause', () => {
+        const { text } = renameStylesheetLayers(`@import url(theme.css) layer(primeng);\n`, RENAMES);
+        expect(text).toBe(`@import url(theme.css) layer(optimus);\n`);
+    });
+
+    it('does not rename the primeng token inside a longer layer name without its own rename', () => {
+        const { text, changed } = renameStylesheetLayers(`@layer primeng-extras;\n`, new Map([['primeng', 'optimus']]));
+        expect(changed).toBe(false);
+        expect(text).toBe(`@layer primeng-extras;\n`);
+    });
+
+    it('leaves matching tokens outside @layer and layer() contexts alone', () => {
+        const input = `.primeng-overwrites { color: red; }\n/* primeng */\n.a { content: 'primeng'; }\n`;
+        const { text, changed } = renameStylesheetLayers(input, RENAMES);
+        expect(changed).toBe(false);
+        expect(text).toBe(input);
+    });
+
+    it('is a no-op when there are no renames', () => {
+        const input = `@layer primeng { .btn { color: red; } }\n`;
+        const { text, changed } = renameStylesheetLayers(input, new Map());
+        expect(changed).toBe(false);
+        expect(text).toBe(input);
     });
 });

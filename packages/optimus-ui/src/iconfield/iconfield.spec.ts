@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 import { IconField } from './iconfield';
@@ -7,6 +7,7 @@ import { InputIcon } from '@openng/optimus-ui/inputicon';
 import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
@@ -21,6 +22,7 @@ class TestBasicIconFieldComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
@@ -36,6 +38,7 @@ class TestPositionIconFieldComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
@@ -362,6 +365,7 @@ describe('IconField PassThrough Tests', () => {
 
 // Test components for inline PT tests
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, FormsModule],
     template: `<p-iconfield [pt]="{ root: 'INLINE_STRING' }"><input /></p-iconfield>`
@@ -369,6 +373,7 @@ describe('IconField PassThrough Tests', () => {
 class TestInlineStringPTComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [IconField, FormsModule],
     template: `

@@ -1,6 +1,6 @@
 {
     "name": "@openng/optimus-ui-tailwindcss",
-    "version": "1.0.0-rc.2",
+    "version": "2.0.0-rc.0",
     "author": "OpenNg",
     "description": "Tailwind CSS utilities for Optimus UI Libraries",
     "homepage": "https://www.openng.org/",
@@ -51,7 +51,7 @@
     },
     "scripts": {
         "build": "cross-env NODE_ENV=production INPUT_DIR=src/ OUTPUT_DIR=dist/ pnpm run build:package",
-        "build:package": "pnpm run build:prebuild && tsup && pnpm run build:postbuild",
+        "build:package": "pnpm run build:prebuild && tsdown && pnpm run build:postbuild",
         "build:prebuild": "node ./scripts/prebuild.mjs",
         "build:postbuild": "node ./scripts/postbuild.mjs",
         "dev:link": "pnpm link --global && npm link"

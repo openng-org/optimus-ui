@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+</div>
+
 # @openng/optimus-ui-styled
 
 Styled utilities and theme management system for [Optimus UI](https://github.com/openng-org/optimus-ui).
