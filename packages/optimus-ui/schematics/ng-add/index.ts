@@ -132,11 +132,25 @@ async function wireProvideOptimus(tree: Tree, context: SchematicContext, options
         // `external()` only emits named imports, and `@openng/optimus-ui-themes/aura` only has a
         // default export — add it ourselves.
         const original = tree.read(wiredFile)!.toString();
-        const updated = addDefaultImport(original, preset, module);
+        const imported = addDefaultImport(original, preset, module);
+        let updated = imported.text;
+        if (imported.bindingName !== preset) {
+            // The preset name is already taken in this file (e.g. `Aura` imported from another
+            // theme package), so the import went in under a different binding — retarget the
+            // `preset:` reference in the provider call addRootProvider just inserted. `external()`
+            // may itself have aliased the provideOptimus binding (provideOptimus_1, …), hence `\w*`.
+            const providerCall = new RegExp(`(provideOptimus\\w*\\(\\{\\s*theme:\\s*\\{\\s*preset:\\s*)${preset}(\\s*\\}\\s*\\}\\s*\\))`);
+            if (!providerCall.test(updated)) {
+                context.logger.warn(instructions);
+                return;
+            }
+            updated = updated.replace(providerCall, `$1${imported.bindingName}$2`);
+        }
         if (updated !== original) {
             tree.overwrite(wiredFile, updated);
         }
-        context.logger.info(`Added provideOptimus with the ${preset} preset to ${wiredFile}.`);
+        const bindingNote = imported.bindingName === preset ? '' : ` (bound as ${imported.bindingName})`;
+        context.logger.info(`Added provideOptimus with the ${preset} preset to ${wiredFile}${bindingNote}.`);
     } catch {
         context.logger.warn(instructions);
     }

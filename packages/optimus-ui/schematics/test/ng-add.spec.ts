@@ -136,4 +136,69 @@ describe('ng-add', () => {
         expect(result.readContent('/libs/app/package.json')).toBe(libPkgRaw);
         expect(JSON.parse(result.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
     });
+
+    it('primeng declared only in peerDependencies: still warns and makes no changes (#1448)', async () => {
+        const runner = createRunner();
+        const appConfig = `import { providePrimeNG } from 'primeng/config';\nexport const appConfig = { providers: [providePrimeNG()] };\n`;
+        const tree = createAppTree({ '/src/app/app.config.ts': appConfig }, { ...DEFAULT_PKG, peerDependencies: { primeng: '^21.0.0' } });
+        const logs: string[] = [];
+        runner.logger.subscribe((entry) => logs.push(entry.message));
+
+        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
+
+        expect(logs.join('\n')).toContain('primeng detected');
+        const pkg = JSON.parse(result.readContent('/package.json'));
+        expect(pkg.peerDependencies.primeng).toBe('^21.0.0');
+        expect(pkg.dependencies['@openng/optimus-ui-themes']).toBeUndefined();
+        expect(result.readContent('/src/app/app.config.ts')).toBe(appConfig);
+    });
+
+    it.each([
+        ['optionalDependencies', { optionalDependencies: { primeng: '^21.0.0' } }],
+        ['resolutions', { resolutions: { '**/primeng': '21.0.2' } }],
+        ['overrides', { overrides: { primeng: '21.0.2' } }],
+        ['pnpm.overrides', { pnpm: { overrides: { primeng: '21.0.2' } } }]
+    ] as const)('primeng declared only in %s: still warns and makes no changes (#1448)', async (_section, extra) => {
+        const runner = createRunner();
+        const tree = createAppTree({}, { ...DEFAULT_PKG, ...extra });
+        const logs: string[] = [];
+        runner.logger.subscribe((entry) => logs.push(entry.message));
+
+        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
+        expect(logs.join('\n')).toContain('primeng detected');
+        expect(JSON.parse(result.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
+    });
+
+    it('pre-existing Aura binding (real CLI tree): imports the preset under an alias and retargets the provider call (#1448)', async () => {
+        const runner = createRunner();
+        const appTree = await createRealAppTree(runner, { standalone: true });
+        appTree.overwrite('/src/app/app.config.ts', `import Aura from './my-aura-theme';\n` + appTree.readContent('/src/app/app.config.ts'));
+        const logs: string[] = [];
+        runner.logger.subscribe((entry) => logs.push(entry.message));
+
+        const result = await runner.runSchematic('ng-add', { skipInstall: true }, appTree);
+
+        const appConfig = result.readContent('/src/app/app.config.ts');
+        expect(appConfig).toContain(`import Aura from './my-aura-theme';`);
+        expect(appConfig).toContain(`import OptimusAura from '@openng/optimus-ui-themes/aura';`);
+        expect(appConfig).toContain(`provideOptimus({ theme: { preset: OptimusAura } })`);
+        expect(appConfig).not.toContain(`import Aura from '@openng/optimus-ui-themes/aura';`);
+        expect(appConfig).not.toContain(`preset: Aura `);
+        expect(logs.join('\n')).toContain('bound as OptimusAura');
+    });
+
+    it('pre-existing legacy @primeuix Aura import (real CLI tree): retargets it in place — no alias, no duplicate (#1448)', async () => {
+        const runner = createRunner();
+        const appTree = await createRealAppTree(runner, { standalone: true });
+        appTree.overwrite('/src/app/app.config.ts', `import Aura from '@primeuix/themes/aura';\n` + appTree.readContent('/src/app/app.config.ts'));
+
+        const result = await runner.runSchematic('ng-add', { skipInstall: true }, appTree);
+
+        const appConfig = result.readContent('/src/app/app.config.ts');
+        expect(appConfig).toContain(`import Aura from '@openng/optimus-ui-themes/aura';`);
+        expect(appConfig).toContain(`provideOptimus({ theme: { preset: Aura } })`);
+        expect(appConfig).not.toContain('@primeuix');
+        expect(appConfig).not.toContain('OptimusAura');
+        expect(appConfig.match(/import Aura /g)).toHaveLength(1);
+    });
 });
