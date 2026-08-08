@@ -30,6 +30,7 @@ import { Bind } from '@openng/optimus-ui/bind';
 import { Fluid } from '@openng/optimus-ui/fluid';
 import { SpinnerIcon } from '@openng/optimus-ui/icons';
 import { Ripple } from '@openng/optimus-ui/ripple';
+import type { BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import type { ButtonIconTemplateContext, ButtonLoadingIconTemplateContext, ButtonPassThrough, ButtonProps, ButtonSeverity } from '@openng/optimus-ui/types/button';
 import { ButtonStyle } from './style/buttonstyle';
 
@@ -293,7 +294,7 @@ export class ButtonDirective extends BaseComponent {
 
     public _loading: boolean = false;
 
-    private _severity: ButtonSeverity;
+    private _severity: ButtonSeverity | null | undefined;
 
     _buttonProps!: ButtonProps;
 
@@ -386,11 +387,11 @@ export class ButtonDirective extends BaseComponent {
      * @group Props
      */
     @Input()
-    get severity(): ButtonSeverity {
+    get severity(): ButtonSeverity | null | undefined {
         return this._severity;
     }
 
-    set severity(value: ButtonSeverity) {
+    set severity(value: ButtonSeverity | null | undefined) {
         this._severity = value;
 
         if (this.initialized) {
@@ -741,7 +742,7 @@ export class Button extends BaseComponent<ButtonPassThrough> {
      * @group Props
      * @defaultValue secondary
      */
-    @Input() badgeSeverity: 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined = 'secondary';
+    @Input() badgeSeverity: BadgeSeverity | null | undefined = 'secondary';
 
     /**
      * Used to define a string that autocomplete attribute the current element.
@@ -789,7 +790,7 @@ export class Button extends BaseComponent<ButtonPassThrough> {
      * Defines the style of the button.
      * @group Props
      */
-    @Input() severity: ButtonSeverity;
+    @Input() severity: ButtonSeverity | null | undefined;
 
     /**
      * Used to pass all properties of the ButtonProps to the Button component.

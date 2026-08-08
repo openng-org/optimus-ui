@@ -7,7 +7,7 @@ import { Bind } from '@openng/optimus-ui/bind';
 import { TimesIcon } from '@openng/optimus-ui/icons';
 import { MotionModule } from '@openng/optimus-ui/motion';
 import { Ripple } from '@openng/optimus-ui/ripple';
-import { MessageContainerTemplateContext, MessagePassThrough } from '@openng/optimus-ui/types/message';
+import { MessageContainerTemplateContext, MessagePassThrough, MessageSeverity } from '@openng/optimus-ui/types/message';
 import { MessageStyle } from './style/messagestyle';
 
 const MESSAGE_INSTANCE = new InjectionToken<Message>('MESSAGE_INSTANCE');
@@ -93,7 +93,7 @@ export class Message extends BaseComponent<MessagePassThrough> {
      * @defaultValue 'info'
      * @group Props
      */
-    @Input() severity: 'success' | 'info' | 'warn' | 'error' | 'secondary' | 'contrast' | undefined | null = 'info';
+    @Input() severity: MessageSeverity | undefined | null = 'info';
     /**
      * Text content.
      * @deprecated since v20.0.0. Use content projection instead '<p-message>Content</p-message>'.
