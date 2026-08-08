@@ -369,7 +369,7 @@ export class CascadeSelectSub extends BaseComponent {
                             [attr.role]="'tree'"
                             [attr.aria-orientation]="'horizontal'"
                             [pBind]="ptm('list')"
-                            [attr.aria-label]="listlabel"
+                            [attr.aria-label]="listLabel"
                             [pt]="pt"
                             [unstyled]="unstyled()"
                         ></ul>
