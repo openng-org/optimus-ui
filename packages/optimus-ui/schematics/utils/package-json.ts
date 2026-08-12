@@ -14,7 +14,7 @@ export interface SwapResult {
 
 export function swapDependencies(pkg: Record<string, any>): SwapResult {
     const result: SwapResult = { changed: false, added: [], removed: [] };
-    for (const section of ['dependencies', 'devDependencies'] as const) {
+    for (const section of DIRECT_DEPENDENCY_SECTIONS) {
         const deps = pkg[section];
         if (!deps) {
             continue;
