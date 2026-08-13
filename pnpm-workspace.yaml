@@ -33,7 +33,7 @@ catalogs:
     "@angular/platform-server": ^22.0.0
     "@angular/router": ^22.0.0
     "@angular/ssr": ^22.0.0
-    "@angular-eslint/eslint-plugin": ^20.6.0
+    "@angular-eslint/eslint-plugin": ^22.1.0
     "@angular-eslint/eslint-plugin-template": ^20.6.0
     "@angular-eslint/schematics": ^20.6.0
     "@angular-eslint/template-parser": ^20.6.0
