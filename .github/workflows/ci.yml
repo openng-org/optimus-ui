@@ -106,7 +106,7 @@ jobs:
 
             - name: Publish test report
               if: always()
-              uses: mikepenz/action-junit-report@v5
+              uses: mikepenz/action-junit-report@v6
               with:
                   report_paths: 'packages/optimus-ui/reports/junit/*.xml'
                   check_name: 'Test Results'
