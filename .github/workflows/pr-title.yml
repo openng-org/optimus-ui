@@ -17,19 +17,7 @@ jobs:
 
         steps:
             - uses: actions/checkout@v7
-            - uses: pnpm/action-setup@v4
-              with:
-                  run_install: false
-
-            - name: Use Node.js 24.x
-              uses: actions/setup-node@v7
-              with:
-                  node-version: 24.x
-                  cache: 'pnpm'
-
-            - name: Install packages
-              run: |
-                  pnpm install
+            - uses: ./.github/actions/setup
 
             - name: Lint PR title
               env:

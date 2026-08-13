@@ -12,7 +12,6 @@ concurrency:
 
 permissions:
     contents: read
-    pull-requests: write
 
 jobs:
     commitlint:
@@ -23,50 +22,77 @@ jobs:
             - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
-            - uses: pnpm/action-setup@v4
-              with:
-                  run_install: false
-
-            - name: Use Node.js 24.x
-              uses: actions/setup-node@v7
-              with:
-                  node-version: 24.x
-                  cache: 'pnpm'
-
-            - name: Install packages
-              run: |
-                  pnpm install
+            - uses: ./.github/actions/setup
 
             - name: Lint commit messages
               run: |
                   pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
-    ci:
-        permissions:
-            issues: write
-            pull-requests: write
-            checks: write # action-junit-report publishes the results as a check run
+    # Formatting, the dependency audit and the schematics suite are all short and need no
+    # browser, so they share a job rather than each paying the setup cost.
+    checks:
         runs-on: ubuntu-latest
-
-        strategy:
-            matrix:
-                node-version: [24.x]
 
         steps:
             - uses: actions/checkout@v7
-            - uses: pnpm/action-setup@v4
-              with:
-                  run_install: false
+            - uses: ./.github/actions/setup
 
-            - name: Use Node.js ${{ matrix.node-version }}
-              uses: actions/setup-node@v7
-              with:
-                  node-version: ${{ matrix.node-version }}
-                  cache: 'pnpm'
-
-            - name: Install packages
+            - name: Code Format
               run: |
-                  pnpm install
+                  pnpm run format:check
+
+            - name: Security Audit
+              run: |
+                  pnpm run security:check
+
+            - name: Schematic Tests
+              run: |
+                  pnpm --filter @openng/optimus-ui test:schematics
+
+    # The jasmine and vitest suites run as separate jobs so that each always runs and always
+    # publishes its report, whatever the other one does.
+    test-karma:
+        permissions:
+            contents: read # a job-level block replaces the workflow default, so restate it
+            checks: write # action-junit-report publishes the results as a check run
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v7
+            - uses: ./.github/actions/setup
+
+            # No Playwright here: karma-chrome-launcher uses the runner image's Chrome.
+            - name: Unit Test (jasmine)
+              run: |
+                  pnpm run test:unit
+
+            - name: Publish test report
+              if: always()
+              uses: mikepenz/action-junit-report@v6
+              with:
+                  report_paths: 'packages/optimus-ui/reports/junit/jasmine.xml'
+                  check_name: 'Test Results (jasmine)'
+                  detailed_summary: true
+                  include_passed: false
+                  fail_on_failure: false
+
+            - name: Upload test report
+              if: always()
+              uses: actions/upload-artifact@v7
+              with:
+                  name: junit-jasmine
+                  path: packages/optimus-ui/reports/junit/jasmine.xml
+                  if-no-files-found: warn
+
+    test-vitest:
+        permissions:
+            contents: read # a job-level block replaces the workflow default, so restate it
+            checks: write # action-junit-report publishes the results as a check run
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v7
+            - uses: ./.github/actions/setup
 
             - name: Cache Playwright browsers
               uses: actions/cache@v6
@@ -80,27 +106,16 @@ jobs:
               run: |
                   pnpm --filter @openng/optimus-ui exec playwright install --with-deps chromium
 
-            - name: Code Format
-              id: codeFormat
-              run: |
-                  pnpm run format:check
-
-            # Both suites run to completion even when one fails, so the report below
-            # always covers both. The gate step afterwards fails the job.
-            - name: Unit Test (jasmine)
-              id: unitTest
-              continue-on-error: true
-              run: |
-                  pnpm run test:unit
-
-            - name: Schematic Tests
-              id: schematicTest
-              run: |
-                  pnpm --filter @openng/optimus-ui test:schematics
+            - name: Cache Angular build cache
+              uses: actions/cache@v6
+              with:
+                  path: packages/optimus-ui/.angular/cache
+                  key: angular-vitest-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.run_id }}
+                  restore-keys: |
+                      angular-vitest-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+                      angular-vitest-${{ runner.os }}-
 
             - name: Unit Test (vitest)
-              id: unitTestVitest
-              continue-on-error: true
               run: |
                   pnpm run test:vitest
 
@@ -108,27 +123,43 @@ jobs:
               if: always()
               uses: mikepenz/action-junit-report@v6
               with:
-                  report_paths: 'packages/optimus-ui/reports/junit/*.xml'
-                  check_name: 'Test Results'
+                  report_paths: 'packages/optimus-ui/reports/junit/vitest.xml'
+                  check_name: 'Test Results (vitest)'
                   detailed_summary: true
                   include_passed: false
                   fail_on_failure: false
 
-            - name: Upload test reports
+            - name: Upload test report
               if: always()
               uses: actions/upload-artifact@v7
               with:
-                  name: junit-reports
-                  path: packages/optimus-ui/reports/junit/*.xml
+                  name: junit-vitest
+                  path: packages/optimus-ui/reports/junit/vitest.xml
                   if-no-files-found: warn
 
-            - name: Fail if any unit test failed
-              if: steps.unitTest.outcome == 'failure' || steps.unitTestVitest.outcome == 'failure'
-              run: |
-                  echo "jasmine: ${{ steps.unitTest.outcome }} / vitest: ${{ steps.unitTestVitest.outcome }}"
-                  exit 1
+    build:
+        runs-on: ubuntu-latest
 
+        steps:
+            - uses: actions/checkout@v7
+            - uses: ./.github/actions/setup
+
+            - name: Cache Angular build cache
+              uses: actions/cache@v6
+              with:
+                  path: |
+                      packages/optimus-ui/.angular/cache
+                      apps/docs/.angular/cache
+                  key: angular-build-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.run_id }}
+                  restore-keys: |
+                      angular-build-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+                      angular-build-${{ runner.os }}-
+
+            # build:packages rather than build, because build re-runs format:check and
+            # security:check, which the checks job already covers. NODE_ENV belongs on this
+            # step only: setting it job-wide would make pnpm install skip devDependencies.
             - name: Build
-              id: build
+              env:
+                  NODE_ENV: production
               run: |
-                  pnpm run build
+                  pnpm run build:packages
