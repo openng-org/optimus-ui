@@ -257,8 +257,8 @@ importers:
         specifier: ^18.3.12
         version: 18.3.28
       chart.js:
-        specifier: 4.4.2
-        version: 4.4.2
+        specifier: 4.5.1
+        version: 4.5.1
       codelyzer:
         specifier: ^0.0.28
         version: 0.0.28(tslint@3.15.1(typescript@6.0.3))
@@ -4181,8 +4181,8 @@ packages:
   chardet@2.1.1:
     resolution: {integrity: sha512-PsezH1rqdV9VvyNhxxOW32/d75r01NY7TQCmOqomRo15ZSOKbpTFVsfjghxo6JloQUCGnH4k1LGu0R4yCLlWQQ==}
 
-  chart.js@4.4.2:
-    resolution: {integrity: sha512-6GD7iKwFpP5kbSD4MeRRRlTnQvxfQREy36uEtm1hzHzcOqwWx0YEHuspuoNlslu+nciLIB7fjjsHkUv/FzFcOg==}
+  chart.js@4.5.1:
+    resolution: {integrity: sha512-GIjfiT9dbmHRiYi6Nl2yFCq7kkwdkp1W/lp2J99rX0yo9tgJGn3lKQATztIjb5tVtevcBtIdICNWqlq5+E8/Pw==}
     engines: {pnpm: '>=8'}
 
   chokidar@3.6.0:
@@ -12021,7 +12021,7 @@ snapshots:
 
   chardet@2.1.1: {}
 
-  chart.js@4.4.2:
+  chart.js@4.5.1:
     dependencies:
       '@kurkle/color': 0.3.4
 
