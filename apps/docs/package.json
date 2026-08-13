@@ -26,7 +26,7 @@
     "devDependencies": {
         "@algolia/client-search": "^4.19.1",
         "@angular/ssr": "catalog:angular22",
-        "@docsearch/css": "^3.3.4",
+        "@docsearch/css": "^5.0.0",
         "@docsearch/js": "^3.3.4",
         "@openng/optimus-ui-themes": "workspace:*",
         "@angular/cdk": "catalog:angular22",
