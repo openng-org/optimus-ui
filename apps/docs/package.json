@@ -37,7 +37,7 @@
         "@types/node": "^26.2.0",
         "@types/react": "^19.2.18",
         "chart.js": "4.5.1",
-        "codelyzer": "^0.0.28",
+        "codelyzer": "^6.0.2",
         "del": "^8.0.1",
         "esbuild": "^0.28.2",
         "express": "^5.2.1",
