@@ -187,8 +187,8 @@ importers:
         specifier: catalog:angular22
         version: 22.1.1(@angular/compiler-cli@22.0.8(@angular/compiler@22.0.8)(typescript@6.0.3))(tailwindcss@4.3.3)(tslib@2.8.1)(typescript@6.0.3)
       pnpm:
-        specifier: ^11.13.1
-        version: 11.13.1
+        specifier: ^11.21.0
+        version: 11.21.0
       prettier:
         specifier: ^3.0.0
         version: 3.8.3
@@ -6620,8 +6620,8 @@ packages:
     resolution: {integrity: sha512-LKWqWJRhstyYo9pGvgor/ivk2w94eSjE3RGVuzLGlr3NmD8bf7RcYGze1mNdEHRP6TRP6rMuDHk5t44hnTRyow==}
     engines: {node: '>=14.19.0'}
 
-  pnpm@11.13.1:
-    resolution: {integrity: sha512-svx2g7imUlQU59E+G6KMqt3elr9m7FQL+ut+cCuB8+C+TR8pXt9/n+A5Z0Co3ORQnFgt33mJH0VD/qMtN2RfJQ==}
+  pnpm@11.21.0:
+    resolution: {integrity: sha512-UhcFvOaJkk6scvWjWHEi82JonvZXHlW6gAdv1jfBETLs/62ib61Op5xIW/3b/T1aKlsFgFp36JPeceyKbMo7sQ==}
     engines: {node: '>=22.13'}
     hasBin: true
 
@@ -14768,7 +14768,7 @@ snapshots:
 
   pngjs@7.0.0: {}
 
-  pnpm@11.13.1: {}
+  pnpm@11.21.0: {}
 
   possible-typed-array-names@1.1.0: {}
 
