@@ -33,7 +33,7 @@
         "@stackblitz/sdk": "1.9.0",
         "@types/express": "^5.0.6",
         "@types/jasmine": "~6.0.0",
-        "@types/jest": "^29.5.14",
+        "@types/jest": "^30.0.0",
         "@types/node": "^22.9.0",
         "@types/react": "^19.2.18",
         "chart.js": "4.5.1",
