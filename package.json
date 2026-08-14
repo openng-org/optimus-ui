@@ -64,7 +64,7 @@
         "@typescript-eslint/eslint-plugin": "^8.13.0",
         "cross-env": "^7.0.3",
         "eslint": "^9.14.0",
-        "eslint-config-prettier": "^9.1.0",
+        "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.31.0",
         "eslint-plugin-jsdoc": "^50.4.3",
         "eslint-plugin-prefer-arrow": "^1.2.3",
