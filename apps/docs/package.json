@@ -27,7 +27,7 @@
         "@algolia/client-search": "^5.56.0",
         "@angular/ssr": "catalog:angular22",
         "@docsearch/css": "^5.0.0",
-        "@docsearch/js": "^3.3.4",
+        "@docsearch/js": "^5.0.1",
         "@openng/optimus-ui-themes": "workspace:*",
         "@angular/cdk": "catalog:angular22",
         "@stackblitz/sdk": "1.9.0",
