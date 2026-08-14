@@ -30,7 +30,7 @@
         "@docsearch/js": "^3.3.4",
         "@openng/optimus-ui-themes": "workspace:*",
         "@angular/cdk": "catalog:angular22",
-        "@stackblitz/sdk": "1.9.0",
+        "@stackblitz/sdk": "1.11.1",
         "@types/express": "^5.0.6",
         "@types/jasmine": "~6.0.0",
         "@types/jest": "^30.0.0",
