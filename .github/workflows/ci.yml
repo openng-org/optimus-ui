@@ -54,12 +54,9 @@ jobs:
               run: |
                   pnpm --filter @openng/optimus-ui test:schematics
 
-    # The jasmine and vitest suites run as separate jobs so that each always runs and always
-    # publishes its report, whatever the other one does.
+    # The jasmine and vitest suites run as separate jobs so that each always runs, whatever
+    # the other one does.
     test-karma:
-        permissions:
-            contents: read # a job-level block replaces the workflow default, so restate it
-            checks: write # action-junit-report publishes the results as a check run
         runs-on: ubuntu-latest
 
         steps:
@@ -67,27 +64,13 @@ jobs:
             - uses: ./.github/actions/setup
 
             # No Playwright here: karma-chrome-launcher uses the runner image's Chrome.
+            # This job publishes no report: the karma builder never loads karma.conf.js
+            # because the test target sets no karmaConfig, so its junit reporter has never
+            # been active and no jasmine.xml is produced. The job passes or fails on the
+            # suite's exit code alone.
             - name: Unit Test (jasmine)
               run: |
                   pnpm run test:unit
-
-            - name: Publish test report
-              if: always()
-              uses: mikepenz/action-junit-report@v6
-              with:
-                  report_paths: 'packages/optimus-ui/reports/junit/jasmine.xml'
-                  check_name: 'Test Results (jasmine)'
-                  detailed_summary: true
-                  include_passed: false
-                  fail_on_failure: false
-
-            - name: Upload test report
-              if: always()
-              uses: actions/upload-artifact@v7
-              with:
-                  name: junit-jasmine
-                  path: packages/optimus-ui/reports/junit/jasmine.xml
-                  if-no-files-found: warn
 
     test-vitest:
         permissions:
@@ -111,21 +94,15 @@ jobs:
               run: |
                   pnpm --filter @openng/optimus-ui exec playwright install --with-deps chromium
 
-            - name: Cache Angular build cache
-              uses: actions/cache@v6
-              with:
-                  path: packages/optimus-ui/.angular/cache
-                  key: angular-vitest-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.run_id }}
-                  restore-keys: |
-                      angular-vitest-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
-                      angular-vitest-${{ runner.os }}-
-
             - name: Unit Test (vitest)
               run: |
                   pnpm run test:vitest
 
+            # A pull_request from a fork gets a read-only GITHUB_TOKEN whatever the
+            # permissions block asks for, so creating the check run fails there. The report
+            # is still uploaded as an artifact below.
             - name: Publish test report
-              if: always()
+              if: always() && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
               uses: mikepenz/action-junit-report@v6
               with:
                   report_paths: 'packages/optimus-ui/reports/junit/vitest.xml'
@@ -148,17 +125,6 @@ jobs:
         steps:
             - uses: actions/checkout@v7
             - uses: ./.github/actions/setup
-
-            - name: Cache Angular build cache
-              uses: actions/cache@v6
-              with:
-                  path: |
-                      packages/optimus-ui/.angular/cache
-                      apps/docs/.angular/cache
-                  key: angular-build-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ github.run_id }}
-                  restore-keys: |
-                      angular-build-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
-                      angular-build-${{ runner.os }}-
 
             # build:packages rather than build, because build re-runs format:check and
             # security:check, which the checks job already covers. NODE_ENV belongs on this

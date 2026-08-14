@@ -49,9 +49,6 @@
         }
     },
     "cli": {
-        "analytics": false,
-        "cache": {
-            "environment": "all"
-        }
+        "analytics": false
     }
 }
