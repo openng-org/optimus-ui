@@ -42,7 +42,7 @@
         "esbuild": "^0.19.8",
         "express": "^5.2.1",
         "file-saver": "^2.0.5",
-        "jasmine-core": "~4.6.0",
+        "jasmine-core": "~6.3.0",
         "jspdf": "^4.0.0",
         "jspdf-autotable": "^5.0.8",
         "@openng/icons": "catalog:",
