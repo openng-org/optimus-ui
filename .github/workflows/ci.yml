@@ -21,7 +21,12 @@ jobs:
         steps:
             - uses: actions/checkout@v7
               with:
+                  # commitlint needs every commit between the base and head SHAs, so the
+                  # history cannot be shallow. It only reads commit messages though, and
+                  # blobs are 94% of this repository's history, so fetch the commits and
+                  # trees without the file contents.
                   fetch-depth: 0
+                  filter: blob:none
             - uses: ./.github/actions/setup
 
             - name: Lint commit messages
