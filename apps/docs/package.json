@@ -24,7 +24,7 @@
         "url": "https://github.com/openng-org/optimus-ui.git"
     },
     "devDependencies": {
-        "@algolia/client-search": "^4.19.1",
+        "@algolia/client-search": "^5.56.0",
         "@angular/ssr": "catalog:angular22",
         "@docsearch/css": "^5.0.0",
         "@docsearch/js": "^3.3.4",
