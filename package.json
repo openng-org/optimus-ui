@@ -62,7 +62,7 @@
         "@openng/optimus-ui-themes": "workspace:*",
         "@openng/optimus-ui-utils": "workspace:*",
         "@typescript-eslint/eslint-plugin": "^8.67.0",
-        "cross-env": "^7.0.3",
+        "cross-env": "^10.1.0",
         "eslint": "^9.14.0",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-import": "^2.31.0",
