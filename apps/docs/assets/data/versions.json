@@ -5,7 +5,11 @@
         "items": [
             {
                 "label": "v1",
-                "value": "https://optimus.openng.org"
+                "value": "https://v1.optimus.openng.org"
+            },
+            {
+                "label": "next",
+                "value": "https://next.optimus.openng.org"
             }
         ]
     },

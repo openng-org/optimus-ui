@@ -23,6 +23,16 @@
             ]
         },
         {
+            "name": "Templates",
+            "icon": "pi pi-clone",
+            "children": [
+                {
+                    "name": "Sparked",
+                    "routerLink": "/templates"
+                }
+            ]
+        },
+        {
             "name": "Theming",
             "icon": "pi pi-palette",
             "children": [

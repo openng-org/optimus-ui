@@ -33,7 +33,7 @@ ng add @openng/optimus-ui
 The schematic asks which theme preset you want, adds the packages, wires `provideOptimus` into your root providers and installs everything.
 
 ```ts
-import { ButtonModule } from '@openng/optimus-ui/button';
+import { Button } from '@openng/optimus-ui/button';
 ```
 
 ```html

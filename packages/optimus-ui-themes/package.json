@@ -71,6 +71,6 @@
         "@openng/optimus-ui-styled": "workspace:*"
     },
     "devDependencies": {
-        "typedoc": "0.27.6"
+        "typedoc": "0.28.20"
     }
 }
