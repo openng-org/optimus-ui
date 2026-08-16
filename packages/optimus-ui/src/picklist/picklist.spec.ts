@@ -15,6 +15,7 @@ import {
     PickListTargetReorderEvent,
     PickListTargetSelectEvent
 } from '@openng/optimus-ui/types/picklist';
+import type { ScrollerLazyLoadEvent } from '@openng/optimus-ui/types/scroller';
 import { PickList } from './picklist';
 
 @Component({
@@ -37,6 +38,12 @@ import { PickList } from './picklist';
             [sourceStyle]="sourceStyle"
             [targetStyle]="targetStyle"
             [dataKey]="dataKey"
+            [sourceLazy]="sourceLazy"
+            [targetLazy]="targetLazy"
+            [sourceVirtualScroll]="sourceVirtualScroll"
+            [targetVirtualScroll]="targetVirtualScroll"
+            [sourceVirtualScrollItemSize]="sourceVirtualScrollItemSize"
+            [targetVirtualScrollItemSize]="targetVirtualScrollItemSize"
             (onMoveToTarget)="onMoveToTarget($event)"
             (onMoveToSource)="onMoveToSource($event)"
             (onMoveAllToTarget)="onMoveAllToTarget($event)"
@@ -45,6 +52,8 @@ import { PickList } from './picklist';
             (onTargetSelect)="onTargetSelect($event)"
             (onSourceReorder)="onSourceReorder($event)"
             (onTargetReorder)="onTargetReorder($event)"
+            (onSourceLazyLoad)="onSourceLazyLoad($event)"
+            (onTargetLazyLoad)="onTargetLazyLoad($event)"
         >
             <ng-template pTemplate="item" let-item>
                 <div class="item-template">{{ item.name }}</div>
@@ -84,6 +93,12 @@ class TestPickListComponent {
     sourceStyle: any = null as any;
     targetStyle: any = null as any;
     dataKey: string | undefined;
+    sourceLazy: boolean = false;
+    targetLazy: boolean = false;
+    sourceVirtualScroll: boolean = false;
+    targetVirtualScroll: boolean = false;
+    sourceVirtualScrollItemSize: number | undefined;
+    targetVirtualScrollItemSize: number | undefined;
 
     // Event handlers
     onMoveToTarget(event: PickListMoveToTargetEvent) {
@@ -118,6 +133,14 @@ class TestPickListComponent {
         this.targetReorderEvent = event;
     }
 
+    onSourceLazyLoad(event: ScrollerLazyLoadEvent) {
+        this.sourceLazyLoadEvent = event;
+    }
+
+    onTargetLazyLoad(event: ScrollerLazyLoadEvent) {
+        this.targetLazyLoadEvent = event;
+    }
+
     // Event tracking
     moveToTargetEvent: PickListMoveToTargetEvent | null = null as any;
     moveToSourceEvent: PickListMoveToSourceEvent | null = null as any;
@@ -127,6 +150,8 @@ class TestPickListComponent {
     targetSelectEvent: PickListTargetSelectEvent | null = null as any;
     sourceReorderEvent: PickListSourceReorderEvent | null = null as any;
     targetReorderEvent: PickListTargetReorderEvent | null = null as any;
+    sourceLazyLoadEvent: ScrollerLazyLoadEvent | null = null as any;
+    targetLazyLoadEvent: ScrollerLazyLoadEvent | null = null as any;
 }
 
 describe('PickList', () => {
@@ -165,6 +190,69 @@ describe('PickList', () => {
             // Check if headers are passed to the component
             expect(component.sourceHeader).toBe('Available Items');
             expect(component.targetHeader).toBe('Selected Items');
+        });
+    });
+
+    describe('Lazy Loading & VirtualScroll', () => {
+        it('should default lazy and virtualScroll to false for both lists', () => {
+            expect(picklistComponent.sourceLazy).toBe(false);
+            expect(picklistComponent.targetLazy).toBe(false);
+            expect(picklistComponent.sourceVirtualScroll).toBe(false);
+            expect(picklistComponent.targetVirtualScroll).toBe(false);
+        });
+
+        it('should forward sourceLazy and sourceVirtualScroll to the source listbox', () => {
+            component.sourceLazy = true;
+            component.sourceVirtualScroll = true;
+            component.sourceVirtualScrollItemSize = 32;
+            fixture.detectChanges();
+
+            const sourceListbox = fixture.debugElement.queryAll(By.css('p-listbox'))[0].componentInstance;
+            expect(sourceListbox.lazy).toBe(true);
+            expect(sourceListbox.virtualScroll).toBe(true);
+            expect(sourceListbox.virtualScrollItemSize).toBe(32);
+        });
+
+        it('should forward targetLazy and targetVirtualScroll to the target listbox', () => {
+            component.targetLazy = true;
+            component.targetVirtualScroll = true;
+            component.targetVirtualScrollItemSize = 48;
+            fixture.detectChanges();
+
+            const targetListbox = fixture.debugElement.queryAll(By.css('p-listbox'))[1].componentInstance;
+            expect(targetListbox.lazy).toBe(true);
+            expect(targetListbox.virtualScroll).toBe(true);
+            expect(targetListbox.virtualScrollItemSize).toBe(48);
+        });
+
+        it('should keep source and target lazy/virtualScroll configuration independent', () => {
+            component.sourceLazy = true;
+            component.sourceVirtualScroll = true;
+            component.targetLazy = false;
+            component.targetVirtualScroll = false;
+            fixture.detectChanges();
+
+            const listboxes = fixture.debugElement.queryAll(By.css('p-listbox'));
+            expect(listboxes[0].componentInstance.lazy).toBe(true);
+            expect(listboxes[0].componentInstance.virtualScroll).toBe(true);
+            expect(listboxes[1].componentInstance.lazy).toBe(false);
+            expect(listboxes[1].componentInstance.virtualScroll).toBe(false);
+        });
+
+        it('should emit onSourceLazyLoad when the source listbox emits onLazyLoad', () => {
+            const event: ScrollerLazyLoadEvent = { first: 0, last: 50 } as ScrollerLazyLoadEvent;
+
+            picklistComponent.onSourceLazyLoad.emit(event);
+
+            expect(component.sourceLazyLoadEvent).toBe(event);
+        });
+
+        it('should emit onTargetLazyLoad when the target listbox emits onLazyLoad', () => {
+            const event: ScrollerLazyLoadEvent = { first: 10, last: 60 } as ScrollerLazyLoadEvent;
+
+            picklistComponent.onTargetLazyLoad.emit(event);
+
+            expect(component.targetLazyLoadEvent).toBe(event);
         });
     });
 
