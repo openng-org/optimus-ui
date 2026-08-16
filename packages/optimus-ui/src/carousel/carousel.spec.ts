@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -20,6 +20,7 @@ const mockProducts = [
 
 // Test Components for different scenarios
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel
@@ -84,6 +85,7 @@ class TestBasicCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products" [numVisible]="3" [numScroll]="1" [circular]="true">
@@ -98,6 +100,7 @@ class TestCircularCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products" [orientation]="'vertical'" [verticalViewPortHeight]="'400px'">
@@ -112,6 +115,7 @@ class TestVerticalCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products" [responsiveOptions]="responsiveOptions">
@@ -131,6 +135,7 @@ class TestResponsiveCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products" [autoplayInterval]="1000">
@@ -145,6 +150,7 @@ class TestAutoplayCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products" [numVisible]="3">
@@ -165,6 +171,7 @@ class TestTemplateCarouselComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-carousel [value]="products">

@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+
 # Optimus UI
 
 **A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.**
@@ -31,7 +33,7 @@ ng add @openng/optimus-ui
 The schematic asks which theme preset you want, adds the packages, wires `provideOptimus` into your root providers and installs everything.
 
 ```ts
-import { ButtonModule } from '@openng/optimus-ui/button';
+import { Button } from '@openng/optimus-ui/button';
 ```
 
 ```html
@@ -42,10 +44,11 @@ Full setup, including the manual path and icons, is in the [getting started guid
 
 ## Migrating from PrimeNG
 
-Run the same command in an existing PrimeNG v21 workspace. It detects the `primeng` dependency and runs the migration instead of a fresh install — packages swapped, imports rewritten, then a report of anything it could not handle automatically, with file and line numbers.
+`ng add` does not migrate an existing workspace. It sets up new projects only, and when it detects a `primeng` dependency it leaves your code untouched and points you here. Use the `migrate-from-primeng` schematic instead: install the package so the Angular CLI can resolve it, then run the schematic. Packages are swapped, imports are rewritten, and you get a report of anything it could not handle automatically, with file and line numbers.
 
 ```bash
-ng add @openng/optimus-ui
+npm install @openng/optimus-ui
+ng generate @openng/optimus-ui:migrate-from-primeng
 ```
 
 See the [migration guide](https://optimus.openng.org/migration/primeng) for prerequisites and the manual cases. If you are on PrimeNG v20 or older, upgrade to v21 first.

@@ -4,9 +4,14 @@
         <a href="https://primeui.dev/nextchapter" target="_blank" rel="noopener noreferrer" class="landing-announcement-link">Read their announcement</a>
         <span class="landing-announcement-version">Optimus UI supports Angular v21+</span>
     </aside>
-    <app-topbar [showConfigurator]="true" [showMenuButton]="false" />
+    <app-topbar [showConfigurator]="true" [showMenuButton]="true" />
+    @if (isMenuActive()) {
+        <div class="layout-mask" (click)="hideMenu()" animate.enter="px-modal-enter" animate.leave="px-modal-leave"></div>
+    }
+    <app-menu class="landing-menu" />
     <hero-section />
     <features-section />
     <theme-section />
+    <template-section />
     <footer-section />
 </div>

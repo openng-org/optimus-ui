@@ -110,7 +110,7 @@ function generateStackBlitzProject(demo, selector) {
             '@openng/optimus-ui': '21.0.0',
             rxjs: '~7.8.0',
             tailwindcss: '^3.4.10',
-            '@openng/optimus-ui-tailwindcss': '^1.0.0-rc.1',
+            '@openng/optimus-ui-tailwindcss': '^1.0.0',
             tslib: '^2.3.0',
             'zone.js': '~0.15.0'
         },

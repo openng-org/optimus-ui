@@ -8,7 +8,7 @@ Contributing to Optimus UI comes with several benefits. Being part of an open-so
 
 ## Helpneeded-
 
-Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Angular community Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
+Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Optimus UI Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
 
 ## Introduction-
 

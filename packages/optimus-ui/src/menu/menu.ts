@@ -66,6 +66,7 @@ export class SafeHtmlPipe implements PipeTransform {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: '[pMenuItemContent]',
     standalone: true,
     imports: [CommonModule, RouterModule, Ripple, TooltipModule, BadgeModule, SharedModule, SafeHtmlPipe, BindModule],

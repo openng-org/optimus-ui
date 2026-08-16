@@ -1,4 +1,4 @@
-import { Component, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -6,7 +6,11 @@ import { SharedModule } from '@openng/optimus-ui/api';
 import { ChipProps } from '@openng/optimus-ui/types/chip';
 import { Chip, ChipModule } from './chip';
 
+const TEST_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+const TEST_IMAGE_2 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-basic-chip',
     template: `<p-chip></p-chip>`
@@ -14,6 +18,7 @@ import { Chip, ChipModule } from './chip';
 class TestBasicChipComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-label-chip',
     template: `<p-chip [label]="label"></p-chip>`
@@ -23,6 +28,7 @@ class TestLabelChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-icon-chip',
     template: `<p-chip [icon]="icon" [label]="label"></p-chip>`
@@ -33,12 +39,13 @@ class TestIconChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-image-chip',
     template: `<p-chip [image]="image" [alt]="alt" [label]="label" (onImageError)="onImageError($event)"></p-chip>`
 })
 class TestImageChipComponent {
-    image = '/path/to/image.jpg';
+    image = TEST_IMAGE;
     alt = 'User Avatar';
     label = 'Image Chip';
     imageError: Event | null = null as any;
@@ -49,6 +56,7 @@ class TestImageChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-removable-chip',
     template: `<p-chip [label]="label" [removable]="removable" (onRemove)="onRemove($event)"></p-chip>`
@@ -66,6 +74,7 @@ class TestRemovableChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-custom-remove-icon-chip',
     template: `<p-chip [label]="label" [removable]="removable" [removeIcon]="removeIcon" (onRemove)="onRemove($event)"></p-chip>`
@@ -82,6 +91,7 @@ class TestCustomRemoveIconChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-template-chip',
     template: `
@@ -103,6 +113,7 @@ class TestTemplateChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-content-chip',
     template: `
@@ -114,6 +125,7 @@ class TestTemplateChipComponent {
 class TestContentChipComponent {}
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-chip',
     template: `<p-chip [label]="label" [styleClass]="styleClass"></p-chip>`
@@ -124,6 +136,7 @@ class TestStyleClassChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-chip-props',
     template: `<p-chip [chipProps]="chipProps"></p-chip>`
@@ -138,6 +151,7 @@ class TestChipPropsComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-chip',
     template: `
@@ -170,6 +184,7 @@ class TestDynamicChipComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-visibility-chip',
     template: `<p-chip [label]="label"></p-chip>`
@@ -362,7 +377,7 @@ describe('Chip', () => {
         it('should display image', async () => {
             const imageElement = fixture.debugElement.query(By.css('.p-chip-image'));
             expect(imageElement).toBeTruthy();
-            expect(imageElement.nativeElement.src).toContain('/path/to/image.jpg');
+            expect(imageElement.nativeElement.src).toBe(component.image);
         });
 
         it('should set alt attribute', async () => {
@@ -371,12 +386,12 @@ describe('Chip', () => {
         });
 
         it('should update image src dynamically', async () => {
-            component.image = '/new/path/image.png';
+            component.image = TEST_IMAGE_2;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const imageElement = fixture.debugElement.query(By.css('.p-chip-image'));
-            expect(imageElement.nativeElement.src).toContain('/new/path/image.png');
+            expect(imageElement.nativeElement.src).toBe(TEST_IMAGE_2);
         });
 
         it('should handle image error event', async () => {
@@ -418,7 +433,7 @@ describe('Chip', () => {
         });
 
         it('should display image instead of icon when both are present', async () => {
-            component.image = '/path/to/image.jpg';
+            component.image = TEST_IMAGE;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -732,7 +747,7 @@ describe('Chip', () => {
             expect(fixture.debugElement.query(By.css('.p-chip-image'))).toBeFalsy();
 
             // Switch to image
-            component.image = '/path/to/image.jpg';
+            component.image = TEST_IMAGE;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -1028,6 +1043,7 @@ describe('Chip', () => {
 
     describe('PassThrough API', () => {
         @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
             imports: [Chip],
             template: `<p-chip [label]="label()" [icon]="icon()" [image]="image()" [removable]="removable()" [removeIcon]="removeIcon()" [pt]="pt()"></p-chip>`
@@ -1086,7 +1102,7 @@ describe('Chip', () => {
 
             it('should apply string class to image section', async () => {
                 fixture.componentRef.setInput('label', undefined);
-                fixture.componentRef.setInput('image', '/path/to/image.jpg');
+                fixture.componentRef.setInput('image', TEST_IMAGE);
                 await fixture.whenStable();
 
                 fixture.componentRef.setInput('pt', { image: 'IMAGE_CLASS' });
@@ -1318,7 +1334,7 @@ describe('Chip', () => {
 
             it('should access onImageError emitter through instance in pt', async () => {
                 let emitterAccessed = false;
-                fixture.componentRef.setInput('image', '/path/to/image.jpg');
+                fixture.componentRef.setInput('image', TEST_IMAGE);
                 await fixture.whenStable();
 
                 fixture.componentRef.setInput('pt', {

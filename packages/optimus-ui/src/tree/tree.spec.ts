@@ -1,4 +1,4 @@
-import { Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewChild, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -8,6 +8,7 @@ import { Tree, UITreeNode } from './tree';
 
 // Test component for basic use cases
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree
@@ -123,6 +124,7 @@ class TestBasicTreeComponent {
 
 // Test component for pTemplate testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
@@ -188,6 +190,7 @@ class TestPTemplateTreeComponent {
 
 // Test component for #template testing (new approach)
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
@@ -241,6 +244,7 @@ class TestTemplateRefTreeComponent {
 
 // Test component for context testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree [value]="nodes" [selectionMode]="'checkbox'">
@@ -279,6 +283,7 @@ class TestContextTreeComponent {
 
 // Dedicated Template Test Components (originally in tree-templates.spec.ts)
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading" [selectionMode]="'checkbox'">
@@ -331,6 +336,7 @@ class TestPTemplateComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree [value]="nodes" [filter]="true" [loading]="loading">
@@ -2814,6 +2820,7 @@ describe('Tree', () => {
 
 // Test component for dynamic values
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-tree

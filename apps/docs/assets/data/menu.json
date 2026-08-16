@@ -23,6 +23,16 @@
             ]
         },
         {
+            "name": "Templates",
+            "icon": "pi pi-clone",
+            "children": [
+                {
+                    "name": "Sparked",
+                    "routerLink": "/templates"
+                }
+            ]
+        },
+        {
             "name": "Theming",
             "icon": "pi pi-palette",
             "children": [
@@ -44,7 +54,6 @@
         {
             "name": "AI Tools",
             "icon": "pi pi-sparkles",
-            "badge": "NEW",
             "children": [
                 {
                     "name": "LLMs.txt",
@@ -423,8 +432,7 @@
                         },
                         {
                             "name": "Bind",
-                            "routerLink": "/bind",
-                            "badge": "NEW"
+                            "routerLink": "/bind"
                         },
                         {
                             "name": "BlockUI",
@@ -436,8 +444,7 @@
                         },
                         {
                             "name": "ClassNames",
-                            "routerLink": "/classnames",
-                            "badge": "NEW"
+                            "routerLink": "/classnames"
                         },
                         {
                             "name": "DragDrop",
@@ -511,8 +518,7 @@
         {
             "name": "Pass Through",
             "icon": "pi pi-directions",
-            "routerLink": "/passthrough",
-            "badge": "NEW"
+            "routerLink": "/passthrough"
         },
         {
             "name": "Guides",
@@ -524,8 +530,7 @@
                 },
                 {
                     "name": "Animations",
-                    "routerLink": "/guides/animations",
-                    "badge": "NEW"
+                    "routerLink": "/guides/animations"
                 },
                 {
                     "name": "PrimeFlex",
@@ -570,8 +575,8 @@
                     "routerLink": "/faq"
                 },
                 {
-                    "name": "Angular Discord",
-                    "href": "https://discord.gg/angular"
+                    "name": "Discord",
+                    "href": "https://discord.gg/auSfMzVVPr"
                 },
                 {
                     "name": "GitHub Discussions",
@@ -593,7 +598,7 @@
                 },
                 {
                     "name": "Changelog",
-                    "href": "https://github.com/openng-org/optimus-ui/blob/main/CHANGELOG.md"
+                    "href": "https://github.com/openng-org/optimus-ui/releases"
                 },
                 {
                     "name": "Contribution",

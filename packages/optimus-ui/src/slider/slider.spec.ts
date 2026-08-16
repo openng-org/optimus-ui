@@ -1,4 +1,4 @@
-import { Component, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -11,6 +11,7 @@ import { Slider, SliderModule } from './slider';
 
 // Test Components
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-slider
@@ -51,6 +52,7 @@ class TestBasicSliderComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -65,6 +67,7 @@ class TestFormSliderComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <form [formGroup]="form">
@@ -984,8 +987,8 @@ describe('Slider', () => {
                 }
             } as any;
 
-            spyOn(window, 'scrollX').and.returnValue(5);
-            spyOn(window, 'scrollY').and.returnValue(10);
+            spyOnProperty(window, 'scrollX').and.returnValue(5);
+            spyOnProperty(window, 'scrollY').and.returnValue(10);
 
             component.updateDomData();
 
@@ -1132,6 +1135,7 @@ describe('Slider', () => {
 
         describe('Case 1: Simple string classes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Slider, FormsModule],
                 template: `<p-slider [(ngModel)]="value" [pt]="pt"></p-slider>`
@@ -1168,6 +1172,7 @@ describe('Slider', () => {
 
         describe('Case 2: Objects with class, style, and attributes', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Slider, FormsModule],
                 template: `<p-slider [(ngModel)]="value" [pt]="pt"></p-slider>`
@@ -1224,6 +1229,7 @@ describe('Slider', () => {
 
         describe('Case 3: Mixed object and string values', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Slider, FormsModule],
                 template: `<p-slider [(ngModel)]="value" [range]="true" [pt]="pt"></p-slider>`
@@ -1277,6 +1283,7 @@ describe('Slider', () => {
 
         describe('Case 4: Use variables from instance', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Slider, FormsModule],
                 template: `<p-slider [(ngModel)]="value" [min]="min" [max]="max" [orientation]="orientation" [pt]="pt"></p-slider>`
@@ -1337,6 +1344,7 @@ describe('Slider', () => {
 
         describe('Case 5: Event binding', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Slider, FormsModule],
                 template: `<p-slider [(ngModel)]="value" [pt]="pt"></p-slider>`
@@ -1380,6 +1388,7 @@ describe('Slider', () => {
         describe('Case 6: Inline PT test', () => {
             it('should apply inline string PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Slider, FormsModule],
                     template: `<p-slider [(ngModel)]="value" [pt]="{ root: 'INLINE_ROOT_CLASS' }"></p-slider>`
@@ -1404,6 +1413,7 @@ describe('Slider', () => {
 
             it('should apply inline object PT', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Slider, FormsModule],
                     template: `<p-slider [(ngModel)]="value" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', style: { border: '2px solid red' } } }"></p-slider>`
@@ -1431,6 +1441,7 @@ describe('Slider', () => {
         describe('Case 7: Global PT from OptimusConfig', () => {
             it('should apply global PT configuration', async () => {
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Slider, FormsModule],
                     template: `<p-slider [(ngModel)]="value1"></p-slider><p-slider [(ngModel)]="value2"></p-slider>`
@@ -1491,6 +1502,7 @@ describe('Slider', () => {
                 const hookCalls: string[] = [];
 
                 @Component({
+                    changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
                     imports: [Slider, FormsModule],
                     template: `<p-slider [(ngModel)]="value" [pt]="pt"></p-slider>`

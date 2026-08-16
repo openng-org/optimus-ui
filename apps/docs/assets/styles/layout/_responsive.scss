@@ -43,6 +43,20 @@
                 display: none;
             }
         }
+
+        .topbar-items {
+            .ask-ai-button {
+                width: 2rem;
+            }
+
+            .ask-ai-label {
+                display: none;
+            }
+
+            .topbar-desktop-item {
+                display: none;
+            }
+        }
     }
 
     .layout-sidebar {
@@ -60,6 +74,10 @@
             transform: translateX(100%);
         }
 
+        .drawer-quickaction {
+            display: block;
+        }
+
         nav {
             padding: 1rem 1rem;
         }
@@ -67,6 +85,10 @@
         &.active {
             transform: translateX(0);
         }
+    }
+
+    .landing-menu {
+        display: flex;
     }
 
     .layout-news-active {

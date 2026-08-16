@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,6 +10,7 @@ import { BehaviorSubject, Observable, delay, of } from 'rxjs';
 import { Listbox } from './listbox';
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-listbox
@@ -1056,6 +1057,7 @@ describe('Listbox', () => {
 
 // Template test component using pTemplate directive with enhanced features
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
@@ -1170,6 +1172,7 @@ class TestListboxPTemplateComponent {
 
 // Template test component using #template references with enhanced context testing
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-listbox [(ngModel)]="selectedValues" [options]="items" [optionLabel]="'label'" [optionValue]="'value'" [multiple]="true" [filter]="true" [checkbox]="true" [group]="true" [showToggleAll]="true" [virtualScroll]="true">
@@ -1657,6 +1660,7 @@ describe('Listbox #template Reference Tests', () => {
 
 // Additional comprehensive test component for ViewChild properties and complex scenarios
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
         <p-listbox
@@ -2332,6 +2336,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
 
         describe('Case 6: Inline test', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Listbox, FormsModule],
                 template: `<p-listbox [options]="options" [pt]="{ host: 'INLINE_HOST_CLASS' }" />`
@@ -2352,6 +2357,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
             });
 
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Listbox, FormsModule],
                 template: `<p-listbox [options]="options" [pt]="{ host: { class: 'INLINE_OBJECT_CLASS' } }" />`
@@ -2374,6 +2380,7 @@ describe('Listbox ViewChild and Advanced Scenarios', () => {
 
         describe('Case 7: Test from v', () => {
             @Component({
+                changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
                 imports: [Listbox, FormsModule],
                 template: `

@@ -409,6 +409,10 @@
         <priority>0.7</priority>
     </url>
     <url>
+        <loc>https://optimus.openng.org/templates</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>https://optimus.openng.org/terminal</loc>
         <priority>0.7</priority>
     </url>
