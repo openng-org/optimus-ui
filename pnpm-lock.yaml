@@ -218,8 +218,8 @@ importers:
         specifier: catalog:angular22
         version: 22.1.3(2a285a77f44bff085f4224593a4aadfc)
       '@docsearch/css':
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^5.0.1
+        version: 5.0.1
       '@docsearch/js':
         specifier: ^3.3.4
         version: 3.9.0(@algolia/client-search@5.56.0)(@types/react@19.2.18)(search-insights@2.17.3)
@@ -1561,8 +1561,8 @@ packages:
   '@docsearch/css@3.9.0':
     resolution: {integrity: sha512-cQbnVbq0rrBwNAKegIac/t6a8nWoUAn8frnkLFW6YARaRmAQr5/Eoe6Ln2fqkUCZ40KpdrKbpSAmgrkviOxuWA==}
 
-  '@docsearch/css@5.0.0':
-    resolution: {integrity: sha512-KlCnJI+uZeTEYnPD1vjDj++PJ6oXcyga0J7B9eUDk38wmILI/Vfsl3tDd8arUzrZatxyF5S5HlKflGI99Axd7w==}
+  '@docsearch/css@5.0.1':
+    resolution: {integrity: sha512-q1HdKMkROnZIIN+/eSa2f6qtIn9VcBtXelVMScFuWTWPQwIMBt0evl/TJku0HsssMJkuT6jKzY6Yfet/RMG2Tg==}
 
   '@docsearch/js@3.9.0':
     resolution: {integrity: sha512-4bKHcye6EkLgRE8ze0vcdshmEqxeiJM77M0JXjef7lrYZfSlMunrDOCqyLjiZyo1+c0BhUqA2QpFartIjuHIjw==}
@@ -9405,7 +9405,7 @@ snapshots:
 
   '@docsearch/css@3.9.0': {}
 
-  '@docsearch/css@5.0.0': {}
+  '@docsearch/css@5.0.1': {}
 
   '@docsearch/js@3.9.0(@algolia/client-search@5.56.0)(@types/react@19.2.18)(search-insights@2.17.3)':
     dependencies:
