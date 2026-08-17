@@ -345,8 +345,8 @@ importers:
         specifier: catalog:angular22
         version: 22.1.4(2a45de2f89285904f9fbd0e8198517d6)
       '@schematics/angular':
-        specifier: ^22.0.0
-        version: 22.0.8(chokidar@5.0.0)
+        specifier: ^22.1.4
+        version: 22.1.4(chokidar@5.0.0)
       '@types/node':
         specifier: ^26.2.0
         version: 26.2.0
@@ -3214,10 +3214,6 @@ packages:
 
   '@rtsao/scc@1.1.0':
     resolution: {integrity: sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==}
-
-  '@schematics/angular@22.0.8':
-    resolution: {integrity: sha512-zD2WLe15SoKYyBZH1GTLLaVABNNObHkH4soQqXb9agN6zkrpE0naeWaBSFSWD+95VKCiMZl8LkiOXvK+6b8S6w==}
-    engines: {node: ^22.22.3 || ^24.15.0 || >=26.0.0, npm: ^6.11.0 || ^7.5.6 || >=8.0.0, yarn: '>= 1.13.0'}
 
   '@schematics/angular@22.1.4':
     resolution: {integrity: sha512-uiYKuiCnkTEbs4eOU1QJlM5NPw6BR1qgpct8VlrhS4n861WCCjTy5cxiAWJ3Doc0R72d44j3uoBfAEp7KEVn2w==}
@@ -10194,15 +10190,6 @@ snapshots:
       fsevents: 2.3.3
 
   '@rtsao/scc@1.1.0': {}
-
-  '@schematics/angular@22.0.8(chokidar@5.0.0)':
-    dependencies:
-      '@angular-devkit/core': 22.0.8(chokidar@5.0.0)
-      '@angular-devkit/schematics': 22.0.8(chokidar@5.0.0)
-      jsonc-parser: 3.3.1
-      typescript: 6.0.3
-    transitivePeerDependencies:
-      - chokidar
 
   '@schematics/angular@22.1.4(chokidar@5.0.0)':
     dependencies:

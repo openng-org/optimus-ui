@@ -65,7 +65,7 @@
     "devDependencies": {
         "@angular-devkit/schematics": "^22.0.0",
         "@angular/build": "catalog:angular22",
-        "@schematics/angular": "^22.0.0",
+        "@schematics/angular": "^22.1.4",
         "@types/node": "^26.2.0",
         "@vitest/browser-playwright": "^4.0.8",
         "@vitest/coverage-v8": "^4.0.8",
