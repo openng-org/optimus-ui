@@ -233,6 +233,24 @@ class TestConfirmationServiceComponent {
     }
 }
 
+// ConfirmDialog with a Confirmation-level draggable override
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: ` <p-confirmdialog></p-confirmdialog> `,
+    providers: [ConfirmationService]
+})
+class TestConfirmationDraggableComponent {
+    constructor(private confirmationService: ConfirmationService) {}
+
+    confirm() {
+        this.confirmationService.confirm({
+            message: 'Are you sure you want to delete this record?',
+            draggable: false
+        });
+    }
+}
+
 // ConfirmDialog Accessibility Test
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -300,6 +318,7 @@ describe('ConfirmDialog', () => {
                 TestContentTemplateConfirmDialogComponent,
                 TestPositionConfirmDialogComponent,
                 TestConfirmationServiceComponent,
+                TestConfirmationDraggableComponent,
                 TestAccessibilityConfirmDialogComponent,
                 TestButtonPropertiesComponent,
                 TestEventsConfirmDialogComponent
@@ -845,6 +864,24 @@ describe('ConfirmDialog', () => {
             await new Promise((resolve) => setTimeout(resolve, 0));
 
             expect(serviceComponent.rejectClicked).toBe(true);
+        });
+
+        it('should apply the draggable option from the Confirmation object', async () => {
+            const serviceFixture = TestBed.createComponent(TestConfirmationDraggableComponent);
+            const serviceComponent = serviceFixture.componentInstance;
+            serviceFixture.changeDetectorRef.markForCheck();
+            await serviceFixture.whenStable();
+
+            serviceComponent.confirm();
+            await new Promise((resolve) => setTimeout(resolve, 0));
+            serviceFixture.changeDetectorRef.markForCheck();
+            await serviceFixture.whenStable();
+
+            const confirmDialogInstance = serviceFixture.debugElement.query(By.directive(ConfirmDialog)).componentInstance;
+            expect(confirmDialogInstance.draggable).toBe(false);
+
+            const dialogInstance = serviceFixture.debugElement.query(By.directive(Dialog)).componentInstance;
+            expect(dialogInstance.draggable).toBe(false);
         });
     });
 
