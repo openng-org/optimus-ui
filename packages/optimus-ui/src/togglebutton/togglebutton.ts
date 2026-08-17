@@ -173,7 +173,7 @@ export class ToggleButton extends BaseEditableHolder<ToggleButtonPassThrough> {
      * Defines the size of the component.
      * @group Props
      */
-    @Input() size: 'large' | 'small';
+    @Input() size: 'large' | 'small' | undefined;
     /**
      * Whether selection can not be cleared.
      * @group Props

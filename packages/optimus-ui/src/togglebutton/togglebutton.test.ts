@@ -392,6 +392,24 @@ describe('ToggleButton', () => {
 
             expect(toggleButtonInstance.size).toBe('large');
         });
+
+        it('should allow size to be reset to undefined', async () => {
+            component.size = 'large';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(toggleButtonInstance.size).toBe('large');
+            expect(toggleButtonElement.nativeElement.getAttribute('data-p')).toContain('large');
+
+            toggleButtonInstance.size = undefined;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(toggleButtonInstance.size).toBeUndefined();
+            expect(toggleButtonElement.nativeElement.getAttribute('data-p')).not.toContain('large');
+        });
     });
 
     describe('Reactive Forms Integration', () => {
