@@ -854,6 +854,22 @@ describe('CascadeSelect', () => {
             expect(ariaRequired === null || ariaRequired === 'false').toBe(true);
             expect(hiddenInput.nativeElement.getAttribute('aria-label')).toBeTruthy();
         });
+
+        it('should set an aria-label on the option list', async () => {
+            testComponent.options = mockCountries;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const trigger = testFixture.debugElement.query(By.css('.p-cascadeselect-dropdown'));
+            trigger.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const optionList = testFixture.debugElement.query(By.css('ul[role="tree"]'));
+            expect(optionList.nativeElement.getAttribute('aria-label')).toBe('Option List');
+        });
     });
 
     describe('Complex Situations and Edge Cases', () => {
