@@ -563,6 +563,10 @@
                 {
                     "name": "From PrimeNG",
                     "routerLink": "/migration/primeng"
+                },
+                {
+                    "name": "Update Optimus UI",
+                    "routerLink": "/migration/update"
                 }
             ]
         },
