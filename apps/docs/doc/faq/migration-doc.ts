@@ -9,7 +9,10 @@ import { RouterModule } from '@angular/router';
     template: `
         <app-docsectiontext>
             <h3>Which Angular versions are supported?</h3>
-            <p>Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on.</p>
+            <p>
+                Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the
+                <a [routerLink]="'/migration/update'" fragment="angular-compatibility" class="doc-link">version compatibility table</a> in the update guide.
+            </p>
 
             <h3>How do I migrate from PrimeNG? Is it automatic?</h3>
             <p>

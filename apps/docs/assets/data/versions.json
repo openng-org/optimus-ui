@@ -4,12 +4,12 @@
         "value": "optimusui",
         "items": [
             {
-                "label": "v1",
-                "value": "https://v1.optimus.openng.org"
+                "label": "v2",
+                "value": "https://optimus.openng.org"
             },
             {
-                "label": "next",
-                "value": "https://next.optimus.openng.org"
+                "label": "v1",
+                "value": "https://v1.optimus.openng.org"
             }
         ]
     },
