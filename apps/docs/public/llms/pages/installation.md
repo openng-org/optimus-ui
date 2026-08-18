@@ -65,3 +65,7 @@ export const appConfig: ApplicationConfig = {
 
 Verify your setup by adding a component such as Button. Each component can be imported and registered individually so that you only include what you use for bundle optimization. Import path is available in the documentation of the corresponding component.
 
+## Versioncompatibility-
+
+Each Optimus UI major targets a single Angular major. Install the version matching your workspace, and see the update guide when moving to a newer one.
+
