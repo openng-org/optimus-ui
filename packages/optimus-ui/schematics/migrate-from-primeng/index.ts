@@ -4,6 +4,7 @@ import { createIgnoreMatcher, IgnoreMatcher } from '../utils/gitignore';
 import { mapAssetReference, SPECIFIER_RENAMES } from '../utils/mappings';
 import { findPrimengMajor, hasPrimeflex, SKIP_DIRS, swapDependencies } from '../utils/package-json';
 import { renameStylesheetLayers, rewriteSource } from '../utils/rewrite';
+import { visitWorkspaceFiles } from '../utils/workspace-files';
 import { Schema } from './schema';
 
 const REPORT_EXTENSIONS = ['.ts', '.mts', '.js', '.mjs', '.html', '.scss', '.css', '.sass', '.less', '.json', '.md'];
@@ -28,27 +29,28 @@ const LOCKFILE_NAMES = new Set(['package-lock.json', 'npm-shrinkwrap.json', 'yar
 export function migrateFromPrimeng(options: Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
         checkVersionGate(tree, options);
-
-        // Coverage reports, build output and other git-ignored files are not the user's source:
-        // rewriting them is pointless and reporting them buries the leftovers that do matter.
         const isIgnored = createIgnoreMatcher(tree);
 
         const packageJsonPaths: string[] = [];
         const sourcePaths: string[] = [];
         const assetReferencePaths: string[] = [];
-        tree.visit((path) => {
-            if (SKIP_DIRS.test(path) || isIgnored(path)) {
-                return;
+        visitWorkspaceFiles(
+            tree,
+            (path) => {
+                const basename = path.slice(path.lastIndexOf('/') + 1);
+                if (basename === 'package.json') {
+                    packageJsonPaths.push(path);
+                } else if (path.endsWith('.ts') || path.endsWith('.mts') || TAILWIND_CONFIG_RE.test(path)) {
+                    sourcePaths.push(path);
+                } else if (STYLESHEET_EXTENSIONS.some((ext) => path.endsWith(ext)) || WORKSPACE_CONFIG_NAMES.has(basename)) {
+                    assetReferencePaths.push(path);
+                }
+            },
+            {
+                shouldDescend: (path) => !SKIP_DIRS.test(path) && !isIgnored(path),
+                shouldVisitFile: (path) => !SKIP_DIRS.test(path) && !isIgnored(path)
             }
-            const basename = path.slice(path.lastIndexOf('/') + 1);
-            if (basename === 'package.json') {
-                packageJsonPaths.push(path);
-            } else if (path.endsWith('.ts') || path.endsWith('.mts') || TAILWIND_CONFIG_RE.test(path)) {
-                sourcePaths.push(path);
-            } else if (STYLESHEET_EXTENSIONS.some((ext) => path.endsWith(ext)) || WORKSPACE_CONFIG_NAMES.has(basename)) {
-                assetReferencePaths.push(path);
-            }
-        });
+        );
 
         for (const path of packageJsonPaths) {
             migratePackageJson(tree, context, path);
@@ -165,20 +167,25 @@ const MIGRATION_GUIDE_URL = 'https://www.openng.org/migration/primeng';
 function reportLeftovers(tree: Tree, context: SchematicContext, isIgnored: IgnoreMatcher): void {
     const leftovers: string[] = [];
     const files = new Set<string>();
-    tree.visit((path, entry) => {
-        if (SKIP_DIRS.test(path) || !entry || isLockfile(path) || isIgnored(path) || !REPORT_EXTENSIONS.some((ext) => path.endsWith(ext))) {
-            return;
-        }
-        entry.content
-            .toString()
-            .split('\n')
-            .forEach((line, index) => {
+    visitWorkspaceFiles(
+        tree,
+        (path, read) => {
+            const content = read();
+            if (content === undefined) {
+                return;
+            }
+            content.split('\n').forEach((line, index) => {
                 if (/primeng|primeicons|@primeuix|tailwindcss-primeui|primelocale/i.test(line)) {
                     leftovers.push(`${path}:${index + 1}  ${line.trim()}`);
                     files.add(path);
                 }
             });
-    });
+        },
+        {
+            shouldDescend: (path) => !SKIP_DIRS.test(path) && !isIgnored(path),
+            shouldVisitFile: (path) => !SKIP_DIRS.test(path) && !isIgnored(path) && !isLockfile(path) && REPORT_EXTENSIONS.some((ext) => path.endsWith(ext))
+        }
+    );
     if (leftovers.length === 0) {
         context.logger.info('No leftover primeng/primeicons/@primeuix/tailwindcss-primeui/primelocale references found — nothing left to review.');
         return;
