@@ -665,6 +665,30 @@ describe('MultiSelect', () => {
             expect(component.onRemove).toHaveBeenCalled();
             expect(multiSelect.modelValue()).toEqual([component.options[1]]);
         });
+
+        it('should keep chips removable when the selection limit is reached', async () => {
+            component.display = 'chip';
+            component.selectionLimit = 2;
+            component.selectedCities = [component.options[0], component.options[1]];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(multiSelect.maxSelectionLimitReached()).toBe(true);
+
+            const removeIcons = fixture.debugElement.queryAll(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcons.length).toBe(2);
+            expect(removeIcons[0].nativeElement.getAttribute('tabindex')).toBe('0');
+
+            removeIcons[0].triggerEventHandler('click', new MouseEvent('click'));
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(multiSelect.modelValue()).toEqual([component.options[1]]);
+            expect(fixture.debugElement.queryAll(By.css('.p-chip-remove-icon')).length).toBe(1);
+        });
     });
 
     describe('Keyboard Navigation', () => {
