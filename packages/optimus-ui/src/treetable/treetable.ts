@@ -2596,15 +2596,7 @@ export class TTScrollableView extends BaseComponent {
     onAfterViewInit() {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.frozen) {
-                if (this.tt.frozenColumns || this.tt.frozenBodyTemplate || this.tt._frozenBodyTemplate) {
-                    addClass(this.el.nativeElement, 'p-treetable-unfrozen-view');
-                }
-
-                let frozenView = this.el.nativeElement.previousElementSibling;
-                if (frozenView) {
-                    if (this.tt.virtualScroll) this.frozenSiblingBody = findSingle(frozenView, '[data-pc-name="virtualscroller"]');
-                    else this.frozenSiblingBody = findSingle(frozenView, '[data-pc-section="scrollablebody"]');
-                }
+                this.bindFrozenSiblingBody();
 
                 if (this.scrollHeight) {
                     let scrollBarWidth = calculateScrollbarWidth();
@@ -2624,6 +2616,36 @@ export class TTScrollableView extends BaseComponent {
 
             this.bindEvents();
         }
+    }
+
+    onAfterViewChecked() {
+        if (isPlatformBrowser(this.platformId) && !this.frozen) {
+            this.bindFrozenSiblingBody();
+        }
+    }
+
+    /**
+     * Resolves the scrollable body of the frozen sibling view, used to keep both views vertically in sync.
+     * The frozen view may only show up after this view is initialized, for instance when `frozenColumns` is
+     * bound to data that resolves asynchronously, so the lookup is repeated until a connected sibling is found.
+     */
+    bindFrozenSiblingBody() {
+        if (!this.tt.frozenColumns && !this.tt.frozenBodyTemplate && !this.tt._frozenBodyTemplate) {
+            removeClass(this.el.nativeElement, 'p-treetable-unfrozen-view');
+            this.frozenSiblingBody = null;
+            return;
+        }
+
+        addClass(this.el.nativeElement, 'p-treetable-unfrozen-view');
+
+        if (this.frozenSiblingBody?.isConnected) {
+            return;
+        }
+
+        const frozenView = this.el.nativeElement.previousElementSibling;
+        const selector = this.tt.virtualScroll ? '[data-pc-name="virtualscroller"]' : '[data-pc-section="scrollablebody"]';
+
+        this.frozenSiblingBody = frozenView ? findSingle(frozenView, selector) : null;
     }
 
     bindEvents() {
