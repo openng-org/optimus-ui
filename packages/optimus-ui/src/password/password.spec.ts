@@ -219,7 +219,9 @@ class TestPasswordRefTemplateComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: ` <input type="password" pPassword [(ngModel)]="value" [feedback]="feedback" [promptLabel]="promptLabel" [weakLabel]="weakLabel" [mediumLabel]="mediumLabel" [strongLabel]="strongLabel" /> `
+    template: `
+        <input type="password" pPassword [(ngModel)]="value" [feedback]="feedback" [promptLabel]="promptLabel" [weakLabel]="weakLabel" [mediumLabel]="mediumLabel" [strongLabel]="strongLabel" [mediumRegex]="mediumRegex" [strongRegex]="strongRegex" />
+    `
 })
 class TestPasswordDirectiveComponent {
     value: string | null = null as any;
@@ -228,6 +230,8 @@ class TestPasswordDirectiveComponent {
     weakLabel: string = 'Weak';
     mediumLabel: string = 'Medium';
     strongLabel: string = 'Strong';
+    mediumRegex: string = '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})';
+    strongRegex: string = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})';
 }
 
 @Component({
@@ -1297,22 +1301,26 @@ describe('PasswordDirective', () => {
             expect(directive.mediumLabel).toBe('Medium');
             expect(directive.strongLabel).toBe('Strong');
             expect(directive.feedback).toBe(true);
+            expect(directive.mediumRegex).toContain('(?=.*[a-z])(?=.*[A-Z])');
+            expect(directive.strongRegex).toContain('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])');
         });
     });
 
     describe('Password Strength Algorithm', () => {
-        it('should test strength correctly', () => {
+        it('should test strength correctly using the default medium/strong regex', () => {
             expect(directive.testStrength('')).toBe(0);
-            expect(directive.testStrength('a')).toBeGreaterThan(0);
-            expect(directive.testStrength('aA')).toBeGreaterThan(directive.testStrength('a'));
-            expect(directive.testStrength('aA1')).toBeGreaterThan(directive.testStrength('aA'));
-            expect(directive.testStrength('aA1!')).toBeGreaterThan(directive.testStrength('aA1'));
+            expect(directive.testStrength('abc')).toBe(1);
+            expect(directive.testStrength('abcDEF')).toBe(2);
+            expect(directive.testStrength('abcDEF123')).toBe(3);
         });
 
-        it('should normalize values correctly', () => {
-            expect(directive.normalize(1, 2)).toBe(0.5);
-            expect(directive.normalize(2, 2)).toBe(1);
-            expect(directive.normalize(3, 2)).toBeGreaterThan(1);
+        it('should respect custom mediumRegex and strongRegex inputs', () => {
+            directive.mediumRegex = '^(?=.{4,})';
+            directive.strongRegex = '^(?=.{8,})';
+
+            expect(directive.testStrength('abc')).toBe(1);
+            expect(directive.testStrength('abcd')).toBe(2);
+            expect(directive.testStrength('abcdefgh')).toBe(3);
         });
     });
 
