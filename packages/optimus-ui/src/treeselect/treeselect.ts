@@ -165,6 +165,7 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
                             [filterPlaceholder]="filterPlaceholder"
                             [filterLocale]="filterLocale"
                             [filteredNodes]="filteredNodes"
+                            (onFilter)="onFilterInput($event)"
                             [virtualScroll]="virtualScroll"
                             [virtualScrollItemSize]="virtualScrollItemSize"
                             [virtualScrollOptions]="virtualScrollOptions"
@@ -820,13 +821,10 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         }
     }
 
-    onFilterInput(event: Event) {
-        this.filterValue = (event.target as HTMLInputElement).value;
-        this.treeViewChild?._filter(this.filterValue);
-        this.onFilter.emit({
-            filter: this.filterValue,
-            filteredValue: this.treeViewChild?.filteredNodes
-        });
+    onFilterInput(event: TreeFilterEvent) {
+        this.filterValue = event.filter;
+        this.filteredNodes = event.filteredValue;
+        this.onFilter.emit(event);
         setTimeout(() => {
             this.overlayViewChild?.alignOverlay();
         });
