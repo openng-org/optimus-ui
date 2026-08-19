@@ -6487,6 +6487,20 @@
                             "description": "Used to define a string that autocomplete attribute the current element."
                         },
                         {
+                            "name": "ariaControls",
+                            "optional": false,
+                            "readonly": false,
+                            "type": "string",
+                            "description": "Identifies the element that controls the current element."
+                        },
+                        {
+                            "name": "ariaExpanded",
+                            "optional": false,
+                            "readonly": false,
+                            "type": "boolean",
+                            "description": "Indicates whether the element is expanded or collapsed."
+                        },
+                        {
                             "name": "autofocus",
                             "optional": false,
                             "readonly": false,
