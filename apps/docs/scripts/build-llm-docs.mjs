@@ -544,7 +544,8 @@ function getAllComponents() {
         'passthrough',
         'cdn',
         'nuxt',
-        'accessibility'
+        'accessibility',
+        'templates'
     ];
 
     for (const entry of entries) {

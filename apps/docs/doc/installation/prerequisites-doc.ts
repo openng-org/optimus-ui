@@ -15,8 +15,8 @@ import { RouterModule } from '@angular/router';
                 <li>A package manager of your choice — npm, yarn or pnpm</li>
             </ul>
             <p>
-                Already using PrimeNG? Do not follow this page. The <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a> covers moving an existing PrimeNG v21 workspace across, and the same <i>ng add</i> command detects that
-                case for you.
+                Already using PrimeNG? Do not follow this page. The <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a> covers moving an existing PrimeNG v21 workspace across with the <i>migrate-from-primeng</i> schematic,
+                which is a separate command from the <i>ng add</i> below.
             </p>
         </app-docsectiontext>
     `

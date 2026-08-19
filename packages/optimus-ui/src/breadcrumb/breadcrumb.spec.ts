@@ -5,6 +5,7 @@ import { By } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 import { MenuItem } from '@openng/optimus-ui/api';
+import { Optimus } from '@openng/optimus-ui/config';
 import { BreadcrumbItemClickEvent } from '@openng/optimus-ui/types/breadcrumb';
 import { Breadcrumb } from './breadcrumb';
 
@@ -837,6 +838,59 @@ describe('Breadcrumb', () => {
             } else {
                 expect(breadcrumbInstance.homeAriaLabel).toBe('Go to homepage');
             }
+        });
+
+        it('should label the icon only home link with the default aria.home translation', async () => {
+            component.home = { icon: 'pi pi-home' };
+            component.homeAriaLabel = undefined;
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const homeLink = fixture.debugElement.query(By.css('[data-pc-section="homeitem"] a'));
+            expect(homeLink.nativeElement.getAttribute('aria-label')).toBe('Home');
+        });
+
+        it('should label the icon only home link with the configured aria.home translation', async () => {
+            TestBed.inject(Optimus).setTranslation({ aria: { home: 'Startseite' } });
+            component.home = { icon: 'pi pi-home' };
+            component.homeAriaLabel = undefined;
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const homeLink = fixture.debugElement.query(By.css('[data-pc-section="homeitem"] a'));
+            expect(homeLink.nativeElement.getAttribute('aria-label')).toBe('Startseite');
+        });
+
+        it('should prefer homeAriaLabel over the aria.home translation', async () => {
+            component.home = { icon: 'pi pi-home' };
+            component.homeAriaLabel = 'Go to homepage';
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const homeLink = fixture.debugElement.query(By.css('[data-pc-section="homeitem"] a'));
+            expect(homeLink.nativeElement.getAttribute('aria-label')).toBe('Go to homepage');
+        });
+
+        it('should not override a visible home label with the aria.home translation', async () => {
+            component.home = { icon: 'pi pi-home', label: 'Dashboard' };
+            component.homeAriaLabel = undefined;
+            fixture.changeDetectorRef.markForCheck();
+
+            await fixture.whenStable();
+
+            fixture.detectChanges();
+
+            const homeLink = fixture.debugElement.query(By.css('[data-pc-section="homeitem"] a'));
+            expect(homeLink.nativeElement.hasAttribute('aria-label')).toBe(false);
         });
 
         it('should handle tabindex for disabled items', async () => {

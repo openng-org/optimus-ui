@@ -1,6 +1,6 @@
 # Optimus UI Documentation
 
-Generated: 2026-08-04
+Generated: 2026-08-18
 
 ---
 
@@ -28,11 +28,11 @@ Once you have Optimus UI up and running, we recommend exploring the following re
 
 ## Ngadd-
 
-The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes at all and points you at the migration guide , which covers the migrate-from-primeng schematic.
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.
 
 ## Prerequisites-
 
-Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across, and the same ng add command detects that case for you.
+Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across with the migrate-from-primeng schematic, which is a separate command from the ng add below.
 
 ## Provider-
 
@@ -57,6 +57,10 @@ export const appConfig: ApplicationConfig = {
 ## Verify-
 
 Verify your setup by adding a component such as Button. Each component can be imported and registered individually so that you only include what you use for bundle optimization. Import path is available in the documentation of the corresponding component.
+
+## Versioncompatibility-
+
+Each Optimus UI major targets a single Angular major. Install the version matching your workspace, and see the update guide when moving to a newer one.
 
 ---
 
@@ -749,7 +753,7 @@ The honest answer to "how is this funded" is: it mostly is not. OpenNG covers th
 
 ## Trademark-
 
-Optimus UI is not affiliated with, endorsed by, or sponsored by PrimeTek. PrimeNG, PrimeFaces, PrimeReact, PrimeVue and PrimeFlex are their trademarks. The rename from the inherited names — the packages, the CSS layer, the icon library — is a trademark matter, not a technical one, and it is why ng add ships a migration schematic rather than asking you to rewrite imports by hand. References to PrimeNG remain throughout this documentation and the source, and they are deliberate. Attribution is the point: this library is PrimeTek's decade of work plus whatever the community adds on top. Pretending otherwise would be both dishonest and useless to anyone trying to find their way around a familiar API. The code we forked was published under the MIT license, and we distribute it under those same terms, with the original copyright notices intact.
+Optimus UI is not affiliated with, endorsed by, or sponsored by PrimeTek. PrimeNG, PrimeFaces, PrimeReact, PrimeVue and PrimeFlex are their trademarks. The rename from the inherited names — the packages, the CSS layer, the icon library — is a trademark matter, not a technical one, and it is why we ship a migration schematic rather than asking you to rewrite imports by hand. References to PrimeNG remain throughout this documentation and the source, and they are deliberate. Attribution is the point: this library is PrimeTek's decade of work plus whatever the community adds on top. Pretending otherwise would be both dishonest and useless to anyone trying to find their way around a familiar API. The code we forked was published under the MIT license, and we distribute it under those same terms, with the original copyright notices intact.
 
 ---
 
@@ -763,7 +767,7 @@ Do the PrimeNG themes work? The built-in presets do — Aura, Material, Lara and
 
 ## Migration-
 
-Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. How do I migrate from PrimeNG? Is it automatic? Mostly. Run ng add &#64;openng/optimus-ui in a PrimeNG v21 workspace and it detects the existing dependency and runs the full migration: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
+Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and makes no changes when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
 
 ## Project-
 

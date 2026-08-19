@@ -66,6 +66,7 @@
 /message
 /metergroup
 /migration/primeng
+/migration/update
 /multiselect
 /orderlist
 /organizationchart
@@ -100,6 +101,7 @@
 /tabs
 /tag
 /tailwind
+/templates
 /terminal
 /textarea
 /theming/styled

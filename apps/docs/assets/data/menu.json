@@ -23,6 +23,16 @@
             ]
         },
         {
+            "name": "Templates",
+            "icon": "pi pi-clone",
+            "children": [
+                {
+                    "name": "Sparked",
+                    "routerLink": "/templates"
+                }
+            ]
+        },
+        {
             "name": "Theming",
             "icon": "pi pi-palette",
             "children": [
@@ -553,6 +563,10 @@
                 {
                     "name": "From PrimeNG",
                     "routerLink": "/migration/primeng"
+                },
+                {
+                    "name": "Update Optimus UI",
+                    "routerLink": "/migration/update"
                 }
             ]
         },
