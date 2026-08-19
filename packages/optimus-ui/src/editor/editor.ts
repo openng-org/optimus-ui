@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformServer } from '@angular/common';
+import { isPlatformServer, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { afterNextRender, ChangeDetectionStrategy, Component, ContentChild, ContentChildren, EventEmitter, forwardRef, inject, InjectionToken, Input, NgModule, Output, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { findSingle } from '@openng/optimus-ui-utils';
@@ -24,7 +24,7 @@ export const EDITOR_VALUE_ACCESSOR: any = {
 @Component({
     selector: 'p-editor',
     standalone: true,
-    imports: [CommonModule, SharedModule, BindModule],
+    imports: [SharedModule, BindModule, NgIf, NgStyle, NgTemplateOutlet],
     template: `
         <div [class]="cx('toolbar')" *ngIf="toolbar || headerTemplate || _headerTemplate" [pBind]="ptm('toolbar')">
             <ng-content select="p-header"></ng-content>

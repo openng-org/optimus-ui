@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -3938,7 +3937,7 @@ describe('Scroller', () => {
         @Component({
             changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
-            imports: [CommonModule, Scroller],
+            imports: [Scroller],
             template: `
                 <p-scroller [items]="items()" [itemSize]="itemSize()" [pt]="pt()" [showLoader]="showLoader()" [loading]="loading()">
                     <ng-template #item let-item>
@@ -4148,7 +4147,7 @@ describe('Scroller', () => {
             @Component({
                 changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
-                imports: [CommonModule, Scroller],
+                imports: [Scroller],
                 template: `<p-scroller [items]="items" [itemSize]="50" [pt]="{ root: 'INLINE_TEST_CLASS' }">
                     <ng-template #item let-item>{{ item }}</ng-template>
                 </p-scroller>`
@@ -4169,7 +4168,7 @@ describe('Scroller', () => {
                 @Component({
                     changeDetection: ChangeDetectionStrategy.Eager,
                     standalone: true,
-                    imports: [CommonModule, Scroller],
+                    imports: [Scroller],
                     template: `<p-scroller [items]="items" [itemSize]="50" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS' } }">
                         <ng-template #item let-item>{{ item }}</ng-template>
                     </p-scroller>`
@@ -4190,7 +4189,7 @@ describe('Scroller', () => {
             @Component({
                 changeDetection: ChangeDetectionStrategy.Eager,
                 standalone: true,
-                imports: [CommonModule, Scroller],
+                imports: [Scroller],
                 template: `
                     <p-scroller [items]="items1" [itemSize]="50">
                         <ng-template #item let-item>{{ item }}</ng-template>

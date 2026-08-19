@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgFor, NgIf, NgStyle, NgTemplateOutlet } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -41,7 +41,7 @@ const PANELMENUSUB_INSTANCE = new InjectionToken<PanelMenuSub>('PANELMENUSUB_INS
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'ul[pPanelMenuSub]',
-    imports: [CommonModule, RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule],
+    imports: [RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     standalone: true,
     template: `
         <ng-template ngFor let-processedItem let-index="index" [ngForOf]="items">
@@ -348,7 +348,7 @@ export class PanelMenuSub extends BaseComponent {
 
 @Component({
     selector: 'ul[pPanelMenuList]',
-    imports: [CommonModule, PanelMenuSub, RouterModule, TooltipModule, SharedModule],
+    imports: [PanelMenuSub, RouterModule, TooltipModule, SharedModule],
     standalone: true,
     template: `
         <ul
@@ -806,7 +806,7 @@ export class PanelMenuList extends BaseComponent {
  */
 @Component({
     selector: 'p-panelMenu, p-panelmenu, p-panel-menu',
-    imports: [CommonModule, PanelMenuList, RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule],
+    imports: [PanelMenuList, RouterModule, TooltipModule, ChevronDownIcon, ChevronRightIcon, SharedModule, BindModule, MotionModule, NgFor, NgIf, NgStyle, NgTemplateOutlet],
     standalone: true,
     template: `
         <ng-container *ngFor="let item of model; let f = first; let l = last; let i = index">

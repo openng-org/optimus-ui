@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, HostListener, inject, InjectionToken, input, model, ViewEncapsulation } from '@angular/core';
 import { equals, focus, getAttribute } from '@openng/optimus-ui-utils';
 import { SharedModule } from '@openng/optimus-ui/api';
@@ -19,7 +19,7 @@ const TAB_INSTANCE = new InjectionToken<Tab>('TAB_INSTANCE');
 @Component({
     selector: 'p-tab',
     standalone: true,
-    imports: [CommonModule, SharedModule, BindModule],
+    imports: [SharedModule, BindModule],
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,

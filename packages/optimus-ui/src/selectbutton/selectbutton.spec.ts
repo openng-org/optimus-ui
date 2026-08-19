@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { provideOptimus } from '@openng/optimus-ui/config';
 import { SelectButton, SelectButtonModule } from './selectbutton';
@@ -14,7 +13,7 @@ describe('SelectButton', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SelectButton, SelectButtonModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule, TestSelectButtonPTemplateComponent, TestSelectButtonRefTemplateComponent],
+            imports: [SelectButton, SelectButtonModule, FormsModule, ReactiveFormsModule, SharedModule, TestSelectButtonPTemplateComponent, TestSelectButtonRefTemplateComponent],
             declarations: [TestFormSelectButtonComponent, TestPrimeTemplateSelectButtonComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -464,7 +463,7 @@ class TestPrimeTemplateSelectButtonComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule, SharedModule],
+    imports: [SelectButton, FormsModule, SharedModule],
     template: `
         <p-selectbutton [(ngModel)]="selectedValue" [options]="options">
             <!-- Item template with pTemplate -->
@@ -490,7 +489,7 @@ class TestSelectButtonPTemplateComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule, SharedModule],
+    imports: [SelectButton, FormsModule, SharedModule],
     template: `
         <p-selectbutton [(ngModel)]="selectedValue" [options]="options">
             <!-- Item template with #template reference -->
@@ -677,7 +676,7 @@ describe('SelectButton PassThrough Tests', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+            imports: [SelectButton, SelectButtonModule, FormsModule],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -899,7 +898,7 @@ describe('SelectButton PassThrough Tests', () => {
         it('should apply global PT configuration to all instances', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -928,7 +927,7 @@ describe('SelectButton PassThrough Tests', () => {
         it('should apply global PT to multiple component instances', async () => {
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule, TestMultipleInstancesComponent],
+                imports: [SelectButton, SelectButtonModule, FormsModule, TestMultipleInstancesComponent],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -962,7 +961,7 @@ describe('SelectButton PassThrough Tests', () => {
             const hooksCalled: string[] = [];
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -993,7 +992,7 @@ describe('SelectButton PassThrough Tests', () => {
             const hooksCalled: string[] = [];
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -1024,7 +1023,7 @@ describe('SelectButton PassThrough Tests', () => {
             const hooksCalled: string[] = [];
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -1057,7 +1056,7 @@ describe('SelectButton PassThrough Tests', () => {
             const hooksCalled: string[] = [];
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -1090,7 +1089,7 @@ describe('SelectButton PassThrough Tests', () => {
             const hooksCalled: string[] = [];
             TestBed.resetTestingModule();
             await TestBed.configureTestingModule({
-                imports: [SelectButton, SelectButtonModule, FormsModule, CommonModule],
+                imports: [SelectButton, SelectButtonModule, FormsModule],
                 providers: [
                     provideZonelessChangeDetection(),
                     provideOptimus({
@@ -1169,7 +1168,7 @@ describe('SelectButton PassThrough Tests', () => {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: 'INLINE_STRING' }" />`
 })
 class TestInlineStringPTComponent {
@@ -1179,7 +1178,7 @@ class TestInlineStringPTComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', 'data-inline': 'true' } }" />`
 })
 class TestInlineObjectPTComponent {
@@ -1189,7 +1188,7 @@ class TestInlineObjectPTComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `
         <p-selectbutton [options]="options1" />
         <p-selectbutton [options]="options2" />

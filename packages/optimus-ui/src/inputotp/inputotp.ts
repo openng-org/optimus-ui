@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgIf, NgFor, NgTemplateOutlet } from '@angular/common';
 import {
     AfterContentInit,
     AfterViewChecked,
@@ -49,7 +49,7 @@ export { InputOtpChangeEvent, InputOtpInputTemplateContext, InputOtpTemplateEven
 @Component({
     selector: 'p-inputOtp, p-inputotp, p-input-otp',
     standalone: true,
-    imports: [CommonModule, InputText, AutoFocus, SharedModule, BindModule],
+    imports: [InputText, AutoFocus, SharedModule, BindModule, NgFor, NgIf, NgTemplateOutlet],
     template: `
         <ng-container *ngFor="let i of getRange(length); trackBy: trackByFn">
             <ng-container *ngIf="!inputTemplate && !_inputTemplate">
