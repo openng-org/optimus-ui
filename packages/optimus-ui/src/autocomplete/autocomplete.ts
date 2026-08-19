@@ -157,8 +157,8 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
                     [class]="cx('pcChip')"
                     [label]="!selectedItemTemplate && !_selectedItemTemplate && getOptionLabel(option)"
                     [disabled]="$disabled()"
-                    [removable]="true"
-                    (onRemove)="!readonly ? removeOption($event, i) : ''"
+                    [removable]="!readonly && !$disabled()"
+                    (onRemove)="removeOption($event, i)"
                     [unstyled]="unstyled()"
                 >
                     <ng-container *ngTemplateOutlet="selectedItemTemplate || _selectedItemTemplate; context: { $implicit: option }"></ng-container>

@@ -1601,6 +1601,45 @@ describe('AutoComplete', () => {
             expect(inputElement.nativeElement.readOnly).toBe(true);
         });
 
+        it('should not offer a chip remove icon in readonly mode', async () => {
+            testComponent.multiple = true;
+            testComponent.readonly = true;
+            testComponent.selectedValue = [{ name: 'Item 1' }, { name: 'Item 2' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const chips = testFixture.debugElement.queryAll(By.css('p-chip'));
+
+            expect(chips.length).toBe(2);
+            expect(testFixture.debugElement.queryAll(By.css('.p-chip-remove-icon')).length).toBe(0);
+            expect(chips.every((chip) => chip.nativeElement.style.display !== 'none')).toBe(true);
+            expect(autocompleteInstance.modelValue().length).toBe(2);
+        });
+
+        it('should still remove a chip when the remove icon is clicked outside readonly mode', async () => {
+            testComponent.multiple = true;
+            testComponent.readonly = false;
+            testComponent.selectedValue = [{ name: 'Item 1' }, { name: 'Item 2' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const removeIcon = testFixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcon).toBeTruthy();
+
+            removeIcon.triggerEventHandler('click', new MouseEvent('click'));
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            expect(autocompleteInstance.modelValue().length).toBe(1);
+            expect(testFixture.debugElement.queryAll(By.css('p-chip')).length).toBe(1);
+        });
+
         it('should handle forceSelection mode', async () => {
             testComponent.forceSelection = true;
             testComponent.optionLabel = undefined as any; // Use string comparison for forceSelection
