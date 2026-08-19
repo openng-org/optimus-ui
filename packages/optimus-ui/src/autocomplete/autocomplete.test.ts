@@ -2091,6 +2091,85 @@ describe('AutoComplete', () => {
 
                 expect(testComponent.selectedValue).toBeNull();
             });
+
+            it('should consume the separator key when the value is already selected', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'Item1';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(keydownEvent.defaultPrevented).toBe(true);
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should consume the separator key when the input is empty', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = '';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(keydownEvent.defaultPrevented).toBe(true);
+                expect(testComponent.selectedValue).toEqual([]);
+            });
+
+            it('should split the input value on the separator instead of adding it verbatim', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = ',Item1,';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+                expect(inputElement.nativeElement.value).toBe('');
+            });
+
+            it('should not leave pasted separators in the input when nothing new is added', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'Item1,';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Item1,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
         });
 
         describe('combined addOnBlur and separator features', () => {
