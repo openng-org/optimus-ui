@@ -1472,6 +1472,22 @@ describe('AutoComplete', () => {
             expect(ariaRequired === null || ariaRequired === 'false').toBe(true);
             expect(inputElement.nativeElement.getAttribute('aria-label')).toBeTruthy();
         });
+
+        it('should give the chip container an accessible name in multiple mode', async () => {
+            testComponent.multiple = true;
+            testComponent.selectedValue = [{ name: 'Item 1' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const chipContainer = testFixture.debugElement.query(By.css('ul.p-autocomplete-input-multiple'));
+
+            expect(chipContainer).toBeTruthy();
+            expect(chipContainer.nativeElement.getAttribute('role')).toBe('listbox');
+            expect(chipContainer.nativeElement.getAttribute('aria-label')).toBe(autocompleteInstance.selectedItemsLabel);
+            expect(chipContainer.nativeElement.getAttribute('aria-label')).toBe('Selected Items');
+        });
     });
 
     describe('Complex Situations and Edge Cases', () => {

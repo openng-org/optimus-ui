@@ -134,6 +134,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
             [attr.data-p]="inputMultipleDataP"
             [tabindex]="-1"
             role="listbox"
+            [attr.aria-label]="selectedItemsLabel"
             [attr.aria-orientation]="'horizontal'"
             [attr.aria-activedescendant]="focused ? focusedMultipleOptionId : undefined"
             (focus)="onMultipleContainerFocus($event)"
@@ -957,6 +958,10 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
     get listLabel(): string {
         return this.config.getTranslation(TranslationKeys.ARIA)['listLabel'];
+    }
+
+    get selectedItemsLabel(): string {
+        return this.config.getTranslation(TranslationKeys.ARIA)['selectedItems'];
     }
 
     get virtualScrollerDisabled() {
