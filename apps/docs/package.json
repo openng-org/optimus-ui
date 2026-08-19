@@ -36,7 +36,7 @@
         "@types/node": "^26.2.0",
         "chart.js": "4.5.1",
         "express": "^5.2.1",
-        "jasmine-core": "~6.3.0",
+        "jasmine-core": "~7.0.1",
         "@openng/icons": "catalog:",
         "@openng/optimus-ui": "workspace:*",
         "prismjs": "^1.29.0",
