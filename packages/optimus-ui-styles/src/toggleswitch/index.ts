@@ -112,4 +112,34 @@ export const style = /*css*/ `
     .p-toggleswitch.p-disabled .p-toggleswitch-handle {
         background: dt('toggleswitch.handle.disabled.background');
     }
+
+    .p-toggleswitch-sm {
+        width: 2rem;
+        height: 1.25rem;
+    }
+
+    .p-toggleswitch-sm .p-toggleswitch-handle {
+        width: 0.75rem;
+        height: 0.75rem;
+        margin-block-start: -0.375rem;
+    }
+
+    .p-toggleswitch-sm.p-toggleswitch-checked .p-toggleswitch-handle {
+        inset-inline-start: calc(2rem - (0.75rem + dt('toggleswitch.gap')));
+    }
+
+    .p-toggleswitch-lg {
+        width: 3rem;
+        height: 1.75rem;
+    }
+
+    .p-toggleswitch-lg .p-toggleswitch-handle {
+        width: 1.25rem;
+        height: 1.25rem;
+        margin-block-start: -0.625rem;
+    }
+
+    .p-toggleswitch-lg.p-toggleswitch-checked .p-toggleswitch-handle {
+        inset-inline-start: calc(3rem - (1.25rem + dt('toggleswitch.gap')));
+    }
 `;
