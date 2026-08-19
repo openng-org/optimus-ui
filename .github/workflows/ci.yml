@@ -33,8 +33,9 @@ jobs:
               run: |
                   pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
-    # Formatting, the dependency audit and the schematics suite are all short and need no
-    # browser, so they share a job rather than each paying the setup cost.
+    # Formatting, the dependency audit, the schematics suite and the optimus-ui-styled unit
+    # tests are all short and need no browser, so they share a job rather than each paying
+    # the setup cost.
     checks:
         runs-on: ubuntu-latest
 
@@ -53,6 +54,10 @@ jobs:
             - name: Schematic Tests
               run: |
                   pnpm --filter @openng/optimus-ui test:schematics
+
+            - name: Styled Utils Tests
+              run: |
+                  pnpm run test:styled
 
     # The jasmine and vitest suites run as separate jobs so that each always runs, whatever
     # the other one does.
