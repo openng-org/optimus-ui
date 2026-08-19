@@ -6,6 +6,7 @@ import { SharedModule, TreeNode } from '@openng/optimus-ui/api';
 import { provideOptimus } from '@openng/optimus-ui/config';
 import { TreeSelectNodeCollapseEvent, TreeSelectNodeExpandEvent } from '@openng/optimus-ui/types/treeselect';
 import { BehaviorSubject } from 'rxjs';
+import { Tree } from '../tree/tree';
 import { TreeSelect, TreeSelectModule } from './treeselect';
 
 const mockTreeNodes: TreeNode[] = [
@@ -76,6 +77,7 @@ const mockTreeNodes: TreeNode[] = [
             [tabindex]="tabindex"
             [inputId]="inputId"
             [ariaLabel]="ariaLabel"
+            [togglerAriaLabel]="togglerAriaLabel"
             [ariaLabelledBy]="ariaLabelledBy"
             [panelClass]="panelClass"
             [panelStyle]="panelStyle"
@@ -200,6 +202,7 @@ class TestTreeSelectComponent {
     tabindex: number = 0;
     inputId: string | undefined;
     ariaLabel: string = 'Test tree select';
+    togglerAriaLabel: string | undefined;
     ariaLabelledBy: string | undefined;
 
     // Styling
@@ -1216,6 +1219,23 @@ describe('TreeSelect', () => {
             expect(hiddenInput.nativeElement.getAttribute('id')).toBe('tree-input');
             expect(hiddenInput.nativeElement.getAttribute('role')).toBe('combobox');
             expect(hiddenInput.nativeElement.getAttribute('aria-haspopup')).toBe('tree');
+        });
+
+        it('should handle togglerAriaLabel property', async () => {
+            testComponent.togglerAriaLabel = 'Expand node';
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const treeSelectInstance = testFixture.debugElement.query(By.directive(TreeSelect)).componentInstance;
+            expect(treeSelectInstance.togglerAriaLabel).toBe('Expand node');
+
+            // Verify togglerAriaLabel is passed to the internal Tree component
+            const treeComponent = testFixture.debugElement.query(By.directive(Tree));
+            if (treeComponent) {
+                const tree = treeComponent.componentInstance;
+                expect(tree.togglerAriaLabel).toBe('Expand node');
+            }
         });
 
         it('should handle keyboard navigation', async () => {

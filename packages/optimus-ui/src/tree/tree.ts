@@ -105,7 +105,7 @@ const TREENODE_INSTANCE = new InjectionToken<UITreeNode>('TREENODE_INSTANCE');
                     [draggable]="tree.draggableNodes"
                     [pBind]="getPTOptions('nodeContent')"
                 >
-                    <button type="button" [class]="cx('nodeToggleButton')" (click)="toggle($event)" pRipple tabindex="-1" [pBind]="getPTOptions('nodeToggleButton')">
+                    <button type="button" [attr.aria-label]="togglerAriaLabel" [class]="cx('nodeToggleButton')" (click)="toggle($event)" pRipple tabindex="-1" [pBind]="getPTOptions('nodeToggleButton')">
                         <ng-container *ngIf="!tree.togglerIconTemplate && !tree._togglerIconTemplate">
                             <ng-container *ngIf="!node.loading">
                                 <svg data-p-icon="chevron-right" *ngIf="!node.expanded" [class]="cx('nodeToggleIcon')" [pBind]="getPTOptions('nodeToggleIcon')" />
@@ -172,6 +172,8 @@ const TREENODE_INSTANCE = new InjectionToken<UITreeNode>('TREENODE_INSTANCE');
                         [itemSize]="itemSize"
                         [level]="level + 1"
                         [loadingMode]="loadingMode"
+                        +
+                        [togglerAriaLabel]="togglerAriaLabel"
                         [pt]="pt"
                         [unstyled]="unstyled()"
                     ></p-treeNode>
@@ -208,6 +210,8 @@ export class UITreeNode extends BaseComponent<TreePassThrough> {
     @Input({ transform: numberAttribute }) itemSize: number | undefined;
 
     @Input() loadingMode: string;
+
+    @Input() togglerAriaLabel: string;
 
     tree: Tree = inject(forwardRef(() => Tree));
 
@@ -818,6 +822,7 @@ export class UITreeNode extends BaseComponent<TreePassThrough> {
                             [itemSize]="scrollerOptions.itemSize"
                             [indentation]="indentation"
                             [loadingMode]="loadingMode"
+                            [togglerAriaLabel]="togglerAriaLabel"
                             [pt]="pt"
                             [unstyled]="unstyled()"
                         ></p-treeNode>
@@ -840,6 +845,8 @@ export class UITreeNode extends BaseComponent<TreePassThrough> {
                             [index]="index"
                             [level]="0"
                             [loadingMode]="loadingMode"
+                            +
+                            [togglerAriaLabel]="togglerAriaLabel"
                             [pt]="pt"
                             [unstyled]="unstyled()"
                         ></p-treeNode>
