@@ -163,16 +163,21 @@ export function app(): express.Express {
         });
     });
 
-    // Serve static files from /browser
-    server.get(
-        '*.*',
+    // Serve static files from /browser.
+    // Registered as plain middleware (with a regex catch-all below) instead of the old
+    // '*.*' / '*' string patterns, which throw "Missing parameter name" at startup under
+    // express 5 (path-to-regexp v8). `index: false` and `redirect: false` preserve the old
+    // behavior: extensionless URLs (including '/') fall through to the Angular engine.
+    server.use(
         express.static(browserDistFolder, {
-            maxAge: '1y'
+            maxAge: '1y',
+            index: false,
+            redirect: false
         })
     );
 
     // All regular routes use the Angular engine
-    server.get('*', (req, res, next) => {
+    server.get(/.*/, (req, res, next) => {
         const { protocol, originalUrl, baseUrl, headers } = req;
 
         commonEngine
