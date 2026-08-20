@@ -4,7 +4,7 @@
 
   <p>
     <a href="https://www.npmjs.com/package/@openng/optimus-ui?activeTab=versions">
-      <img src="https://img.shields.io/npm/v/@openng/optimus-ui/v1.svg" alt="npm version">
+      <img src="https://img.shields.io/npm/v/@openng/optimus-ui/v1-legacy.svg" alt="npm version">
     </a>
     <a href="https://www.npmjs.com/package/@openng/optimus-ui">
       <img src="https://img.shields.io/npm/dm/@openng/optimus-ui.svg" alt="npm downloads">
