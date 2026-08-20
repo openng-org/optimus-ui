@@ -3087,6 +3087,12 @@
                             "type": "string"
                         },
                         {
+                            "name": "home",
+                            "optional": true,
+                            "readonly": false,
+                            "type": "string"
+                        },
+                        {
                             "name": "scrollTop",
                             "optional": true,
                             "readonly": false,
@@ -5954,7 +5960,7 @@
                             "optional": false,
                             "readonly": false,
                             "type": "string",
-                            "description": "Defines a string that labels the home icon for accessibility."
+                            "description": "Defines a string that labels the home icon for accessibility. Defaults to the  `aria.home`  translation when the home item has no visible label."
                         }
                     ]
                 },

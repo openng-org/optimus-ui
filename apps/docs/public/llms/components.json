@@ -3389,7 +3389,7 @@
             "name": "homeAriaLabel",
             "type": "string",
             "default": "-",
-            "description": "Defines a string that labels the home icon for accessibility.",
+            "description": "Defines a string that labels the home icon for accessibility. Defaults to the  `aria.home`  translation when the home item has no visible label.",
             "deprecated": ""
           }
         ],

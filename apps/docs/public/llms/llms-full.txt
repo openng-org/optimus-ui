@@ -3901,7 +3901,7 @@ Breadcrumb provides contextual information about page hierarchy.
 | style | { [klass: string]: any } | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
 | home | MenuItem | - | MenuItem configuration for the home icon. |
-| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. |
+| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. Defaults to the  `aria.home`  translation when the home item has no visible label. |
 
 ### Emits
 
