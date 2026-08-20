@@ -4,7 +4,7 @@
 
 **A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.**
 
-[![npm](https://img.shields.io/npm/v/@openng/optimus-ui.svg?color=%23000)](https://www.npmjs.com/package/@openng/optimus-ui)
+[![npm](https://img.shields.io/npm/v/@openng/optimus-ui/v1.svg?color=%23000)](https://www.npmjs.com/package/@openng/optimus-ui?activeTab=versions)
 [![license](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE.md)
 [![angular](https://img.shields.io/badge/angular-%3E%3D21-black.svg)](https://angular.dev)
 
