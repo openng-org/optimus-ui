@@ -854,6 +854,32 @@ describe('CascadeSelect', () => {
             expect(ariaRequired === null || ariaRequired === 'false').toBe(true);
             expect(hiddenInput.nativeElement.getAttribute('aria-label')).toBeTruthy();
         });
+
+        it('should render nested option lists with role="group"', async () => {
+            testComponent.options = mockCountries;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const trigger = testFixture.debugElement.query(By.css('.p-cascadeselect-dropdown'));
+            trigger.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const rootList = testFixture.debugElement.query(By.css('ul[role="tree"]'));
+            expect(rootList).toBeTruthy();
+
+            const groupOption = testFixture.debugElement.query(By.css('li[role="treeitem"]'));
+            groupOption.nativeElement.querySelector('.p-cascadeselect-option-content').click();
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const nestedList = rootList.nativeElement.querySelector('ul');
+            expect(nestedList).toBeTruthy();
+            expect(nestedList.getAttribute('role')).toBe('group');
+        });
     });
 
     describe('Complex Situations and Edge Cases', () => {
