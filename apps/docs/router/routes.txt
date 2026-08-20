@@ -65,7 +65,6 @@
 /menubar
 /message
 /metergroup
-/migration/primeng
 /migration/update
 /multiselect
 /orderlist

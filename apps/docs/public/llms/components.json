@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-18",
+  "generatedAt": "2026-08-20",
   "components": [
     {
       "name": "Image",
@@ -3299,7 +3299,7 @@
         {
           "id": "accessibility",
           "label": "Accessibility",
-          "description": "Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with \"page\" as the value. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.",
+          "description": "Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with \"page\" as the value. The home item renders an icon, so when it has no label the link is named with the homeAriaLabel property. When homeAriaLabel is not defined either, the aria.home key of the locale configuration is used as the default. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.",
           "examples": null
         },
         {
@@ -45274,54 +45274,6 @@
           "label": "Support-",
           "description": "Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. For real-time chat, join the Optimus UI Discord server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the GitHub releases .",
           "examples": null
-        }
-      ]
-    },
-    {
-      "name": "primeng",
-      "path": "migration/primeng",
-      "title": "Migrate from PrimeNG",
-      "description": "Moving a PrimeNG v21 application to Optimus UI.",
-      "sections": [
-        {
-          "id": "automated-",
-          "label": "Automated-",
-          "description": "The recommended way to migrate is the migrate-from-primeng schematic. Install &#64;openng/optimus-ui first so the Angular CLI can resolve it, then run the schematic: packages are swapped, imports are rewritten and dependencies are installed. Note that ng add does not run the migration. It only sets up Optimus UI in a fresh project and makes no changes when primeng is detected. The schematic can be re-run at any time, for example after pulling in unmigrated code, and accepts a couple of flags. --skip-install skips the package install task and --force bypasses the PrimeNG v21 version check. After rewriting, the schematic scans the workspace and prints a report of any remaining primeng , primeicons or &#64;primeuix references it could not migrate automatically, with file and line numbers. Review these manually using the tables in the manual migration section below. Files your .gitignore excludes are left alone, so coverage reports and build output are neither rewritten nor reported. The report itself is printed before the CLI lists the files it created and updated — that list only covers what the migration changed for you, so scroll back up to the warnings before you build.",
-          "examples": null
-        },
-        {
-          "id": "manual-",
-          "label": "Manual-",
-          "description": "If you prefer to migrate by hand, or need to finish references the schematic reported as leftovers, apply the renames below. Start by replacing the packages. Packages Replace the packages in package.json and in every import path. Subpath imports keep their suffix, for example primeng/button becomes &#64;openng/optimus-ui/button . Identifiers Rename the following exported identifiers. The PrimeIcons constants class still compiles through a deprecated alias, however OpenngIcons is the current API. Assets The PrimeIcons stylesheet moved along with the package rename. Update references in global stylesheets and in the styles arrays of angular.json or project.json from primeicons/primeicons.css to &#64;openng/icons/openng-icons.css . Example A typical app.config.ts and component before the migration. The same code after the migration.",
-          "examples": null
-        },
-        {
-          "id": "overview-",
-          "label": "Overview-",
-          "description": "Optimus UI is the open-source MIT licensed continuation of PrimeNG (now closed-source), rebranded due to trademark restrictions. Optimus UI v1 targets Angular 21 and is fully API-compatible with PrimeNG v21, so migrating is a rename rather than a rewrite. From v1 onward, Optimus UI evolves independently and future versions will diverge from PrimeNG, so v1 is the smoothest point to switch. Component selectors keep the p- prefix and icon classes keep the pi- prefix, so your templates are not affected by the migration.",
-          "examples": null
-        },
-        {
-          "id": "prerequisites-",
-          "label": "Prerequisites-",
-          "description": "Your project must be on PrimeNG v21 before migrating, as Optimus UI v1 mirrors the PrimeNG v21 API. If you are on an older version, update PrimeNG first by following its v21 migration guide . The migration schematic verifies this requirement and aborts when PrimeNG is missing or older than v21. The check can be bypassed with the --force flag, for example in workspaces where the dependency is declared in a non-standard location.",
-          "examples": {
-            "command": "ng update primeng@21"
-          }
-        },
-        {
-          "id": "schematic-details-",
-          "label": "Schematic-details-",
-          "description": "The schematic performs the following steps across the whole workspace, skipping build output and dependency folders. Swaps the PrimeNG package family for the Optimus UI equivalents in every package.json . Rewrites import specifiers and renamed identifiers, such as providePrimeNG , in all .ts and .mts source files. Updates asset references, such as the PrimeIcons stylesheet, in stylesheets and in angular.json / project.json . Prints a report of leftover references that require manual review. Schedules a package install, unless --skip-install is set.",
-          "examples": null
-        },
-        {
-          "id": "verify-",
-          "label": "Verify-",
-          "description": "Build the application and run your test suite to confirm the migration. Searching the project for the old package names is a quick way to find anything left behind. The schematic scans for the same pattern when it prints its leftover report.",
-          "examples": {
-            "command": "ng build\n\ngrep -riEn \"primeng|primeicons|@primeuix\" src/"
-          }
         }
       ]
     },

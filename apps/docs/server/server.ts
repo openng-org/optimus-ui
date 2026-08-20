@@ -39,7 +39,7 @@ export function app(): express.Express {
 
     // Pages that have their own markdown files (not components)
     // These are defined in GUIDE_PAGES in build-llm-docs.mjs
-    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'primeflex', 'philosophy', 'faq', 'primeng', 'contribution']);
+    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'primeflex', 'philosophy', 'faq', 'contribution']);
 
     // Serve markdown files - handles both components and pages
     server.get('/:name.md', (req, res, next) => {
@@ -161,6 +161,11 @@ export function app(): express.Express {
         req.on('end', () => {
             res.status(200).json({ message: 'Uploaded' });
         });
+    });
+
+    // The PrimeNG migration guide moved to the v1 docs archive — redirect rather than 404.
+    server.get('/migration/primeng', (req, res) => {
+        res.redirect(301, 'https://v1.optimus.openng.org/migration/primeng');
     });
 
     // Serve static files from /browser.

@@ -10,7 +10,7 @@
 [![license](https://img.shields.io/badge/license-MIT-black.svg)](LICENSE.md)
 [![angular](https://img.shields.io/badge/angular-%3E%3D21-black.svg)](https://angular.dev)
 
-[Documentation](https://optimus.openng.org) · [Getting started](https://optimus.openng.org/installation) · [Migrating from PrimeNG](https://optimus.openng.org/migration/primeng) · [Philosophy](https://optimus.openng.org/philosophy) · [FAQ](https://optimus.openng.org/faq)
+[Documentation](https://optimus.openng.org) · [Getting started](https://optimus.openng.org/installation) · [Migrating from PrimeNG](https://v1.optimus.openng.org/migration/primeng) · [Philosophy](https://optimus.openng.org/philosophy) · [FAQ](https://optimus.openng.org/faq)
 
 </div>
 
@@ -51,7 +51,7 @@ npm install @openng/optimus-ui
 ng generate @openng/optimus-ui:migrate-from-primeng
 ```
 
-See the [migration guide](https://optimus.openng.org/migration/primeng) for prerequisites and the manual cases. If you are on PrimeNG v20 or older, upgrade to v21 first.
+See the [migration guide](https://v1.optimus.openng.org/migration/primeng) for prerequisites and the manual cases. If you are on PrimeNG v20 or older, upgrade to v21 first.
 
 ## Packages
 

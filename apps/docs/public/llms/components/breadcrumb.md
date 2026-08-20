@@ -4,7 +4,7 @@ Breadcrumb provides contextual information about page hierarchy.
 
 ## Accessibility
 
-Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
+Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. The home item renders an icon, so when it has no label the link is named with the homeAriaLabel property. When homeAriaLabel is not defined either, the aria.home key of the locale configuration is used as the default. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
 
 ## Basic
 
