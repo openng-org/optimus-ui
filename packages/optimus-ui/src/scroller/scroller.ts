@@ -511,6 +511,8 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
     windowResizeListener: VoidListener;
 
+    visibilityObserver: ResizeObserver | undefined;
+
     defaultWidth: number | undefined;
 
     defaultHeight: number | undefined;
@@ -671,6 +673,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
     onDestroy() {
         this.unbindResizeListener();
+        this.unbindVisibilityObserver();
 
         this.contentEl = null;
         this.initialized = false;
@@ -679,6 +682,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
     viewInit() {
         if (isPlatformBrowser(this.platformId) && !this.initialized) {
             if (isVisible(this.elementViewChild?.nativeElement)) {
+                this.unbindVisibilityObserver();
                 this.setInitialState();
                 this.setContentEl(this.contentEl);
                 this.init();
@@ -688,6 +692,8 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
                 this.defaultContentWidth = getWidth(this.contentEl);
                 this.defaultContentHeight = getHeight(this.contentEl);
                 this.initialized = true;
+            } else {
+                this.bindVisibilityObserver();
             }
         }
     }
@@ -1155,6 +1161,37 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
         if (this.windowResizeListener) {
             this.windowResizeListener();
             this.windowResizeListener = null;
+        }
+    }
+
+    bindVisibilityObserver() {
+        if (this.visibilityObserver || typeof ResizeObserver === 'undefined') {
+            return;
+        }
+
+        const element = this.elementViewChild?.nativeElement;
+
+        if (!element) {
+            return;
+        }
+
+        this.zone.runOutsideAngular(() => {
+            this.visibilityObserver = new ResizeObserver(() => {
+                // `viewInit` disconnects this observer as soon as it initializes, so there is
+                // nothing to guard against here: the callback cannot run once initialized.
+                if (isVisible(element)) {
+                    this.zone.run(() => this.viewInit());
+                }
+            });
+
+            this.visibilityObserver.observe(element);
+        });
+    }
+
+    unbindVisibilityObserver() {
+        if (this.visibilityObserver) {
+            this.visibilityObserver.disconnect();
+            this.visibilityObserver = undefined;
         }
     }
 

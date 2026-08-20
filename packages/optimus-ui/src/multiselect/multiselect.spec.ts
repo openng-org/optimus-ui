@@ -5,10 +5,10 @@ import { FormControl, FormGroup, FormsModule, NgForm, NgModel, ReactiveFormsModu
 import { By } from '@angular/platform-browser';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideOptimus } from '@openng/optimus-ui/config';
+import type { MultiSelectBlurEvent, MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectFocusEvent } from '@openng/optimus-ui/types/multiselect';
 import { BehaviorSubject, of } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import { MultiSelect, MultiSelectModule } from './multiselect';
-import type { MultiSelectBlurEvent, MultiSelectChangeEvent, MultiSelectFilterEvent, MultiSelectFocusEvent } from '@openng/optimus-ui/types/multiselect';
 interface City {
     name: string;
     code: string;
@@ -1832,6 +1832,21 @@ describe('MultiSelect Virtual Scrolling', () => {
         expect(multiSelect.virtualScrollItemSize).toBe(40);
         expect(multiSelect.scrollHeight).toBe('200px');
         expect(multiSelect.virtualScrollerDisabled).toBe(false);
+    });
+
+    it('should initialize the scroller on overlay enter with no value selected', async () => {
+        multiSelect.show();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(multiSelect.scroller).toBeTruthy();
+        expect(multiSelect.modelValue()?.length).toBeFalsy();
+
+        multiSelect.scroller!.initialized = false;
+        multiSelect.onOverlayBeforeEnter({});
+
+        expect(multiSelect.scroller!.initialized).toBe(true);
     });
 
     it('should handle large datasets', async () => {

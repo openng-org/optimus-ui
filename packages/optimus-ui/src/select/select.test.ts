@@ -2733,6 +2733,23 @@ describe('Select ViewChild Properties', () => {
             expect(selectInstance.lastHiddenFocusableElementOnOverlay.nativeElement).toBeTruthy();
         }
     });
+
+    it('should initialize the scroller on overlay enter with no value selected', async () => {
+        const virtualSelect = viewChildFixture.debugElement.query(By.css('p-select[placeholder="Virtual scroll select"]')).componentInstance;
+
+        virtualSelect.show();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await viewChildFixture.whenStable();
+        viewChildFixture.detectChanges();
+
+        expect(virtualSelect.scroller).toBeTruthy();
+        expect(virtualSelect.modelValue()).toBeFalsy();
+
+        virtualSelect.scroller.initialized = false;
+        virtualSelect.onOverlayBeforeEnter({});
+
+        expect(virtualSelect.scroller.initialized).toBe(true);
+    });
 });
 
 // Complex Edge Cases Tests

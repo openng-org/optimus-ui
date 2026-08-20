@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, ElementRef, input, provideZonelessChangeDetection, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -246,6 +246,24 @@ class TestDynamicPropertiesComponent {
     updateDisabled(disabled: boolean) {
         this.dynamicDisabled = disabled;
     }
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <div #host style="display: none">
+            <p-scroller [items]="items" [itemSize]="38" scrollHeight="200px">
+                <ng-template #item let-item>
+                    <div class="deferred-item">{{ item }}</div>
+                </ng-template>
+            </p-scroller>
+        </div>
+    `
+})
+class TestDeferredVisibilityComponent {
+    @ViewChild('host', { static: true }) host: ElementRef<HTMLElement>;
+    items = Array.from({ length: 50 }, (_, i) => `Item ${i}`);
 }
 
 describe('Scroller', () => {
@@ -4341,6 +4359,58 @@ describe('Scroller', () => {
                     expect(loadingIcon.nativeElement.classList.contains('PT_LOADING_ICON')).toBeTruthy();
                 }
             });
+        });
+    });
+
+    describe('Deferred Visibility Initialization', () => {
+        let fixture: ComponentFixture<TestDeferredVisibilityComponent>;
+        let scroller: Scroller;
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [Scroller],
+                providers: [provideZonelessChangeDetection()],
+                declarations: [TestDeferredVisibilityComponent]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestDeferredVisibilityComponent);
+            scroller = fixture.debugElement.query(By.directive(Scroller)).componentInstance;
+            fixture.detectChanges();
+            await fixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 50));
+        });
+
+        it('should not initialize while the host has no box', () => {
+            expect(scroller.initialized).toBe(false);
+            expect(fixture.nativeElement.querySelectorAll('.deferred-item').length).toBe(0);
+        });
+
+        it('should observe the element while it has no box', () => {
+            expect(scroller.visibilityObserver).toBeTruthy();
+        });
+
+        it('should render items once the host becomes visible, without any change detection cycle', async () => {
+            fixture.componentInstance.host.nativeElement.style.display = 'block';
+
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            expect(scroller.initialized).toBe(true);
+            expect(scroller.last).toBeGreaterThan(0);
+            expect(fixture.nativeElement.querySelectorAll('.deferred-item').length).toBeGreaterThan(0);
+        });
+
+        it('should stop observing the element once initialized', async () => {
+            fixture.componentInstance.host.nativeElement.style.display = 'block';
+
+            await new Promise((resolve) => setTimeout(resolve, 300));
+
+            expect(scroller.visibilityObserver).toBeUndefined();
+        });
+
+        it('should disconnect the observer on destroy', () => {
+            fixture.destroy();
+
+            expect(scroller.visibilityObserver).toBeUndefined();
         });
     });
 });
