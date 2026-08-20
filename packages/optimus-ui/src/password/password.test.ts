@@ -96,6 +96,24 @@ class TestFormPasswordComponent {
     toggleMask: boolean = true;
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <form [formGroup]="form">
+            <p-password formControlName="password" [feedback]="false" [showClear]="true"> </p-password>
+        </form>
+    `
+})
+class TestUpdateOnBlurPasswordComponent {
+    form = new FormGroup({
+        password: new FormControl('', {
+            validators: [Validators.required, Validators.minLength(8)],
+            updateOn: 'blur' as const
+        })
+    });
+}
+
 // Comprehensive template test component with all ContentChild projections
 // Password pTemplate component
 @Component({
@@ -263,7 +281,7 @@ describe('Password', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [PasswordModule, FormsModule, ReactiveFormsModule, CommonModule, SharedModule],
-            declarations: [TestBasicPasswordComponent, TestFormPasswordComponent, TestPasswordPTemplateComponent, TestPasswordRefTemplateComponent, TestPTPasswordComponent],
+            declarations: [TestBasicPasswordComponent, TestFormPasswordComponent, TestUpdateOnBlurPasswordComponent, TestPasswordPTemplateComponent, TestPasswordRefTemplateComponent, TestPTPasswordComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -696,27 +714,76 @@ describe('Password', () => {
             expect(formTestComponent.form.pristine).toBe(true);
         });
 
-        it('should handle updateOn blur strategy', async () => {
-            // Create a new form with updateOn blur for testing
-            const blurForm = new FormGroup({
-                password: new FormControl('', {
-                    validators: [Validators.required, Validators.minLength(8)],
-                    updateOn: 'blur'
-                })
+        describe('updateOn blur strategy', () => {
+            let blurFixture: ComponentFixture<TestUpdateOnBlurPasswordComponent>;
+            let blurComponent: TestUpdateOnBlurPasswordComponent;
+            let blurInput: HTMLInputElement;
+
+            const control = () => blurComponent.form.controls.password;
+
+            const type = async (value: string) => {
+                blurInput.value = value;
+                blurInput.dispatchEvent(new Event('input'));
+                blurFixture.detectChanges();
+                await blurFixture.whenStable();
+            };
+
+            const blur = async () => {
+                blurInput.dispatchEvent(new Event('blur'));
+                blurFixture.detectChanges();
+                await blurFixture.whenStable();
+            };
+
+            beforeEach(async () => {
+                blurFixture = TestBed.createComponent(TestUpdateOnBlurPasswordComponent);
+                blurComponent = blurFixture.componentInstance;
+                blurFixture.detectChanges();
+                await blurFixture.whenStable();
+
+                blurInput = blurFixture.debugElement.query(By.css('input')).nativeElement;
             });
 
-            formTestFixture.detectChanges();
+            it('should not update the control while typing', async () => {
+                await type('secret12');
 
-            const inputEl = formTestFixture.debugElement.query(By.css('input'));
-            if (inputEl) {
-                inputEl.nativeElement.focus();
-                inputEl.nativeElement.blur();
-                formTestFixture.detectChanges();
-                await formTestFixture.whenStable();
+                expect(control().value).toBe('');
+                expect(control().touched).toBe(false);
+            });
 
-                // Check that blur triggered form update
-                expect(inputEl.nativeElement).toBeTruthy();
-            }
+            it('should commit the value and mark the control touched on blur', async () => {
+                await type('secret12');
+                await blur();
+
+                expect(control().value).toBe('secret12');
+                expect(control().touched).toBe(true);
+                expect(control().dirty).toBe(true);
+                expect(control().valid).toBe(true);
+            });
+
+            it('should run validators once the value is committed on blur', async () => {
+                await type('short');
+                await blur();
+
+                expect(control().value).toBe('short');
+                expect(control().hasError('minlength')).toBe(true);
+            });
+
+            it('should commit the cleared value when the clear icon is clicked', async () => {
+                await type('secret12');
+                await blur();
+                expect(control().value).toBe('secret12');
+
+                const clearIcon = blurFixture.debugElement.query(By.css('[data-pc-section="clearicon"]'));
+                expect(clearIcon).toBeTruthy();
+
+                clearIcon.nativeElement.dispatchEvent(new MouseEvent('click'));
+                blurFixture.detectChanges();
+                await blurFixture.whenStable();
+
+                expect(blurInput.value).toBe('');
+                expect(control().value).toBeNull();
+                expect(control().hasError('required')).toBe(true);
+            });
         });
 
         it('should handle nested form validation', async () => {
