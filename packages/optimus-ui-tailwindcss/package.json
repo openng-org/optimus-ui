@@ -1,6 +1,6 @@
 {
     "name": "@openng/optimus-ui-tailwindcss",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "author": "OpenNg",
     "description": "Tailwind CSS utilities for Optimus UI Libraries",
     "homepage": "https://www.openng.org/",
