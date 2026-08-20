@@ -14,13 +14,8 @@ import { AppCode } from '@/components/doc/app.code';
                 dependencies are installed.
             </p>
             <app-code [code]="migrateCode" [hideToggleCode]="true"></app-code>
-            <p>
-                The <i>&#64;1</i> pin matters: this repo's <i>latest</i> npm tag points at the current major, not this one, so an unpinned install resolves to the wrong Angular peer requirements.
-            </p>
-            <p>
-                Note that <i>ng add</i> does not run the migration. It only sets up Optimus UI in a fresh project and makes no changes when <i>primeng</i> is detected. The schematic can be re-run at any time, for example after pulling in unmigrated
-                code, and accepts a couple of flags. <i>--skip-install</i> skips the package install task and <i>--force</i> bypasses the PrimeNG v21 version check.
-            </p>
+            <p>The <i>&#64;1</i> pin matters: this repo's <i>latest</i> npm tag points at the current major, not this one, so an unpinned install resolves to the wrong Angular peer requirements.</p>
+            <p>The schematic can be re-run at any time, for example after pulling in unmigrated code, and accepts a couple of flags. <i>--skip-install</i> skips the package install task and <i>--force</i> bypasses the PrimeNG v21 version check.</p>
             <app-code [code]="flagsCode" [hideToggleCode]="true"></app-code>
             <p>
                 After rewriting, the schematic scans the workspace and prints a report of any remaining <i>primeng</i>, <i>primeicons</i> or <i>&#64;primeuix</i> references it could not migrate automatically, with file and line numbers. Review these
