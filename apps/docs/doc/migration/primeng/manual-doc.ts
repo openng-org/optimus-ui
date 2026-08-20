@@ -104,11 +104,11 @@ export class ManualDoc {
     installCode: Code = {
         command: `# Using npm
 npm uninstall primeng primeicons @primeuix/themes
-npm install @openng/optimus-ui @openng/optimus-ui-themes @openng/icons
+npm install @openng/optimus-ui@1 @openng/optimus-ui-themes@1 @openng/icons
 
 # Using pnpm
 pnpm remove primeng primeicons @primeuix/themes
-pnpm add @openng/optimus-ui @openng/optimus-ui-themes @openng/icons`
+pnpm add @openng/optimus-ui@1 @openng/optimus-ui-themes@1 @openng/icons`
     };
 
     beforeCode: Code = {

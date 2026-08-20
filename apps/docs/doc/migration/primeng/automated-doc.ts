@@ -15,6 +15,9 @@ import { AppCode } from '@/components/doc/app.code';
             </p>
             <app-code [code]="migrateCode" [hideToggleCode]="true"></app-code>
             <p>
+                The <i>&#64;1</i> pin matters: this repo's <i>latest</i> npm tag points at the current major, not this one, so an unpinned install resolves to the wrong Angular peer requirements.
+            </p>
+            <p>
                 Note that <i>ng add</i> does not run the migration. It only sets up Optimus UI in a fresh project and makes no changes when <i>primeng</i> is detected. The schematic can be re-run at any time, for example after pulling in unmigrated
                 code, and accepts a couple of flags. <i>--skip-install</i> skips the package install task and <i>--force</i> bypasses the PrimeNG v21 version check.
             </p>
@@ -32,12 +35,12 @@ import { AppCode } from '@/components/doc/app.code';
 })
 export class AutomatedDoc {
     migrateCode: Code = {
-        command: `npm install @openng/optimus-ui
-ng generate @openng/optimus-ui:migrate-from-primeng`
+        command: `npm install @openng/optimus-ui@1
+ng generate @openng/optimus-ui@1:migrate-from-primeng`
     };
 
     flagsCode: Code = {
-        command: `ng generate @openng/optimus-ui:migrate-from-primeng --skip-install
-ng generate @openng/optimus-ui:migrate-from-primeng --force`
+        command: `ng generate @openng/optimus-ui@1:migrate-from-primeng --skip-install
+ng generate @openng/optimus-ui@1:migrate-from-primeng --force`
     };
 }

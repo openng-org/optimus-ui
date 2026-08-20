@@ -2,11 +2,12 @@ import { Code } from '@/domain/code';
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { AppCode } from '@/components/doc/app.code';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'verify-doc',
     standalone: true,
-    imports: [AppDocSectionText, AppCode],
+    imports: [AppDocSectionText, AppCode, RouterModule],
     template: `
         <app-docsectiontext>
             <p>
@@ -14,6 +15,7 @@ import { AppCode } from '@/components/doc/app.code';
                 report.
             </p>
             <app-code [code]="code" [hideToggleCode]="true"></app-code>
+            <p>Once verified, see <a [routerLink]="'/migration/update'" class="doc-link">Updating Optimus UI</a> when you're ready to move to a newer major.</p>
         </app-docsectiontext>
     `
 })
