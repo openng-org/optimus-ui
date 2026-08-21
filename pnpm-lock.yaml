@@ -218,8 +218,8 @@ importers:
         specifier: catalog:angular22
         version: 22.1.4(cf90cf45120ead3d00337c253aee8a0c)
       '@docsearch/css':
-        specifier: ^5.0.0
-        version: 5.0.0
+        specifier: ^5.0.2
+        version: 5.0.2
       '@docsearch/js':
         specifier: ^3.3.4
         version: 3.9.0(@algolia/client-search@5.56.0)(@types/react@19.2.18)(search-insights@2.17.3)
@@ -1495,8 +1495,8 @@ packages:
   '@docsearch/css@3.9.0':
     resolution: {integrity: sha512-cQbnVbq0rrBwNAKegIac/t6a8nWoUAn8frnkLFW6YARaRmAQr5/Eoe6Ln2fqkUCZ40KpdrKbpSAmgrkviOxuWA==}
 
-  '@docsearch/css@5.0.0':
-    resolution: {integrity: sha512-KlCnJI+uZeTEYnPD1vjDj++PJ6oXcyga0J7B9eUDk38wmILI/Vfsl3tDd8arUzrZatxyF5S5HlKflGI99Axd7w==}
+  '@docsearch/css@5.0.2':
+    resolution: {integrity: sha512-PAUJ+Nm2bEoW2na2EynAeyF/ZDYUcoDs9VXmRhvFQoPm0bMYhnw06mlFvbkxYDzxYvWnue8STSXnTnT5eKHvPg==}
 
   '@docsearch/js@3.9.0':
     resolution: {integrity: sha512-4bKHcye6EkLgRE8ze0vcdshmEqxeiJM77M0JXjef7lrYZfSlMunrDOCqyLjiZyo1+c0BhUqA2QpFartIjuHIjw==}
@@ -4664,6 +4664,7 @@ packages:
   eslint@9.39.4:
     resolution: {integrity: sha512-XoMjdBOwe/esVgEvLmNsD3IRHkm7fbKIUGvrleloJXUZgDHig2IPWNniv+GwjyJXzuNqVjlr5+4yVUZjycJwfQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
     peerDependencies:
       jiti: '*'
@@ -8928,7 +8929,7 @@ snapshots:
 
   '@docsearch/css@3.9.0': {}
 
-  '@docsearch/css@5.0.0': {}
+  '@docsearch/css@5.0.2': {}
 
   '@docsearch/js@3.9.0(@algolia/client-search@5.56.0)(@types/react@19.2.18)(search-insights@2.17.3)':
     dependencies:
