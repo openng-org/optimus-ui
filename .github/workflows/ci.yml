@@ -59,24 +59,6 @@ jobs:
               run: |
                   pnpm run test:styled
 
-    # The jasmine and vitest suites run as separate jobs so that each always runs, whatever
-    # the other one does.
-    test-karma:
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v7
-            - uses: ./.github/actions/setup
-
-            # No Playwright here: karma-chrome-launcher uses the runner image's Chrome.
-            # This job publishes no report: the karma builder never loads karma.conf.js
-            # because the test target sets no karmaConfig, so its junit reporter has never
-            # been active and no jasmine.xml is produced. The job passes or fails on the
-            # suite's exit code alone.
-            - name: Unit Test (jasmine)
-              run: |
-                  pnpm run test:unit
-
     test-vitest:
         permissions:
             contents: read # a job-level block replaces the workflow default, so restate it
@@ -101,7 +83,7 @@ jobs:
 
             - name: Unit Test (vitest)
               run: |
-                  pnpm run test:vitest
+                  pnpm run test:unit
 
             # A pull_request from a fork gets a read-only GITHUB_TOKEN whatever the
             # permissions block asks for, so creating the check run fails there. The report
