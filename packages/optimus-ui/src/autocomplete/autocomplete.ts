@@ -1808,7 +1808,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
     }
 
     getOptionValue(option) {
-        return this.optionValue ? resolveFieldData(option, this.optionValue) : option && option.value != undefined ? option.value : option;
+        return this.optionValue ? resolveFieldData(option, this.optionValue) : !this.optionLabel && option && option.value != undefined ? option.value : option;
     }
 
     getOptionIndex(index, scrollerOptions) {
