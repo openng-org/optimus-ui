@@ -3892,3 +3892,99 @@ describe('MultiSelect Complex Edge Cases', () => {
         });
     });
 });
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-multiselect
+            [options]="items"
+            [(ngModel)]="selectedItems"
+            optionLabel="label"
+            optionValue="value"
+            [lazySelectedOptions]="lazySelectedOptions"
+            [filter]="true"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="43"
+            [lazy]="lazy"
+            (onLazyLoad)="onLazyLoad($event)"
+        ></p-multiselect>
+    `
+})
+class TestLazyFilterMultiSelectComponent {
+    items: any[] = [
+        { label: 'Item #0', value: 0 },
+        { label: 'Other', value: 1 }
+    ];
+
+    lazySelectedOptions: any[] = [{ label: 'Item #9999', value: 9999 }];
+
+    selectedItems: any[] = [9999];
+
+    lazy = true;
+
+    events: any[] = [];
+
+    onLazyLoad(event: any) {
+        this.events.push(event);
+    }
+}
+
+describe('MultiSelect Lazy Filtering', () => {
+    let fixture: ComponentFixture<TestLazyFilterMultiSelectComponent>;
+    let component: TestLazyFilterMultiSelectComponent;
+    let multiSelect: MultiSelect;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [TestLazyFilterMultiSelectComponent],
+            imports: [CommonModule, FormsModule, MultiSelectModule],
+            providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestLazyFilterMultiSelectComponent);
+        component = fixture.componentInstance;
+        multiSelect = fixture.debugElement.query(By.directive(MultiSelect)).componentInstance;
+        fixture.detectChanges();
+        await fixture.whenStable();
+    });
+
+    it('should request a reload carrying the filter when the filter changes', async () => {
+        component.events.length = 0;
+
+        multiSelect.onFilterInputChange({ target: { value: 'Item' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const event = component.events[component.events.length - 1];
+        expect(event).toBeTruthy();
+        expect(event.first).toBe(0);
+        expect(event.filter).toBe('Item');
+    });
+
+    it('should leave filtering to the data source when lazy', async () => {
+        multiSelect.onFilterInputChange({ target: { value: 'Other' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(multiSelect.visibleOptions().length).toBe(2);
+    });
+
+    it('should filter locally when not lazy', async () => {
+        component.lazy = false;
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        multiSelect.onFilterInputChange({ target: { value: 'Other' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(multiSelect.visibleOptions().length).toBe(1);
+    });
+
+    it('should resolve the label of a selection the data source has not returned', () => {
+        expect(multiSelect.getLabelByValue(9999)).toBe('Item #9999');
+        // the remembered options resolve labels only, they are never rendered as list items
+        expect(multiSelect.visibleOptions().length).toBe(2);
+    });
+});

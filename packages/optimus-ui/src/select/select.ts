@@ -45,6 +45,7 @@ import { Ripple } from '@openng/optimus-ui/ripple';
 import { Scroller } from '@openng/optimus-ui/scroller';
 import { Tooltip } from '@openng/optimus-ui/tooltip';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
+import type { ScrollerLazyLoadEvent } from '@openng/optimus-ui/types/scroller';
 import {
     SelectChangeEvent,
     SelectFilterEvent,
@@ -59,6 +60,12 @@ import {
     SelectSelectedItemTemplateContext
 } from '@openng/optimus-ui/types/select';
 import { SelectStyle } from './style/selectstyle';
+
+/**
+ * Number of options requested when a filter change forces a reload before the scroller has
+ * measured its viewport.
+ */
+const DEFAULT_LAZY_PAGE_SIZE = 20;
 
 const SELECT_INSTANCE = new InjectionToken<Select>('SELECT_INSTANCE');
 const SELECT_ITEM_INSTANCE = new InjectionToken<SelectItem>('SELECT_ITEM_INSTANCE');
@@ -342,7 +349,7 @@ export class SelectItem extends BaseComponent {
                             [itemSize]="virtualScrollItemSize"
                             [autoSize]="true"
                             [lazy]="lazy"
-                            (onLazyLoad)="onLazyLoad.emit($event)"
+                            (onLazyLoad)="onScrollerLazyLoad($event)"
                             [options]="virtualScrollOptions"
                             [pt]="ptm('virtualScroller')"
                         >
@@ -992,8 +999,11 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
 
     visibleOptions = computed(() => {
         const options = this.getAllVisibleAndNonVisibleOptions();
+        // read outside the condition so the filter stays a dependency of this computed whatever lazy is
+        const filterValue = this._filterValue();
 
-        if (this._filterValue()) {
+        // when lazy, filtering is the data source's job: the options it returns are already filtered
+        if (!this.lazy && filterValue) {
             const _filterBy = this.filterBy || this.optionLabel;
 
             const filteredOptions =
@@ -1046,6 +1056,12 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
             return this.getOptionLabel(selectedOption);
         }
 
+        // with lazy loading the selected option is not necessarily part of the loaded page,
+        // fall back to the model value rather than showing the placeholder over a filled control
+        if (this.lazy && this.$filled()) {
+            return this.getOptionLabel(this.modelValue());
+        }
+
         return this.placeholder() || 'p-emptylabel';
     });
 
@@ -1084,15 +1100,25 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
             }
             this.cd.markForCheck();
         });
+
+        effect(() => {
+            const filter = this._filterValue();
+
+            if (this.lazy) {
+                this.emitLazyLoadForFilter(filter);
+            }
+        });
     }
 
     private isModelValueNotSet(): boolean {
         return this.modelValue() === null && !this.isOptionValueEqualsModelValue(this.selectedOption);
     }
 
-    private getAllVisibleAndNonVisibleOptions() {
-        return this.group ? this.flatOptions(this.options) : this.options || [];
-    }
+    private getAllVisibleAndNonVisibleOptions = computed(() => {
+        const options = this._options();
+
+        return this.group ? this.flatOptions(options) : options || [];
+    });
 
     onInit() {
         this.id = this.id || uuid('pn_id_');
@@ -1931,6 +1957,22 @@ export class Select extends BaseInput<SelectPassThrough> implements AfterViewIni
             this.overlayViewChild?.alignOverlay();
         });
         this.cd.markForCheck();
+    }
+
+    onScrollerLazyLoad(event: ScrollerLazyLoadEvent): void {
+        this.onLazyLoad.emit({ ...event, filter: this._filterValue() ?? null });
+    }
+
+    /**
+     * The scroller only reports a range once it has rendered, so a filter change has to ask for a
+     * first page itself. The scroller re-emits the exact range right after, through onScrollerLazyLoad.
+     */
+    private emitLazyLoadForFilter(filter: string | undefined | null): void {
+        this.onLazyLoad.emit({
+            first: 0,
+            last: this.scroller?.numItemsInViewport || DEFAULT_LAZY_PAGE_SIZE,
+            filter: filter ?? null
+        });
     }
 
     applyFocus(): void {
