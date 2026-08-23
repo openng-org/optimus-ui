@@ -1,6 +1,6 @@
 # Optimus UI Documentation
 
-Generated: 2026-08-04
+Generated: 2026-08-20
 
 ---
 
@@ -28,11 +28,11 @@ Once you have Optimus UI up and running, we recommend exploring the following re
 
 ## Ngadd-
 
-The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes at all and points you at the migration guide , which covers the migrate-from-primeng schematic.
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.
 
 ## Prerequisites-
 
-Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across, and the same ng add command detects that case for you.
+Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across with the migrate-from-primeng schematic, which is a separate command from the ng add below.
 
 ## Provider-
 
@@ -57,6 +57,10 @@ export const appConfig: ApplicationConfig = {
 ## Verify-
 
 Verify your setup by adding a component such as Button. Each component can be imported and registered individually so that you only include what you use for bundle optimization. Import path is available in the documentation of the corresponding component.
+
+## Versioncompatibility-
+
+Each Optimus UI major targets a single Angular major. Install the version matching your workspace, and see the update guide when moving to a newer one.
 
 ---
 
@@ -749,7 +753,7 @@ The honest answer to "how is this funded" is: it mostly is not. OpenNG covers th
 
 ## Trademark-
 
-Optimus UI is not affiliated with, endorsed by, or sponsored by PrimeTek. PrimeNG, PrimeFaces, PrimeReact, PrimeVue and PrimeFlex are their trademarks. The rename from the inherited names — the packages, the CSS layer, the icon library — is a trademark matter, not a technical one, and it is why ng add ships a migration schematic rather than asking you to rewrite imports by hand. References to PrimeNG remain throughout this documentation and the source, and they are deliberate. Attribution is the point: this library is PrimeTek's decade of work plus whatever the community adds on top. Pretending otherwise would be both dishonest and useless to anyone trying to find their way around a familiar API. The code we forked was published under the MIT license, and we distribute it under those same terms, with the original copyright notices intact.
+Optimus UI is not affiliated with, endorsed by, or sponsored by PrimeTek. PrimeNG, PrimeFaces, PrimeReact, PrimeVue and PrimeFlex are their trademarks. The rename from the inherited names — the packages, the CSS layer, the icon library — is a trademark matter, not a technical one, and it is why we ship a migration schematic rather than asking you to rewrite imports by hand. References to PrimeNG remain throughout this documentation and the source, and they are deliberate. Attribution is the point: this library is PrimeTek's decade of work plus whatever the community adds on top. Pretending otherwise would be both dishonest and useless to anyone trying to find their way around a familiar API. The code we forked was published under the MIT license, and we distribute it under those same terms, with the original copyright notices intact.
 
 ---
 
@@ -763,7 +767,7 @@ Do the PrimeNG themes work? The built-in presets do — Aura, Material, Lara and
 
 ## Migration-
 
-Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. How do I migrate from PrimeNG? Is it automatic? Mostly. Run ng add &#64;openng/optimus-ui in a PrimeNG v21 workspace and it detects the existing dependency and runs the full migration: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
+Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and makes no changes when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
 
 ## Project-
 
@@ -771,37 +775,7 @@ Is Optimus UI free? Will it stay free? Yes, and yes. Every package is MIT licens
 
 ## Support-
 
-Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. Optimus UI does not run its own Discord — the Discord links here point to the general Angular community server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the GitHub releases .
-
----
-
-# Migrate from PrimeNG
-
-Moving a PrimeNG v21 application to Optimus UI.
-
-## Automated-
-
-The recommended way to migrate is the migrate-from-primeng schematic. Install &#64;openng/optimus-ui first so the Angular CLI can resolve it, then run the schematic: packages are swapped, imports are rewritten and dependencies are installed. Note that ng add does not run the migration. It only sets up Optimus UI in a fresh project and makes no changes when primeng is detected. The schematic can be re-run at any time, for example after pulling in unmigrated code, and accepts a couple of flags. --skip-install skips the package install task and --force bypasses the PrimeNG v21 version check. After rewriting, the schematic scans the workspace and prints a report of any remaining primeng , primeicons or &#64;primeuix references it could not migrate automatically, with file and line numbers. Review these manually using the tables in the manual migration section below. Files your .gitignore excludes are left alone, so coverage reports and build output are neither rewritten nor reported. The report itself is printed before the CLI lists the files it created and updated — that list only covers what the migration changed for you, so scroll back up to the warnings before you build.
-
-## Manual-
-
-If you prefer to migrate by hand, or need to finish references the schematic reported as leftovers, apply the renames below. Start by replacing the packages. Packages Replace the packages in package.json and in every import path. Subpath imports keep their suffix, for example primeng/button becomes &#64;openng/optimus-ui/button . Identifiers Rename the following exported identifiers. The PrimeIcons constants class still compiles through a deprecated alias, however OpenngIcons is the current API. Assets The PrimeIcons stylesheet moved along with the package rename. Update references in global stylesheets and in the styles arrays of angular.json or project.json from primeicons/primeicons.css to &#64;openng/icons/openng-icons.css . Example A typical app.config.ts and component before the migration. The same code after the migration.
-
-## Overview-
-
-Optimus UI is the open-source MIT licensed continuation of PrimeNG (now closed-source), rebranded due to trademark restrictions. Optimus UI v1 targets Angular 21 and is fully API-compatible with PrimeNG v21, so migrating is a rename rather than a rewrite. From v1 onward, Optimus UI evolves independently and future versions will diverge from PrimeNG, so v1 is the smoothest point to switch. Component selectors keep the p- prefix and icon classes keep the pi- prefix, so your templates are not affected by the migration.
-
-## Prerequisites-
-
-Your project must be on PrimeNG v21 before migrating, as Optimus UI v1 mirrors the PrimeNG v21 API. If you are on an older version, update PrimeNG first by following its v21 migration guide . The migration schematic verifies this requirement and aborts when PrimeNG is missing or older than v21. The check can be bypassed with the --force flag, for example in workspaces where the dependency is declared in a non-standard location.
-
-## Schematic-details-
-
-The schematic performs the following steps across the whole workspace, skipping build output and dependency folders. Swaps the PrimeNG package family for the Optimus UI equivalents in every package.json . Rewrites import specifiers and renamed identifiers, such as providePrimeNG , in all .ts and .mts source files. Updates asset references, such as the PrimeIcons stylesheet, in stylesheets and in angular.json / project.json . Prints a report of leftover references that require manual review. Schedules a package install, unless --skip-install is set.
-
-## Verify-
-
-Build the application and run your test suite to confirm the migration. Searching the project for the old package names is a quick way to find anything left behind. The schematic scans for the same pattern when it prints its leftover report.
+Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. For real-time chat, join the Optimus UI Discord server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the GitHub releases .
 
 ---
 
@@ -815,7 +789,7 @@ Contributing to Optimus UI comes with several benefits. Being part of an open-so
 
 ## Helpneeded-
 
-Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Angular community Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
+Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Optimus UI Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
 
 ## Introduction-
 
@@ -3814,7 +3788,7 @@ Breadcrumb provides contextual information about page hierarchy.
 
 ## Accessibility
 
-Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
+Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. The home item renders an icon, so when it has no label the link is named with the homeAriaLabel property. When homeAriaLabel is not defined either, the aria.home key of the locale configuration is used as the default. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
 
 ## Basic
 
@@ -3927,7 +3901,7 @@ Breadcrumb provides contextual information about page hierarchy.
 | style | { [klass: string]: any } | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
 | home | MenuItem | - | MenuItem configuration for the home icon. |
-| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. |
+| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. Defaults to the  `aria.home`  translation when the home item has no visible label. |
 
 ### Emits
 

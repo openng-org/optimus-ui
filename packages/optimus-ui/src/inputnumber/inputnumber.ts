@@ -986,13 +986,15 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         }
 
         let code = event.which || event.keyCode;
+        if (code == 13) {
+            return;
+        }
+        event.preventDefault();
+
         let char = String.fromCharCode(code);
         let isDecimalSign = this.isDecimalSign(char);
         const isMinusSign = this.isMinusSign(char);
 
-        if (code != 13) {
-            event.preventDefault();
-        }
         if (!isDecimalSign && event.code === 'NumpadDecimal') {
             isDecimalSign = true;
             char = this._decimalChar;

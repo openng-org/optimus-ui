@@ -7,6 +7,7 @@ import {
     ContentChild,
     ContentChildren,
     ElementRef,
+    EmbeddedViewRef,
     EventEmitter,
     forwardRef,
     HostListener,
@@ -885,6 +886,8 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
 
     focusedOptionIndex = signal<number>(-1);
 
+    selectedItemTemplateLabel = signal<string | null>(null);
+
     _componentStyle = inject(AutoCompleteStyle);
 
     $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
@@ -899,6 +902,12 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
 
         if (isNotEmpty(modelValue)) {
             if (typeof modelValue === 'object' || this.optionValueSelected) {
+                const selectedItemTemplateLabel = this.selectedItemTemplateLabel();
+
+                if (selectedItemTemplateLabel) {
+                    return selectedItemTemplateLabel;
+                }
+
                 const label = this.getOptionLabel(selectedOption);
 
                 return label != null ? label : modelValue;
@@ -1667,6 +1676,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         }
 
         this.value = value;
+        this.updateSelectedItemTemplateLabel(options);
         this.writeModelValue(options);
         this.onModelChange(value);
         this.updateInputValue();
@@ -1807,6 +1817,32 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         return option && option.label != undefined ? option.label : option;
     }
 
+    getSelectedItemTemplateLabel(option: any) {
+        const template = this.selectedItemTemplate || this._selectedItemTemplate;
+
+        if (!template || option == null) {
+            return null;
+        }
+
+        const embeddedView: EmbeddedViewRef<AutoCompleteSelectedItemTemplateContext> = template.createEmbeddedView({ $implicit: option });
+
+        embeddedView.detectChanges();
+
+        const label = embeddedView.rootNodes
+            .map((node: Node) => node.textContent || '')
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        embeddedView.destroy();
+
+        return label || null;
+    }
+
+    updateSelectedItemTemplateLabel(option: any) {
+        this.selectedItemTemplateLabel.set(!this.multiple ? this.getSelectedItemTemplateLabel(option) : null);
+    }
+
     getOptionValue(option) {
         return this.optionValue ? resolveFieldData(option, this.optionValue) : !this.optionLabel && option && option.value != undefined ? option.value : option;
     }
@@ -1890,16 +1926,29 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Writes the value to the control.
      */
     writeControlValue(value: any, setModelValue: (value: any) => void): void {
+        let resolvedValue = value;
+
         if (this.multiple) {
-            const resolved = (value || []).map((val: any) => this.findOptionByValue(val) ?? val);
-            setModelValue(isEmpty(value) ? value : resolved);
+            const resolved = (value || []).map((val: any) => {
+                const match = this.visibleOptions().find((option: any) => equals(val, option, this.equalityKey()));
+                return match ?? val;
+            });
+            resolvedValue = isEmpty(value) ? value : resolved;
         } else {
-            const option = this.findOptionByValue(value);
-            setModelValue(isEmpty(option) ? value : option);
+            const option = this.visibleOptions().find((option: any) => equals(value, option, this.equalityKey()));
+            resolvedValue = isEmpty(option) ? value : option;
         }
 
+        setModelValue(resolvedValue);
         this.value = value;
         this.updateInputValue();
+
+        queueMicrotask(() => {
+            this.updateSelectedItemTemplateLabel(resolvedValue);
+            this.updateInputValue();
+            this.cd.markForCheck();
+        });
+
         this.cd.markForCheck();
     }
 

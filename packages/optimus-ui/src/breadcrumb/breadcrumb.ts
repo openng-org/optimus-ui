@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ContentChild, ContentChildren, EventEmitter, inject, InjectionToken, Input, NgModule, Output, QueryList, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterModule } from '@angular/router';
-import { MenuItem, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
+import { MenuItem, PrimeTemplate, SharedModule, TranslationKeys } from '@openng/optimus-ui/api';
 import { Badge } from '@openng/optimus-ui/badge';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
@@ -30,7 +30,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                         <a
                             [href]="home.url ? home.url : null"
                             *ngIf="!home.routerLink"
-                            [attr.aria-label]="homeAriaLabel"
+                            [attr.aria-label]="homeLinkAriaLabel"
                             [class]="cn(cx('itemLink'), home.linkClass)"
                             [ngStyle]="home.linkStyle"
                             (click)="onClick($event, home)"
@@ -52,7 +52,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                             *ngIf="home.routerLink"
                             [routerLink]="home.routerLink"
                             routerLinkActive="p-menuitem-link-active"
-                            [attr.aria-label]="homeAriaLabel"
+                            [attr.aria-label]="homeLinkAriaLabel"
                             [queryParams]="home.queryParams"
                             [routerLinkActiveOptions]="home.routerLinkActiveOptions || { exact: false }"
                             [class]="cn(cx('itemLink'), home.linkClass)"
@@ -108,6 +108,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                                 [attr.title]="menuitem?.title"
                                 [attr.tabindex]="menuitem?.disabled ? null : menuitem?.tabindex || '0'"
                                 [attr.data-automationid]="menuitem?.automationId"
+                                [attr.aria-current]="isCurrentPage(i) ? 'page' : undefined"
                                 [pBind]="getPTOptions(menuitem, i, 'itemLink')"
                             >
                                 <ng-container *ngIf="!itemTemplate && !_itemTemplate">
@@ -142,6 +143,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                                 [skipLocationChange]="menuitem?.skipLocationChange"
                                 [replaceUrl]="menuitem?.replaceUrl"
                                 [state]="menuitem?.state"
+                                [ariaCurrentWhenActive]="isCurrentPage(i) ? 'page' : undefined"
                                 [pBind]="getPTOptions(menuitem, i, 'itemLink')"
                             >
                                 <span *ngIf="menuitem?.icon" [class]="cn(cx('itemIcon'), menuitem?.icon, menuitem?.iconClass)" [ngStyle]="menuitem?.iconStyle" [pBind]="getPTOptions(menuitem, i, 'itemIcon')"></span>
@@ -195,7 +197,7 @@ export class Breadcrumb extends BaseComponent<BreadcrumbPassThrough> {
      */
     @Input() home: MenuItem | undefined;
     /**
-     * Defines a string that labels the home icon for accessibility.
+     * Defines a string that labels the home icon for accessibility. Defaults to the `aria.home` translation when the home item has no visible label.
      * @group Props
      */
     @Input() homeAriaLabel: string | undefined;
@@ -209,6 +211,15 @@ export class Breadcrumb extends BaseComponent<BreadcrumbPassThrough> {
     _componentStyle = inject(BreadCrumbStyle);
 
     router = inject(Router);
+
+    get homeLinkAriaLabel(): string | undefined {
+        if (this.homeAriaLabel) {
+            return this.homeAriaLabel;
+        }
+
+        // A visible label already names the link, so an aria-label would only override it.
+        return this.home?.label ? undefined : this.config.getTranslation(TranslationKeys.ARIA)?.home;
+    }
 
     onClick(event: MouseEvent, item: MenuItem) {
         if (item.disabled) {
@@ -280,6 +291,20 @@ export class Breadcrumb extends BaseComponent<BreadcrumbPassThrough> {
                 index
             }
         });
+    }
+
+    isCurrentPage(index: number): boolean {
+        if (!this.model) {
+            return false;
+        }
+
+        for (let i = this.model.length - 1; i >= 0; i--) {
+            if (this.model[i]?.visible !== false) {
+                return i === index;
+            }
+        }
+
+        return false;
     }
 }
 

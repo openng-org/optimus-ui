@@ -31,7 +31,7 @@ Once you have Optimus UI up and running, we recommend exploring the following re
 
 ## Ngadd-
 
-The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes at all and points you at the migration guide , which covers the migrate-from-primeng schematic.
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.
 
 ```bash
 ng add @openng/optimus-ui
@@ -39,7 +39,7 @@ ng add @openng/optimus-ui
 
 ## Prerequisites-
 
-Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across, and the same ng add command detects that case for you.
+Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across with the migrate-from-primeng schematic, which is a separate command from the ng add below.
 
 ## Provider-
 
@@ -64,4 +64,8 @@ export const appConfig: ApplicationConfig = {
 ## Verify-
 
 Verify your setup by adding a component such as Button. Each component can be imported and registered individually so that you only include what you use for bundle optimization. Import path is available in the documentation of the corresponding component.
+
+## Versioncompatibility-
+
+Each Optimus UI major targets a single Angular major. Install the version matching your workspace, and see the update guide when moving to a newer one.
 

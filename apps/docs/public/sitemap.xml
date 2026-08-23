@@ -269,7 +269,7 @@
         <priority>0.7</priority>
     </url>
     <url>
-        <loc>https://optimus.openng.org/migration/primeng</loc>
+        <loc>https://optimus.openng.org/migration/update</loc>
         <priority>0.8</priority>
     </url>
     <url>
@@ -406,6 +406,10 @@
     </url>
     <url>
         <loc>https://optimus.openng.org/tailwind</loc>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://optimus.openng.org/templates</loc>
         <priority>0.7</priority>
     </url>
     <url>

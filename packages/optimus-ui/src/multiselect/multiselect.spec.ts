@@ -824,6 +824,163 @@ describe('MultiSelect', () => {
         });
     });
 
+    describe('Tab Key Behavior', () => {
+        const dispatchTab = async (options: KeyboardEventInit = {}) => {
+            const keyEvent = new KeyboardEvent('keydown', { code: 'Tab', ...options });
+            spyOn(keyEvent, 'preventDefault');
+
+            multiSelect.onKeyDown(keyEvent);
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            return keyEvent;
+        };
+
+        describe('without focusable elements in the overlay', () => {
+            beforeEach(async () => {
+                component.filter = false;
+                multiSelect.showHeader = false;
+                fixture.detectChanges();
+
+                multiSelect.show();
+                await fixture.whenStable();
+                fixture.detectChanges();
+            });
+
+            it('should have no focusable elements when filter and header are disabled', () => {
+                expect(multiSelect.hasFocusableElements()).toBe(false);
+            });
+
+            it('should not select the focused option (#395)', async () => {
+                spyOn(component, 'onSelectionChange');
+                multiSelect.focusedOptionIndex.set(2);
+
+                await dispatchTab();
+
+                expect(multiSelect.modelValue()).toEqual([]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+            });
+
+            it('should keep previously selected options untouched', async () => {
+                multiSelect.onOptionSelect({ originalEvent: new MouseEvent('click'), option: component.options[0] });
+                await fixture.whenStable();
+                fixture.detectChanges();
+
+                spyOn(component, 'onSelectionChange');
+                multiSelect.focusedOptionIndex.set(2);
+
+                await dispatchTab();
+
+                expect(multiSelect.modelValue()).toEqual([component.options[0]]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+            });
+
+            it('should not deselect an already selected focused option', async () => {
+                multiSelect.onOptionSelect({ originalEvent: new MouseEvent('click'), option: component.options[1] });
+                await fixture.whenStable();
+                fixture.detectChanges();
+
+                multiSelect.focusedOptionIndex.set(1);
+
+                await dispatchTab();
+
+                expect(multiSelect.modelValue()).toEqual([component.options[1]]);
+            });
+
+            it('should close the overlay without preventing the default tab navigation', async () => {
+                multiSelect.focusedOptionIndex.set(2);
+
+                const keyEvent = await dispatchTab();
+
+                expect(multiSelect.overlayVisible).toBe(false);
+                expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+            });
+
+            it('should not select anything when no option is focused', async () => {
+                spyOn(component, 'onSelectionChange');
+                multiSelect.focusedOptionIndex.set(-1);
+
+                await dispatchTab();
+
+                expect(multiSelect.modelValue()).toEqual([]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+                expect(multiSelect.overlayVisible).toBe(false);
+            });
+
+            it('should be a no-op while the overlay is closed', async () => {
+                multiSelect.hide();
+                await fixture.whenStable();
+                fixture.detectChanges();
+
+                spyOn(component, 'onSelectionChange');
+                multiSelect.focusedOptionIndex.set(2);
+
+                const keyEvent = await dispatchTab();
+
+                expect(multiSelect.modelValue()).toEqual([]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+                expect(multiSelect.overlayVisible).toBe(false);
+                expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+            });
+        });
+
+        describe('with focusable elements in the overlay', () => {
+            beforeEach(async () => {
+                component.filter = true;
+                multiSelect.showHeader = true;
+                fixture.detectChanges();
+
+                multiSelect.show();
+                await fixture.whenStable();
+                fixture.detectChanges();
+            });
+
+            it('should move focus to the first hidden focusable element and keep the overlay open', async () => {
+                spyOn(component, 'onSelectionChange');
+                const firstHiddenFocusableElement = multiSelect.firstHiddenFocusableElementOnOverlay!.nativeElement;
+                spyOn(firstHiddenFocusableElement, 'focus');
+                multiSelect.focusedOptionIndex.set(2);
+
+                const keyEvent = await dispatchTab();
+
+                expect(firstHiddenFocusableElement.focus).toHaveBeenCalled();
+                expect(keyEvent.preventDefault).toHaveBeenCalled();
+                expect(multiSelect.overlayVisible).toBe(true);
+                expect(multiSelect.modelValue()).toEqual([]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+            });
+
+            it('should move focus to the last hidden focusable element on shift+tab', async () => {
+                const lastHiddenFocusableElement = multiSelect.lastHiddenFocusableElementOnOverlay!.nativeElement;
+                spyOn(lastHiddenFocusableElement, 'focus');
+                multiSelect.focusedOptionIndex.set(2);
+
+                const keyEvent = await dispatchTab({ shiftKey: true });
+
+                expect(lastHiddenFocusableElement.focus).toHaveBeenCalled();
+                expect(keyEvent.preventDefault).toHaveBeenCalled();
+                expect(multiSelect.modelValue()).toEqual([]);
+            });
+
+            it('should not select the focused option when tab is pressed inside the filter input', async () => {
+                spyOn(component, 'onSelectionChange');
+                multiSelect.focusedOptionIndex.set(2);
+
+                const keyEvent = new KeyboardEvent('keydown', { code: 'Tab' });
+                spyOn(keyEvent, 'preventDefault');
+
+                multiSelect.onFilterKeyDown(keyEvent);
+                await fixture.whenStable();
+                fixture.detectChanges();
+
+                expect(multiSelect.modelValue()).toEqual([]);
+                expect(component.onSelectionChange).not.toHaveBeenCalled();
+                expect(multiSelect.overlayVisible).toBe(true);
+                expect(keyEvent.preventDefault).not.toHaveBeenCalled();
+            });
+        });
+    });
+
     describe('Accessibility', () => {
         beforeEach(() => {
             fixture.detectChanges();

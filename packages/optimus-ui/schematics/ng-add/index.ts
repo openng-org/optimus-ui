@@ -15,13 +15,16 @@ function themeImport(theme: Theme): { preset: string; module: string } {
     return { preset: theme, module: `${THEMES_PACKAGE}/${theme.toLowerCase()}` };
 }
 
-function manualInstructions(theme: Theme): string {
+function manualSteps(theme: Theme): string {
     const { preset, module } = themeImport(theme);
-    return `Could not find a providers array to update automatically. Finish the setup manually:
-  1. import { provideOptimus } from '@openng/optimus-ui/config';
+    return `  1. import { provideOptimus } from '@openng/optimus-ui/config';
   2. import ${preset} from '${module}';
   3. add provideOptimus({ theme: { preset: ${preset} } }) to your root providers
      (bootstrapApplication providers, or an NgModule's providers array).`;
+}
+
+function manualInstructions(theme: Theme): string {
+    return `Could not find a providers array to update automatically. Finish the setup manually:\n${manualSteps(theme)}`;
 }
 
 /**
@@ -76,7 +79,9 @@ function addThemesDependency(tree: Tree): void {
  * apps). An explicit but nonexistent `--project` is a hard error; anything else unexpected about
  * the app's shape (no application project, no `build` target, an app.config.ts/main.ts that
  * addRootProvider can't statically analyze, …) degrades to the manual-instructions warning
- * rather than aborting the rest of ng-add.
+ * rather than aborting the rest of ng-add. Whenever wiring degrades after addRootProvider has
+ * already edited the tree, those edits are rolled back first so the user never inherits a
+ * half-wired provideOptimus call (e.g. one referencing a conflicting `Aura` binding).
  */
 async function wireProvideOptimus(tree: Tree, context: SchematicContext, options: Schema): Promise<void> {
     const theme = options.theme ?? DEFAULT_THEME;
@@ -119,12 +124,30 @@ async function wireProvideOptimus(tree: Tree, context: SchematicContext, options
         return;
     }
 
+    // A providePrimeNG call in the sources means this is a live PrimeNG app that slipped past the
+    // package.json detection in ngAdd (#1448: primeng installed but undeclared, or declared only
+    // in a package.json the detection can't see). Wiring anyway would retarget a legacy
+    // `@primeuix/themes/*` import in place and silently hand providePrimeNG an Optimus preset —
+    // it compiles, so nothing would surface the breakage. Skip the automatic wiring instead.
+    const primengFile = findSourceFileContaining(tree, sourceRoot, 'providePrimeNG(');
+    if (primengFile) {
+        context.logger.warn(`Found a providePrimeNG call in ${primengFile} — this workspace still uses PrimeNG, so provideOptimus was not wired automatically.
+To migrate this workspace, run: ng generate @openng/optimus-ui:migrate-from-primeng
+Or finish the setup manually:
+${manualSteps(theme)}`);
+        return;
+    }
+
+    // addRootProvider edits the tree before we can validate the result, so keep a snapshot of the
+    // source files to roll those edits back if wiring has to degrade to manual instructions.
+    const snapshot = snapshotSourceFiles(tree, sourceRoot);
     try {
         const rule = addRootProvider(projectName, ({ code, external }) => code`${external('provideOptimus', '@openng/optimus-ui/config')}({ theme: { preset: ${preset} } })`);
         await applyRule(rule, tree, context);
 
         const wiredFile = findProvideOptimusFile(tree, sourceRoot);
         if (!wiredFile) {
+            restoreSourceFiles(tree, snapshot);
             context.logger.warn(instructions);
             return;
         }
@@ -132,30 +155,80 @@ async function wireProvideOptimus(tree: Tree, context: SchematicContext, options
         // `external()` only emits named imports, and `@openng/optimus-ui-themes/aura` only has a
         // default export — add it ourselves.
         const original = tree.read(wiredFile)!.toString();
-        const updated = addDefaultImport(original, preset, module);
+        const imported = addDefaultImport(original, preset, module);
+        let updated = imported.text;
+        if (imported.bindingName !== preset) {
+            // The preset name is already taken in this file (e.g. `Aura` imported from another
+            // theme package), so the import went in under a different binding — retarget the
+            // `preset:` reference in the provider call addRootProvider just inserted. `external()`
+            // may itself have aliased the provideOptimus binding (provideOptimus_1, …), hence `\w*`.
+            const providerCall = new RegExp(`(provideOptimus\\w*\\(\\{\\s*theme:\\s*\\{\\s*preset:\\s*)${preset}(\\s*\\}\\s*\\}\\s*\\))`);
+            if (!providerCall.test(updated)) {
+                // Never leave the inserted call referencing the conflicting binding — undo the
+                // wiring so the manual instructions start from an untouched file.
+                restoreSourceFiles(tree, snapshot);
+                context.logger.warn(instructions);
+                return;
+            }
+            updated = updated.replace(providerCall, `$1${imported.bindingName}$2`);
+        }
         if (updated !== original) {
             tree.overwrite(wiredFile, updated);
         }
-        context.logger.info(`Added provideOptimus with the ${preset} preset to ${wiredFile}.`);
+        const bindingNote = imported.bindingName === preset ? '' : ` (bound as ${imported.bindingName})`;
+        context.logger.info(`Added provideOptimus with the ${preset} preset to ${wiredFile}${bindingNote}.`);
     } catch {
+        restoreSourceFiles(tree, snapshot);
         context.logger.warn(instructions);
     }
 }
 
-/** Finds the first `.ts` file under `sourceRoot` (skipping node_modules/dist/…) containing a `provideOptimus(` call. */
-function findProvideOptimusFile(tree: Tree, sourceRoot: string): string | null {
+/**
+ * Content of every `.ts` file under `sourceRoot` (skipping node_modules/dist/…) before wiring —
+ * the scope addRootProvider edits and findProvideOptimusFile searches. Exported for testing.
+ */
+export function snapshotSourceFiles(tree: Tree, sourceRoot: string): Map<string, string> {
+    const prefix = `/${sourceRoot}/`;
+    const snapshot = new Map<string, string>();
+    tree.visit((path, entry) => {
+        if (SKIP_DIRS.test(path) || !path.startsWith(prefix) || !path.endsWith('.ts') || !entry) {
+            return;
+        }
+        snapshot.set(path, entry.content.toString());
+    });
+    return snapshot;
+}
+
+/**
+ * Restores every snapshotted file whose content has changed, undoing a partially-applied wiring.
+ * Exported for testing.
+ */
+export function restoreSourceFiles(tree: Tree, snapshot: ReadonlyMap<string, string>): void {
+    for (const [path, content] of snapshot) {
+        if (tree.read(path)?.toString() !== content) {
+            tree.overwrite(path, content);
+        }
+    }
+}
+
+/** Finds the first `.ts` file under `sourceRoot` (skipping node_modules/dist/…) whose content contains `needle`. */
+function findSourceFileContaining(tree: Tree, sourceRoot: string, needle: string): string | null {
     const prefix = `/${sourceRoot}/`;
     let found: string | null = null;
     tree.visit((path) => {
         if (found || SKIP_DIRS.test(path) || !path.startsWith(prefix) || !path.endsWith('.ts')) {
             return;
         }
-        const content = tree.read(path)?.toString();
-        if (content?.includes('provideOptimus(')) {
+        if (tree.read(path)?.toString().includes(needle)) {
             found = path;
         }
     });
     return found;
+}
+
+/** Finds the first `.ts` file under `sourceRoot` (skipping node_modules/dist/…) containing a `provideOptimus(` call. */
+function findProvideOptimusFile(tree: Tree, sourceRoot: string): string | null {
+    return findSourceFileContaining(tree, sourceRoot, 'provideOptimus(');
 }
 
 /**

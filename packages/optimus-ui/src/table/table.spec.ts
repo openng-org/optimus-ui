@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { SharedModule } from '@openng/optimus-ui/api';
+import { SharedModule, SortMeta } from '@openng/optimus-ui/api';
 import { Select } from '@openng/optimus-ui/select';
 import { Table, TableModule, TableService } from './table';
 
@@ -122,6 +122,28 @@ describe('Table', () => {
 
     @Component({
         changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products" [sortMode]="'multiple'" [multiSortMeta]="multiSortMeta" [groupRowsBy]="'category'">
+                <ng-template #body let-product>
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.category }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestGroupedSortingTableComponent {
+        products = [
+            { id: '1001', name: 'Gaming Laptop', price: 1299.99, category: 'Electronics' },
+            { id: '1002', name: 'Wireless Mouse', price: 29.99, category: 'Accessories' },
+            { id: '1003', name: 'Mechanical Keyboard', price: 149.99, category: 'Accessories' }
+        ];
+        multiSortMeta: SortMeta[] = [];
+    }
+
+    @Component({
         standalone: false,
         template: `
             <p-table [value]="products" [globalFilterFields]="['name', 'category']">
@@ -271,7 +293,17 @@ describe('Table', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [Table, TestBasicTableComponent, TestSelectionTableComponent, TestSortingTableComponent, TestFilteringTableComponent, TestVirtualScrollTableComponent, TestLazyLoadTableComponent, TestTemplatesTableComponent],
+            declarations: [
+                Table,
+                TestBasicTableComponent,
+                TestSelectionTableComponent,
+                TestSortingTableComponent,
+                TestGroupedSortingTableComponent,
+                TestFilteringTableComponent,
+                TestVirtualScrollTableComponent,
+                TestLazyLoadTableComponent,
+                TestTemplatesTableComponent
+            ],
             imports: [CommonModule, FormsModule, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
         }).compileComponents();
@@ -369,6 +401,43 @@ describe('Table', () => {
         it('should have sortable columns', () => {
             const sortableColumns = testFixture.debugElement.queryAll(By.css('[pSortableColumn]'));
             expect(sortableColumns.length).toBe(3);
+        });
+
+        describe('Row Grouping With An Empty multiSortMeta', () => {
+            let groupedComponent: TestGroupedSortingTableComponent;
+            let groupedFixture: ComponentFixture<TestGroupedSortingTableComponent>;
+
+            const createGroupedFixture = async () => {
+                groupedFixture = TestBed.createComponent(TestGroupedSortingTableComponent);
+                groupedComponent = groupedFixture.componentInstance;
+                await groupedFixture.whenStable();
+                groupedFixture.detectChanges();
+            };
+
+            it('should not throw when multiSortMeta starts out as an empty array', async () => {
+                await expectAsync(createGroupedFixture()).toBeResolved();
+            });
+
+            it('should sort by the grouped field when multiSortMeta is empty', async () => {
+                await createGroupedFixture();
+
+                const tableInstance: Table = groupedFixture.debugElement.query(By.css('p-table')).componentInstance;
+
+                expect(tableInstance.multiSortMeta).toEqual([{ field: 'category', order: 1 }]);
+                expect(tableInstance.value.map((product: any) => product.category)).toEqual(['Accessories', 'Accessories', 'Electronics']);
+            });
+
+            it('should keep the grouped field first when multiSortMeta is emptied later', async () => {
+                await createGroupedFixture();
+
+                groupedComponent.multiSortMeta = [];
+                groupedFixture.detectChanges();
+                await groupedFixture.whenStable();
+
+                const tableInstance: Table = groupedFixture.debugElement.query(By.css('p-table')).componentInstance;
+
+                expect(tableInstance.multiSortMeta).toEqual([{ field: 'category', order: 1 }]);
+            });
         });
     });
 
