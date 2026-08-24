@@ -1,8 +1,8 @@
-import type { Mock } from 'vitest';
 import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
 
 import { CommonModule } from '@angular/common';
 import { SharedModule } from '@openng/optimus-ui/api';
@@ -1328,7 +1328,7 @@ describe('PasswordDirective', () => {
             expect(directive.meter).toBeTruthy();
             expect(directive.info).toBeTruthy();
             expect(directive.content).toBeTruthy();
-            expect(directive.label).toBeTruthy();
+            expect(directive.meterLabel).toBeTruthy();
         });
 
         it('should show overlay on focus', async () => {

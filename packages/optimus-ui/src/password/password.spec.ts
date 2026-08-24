@@ -1327,7 +1327,7 @@ describe('PasswordDirective', () => {
             expect(directive.meter).toBeTruthy();
             expect(directive.info).toBeTruthy();
             expect(directive.content).toBeTruthy();
-            expect(directive.label).toBeTruthy();
+            expect(directive.meterLabel).toBeTruthy();
         });
 
         it('should show overlay on focus', async () => {
