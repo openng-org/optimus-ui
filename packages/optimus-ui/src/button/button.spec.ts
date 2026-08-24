@@ -29,6 +29,8 @@ import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from './button';
             [badge]="badge"
             [badgeSeverity]="badgeSeverity"
             [ariaLabel]="ariaLabel"
+            [ariaControls]="ariaControls"
+            [ariaExpanded]="ariaExpanded"
             [autofocus]="autofocus"
             [tabindex]="tabindex"
             [fluid]="fluid"
@@ -59,6 +61,8 @@ class TestBasicButtonComponent {
     badge: string | undefined;
     badgeSeverity: any;
     ariaLabel: string | undefined;
+    ariaControls: string | undefined;
+    ariaExpanded: boolean | undefined;
     autofocus: boolean = false;
     tabindex: number | undefined;
     fluid: boolean = false;
@@ -423,6 +427,19 @@ describe('Button', () => {
 
             expect(buttonInstance.ariaLabel).toBe('Custom Button Label');
             expect(buttonElement.getAttribute('aria-label')).toBe('Custom Button Label');
+        });
+
+        it('should update ariaControls and ariaExpanded properties', async () => {
+            component.ariaControls = 'panel-content';
+            component.ariaExpanded = false;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(buttonInstance.ariaControls).toBe('panel-content');
+            expect(buttonInstance.ariaExpanded).toBe(false);
+            expect(buttonElement.getAttribute('aria-controls')).toBe('panel-content');
+            expect(buttonElement.getAttribute('aria-expanded')).toBe('false');
         });
 
         it('should update tabindex property', async () => {

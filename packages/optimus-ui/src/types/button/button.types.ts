@@ -120,6 +120,8 @@ export interface ButtonProps {
     badgeClass?: string | undefined;
     badgeSeverity?: 'success' | 'info' | 'warning' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
     ariaLabel?: string | undefined;
+    ariaControls?: string | undefined;
+    ariaExpanded?: boolean | undefined;
     autofocus?: boolean | undefined;
     variant?: string | undefined;
 }

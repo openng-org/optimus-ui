@@ -11,8 +11,8 @@ import { Component } from '@angular/core';
         <app-docsectiontext>
             <h3>Screen Reader</h3>
             <p>
-                Button component renders a native button element that implicitly includes any passed prop. Text to describe the button is defined with the <i>aria-label</i> prop, if not present <i>label</i> prop is used as the value. If the button is
-                icon only or custom templating is used, it is recommended to use <i>aria-label</i> so that screen readers would be able to read the element properly.
+                Button component renders a native button element that implicitly includes any passed prop. Text to describe the button is defined with the <i>ariaLabel</i> prop, if not present <i>label</i> prop is used as the value. If the button is
+                icon only or custom templating is used, it is recommended to use <i>ariaLabel</i> so that screen readers would be able to read the element properly.
             </p>
         </app-docsectiontext>
 
@@ -53,10 +53,10 @@ import { Component } from '@angular/core';
 })
 export class AccessibilityDoc {
     code: Code = {
-        html: `<p-button icon="pi pi-check" aria-label="Submit" />
+        html: `<p-button icon="pi pi-check" ariaLabel="Submit" />
 <p-button icon="pi pi-check" label="Submit" />
 
-<p-button class="youtube p-0" aria-label="Youtube">
+<p-button class="youtube p-0" ariaLabel="Youtube">
     <i class="pi pi-youtube px-2"></i>
     <span class="px-4">Youtube</span>
 </p-button>`
