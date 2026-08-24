@@ -1134,6 +1134,101 @@ describe('Scroller', () => {
         });
     });
 
+    describe('Lazy Load Window Tests', () => {
+        let component: TestBasicScrollerComponent;
+        let fixture: ComponentFixture<TestBasicScrollerComponent>;
+        let scroller: Scroller;
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [Scroller],
+                providers: [provideZonelessChangeDetection()],
+                declarations: [TestBasicScrollerComponent]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestBasicScrollerComponent);
+            component = fixture.componentInstance;
+            scroller = fixture.debugElement.query(By.directive(Scroller)).componentInstance;
+
+            component.items = Array.from({ length: 100 }, (_, i) => ({ label: `Item ${i}`, value: `item${i}` }));
+            component.lazy = true;
+            component.step = 10;
+            component.itemSize = 50;
+            component.scrollHeight = '200px';
+
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            vi.spyOn(scroller, 'setContentPosition').mockImplementation(() => {});
+            vi.spyOn(scroller, 'onScrollPositionChange');
+
+            // Make page arithmetic deterministic: page = floor(first / step)
+            scroller.d_numToleratedItems = 0;
+        });
+
+        const seedState = (first: number, lazyFirst: number, lazyLast: number) => {
+            scroller.first = first;
+            scroller.page = scroller.getPageByFirst(first);
+            scroller.lazyLoadState = { first: lazyFirst, last: lazyLast };
+        };
+
+        const scrollToIndex = (first: number, last: number) => {
+            vi.mocked(scroller.onScrollPositionChange).mockReturnValue({
+                first,
+                last,
+                isRangeChanged: true,
+                scrollPos: first * 50
+            });
+            scroller.onScrollChange(new Event('scroll'));
+        };
+
+        it('should include the previous page in the lazy load window when scrolling backward', () => {
+            const onLazyLoad = vi.spyOn(component, 'onLazyLoad').mockImplementation(() => {});
+            seedState(30, 30, 40);
+
+            scrollToIndex(15, 19);
+
+            expect(onLazyLoad).toHaveBeenCalledWith({ first: 0, last: 20 });
+        });
+
+        it('should include the page before the landing page when jumping multiple pages forward', () => {
+            const onLazyLoad = vi.spyOn(component, 'onLazyLoad').mockImplementation(() => {});
+            seedState(0, 0, 10);
+
+            scrollToIndex(50, 54);
+
+            expect(onLazyLoad).toHaveBeenCalledWith({ first: 40, last: 60 });
+        });
+
+        it('should request only the current page when scrolling one page forward', () => {
+            const onLazyLoad = vi.spyOn(component, 'onLazyLoad').mockImplementation(() => {});
+            seedState(0, 0, 10);
+
+            scrollToIndex(12, 16);
+
+            expect(onLazyLoad).toHaveBeenCalledWith({ first: 10, last: 20 });
+        });
+
+        it('should not re-emit onLazyLoad for a window already covered by the previous request', () => {
+            const onLazyLoad = vi.spyOn(component, 'onLazyLoad').mockImplementation(() => {});
+            seedState(25, 0, 30);
+
+            scrollToIndex(12, 16);
+
+            expect(onLazyLoad).not.toHaveBeenCalled();
+        });
+
+        it('should clamp the lazy load window to zero when scrolling backward onto the first page', () => {
+            const onLazyLoad = vi.spyOn(component, 'onLazyLoad').mockImplementation(() => {});
+            seedState(25, 20, 30);
+
+            scrollToIndex(3, 7);
+
+            expect(onLazyLoad).toHaveBeenCalledWith({ first: 0, last: 10 });
+        });
+    });
+
     describe('Template Content Projection Tests', () => {
         it('should render with content template', async () => {
             await TestBed.configureTestingModule({
