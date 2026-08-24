@@ -900,7 +900,9 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
     calculateAutoSize() {
         if (this._autoSize && !this.d_loading) {
-            Promise.resolve().then(() => {
+            // a macrotask is required here: when items are lazy loaded, the new items are only
+            // rendered on the next tick, and a microtask would measure the still empty content
+            setTimeout(() => {
                 if (this.contentEl) {
                     this.contentEl.style.minHeight = this.contentEl.style.minWidth = 'auto';
                     this.contentEl.style.position = 'relative';
@@ -918,7 +920,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
                     this.contentEl.style.position = '';
                     (<ElementRef>this.elementViewChild).nativeElement.style.contain = '';
                 }
-            });
+            }, 1);
         }
     }
 

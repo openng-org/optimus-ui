@@ -4457,3 +4457,81 @@ describe('Select PT (PassThrough)', () => {
         });
     });
 });
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `<p-select [options]="items" [(ngModel)]="selectedItem" placeholder="Select Item" [virtualScroll]="true" [virtualScrollItemSize]="32" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"></p-select>`
+})
+class TestLazyVirtualScrollComponent {
+    items: any[] = [];
+    selectedItem: any;
+
+    onLazyLoad(event: any) {
+        const { first, last } = event;
+        const items = [...this.items];
+
+        // the total number of records is known upfront, only the requested window is filled in
+        if (items.length < 10000) {
+            items.length = 10000;
+        }
+
+        for (let i = first; i < last; i++) {
+            items[i] = { label: `Item #${i}`, value: i };
+        }
+
+        this.items = items;
+    }
+}
+
+describe('Select Lazy Virtual Scroll', () => {
+    let fixture: ComponentFixture<TestLazyVirtualScrollComponent>;
+    let component: TestLazyVirtualScrollComponent;
+    let selectInstance: Select;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CommonModule, FormsModule, Select],
+            declarations: [TestLazyVirtualScrollComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestLazyVirtualScrollComponent);
+        component = fixture.componentInstance;
+        selectInstance = fixture.debugElement.query(By.css('p-select')).componentInstance;
+        fixture.detectChanges();
+        await fixture.whenStable();
+    });
+
+    it('should render the lazy loaded options and keep the scroller at its full height', async () => {
+        const lazyLoadSpy = spyOn(component, 'onLazyLoad').and.callThrough();
+
+        selectInstance.show();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(lazyLoadSpy).toHaveBeenCalled();
+
+        fixture.detectChanges();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        const options = fixture.debugElement.queryAll(By.css('.p-select-option'));
+        expect(options.length).toBeGreaterThan(0);
+        expect(options[0].nativeElement.textContent).toContain('Item #0');
+
+        // autoSize used to measure the content before the lazy loaded items were rendered,
+        // which collapsed the scroller to the height of an empty list
+        const scroller = fixture.debugElement.query(By.css('p-scroller'));
+        expect(scroller.nativeElement.offsetHeight).toBeGreaterThan(100);
+    });
+
+    it('should not throw when an option of the lazy loaded window is not resolved yet', () => {
+        selectInstance.optionGroupLabel = 'label';
+
+        expect(() => selectInstance.isOptionGroup(undefined)).not.toThrow();
+        expect(selectInstance.isOptionGroup(undefined)).toBeFalsy();
+    });
+});
