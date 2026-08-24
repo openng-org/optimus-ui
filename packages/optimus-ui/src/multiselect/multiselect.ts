@@ -2043,7 +2043,11 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
     onOverlayBeforeEnter(event: any) {
         this.itemsWrapper = <any>findSingle(this.overlayViewChild?.overlayViewChild?.nativeElement, this.virtualScroll ? '[data-pc-name="virtualscroller"]' : '[data-pc-section="listcontainer"]');
-        this.virtualScroll && this.scroller?.setContentEl(this.itemsViewChild?.nativeElement);
+
+        if (this.virtualScroll) {
+            this.scroller?.setContentEl(this.itemsViewChild?.nativeElement);
+            this.scroller?.viewInit();
+        }
 
         if (this.options && this.options.length) {
             if (this.virtualScroll) {
