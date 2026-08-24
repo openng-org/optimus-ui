@@ -829,6 +829,26 @@ describe('CascadeSelect', () => {
             expect(hiddenInput.nativeElement.getAttribute('aria-expanded')).toBe('true');
         });
 
+        it('should label the option list with the listLabel ARIA translation', async () => {
+            testComponent.options = mockCountries;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const trigger = testFixture.debugElement.query(By.css('.p-cascadeselect-dropdown'));
+            trigger.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const cascadeSelectInstance = testFixture.debugElement.query(By.directive(CascadeSelect)).componentInstance;
+            const list = testFixture.debugElement.query(By.css('ul[role="tree"]'));
+
+            expect(list).toBeTruthy();
+            expect(list.nativeElement.getAttribute('aria-label')).toBe(cascadeSelectInstance.listLabel);
+            expect(list.nativeElement.getAttribute('aria-label')).toBe('Option List');
+        });
+
         it('should support keyboard navigation', async () => {
             const hiddenInput = testFixture.debugElement.query(By.css('.p-hidden-accessible input'));
 

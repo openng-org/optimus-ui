@@ -1088,6 +1088,18 @@ describe('AutoComplete', () => {
                 }
             });
 
+            it('should use pTemplate="selecteditem" as the input display value in single mode', async () => {
+                pTemplateComponent.multiple = false;
+                pTemplateFixture.detectChanges();
+                await pTemplateFixture.whenStable();
+                const autocompleteInstance = pTemplateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                autocompleteInstance.onOptionSelect(new Event('click'), mockCountries[0], false);
+                pTemplateFixture.detectChanges();
+                await pTemplateFixture.whenStable();
+                const inputElement = pTemplateFixture.debugElement.query(By.css('input')).nativeElement;
+                expect(inputElement.value).toBe('🏳️Afghanistan');
+            });
+
             it('should set _selectedItemTemplate in ngAfterContentInit', () => {
                 const autocompleteInstance = pTemplateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
                 expect(autocompleteInstance._selectedItemTemplate).toBeTruthy();
