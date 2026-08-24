@@ -34,7 +34,7 @@ import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent
 import { BaseEditableHolder } from '@openng/optimus-ui/baseeditableholder';
 import { Bind } from '@openng/optimus-ui/bind';
 import { Fluid } from '@openng/optimus-ui/fluid';
-import { AngleRightIcon, ChevronDownIcon, TimesIcon } from '@openng/optimus-ui/icons';
+import { AngleRightIcon, ChevronDownIcon, SpinnerIcon, TimesIcon } from '@openng/optimus-ui/icons';
 import { Overlay } from '@openng/optimus-ui/overlay';
 import { Ripple } from '@openng/optimus-ui/ripple';
 import { Nullable, VoidListener } from '@openng/optimus-ui/ts-helpers';
@@ -263,7 +263,7 @@ export class CascadeSelectSub extends BaseComponent {
 @Component({
     selector: 'p-cascadeSelect, p-cascadeselect, p-cascade-select',
     standalone: true,
-    imports: [CommonModule, Overlay, AutoFocus, CascadeSelectSub, ChevronDownIcon, TimesIcon, SharedModule, Bind],
+    imports: [CommonModule, Overlay, AutoFocus, CascadeSelectSub, ChevronDownIcon, SpinnerIcon, TimesIcon, SharedModule, Bind],
     template: `
         <div class="p-hidden-accessible" [pBind]="ptm('hiddenInputWrapper')">
             <input
@@ -312,8 +312,8 @@ export class CascadeSelectSub extends BaseComponent {
                     <ng-container *ngTemplateOutlet="loadingIconTemplate || _loadingIconTemplate"></ng-container>
                 </ng-container>
                 <ng-container *ngIf="!loadingIconTemplate && !_loadingIconTemplate">
-                    <span *ngIf="loadingIcon" [class]="cn(cx('loadingIcon'), loadingIcon + 'pi-spin')" aria-hidden="true" [pBind]="ptm('loadingIcon')"></span>
-                    <span *ngIf="!loadingIcon" [class]="cn(cx('loadingIcon'), loadingIcon + ' pi pi-spinner pi-spin')" aria-hidden="true" [pBind]="ptm('loadingIcon')"></span>
+                    <span *ngIf="loadingIcon" [class]="cxLoadingIcon(loadingIcon)" [attr.aria-hidden]="true" [pBind]="ptm('loadingIcon')"></span>
+                    <svg data-p-icon="spinner" *ngIf="!loadingIcon" [class]="cx('loadingIcon')" [spin]="true" [attr.aria-hidden]="true" [pBind]="ptm('loadingIcon')" />
                 </ng-container>
             </ng-container>
             <ng-template #elseBlock>
