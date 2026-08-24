@@ -9,6 +9,7 @@ import { GroupDoc } from '@/doc/multiselect/group-doc';
 import { IftaLabelDoc } from '@/doc/multiselect/iftalabel-doc';
 import { ImportDoc } from '@/doc/multiselect/import-doc';
 import { InvalidDoc } from '@/doc/multiselect/invalid-doc';
+import { LazyVirtualScrollDoc } from '@/doc/multiselect/lazyvirtualscroll-doc';
 import { LoadingStateDoc } from '@/doc/multiselect/loadingstate-doc';
 import { ReactiveFormsDoc } from '@/doc/multiselect/reactiveforms-doc';
 import { SizesDoc } from '@/doc/multiselect/sizes-doc';
@@ -76,6 +77,11 @@ export class MultiSelectDemo {
             id: 'virtualscroll',
             label: 'VirtualScroll',
             component: VirtualScrollDoc
+        },
+        {
+            id: 'lazyvirtualscroll',
+            label: 'Lazy Virtual Scroll',
+            component: LazyVirtualScrollDoc
         },
         {
             id: 'floatlabel',

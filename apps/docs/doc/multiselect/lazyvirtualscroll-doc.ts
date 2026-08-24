@@ -1,27 +1,38 @@
-import { AppCode } from '@/components/doc/app.code';
+import { AppCodeModule } from '@/components/doc/app.code';
+import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { SelectItem } from '@openng/optimus-ui/api';
-import { SelectModule } from '@openng/optimus-ui/select';
-import { SelectLazyLoadEvent } from '@openng/optimus-ui/types/select';
+import { MultiSelectModule } from '@openng/optimus-ui/multiselect';
+import { MultiSelectLazyLoadEvent } from '@openng/optimus-ui/types/multiselect';
 
 @Component({
     selector: 'lazyvirtualscroll-doc',
     standalone: true,
-    imports: [AppCode, FormsModule, SelectModule],
+    imports: [FormsModule, MultiSelectModule, AppCodeModule, AppDocSectionText],
     template: `
+        <app-docsectiontext>
+            <p>
+                Enabling <i>lazy</i> on top of <i>virtualScroll</i> loads the options from a backend as they are scrolled into view. The <i>onLazyLoad</i> event carries the requested range along with the current <i>filter</i>, so filtering can be
+                delegated to the backend as well. Options behind the current selection that the backend has not returned yet are supplied through <i>lazySelectedOptions</i>, which is what keeps their labels resolvable.
+            </p>
+        </app-docsectiontext>
         <div class="card flex justify-center">
-            <p-select
+            <p-multiselect
                 [options]="items()"
-                [(ngModel)]="selectedItem"
-                placeholder="Select Item"
+                [(ngModel)]="selectedItems"
+                optionLabel="label"
+                optionValue="value"
+                [lazySelectedOptions]="lazySelectedOptions"
                 [filter]="true"
                 [virtualScroll]="true"
-                [virtualScrollItemSize]="32"
+                [virtualScrollItemSize]="43"
                 [lazy]="true"
                 (onLazyLoad)="onLazyLoad($event)"
                 [loading]="loading()"
-                class="w-full md:w-56"
+                placeholder="Select Items"
+                [maxSelectedLabels]="3"
+                class="w-full md:w-80"
             />
         </div>
         <app-code></app-code>
@@ -31,8 +42,10 @@ export class LazyVirtualScrollDoc {
     // Simulates backend database
     backendItems: SelectItem[] = Array.from({ length: 10000 }, (_, i) => ({ label: `Item #${i}`, value: i }));
 
-    // The selection is deliberately outside the first page, to show that its label survives lazy loading
-    selectedItem: SelectItem | undefined = this.backendItems[5000];
+    // The selection is deliberately outside the first page, so its options have to be handed over upfront
+    selectedItems: number[] = [5000, 7000];
+
+    lazySelectedOptions: SelectItem[] = [this.backendItems[5000], this.backendItems[7000]];
 
     items = signal<SelectItem[] | null>(null);
 
@@ -42,7 +55,7 @@ export class LazyVirtualScrollDoc {
 
     currentFilter: string | null = null;
 
-    onLazyLoad(event: SelectLazyLoadEvent) {
+    onLazyLoad(event: MultiSelectLazyLoadEvent) {
         this.loading.set(true);
 
         if (this.loadLazyTimeout) {

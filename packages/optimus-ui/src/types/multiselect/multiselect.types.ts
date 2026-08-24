@@ -211,6 +211,10 @@ export interface MultiSelectLazyLoadEvent {
      * Index of the last element in viewport.
      */
     last: number;
+    /**
+     * Current value of the filter input, null when no filter is applied.
+     */
+    filter?: string | null;
 }
 
 /**

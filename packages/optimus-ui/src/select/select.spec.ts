@@ -4457,3 +4457,87 @@ describe('Select PT (PassThrough)', () => {
         });
     });
 });
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `<p-select [options]="items" [(ngModel)]="selectedItem" optionLabel="label" [filter]="true" [virtualScroll]="true" [virtualScrollItemSize]="32" [lazy]="lazy" (onLazyLoad)="onLazyLoad($event)"></p-select>`
+})
+class TestLazyFilterSelectComponent {
+    items: any[] = [
+        { label: 'Item #0', value: 0 },
+        { label: 'Other', value: 1 }
+    ];
+
+    selectedItem: any;
+
+    lazy = true;
+
+    events: any[] = [];
+
+    onLazyLoad(event: any) {
+        this.events.push(event);
+    }
+}
+
+describe('Select Lazy Filtering', () => {
+    let fixture: ComponentFixture<TestLazyFilterSelectComponent>;
+    let component: TestLazyFilterSelectComponent;
+    let selectInstance: Select;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [CommonModule, FormsModule, Select],
+            declarations: [TestLazyFilterSelectComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestLazyFilterSelectComponent);
+        component = fixture.componentInstance;
+        selectInstance = fixture.debugElement.query(By.css('p-select')).componentInstance;
+        fixture.detectChanges();
+        await fixture.whenStable();
+    });
+
+    it('should request a reload carrying the filter when the filter changes', async () => {
+        component.events.length = 0;
+
+        selectInstance.onFilterInputChange({ target: { value: 'Item' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const event = component.events[component.events.length - 1];
+        expect(event).toBeTruthy();
+        expect(event.first).toBe(0);
+        expect(event.filter).toBe('Item');
+    });
+
+    it('should leave filtering to the data source when lazy', async () => {
+        selectInstance.onFilterInputChange({ target: { value: 'Other' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(selectInstance.visibleOptions().length).toBe(2);
+    });
+
+    it('should filter locally when not lazy', async () => {
+        component.lazy = false;
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        selectInstance.onFilterInputChange({ target: { value: 'Other' } } as any);
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        expect(selectInstance.visibleOptions().length).toBe(1);
+    });
+
+    it('should label the value from the model when its option is not loaded', async () => {
+        component.selectedItem = { label: 'Item #9999', value: 9999 };
+        fixture.detectChanges();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(selectInstance.label()).toBe('Item #9999');
+    });
+});

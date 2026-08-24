@@ -45,6 +45,7 @@ import { Overlay } from '@openng/optimus-ui/overlay';
 import { Scroller } from '@openng/optimus-ui/scroller';
 import { Tooltip } from '@openng/optimus-ui/tooltip';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
+import type { ScrollerLazyLoadEvent } from '@openng/optimus-ui/types/scroller';
 import {
     MultiSelectBlurEvent,
     MultiSelectChangeEvent,
@@ -67,6 +68,12 @@ import {
 } from '@openng/optimus-ui/types/multiselect';
 import { ObjectUtils } from '@openng/optimus-ui/utils';
 import { MultiSelectStyle } from './style/multiselectstyle';
+
+/**
+ * Number of options requested when a filter change forces a reload before the scroller has
+ * measured its viewport.
+ */
+const DEFAULT_LAZY_PAGE_SIZE = 20;
 
 const MULTISELECT_INSTANCE = new InjectionToken<MultiSelect>('MULTISELECT_INSTANCE');
 const MULTISELECT_ITEM_INSTANCE = new InjectionToken<MultiSelectItem>('MULTISELECT_ITEM_INSTANCE');
@@ -392,7 +399,7 @@ export class MultiSelectItem extends BaseComponent {
                             [autoSize]="true"
                             [tabindex]="-1"
                             [lazy]="lazy"
-                            (onLazyLoad)="onLazyLoad.emit($event)"
+                            (onLazyLoad)="onScrollerLazyLoad($event)"
                             [options]="virtualScrollOptions"
                         >
                             <ng-template #content let-items let-scrollerOptions="options">
@@ -792,6 +799,14 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
     }
     set filterValue(val: string | undefined | null) {
         this._filterValue.set(val);
+    }
+    /**
+     * Options behind the current selection, for the lazy case where the selected options are not
+     * part of the loaded page. Only used to resolve the labels of the chips and of the value.
+     * @group Props
+     */
+    @Input() set lazySelectedOptions(val: any[]) {
+        this._lazySelectedOptions = val || [];
     }
     /**
      * Whether all data is selected.
@@ -1222,6 +1237,8 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
     clickInProgress: boolean = false;
 
+    _lazySelectedOptions: any[] = [];
+
     get emptyMessageLabel(): string {
         return this.emptyMessage || this.config.getTranslation(TranslationKeys.EMPTY_MESSAGE);
     }
@@ -1242,15 +1259,30 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
         return this.config.getTranslation(TranslationKeys.ARIA)['listLabel'];
     }
 
-    private getAllVisibleAndNonVisibleOptions() {
-        return this.group ? this.flatOptions(this.options) : this.options || [];
+    private getAllVisibleAndNonVisibleOptions = computed(() => {
+        const options = this._options();
+
+        return this.group ? this.flatOptions(options) : options || [];
+    });
+
+    /**
+     * Every option a model value can be resolved against: the loaded options plus the options behind
+     * a selection that lazy loading has not brought back. Never rendered as list items.
+     */
+    private getResolvableOptions() {
+        const options = this.getAllVisibleAndNonVisibleOptions();
+
+        return this.lazy && this._lazySelectedOptions.length ? [...options, ...this._lazySelectedOptions] : options;
     }
 
     visibleOptions = computed(() => {
         const options = this.getAllVisibleAndNonVisibleOptions();
         const isArrayOfObjects = isArray(options) && ObjectUtils.isObject(options[0]);
+        // read outside the condition so the filter stays a dependency of this computed whatever lazy is
+        const filterValue = this._filterValue();
 
-        if (this._filterValue()) {
+        // when lazy, filtering is the data source's job: the options it returns are already filtered
+        if (!this.lazy && filterValue) {
             let filteredOptions;
 
             if (isArrayOfObjects) {
@@ -1319,14 +1351,22 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
         effect(() => {
             const modelValue = this.modelValue();
 
-            const allVisibleAndNonVisibleOptions = this.getAllVisibleAndNonVisibleOptions();
-            if (allVisibleAndNonVisibleOptions && isNotEmpty(allVisibleAndNonVisibleOptions)) {
+            const resolvableOptions = this.getResolvableOptions();
+            if (resolvableOptions && isNotEmpty(resolvableOptions)) {
                 if (this.optionValue && this.optionLabel && modelValue) {
-                    this.selectedOptions = allVisibleAndNonVisibleOptions.filter((option) => modelValue.includes(option[this.optionLabel!]) || modelValue.includes(option[this.optionValue!]));
+                    this.selectedOptions = resolvableOptions.filter((option) => modelValue.includes(option[this.optionLabel!]) || modelValue.includes(option[this.optionValue!]));
                 } else {
                     this.selectedOptions = modelValue;
                 }
                 this.cd.markForCheck();
+            }
+        });
+
+        effect(() => {
+            const filter = this._filterValue();
+
+            if (this.lazy) {
+                this.emitLazyLoadForFilter(filter);
             }
         });
     }
@@ -1559,8 +1599,20 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
     }
 
     getLabelByValue(value) {
-        const options = this.group ? this.flatOptions(this._options()) : this._options() || [];
-        const matchedOption = options.find((option) => !this.isOptionGroup(option) && equals(this.getOptionValue(option), value, this.equalityKey() || ''));
+        const matches = (option) => !this.isOptionGroup(option) && equals(this.getOptionValue(option), value, this.equalityKey() || '');
+        let matchedOption = this.getAllVisibleAndNonVisibleOptions().find(matches);
+
+        if (this.lazy) {
+            if (matchedOption) {
+                // remember the option, so that the label survives the page it came with being replaced
+                if (!this._lazySelectedOptions.some(matches)) {
+                    this._lazySelectedOptions.push(matchedOption);
+                }
+            } else {
+                matchedOption = this._lazySelectedOptions.find(matches);
+            }
+        }
+
         return matchedOption ? this.getOptionLabel(matchedOption) : null;
     }
 
@@ -1899,6 +1951,22 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
         !this.virtualScrollerDisabled && this.scroller?.scrollToIndex(0);
         setTimeout(() => {
             this.overlayViewChild?.alignOverlay();
+        });
+    }
+
+    onScrollerLazyLoad(event: ScrollerLazyLoadEvent): void {
+        this.onLazyLoad.emit({ ...event, filter: this._filterValue() ?? null });
+    }
+
+    /**
+     * The scroller only reports a range once it has rendered, so a filter change has to ask for a
+     * first page itself. The scroller re-emits the exact range right after, through onScrollerLazyLoad.
+     */
+    private emitLazyLoadForFilter(filter: string | undefined | null): void {
+        this.onLazyLoad.emit({
+            first: 0,
+            last: this.scroller?.numItemsInViewport || DEFAULT_LAZY_PAGE_SIZE,
+            filter: filter ?? null
         });
     }
 
