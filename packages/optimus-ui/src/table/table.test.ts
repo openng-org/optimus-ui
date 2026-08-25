@@ -623,7 +623,7 @@ describe('Table', () => {
 
             expect(tableElement.style.height).toBe('');
             expect(containerElement.style.height).toBe('');
-            expect(rootElement.classList.contains('p-datatable-flex-scrollable')).toBeTrue();
+            expect(rootElement.classList.contains('p-datatable-flex-scrollable')).toBe(true);
         });
     });
 
