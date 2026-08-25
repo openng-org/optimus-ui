@@ -333,8 +333,8 @@ importers:
         version: 7.8.2
     devDependencies:
       '@angular-devkit/schematics':
-        specifier: ^22.1.4
-        version: 22.1.4(chokidar@5.0.0)
+        specifier: ^22.1.5
+        version: 22.1.5(chokidar@5.0.0)
       '@angular/build':
         specifier: catalog:angular22
         version: 22.1.5(fd687c66c5c2e9ceb5537a4fe20bdf9a)
