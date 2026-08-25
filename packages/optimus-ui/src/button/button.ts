@@ -752,7 +752,7 @@ export class Button extends BaseComponent<ButtonPassThrough> {
     @Input() ariaLabel: string | undefined;
 
     /**
-     * Identifies the element that controls the current element.
+     * Defines the element controlled by the button
      * @group Props
      */
     @Input() ariaControls: string | undefined;
