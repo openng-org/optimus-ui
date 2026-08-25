@@ -41,7 +41,7 @@
         "@openng/optimus-ui-utils": "workspace:*"
     },
     "devDependencies": {
-        "vitest": "^4.0.8"
+        "vitest": "^4.1.11"
     },
     "engines": {
         "node": ">=12.11.0"
