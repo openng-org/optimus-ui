@@ -18,7 +18,7 @@ catalog:
 
 catalogs:
   angular22:
-    "@angular-devkit/build-angular": ^22.1.4
+    "@angular-devkit/build-angular": ^22.1.5
     "@angular/animations": ^22.1.2
     "@angular/build": ^22.1.5
     "@angular/cdk": ^22.1.3
