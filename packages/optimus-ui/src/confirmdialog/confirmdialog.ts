@@ -118,7 +118,7 @@ const CONFIRMDIALOG_INSTANCE = new InjectionToken<ConfirmDialog>('CONFIRMDIALOG_
                         [unstyled]="unstyled()"
                     >
                         <ng-template #icon>
-                            @if (rejectIcon && !rejectIconTemplate && !_rejectIconTemplate) {
+                            @if (option('rejectIcon') && !rejectIconTemplate && !_rejectIconTemplate) {
                                 <i *ngIf="option('rejectIcon')" [class]="option('rejectIcon')" [pBind]="ptm('pcRejectButton')['icon']"></i>
                             }
                             <ng-template *ngTemplateOutlet="rejectIconTemplate || _rejectIconTemplate"></ng-template>
@@ -135,7 +135,7 @@ const CONFIRMDIALOG_INSTANCE = new InjectionToken<ConfirmDialog>('CONFIRMDIALOG_
                         [unstyled]="unstyled()"
                     >
                         <ng-template #icon>
-                            @if (acceptIcon && !_acceptIconTemplate && !acceptIconTemplate) {
+                            @if (option('acceptIcon') && !_acceptIconTemplate && !acceptIconTemplate) {
                                 <i *ngIf="option('acceptIcon')" [class]="option('acceptIcon')" [pBind]="ptm('pcAcceptButton')['icon']"></i>
                             }
                             <ng-template *ngTemplateOutlet="acceptIconTemplate || _acceptIconTemplate"></ng-template>
