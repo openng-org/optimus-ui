@@ -485,7 +485,7 @@ export class Accordion extends BaseComponent<AccordionPassThrough> implements Bl
     _componentStyle = inject(AccordionStyle);
 
     @HostListener('keydown', ['$event'])
-    onKeydown(event) {
+    onKeydown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowDown':
                 this.onTabArrowDownKey(event);
@@ -509,44 +509,66 @@ export class Accordion extends BaseComponent<AccordionPassThrough> implements Bl
         }
     }
 
-    onTabArrowDownKey(event) {
-        const nextHeaderAction = this.findNextHeaderAction(event.target.parentElement);
-        nextHeaderAction ? this.changeFocusedTab(nextHeaderAction) : this.onTabHomeKey(event);
-
-        event.preventDefault();
-    }
-
-    onTabArrowUpKey(event) {
-        const prevHeaderAction = this.findPrevHeaderAction(event.target.parentElement);
-        prevHeaderAction ? this.changeFocusedTab(prevHeaderAction) : this.onTabEndKey(event);
-
-        event.preventDefault();
-    }
-
-    onTabHomeKey(event) {
-        const firstHeaderAction = this.findFirstHeaderAction();
-        this.changeFocusedTab(firstHeaderAction);
-        event.preventDefault();
-    }
-
-    changeFocusedTab(element) {
-        if (element) {
-            focus(element);
+    onTabArrowDownKey(event: KeyboardEvent) {
+        const nextHeaderAction = this.findNextHeaderAction((event.target as HTMLElement)?.parentElement);
+        if (nextHeaderAction) {
+            this.changeFocusedTab(nextHeaderAction);
+            event.preventDefault();
+        } else {
+            this.onTabHomeKey(event);
         }
     }
 
-    findNextHeaderAction(tabElement, selfCheck = false) {
-        const nextTabElement = selfCheck ? tabElement : tabElement.nextElementSibling;
-        const headerElement = findSingle(nextTabElement, '[data-pc-section="accordionheader"]');
-
-        return headerElement ? (getAttribute(headerElement, 'data-p-disabled') ? this.findNextHeaderAction(headerElement.parentElement) : findSingle(headerElement.parentElement as HTMLElement, '[data-pc-section="accordionheader"]')) : null;
+    onTabArrowUpKey(event: KeyboardEvent) {
+        const prevHeaderAction = this.findPrevHeaderAction((event.target as HTMLElement)?.parentElement);
+        if (prevHeaderAction) {
+            this.changeFocusedTab(prevHeaderAction);
+            event.preventDefault();
+        } else {
+            this.onTabEndKey(event);
+        }
     }
 
-    findPrevHeaderAction(tabElement, selfCheck = false) {
-        const prevTabElement = selfCheck ? tabElement : tabElement.previousElementSibling;
-        const headerElement = findSingle(prevTabElement, '[data-pc-section="accordionheader"]');
+    onTabHomeKey(event: KeyboardEvent) {
+        const firstHeaderAction = this.findFirstHeaderAction();
+        if (firstHeaderAction) {
+            this.changeFocusedTab(firstHeaderAction);
+            event.preventDefault();
+        }
+    }
 
-        return headerElement ? (getAttribute(headerElement, 'data-p-disabled') ? this.findPrevHeaderAction(headerElement.parentElement) : findSingle(headerElement.parentElement as HTMLElement, '[data-pc-section="accordionheader"]')) : null;
+    onTabEndKey(event: KeyboardEvent) {
+        const lastHeaderAction = this.findLastHeaderAction();
+        if (lastHeaderAction) {
+            this.changeFocusedTab(lastHeaderAction);
+            event.preventDefault();
+        }
+    }
+
+    changeFocusedTab(element: HTMLElement) {
+        focus(element);
+    }
+
+    findNextHeaderAction(tabElement: HTMLElement | null, selfCheck = false) {
+        const nextTabElement = selfCheck ? tabElement : tabElement?.nextElementSibling;
+        if (!nextTabElement) return null;
+        const headerElement = findSingle(nextTabElement, '[data-pc-section="accordionheader"]');
+        if (!headerElement) return null;
+        if (getAttribute(headerElement, 'data-p-disabled')) {
+            return this.findNextHeaderAction(headerElement.parentElement);
+        }
+        return findSingle(headerElement.parentElement as HTMLElement, '[data-pc-section="accordionheader"]');
+    }
+
+    findPrevHeaderAction(tabElement: HTMLElement | null, selfCheck = false) {
+        const prevTabElement = selfCheck ? tabElement : tabElement?.previousElementSibling;
+        if (!prevTabElement) return null;
+        const headerElement = findSingle(prevTabElement, '[data-pc-section="accordionheader"]');
+        if (!headerElement) return null;
+        if (getAttribute(headerElement, 'data-p-disabled')) {
+            return this.findPrevHeaderAction(headerElement.parentElement);
+        }
+        return findSingle(headerElement.parentElement as HTMLElement, '[data-pc-section="accordionheader"]');
     }
 
     findFirstHeaderAction() {
@@ -557,12 +579,6 @@ export class Accordion extends BaseComponent<AccordionPassThrough> implements Bl
     findLastHeaderAction() {
         const lastEl = this.el.nativeElement.lastElementChild;
         return this.findPrevHeaderAction(lastEl, true);
-    }
-
-    onTabEndKey(event) {
-        const lastHeaderAction = this.findLastHeaderAction();
-        this.changeFocusedTab(lastHeaderAction);
-        event.preventDefault();
     }
 
     getBlockableElement(): HTMLElement {
