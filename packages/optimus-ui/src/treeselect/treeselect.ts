@@ -739,7 +739,6 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     onOverlayBeforeEnter() {
-        console.log('onOverlayBeforeEnter');
         if (this.filter) {
             isNotEmpty(this.filterValue) && this.treeViewChild?._filter(<any>this.filterValue);
             this.filterInputAutoFocus && this.filterViewChild?.nativeElement.focus();
@@ -753,17 +752,17 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         const panelElement = this.panelEl?.nativeElement;
         if (this.virtualScroll && panelElement) {
             let lastHeight = panelElement.offsetHeight;
-            const ro = new ResizeObserver((entries) => {
+            const virtualScrollResizeObserver = new ResizeObserver((entries) => {
                 const newHeight = entries[0].contentRect.height;
                 if (newHeight !== lastHeight) {
                     lastHeight = newHeight;
                     this.overlayViewChild?.alignOverlay();
                 }
             });
-            ro.observe(panelElement);
+            virtualScrollResizeObserver.observe(panelElement);
 
             // clean up when overlay closes, not after first callback
-            this.overlayViewChild?.onHide.pipe(take(1)).subscribe(() => ro.disconnect());
+            this.overlayViewChild?.onHide.pipe(take(1)).subscribe(() => virtualScrollResizeObserver.disconnect());
         }
     }
 
