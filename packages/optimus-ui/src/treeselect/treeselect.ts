@@ -171,6 +171,7 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
                             [_templateMap]="templateMap"
                             [loading]="loading"
                             [filterInputAutoFocus]="filterInputAutoFocus"
+                            [togglerAriaLabel]="togglerAriaLabel"
                             [loadingMode]="loadingMode"
                             [pt]="ptm('pcTree')"
                             [unstyled]="unstyled()"
@@ -281,6 +282,11 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
      * @group Props
      */
     @Input() ariaLabelledBy: string | undefined;
+    /**
+     * Defines a string that labels the toggler icon for accessibility.
+     * @group Props
+     */
+    @Input() togglerAriaLabel: string | undefined;
     /**
      * Label to display when there are no selections.
      * @group Props

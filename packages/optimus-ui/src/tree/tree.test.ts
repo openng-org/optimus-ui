@@ -1961,12 +1961,28 @@ describe('Tree', () => {
         });
 
         it('should handle togglerAriaLabel property', async () => {
+            const testNodes: TreeNode[] = [
+                {
+                    label: 'Root',
+                    key: 'root',
+                    expanded: false,
+                    children: [{ label: 'Child 1', key: 'child1' }]
+                }
+            ];
+            component.nodes = testNodes;
             component.togglerAriaLabel = 'Toggle node';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             expect(tree.togglerAriaLabel).toBe('Toggle node');
+
+            // Verify togglerAriaLabel is applied to toggle button
+            const toggleButtons = fixture.debugElement.queryAll(By.css('[role="treeitem"] button[type="button"]'));
+            if (toggleButtons.length > 0) {
+                const toggleButton = toggleButtons[0];
+                expect(toggleButton.nativeElement.getAttribute('aria-label')).toBe('Toggle node');
+            }
         });
 
         it('should handle ariaLabelledBy property', async () => {
