@@ -101,7 +101,6 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                 [attr.readonly]="readonlyInput ? '' : undefined"
                 [attr.disabled]="$disabled() ? '' : undefined"
                 (input)="onUserInput($event)"
-                (paste)="onPaste($event)"
                 [ngStyle]="inputStyle"
                 [class]="cn(cx('pcInputText'), inputStyleClass)"
                 [attr.placeholder]="placeholder"
@@ -1107,8 +1106,6 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     focus: Nullable<boolean>;
 
     isKeydown: Nullable<boolean>;
-
-    isPaste = false;
 
     _minDate?: Date | null;
 
@@ -3033,10 +3030,10 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     onUserInput(event: InputEvent) {
         // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
 
-        if (!this.isKeydown && !this.isPaste) {
+        if (!this.isKeydown && event.inputType !== 'insertFromPaste') {
             return;
         }
-        this.isKeydown = this.isPaste = false;
+        this.isKeydown = false;
 
         let val = (event.target as HTMLInputElement).value;
         try {
@@ -3849,10 +3846,6 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         this.clearTimePickerTimer();
         this.restoreOverlayAppend();
         this.onOverlayHide();
-    }
-
-    onPaste(ev: ClipboardEvent) {
-        this.isPaste = true;
     }
 }
 
