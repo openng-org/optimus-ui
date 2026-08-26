@@ -1088,6 +1088,18 @@ describe('AutoComplete', () => {
                 }
             });
 
+            it('should use pTemplate="selecteditem" as the input display value in single mode', async () => {
+                pTemplateComponent.multiple = false;
+                pTemplateFixture.detectChanges();
+                await pTemplateFixture.whenStable();
+                const autocompleteInstance = pTemplateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                autocompleteInstance.onOptionSelect(new Event('click'), mockCountries[0], false);
+                pTemplateFixture.detectChanges();
+                await pTemplateFixture.whenStable();
+                const inputElement = pTemplateFixture.debugElement.query(By.css('input')).nativeElement;
+                expect(inputElement.value).toBe('🏳️Afghanistan');
+            });
+
             it('should set _selectedItemTemplate in ngAfterContentInit', () => {
                 const autocompleteInstance = pTemplateFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
                 expect(autocompleteInstance._selectedItemTemplate).toBeTruthy();
@@ -2639,5 +2651,61 @@ describe('AutoComplete', () => {
                 expect(dropdownButton?.getAttribute('data-has-suggestions')).toBe('true');
             });
         });
+    });
+});
+
+describe('AutoComplete generic typing', () => {
+    interface Country {
+        name: string;
+        code: string;
+    }
+
+    const afghanistan: Country = { name: 'Afghanistan', code: 'AF' };
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [AutoCompleteModule],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+    });
+
+    it('should type the select event value as the suggestion type', () => {
+        const event: AutoCompleteSelectEvent<Country> = { originalEvent: new Event('click'), value: afghanistan };
+
+        // Fails to compile if `value` is widened back to `any`.
+        const name: string = event.value.name;
+
+        expect(name).toBe('Afghanistan');
+    });
+
+    it('should type the unselect event value as the suggestion type', () => {
+        const event: AutoCompleteUnselectEvent<Country> = { originalEvent: new Event('click'), value: afghanistan };
+
+        const code: string = event.value.code;
+
+        expect(code).toBe('AF');
+    });
+
+    it('should propagate the component type argument to the select output', () => {
+        const typedFixture: ComponentFixture<AutoComplete<Country>> = TestBed.createComponent<AutoComplete<Country>>(AutoComplete);
+        const typedComponent = typedFixture.componentInstance;
+        let selectedName: string | undefined;
+
+        typedComponent.onSelect.subscribe((event) => (selectedName = event.value.name));
+        typedComponent.suggestions = [afghanistan];
+        typedComponent.onOptionSelect(new Event('click'), afghanistan);
+
+        expect(selectedName).toBe('Afghanistan');
+    });
+
+    it('should type the add event value as free text', () => {
+        const typedFixture: ComponentFixture<AutoComplete<Country>> = TestBed.createComponent<AutoComplete<Country>>(AutoComplete);
+        const typedComponent = typedFixture.componentInstance;
+        let addedValue: string | undefined;
+
+        typedComponent.onAdd.subscribe((event) => (addedValue = event.value.trim()));
+        typedComponent.onAdd.emit({ originalEvent: new Event('blur'), value: ' Afghanistan ' });
+
+        expect(addedValue).toBe('Afghanistan');
     });
 });

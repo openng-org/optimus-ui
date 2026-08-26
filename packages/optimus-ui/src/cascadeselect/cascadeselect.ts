@@ -97,7 +97,7 @@ export const CASCADESELECT_VALUE_ACCESSOR: any = {
                 <ul
                     pCascadeSelectSub
                     *ngIf="isOptionGroup(processedOption) && isOptionActive(processedOption)"
-                    [attrrole]="'group'"
+                    [attr.role]="'group'"
                     [class]="cx('optionList')"
                     [selectId]="selectId"
                     [focusedOptionId]="focusedOptionId"

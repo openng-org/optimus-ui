@@ -337,7 +337,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
     },
     hostDirectives: [Bind]
 })
-export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
+export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     componentName = 'AutoComplete';
 
     $pcAutoComplete: AutoComplete | undefined = inject(AUTOCOMPLETE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
@@ -573,11 +573,11 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * An array of suggestions to display.
      * @group Props
      */
-    @Input() get suggestions(): any[] {
+    @Input() get suggestions(): T[] {
         return this._suggestions();
     }
 
-    set suggestions(value: any[]) {
+    set suggestions(value: T[]) {
         this._suggestions.set(value);
         this.handleSuggestionsChange();
     }
@@ -586,12 +586,12 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Property name or getter function to use as the label of an option.
      * @group Props
      */
-    @Input() optionLabel: string | ((item: any) => string) | undefined;
+    @Input() optionLabel: string | ((item: T) => string) | undefined;
     /**
      * Property name or getter function to use as the value of an option.
      * @group Props
      */
-    @Input() optionValue: string | ((item: any) => string) | undefined;
+    @Input() optionValue: string | ((item: T) => string) | undefined;
     /**
      * Unique identifier of the component.
      * @group Props
@@ -634,7 +634,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.
      * @group Props
      */
-    @Input() optionDisabled: string | ((item: any) => string) | undefined;
+    @Input() optionDisabled: string | ((item: T) => string) | undefined;
     /**
      * When enabled, the hovered option will be focused.
      * @group Props
@@ -679,13 +679,13 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * @param {AutoCompleteSelectEvent} event - custom select event.
      * @group Emits
      */
-    @Output() onSelect: EventEmitter<AutoCompleteSelectEvent> = new EventEmitter<AutoCompleteSelectEvent>();
+    @Output() onSelect: EventEmitter<AutoCompleteSelectEvent<T>> = new EventEmitter<AutoCompleteSelectEvent<T>>();
     /**
      * Callback to invoke when a selected value is removed.
      * @param {AutoCompleteUnselectEvent} event - custom unselect event.
      * @group Emits
      */
-    @Output() onUnselect: EventEmitter<AutoCompleteUnselectEvent> = new EventEmitter<AutoCompleteUnselectEvent>();
+    @Output() onUnselect: EventEmitter<AutoCompleteUnselectEvent<T>> = new EventEmitter<AutoCompleteUnselectEvent<T>>();
     /**
      * Callback to invoke when an item is added via addOnBlur or separator features.
      * @param {AutoCompleteAddEvent} event - Custom add event.

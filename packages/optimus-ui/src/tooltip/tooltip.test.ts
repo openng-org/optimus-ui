@@ -281,6 +281,97 @@ describe('Tooltip', () => {
         });
     });
 
+    describe('Re-entrant Mouse Enter', () => {
+        let fixture: ComponentFixture<TestBasicTooltipComponent>;
+        let component: TestBasicTooltipComponent;
+        let tooltipDirective: Tooltip;
+        let inputElement: HTMLElement;
+
+        // Chrome dispatches a fresh mouseenter on the host when the element under the pointer is
+        // detached - for instance an overlay rendered inside the host closing on click. The pointer
+        // never moved, so no mouseleave precedes it. See issue #950.
+        const enter = () => inputElement.dispatchEvent(new MouseEvent('mouseenter'));
+        const leave = () => inputElement.dispatchEvent(new MouseEvent('mouseleave'));
+        const click = () => inputElement.dispatchEvent(new MouseEvent('click'));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(TestBasicTooltipComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            const debugElement = fixture.debugElement.query(By.directive(Tooltip));
+            tooltipDirective = debugElement.injector.get(Tooltip);
+            inputElement = component.inputElement.nativeElement;
+        });
+
+        afterEach(() => {
+            tooltipDirective.deactivate();
+        });
+
+        it('should activate on the first mouse enter', () => {
+            const activateSpy = vi.spyOn(tooltipDirective, 'activate');
+
+            enter();
+
+            expect(activateSpy).toHaveBeenCalledTimes(1);
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should ignore a mouse enter that is not preceded by a mouse leave', () => {
+            enter();
+            tooltipDirective.deactivate();
+
+            const activateSpy = vi.spyOn(tooltipDirective, 'activate');
+            enter();
+
+            expect(activateSpy).not.toHaveBeenCalled();
+        });
+
+        it('should activate again once the pointer has really left', () => {
+            const activateSpy = vi.spyOn(tooltipDirective, 'activate');
+
+            enter();
+            leave();
+            enter();
+
+            expect(activateSpy).toHaveBeenCalledTimes(2);
+        });
+
+        it('should stay hidden when a click is followed by a re-entrant mouse enter', () => {
+            enter();
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+
+            // clicking the host dismisses the tooltip, then the detached-element enter arrives
+            click();
+            expect(document.querySelector('.p-tooltip')).toBeFalsy();
+
+            enter();
+
+            expect(document.querySelector('.p-tooltip')).toBeFalsy();
+        });
+
+        it('should show again after the pointer leaves and returns following a click', () => {
+            enter();
+            click();
+            enter();
+            expect(document.querySelector('.p-tooltip')).toBeFalsy();
+
+            leave();
+            enter();
+
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should reset the pointer state when the events are unbound', () => {
+            enter();
+            expect(tooltipDirective.pointerInside).toBe(true);
+
+            tooltipDirective.unbindEvents();
+
+            expect(tooltipDirective.pointerInside).toBe(false);
+        });
+    });
+
     describe('Positioning', () => {
         let fixture: ComponentFixture<TestBasicTooltipComponent>;
         let component: TestBasicTooltipComponent;

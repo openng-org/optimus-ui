@@ -829,6 +829,26 @@ describe('CascadeSelect', () => {
             expect(hiddenInput.nativeElement.getAttribute('aria-expanded')).toBe('true');
         });
 
+        it('should label the option list with the listLabel ARIA translation', async () => {
+            testComponent.options = mockCountries;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const trigger = testFixture.debugElement.query(By.css('.p-cascadeselect-dropdown'));
+            trigger.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const cascadeSelectInstance = testFixture.debugElement.query(By.directive(CascadeSelect)).componentInstance;
+            const list = testFixture.debugElement.query(By.css('ul[role="tree"]'));
+
+            expect(list).toBeTruthy();
+            expect(list.nativeElement.getAttribute('aria-label')).toBe(cascadeSelectInstance.listLabel);
+            expect(list.nativeElement.getAttribute('aria-label')).toBe('Option List');
+        });
+
         it('should support keyboard navigation', async () => {
             const hiddenInput = testFixture.debugElement.query(By.css('.p-hidden-accessible input'));
 
@@ -853,6 +873,32 @@ describe('CascadeSelect', () => {
             const ariaRequired = hiddenInput.nativeElement.getAttribute('aria-required');
             expect(ariaRequired === null || ariaRequired === 'false').toBe(true);
             expect(hiddenInput.nativeElement.getAttribute('aria-label')).toBeTruthy();
+        });
+
+        it('should render nested option lists with role="group"', async () => {
+            testComponent.options = mockCountries;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const trigger = testFixture.debugElement.query(By.css('.p-cascadeselect-dropdown'));
+            trigger.nativeElement.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const rootList = testFixture.debugElement.query(By.css('ul[role="tree"]'));
+            expect(rootList).toBeTruthy();
+
+            const groupOption = testFixture.debugElement.query(By.css('li[role="treeitem"]'));
+            groupOption.nativeElement.querySelector('.p-cascadeselect-option-content').click();
+            testFixture.changeDetectorRef.markForCheck();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+
+            const nestedList = rootList.nativeElement.querySelector('ul');
+            expect(nestedList).toBeTruthy();
+            expect(nestedList.getAttribute('role')).toBe('group');
         });
     });
 
