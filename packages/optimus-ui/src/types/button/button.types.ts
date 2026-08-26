@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
 import type { PassThrough, PassThroughOption } from '@openng/optimus-ui/api';
-import type { BadgePassThrough, BadgeSeverity } from '@openng/optimus-ui/types/badge';
+import type { BadgePassThrough } from '@openng/optimus-ui/types/badge';
 
 /**
  * Custom pass-through(pt) options.
@@ -110,7 +110,7 @@ export interface ButtonProps {
     rounded?: boolean;
     text?: boolean;
     plain?: boolean;
-    severity?: ButtonSeverity | null | undefined;
+    severity?: ButtonSeverity;
     outlined?: boolean;
     link?: boolean;
     tabindex?: number | undefined;
@@ -118,7 +118,7 @@ export interface ButtonProps {
     style?: { [klass: string]: any } | null | undefined;
     styleClass?: string | undefined;
     badgeClass?: string | undefined;
-    badgeSeverity?: BadgeSeverity | null | undefined;
+    badgeSeverity?: 'success' | 'info' | 'warning' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
     ariaLabel?: string | undefined;
     autofocus?: boolean | undefined;
     variant?: string | undefined;
@@ -128,4 +128,4 @@ export interface ButtonProps {
  * Severity levels of the button.
  * @group Types
  */
-export type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';
+export type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
