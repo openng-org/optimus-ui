@@ -61,8 +61,12 @@ interface City {
 
 @Component({
     template: `
-        <div class="card flex justify-center">
-            <p-multiselect [options]="cities" [(ngModel)]="selectedCities" placeholder="Select Cities" optionLabel="name" display="chip" class="w-full md:w-80" />
+       <div class="card flex justify-center">
+            <p-multiselect [options]="cities" [(ngModel)]="selectedCities" placeholder="Select Cities" optionLabel="name" display="chip" class="w-full md:w-80">
+                <ng-template #chipicon>
+                    <span class="pi pi-map"></span>
+                </ng-template>
+            </p-multiselect>
         </div>
     `,
     standalone: true,
@@ -918,7 +922,8 @@ MultiSelect is used to select multiple items from a collection.
 | selecteditems | TemplateRef<MultiSelectSelectedItemsTemplateContext<any>> | Custom selected items template. |
 | loadingicon | TemplateRef<void> | Custom loading icon template. |
 | filtericon | TemplateRef<void> | Custom filter icon template. |
-| removetokenicon | TemplateRef<MultiSelectChipIconTemplateContext> | Custom remove token icon template. |
+| chipremoveicon | TemplateRef<MultiSelectChipIconTemplateContext> | Custom chip remove icon template to customize the remove icon of the chip. |
+| removetokenicon | TemplateRef<MultiSelectChipIconTemplateContext> | Custom remove token icon template. (deprecated: use chipremoveicon instead) |
 | chipicon | TemplateRef<MultiSelectChipIconTemplateContext> | Custom chip icon template. |
 | clearicon | TemplateRef<void> | Custom clear icon template. |
 | dropdownicon | TemplateRef<MultiSelectDropdownIconTemplateContext> | Custom dropdown icon template. |
