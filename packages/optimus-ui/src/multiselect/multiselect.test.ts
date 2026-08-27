@@ -231,10 +231,12 @@ class TestFormMultiSelectComponent {
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template pTemplate="selectedItems" let-value let-removeChip="removeChip">
                 <div class="custom-selected-items">
-                    <div *ngFor="let city of value" class="custom-chip">
-                        {{ city.name }}
-                        <span class="remove-chip" (click)="removeChip(city)">×</span>
-                    </div>
+                    @for (city of value; track city) {
+                        <div class="custom-chip">
+                            {{ city.name }}
+                            <span class="remove-chip" (click)="removeChip(city)">×</span>
+                        </div>
+                    }
                 </div>
             </ng-template>
 
@@ -314,7 +316,9 @@ class TestGroupedMultiSelectComponent {
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
                 <div class="content-child-selected">
-                    <div *ngFor="let city of value">{{ city.name }}</div>
+                    @for (city of value; track city) {
+                        <div>{{ city.name }}</div>
+                    }
                 </div>
             </ng-template>
 

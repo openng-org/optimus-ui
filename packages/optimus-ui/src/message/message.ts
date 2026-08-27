@@ -33,13 +33,17 @@ const MESSAGE_INSTANCE = new InjectionToken<Message>('MESSAGE_INSTANCE');
                 @if (containerTemplate || _containerTemplate) {
                     <ng-container *ngTemplateOutlet="containerTemplate || _containerTemplate; context: { closeCallback: closeCallback }"></ng-container>
                 } @else {
-                    <div *ngIf="!escape; else escapeOut">
-                        <span [pBind]="ptm('text')" *ngIf="!escape" [ngClass]="cx('text')" [innerHTML]="text" [attr.data-p]="dataP"></span>
-                    </div>
-
-                    <ng-template #escapeOut>
-                        <span [pBind]="ptm('text')" *ngIf="escape && text" [ngClass]="cx('text')" [attr.data-p]="dataP">{{ text }}</span>
-                    </ng-template>
+                    @if (!escape) {
+                        <div>
+                            @if (!escape) {
+                                <span [pBind]="ptm('text')" [ngClass]="cx('text')" [innerHTML]="text" [attr.data-p]="dataP"></span>
+                            }
+                        </div>
+                    } @else {
+                        @if (escape && text) {
+                            <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP">{{ text }}</span>
+                        }
+                    }
 
                     <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP">
                         <ng-content></ng-content>

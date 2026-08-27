@@ -464,7 +464,7 @@ class TestPrimeTemplateSelectButtonComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule, SharedModule],
+    imports: [SelectButton, FormsModule, SharedModule],
     template: `
         <p-selectbutton [(ngModel)]="selectedValue" [options]="options">
             <!-- Item template with pTemplate -->
@@ -490,7 +490,7 @@ class TestSelectButtonPTemplateComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule, SharedModule],
+    imports: [SelectButton, FormsModule, SharedModule],
     template: `
         <p-selectbutton [(ngModel)]="selectedValue" [options]="options">
             <!-- Item template with #template reference -->
@@ -1174,7 +1174,7 @@ describe('SelectButton PassThrough Tests', () => {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: 'INLINE_STRING' }" />`
 })
 class TestInlineStringPTComponent {
@@ -1184,7 +1184,7 @@ class TestInlineStringPTComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `<p-selectbutton [options]="options" [pt]="{ root: { class: 'INLINE_OBJECT_CLASS', 'data-inline': 'true' } }" />`
 })
 class TestInlineObjectPTComponent {
@@ -1194,7 +1194,7 @@ class TestInlineObjectPTComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
-    imports: [SelectButton, FormsModule, CommonModule],
+    imports: [SelectButton, FormsModule],
     template: `
         <p-selectbutton [options]="options1" />
         <p-selectbutton [options]="options2" />

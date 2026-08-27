@@ -159,8 +159,12 @@ class TestReactiveFormDatePickerComponent {
             <ng-template pTemplate="date" let-date="date">
                 <div class="custom-date" data-testid="date-template">
                     <span class="day">{{ date.day }}</span>
-                    <span class="month" *ngIf="date.month">{{ date.month }}</span>
-                    <span class="year" *ngIf="date.year">{{ date.year }}</span>
+                    @if (date.month) {
+                        <span class="month">{{ date.month }}</span>
+                    }
+                    @if (date.year) {
+                        <span class="year">{{ date.year }}</span>
+                    }
                 </div>
             </ng-template>
 
@@ -251,8 +255,12 @@ class TestPTemplatesDatePickerComponent {
             <ng-template #date let-date="date">
                 <div class="custom-date-ref" data-testid="date-ref-template">
                     <span class="day">{{ date?.day }}</span>
-                    <span class="month" *ngIf="date?.month">{{ date?.month }}</span>
-                    <span class="year" *ngIf="date?.year">{{ date?.year }}</span>
+                    @if (date?.month) {
+                        <span class="month">{{ date?.month }}</span>
+                    }
+                    @if (date?.year) {
+                        <span class="year">{{ date?.year }}</span>
+                    }
                 </div>
             </ng-template>
 

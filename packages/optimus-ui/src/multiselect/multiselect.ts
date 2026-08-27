@@ -84,13 +84,15 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
     imports: [CommonModule, Checkbox, FormsModule, SharedModule],
     template: `
         <p-checkbox [ngModel]="selected" [binary]="true" [tabindex]="-1" [variant]="variant" [ariaLabel]="label" [pt]="getPTOptions('pcOptionCheckbox')" [unstyled]="unstyled()">
-            <ng-container *ngIf="itemCheckboxIconTemplate">
+            @if (itemCheckboxIconTemplate) {
                 <ng-template #icon let-klass="class">
                     <ng-template *ngTemplateOutlet="itemCheckboxIconTemplate; context: { checked: selected, class: klass }"></ng-template>
                 </ng-template>
-            </ng-container>
+            }
         </p-checkbox>
-        <span *ngIf="!template">{{ label ?? 'empty' }}</span>
+        @if (!template) {
+            <span>{{ label ?? 'empty' }}</span>
+        }
         <ng-container *ngTemplateOutlet="template; context: { $implicit: option }"></ng-container>
     `,
     encapsulation: ViewEncapsulation.None,

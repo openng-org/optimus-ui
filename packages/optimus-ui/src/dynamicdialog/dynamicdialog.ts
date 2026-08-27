@@ -60,27 +60,43 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             hostName="DynamicDialog"
             [unstyled]="isUnstyled"
         >
-            <ng-template #header *ngIf="headerTemplate">
-                <ng-container *ngComponentOutlet="headerTemplate"></ng-container>
-            </ng-template>
-            <ng-template #content *ngIf="contentTemplate">
-                <ng-container *ngComponentOutlet="contentTemplate"></ng-container>
-            </ng-template>
-            <ng-template #footer *ngIf="footerTemplate">
-                <ng-container *ngComponentOutlet="footerTemplate"></ng-container>
-            </ng-template>
-            <ng-template #closeicon *ngIf="closeIconTemplate">
-                <ng-container *ngComponentOutlet="closeIconTemplate"></ng-container>
-            </ng-template>
-            <ng-template #maximizeicon *ngIf="maximizeIconTemplate">
-                <ng-container *ngComponentOutlet="maximizeIconTemplate"></ng-container>
-            </ng-template>
-            <ng-template #minimizeicon *ngIf="minimizeIconTemplate">
-                <ng-container *ngComponentOutlet="minimizeIconTemplate"></ng-container>
-            </ng-template>
+            @if (headerTemplate) {
+                <ng-template #header>
+                    <ng-container *ngComponentOutlet="headerTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (contentTemplate) {
+                <ng-template #content>
+                    <ng-container *ngComponentOutlet="contentTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (footerTemplate) {
+                <ng-template #footer>
+                    <ng-container *ngComponentOutlet="footerTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (closeIconTemplate) {
+                <ng-template #closeicon>
+                    <ng-container *ngComponentOutlet="closeIconTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (maximizeIconTemplate) {
+                <ng-template #maximizeicon>
+                    <ng-container *ngComponentOutlet="maximizeIconTemplate"></ng-container>
+                </ng-template>
+            }
+            @if (minimizeIconTemplate) {
+                <ng-template #minimizeicon>
+                    <ng-container *ngComponentOutlet="minimizeIconTemplate"></ng-container>
+                </ng-template>
+            }
 
-            <ng-template pDynamicDialogContent *ngIf="!contentTemplate"></ng-template>
-            <div *ngIf="ddconfig.footer && !footerTemplate">{{ ddconfig.footer }}</div>
+            @if (!contentTemplate) {
+                <ng-template pDynamicDialogContent></ng-template>
+            }
+            @if (ddconfig.footer && !footerTemplate) {
+                <div>{{ ddconfig.footer }}</div>
+            }
         </p-dialog>
     `,
     changeDetection: ChangeDetectionStrategy.Eager,

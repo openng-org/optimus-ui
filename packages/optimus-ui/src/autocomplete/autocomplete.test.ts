@@ -93,9 +93,11 @@ const mockItems = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5'];
         </p-autocomplete>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-autocomplete formControlName="selectedItems" [suggestions]="formSuggestions" [optionLabel]="'name'" [multiple]="true" (completeMethod)="onFormSearch($event)"> </p-autocomplete>
-        </form>
+        @if (showReactiveForm) {
+            <form [formGroup]="reactiveForm">
+                <p-autocomplete formControlName="selectedItems" [suggestions]="formSuggestions" [optionLabel]="'name'" [multiple]="true" (completeMethod)="onFormSearch($event)"> </p-autocomplete>
+            </form>
+        }
     `
 })
 class TestAutocompleteComponent {

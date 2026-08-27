@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BadgeModule } from '@openng/optimus-ui/badge';
@@ -17,7 +16,7 @@ const OVERLAYBADGE_INSTANCE = new InjectionToken<OverlayBadge>('OVERLAYBADGE_INS
 @Component({
     selector: 'p-overlayBadge, p-overlay-badge, p-overlaybadge',
     standalone: true,
-    imports: [CommonModule, BadgeModule, SharedModule, Bind],
+    imports: [BadgeModule, SharedModule, Bind],
     template: `
         <div [class]="cx('root')" [pBind]="ptm('root')">
             <ng-content></ng-content>
