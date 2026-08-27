@@ -3896,3 +3896,49 @@ describe('MultiSelect Complex Edge Cases', () => {
         });
     });
 });
+
+describe('MultiSelect inside a parent form', () => {
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+    });
+
+    it('should not register its internal ngModels with the parent form', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const isolationFixture = TestBed.createComponent(TestFormIsolationMultiSelectComponent);
+        isolationFixture.detectChanges();
+        await isolationFixture.whenStable();
+
+        // the header checkbox and the option checkboxes only exist while the panel is open
+        isolationFixture.debugElement.query(By.directive(MultiSelect)).componentInstance.show();
+        isolationFixture.detectChanges();
+        await isolationFixture.whenStable();
+
+        const internalNgModels = isolationFixture.debugElement.queryAll(By.directive(NgModel)).map((debugElement) => debugElement.injector.get(NgModel));
+        expect(internalNgModels.length).toBeGreaterThan(0);
+        expect(internalNgModels.every((ngModel) => ngModel.options?.standalone === true)).toBe(true);
+
+        // NG01354 is only reported by Angular 22.1.3 and up
+        expect(warnSpy.mock.calls.flat().join('\n')).not.toContain('NG01354');
+        expect(Object.keys(isolationFixture.componentInstance.form.controls)).toEqual(['value']);
+    });
+});
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [MultiSelect, ReactiveFormsModule],
+    template: `
+        <form [formGroup]="form">
+            <p-multiselect [options]="options" optionLabel="name" [filter]="true" [showToggleAll]="true" formControlName="value" />
+        </form>
+    `
+})
+class TestFormIsolationMultiSelectComponent {
+    form = new FormGroup({ value: new FormControl<City[]>([]) });
+    options: City[] = [
+        { name: 'Amsterdam', code: 'AMS' },
+        { name: 'Rotterdam', code: 'RTM' }
+    ];
+}

@@ -34,7 +34,7 @@ const TERMINAL_INSTANCE = new InjectionToken<Terminal>('TERMINAL_INSTANCE');
         </div>
         <div [class]="cx('prompt')" [pBind]="ptm('prompt')">
             <span [class]="cx('promptLabel')" [pBind]="ptm('promptLabel')">{{ prompt }}</span>
-            <input #in type="text" [(ngModel)]="command" [class]="cx('promptValue')" [pBind]="ptm('promptValue')" autocomplete="off" (keydown)="handleCommand($event)" autofocus />
+            <input #in type="text" [(ngModel)]="command" [ngModelOptions]="{ standalone: true }" [class]="cx('promptValue')" [pBind]="ptm('promptValue')" autocomplete="off" (keydown)="handleCommand($event)" autofocus />
         </div>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,

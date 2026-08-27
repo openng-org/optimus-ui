@@ -5040,7 +5040,19 @@ export class CellEditor extends BaseComponent {
 @Component({
     selector: 'p-tableRadioButton',
     standalone: false,
-    template: `<p-radioButton #rb [(ngModel)]="checked" [disabled]="disabled()" [inputId]="inputId()" [name]="name()" [ariaLabel]="ariaLabel" [binary]="true" [value]="value" (onClick)="onClick($event)" [unstyled]="unstyled()" /> `,
+    template: `<p-radioButton
+        #rb
+        [(ngModel)]="checked"
+        [ngModelOptions]="{ standalone: true }"
+        [disabled]="disabled()"
+        [inputId]="inputId()"
+        [name]="name()"
+        [ariaLabel]="ariaLabel"
+        [binary]="true"
+        [value]="value"
+        (onClick)="onClick($event)"
+        [unstyled]="unstyled()"
+    /> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
@@ -5103,7 +5115,18 @@ export class TableRadioButton extends BaseComponent {
     selector: 'p-tableCheckbox',
     standalone: false,
     template: `
-        <p-checkbox [(ngModel)]="checked" [binary]="true" (onChange)="onClick($event)" [required]="required()" [disabled]="disabled()" [inputId]="inputId()" [name]="name()" [ariaLabel]="ariaLabel" [unstyled]="unstyled()">
+        <p-checkbox
+            [(ngModel)]="checked"
+            [ngModelOptions]="{ standalone: true }"
+            [binary]="true"
+            (onChange)="onClick($event)"
+            [required]="required()"
+            [disabled]="disabled()"
+            [inputId]="inputId()"
+            [name]="name()"
+            [ariaLabel]="ariaLabel"
+            [unstyled]="unstyled()"
+        >
             @if (dataTable.checkboxIconTemplate || dataTable._checkboxIconTemplate; as template) {
                 <ng-template pTemplate="icon">
                     <ng-template *ngTemplateOutlet="template; context: { $implicit: checked }" />
@@ -5169,7 +5192,18 @@ export class TableCheckbox extends BaseComponent {
     selector: 'p-tableHeaderCheckbox',
     standalone: false,
     template: `
-        <p-checkbox [pt]="ptm('pcCheckbox')" [(ngModel)]="checked" (onChange)="onClick($event)" [binary]="true" [disabled]="isDisabled()" [inputId]="inputId()" [name]="name()" [ariaLabel]="ariaLabel" [unstyled]="unstyled()">
+        <p-checkbox
+            [pt]="ptm('pcCheckbox')"
+            [(ngModel)]="checked"
+            [ngModelOptions]="{ standalone: true }"
+            (onChange)="onClick($event)"
+            [binary]="true"
+            [disabled]="isDisabled()"
+            [inputId]="inputId()"
+            [name]="name()"
+            [ariaLabel]="ariaLabel"
+            [unstyled]="unstyled()"
+        >
             @if (dataTable.headerCheckboxIconTemplate || dataTable._headerCheckboxIconTemplate; as template) {
                 <ng-template pTemplate="icon">
                     <ng-template *ngTemplateOutlet="template; context: { $implicit: checked }" />
@@ -5521,7 +5555,15 @@ export class ReorderableRow extends BaseComponent {
                     </ul>
                     <ng-template #menu>
                         <div [class]="cx('filterOperator')" [pBind]="ptm('filterOperator')" *ngIf="isShowOperator">
-                            <p-select [options]="operatorOptions" [pt]="ptm('pcFilterOperatorDropdown')" [ngModel]="operator" (ngModelChange)="onOperatorChange($event)" [styleClass]="cx('pcFilterOperatorDropdown')" [unstyled]="unstyled()"></p-select>
+                            <p-select
+                                [options]="operatorOptions"
+                                [pt]="ptm('pcFilterOperatorDropdown')"
+                                [ngModel]="operator"
+                                [ngModelOptions]="{ standalone: true }"
+                                (ngModelChange)="onOperatorChange($event)"
+                                [styleClass]="cx('pcFilterOperatorDropdown')"
+                                [unstyled]="unstyled()"
+                            ></p-select>
                         </div>
                         <div [class]="cx('filterRuleList')" [pBind]="ptm('filterRuleList')">
                             <div *ngFor="let fieldConstraint of fieldConstraints; let i = index" [ngClass]="cx('filterRule')" [pBind]="ptm('filterRule')">
@@ -5529,6 +5571,7 @@ export class ReorderableRow extends BaseComponent {
                                     *ngIf="showMatchModes && matchModes"
                                     [options]="matchModes"
                                     [ngModel]="fieldConstraint.matchMode"
+                                    [ngModelOptions]="{ standalone: true }"
                                     (ngModelChange)="onMenuMatchModeChange($event, fieldConstraint)"
                                     [styleClass]="cx('pcFilterConstraintDropdown')"
                                     [pt]="ptm('pcFilterConstraintDropdown')"
@@ -6463,6 +6506,7 @@ export class ColumnFilter extends BaseComponent {
                 @case ('numeric') {
                     <p-inputNumber
                         [ngModel]="filterConstraint?.value"
+                        [ngModelOptions]="{ standalone: true }"
                         (ngModelChange)="onModelChange($event)"
                         (onKeyDown)="onNumericInputKeyDown($event)"
                         [showButtons]="showButtons"
@@ -6483,10 +6527,27 @@ export class ColumnFilter extends BaseComponent {
                     ></p-inputNumber>
                 }
                 @case ('boolean') {
-                    <p-checkbox [pt]="ptm('pcFilterCheckbox')" [indeterminate]="filterConstraint?.value === null" [binary]="true" [ngModel]="filterConstraint?.value" (ngModelChange)="onModelChange($event)" [unstyled]="unstyled()" />
+                    <p-checkbox
+                        [pt]="ptm('pcFilterCheckbox')"
+                        [indeterminate]="filterConstraint?.value === null"
+                        [binary]="true"
+                        [ngModel]="filterConstraint?.value"
+                        [ngModelOptions]="{ standalone: true }"
+                        (ngModelChange)="onModelChange($event)"
+                        [unstyled]="unstyled()"
+                    />
                 }
                 @case ('date') {
-                    <p-datepicker [pt]="ptm('pcFilterDatePicker')" [ariaLabel]="ariaLabel" [placeholder]="placeholder" [ngModel]="filterConstraint?.value" (ngModelChange)="onModelChange($event)" appendTo="body" [unstyled]="unstyled()"></p-datepicker>
+                    <p-datepicker
+                        [pt]="ptm('pcFilterDatePicker')"
+                        [ariaLabel]="ariaLabel"
+                        [placeholder]="placeholder"
+                        [ngModel]="filterConstraint?.value"
+                        [ngModelOptions]="{ standalone: true }"
+                        (ngModelChange)="onModelChange($event)"
+                        appendTo="body"
+                        [unstyled]="unstyled()"
+                    ></p-datepicker>
                 }
             }
         }

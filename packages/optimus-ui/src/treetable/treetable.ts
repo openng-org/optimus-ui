@@ -3382,7 +3382,18 @@ export class TTContextMenuRow extends BaseComponent {
     selector: 'p-treeTableCheckbox, p-treetable-checkbox, p-tree-table-checkbox',
     standalone: false,
     template: `
-        <p-checkbox [ngModel]="checked" [pt]="ptm('pcRowCheckbox')" (onChange)="onClick($event)" [binary]="true" [disabled]="disabled" [indeterminate]="partialChecked" [styleClass]="cx('pcNodeCheckbox')" [tabIndex]="-1" [unstyled]="unstyled()">
+        <p-checkbox
+            [ngModel]="checked"
+            [ngModelOptions]="{ standalone: true }"
+            [pt]="ptm('pcRowCheckbox')"
+            (onChange)="onClick($event)"
+            [binary]="true"
+            [disabled]="disabled"
+            [indeterminate]="partialChecked"
+            [styleClass]="cx('pcNodeCheckbox')"
+            [tabIndex]="-1"
+            [unstyled]="unstyled()"
+        >
             @if (tt.checkboxIconTemplate || tt._checkboxIconTemplate) {
                 <ng-template pTemplate="icon">
                     <ng-template *ngTemplateOutlet="tt.checkboxIconTemplate || tt._checkboxIconTemplate; context: { $implicit: checked, partialSelected: partialChecked }"></ng-template>
@@ -3478,7 +3489,7 @@ export class TTCheckbox extends BaseComponent {
     selector: 'p-treeTableHeaderCheckbox',
     standalone: false,
     template: `
-        <p-checkbox [ngModel]="checked" [pt]="ptm('pcHeaderCheckbox')" (onChange)="onClick($event)" [binary]="true" [disabled]="!tt.value || tt.value.length === 0" [unstyled]="unstyled()">
+        <p-checkbox [ngModel]="checked" [ngModelOptions]="{ standalone: true }" [pt]="ptm('pcHeaderCheckbox')" (onChange)="onClick($event)" [binary]="true" [disabled]="!tt.value || tt.value.length === 0" [unstyled]="unstyled()">
             @if (tt.headerCheckboxIconTemplate || tt._headerCheckboxIconTemplate) {
                 <ng-template pTemplate="icon">
                     <ng-template *ngTemplateOutlet="tt.headerCheckboxIconTemplate || tt._headerCheckboxIconTemplate; context: { $implicit: checked }"></ng-template>

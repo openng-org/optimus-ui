@@ -129,6 +129,7 @@ const TREENODE_INSTANCE = new InjectionToken<UITreeNode>('TREENODE_INSTANCE');
                     @if (tree.selectionMode == 'checkbox') {
                         <p-checkbox
                             [ngModel]="isSelected()"
+                            [ngModelOptions]="{ standalone: true }"
                             [styleClass]="cx('nodeCheckbox')"
                             [binary]="true"
                             [indeterminate]="node.partialSelected"

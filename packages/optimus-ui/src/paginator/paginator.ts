@@ -98,6 +98,7 @@ const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
             <p-select
                 [options]="pageItems"
                 [ngModel]="getPage()"
+                [ngModelOptions]="{ standalone: true }"
                 [disabled]="empty()"
                 [attr.aria-label]="getAriaLabel('jumpToPageDropdownLabel')"
                 [styleClass]="cx('pcJumpToPageDropdown')"
@@ -143,12 +144,21 @@ const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
             </button>
         }
         @if (showJumpToPageInput) {
-            <p-inputnumber [pt]="ptm('pcJumpToPageInput')" [ngModel]="currentPage()" [class]="cx('pcJumpToPageInput')" [disabled]="empty()" (ngModelChange)="changePage($event - 1)" [unstyled]="unstyled()"></p-inputnumber>
+            <p-inputnumber
+                [pt]="ptm('pcJumpToPageInput')"
+                [ngModel]="currentPage()"
+                [ngModelOptions]="{ standalone: true }"
+                [class]="cx('pcJumpToPageInput')"
+                [disabled]="empty()"
+                (ngModelChange)="changePage($event - 1)"
+                [unstyled]="unstyled()"
+            ></p-inputnumber>
         }
         @if (rowsPerPageOptions) {
             <p-select
                 [options]="rowsPerPageItems"
                 [(ngModel)]="rows"
+                [ngModelOptions]="{ standalone: true }"
                 [styleClass]="cx('pcRowPerPageDropdown')"
                 [disabled]="empty()"
                 (onChange)="onRppChange($event)"

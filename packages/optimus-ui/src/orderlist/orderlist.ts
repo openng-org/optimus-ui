@@ -97,6 +97,7 @@ const ORDERLIST_INSTANCE = new InjectionToken<OrderList>('ORDERLIST_INSTANCE');
             [multiple]="true"
             [options]="value"
             [(ngModel)]="d_selection"
+            [ngModelOptions]="{ standalone: true }"
             [optionLabel]="dataKey ?? 'name'"
             [id]="id + '_list'"
             [listStyle]="listStyle"

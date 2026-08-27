@@ -83,7 +83,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
     standalone: true,
     imports: [CommonModule, Checkbox, FormsModule, SharedModule],
     template: `
-        <p-checkbox [ngModel]="selected" [binary]="true" [tabindex]="-1" [variant]="variant" [ariaLabel]="label" [pt]="getPTOptions('pcOptionCheckbox')" [unstyled]="unstyled()">
+        <p-checkbox [ngModel]="selected" [ngModelOptions]="{ standalone: true }" [binary]="true" [tabindex]="-1" [variant]="variant" [ariaLabel]="label" [pt]="getPTOptions('pcOptionCheckbox')" [unstyled]="unstyled()">
             @if (itemCheckboxIconTemplate) {
                 <ng-template #icon let-klass="class">
                     <ng-template *ngTemplateOutlet="itemCheckboxIconTemplate; context: { checked: selected, class: klass }"></ng-template>
@@ -329,6 +329,7 @@ export class MultiSelectItem extends BaseComponent {
                             <p-checkbox
                                 [pt]="getHeaderCheckboxPTOptions('pcHeaderCheckbox')"
                                 [ngModel]="allSelected()"
+                                [ngModelOptions]="{ standalone: true }"
                                 [ariaLabel]="toggleAllAriaLabel"
                                 [binary]="true"
                                 (onChange)="onToggleAll($event)"
