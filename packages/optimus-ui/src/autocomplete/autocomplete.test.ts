@@ -681,6 +681,69 @@ describe('AutoComplete', () => {
             expect(valueResult).toBe('CUSTOM_AF');
         });
 
+        it('should display the option label in the input when the model holds an optionValue', async () => {
+            fixture.componentRef.setInput('optionLabel', 'name');
+            fixture.componentRef.setInput('optionValue', 'code');
+            fixture.componentRef.setInput('suggestions', mockCountries);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue('AF');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const inputElement = fixture.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
+            expect(inputElement.value).toBe('Afghanistan');
+        });
+
+        it('should display the option label in the input when a numeric optionValue is written before suggestions arrive', async () => {
+            fixture.componentRef.setInput('optionLabel', 'name');
+            fixture.componentRef.setInput('optionValue', 'id');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue(2);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            fixture.componentRef.setInput('suggestions', [
+                { id: 1, name: 'One' },
+                { id: 2, name: 'Two' }
+            ]);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(component.inputValue()).toBe('Two');
+        });
+
+        it('should mark the option matching the written optionValue as selected', async () => {
+            fixture.componentRef.setInput('optionLabel', 'name');
+            fixture.componentRef.setInput('optionValue', 'code');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue('AL');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            fixture.componentRef.setInput('suggestions', mockCountries);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(mockCountries.map((country) => component.isSelected(country))).toEqual([false, true, false, false, false]);
+        });
+
+        it('should pass the resolved option to the selected item template when the model holds an optionValue', async () => {
+            testComponent.optionValue = 'code';
+            testComponent.suggestions = testComponent.objectOptions;
+            testComponent.selectedValue = 'AF';
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const inputElement = testFixture.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
+            expect(inputElement.value).toBe('Afghanistan');
+        });
+
         it('should work with optionDisabled as string', async () => {
             testComponent.optionDisabled = 'disabled';
             testComponent.suggestions = [

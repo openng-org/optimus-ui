@@ -898,7 +898,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
     inputValue = computed(() => {
         const modelValue = this.modelValue();
-        const selectedOption = this.optionValueSelected ? (this.suggestions || []).find((option: any) => equals(option, modelValue, this.equalityKey())) : modelValue;
+        const selectedOption = this.optionValueSelected ? (this.suggestions || []).find((option: any) => this.isOptionEqualToValue(option, modelValue)) : modelValue;
 
         if (isNotEmpty(modelValue)) {
             if (typeof modelValue === 'object' || this.optionValueSelected) {
@@ -964,7 +964,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     get optionValueSelected() {
-        return typeof this.modelValue() === 'string' && this.optionValue;
+        return this.isResolvedOptionValue(this.modelValue());
     }
 
     chipItemClass(index) {
@@ -1140,9 +1140,25 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
     isSelected(option) {
         if (this.multiple) {
-            return this.unique ? (this.modelValue() as string[])?.some((model) => equals(model, option, this.equalityKey())) : false;
+            return this.unique ? (this.modelValue() as any[])?.some((model) => this.isOptionEqualToValue(option, model)) : false;
         }
-        return equals(this.modelValue(), option, this.equalityKey());
+        return this.isOptionEqualToValue(option, this.modelValue());
+    }
+
+    /**
+     * Whether the model holds a value produced by `optionValue` (a primitive) rather than an option object.
+     * This happens when a value is written before the matching option is available in the suggestions.
+     */
+    private isResolvedOptionValue(value: any): boolean {
+        return !!this.optionValue && value != null && typeof value !== 'object';
+    }
+
+    /**
+     * Whether an option corresponds to a model value, regardless of whether the model holds
+     * the option object itself or the value resolved through `optionValue`.
+     */
+    private isOptionEqualToValue(option: any, value: any): boolean {
+        return equals(value, option, this.equalityKey()) || (this.isResolvedOptionValue(value) && equals(this.getOptionValue(option), value));
     }
 
     isOptionMatched(option, value) {
@@ -1916,12 +1932,12 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
         if (this.multiple) {
             const resolved = (value || []).map((val: any) => {
-                const match = this.visibleOptions().find((option: any) => equals(val, option, this.equalityKey()));
+                const match = this.visibleOptions().find((option: any) => this.isOptionEqualToValue(option, val));
                 return match ?? val;
             });
             resolvedValue = isEmpty(value) ? value : resolved;
         } else {
-            const option = this.visibleOptions().find((option: any) => equals(value, option, this.equalityKey()));
+            const option = this.visibleOptions().find((option: any) => this.isOptionEqualToValue(option, value));
             resolvedValue = isEmpty(option) ? value : option;
         }
 
