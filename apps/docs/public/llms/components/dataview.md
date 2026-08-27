@@ -27,7 +27,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -126,7 +126,7 @@ import { Product } from '@/domain/product';
                     <div *ngFor="let item of items; let first = first">
                         <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                             <div class="md:w-40 relative">
-                                <img class="block xl:block mx-auto rounded w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                <img class="block xl:block mx-auto rounded w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                 <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                             </div>
                             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -159,7 +159,7 @@ import { Product } from '@/domain/product';
                             <div class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
                                 <div class="bg-surface-50 flex justify-center rounded p-4">
                                     <div class="relative mx-auto">
-                                        <img class="rounded w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="max-width: 300px" />
+                                        <img class="rounded w-full" [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" style="max-width: 300px" />
                                         <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                     </div>
                                 </div>
@@ -321,7 +321,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -400,7 +400,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="dark:!bg-surface-900 absolute" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">

@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: ` <app-doc
-        docTitle="Angular Organization Chart Component"
+        docTitle="Angular Organization Chart Component - Optimus UI"
         header="OrganizationChart"
         description="OrganizationChart visualizes hierarchical organization data."
         [docs]="docs"

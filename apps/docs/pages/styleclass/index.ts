@@ -7,7 +7,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular StyleClass Component"
+        docTitle="Angular StyleClass Component - Optimus UI"
         header="StyleClass"
         description="StyleClass manages css classes declaratively to during enter/leave animations or just to toggle classes on an element."
         [docs]="docs"

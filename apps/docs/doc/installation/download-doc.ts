@@ -9,7 +9,10 @@ import { AppCode } from '@/components/doc/app.code';
     imports: [AppDocSectionText, AppCode],
     template: `
         <app-docsectiontext>
-            <p>Optimus UI is available for download on the <a href="https://www.npmjs.com/package/@openng/optimus-ui">npm registry</a>.</p>
+            <p>
+                Prefer to wire things up yourself? Install the packages from the <a href="https://www.npmjs.com/package/@openng/optimus-ui" target="_blank" rel="noopener noreferrer">npm registry</a> directly. The next section covers the provider
+                setup that <i>ng add</i> would have written for you.
+            </p>
         </app-docsectiontext>
         <app-code [code]="code" [hideToggleCode]="true"></app-code>
     `

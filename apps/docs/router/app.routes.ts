@@ -10,7 +10,6 @@ export const routes: Routes = [
         children: [
             { path: 'accessibility', redirectTo: 'guides/accessibility', pathMatch: 'full' },
             { path: 'theming', redirectTo: 'theming/styled', pathMatch: 'full' },
-            { path: 'uikit/guide', redirectTo: 'uikit/guide/v3', pathMatch: 'full' },
             { path: 'autocomplete', loadChildren: () => import('@/pages/autocomplete/routes') },
             {
                 path: 'installation',
@@ -20,8 +19,11 @@ export const routes: Routes = [
                 path: 'configuration',
                 loadChildren: () => import('@/pages/configuration/routes')
             },
+            { path: 'philosophy', loadChildren: () => import('@/pages/philosophy/routes') },
+            { path: 'faq', loadChildren: () => import('@/pages/faq/routes') },
             { path: 'playground', loadChildren: () => import('@/pages/playground/routes') },
             { path: 'roadmap', loadChildren: () => import('@/pages/roadmap/routes') },
+            { path: 'templates', loadChildren: () => import('@/pages/templates/routes') },
             {
                 path: 'theming',
                 loadChildren: () => import('@/pages/theming/routes')

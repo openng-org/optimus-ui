@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'compatibility-doc',
@@ -7,21 +7,11 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     imports: [AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>The compatible versions to choose the correct combination.</p>
-            <div class="doc-tablewrapper">
-                <table class="doc-table">
-                    <tbody>
-                        <tr>
-                            <td>PrimeNG v18 and newer</td>
-                            <td>PrimeFlex v4</td>
-                        </tr>
-                        <tr>
-                            <td>PrimeNG v17 and older</td>
-                            <td>PrimeFlex v3</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <p>
+                If you are staying on PrimeFlex for now, Optimus UI v1 pairs with PrimeFlex v4 — the same combination that worked with PrimeNG v18 and newer, since the styling architecture is unchanged. PrimeFlex v3 targeted the older PrimeNG
+                releases and is not a supported pairing here.
+            </p>
+            <p>Neither version is tested against Optimus UI releases, so treat this as "should work", not as a supported configuration. The migration below is the path we actually maintain.</p>
         </app-docsectiontext>
     `
 })

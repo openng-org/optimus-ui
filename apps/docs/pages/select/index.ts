@@ -24,7 +24,15 @@ import { AppDoc } from '@/components/doc/app.doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Select Component" header="Select" description="Select is used to choose an item from a collection of options." [docs]="docs" [apiDocs]="['Select']" [ptDocs]="ptComponent" themeDocs="select"></app-doc> `,
+    template: `<app-doc
+        docTitle="Angular Select Component - Optimus UI"
+        header="Select"
+        description="Select is used to choose an item from a collection of options."
+        [docs]="docs"
+        [apiDocs]="['Select']"
+        [ptDocs]="ptComponent"
+        themeDocs="select"
+    ></app-doc> `,
     standalone: true,
     imports: [AppDoc],
     styleUrl: './selectdemo.scss'

@@ -7,9 +7,22 @@ interface Edit {
     replacement: string;
 }
 
-export function rewriteSource(fileName: string, text: string): { text: string; changed: boolean } {
+export interface RewriteResult {
+    text: string;
+    changed: boolean;
+    /**
+     * CSS cascade layer tokens renamed inside cssLayer name/order strings (old name → new name),
+     * e.g. `primeng` → `optimus` and `primeng-overwrites` → `optimus-overwrites`. The caller uses
+     * these to rename the matching `@layer` declarations in stylesheets, which would otherwise
+     * silently detach from the configured layer order.
+     */
+    layerRenames: Map<string, string>;
+}
+
+export function rewriteSource(fileName: string, text: string): RewriteResult {
     const sourceFile = ts.createSourceFile(fileName, text, ts.ScriptTarget.Latest, true);
     const edits: Edit[] = [];
+    const layerRenames = new Map<string, string>();
     // local names (imported un-aliased from a primeng module) whose usages must be renamed file-wide
     const renamedLocals = new Map<string, string>();
     // names already declared in the file (vars, destructured bindings, params, functions/classes/etc.) —
@@ -87,15 +100,17 @@ export function rewriteSource(fileName: string, text: string): { text: string; c
         visitUsages(sourceFile);
     }
 
+    rewriteCssLayerNames(sourceFile, text, edits, layerRenames);
+
     if (edits.length === 0) {
-        return { text, changed: false };
+        return { text, changed: false, layerRenames };
     }
     edits.sort((a, b) => b.start - a.start);
     let result = text;
     for (const edit of edits) {
         result = result.slice(0, edit.start) + edit.replacement + result.slice(edit.end);
     }
-    return { text: result, changed: true };
+    return { text: result, changed: true, layerRenames };
 }
 
 // Collects identifier names that are declaration names anywhere in the file (variables,
@@ -172,4 +187,91 @@ function usageReplacement(node: ts.Identifier, newName: string): string | null {
         return `${node.text}: ${newName}`;
     }
     return newName;
+}
+
+// PrimeNG's default CSS cascade layer is named `primeng`. Users who enable the theme's cssLayer
+// option with an explicit name/order carry that token into their app config, e.g.
+//   cssLayer: { name: 'primeng', order: 'theme, base, primeng' }
+const CSS_LAYER_TOKEN_RE = /\bprimeng\b/g;
+
+function rewriteCssLayerNames(sourceFile: ts.SourceFile, text: string, edits: Edit[], layerRenames: Map<string, string>): void {
+    const visit = (node: ts.Node): void => {
+        if (ts.isPropertyAssignment(node) && propertyKeyText(node.name) === 'cssLayer' && ts.isObjectLiteralExpression(node.initializer)) {
+            for (const prop of node.initializer.properties) {
+                if (!ts.isPropertyAssignment(prop) || !ts.isStringLiteralLike(prop.initializer)) {
+                    continue;
+                }
+                const key = propertyKeyText(prop.name);
+                if (key !== 'name' && key !== 'order') {
+                    continue;
+                }
+                const literal = prop.initializer;
+                const replaced = literal.text.replace(CSS_LAYER_TOKEN_RE, 'optimus');
+                if (replaced === literal.text) {
+                    continue;
+                }
+                // Record every layer token this edit renames (`order` is a comma-separated list,
+                // `name` a single layer) so the matching `@layer` declarations in stylesheets can
+                // be renamed too — see renameStylesheetLayers.
+                for (const token of literal.text.split(',')) {
+                    const from = token.trim();
+                    const to = from.replace(CSS_LAYER_TOKEN_RE, 'optimus');
+                    if (from.length > 0 && to !== from) {
+                        layerRenames.set(from, to);
+                    }
+                }
+                const quote = text[literal.getStart(sourceFile)];
+                edits.push({ start: literal.getStart(sourceFile), end: literal.getEnd(), replacement: `${quote}${replaced}${quote}` });
+            }
+        }
+        ts.forEachChild(node, visit);
+    };
+    visit(sourceFile);
+}
+
+// `@layer` at-rule preludes — both the ordering statement (`@layer a, b;`) and the block form
+// (`@layer name { ... }`). The prelude runs until the `{` or `;`, which is left in place.
+const LAYER_AT_RULE_RE = /(@layer\b)([^{;}]*)(?=[{;])/g;
+// The `layer(name)` function of `@import url(...) layer(name);`. The bare `layer` keyword
+// (anonymous layer) has no name to rename.
+const LAYER_FUNCTION_RE = /(@import\b[^;{]*?\blayer\(\s*)([^)]*)(?=\))/g;
+
+/**
+ * Renames CSS cascade layer tokens in the `@layer` preludes and `@import ... layer(...)` clauses
+ * of a stylesheet, using the renames collected from cssLayer name/order strings by rewriteSource.
+ * Keeps user stylesheets in sync with the rewritten theme config: a `@layer primeng-overwrites`
+ * declaration must follow its `order: '..., primeng-overwrites'` entry when the latter becomes
+ * `optimus-overwrites`, or the layer silently drops out of the configured order.
+ */
+export function renameStylesheetLayers(text: string, renames: ReadonlyMap<string, string>): { text: string; changed: boolean } {
+    if (renames.size === 0) {
+        return { text, changed: false };
+    }
+    let changed = false;
+    const renameTokens = (segment: string): string => {
+        let result = segment;
+        for (const [from, to] of renames) {
+            // Custom boundaries treating `-` as part of the layer name: the `primeng` rename must
+            // not match inside `primeng-overwrites` (which has its own rename entry).
+            const tokenRe = new RegExp(`(?<![\\w-])${escapeRegExp(from)}(?![\\w-])`, 'g');
+            const next = result.replace(tokenRe, to);
+            if (next !== result) {
+                changed = true;
+                result = next;
+            }
+        }
+        return result;
+    };
+    const rewritten = text.replace(LAYER_AT_RULE_RE, (_match, atRule: string, names: string) => `${atRule}${renameTokens(names)}`).replace(LAYER_FUNCTION_RE, (_match, fn: string, names: string) => `${fn}${renameTokens(names)}`);
+    return { text: rewritten, changed };
+}
+
+function escapeRegExp(value: string): string {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+// The text of an object-literal property key when it is a plain identifier or string literal
+// (name, "name", 'name'); null for computed or numeric keys.
+function propertyKeyText(name: ts.PropertyName): string | null {
+    return ts.isIdentifier(name) || ts.isStringLiteral(name) ? name.text : null;
 }

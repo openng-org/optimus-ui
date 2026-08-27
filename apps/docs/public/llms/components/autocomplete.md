@@ -35,7 +35,7 @@ import { Product } from '@/domain/product';
             >
                 <ng-template let-product #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ product.name }}</span>
                             <span class="text-sm text-surface-500 dark:text-surface-400">{{ product.category }}</span>
@@ -459,7 +459,7 @@ interface AutoCompleteCompleteEvent {
             <p-autocomplete [(ngModel)]="selectedCity" [group]="true" [suggestions]="filteredGroups" (completeMethod)="filterGroupedCity($event)" placeholder="Hint: type 'a'">
                 <ng-template let-group #group>
                     <div class="flex items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
                         <span>{{ group.label }}</span>
                     </div>
                 </ng-template>
@@ -814,7 +814,7 @@ interface AutoCompleteCompleteEvent {
             <p-autocomplete [(ngModel)]="selectedCountryAdvanced" [suggestions]="filteredCountries" (completeMethod)="filterCountry($event)" optionLabel="name">
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>

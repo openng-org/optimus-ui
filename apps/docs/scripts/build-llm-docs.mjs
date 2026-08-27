@@ -61,6 +61,13 @@ const COMPONENT_NAME_MAP = {
     styleclass: 'StyleClass'
 };
 
+// Components whose documentation directory name differs from their public route.
+// Keep in sync with router/app.routes.ts.
+const COMPONENT_ROUTE_MAP = {
+    scroller: 'virtualscroller',
+    Image: 'image'
+};
+
 // Guide/documentation pages configuration
 // Maps route paths to their doc directories and metadata
 const GUIDE_PAGES = [
@@ -92,7 +99,7 @@ const GUIDE_PAGES = [
         route: 'icons',
         docPath: 'icons',
         title: 'Icons',
-        description: 'PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.'
+        description: 'OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons.'
     },
     {
         route: 'customicons',
@@ -135,6 +142,30 @@ const GUIDE_PAGES = [
         docPath: 'guides/rtl',
         title: 'RTL',
         description: 'Right-to-left support for Optimus UI components.'
+    },
+    {
+        route: 'guides/primeflex',
+        docPath: 'guides/primeflex',
+        title: 'PrimeFlex',
+        description: 'Moving from PrimeFlex to Tailwind CSS.'
+    },
+    {
+        route: 'philosophy',
+        docPath: 'philosophy',
+        title: 'Philosophy',
+        description: 'Why Optimus UI exists, what it commits to, and where it stops.'
+    },
+    {
+        route: 'faq',
+        docPath: 'faq',
+        title: 'FAQ',
+        description: 'Licensing, migration from PrimeNG, the ecosystem, and how support works.'
+    },
+    {
+        route: 'contribution',
+        docPath: 'contribution',
+        title: 'Contribution Guide',
+        description: 'How to contribute to Optimus UI.'
     }
 ];
 
@@ -363,6 +394,9 @@ function getComponentMetadata(componentName) {
 
     // Extract from app-doc template attributes
     const docTitleMatch = content.match(/docTitle="([^"]+)"/);
+    // Page titles carry a ' - Optimus UI' suffix for the browser tab; the llms output
+    // is already headed '# Optimus UI', so drop it rather than repeat it on every line.
+    const docTitle = docTitleMatch ? docTitleMatch[1].replace(/\s+-\s+Optimus UI$/, '') : null;
     const headerMatch = content.match(/header="([^"]+)"/);
     const descriptionMatch = content.match(/description="([^"]+)"/);
     const apiDocsMatch = content.match(/\[apiDocs\]="(\[[^\]]+\])"/);
@@ -399,7 +433,7 @@ function getComponentMetadata(componentName) {
     }
 
     return {
-        title: docTitleMatch ? docTitleMatch[1] : componentName,
+        title: docTitle ?? componentName,
         header: headerMatch ? headerMatch[1] : componentName,
         description: descriptionMatch ? descriptionMatch[1] : '',
         sections,
@@ -486,6 +520,8 @@ function getAllComponents() {
         'configuration',
         'contribution',
         'customicons',
+        'faq',
+        'philosophy',
         'designer',
         'icons',
         'introduction',
@@ -494,7 +530,6 @@ function getAllComponents() {
         'tailwind',
         'colors',
         'primeflex',
-        'Image',
         'domain',
         'filterservice',
         'classnames',
@@ -503,7 +538,8 @@ function getAllComponents() {
         'passthrough',
         'cdn',
         'nuxt',
-        'accessibility'
+        'accessibility',
+        'templates'
     ];
 
     for (const entry of entries) {
@@ -1002,7 +1038,7 @@ function generateMarkdownOutput(components, apiDocs, guidePages = []) {
  */
 function generateLlmsTxt(components, pages = []) {
     let content = '# Optimus UI\n\n';
-    content += '> The Most Complete Angular UI Component Library\n\n';
+    content += '> A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.\n\n';
 
     // Add Guides section
     if (pages.length > 0) {
@@ -1021,7 +1057,8 @@ function generateLlmsTxt(components, pages = []) {
     const sorted = [...components].sort((a, b) => a.title.localeCompare(b.title));
 
     for (const comp of sorted) {
-        content += `- [${comp.title}](https://optimus.openng.org/${comp.name}): ${comp.description}\n`;
+        const route = COMPONENT_ROUTE_MAP[comp.name] ?? comp.name;
+        content += `- [${comp.title}](https://optimus.openng.org/${route}): ${comp.description}\n`;
     }
 
     const outputPath = path.join(OUTPUT_DIR, 'llms.txt');

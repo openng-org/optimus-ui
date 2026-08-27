@@ -287,7 +287,7 @@ import { MenuItem } from '@openng/optimus-ui/api';
                 <ng-template #end>
                     <div class="flex items-center gap-2">
                         <input type="text" pInputText placeholder="Search" class="w-36" />
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                     </div>
                 </ng-template>
             </p-menubar>

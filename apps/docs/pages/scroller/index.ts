@@ -15,7 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Virtual Scroller Component"
+        docTitle="Angular Virtual Scroller Component - Optimus UI"
         header="Scroller"
         description="VirtualScroller is a performance-approach to handle huge data efficiently."
         [docs]="docs"

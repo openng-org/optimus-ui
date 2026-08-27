@@ -14,7 +14,7 @@ export function app(): express.Express {
     const llmsFolder = join(browserDistFolder, 'llms');
 
     const commonEngine = new CommonEngine({
-        allowedHosts: ['*.vercel.app', 'optimus.openng.org']
+        allowedHosts: ['*.vercel.app', 'optimus.openng.org', '*.optimus.openng.org']
     });
 
     server.set('view engine', 'html');
@@ -39,7 +39,7 @@ export function app(): express.Express {
 
     // Pages that have their own markdown files (not components)
     // These are defined in GUIDE_PAGES in build-llm-docs.mjs
-    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'v19', 'v20']);
+    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'primeflex', 'philosophy', 'faq', 'contribution']);
 
     // Serve markdown files - handles both components and pages
     server.get('/:name.md', (req, res, next) => {
@@ -70,7 +70,7 @@ export function app(): express.Express {
         res.send(content);
     });
 
-    // Serve nested page markdown files (e.g., /theming/styled.md, /guides/accessibility.md, /migration/v19.md)
+    // Serve nested page markdown files (e.g., /theming/styled.md, /guides/accessibility.md)
     // Using regex pattern to properly match .md extension in nested paths
     server.get(/^\/([^/]+)\/([^/]+)\.md$/, (req, res, next) => {
         const page = req.params[1]; // Second capture group is the page name
@@ -141,18 +141,48 @@ export function app(): express.Express {
         res.send(content);
     });
 
-    // Example Express Rest API endpoints
-    // server.get('/api/**', (req, res) => { });
-    // Serve static files from /browser
-    server.get(
-        '*.*',
+    // Upload sink for the FileUpload demos.
+    //
+    // These demos used to POST to primefaces.org/cdn/api/upload.php, an endpoint owned by
+    // another project that could disappear or start rejecting us without warning. This accepts
+    // the request, discards it and returns the shape the component expects. Nothing is stored.
+    // CORS is required because the demos are also exported to StackBlitz, which posts
+    // cross-origin back to this site.
+    server.options('/api/upload', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+        res.status(204).end();
+    });
+
+    server.post('/api/upload', (req, res) => {
+        res.setHeader('Access-Control-Allow-Origin', '*');
+        req.resume();
+        req.on('end', () => {
+            res.status(200).json({ message: 'Uploaded' });
+        });
+    });
+
+    // The PrimeNG migration guide moved to the v1 docs archive — redirect rather than 404.
+    server.get('/migration/primeng', (req, res) => {
+        res.redirect(301, 'https://v1.optimus.openng.org/migration/primeng');
+    });
+
+    // Serve static files from /browser.
+    // Registered as plain middleware (with a regex catch-all below) instead of the old
+    // '*.*' / '*' string patterns, which throw "Missing parameter name" at startup under
+    // express 5 (path-to-regexp v8). `index: false` and `redirect: false` preserve the old
+    // behavior: extensionless URLs (including '/') fall through to the Angular engine.
+    server.use(
         express.static(browserDistFolder, {
-            maxAge: '1y'
+            maxAge: '1y',
+            index: false,
+            redirect: false
         })
     );
 
     // All regular routes use the Angular engine
-    server.get('*', (req, res, next) => {
+    server.get(/.*/, (req, res, next) => {
         const { protocol, originalUrl, baseUrl, headers } = req;
 
         commonEngine

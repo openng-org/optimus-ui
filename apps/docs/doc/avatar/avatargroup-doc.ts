@@ -14,11 +14,11 @@ import { AvatarGroupModule } from '@openng/optimus-ui/avatargroup';
         </app-docsectiontext>
         <div class="card flex justify-center">
             <p-avatar-group>
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
                 <p-avatar label="+2" shape="circle" size="large" />
             </p-avatar-group>
         </div>

@@ -32,6 +32,7 @@ import { ChevronDownIcon } from '@openng/optimus-ui/icons';
 import { Ripple } from '@openng/optimus-ui/ripple';
 import { TieredMenu } from '@openng/optimus-ui/tieredmenu';
 import { TooltipModule } from '@openng/optimus-ui/tooltip';
+import type { ButtonSeverity } from '@openng/optimus-ui/types/button';
 import { ButtonProps, MenuButtonProps, SplitButtonPassThrough } from '@openng/optimus-ui/types/splitbutton';
 import { SplitButtonStyle } from './style/splitbuttonstyle';
 
@@ -166,7 +167,7 @@ export class SplitButton extends BaseComponent<SplitButtonPassThrough> {
      * Defines the style of the button.
      * @group Props
      */
-    @Input() severity: 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
+    @Input() severity: ButtonSeverity;
     /**
      * Add a shadow to indicate elevation.
      * @group Props

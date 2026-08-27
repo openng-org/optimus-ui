@@ -1,6 +1,6 @@
-# Contributing to Open Prime
+# Contributing to Optimus UI
 
-Open Prime is a community-driven continuation of PrimeNG. This is not an official fork of the `primefaces/primeng` repository — it's a fresh repository seeded with PrimeNG's code and history, now maintained by the community. Any help is welcome, whether it's fixing bugs, adding features, improving docs, or triaging issues.
+Optimus UI is a community-driven continuation of PrimeNG. This is not an official fork of the `primefaces/primeng` repository — it's a fresh repository seeded with PrimeNG's code and history, now maintained by the community. Any help is welcome, whether it's fixing bugs, adding features, improving docs, or triaging issues.
 
 ## Bringing over a PR you already opened on PrimeNG
 
@@ -9,7 +9,7 @@ If you had a pull request open on `primefaces/primeng` that wasn't merged (or wo
 **The quick way — apply the patch:**
 
 1. Append `.patch` to your original PR URL, e.g. `https://github.com/primefaces/primeng/pull/19547.patch`, and download the file.
-2. Clone this repo and create a branch off `master`.
+2. Clone this repo and create a branch off `main`.
 3. Apply the patch:
    ```bash
    git am < 19547.patch
@@ -23,7 +23,7 @@ If `git am` fails because the patch doesn't apply cleanly (files diverged), fall
 This is a pnpm-based monorepo.
 
 ```bash
-pnpm run setup   # clean install + git hooks
+pnpm install     # install deps + git hooks (via lefthook)
 pnpm run dev     # run the docs app locally
 ```
 
@@ -31,7 +31,7 @@ Useful scripts:
 
 | Command | Purpose |
 |---|---|
-| `pnpm run build:lib` | Build the `primeng` package |
+| `pnpm run build:lib` | Build the `@openng/optimus-ui` package |
 | `pnpm run lint` / `pnpm run lint:fix` | Lint |
 | `pnpm run format` / `pnpm run format:check` | Prettier |
 | `pnpm run test:unit` | Unit tests |
@@ -39,7 +39,7 @@ Useful scripts:
 
 ## Making a change
 
-1. Fork this repo and create a branch from `master`.
+1. Fork this repo and create a branch from `main`.
 2. Make your change, keeping it scoped — smaller, focused PRs are easier to review and merge.
 3. Add or update unit tests for the affected component(s).
 4. Run `pnpm run lint` and `pnpm run test:unit` before opening the PR.
@@ -48,7 +48,7 @@ Useful scripts:
 
 ## Reporting issues
 
-Open an issue with a clear description and, ideally, a minimal reproduction (StackBlitz, CodeSandbox, or a small repo). For bugs, include the PrimeNG/Open Prime version, Angular version, and browser.
+Open an issue with a clear description and, ideally, a minimal reproduction (StackBlitz, CodeSandbox, or a small repo). For bugs, include the Optimus UI (or PrimeNG) version, Angular version, and browser.
 
 ## Questions
 

@@ -78,6 +78,7 @@ export const MULTISELECT_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'li[pMultiSelectItem]',
     standalone: true,
     imports: [CommonModule, Checkbox, FormsModule, SharedModule],
@@ -1825,19 +1826,13 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
         }
     }
 
-    onTabKey(event, pressedInInputText = false) {
+    onTabKey(event: KeyboardEvent, pressedInInputText = false) {
         if (!pressedInInputText) {
             if (this.overlayVisible && this.hasFocusableElements()) {
                 focus(event.shiftKey ? this.lastHiddenFocusableElementOnOverlay?.nativeElement : this.firstHiddenFocusableElementOnOverlay?.nativeElement);
 
                 event.preventDefault();
             } else {
-                if (this.focusedOptionIndex() !== -1) {
-                    const option = this.visibleOptions()[this.focusedOptionIndex()];
-
-                    !this.isSelected(option) && this.onOptionSelect({ originalEvent: event, option });
-                }
-
                 this.overlayVisible && this.hide(this.filter);
             }
         }

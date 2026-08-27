@@ -22,7 +22,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular InputNumber Component"
+        docTitle="Angular InputNumber Component - Optimus UI"
         header="InputNumber"
         description="InputNumber is an input component to provide numerical input."
         [docs]="docs"

@@ -24,7 +24,7 @@ import { MultiSelectModule } from '@openng/optimus-ui/multiselect';
             >
                 <ng-template #group let-group>
                     <div class="flex items-center">
-                        <img [alt]="group.label" src="https://primefaces.org/cdn/primevue/images/flag/flag_placeholder.png" [class]="'flag flag-' + group.code.toLowerCase() + ' mr-2'" style="width: 18px" />
+                        <img [alt]="group.label" src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + group.code.toLowerCase() + ' mr-2'" style="width: 18px" />
                         <div>{{ group.label }}</div>
                     </div>
                 </ng-template>

@@ -9,7 +9,7 @@ import { ImageModule } from '@openng/optimus-ui/image';
     imports: [CommonModule, AppDocPtViewer, ImageModule],
     template: `
         <app-docptviewer [docs]="docs">
-            <p-image src="https://primefaces.org/cdn/primeng/images/galleria/galleria1.jpg" alt="Image" width="250" [preview]="true"></p-image>
+            <p-image src="https://optimus.openng.org/demo/galleria/galleria1.jpg" alt="Image" width="250" [preview]="true"></p-image>
         </app-docptviewer>
     `
 })

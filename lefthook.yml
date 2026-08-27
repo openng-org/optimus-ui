@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob:
+        - "packages/**/*.{js,mjs,ts,mts,d.ts,html}"
+        - "apps/**/*.{js,mjs,ts,mts,d.ts,html}"
+      run: npx --no-install prettier --write {staged_files}
+      stage_fixed: true
+
+commit-msg:
+  commands:
+    commitlint:
+      run: npx --no-install commitlint --edit {1}

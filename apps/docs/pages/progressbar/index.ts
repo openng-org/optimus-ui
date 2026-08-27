@@ -9,7 +9,15 @@ import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Angular ProgressBar Component" header="ProgressBar" description="ProgressBar is a process status indicator." [docs]="docs" [ptDocs]="ptComponent" [apiDocs]="['ProgressBar']" themeDocs="progressbar"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular ProgressBar Component - Optimus UI"
+        header="ProgressBar"
+        description="ProgressBar is a process status indicator."
+        [docs]="docs"
+        [ptDocs]="ptComponent"
+        [apiDocs]="['ProgressBar']"
+        themeDocs="progressbar"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

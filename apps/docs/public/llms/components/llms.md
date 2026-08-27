@@ -1,4 +1,4 @@
-# LLMs.txt - Optimus UI
+# LLMs.txt
 
 LLM-optimized documentation endpoints for Optimus UI components.
 

@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Stepper Component"
+        docTitle="Angular Stepper Component - Optimus UI"
         header="Stepper"
         description="The Stepper component displays a wizard-like workflow by guiding users through the multi-step progression."
         [docs]="docs"

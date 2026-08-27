@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/schema",
+    "$id": "OptimusUiMigrateFromPrimeflex",
+    "title": "Translate PrimeFlex classes to Tailwind CSS",
+    "type": "object",
+    "properties": {
+        "path": {
+            "type": "string",
+            "description": "Restrict the translation to files under this workspace path (e.g. \"src/app\"). Defaults to the whole workspace."
+        }
+    }
+}

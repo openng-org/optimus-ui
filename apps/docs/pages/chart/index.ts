@@ -21,7 +21,7 @@ import { PTComponent } from '@/doc/chart/pt/PTComponent';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular Chart Component"
+            docTitle="Angular Chart Component - Optimus UI"
             header="Charts"
             description="Chart components are based on Charts.js 3.3.2+, an open source HTML5 based charting library."
             [docs]="docs"

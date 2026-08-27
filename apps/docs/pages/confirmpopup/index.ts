@@ -12,7 +12,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular ConfirmPopup Component"
+            docTitle="Angular ConfirmPopup Component - Optimus UI"
             header="ConfirmPopup"
             description="ConfirmPopup displays a confirmation overlay displayed relatively to its target."
             [docs]="docs"

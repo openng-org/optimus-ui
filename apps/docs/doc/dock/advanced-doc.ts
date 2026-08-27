@@ -82,7 +82,7 @@ import { Subscription } from 'rxjs';
                     width: 100%;
                     height: 450px;
                     position: relative;
-                    background-image: url('https://primefaces.org/cdn/primevue/images/dock/window.jpg');
+                    background-image: url('https://optimus.openng.org/demo/dock/window.jpg');
                     background-repeat: no-repeat;
                     background-size: cover;
                 }
@@ -133,7 +133,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg',
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg',
                 command: () => {
                     this.displayFinder = true;
                 }
@@ -147,7 +147,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/terminal.svg',
+                icon: 'https://optimus.openng.org/demo/dock/terminal.svg',
                 command: () => {
                     this.displayTerminal = true;
                 }
@@ -161,7 +161,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg',
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg',
                 url: 'https://www.apple.com/app-store/'
             },
             {
@@ -173,7 +173,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/safari.svg'
+                icon: 'https://optimus.openng.org/demo/dock/safari.svg'
             },
             {
                 label: 'Photos',
@@ -184,7 +184,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg',
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg',
                 command: () => {
                     this.displayGalleria = true;
                 }
@@ -198,7 +198,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
+                icon: 'https://optimus.openng.org/demo/dock/github.svg',
                 url: 'https://github.com/openng-org/optimus-ui'
             },
             {
@@ -210,7 +210,7 @@ export class AdvancedDoc implements OnInit, OnDestroy {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png',
+                icon: 'https://optimus.openng.org/demo/dock/trash.png',
                 command: () => {
                     this.messageService.add({ severity: 'info', summary: 'Trash is empty', key: 'tc' });
                 }

@@ -18,11 +18,11 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
     template: `
         <div class="card flex justify-center">
             <p-avatar-group>
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
                 <p-avatar label="+2" shape="circle" size="large" />
             </p-avatar-group>
         </div>
@@ -130,7 +130,7 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
 @Component({
     template: `
         <div class="card flex justify-center">
-            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
+            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
         </div>
     `,
     standalone: true,
@@ -192,14 +192,14 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
             <div class="flex flex-wrap gap-8">
                 <div class="flex-auto">
                     <h5>Image</h5>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                 </div>
                 <div class="flex-auto">
                     <h5>Badge</h5>
                     <p-overlay-badge value="4" severity="danger" class="inline-flex">
-                        <p-avatar class="p-overlay-badge" image="https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg" size="xlarge" />
+                        <p-avatar class="p-overlay-badge" image="https://optimus.openng.org/demo/avatar/walter.jpg" size="xlarge" />
                     </p-overlay-badge>
                 </div>
                 <div class="flex-auto">

@@ -14,7 +14,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 import { AppDocService } from '@/components/doc/app.doc.service';
 @Component({
     template: `<app-doc
-        docTitle="Angular RadioButton Component"
+        docTitle="Angular RadioButton Component - Optimus UI"
         header="RadioButton"
         description="RadioButton is an extension to standard radio button element with theming."
         [docs]="docs"

@@ -21,7 +21,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 <span>Target Element</span>
             </div>
             <p-popover #op>
-                <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" />
+                <img src="https://optimus.openng.org/demo/product/bamboo-watch.jpg" alt="product" />
             </p-popover>
         </div>
         <app-code></app-code>

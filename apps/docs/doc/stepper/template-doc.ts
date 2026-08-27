@@ -119,7 +119,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                             <div class="flex flex-col items-center gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
                                 <div class="text-center mt-4 mb-4 text-xl font-semibold">Account created successfully</div>
                                 <div class="text-center">
-                                    <img alt="logo" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" />
+                                    <img alt="logo" src="https://optimus.openng.org/demo/stepper/content.svg" />
                                 </div>
                             </div>
                             <div class="flex pt-6 justify-start">

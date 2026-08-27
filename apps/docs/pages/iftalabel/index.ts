@@ -10,7 +10,15 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: `
-        <app-doc docTitle="Angular Ifta Label Component" header="IftaLabel" description="IftaLabel is used to create infield top aligned labels." [docs]="docs" themeDocs="iftalabel" [apiDocs]="['IftaLabel']" [ptDocs]="ptComponent"></app-doc>
+        <app-doc
+            docTitle="Angular Ifta Label Component - Optimus UI"
+            header="IftaLabel"
+            description="IftaLabel is used to create infield top aligned labels."
+            [docs]="docs"
+            themeDocs="iftalabel"
+            [apiDocs]="['IftaLabel']"
+            [ptDocs]="ptComponent"
+        ></app-doc>
     `
 })
 export class IftaLabelDemo {

@@ -17,6 +17,10 @@
         justify-content: center;
     }
 
+    .drawer-quickaction {
+        display: none;
+    }
+
     nav {
         padding-block: 0;
         padding-inline: 1rem 0;
@@ -188,5 +192,62 @@
             color: var(--text-secondary-color);
             margin-bottom: .25rem;
         }
+
+        .drawer-quickaction-divider {
+            margin-top: .75rem;
+            padding-top: .75rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .drawer-version-row {
+            display: flex;
+            align-items: center;
+            padding-block: .5rem;
+            padding-inline: 1px;
+
+            .menu-icon {
+                width: 2rem;
+                height: 2rem;
+                border-radius: 6px;
+                margin-inline-end: .5rem;
+                border: 1px solid var(--border-color);
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                background-color: transparent;
+
+                i {
+                    color: var(--text-color);
+                }
+            }
+
+            .p-select {
+                flex: 1 1 auto;
+                border: 0 none;
+                background: transparent;
+                box-shadow: none;
+                padding: 0;
+
+                .p-select-label {
+                    padding: 0;
+                    font-weight: 600;
+                    font-size: 1rem;
+                    color: var(--text-color);
+                }
+
+                .p-select-dropdown {
+                    width: auto;
+                    color: var(--text-secondary-color);
+                }
+            }
+        }
     }
+}
+
+// The landing page has no persistent docs sidebar — its app-menu instance
+// only exists to back the mobile hamburger drawer, so keep it out of the
+// desktop layout entirely (shown again below 1199px in _responsive.scss).
+.landing-menu {
+    display: none;
 }

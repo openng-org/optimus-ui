@@ -61,7 +61,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                 <div class="border border-surface rounded-3xl p-6 flex flex-col gap-6">
                     <div class="flex items-center gap-3">
                         <p-overlayBadge severity="danger" styleClass="w-fit">
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden flex" />
+                            <p-avatar image="/demo/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden flex" />
                         </p-overlayBadge>
 
                         <div>
@@ -77,11 +77,11 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     <div class="flex items-center justify-between gap-2">
                         <div class="text-sm leading-5 text-color font-medium">Mutual Friends</div>
                         <p-avatarGroup>
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar1.png" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar1.png" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar9.jpg" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar11.jpg" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar13.jpg" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar5.png" class="rounded-lg overflow-hidden" />
                             <p-avatar label="+99" class="rounded-lg overflow-hidden text-xs" />
                         </p-avatarGroup>
                     </div>
@@ -89,7 +89,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     <div class="flex flex-col gap-4">
                         <div class="p-2 rounded-2xl flex items-center gap-3 bg-emphasis">
                             <p-overlayBadge severity="danger" class="w-fit">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden w-10 h-10 block" />
+                                <p-avatar image="/demo/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden w-10 h-10 block" />
                             </p-overlayBadge>
 
                             <div class="flex-1">
@@ -100,7 +100,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                         </div>
                         <div class="p-2 rounded-2xl flex items-center gap-3 bg-emphasis">
                             <p-overlayBadge severity="danger" class="w-fit">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg" class="rounded-lg overflow-hidden w-10 h-10 flex" />
+                                <p-avatar image="/demo/landing/apps/avatar9.jpg" class="rounded-lg overflow-hidden w-10 h-10 flex" />
                             </p-overlayBadge>
 
                             <div class="flex-1">
@@ -113,7 +113,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                 </div>
                 <div class="border border-surface rounded-3xl p-6">
                     <div class="flex items-center gap-3 p-3 border border-surface rounded-xl shadow-[0px_1px_2px_0px_rgba(18,18,23,0.05)]">
-                        <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden w-14 h-14" />
+                        <p-avatar image="/demo/landing/apps/main-avatar.png" class="rounded-lg overflow-hidden w-14 h-14" />
                         <div class="flex-1">
                             <div class="text-color font-medium leading-7">Jacob Jones</div>
                             <div class="text-muted-color text-sm mt-1">hi&#64;jacobjones.co</div>
@@ -184,11 +184,11 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     <div class="p-1 mt-4">
                         <button class="p-4 rounded-3xl w-full bg-emphasis transition-all text-color hover:text-color-emphasis flex items-center gap-2 justify-between cursor-pointer">
                             <div class="flex items-center [&>*]:-mr-2">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" shape="circle" />
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar10.jpg" shape="circle" />
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg" shape="circle" />
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg" shape="circle" />
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar11.jpg" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar10.jpg" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar12.jpg" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar9.jpg" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar5.png" shape="circle" />
                             </div>
                             <div class="flex items-center gap-2">
                                 <div class="font-medium leading-6">12 Applicants</div>
@@ -288,17 +288,17 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                 <div class="border border-surface rounded-3xl p-6">
                     <div class="flex items-start justify-between gap-1">
                         <div class="flex items-center gap-x-2 gap-y-1 flex-wrap flex-1">
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar1.png" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar1.png" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar2.png" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar9.jpg" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar11.jpg" shape="circle" class="rounded-lg overflow-hidden" />
                             <div class="w-full"></div>
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar10.jpg" shape="circle" class="rounded-lg overflow-hidden" />
-                            <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar5.png" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar13.jpg" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar7.png" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar8.png" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar10.jpg" shape="circle" class="rounded-lg overflow-hidden" />
+                            <p-avatar image="/demo/landing/apps/avatar12.jpg" shape="circle" class="rounded-lg overflow-hidden" />
                         </div>
                         <p-button icon="pi pi-arrow-up-right" rounded text />
                     </div>
@@ -321,26 +321,26 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                         <div class="font-medium leading-6 text-muted-color">Members</div>
                         <div class="mt-4 flex flex-col gap-4">
                             <div class="flex items-center gap-2 justify-between">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png" class="w-9 h-9" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar8.png" class="w-9 h-9" shape="circle" />
                                 <div class="flex-1">
                                     <div class="text-sm font-medium text-color leading-5">Brook Simmons</div>
-                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">brook.sim42&#64;primeng.org</div>
+                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">brook.sim42&#64;example.com</div>
                                 </div>
                                 <p-select [(ngModel)]="memberSelectedTypes[0]" [options]="memberTypes" optionLabel="name" placeholder="Select" class="!border-0 !shadow-none" />
                             </div>
                             <div class="flex items-center gap-2 justify-between">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg" class="w-9 h-9" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar13.jpg" class="w-9 h-9" shape="circle" />
                                 <div class="flex-1">
                                     <div class="text-sm font-medium text-color leading-5">Dianne Russell</div>
-                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">di.russ23&#64;primeng.org</div>
+                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">di.russ23&#64;example.com</div>
                                 </div>
                                 <p-select [(ngModel)]="memberSelectedTypes[1]" [options]="memberTypes" optionLabel="name" placeholder="Select" class="!border-0 !shadow-none" />
                             </div>
                             <div class="flex items-center gap-2 justify-between">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg" class="w-9 h-9" shape="circle" />
+                                <p-avatar image="/demo/landing/apps/avatar12.jpg" class="w-9 h-9" shape="circle" />
                                 <div class="flex-1">
                                     <div class="text-sm font-medium text-color leading-5">Jacob Jones</div>
-                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">jac.jon87&#64;primeng.org</div>
+                                    <div class="text-sm text-muted-color leading-5 line-clamp-4">jac.jon87&#64;example.com</div>
                                 </div>
                                 <p-select [(ngModel)]="memberSelectedTypes[2]" [options]="memberTypes" optionLabel="name" placeholder="Select" class="!border-0 !shadow-none" />
                             </div>

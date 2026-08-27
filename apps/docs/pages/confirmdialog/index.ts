@@ -12,7 +12,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular ConfirmDialog Component"
+            docTitle="Angular ConfirmDialog Component - Optimus UI"
             header="ConfirmDialog"
             description="ConfirmDialog is backed by a service utilizing Observables to display confirmation windows easily that can be shared by multiple actions on the same component."
             [docs]="docs"

@@ -1,10 +1,10 @@
 # Icons
 
-PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.
+OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons.
 
 ## Basic-
 
-PrimeIcons use the pi pi-&#123;icon&#125; syntax such as pi pi-check . A standalone icon can be displayed using an element such as i or span
+OpenNG Icons use the pi pi-&#123;icon&#125; syntax such as pi pi-check . A standalone icon can be displayed using an element such as i or span
 
 ## Color-
 

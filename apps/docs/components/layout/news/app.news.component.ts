@@ -12,7 +12,7 @@ import { RouterModule } from '@angular/router';
     imports: [CommonModule, RouterModule]
 })
 export class AppNewsComponent {
-    storageKey: string = 'primeng';
+    storageKey: string = 'optimus-ui';
 
     announcement: any;
 

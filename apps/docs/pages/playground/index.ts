@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
+import { Meta, Title } from '@angular/platform-browser';
 
 @Component({
     standalone: true,
@@ -16,4 +17,16 @@ import { Component } from '@angular/core';
         </div>
     </div>`
 })
-export class PlaygroundDemo {}
+export class PlaygroundDemo implements OnInit {
+    private titleService = inject(Title);
+
+    private metaService = inject(Meta);
+
+    ngOnInit() {
+        this.titleService.setTitle('Playground - Optimus UI');
+        this.metaService.updateTag({
+            name: 'description',
+            content: 'Try Optimus UI in an interactive playground without installing anything.'
+        });
+    }
+}

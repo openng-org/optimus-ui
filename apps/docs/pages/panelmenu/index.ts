@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular PanelMenu Component"
+        docTitle="Angular PanelMenu Component - Optimus UI"
         header="PanelMenu"
         description="PanelMenu is a hybrid of Accordion and Tree components."
         [docs]="docs"

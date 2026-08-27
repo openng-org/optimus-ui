@@ -19,10 +19,10 @@ import { SelectModule } from '@openng/optimus-ui/select';
         <div class="layout-topbar-inner">
             <div class="layout-topbar-logo-container">
                 <a [routerLink]="['/']" class="layout-topbar-logo" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo.svg" height="40" width="200" />
+                    <img ngSrc="logo.svg" height="40" width="200" class="dark:invert" />
                 </a>
                 <a [routerLink]="['/']" class="layout-topbar-icon" aria-label="Optimus UI Logo">
-                    <img ngSrc="logo-icon.svg" height="32" width="32" />
+                    <img ngSrc="logo-icon.svg" height="32" width="32" class="dark:invert" />
                 </a>
             </div>
 
@@ -31,26 +31,32 @@ import { SelectModule } from '@openng/optimus-ui/select';
                     <div id="docsearch"></div>
                 </li>
                 <li>
+                    <button type="button" class="topbar-item ask-ai-button" id="ask-ai" aria-label="Ask AI">
+                        <i class="pi pi-sparkles"></i>
+                        <span class="ask-ai-label">Ask AI</span>
+                    </button>
+                </li>
+                <li class="topbar-desktop-item">
                     <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-github text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
-                    <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
+                <li class="topbar-desktop-item">
+                    <a [href]="discordUrl" target="_blank" rel="noopener noreferrer" class="topbar-item" aria-label="Optimus UI Discord" title="Optimus UI Discord">
                         <i class="pi pi-discord text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <a [href]="githubDiscussionsUrl" target="_blank" rel="noopener noreferrer" class="topbar-item">
                         <i class="pi pi-comments text-surface-700 dark:text-surface-100"></i>
                     </a>
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <button type="button" class="topbar-item" (click)="toggleDarkMode()">
                         <i class="pi" [ngClass]="{ 'pi-moon': isDarkMode(), 'pi-sun': !isDarkMode() }"></i>
                     </button>
                 </li>
-                <li *ngIf="showConfigurator" class="relative">
+                <li *ngIf="showConfigurator" class="relative topbar-desktop-item">
                     <button
                         type="button"
                         class="topbar-item config-item"
@@ -65,7 +71,7 @@ import { SelectModule } from '@openng/optimus-ui/select';
                     </button>
                     <app-configurator />
                 </li>
-                <li>
+                <li class="topbar-desktop-item">
                     <p-select
                         [(ngModel)]="selectedVersion"
                         [options]="versions"

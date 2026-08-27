@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Listbox Component"
+        docTitle="Angular Listbox Component - Optimus UI"
         header="Listbox"
         description="Listbox is used to select one or more values from a list of items."
         [docs]="docs"

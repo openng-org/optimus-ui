@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
     imports: [AppCode, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>Optimus UI is a popular Angular UI library maintained by OpenNG and dedicated to provide high-quality, versatile, and accessible UI components that help developers build better applications faster.</p>
+            <p>Optimus UI is a community-maintained Angular UI library, stewarded by OpenNG and dedicated to providing high-quality, versatile and accessible UI components that help developers build better applications faster.</p>
             <h3>Development Setup</h3>
             <p>To begin with, clone the Optimus UI repository from GitHub:</p>
             <app-code [code]="code1" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
@@ -27,12 +27,21 @@ export class IntroductionDoc {
 cd optimus-ui`
     };
     code2: Code = {
-        typescript: `pnpm run setup
+        typescript: `pnpm install
 pnpm run dev`
     };
     code3: Code = {
-        typescript: `- app
-  - docs                    // documentation
-  - packages/optimus-ui              // main directory of components and directives`
+        typescript: `- apps
+  - docs                       // this documentation website
+  - tailwind-playgrounds       // Tailwind integration sandboxes
+- packages
+  - optimus-ui                 // components, directives and services
+  - optimus-ui-themes          // built-in theme presets
+  - optimus-ui-styled          // styled-mode theming engine
+  - optimus-ui-styles          // base styles
+  - optimus-ui-tailwindcss     // Tailwind CSS plugin
+  - optimus-ui-locale          // i18n locales
+  - optimus-ui-motion          // animation utilities
+  - optimus-ui-utils           // shared helpers`
     };
 }

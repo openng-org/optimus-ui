@@ -16,7 +16,7 @@ import { MessageModule } from '@openng/optimus-ui/message';
             <p-message severity="info" icon="pi pi-send" text="Info Message" styleClass="h-full" />
             <p-message severity="success">
                 <ng-template #icon>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                 </ng-template>
                 <span class="ms-2">How may I help you?</span>
             </p-message>

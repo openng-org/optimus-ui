@@ -32,7 +32,17 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular DatePicker Component" header="DatePicker" description="DatePicker is an input component to select a date." [docs]="docs" [apiDocs]="['DatePicker']" [ptDocs]="ptComponent" themeDocs="datepicker"></app-doc> `
+    template: `
+        <app-doc
+            docTitle="Angular DatePicker Component - Optimus UI"
+            header="DatePicker"
+            description="DatePicker is an input component to select a date."
+            [docs]="docs"
+            [apiDocs]="['DatePicker']"
+            [ptDocs]="ptComponent"
+            themeDocs="datepicker"
+        ></app-doc>
+    `
 })
 export class DatePickerDemo {
     ptComponent = PTComponent;

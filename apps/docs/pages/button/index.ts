@@ -25,7 +25,7 @@ import { PTComponent } from '@/doc/button/pt/PTComponent';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular Button Component"
+            docTitle="Angular Button Component - Optimus UI"
             header="Button"
             description="Button is an extension to standard button element with icons and theming."
             [docs]="docs"

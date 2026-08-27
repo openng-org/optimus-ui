@@ -19,7 +19,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular InputMask Component"
+        docTitle="Angular InputMask Component - Optimus UI"
         header="InputMask"
         description="InputMask component is used to enter input in a certain format such as numeric, date, currency and phone."
         [docs]="docs"

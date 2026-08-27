@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular Breadcrumb Component"
+            docTitle="Angular Breadcrumb Component - Optimus UI"
             header="Breadcrumb"
             description="Breadcrumb provides contextual information about page hierarchy."
             [docs]="docs"

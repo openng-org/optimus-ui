@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular TieredMenu Component"
+        docTitle="Angular TieredMenu Component - Optimus UI"
         header="TieredMenu"
         description="TieredMenu displays submenus in nested overlays."
         [docs]="docs"

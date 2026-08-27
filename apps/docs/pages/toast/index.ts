@@ -13,7 +13,15 @@ import { TemplateDoc } from '@/doc/toast/template-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Toast Component" header="Toast" description="Toast is used to display messages in an overlay." [docs]="docs" [apiDocs]="['Toast', 'ToastMessage']" [ptDocs]="ptComponent" themeDocs="toast"></app-doc> `,
+    template: `<app-doc
+        docTitle="Angular Toast Component - Optimus UI"
+        header="Toast"
+        description="Toast is used to display messages in an overlay."
+        [docs]="docs"
+        [apiDocs]="['Toast', 'ToastMessage']"
+        [ptDocs]="ptComponent"
+        themeDocs="toast"
+    ></app-doc> `,
     standalone: true,
     imports: [AppDoc]
 })

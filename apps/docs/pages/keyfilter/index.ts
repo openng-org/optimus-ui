@@ -7,7 +7,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular KeyFilter Component"
+        docTitle="Angular KeyFilter Component - Optimus UI"
         header="KeyFilter"
         description="KeyFilter is a directive to restrict individual key strokes. In order to restrict the whole input, use InputNumber or InputMask instead."
         [docs]="docs"

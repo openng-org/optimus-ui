@@ -18,7 +18,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular SplitButton Component"
+        docTitle="Angular SplitButton Component - Optimus UI"
         header="SplitButton"
         description="SplitButton groups a set of commands in an overlay with a default action item."
         [docs]="docs"

@@ -9,7 +9,15 @@ import { Component } from '@angular/core';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular BlockUI Component" header="BlockUI" description="BlockUI can either block other components or the whole page." [docs]="docs" [apiDocs]="['BlockUI']" [ptDocs]="ptComponent" themeDocs="BlockUI"></app-doc>`
+    template: ` <app-doc
+        docTitle="Angular BlockUI Component - Optimus UI"
+        header="BlockUI"
+        description="BlockUI can either block other components or the whole page."
+        [docs]="docs"
+        [apiDocs]="['BlockUI']"
+        [ptDocs]="ptComponent"
+        themeDocs="BlockUI"
+    ></app-doc>`
 })
 export class BlockUIDemo {
     ptComponent = PTComponent;

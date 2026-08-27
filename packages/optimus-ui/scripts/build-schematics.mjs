@@ -10,6 +10,7 @@ const workspaceDir = path.resolve(__dirname, '../../..');
 const outDir = path.join(schematicsDir, 'dist');
 
 const versions = {};
+const monorepoPackages = [];
 const packagesDir = path.join(workspaceDir, 'packages');
 for (const entry of fs.readdirSync(packagesDir)) {
     const pkgPath = path.join(packagesDir, entry, 'package.json');
@@ -19,7 +20,21 @@ for (const entry of fs.readdirSync(packagesDir)) {
     const pkg = fs.readJsonSync(pkgPath);
     if (pkg.name?.startsWith('@openng/') && pkg.version) {
         versions[pkg.name] = `^${pkg.version}`;
+        monorepoPackages.push(pkg);
     }
+}
+
+// All packages share the same version policy, so `ng update @openng/optimus-ui` must update
+// them all: the main package declares the full monorepo package list as its ng-update
+// packageGroup. Fail the build when its package.json falls out of sync.
+const expectedGroup = monorepoPackages
+    .map((pkg) => pkg.name)
+    .sort()
+    .join(',');
+const mainPkg = monorepoPackages.find((pkg) => pkg.name === '@openng/optimus-ui');
+const packageGroup = mainPkg?.['ng-update']?.packageGroup;
+if (!Array.isArray(packageGroup) || [...packageGroup].sort().join(',') !== expectedGroup) {
+    throw new Error(`@openng/optimus-ui: "ng-update".packageGroup must list every @openng package in packages/ (${expectedGroup.split(',').join(', ')})`);
 }
 
 const workspaceYaml = fs.readFileSync(path.join(workspaceDir, 'pnpm-workspace.yaml'), 'utf8');
@@ -34,9 +49,19 @@ fs.writeJsonSync(path.join(schematicsDir, 'utils/versions.json'), versions, { sp
 fs.removeSync(outDir);
 execSync('npx tsc -p tsconfig.json', { cwd: schematicsDir, stdio: 'inherit' });
 
+// ng-packagr writes `"type": "module"` into the published package.json, but tsc compiles the
+// schematics to CommonJS, so Node would load them as ES modules and crash ("exports is not
+// defined in ES module scope"). Ship a nested package.json that re-scopes everything under
+// dist/schematics back to CommonJS — the same layout @angular/cdk publishes.
+fs.writeJsonSync(path.join(outDir, 'package.json'), { type: 'commonjs' }, { spaces: 4 });
+
 fs.copySync(path.join(schematicsDir, 'collection.json'), path.join(outDir, 'collection.json'));
+fs.copySync(path.join(schematicsDir, 'migrations.json'), path.join(outDir, 'migrations.json'));
 fs.copySync(path.join(schematicsDir, 'utils/versions.json'), path.join(outDir, 'utils/versions.json'));
-for (const name of ['ng-add', 'migrate-from-primeng']) {
+// tsc does not emit imported .json files, so copy the PrimeFlex -> Tailwind dictionary that
+// utils/primeflex.ts requires at runtime.
+fs.copySync(path.join(schematicsDir, 'utils/primeflex-translations.json'), path.join(outDir, 'utils/primeflex-translations.json'));
+for (const name of ['ng-add', 'migrate-from-primeng', 'migrate-from-primeflex']) {
     fs.copySync(path.join(schematicsDir, name, 'schema.json'), path.join(outDir, name, 'schema.json'));
 }
 

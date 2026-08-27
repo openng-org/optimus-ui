@@ -22,7 +22,7 @@ import { Component } from '@angular/core';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular CascadeSelect Component"
+            docTitle="Angular CascadeSelect Component - Optimus UI"
             header="CascadeSelect"
             description="CascadeSelect displays a nested structure of options."
             [docs]="docs"

@@ -7,7 +7,10 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     imports: [AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>An example starter with Angular CLI is available at <a href="https://github.com/openng-org/optimus-ui">GitHub</a>.</p>
+            <p>
+                Every example in this documentation opens in StackBlitz from the code toolbar above each demo, already wired up with the current version. The
+                <a href="https://github.com/openng-org/optimus-ui" target="_blank" rel="noopener noreferrer">source repository</a> is the reference for how the library itself is built and consumed.
+            </p>
         </app-docsectiontext>
     `
 })

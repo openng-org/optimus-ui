@@ -3,6 +3,7 @@ import { AfterContentInit, booleanAttribute, ChangeDetectionStrategy, Component,
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
+import type { BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import { TagPassThrough } from '@openng/optimus-ui/types/tag';
 import { TagStyle } from './style/tagstyle';
 
@@ -55,7 +56,7 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
      * Severity type of the tag.
      * @group Props
      */
-    @Input() severity: 'success' | 'secondary' | 'info' | 'warn' | 'danger' | 'contrast' | undefined | null;
+    @Input() severity: BadgeSeverity | undefined | null;
     /**
      * Value to display inside the tag.
      * @group Props

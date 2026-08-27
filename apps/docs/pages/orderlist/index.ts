@@ -9,7 +9,7 @@ import { PTComponent } from '@/doc/orderlist/pt/PTComponent';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular OrderList Component" header="OrderList" description="OrderList is used to sort a collection." [docs]="docs" [apiDocs]="['OrderList']" [ptDocs]="ptComponent" themeDocs="orderlist"></app-doc>`,
+    template: `<app-doc docTitle="Angular OrderList Component - Optimus UI" header="OrderList" description="OrderList is used to sort a collection." [docs]="docs" [apiDocs]="['OrderList']" [ptDocs]="ptComponent" themeDocs="orderlist"></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

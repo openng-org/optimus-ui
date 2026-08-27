@@ -15,10 +15,10 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         <div class="card flex justify-center">
             <p-rating [(ngModel)]="value">
                 <ng-template #onicon>
-                    <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon-active.png" height="24" width="24" />
+                    <img src="https://optimus.openng.org/demo/rating/custom-icon-active.png" height="24" width="24" />
                 </ng-template>
                 <ng-template #officon>
-                    <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon.png" height="24" width="24" />
+                    <img src="https://optimus.openng.org/demo/rating/custom-icon.png" height="24" width="24" />
                 </ng-template>
             </p-rating>
         </div>

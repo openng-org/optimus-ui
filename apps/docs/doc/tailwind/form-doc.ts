@@ -38,13 +38,13 @@ import { TextareaModule } from '@openng/optimus-ui/textarea';
                         <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [showClear]="true" placeholder="Select a Country">
                             <ng-template pTemplate="selectedItem">
                                 <div class="flex items-center gap-2" *ngIf="selectedCountry">
-                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
+                                    <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
                                     <div>{{ selectedCountry.name }}</div>
                                 </div>
                             </ng-template>
                             <ng-template let-country pTemplate="item">
                                 <div class="flex items-center gap-2">
-                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                                    <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                                     <div>{{ country.name }}</div>
                                 </div>
                             </ng-template>

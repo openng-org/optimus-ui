@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Scroll Panel Component"
+        docTitle="Angular Scroll Panel Component - Optimus UI"
         header="ScrollPanel"
         description="ScrollPanel is a cross browser, lightweight and skinnable alternative to native browser scrollbar."
         [docs]="docs"

@@ -19,7 +19,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
                 <ng-template #header>
                     <div class="inline-flex items-center justify-center gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                     </div>
                 </ng-template>

@@ -11,7 +11,15 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AppDoc],
     template: `
-        <app-doc docTitle="Angular Fieldset Component" header="Fieldset" description="Fieldset is a grouping component with a content toggle feature." [docs]="docs" [apiDocs]="['Fieldset']" themeDocs="fieldset" [ptDocs]="ptComponent"></app-doc>
+        <app-doc
+            docTitle="Angular Fieldset Component - Optimus UI"
+            header="Fieldset"
+            description="Fieldset is a grouping component with a content toggle feature."
+            [docs]="docs"
+            [apiDocs]="['Fieldset']"
+            themeDocs="fieldset"
+            [ptDocs]="ptComponent"
+        ></app-doc>
     `
 })
 export class FieldsetDemo {

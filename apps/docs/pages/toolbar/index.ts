@@ -7,7 +7,15 @@ import { PTComponent } from '@/doc/toolbar/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Angular Toolbar Component" header="Toolbar" description="Toolbar is a grouping component for buttons and other content." [docs]="docs" [apiDocs]="['Toolbar']" [ptDocs]="ptComponent" themeDocs="toolbar"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular Toolbar Component - Optimus UI"
+        header="Toolbar"
+        description="Toolbar is a grouping component for buttons and other content."
+        [docs]="docs"
+        [apiDocs]="['Toolbar']"
+        [ptDocs]="ptComponent"
+        themeDocs="toolbar"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

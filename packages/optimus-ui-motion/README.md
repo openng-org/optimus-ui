@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="https://optimus.openng.org/large-icon.svg" alt="Optimus UI" width="140" />
+</div>
+
 # @openng/optimus-ui-motion
 
 Motion and animation utilities for [Optimus UI](https://github.com/openng-org/optimus-ui).

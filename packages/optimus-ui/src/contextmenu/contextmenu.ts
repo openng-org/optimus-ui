@@ -65,6 +65,7 @@ const CONTEXTMENU_INSTANCE = new InjectionToken<ContextMenu>('CONTEXTMENU_INSTAN
 const CONTEXTMENUSUB_INSTANCE = new InjectionToken<ContextMenuSub>('CONTEXTMENUSUB_INSTANCE');
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-contextMenuSub, p-contextmenu-sub',
     standalone: true,
     imports: [CommonModule, RouterModule, Ripple, TooltipModule, AngleRightIcon, BadgeModule, SharedModule, BindModule, MotionModule],

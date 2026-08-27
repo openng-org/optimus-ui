@@ -7,7 +7,15 @@ import { TemplateDoc } from '@/doc/panel/template-doc';
 import { ToggleableDoc } from '@/doc/panel/toggleable-doc';
 import { Component } from '@angular/core';
 @Component({
-    template: ` <app-doc docTitle="Angular Panel Component" header="Panel" description="Panel is a container component with an optional content toggle feature." [docs]="docs" [apiDocs]="['Panel']" themeDocs="panel" [ptDocs]="ptComponent"></app-doc>`,
+    template: ` <app-doc
+        docTitle="Angular Panel Component - Optimus UI"
+        header="Panel"
+        description="Panel is a container component with an optional content toggle feature."
+        [docs]="docs"
+        [apiDocs]="['Panel']"
+        themeDocs="panel"
+        [ptDocs]="ptComponent"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

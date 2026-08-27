@@ -23,7 +23,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular MultiSelect Component"
+        docTitle="Angular MultiSelect Component - Optimus UI"
         header="MultiSelect"
         description="MultiSelect is used to select multiple items from a collection."
         [docs]="docs"

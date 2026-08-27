@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Card Component" header="Card" description="Card is a flexible container component." [docs]="docs" [apiDocs]="['Card']" themeDocs="Card" [ptDocs]="ptComponent"></app-doc> `
+    template: ` <app-doc docTitle="Angular Card Component - Optimus UI" header="Card" description="Card is a flexible container component." [docs]="docs" [apiDocs]="['Card']" themeDocs="Card" [ptDocs]="ptComponent"></app-doc> `
 })
 export class CardDemo {
     docs = [

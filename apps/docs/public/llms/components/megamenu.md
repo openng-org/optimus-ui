@@ -266,7 +266,7 @@ import { MegaMenuItem } from '@openng/optimus-ui/api';
                     </div>
                 </ng-template>
                 <ng-template #end>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                 </ng-template>
             </p-megamenu>
         </div>

@@ -1,5 +1,4 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { GITHUB_REPO_URL } from '@/utils/constants';
 import { CommonModule, isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -14,6 +13,7 @@ import { DrawerModule } from '@openng/optimus-ui/drawer';
 import { KnobModule } from '@openng/optimus-ui/knob';
 import { OverlayBadgeModule } from '@openng/optimus-ui/overlaybadge';
 import { SelectButton } from '@openng/optimus-ui/selectbutton';
+import { TagModule } from '@openng/optimus-ui/tag';
 import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
 import { TooltipModule } from '@openng/optimus-ui/tooltip';
 import { Subscription } from 'rxjs';
@@ -32,6 +32,7 @@ import { OverviewApp } from './samples/overviewapp.component';
         RouterModule,
         ChartModule,
         SelectButton,
+        TagModule,
         ToggleSwitchModule,
         BadgeModule,
         FormsModule,
@@ -53,19 +54,33 @@ import { OverviewApp } from './samples/overviewapp.component';
     template: `
         <section class="landing-hero py-20 px-8 lg:px-20">
             <div class="flex flex-col items-center">
-                <h1 class="text-5xl font-bold text-center xl:text-left leading-tight">The Next-Gen UI Suite for <span class="font-bold text-primary">Angular</span></h1>
+                <h1 class="text-5xl font-bold text-center xl:text-left leading-tight">The Open Source UI Suite for <span class="font-bold text-primary">Angular</span></h1>
                 <p class="text-center mt-0 mb-8 text-surface-500 dark:text-surface-400 font-medium text-xl leading-relaxed lg:px-56">
-                    Enhance your web applications with Optimus UI's comprehensive suite of customizable, feature-rich UI components. With Optimus UI, turning your development vision into reality has never been easier.
+                    80+ accessible, customizable Angular components under the MIT license. A community-maintained continuation of PrimeNG v21, built to stay open.
                 </p>
                 <div class="flex items-center gap-4">
                     <a [routerLink]="'installation'" class="linkbox linkbox-primary">
                         <span>Get Started</span>
                         <i class="pi pi-arrow-right ms-4"></i>
                     </a>
-                    <a [href]="githubRepoUrl" target="_blank" rel="noopener noreferrer" class="linkbox">
-                        <span>Give a Star</span>
-                        <i class="pi pi-star-fill ms-4 text-yellow-500"></i>
+                    <a href="https://v1.optimus.openng.org/migration/primeng" target="_blank" rel="noopener noreferrer" class="linkbox">
+                        <span>Migrate from PrimeNG</span>
+                        <i class="pi pi-arrow-right-arrow-left ms-4"></i>
                     </a>
+                </div>
+                <div class="flex items-center gap-3 mt-6 bg-surface-100 dark:bg-surface-800 border border-black/10 dark:border-white/10 rounded-full py-2 pl-5 pr-2">
+                    <code class="font-mono text-sm text-surface-700 dark:text-surface-300">{{ installCommand }}</code>
+                    <p-button
+                        [icon]="commandCopied ? 'pi pi-check' : 'pi pi-copy'"
+                        (onClick)="copyInstallCommand()"
+                        [pTooltip]="commandCopied ? 'Copied!' : 'Copy to Clipboard'"
+                        tooltipPosition="bottom"
+                        aria-label="Copy install command"
+                        text
+                        rounded
+                        severity="secondary"
+                        styleClass="w-8 h-8"
+                    />
                 </div>
                 <div class="w-full flex lg:hidden items-center justify-center mt-16 mb-4">
                     <p-selectbutton [(ngModel)]="selectedSampleOption" [options]="sampleOptions" optionLabel="title" styleClass="dark:border dark:border-white/20">
@@ -96,7 +111,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                         >
                             <div class="flex items-center gap-3">
                                 <div class="w-11 h-11 border border-primary rounded-xl flex items-center justify-center">
-                                    <img ngSrc="logo-icon.svg" height="30" width="30" />
+                                    <img ngSrc="logo-icon.svg" height="30" width="30" class="dark:invert" />
                                 </div>
                                 <div
                                     [ngClass]="{
@@ -105,7 +120,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                                     }"
                                     class="text-surface-950 dark:text-surface-0 font-medium text-3xl"
                                 >
-                                    Prime
+                                    Optimus
                                 </div>
                             </div>
                             <div class="mt-10 flex flex-col gap-2">
@@ -182,7 +197,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                             </div>
                             <p-divider />
                             <div [class]="isSlimMenu ? 'justify-center' : ' gap-3'" class="flex items-center">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/main-avatar.png" size="large" shape="circle" class="shrink-0" />
+                                <p-avatar image="/demo/landing/apps/main-avatar.png" size="large" shape="circle" class="shrink-0" />
                                 <div>
                                     <div [class]="isSlimMenu ? 'hidden' : 'text-base font-medium text-color leading-5'">Robin Jonas</div>
                                     <div [class]="isSlimMenu ? 'hidden' : 'text-sm text-muted-color mt-1'">hi&#64;robin.xyz</div>
@@ -203,7 +218,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                     <div class="flex flex-col h-screen overflow-auto">
                         <div class="">
                             <div class="flex align-items-center gap-3 p-6">
-                                <p-avatar image="https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg" size="large" class="rounded-xl overflow-hidden" />
+                                <p-avatar image="/demo/landing/apps/avatar11.jpg" size="large" class="rounded-xl overflow-hidden" />
                                 <div class="flex-1">
                                     <div class="leading-6 text-color font-medium">Brook Simmons</div>
                                     <div class="mt-1 leading-5 text-muted-color text-sm">Sales Executive</div>
@@ -307,11 +322,12 @@ import { OverviewApp } from './samples/overviewapp.component';
                             <div *ngFor="let data of opportunities" class="flex flex-col p-3 rounded-xl bg-emphasis">
                                 <div class="flex items-start justify-between gap-2">
                                     <div class="font-medium text-color mt-0.5">{{ data.title }}</div>
-                                    <a [href]="data.link" target="_blank" rel="noopener">
-                                        <p-button icon="pi pi-arrow-up-right text-sm !leading-none" styleClass="w-8 h-8 !border-surface !bg-surface-0 dark:!bg-surface-900" severity="secondary" text />
-                                    </a>
+                                    <p-tag [value]="data.stage" [severity]="data.severity" />
                                 </div>
-                                <img class="w-full rounded-lg mt-2 block" [src]="data.image" alt="Opportunutiy Image" />
+                                <div class="w-full rounded-lg mt-2 p-4 bg-surface-0 dark:bg-surface-900 flex items-baseline gap-2">
+                                    <span class="text-2xl font-semibold text-color">{{ data.value }}</span>
+                                    <span class="text-xs text-muted-color">{{ data.owner }}</span>
+                                </div>
                                 <div class="flex-1 mt-2 p-2 rounded-lg bg-surface-0 dark:bg-surface-900 text-xs text-color">
                                     {{ data.text }}
                                 </div>
@@ -367,7 +383,9 @@ import { OverviewApp } from './samples/overviewapp.component';
     `
 })
 export class HeroSectionComponent implements OnInit, OnDestroy {
-    readonly githubRepoUrl = GITHUB_REPO_URL;
+    readonly installCommand = 'ng add @openng/optimus-ui';
+
+    commandCopied: boolean = false;
 
     selectedSampleOption;
 
@@ -448,32 +466,32 @@ export class HeroSectionComponent implements OnInit, OnDestroy {
             {
                 icon: 'pi pi-home',
                 title: 'Overview',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/overview'
+                src: '/demo/landing/apps/sampleshots/overview'
             },
             {
                 icon: 'pi pi-comment',
                 title: 'Chat',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/chat'
+                src: '/demo/landing/apps/sampleshots/chat'
             },
             {
                 icon: 'pi pi-inbox',
                 title: 'Inbox',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/mail'
+                src: '/demo/landing/apps/sampleshots/mail'
             },
             {
                 icon: 'pi pi-th-large',
                 title: 'Cards',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/cards'
+                src: '/demo/landing/apps/sampleshots/cards'
             },
             {
                 icon: 'pi pi-user',
                 title: 'Customers',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/customers'
+                src: '/demo/landing/apps/sampleshots/customers'
             },
             {
                 icon: 'pi pi-video',
                 title: 'Movies',
-                src: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/sampleshots/movies'
+                src: '/demo/landing/apps/sampleshots/movies'
             }
         ];
         this.selectedSampleOption = this.sampleOptions[0];
@@ -542,71 +560,83 @@ export class HeroSectionComponent implements OnInit, OnDestroy {
 
         this.opportunities = [
             {
-                title: 'Apollo',
-                link: 'https://apollo.primeng.org',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/apollo-ng.jpg',
-                text: 'Keep your application fresh with Apollo, the newest and most modern template available.'
+                title: 'Northwind Retail',
+                stage: 'Proposal',
+                severity: 'info',
+                value: '$48,200',
+                owner: 'Amy Elsner',
+                text: 'Migrating three storefronts onto a shared design system. Waiting on security review.'
             },
             {
-                title: 'Ultima',
-                link: 'https://ultima.primeng.org/',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/ultima-ng.jpg',
-                text: "Elevate your application's intuitiveness with Ultima's premium Material Design interface."
+                title: 'Atlas Manufacturing',
+                stage: 'Negotiation',
+                severity: 'warn',
+                value: '$126,000',
+                owner: 'Onyama Limba',
+                text: 'Multi-year platform contract. Legal has the redlines, close expected next quarter.'
             },
             {
-                title: 'Diamond',
-                link: 'https://diamond.primeng.org/',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/diamond-ng.jpg',
-                text: "Handle complex operations with elegance with Diamond's robust and powerful premium design."
+                title: 'Cedar Health',
+                stage: 'Won',
+                severity: 'success',
+                value: '$71,500',
+                owner: 'Ioni Bowcher',
+                text: 'Accessibility audit passed on the first pass. Rollout starts with the patient portal.'
             },
             {
-                title: 'Atlantis',
-                link: 'https://atlantis.primeng.org/',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/atlantis-ng.jpg',
-                text: "Boost your application's capabilities, customization with the Atlantis template."
+                title: 'Blue Harbor Logistics',
+                stage: 'Discovery',
+                severity: 'secondary',
+                value: '$19,800',
+                owner: 'Asiya Javayant',
+                text: 'Evaluating a replacement for an in-house component library built in 2017.'
             },
             {
-                title: 'Verona',
-                link: 'https://verona.primeng.org/',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/verona-ng.jpg',
-                text: "Achieve sophistication and subtlety with Verona's minimalistic, content-focused design."
+                title: 'Meridian Bank',
+                stage: 'Proposal',
+                severity: 'info',
+                value: '$204,000',
+                owner: 'Xuxue Feng',
+                text: 'Regulated environment, needs an on-premise build pipeline and long-term support.'
             },
             {
-                title: 'Freya',
-                link: 'https://freya.primeng.org/',
-                image: 'https://primefaces.org/cdn/primeng/images/layouts/freya-ng.jpg',
-                text: "Give your application a sleek, updated look with Freya's chic and modern premium template."
+                title: 'Fairlane Studios',
+                stage: 'Lost',
+                severity: 'danger',
+                value: '$12,400',
+                owner: 'Stephen Shaw',
+                text: 'Went with an internal solution. Worth revisiting when their team grows.'
             }
         ];
 
         this.callLogs = [
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar6.png',
+                image: '/demo/landing/apps/avatar6.png',
                 name: 'Brook Simmons',
                 time: '02.02.2024 | 45 min'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
+                image: '/demo/landing/apps/avatar12.jpg',
                 name: 'Jacob Jones',
                 time: '02.02.2024 | 45 min'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 name: 'Annette Black',
                 time: '02.03.2024 | 13 min'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg',
+                image: '/demo/landing/apps/avatar9.jpg',
                 name: 'Arlene McCoy',
                 time: '02.03.2024 | 14 min'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar10.jpg',
+                image: '/demo/landing/apps/avatar10.jpg',
                 name: 'Arlene Simmons',
                 time: '02.03.2024 | 14 min'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 name: 'Michael Brown',
                 time: '02.04.2024 | 20 min'
             }
@@ -614,42 +644,42 @@ export class HeroSectionComponent implements OnInit, OnDestroy {
 
         this.emailRecords = [
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 name: 'Brook Simmons',
                 time: '3:24 PM',
                 title: 'Unleash Business Potential',
                 text: 'Automate, analyze, and accelerate with our SaaS platform. Unshackle from mundane tasks and focus on scaling your business. Contact us for a demo today!'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png',
+                image: '/demo/landing/apps/avatar7.png',
                 name: 'Jacob Jones',
                 time: '12.23.2023',
                 title: 'Optimized Workflow Revolution  ',
                 text: "Experience a workflow revolution with our intuitive SaaS tool. With enhanced features and optimized processes, it's efficiency like never before. Let's get in touch for a brief demo!"
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
+                image: '/demo/landing/apps/avatar8.png',
                 name: 'Annette Black',
                 time: '12.17.2023',
                 title: 'Innovation at Fingertips',
                 text: 'With our SaaS solution, innovation is only a click away. Shape your future with pioneering features and minimalist design. Join us for your solution walk-through today!'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 name: 'Arlene McCoy',
                 time: '06.17.2023',
                 title: 'Seamless Integration',
                 text: 'Integrate effortlessly with our user-friendly SaaS tools. Streamline your operations and boost productivity. Discover more in our demo session.'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 name: 'Arlene Simmons',
                 time: '04.17.2023',
                 title: 'Transform Your Business',
                 text: 'Empower your team with our innovative SaaS solutions. Achieve unparalleled efficiency and drive growth. Book a demo to explore the possibilities.'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 name: 'Michael Brown',
                 time: '01.05.2024',
                 title: 'Next-Gen Collaboration',
@@ -1002,6 +1032,22 @@ export class HeroSectionComponent implements OnInit, OnDestroy {
 
     setSelectedSampleAppsSidebarNav(title) {
         this.selectedSampleAppsSidebarNav = title;
+    }
+
+    copyInstallCommand(): void {
+        if (!isPlatformBrowser(this.platformId) || !navigator?.clipboard?.writeText) {
+            return;
+        }
+
+        navigator.clipboard
+            .writeText(this.installCommand)
+            .then(() => {
+                this.commandCopied = true;
+                setTimeout(() => (this.commandCopied = false), 2000);
+            })
+            .catch(() => {
+                // Clipboard may be blocked (permissions/insecure context). Ignore to avoid unhandled rejections.
+            });
     }
 
     ngOnDestroy(): void {

@@ -13,7 +13,7 @@ import { TabmenuDoc } from '@/doc/tabs/tabmenu-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Tabs Component" header="Tabs" description="Tabs is a container component to group content with tabs." [docs]="docs" [apiDocs]="['Tabs']" [ptDocs]="ptComponent" themeDocs="tabs"></app-doc>`,
+    template: `<app-doc docTitle="Angular Tabs Component - Optimus UI" header="Tabs" description="Tabs is a container component to group content with tabs." [docs]="docs" [apiDocs]="['Tabs']" [ptDocs]="ptComponent" themeDocs="tabs"></app-doc>`,
     imports: [AppDoc],
     standalone: true
 })

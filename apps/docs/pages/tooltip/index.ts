@@ -12,7 +12,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Tooltip Component"
+        docTitle="Angular Tooltip Component - Optimus UI"
         header="Tooltip"
         description="Tooltip directive provides advisory information for a component. Tooltip is integrated within various Optimus UI components."
         [docs]="docs"

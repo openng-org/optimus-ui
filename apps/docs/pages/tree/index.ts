@@ -19,7 +19,7 @@ import { LazyVirtualScrollDoc } from '@/doc/tree/virtualscrolllazy-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Tree Component" header="Tree" description="Tree is used to display hierarchical data." [docs]="docs" [apiDocs]="['Tree', 'TreeNode']" [ptDocs]="ptComponent" themeDocs="tree"></app-doc>`,
+    template: `<app-doc docTitle="Angular Tree Component - Optimus UI" header="Tree" description="Tree is used to display hierarchical data." [docs]="docs" [apiDocs]="['Tree', 'TreeNode']" [ptDocs]="ptComponent" themeDocs="tree"></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

@@ -14,7 +14,7 @@ import { AppDocService } from '@/components/doc/app.doc.service';
     standalone: true,
     imports: [AppDoc],
     template: `<app-doc
-        docTitle="Angular MegaMenu Component"
+        docTitle="Angular MegaMenu Component - Optimus UI"
         header="MegaMenu"
         description="MegaMenu is navigation component that displays submenus together."
         [docs]="docs"

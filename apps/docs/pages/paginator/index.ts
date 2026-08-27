@@ -10,7 +10,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Paginator Component"
+        docTitle="Angular Paginator Component - Optimus UI"
         header="Paginator"
         description="Paginator displays data in paged format and provides navigation between pages."
         [docs]="docs"

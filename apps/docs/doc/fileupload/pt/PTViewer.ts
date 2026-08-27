@@ -10,7 +10,7 @@ import { FileUploadModule } from '@openng/optimus-ui/fileupload';
     template: `
         <app-docptviewer [docs]="docs">
             <div class="w-full">
-                <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
+                <p-fileupload name="demo[]" url="https://optimus.openng.org/api/upload" [multiple]="true" accept="image/*" [maxFileSize]="1000000">
                     <ng-template #empty>
                         <span>Drag and drop files to here to upload.</span>
                     </ng-template>

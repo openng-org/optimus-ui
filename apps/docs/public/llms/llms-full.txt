@@ -1,6 +1,6 @@
 # Optimus UI Documentation
 
-Generated: 2026-07-23
+Generated: 2026-08-20
 
 ---
 
@@ -12,15 +12,27 @@ Setting up Optimus UI in an Angular CLI project.
 
 ## Download-
 
-Optimus UI is available for download on the npm registry .
+Prefer to wire things up yourself? Install the packages from the npm registry directly. The next section covers the provider setup that ng add would have written for you.
 
 ## Examples-
 
-An example starter with Angular CLI is available at GitHub .
+Every example in this documentation opens in StackBlitz from the code toolbar above each demo, already wired up with the current version. The source repository is the reference for how the library itself is built and consumed.
+
+## Icons-
+
+Optimus UI components accept any icon through templating, so an icon library is optional. That said, every example in this documentation uses the pi pi-&#123;icon&#125; classes from OpenNG Icons , and component defaults such as the DatePicker arrows reference them too. Install it if you want the demos to look the way they do here. Then import the stylesheet, either from your global stylesheet or from the styles array in angular.json .
 
 ## Nextsteps-
 
-Welcome to the Prime UI Ecosystem! Once you have Optimus UI up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Customization of styles
+Once you have Optimus UI up and running, we recommend exploring the following resources to gain a deeper understanding of the library. Global configuration Styled mode and unstyled mode Tailwind CSS integration Pass Through for direct access to the underlying elements Philosophy — what this project promises, and what it does not FAQ
+
+## Ngadd-
+
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.
+
+## Prerequisites-
+
+Optimus UI targets Angular v21 and newer. Any workspace created with the Angular CLI works, standalone or NgModule based. Angular v21 or newer, including &#64;angular/cdk , &#64;angular/forms and &#64;angular/router RxJS v7.8.1 or newer A package manager of your choice — npm, yarn or pnpm Already using PrimeNG? Do not follow this page. The migration guide covers moving an existing PrimeNG v21 workspace across with the migrate-from-primeng schematic, which is a separate command from the ng add below.
 
 ## Provider-
 
@@ -42,33 +54,13 @@ export const appConfig: ApplicationConfig = {
 };
 ```
 
-## Theme-
-
-Configure Optimus UI to use a theme like Aura.
-
-```typescript
-import { ApplicationConfig } from '@angular/core';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { provideOptimus } from '@openng/optimus-ui/config';
-import Aura from '@openng/optimus-ui-themes/aura';
-
-export const appConfig: ApplicationConfig = {
-    providers: [
-        provideAnimationsAsync(),
-        provideOptimus({
-            theme: Aura
-        })
-    ]
-};
-```
-
 ## Verify-
 
 Verify your setup by adding a component such as Button. Each component can be imported and registered individually so that you only include what you use for bundle optimization. Import path is available in the documentation of the corresponding component.
 
-## Videos
+## Versioncompatibility-
 
-Angular CLI is the recommended way to build Angular applications with Optimus UI.
+Each Optimus UI major targets a single Angular major. Install the version matching your workspace, and see the update guide when moving to a newer one.
 
 ---
 
@@ -145,7 +137,15 @@ Locale Options
 
 ## Repository
 
-Ready to use settings for locales are available at the community supported PrimeLocale repository. We'd appreciate if you could contribute to this repository with pull requests and share it with the rest of the community.
+Ready to use settings for locales are available as the &#64;openng/optimus-ui-locale package, maintained in the Optimus UI repository. We'd appreciate if you could contribute translations to the repository and share them with the rest of the community.
+
+```typescript
+import { de } from '@openng/optimus-ui-locale/js/de.js';
+
+provideOptimus({
+    translation: de
+})
+```
 
 ## Runtime
 
@@ -453,11 +453,11 @@ Unstyled mode is enabled for the whole suite by enabling unstyled option during 
 
 # Icons
 
-PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.
+OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons.
 
 ## Basic-
 
-PrimeIcons use the pi pi-&#123;icon&#125; syntax such as pi pi-check . A standalone icon can be displayed using an element such as i or span
+OpenNG Icons use the pi pi-&#123;icon&#125; syntax such as pi pi-check . A standalone icon can be displayed using an element such as i or span
 
 ## Color-
 
@@ -601,7 +601,7 @@ A headless Optimus UI dialog with a custom UI.
 
 ## Override-
 
-Tailwind utilities may not be able to override the default styling of components due to css specificity, there are two possible solutions; Import and CSS Layer. Important Use the ! as a prefix to enforce the styling. This is not the recommend approach, and should be used as last resort to avoid adding unnecessary style classes to your bundle. Tailwind v4 Tailwind v3 CSS Layer CSS Layer provides control over the css specificity so that Tailwind utilities can safely override components. Tailwind v4 Ensure primeng layer is after theme and base , but before the other Tailwind layers such as utilities . No change in the CSS configuration is required. Tailwind v3 The primeng layer should be between base and utilities. Tailwind v3 does not use native layer so needs to be defined with CSS.
+Tailwind utilities may not be able to override the default styling of components due to css specificity, there are two possible solutions; Import and CSS Layer. Important Use the ! as a prefix to enforce the styling. This is not the recommend approach, and should be used as last resort to avoid adding unnecessary style classes to your bundle. Tailwind v4 Tailwind v3 CSS Layer CSS Layer provides control over the css specificity so that Tailwind utilities can safely override components. Tailwind v4 Ensure optimus layer is after theme and base , but before the other Tailwind layers such as utilities . No change in the CSS configuration is required. Tailwind v3 The optimus layer should be between base and utilities. Tailwind v3 does not use native layer so needs to be defined with CSS.
 
 ## Overview-
 
@@ -705,7 +705,333 @@ RTL is widely supported by the UI suite except the Galleria and Carousel compone
 
 ---
 
+# PrimeFlex
+
+Moving from PrimeFlex to Tailwind CSS.
+
+## Compatibility-
+
+If you are staying on PrimeFlex for now, Optimus UI v1 pairs with PrimeFlex v4 — the same combination that worked with PrimeNG v18 and newer, since the styling architecture is unchanged. PrimeFlex v3 targeted the older PrimeNG releases and is not a supported pairing here. Neither version is tested against Optimus UI releases, so treat this as "should work", not as a supported configuration. The migration below is the path we actually maintain.
+
+## Migration-
+
+PrimeFlex class names map closely onto Tailwind's, so most of the work is mechanical. PrimeTek's primeclt ships a pf2tw command that does the conversion, and it works on any codebase — it rewrites class names and does not care which component library you use. Run pf2tw in a directory containing the files to convert. A handful of PrimeFlex classes have no Tailwind counterpart and are left alone. Replace them with flexbox or grid utilities by hand: formgrid formgroup formgroup-inline col col-fixed field field-checkbox field-radiobutton reset
+
+## Overview-
+
+PrimeFlex was PrimeTek's lightweight CSS utility library, designed to accompany PrimeNG. PrimeTek stopped maintaining it before the relicensing, on the grounds that most applications already bring their own utility layer — Tailwind, Bootstrap or something in-house — and a second one only overlaps with it. Optimus UI does not maintain PrimeFlex either, and for the same reason. Nothing in this library depends on it, and no component requires it. If your application already uses PrimeFlex it will keep working, but it will not receive updates from us, and we suggest moving to Tailwind CSS.
+
+## Tailwindcss-
+
+Tailwind CSS is the replacement we suggest. This documentation site is itself built with it, and we publish &#64;openng/optimus-ui-tailwindcss for first-class integration — a plugin that teaches Tailwind about the theme's design tokens and puts the component styles in a cascade layer you can override cleanly. See the Tailwind CSS guide for setup with either Tailwind v3 or v4, and the next section for converting existing PrimeFlex classes.
+
+---
+
+# Philosophy
+
+Why Optimus UI exists, what it commits to, and where it stops.
+
+## Governance-
+
+Everything happens in the open, in the repository . There is no private roadmap and no internal issue tracker. What you see in the issues, the discussions and the roadmap is the whole plan. Contributors earn commit access by contributing — the contribution guide describes the Contributor and Committer roles and roughly what it takes to reach them. We would rather grow the number of people who can merge a fix than route everything through one person. Breaking changes are avoided within a major and documented when a major requires them. Where we inherited a name that no longer fits — the CSS cascade layer, the package scope, the icon library — we changed it once, at v1, with a migration schematic, rather than dripping renames across releases.
+
+## Limits-
+
+Naming the limits is what makes the commitments above worth anything. Here is what Optimus UI is not. There is no commercial support No SLA, no support contract, no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot provide them and you should plan accordingly. There are no premium templates, blocks or design tooling PrimeTek's application templates, block library and visual theme designer are their commercial products. They are not part of what was MIT licensed, so they are not part of this fork and will not be reimplemented. Theming here means editing preset objects in code, which is documented in full. We are not chasing feature parity with PrimeNG v22 and beyond PrimeNG continues under its own license and its own roadmap. Optimus UI diverges from v21 forward. Some things they add, we will not have. Some things we fix, they will not. Treat the two as separate libraries that share an ancestor, not as a free copy of a paid product. The bus factor is real This is maintained by a small group of people in their own time. We would rather say that plainly than imply a larger organisation stands behind it. The best way to change that number is to contribute .
+
+## Origin-
+
+In June 2026 PrimeTek archived the PrimeNG repository and moved future major versions, starting with v22, to a commercial license. They explained their reasoning in their own announcement , and it is worth reading. Maintaining a component library of this size for a decade, largely for free, is genuinely hard, and we do not think the decision was made lightly. It did, however, leave a lot of applications on a library with no further open source releases. Optimus UI exists for those applications. It is a community fork of the last MIT licensed version of PrimeNG, v21, and it stays MIT. This is not an official fork and it is not endorsed by PrimeTek. It is a separate repository, seeded with PrimeNG's code and history, maintained by people who depend on it.
+
+## Promises-
+
+Four commitments, in the order we would want to read them if we were choosing a dependency: MIT, with no second tier Every package we publish is MIT licensed. There is no paid edition, no enterprise build, no feature held back behind a subscription, and no plan to introduce one. If that ever changed, it would be a fork of this project rather than a relicensing of it, because the code we inherited is MIT and so is everything we add to it. We track Angular Our release cadence follows Angular's. When a new Angular major lands, the priority is a compatible Optimus UI major — before new features, before refactors. Staying upgradeable is the single most valuable thing a component library can do for the applications built on it. Bugs before features We inherited a large backlog along with the code. Fixing what is broken ranks above adding what is missing. Feature requests are triaged and welcome, but they generally ship when someone in the community implements them. No surprises in your bundle The library sends no telemetry, phones no home, and requires no account or key to use. What you install is what runs.
+
+## Sustainability-
+
+The honest answer to "how is this funded" is: it mostly is not. OpenNG covers the hosting and the domain; the work is volunteered. That is a fragile arrangement, and it is the main risk to this project — larger than any technical risk we can see today. The things that actually help, roughly in order of impact: Reproducing and triaging issues. A bug with a minimal reproduction is several times more likely to get fixed. Sending pull requests, especially for issues labelled help-needed . Answering questions in discussions, so the same answer is not written five times. Improving this documentation. Every page has a source file and every fix is welcome. Telling your employer you depend on it. Sponsored maintenance time is worth more than any one-off donation. The contribution guide covers how to get started.
+
+## Trademark-
+
+Optimus UI is not affiliated with, endorsed by, or sponsored by PrimeTek. PrimeNG, PrimeFaces, PrimeReact, PrimeVue and PrimeFlex are their trademarks. The rename from the inherited names — the packages, the CSS layer, the icon library — is a trademark matter, not a technical one, and it is why we ship a migration schematic rather than asking you to rewrite imports by hand. References to PrimeNG remain throughout this documentation and the source, and they are deliberate. Attribution is the point: this library is PrimeTek's decade of work plus whatever the community adds on top. Pretending otherwise would be both dishonest and useless to anyone trying to find their way around a familiar API. The code we forked was published under the MIT license, and we distribute it under those same terms, with the original copyright notices intact.
+
+---
+
+# FAQ
+
+Licensing, migration from PrimeNG, the ecosystem, and how support works.
+
+## Ecosystem-
+
+Do the PrimeNG themes work? The built-in presets do — Aura, Material, Lara and Nora ship in &#64;openng/optimus-ui-themes and are configured the same way. A preset you wrote yourself against PrimeNG v21 will work after the import paths are updated, which the migration schematic handles. What about the Theme Designer, templates and blocks? Those are PrimeTek's commercial products. They were never MIT licensed, so they are not part of this fork and we will not be reimplementing them. Theming in Optimus UI means editing preset objects in code, which is documented in full under styled mode . What replaced PrimeIcons? OpenNG Icons , installed as &#64;openng/icons . The pi pi-&#123;icon&#125; class names are unchanged, so templates do not need editing — only the package name and the stylesheet import, both of which the migration schematic rewrites. What about PrimeFlex? PrimeFlex is not maintained here. We suggest Tailwind CSS instead, and ship &#64;openng/optimus-ui-tailwindcss for first-class integration — see the Tailwind guide . The PrimeFlex guide covers moving across. Does Optimus UI work with SSR? This documentation site is itself an Angular SSR application built on Optimus UI, prerendered at build time. So yes, and any regression there tends to be noticed quickly.
+
+## Migration-
+
+Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and makes no changes when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
+
+## Project-
+
+Is Optimus UI free? Will it stay free? Yes, and yes. Every package is MIT licensed, and the code we forked was MIT too, so relicensing it is not something we could do even if we wanted to. There is no paid tier and none is planned. The philosophy page goes into what that does and does not buy you. Is this an official PrimeNG fork? Are you affiliated with PrimeTek? No. Optimus UI is an independent community fork, not affiliated with, endorsed by, or sponsored by PrimeTek. It is a separate repository seeded with PrimeNG's MIT licensed code and history, not a fork of the archived primefaces/primeng repository. Which PrimeNG version is this forked from? PrimeNG v21, the last version published under the MIT license. Optimus UI v1 is that codebase, rebranded, with the fixes that have landed since. Who maintains it, and how is it funded? A small group of volunteers, with OpenNG covering hosting and the domain. We are deliberate about not implying more than that — see sustainability for the honest version and the ways that can change. Why did the name change? Trademark. PrimeNG, PrimeFaces and PrimeFlex are PrimeTek's marks, so the packages, the CSS cascade layer and the icon library all needed new names. That is also why the rename is handled by a schematic rather than by asking you to rewrite imports by hand.
+
+## Support-
+
+Is there commercial support? No. There is no SLA, no support contract and no guaranteed response time. Issues and discussions are answered by volunteers when they have time. If your organisation needs contractual guarantees, this project cannot offer them. How do I report a bug? Open an issue on GitHub with a minimal reproduction — a StackBlitz from any demo on this site is ideal — plus your Optimus UI, Angular and browser versions. A reproduction is the difference between a bug that gets fixed and one that sits in the backlog. How do I request a feature? Open a discussion . Requests are triaged and welcome, but in practice they ship when someone implements them. If it matters to you, the contribution guide is the fastest route. Where do I ask questions? GitHub Discussions is the primary place. There is also an Ask AI button in the header, which answers from this documentation. For real-time chat, join the Optimus UI Discord server. How does versioning work? Semantic versioning, with majors tracking Angular majors. Breaking changes are confined to majors and documented in the GitHub releases .
+
+---
+
+# Contribution Guide
+
+How to contribute to Optimus UI.
+
+## Benefits-
+
+Contributing to Optimus UI comes with several benefits. Being part of an open-source project will enhance your career and open up exciting opportunities. You'll gain significant visibility in the developer community while improving yourself as a professional.
+
+## Helpneeded-
+
+Optimus UI is a community-driven project stewarded by OpenNG, and we appreciate any help you can provide. Here are some areas where you can contribute: Issue Triage Help us manage issues by; Reproducing reported bugs Clarifying issue descriptions Tagging issues with appropriate labels Sending Pull Requests We encourage you to send pull requests, especially for issues tagged with the help-needed label. Community Support Assist other users by participating in the issue tracker, GitHub discussions , and the Optimus UI Discord . Your expertise can help others solve problems and improve their experience with Optimus UI.
+
+## Introduction-
+
+Optimus UI is a community-maintained Angular UI library, stewarded by OpenNG and dedicated to providing high-quality, versatile and accessible UI components that help developers build better applications faster. Development Setup To begin with, clone the Optimus UI repository from GitHub: Then run the documentation app in your local environment at http://localhost:4200/ . Project Structure Optimus UI's project structure is organized as follows:
+
+## Pathway-
+
+Optimus UI offers an organization structure involving contributors and the core team: Contributor Role After a certain period of frequent contributions, a community member is offered the Contributor role. On average, it may take about three months, but the exact duration can vary depending on the individual commitment. Committer Role If a contributor actively participates in the codebase and PRs, their role may be upgraded to a Committer level, providing direct commit access to the Optimus UI codebase.
+
+---
+
 # Components
+
+# Angular Image Component
+
+Displays an image with preview and tranformation options.
+
+## Accessibility
+
+Screen Reader The preview button is a native button element with an aria-label that refers to the aria.zoomImage property of the locale API by default. When preview is active, dialog role with aria-modal is applied to the overlay image container. Button controls use aria.rotateRight , aria.rotateLeft , aria.zoomIn , aria.zoomOut and aria.close from the locale API as aria-label . ButtonBar Keyboard Support When preview is activated, close button receives the initial focus. Key Function tab Moves focus through button bar. enter Activates the button. space Activates the button. esc Closes the image preview.
+
+## Basic
+
+Image is used as the native img element and supports all properties that the native element has. For multiple image, see Galleria.
+
+**Example:**
+
+```typescript
+import { Component } from '@angular/core';
+import { ImageModule } from '@openng/optimus-ui/image';
+
+@Component({
+    template: `
+        <div class="card flex justify-center">
+            <p-image src="https://optimus.openng.org/demo/galleria/galleria10.jpg" alt="Image" width="250" />
+        </div>
+    `,
+    standalone: true,
+    imports: [ImageModule]
+})
+export class ImageBasicDemo {}
+```
+
+## Preview
+
+Preview mode displays a modal layer when the image is clicked that provides transformation options such as rotating and zooming.
+
+**Example:**
+
+```typescript
+import { Component } from '@angular/core';
+import { ImageModule } from '@openng/optimus-ui/image';
+
+@Component({
+    template: `
+        <div class="card flex justify-center">
+            <p-image src="https://optimus.openng.org/demo/galleria/galleria10.jpg" alt="Image" width="250" [preview]="true" />
+        </div>
+    `,
+    standalone: true,
+    imports: [ImageModule]
+})
+export class ImagePreviewDemo {}
+```
+
+## previewimagesource-doc
+
+In case that you want to show different image on preview, you can set previewImageSrc attribute. It could come handy when wanted to use smaller image version at first and bigger one on preview.
+
+**Example:**
+
+```typescript
+import { Component } from '@angular/core';
+import { ImageModule } from '@openng/optimus-ui/image';
+
+@Component({
+    template: `
+        <div class="card flex justify-center">
+            <p-image src="https://optimus.openng.org/demo/galleria/galleria11.jpg" previewImageSrc="https://optimus.openng.org/demo/galleria/galleria11.jpg" alt="Image" width="250" [preview]="true" />
+        </div>
+    `,
+    standalone: true,
+    imports: [ImageModule]
+})
+export class ImagePreviewimagesourceDemo {}
+```
+
+## Template
+
+An eye icon is displayed by default when the image is hovered in preview mode. Use the indicator template for custom content.
+
+**Example:**
+
+```typescript
+import { Component } from '@angular/core';
+import { ImageModule } from '@openng/optimus-ui/image';
+
+@Component({
+    template: `
+        <div class="card flex justify-center">
+            <p-image src="https://optimus.openng.org/demo/galleria/galleria11.jpg" [preview]="true" alt="Image" width="250">
+                <ng-template #indicator>
+                    <i class="pi pi-search"></i>
+                </ng-template>
+                <ng-template #image>
+                    <img src="https://optimus.openng.org/demo/galleria/galleria11.jpg" alt="image" width="250" />
+                </ng-template>
+                <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                    <img src="https://optimus.openng.org/demo/galleria/galleria11.jpg" alt="image" [style]="style" (click)="previewCallback()" />
+                </ng-template>
+            </p-image>
+        </div>
+    `,
+    standalone: true,
+    imports: [ImageModule]
+})
+export class ImageTemplateDemo {}
+```
+
+## Image
+
+Displays an image with preview and tranformation options. For multiple image, see Galleria.
+
+### Props
+
+| Name | Type | Default | Description |
+|------|------|---------|-------------|
+| dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
+| unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
+| pt | InputSignal<ImagePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
+| ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
+| imageClass | string | - | Style class of the image element. |
+| imageStyle | { [klass: string]: any } | - | Inline style of the image element. |
+| styleClass | string | - | Class of the element. **(Deprecated)** |
+| src | string \| SafeUrl | - | The source path for the main image. |
+| srcSet | string \| SafeUrl | - | The srcset definition for the main image. |
+| sizes | string | - | The sizes definition for the main image. |
+| previewImageSrc | string \| SafeUrl | - | The source path for the preview image. |
+| previewImageSrcSet | string \| SafeUrl | - | The srcset definition for the preview image. |
+| previewImageSizes | string | - | The sizes definition for the preview image. |
+| alt | string | - | Attribute of the preview image element. |
+| width | string | - | Attribute of the image element. |
+| height | string | - | Attribute of the image element. |
+| loading | "eager" \| "lazy" | - | Attribute of the image element. |
+| preview | boolean | false | Controls the preview functionality. |
+| showTransitionOptions | string | 150ms cubic-bezier(0, 0, 0.2, 1) | Transition options of the show animation **(Deprecated)** |
+| hideTransitionOptions | string | 150ms cubic-bezier(0, 0, 0.2, 1) | Transition options of the hide animation **(Deprecated)** |
+| modalEnterAnimation | InputSignal<string> | 'p-modal-enter' | Enter animation class name of modal. |
+| modalLeaveAnimation | InputSignal<string> | 'p-modal-leave' | Leave animation class name of modal. |
+| appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
+| maskMotionOptions | InputSignal<MotionOptions> | ... | The motion options for the mask. |
+| motionOptions | InputSignal<MotionOptions> | ... | The motion options. |
+
+### Emits
+
+| Name | Parameters | Description |
+|------|------------|-------------|
+| onShow | value: any | Triggered when the preview overlay is shown. |
+| onHide | value: any | Triggered when the preview overlay is hidden. |
+| onImageError | event: Event | This event is triggered if an error occurs while loading an image file. |
+
+### Templates
+
+| Name | Type | Description |
+|------|------|-------------|
+| indicator | TemplateRef<void> | Custom indicator template. |
+| rotaterighticon | TemplateRef<void> | Custom rotate right icon template. |
+| rotatelefticon | TemplateRef<void> | Custom rotate left icon template. |
+| zoomouticon | TemplateRef<void> | Custom zoom out icon template. |
+| zoominicon | TemplateRef<void> | Custom zoom in icon template. |
+| closeicon | TemplateRef<void> | Custom close icon template. |
+| preview | TemplateRef<ImagePreviewTemplateContext> | Custom preview template. |
+| image | TemplateRef<ImageImageTemplateContext> | Custom image template. |
+
+## Pass Through Options
+
+| Name | Type | Description |
+|------|------|-------------|
+| root | PassThroughOption<HTMLSpanElement, I> | Used to pass attributes to the root's DOM element. |
+| image | PassThroughOption<HTMLImageElement, I> | Used to pass attributes to the image's DOM element. |
+| previewMask | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the preview mask button's DOM element. |
+| previewIcon | PassThroughOption<SVGElement, I> | Used to pass attributes to the preview icon's DOM element. |
+| mask | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the mask's DOM element. |
+| toolbar | PassThroughOption<HTMLDivElement, I> | Used to pass attributes to the toolbar's DOM element. |
+| rotateRightButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the rotate right button's DOM element. |
+| rotateLeftButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the rotate left button's DOM element. |
+| zoomOutButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the zoom out button's DOM element. |
+| zoomInButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the zoom in button's DOM element. |
+| closeButton | PassThroughOption<HTMLButtonElement, I> | Used to pass attributes to the close button's DOM element. |
+| original | PassThroughOption<HTMLImageElement, I> | Used to pass attributes to the original/preview image's DOM element. |
+| motion | MotionOptions | Used to pass options to the motion component/directive. |
+
+## Theming
+
+### CSS Classes
+
+| Class | Description |
+|-------|-------------|
+| p-image | Class name of the root element |
+| p-image-preview-mask | Class name of the preview mask element |
+| p-image-preview-icon | Class name of the preview icon element |
+| p-image-mask | Class name of the mask element |
+| p-image-toolbar | Class name of the toolbar element |
+| p-image-rotate-right-button | Class name of the rotate right button element |
+| p-image-rotate-left-button | Class name of the rotate left button element |
+| p-image-zoom-out-button | Class name of the zoom out button element |
+| p-image-zoom-in-button | Class name of the zoom in button element |
+| p-image-close-button | Class name of the close button element |
+| p-image-original | Class name of the original element |
+
+### Design Tokens
+
+| Token | CSS Variable | Description |
+|-------|--------------|-------------|
+| image.transition.duration | --p-image-transition-duration | Transition duration of root |
+| image.preview.icon.size | --p-image-preview-icon-size | Icon size of preview |
+| image.preview.mask.background | --p-image-preview-mask-background | Mask background of preview |
+| image.preview.mask.color | --p-image-preview-mask-color | Mask color of preview |
+| image.toolbar.position.left | --p-image-toolbar-position-left | Position left of toolbar |
+| image.toolbar.position.right | --p-image-toolbar-position-right | Position right of toolbar |
+| image.toolbar.position.top | --p-image-toolbar-position-top | Position top of toolbar |
+| image.toolbar.position.bottom | --p-image-toolbar-position-bottom | Position bottom of toolbar |
+| image.toolbar.blur | --p-image-toolbar-blur | Blur of toolbar |
+| image.toolbar.background | --p-image-toolbar-background | Background of toolbar |
+| image.toolbar.border.color | --p-image-toolbar-border-color | Border color of toolbar |
+| image.toolbar.border.width | --p-image-toolbar-border-width | Border width of toolbar |
+| image.toolbar.border.radius | --p-image-toolbar-border-radius | Border radius of toolbar |
+| image.toolbar.padding | --p-image-toolbar-padding | Padding of toolbar |
+| image.toolbar.gap | --p-image-toolbar-gap | Gap of toolbar |
+| image.action.hover.background | --p-image-action-hover-background | Hover background of action |
+| image.action.color | --p-image-action-color | Color of action |
+| image.action.hover.color | --p-image-action-hover-color | Hover color of action |
+| image.action.size | --p-image-action-size | Size of action |
+| image.action.icon.size | --p-image-action-icon-size | Icon size of action |
+| image.action.border.radius | --p-image-action-border-radius | Border radius of action |
+| image.action.focus.ring.width | --p-image-action-focus-ring-width | Focus ring width of action |
+| image.action.focus.ring.style | --p-image-action-focus-ring-style | Focus ring style of action |
+| image.action.focus.ring.color | --p-image-action-focus-ring-color | Focus ring color of action |
+| image.action.focus.ring.offset | --p-image-action-focus-ring-offset | Focus ring offset of action |
+| image.action.focus.ring.shadow | --p-image-action-focus-ring-shadow | Focus ring shadow of action |
+
+---
 
 # Angular Accordion Component
 
@@ -989,7 +1315,7 @@ import { BadgeModule } from '@openng/optimus-ui/badge';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                             <p-badge value="3" class="ml-auto mr-2" />
                         </span>
@@ -1012,7 +1338,7 @@ import { BadgeModule } from '@openng/optimus-ui/badge';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Onyama Limba</span>
                             <p-badge value="4" class="ml-auto mr-2" />
                         </span>
@@ -1034,7 +1360,7 @@ import { BadgeModule } from '@openng/optimus-ui/badge';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Ioni Bowcher</span>
                             <p-badge value="2" class="ml-auto mr-2" />
                         </span>
@@ -1247,17 +1573,17 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
                     leaveClass="animate-leave fade-out-0"
                     class="flex flex-col border border-primary-200 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4"
                 >
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" size="xlarge" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" size="xlarge" />
                     <span class="text-2xl font-medium">Jenna Thompson</span>
                     <span class="text-muted-color text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
                 </div>
                 <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-b-20 animate-duration-1000" class="flex flex-col border border-primary-200 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" shape="circle" size="xlarge" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" shape="circle" size="xlarge" />
                     <span class="text-2xl font-medium">Isabel Garcia</span>
                     <span class="text-muted-color text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
                 </div>
                 <div pAnimateOnScroll enterClass="animate-enter fade-in-10 slide-in-from-t-20 animate-duration-1000" class="flex flex-col border border-primary-200 shadow-lg justify-center items-center max-w-80 rounded-2xl p-8 gap-4">
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" size="xlarge" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" size="xlarge" />
                     <span class="text-2xl font-medium">Xavier Mason</span>
                     <span class="text-muted-color text-center">Lorem ipsum dolor sit amet consectetur adipisicing elit.</span>
                 </div>
@@ -1383,7 +1709,7 @@ import { Product } from '@/domain/product';
             >
                 <ng-template let-product #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ product.name }}</span>
                             <span class="text-sm text-surface-500 dark:text-surface-400">{{ product.category }}</span>
@@ -1827,7 +2153,7 @@ interface AutoCompleteCompleteEvent {
             <p-autocomplete [(ngModel)]="selectedCity" [group]="true" [suggestions]="filteredGroups" (completeMethod)="filterGroupedCity($event)" placeholder="Hint: type 'a'">
                 <ng-template let-group #group>
                     <div class="flex items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
                         <span>{{ group.label }}</span>
                     </div>
                 </ng-template>
@@ -2196,7 +2522,7 @@ interface AutoCompleteCompleteEvent {
             <p-autocomplete [(ngModel)]="selectedCountryAdvanced" [suggestions]="filteredCountries" (completeMethod)="filterCountry($event)" optionLabel="name">
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -2649,11 +2975,11 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
     template: `
         <div class="card flex justify-center">
             <p-avatar-group>
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" size="large" shape="circle" />
-                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" size="large" shape="circle" />
+                <p-avatar image="https://optimus.openng.org/demo/avatar/xuxuefeng.png" size="large" shape="circle" />
                 <p-avatar label="+2" shape="circle" size="large" />
             </p-avatar-group>
         </div>
@@ -2767,7 +3093,7 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
 @Component({
     template: `
         <div class="card flex justify-center">
-            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
+            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
         </div>
     `,
     standalone: true,
@@ -2833,14 +3159,14 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
             <div class="flex flex-wrap gap-8">
                 <div class="flex-auto">
                     <h5>Image</h5>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                 </div>
                 <div class="flex-auto">
                     <h5>Badge</h5>
                     <p-overlay-badge value="4" severity="danger" class="inline-flex">
-                        <p-avatar class="p-overlay-badge" image="https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg" size="xlarge" />
+                        <p-avatar class="p-overlay-badge" image="https://optimus.openng.org/demo/avatar/walter.jpg" size="xlarge" />
                     </p-overlay-badge>
                 </div>
                 <div class="flex-auto">
@@ -3462,7 +3788,7 @@ Breadcrumb provides contextual information about page hierarchy.
 
 ## Accessibility
 
-Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
+Screen Reader Breadcrumb uses the nav element and since any attribute is passed to the root implicitly aria-labelledby or aria-label can be used to describe the component. Inside an ordered list is used where the list item separators have aria-hidden to be able to ignored by the screen readers. If the last link represents the current route, aria-current is added with "page" as the value. The home item renders an icon, so when it has no label the link is named with the homeAriaLabel property. When homeAriaLabel is not defined either, the aria.home key of the locale configuration is used as the default. Keyboard Support No special keyboard interaction is needed, all menuitems are focusable based on the page tab sequence.
 
 ## Basic
 
@@ -3575,7 +3901,7 @@ Breadcrumb provides contextual information about page hierarchy.
 | style | { [klass: string]: any } | - | Inline style of the component. |
 | styleClass | string | - | Style class of the component. |
 | home | MenuItem | - | MenuItem configuration for the home icon. |
-| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. |
+| homeAriaLabel | string | - | Defines a string that labels the home icon for accessibility. Defaults to the  `aria.home`  translation when the home item has no visible label. |
 
 ### Emits
 
@@ -4509,7 +4835,7 @@ import { CardModule } from '@openng/optimus-ui/card';
         <div class="mb-4 p-8 flex items-center justify-center">
             <p-card [style]="{ width: '25rem', overflow: 'hidden' }">
                 <ng-template #header>
-                    <img alt="Card" class="w-full" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+                    <img alt="Card" class="w-full" src="https://optimus.openng.org/demo/card-ng.jpg" />
                 </ng-template>
                 <ng-template #title> Advanced Card </ng-template>
                 <ng-template #subtitle> Card subtitle </ng-template>
@@ -4660,7 +4986,7 @@ import { Product } from '@/domain/product';
                     <div class="border border-surface rounded-border m-2 p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
+                                <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
                                 <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                             </div>
                         </div>
@@ -4749,7 +5075,7 @@ import { Product } from '@/domain/product';
                     <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
+                                <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
                                 <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                             </div>
                         </div>
@@ -4838,7 +5164,7 @@ import { Product } from '@/domain/product';
                     <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
+                                <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
                                 <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                             </div>
                         </div>
@@ -4927,7 +5253,7 @@ import { Product } from '@/domain/product';
                     <div class="border border-surface-200 dark:border-surface-700 rounded m-2 p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded" />
+                                <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded" />
                                 <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                             </div>
                         </div>
@@ -6155,7 +6481,7 @@ import { CascadeSelectModule } from '@openng/optimus-ui/cascadeselect';
             <p-cascadeselect [(ngModel)]="selectedCity" [options]="countries" optionLabel="cname" optionGroupLabel="name" [optionGroupChildren]="['states', 'cities']" [style]="{ minWidth: '14rem' }" placeholder="Select a City">
                 <ng-template #option let-option>
                     <div class="flex items-center">
-                        <img *ngIf="option.states" src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px" />
+                        <img *ngIf="option.states" src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + option.code.toLowerCase()" style="width: 18px" />
                         <i class="pi pi-compass mr-2" *ngIf="option.cities"></i>
                         <i class="pi pi-map-marker mr-2" *ngIf="option.cname"></i>
                         <span>{{ option.cname || option.name }}</span>
@@ -8439,10 +8765,10 @@ import { ChipModule } from '@openng/optimus-ui/chip';
 @Component({
     template: `
         <div class="card flex items-center gap-2 flex-wrap">
-            <p-chip label="Amy Elsner" image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" alt="Avatar image" />
-            <p-chip label="Asiya Javayant" image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" alt="Avatar image" />
-            <p-chip label="Onyama Limba" image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" alt="Avatar image" />
-            <p-chip label="Xuxue Feng" image="https://primefaces.org/cdn/primeng/images/demo/avatar/xuxuefeng.png" alt="Avatar image" [removable]="true" />
+            <p-chip label="Amy Elsner" image="https://optimus.openng.org/demo/avatar/amyelsner.png" alt="Avatar image" />
+            <p-chip label="Asiya Javayant" image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" alt="Avatar image" />
+            <p-chip label="Onyama Limba" image="https://optimus.openng.org/demo/avatar/onyamalimba.png" alt="Avatar image" />
+            <p-chip label="Xuxue Feng" image="https://optimus.openng.org/demo/avatar/xuxuefeng.png" alt="Avatar image" [removable]="true" />
         </div>
     `,
     standalone: true,
@@ -9649,7 +9975,7 @@ import { ContextMenu } from '@openng/optimus-ui/contextmenu';
 @Component({
     template: `
         <div class="card flex justify-center">
-            <img #img src="https://primefaces.org/cdn/primeng/images/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-[30rem] rounded shadow-lg" />
+            <img #img src="https://optimus.openng.org/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-[30rem] rounded shadow-lg" />
             <p-contextmenu [target]="img" [model]="items" />
         </div>
     `,
@@ -9701,7 +10027,7 @@ interface Users {
                     (contextmenu)="onContextMenu($event, user)"
                 >
                     <div class="flex flex-1 items-center gap-2">
-                        <img class="w-8 h-8" [alt]="user.name" [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image" />
+                        <img class="w-8 h-8" [alt]="user.name" [src]="'https://optimus.openng.org/demo/avatar/' + user.image" />
                         <span class="font-bold">{{ user.name }}</span>
                     </div>
                     <p-tag [value]="user.role" [severity]="getBadge(user)" />
@@ -9945,7 +10271,7 @@ import { ContextMenu } from '@openng/optimus-ui/contextmenu';
                     (contextmenu)="onContextMenu($event)"
                 >
                     <div class="flex flex-wrap p-2 items-center gap-4">
-                        <img class="w-16 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
+                        <img class="w-16 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" />
                         <div class="flex-1 flex flex-col gap-1">
                             <span class="font-bold">{{ product.name }}</span>
                             <div class="flex items-center gap-2">
@@ -10161,7 +10487,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -10262,7 +10588,7 @@ import { Product } from '@/domain/product';
                     <div *ngFor="let item of items; let first = first">
                         <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                             <div class="md:w-40 relative">
-                                <img class="block xl:block mx-auto rounded w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                <img class="block xl:block mx-auto rounded w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                 <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                             </div>
                             <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -10295,7 +10621,7 @@ import { Product } from '@/domain/product';
                             <div class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
                                 <div class="bg-surface-50 flex justify-center rounded p-4">
                                     <div class="relative mx-auto">
-                                        <img class="rounded w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="max-width: 300px" />
+                                        <img class="rounded w-full" [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" style="max-width: 300px" />
                                         <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                     </div>
                                 </div>
@@ -10461,7 +10787,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -10542,7 +10868,7 @@ import { Product } from '@/domain/product';
                         <div class="col-span-12" *ngFor="let item of items; let first = first">
                             <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4" [ngClass]="{ 'border-t border-surface-200 dark:border-surface-700': !first }">
                                 <div class="md:w-40 relative">
-                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + item.image" [alt]="item.name" />
+                                    <img class="block xl:block mx-auto rounded-border w-full" [src]="'https://optimus.openng.org/demo/product/' + item.image" [alt]="item.name" />
                                     <p-tag [value]="item.inventoryStatus" [severity]="getSeverity(item)" class="dark:!bg-surface-900 absolute" [style.left.px]="4" [style.top.px]="4" />
                                 </div>
                                 <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
@@ -12504,7 +12830,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
             <p-dialog [(visible)]="visible" [modal]="true" [style]="{ width: '25rem' }">
                 <ng-template #header>
                     <div class="inline-flex items-center justify-center gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                     </div>
                 </ng-template>
@@ -13086,7 +13412,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg',
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg',
                 command: () => {
                     this.displayFinder = true;
                 }
@@ -13100,7 +13426,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/terminal.svg',
+                icon: 'https://optimus.openng.org/demo/dock/terminal.svg',
                 command: () => {
                     this.displayTerminal = true;
                 }
@@ -13114,7 +13440,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg',
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg',
                 url: 'https://www.apple.com/app-store/'
             },
             {
@@ -13126,7 +13452,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/safari.svg'
+                icon: 'https://optimus.openng.org/demo/dock/safari.svg'
             },
             {
                 label: 'Photos',
@@ -13137,7 +13463,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg',
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg',
                 command: () => {
                     this.displayGalleria = true;
                 }
@@ -13151,7 +13477,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
+                icon: 'https://optimus.openng.org/demo/dock/github.svg',
                 url: 'https://github.com/openng-org/optimus-ui'
             },
             {
@@ -13163,7 +13489,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png',
+                icon: 'https://optimus.openng.org/demo/dock/trash.png',
                 command: () => {
                     this.messageService.add({ severity: 'info', summary: 'Trash is empty', key: 'tc' });
                 }
@@ -13389,19 +13715,19 @@ export class DockBasicDemo implements OnInit {
         this.items = [
             {
                 label: 'Finder',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg'
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg'
             },
             {
                 label: 'App Store',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg'
             },
             {
                 label: 'Photos',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg'
             },
             {
                 label: 'Trash',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png'
+                icon: 'https://optimus.openng.org/demo/dock/trash.png'
             }
         ];
     }
@@ -13586,7 +13912,7 @@ import { Product } from '@/domain/product';
                 <div *ngFor="let product of availableProducts">
                     <div class="product-item" pDraggable="products" (onDragStart)="dragStart(product)" (onDragEnd)="dragEnd()">
                         <div class="image-container">
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="product-image" />
+                            <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="product-image" />
                         </div>
                         <div class="product-list-detail">
                             <h5 class="mb-2">{{ product.name }}</h5>
@@ -14099,7 +14425,7 @@ import { RippleModule } from '@openng/optimus-ui/ripple';
                         <div class="mt-auto">
                             <hr class="mb-4 mx-4 border-t border-0 border-surface" />
                             <a pRipple class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                                <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                                 <span class="font-bold">Amy Elsner</span>
                             </a>
                         </div>
@@ -14227,7 +14553,7 @@ import { ButtonModule } from '@openng/optimus-ui/button';
             <p-drawer [(visible)]="visible" [closable]="false">
                 <ng-template #header>
                     <div class="flex items-center gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold">Amy Elsner</span>
                     </div>
                 </ng-template>
@@ -14815,7 +15141,7 @@ import { FieldsetModule } from '@openng/optimus-ui/fieldset';
             <p-fieldset>
                 <ng-template #header>
                     <div class="flex items-center gap-2 px-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold">Amy Elsner</span>
                     </div>
                 </ng-template>
@@ -14984,7 +15310,7 @@ interface UploadEvent {
     template: `
         <div class="card">
             <p-toast />
-            <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced">
+            <p-fileupload name="demo[]" url="https://optimus.openng.org/api/upload" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced">
                 <ng-template #empty>
                     <div>Drag and drop files to here to upload.</div>
                 </ng-template>
@@ -15022,7 +15348,7 @@ interface UploadEvent {
     template: `
         <div class="card flex justify-center">
             <p-toast />
-            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
+            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://optimus.openng.org/api/upload" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
         </div>
     `,
     standalone: true,
@@ -15056,7 +15382,7 @@ interface UploadEvent {
     template: `
         <p-toast />
         <div class="card flex flex-wrap gap-6 items-center justify-between">
-            <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
+            <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://optimus.openng.org/api/upload" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
             <p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />
         </div>
     `,
@@ -15122,7 +15448,7 @@ import { MessageService } from '@openng/optimus-ui/api';
         >
         <div class="card">
             <p-toast />
-            <p-fileupload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload()" (onSelect)="onSelectedFiles($event)">
+            <p-fileupload name="myfile[]" url="https://optimus.openng.org/api/upload" [multiple]="true" accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload()" (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
                     <div class="flex flex-wrap justify-between items-center flex-1 gap-4">
                         <div class="flex gap-2">
@@ -16752,10 +17078,10 @@ import { ImageCompareModule } from '@openng/optimus-ui/imagecompare';
         <div class="card flex justify-center">
             <p-imagecompare class="shadow-lg rounded-2xl">
                 <ng-template #left>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island1.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island1.jpg" />
                 </ng-template>
                 <ng-template #right>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island2.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island2.jpg" />
                 </ng-template>
             </p-imagecompare>
         </div>
@@ -16781,10 +17107,10 @@ import { ImageCompareModule } from '@openng/optimus-ui/imagecompare';
         <div class="card flex justify-center">
             <p-imagecompare class="sm:!w-96 shadow-lg rounded-2xl">
                 <ng-template #left>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island1.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island1.jpg" />
                 </ng-template>
                 <ng-template #right>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island2.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island2.jpg" />
                 </ng-template>
             </p-imagecompare>
         </div>
@@ -16917,7 +17243,7 @@ import { Photo } from '@/domain/photo';
                     </span>
                 </ng-template>
                 <ng-template #content>
-                    <img class="w-full sm:w-80 shadow-md" src="https://primefaces.org/cdn/primeng/images/demo/galleria/galleria5.jpg" alt="Nature" />
+                    <img class="w-full sm:w-80 shadow-md" src="https://optimus.openng.org/demo/galleria/galleria5.jpg" alt="Nature" />
                 </ng-template>
             </p-inplace>
         </div>
@@ -20445,7 +20771,7 @@ interface Country {
             <p-listbox [options]="groupedCities" [group]="true" [(ngModel)]="selectedCountry" class="w-full md:w-56">
                 <ng-template let-group #group>
                     <div class="flex items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
                         <span>{{ group.label }}</span>
                     </div>
                 </ng-template>
@@ -20674,7 +21000,7 @@ interface Country {
             <p-listbox [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" class="w-full md:w-56">
                 <ng-template #item let-country>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -20999,7 +21325,7 @@ ListBox is used to select one or more values from a list of items.
 
 ---
 
-# LLMs.txt - Optimus UI
+# LLMs.txt
 
 LLM-optimized documentation endpoints for Optimus UI components.
 
@@ -21291,7 +21617,7 @@ import { MegaMenuItem } from '@openng/optimus-ui/api';
                     </div>
                 </ng-template>
                 <ng-template #end>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                 </ng-template>
             </p-megamenu>
         </div>
@@ -21934,7 +22260,7 @@ import { MenuItem } from '@openng/optimus-ui/api';
                 </ng-template>
                 <ng-template #end>
                     <button pRipple class="relative overflow-hidden w-full border-0 bg-transparent flex items-start p-2 pl-4 hover:bg-surface-100 dark:hover:bg-surface-800 rounded-none cursor-pointer transition-colors duration-200">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" class="mr-2" shape="circle" />
                         <span class="inline-flex flex-col items-start">
                             <span class="font-bold">Amy Elsner</span>
                             <span class="text-sm">Admin</span>
@@ -22413,7 +22739,7 @@ import { MenuItem } from '@openng/optimus-ui/api';
                 <ng-template #end>
                     <div class="flex items-center gap-2">
                         <input type="text" pInputText placeholder="Search" class="w-36" />
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                     </div>
                 </ng-template>
             </p-menubar>
@@ -22747,7 +23073,7 @@ import { MessageModule } from '@openng/optimus-ui/message';
             <p-message severity="info" icon="pi pi-send" text="Info Message" styleClass="h-full" />
             <p-message severity="success">
                 <ng-template #icon>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                 </ng-template>
                 <span class="ms-2">How may I help you?</span>
             </p-message>
@@ -23725,7 +24051,7 @@ interface City {
             <p-multiselect [options]="groupedCities" [group]="true" [(ngModel)]="selectedCities" placeholder="Select Cities" scrollHeight="250px" display="chip" class="w-full md:w-80">
                 <ng-template let-group #group>
                     <div class="flex items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
                         <span>{{ group.label }}</span>
                     </div>
                 </ng-template>
@@ -24034,7 +24360,7 @@ interface Country {
             <p-multiselect [options]="countries" [(ngModel)]="selectedCountries" placeholder="Select Countries" optionLabel="name" class="w-full md:w-80" display="chip">
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -24512,7 +24838,7 @@ import { Product } from '@/domain/product';
             <p-orderlist [value]="products()" dataKey="id" [dragdrop]="true" [responsive]="true" breakpoint="575px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -24576,7 +24902,7 @@ import { Product } from '@/domain/product';
             <p-orderlist [value]="products()" filterBy="name" filterPlaceholder="Filter by name" [responsive]="true" breakpoint="575px" scrollHeight="20rem" class="sm:min-w-96">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -24640,7 +24966,7 @@ import { Product } from '@/domain/product';
             <p-orderlist [value]="products()" dataKey="id" [responsive]="true" breakpoint="575px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -24912,7 +25238,7 @@ import { TreeNode } from '@openng/optimus-ui/api';
             <p-organization-chart [value]="data" [collapsible]="true">
                 <ng-template let-node pTemplate="default">
                     <div class="flex flex-col items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
                         <div class="mt-4 font-medium text-lg">{{ node.label }}</div>
                     </div>
                 </ng-template>
@@ -25027,7 +25353,7 @@ OrganizationChart visualizes hierarchical organization data.
 
 ---
 
-# Overlay API - Optimus UI
+# Overlay API
 
 This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.
 
@@ -25271,7 +25597,7 @@ Paginator displays data in paged format and provides navigation between pages.
 
 ## Accessibility
 
-Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a dropdown component, refer to the dropdown documentation for accessibility details. Additionally, the dropdown uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the dropdown documentation for more details about keyboard support.
+Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a Select component, refer to the Select documentation for accessibility details. Additionally, the Select uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the Select documentation for more details about keyboard support.
 
 ## Basic
 
@@ -25356,7 +25682,7 @@ import { PaginatorModule } from '@openng/optimus-ui/paginator';
     template: `
         <div class="card flex flex-col gap-4 justify-center items-center">
             <p-paginator [first]="first" [rows]="1" [totalRecords]="12" (onPageChange)="onPageChange($event)" [showJumpToPageDropdown]="true" [showPageLinks]="false"></p-paginator>
-            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/nature/nature' + (first + 1) + '.jpg'" class="max-w-full rounded-xl" />
+            <img [src]="'https://optimus.openng.org/demo/nature/nature' + (first + 1) + '.jpg'" class="max-w-full rounded-xl" />
         </div>
     `,
     standalone: true,
@@ -25645,7 +25971,7 @@ import { PanelModule } from '@openng/optimus-ui/panel';
             <p-panel [toggleable]="true">
                 <ng-template #header>
                     <div class="flex items-center gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold">Amy Elsner</span>
                     </div>
                 </ng-template>
@@ -27241,7 +27567,7 @@ import { Product } from '@/domain/product';
             >
                 <ng-template let-option let-selected="selected" #option>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -27294,7 +27620,7 @@ import { Product } from '@/domain/product';
             <p-picklist [source]="sourceProducts()" [target]="targetProducts()" [dragdrop]="true" [responsive]="true" sourceFilterPlaceholder="Search by name" targetFilterPlaceholder="Search by name" breakpoint="1400px" scrollHeight="20rem">
                 <ng-template let-option let-selected="selected" #item>
                     <div class="flex flex-wrap p-1 items-center gap-4 w-full">
-                        <img class="w-12 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ option.image }}" [alt]="option.name" />
+                        <img class="w-12 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ option.image }}" [alt]="option.name" />
                         <div class="flex-1 flex flex-col">
                             <span class="font-medium text-sm">{{ option.name }}</span>
                             <span
@@ -27626,7 +27952,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                     <div>
                         <span class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Share this document</span>
                         <p-inputgroup>
-                            <input pInputText value="https://primeng.org/12323ff26t2g243g423g234gg52hy25XADXAG3" readonly class="w-[25rem]" />
+                            <input pInputText value="https://optimus.openng.org/s/12323ff26t2g243g423g234gg52hy25XADXAG3" readonly class="w-[25rem]" />
                             <p-inputgroup-addon>
                                 <i class="pi pi-copy"></i>
                             </p-inputgroup-addon>
@@ -27646,7 +27972,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                         <ul class="list-none p-0 m-0 flex flex-col gap-4">
                             @for (member of members; track member) {
                                 <li class="flex items-center gap-2">
-                                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" />
+                                    <img [src]="'https://optimus.openng.org/demo/avatar/' + member.image" style="width: 32px" />
                                     <div>
                                         <span class="font-medium">{{ member.name }}</span>
                                         <div class="text-sm text-muted-color">{{ member.email }}</div>
@@ -27708,7 +28034,7 @@ import { Product } from '@/domain/product';
                         <td>{{ product.name }}</td>
                         <td>$ {{ product.price }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="w-16 shadow-sm" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.image" class="w-16 shadow-sm" />
                         </td>
                         <td>
                             <p-button (onClick)="displayProduct($event, product)" icon="pi pi-search" severity="secondary" rounded />
@@ -27721,7 +28047,7 @@ import { Product } from '@/domain/product';
                     <div *ngIf="selectedProduct()" class="rounded flex flex-col">
                         <div class="flex justify-center rounded">
                             <div class="relative mx-auto">
-                                <img class="rounded w-44 sm:w-64" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + selectedProduct().image" [alt]="selectedProduct().name" />
+                                <img class="rounded w-44 sm:w-64" [src]="'https://optimus.openng.org/demo/product/' + selectedProduct().image" [alt]="selectedProduct().name" />
                                 <p-tag [value]="selectedProduct().inventoryStatus" [severity]="getSeverity(selectedProduct())" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                             </div>
                         </div>
@@ -27828,7 +28154,7 @@ import { Popover, PopoverModule } from '@openng/optimus-ui/popover';
                         <span class="font-medium block mb-2">Team Members</span>
                         <ul class="list-none p-0 m-0 flex flex-col">
                             <li *ngFor="let member of members" class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border" (click)="selectMember(member)">
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" />
+                                <img [src]="'https://optimus.openng.org/demo/avatar/' + member.image" style="width: 32px" />
                                 <div>
                                     <span class="font-medium">{{ member.name }}</span>
                                     <div class="text-sm text-surface-500 dark:text-surface-400">{{ member.email }}</div>
@@ -27877,7 +28203,7 @@ import { PopoverModule } from '@openng/optimus-ui/popover';
                 <span>Target Element</span>
             </div>
             <p-popover #op>
-                <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" />
+                <img src="https://optimus.openng.org/demo/product/bamboo-watch.jpg" alt="product" />
             </p-popover>
         </div>
     `,
@@ -28901,10 +29227,10 @@ import { RatingModule } from '@openng/optimus-ui/rating';
         <div class="card flex justify-center">
             <p-rating [(ngModel)]="value">
                 <ng-template #onicon>
-                    <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon-active.png" height="24" width="24" />
+                    <img src="https://optimus.openng.org/demo/rating/custom-icon-active.png" height="24" width="24" />
                 </ng-template>
                 <ng-template #officon>
-                    <img src="https://primefaces.org/cdn/primeng/images/demo/rating/custom-icon.png" height="24" width="24" />
+                    <img src="https://optimus.openng.org/demo/rating/custom-icon.png" height="24" width="24" />
                 </ng-template>
             </p-rating>
         </div>
@@ -29722,13 +30048,13 @@ interface City {
                 </ng-template>
                 <ng-template pTemplate="selectedItem" let-selectedOption>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
                         <div>{{ selectedOption.name }}</div>
                     </div>
                 </ng-template>
                 <ng-template let-country pTemplate="item">
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -29910,13 +30236,13 @@ import { Country } from '@/domain/customer';
             <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country" class="w-full md:w-56">
                 <ng-template #selectedItem let-selectedOption>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedCountry.code.toLowerCase()" style="width: 18px" />
                         <div>{{ selectedOption.name }}</div>
                     </div>
                 </ng-template>
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -30061,7 +30387,7 @@ import { SelectItemGroup } from '@openng/optimus-ui/api';
             <p-select [options]="groupedCities" [(ngModel)]="selectedCity" placeholder="Select a City" [group]="true" class="w-full md:w-56">
                 <ng-template let-group #group>
                     <div class="flex items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + group.value" style="width: 20px" />
                         <span>{{ group.label }}</span>
                     </div>
                 </ng-template>
@@ -30421,13 +30747,13 @@ import { SelectModule } from '@openng/optimus-ui/select';
             <p-select [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" placeholder="Select a country" class="w-full md:w-56">
                 <ng-template #selectedItem let-selectedOption>
                     <div class="flex items-center gap-2" *ngIf="selectedOption">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + selectedOption.code.toLowerCase()" style="width: 18px" />
                         <div>{{ selectedOption.name }}</div>
                     </div>
                 </ng-template>
                 <ng-template let-country #item>
                     <div class="flex items-center gap-2">
-                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px" />
                         <div>{{ country.name }}</div>
                     </div>
                 </ng-template>
@@ -31485,7 +31811,7 @@ import { SliderModule } from '@openng/optimus-ui/slider';
     template: `
         <div class="card flex justify-center">
             <div class="flex flex-col items-center">
-                <img alt="user header" class="w-full md:w-80 rounded mb-6" src="https://primefaces.org/cdn/primevue/images/card-vue.jpg" [style]="filterStyle" />
+                <img alt="user header" class="w-full md:w-80 rounded mb-6" src="https://optimus.openng.org/demo/card-vue.jpg" [style]="filterStyle" />
                 <p-selectbutton [(ngModel)]="filter" [options]="filterOptions" optionLabel="label" optionValue="value" class="mb-4" />
                 <p-slider [(ngModel)]="filterValues[filter]" class="w-56" [min]="0" [max]="200" />
             </div>
@@ -33170,8 +33496,8 @@ import { MenuItem, MessageService } from '@openng/optimus-ui/api';
             <p-splitbutton label="Save" (onClick)="save()" severity="contrast" [model]="items">
                 <ng-template #content>
                     <span class="flex items-center font-bold">
-                        <img alt="logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" style="height: 1rem; margin-right: 0.5rem" />
-                        <span>PrimeNG</span>
+                        <img alt="logo" src="logo-icon.svg" style="height: 1rem; margin-right: 0.5rem" />
+                        <span>Optimus UI</span>
                     </span>
                 </ng-template>
             </p-splitbutton>
@@ -33830,7 +34156,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                             <div class="flex flex-col items-center gap-2 mx-auto" style="min-height: 16rem; max-width: 24rem">
                                 <div class="text-center mt-4 mb-4 text-xl font-semibold">Account created successfully</div>
                                 <div class="text-center">
-                                    <img alt="logo" src="https://primefaces.org/cdn/primeng/images/stepper/content.svg" />
+                                    <img alt="logo" src="https://optimus.openng.org/demo/stepper/content.svg" />
                                 </div>
                             </div>
                             <div class="flex pt-6 justify-start">
@@ -34986,7 +35312,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                         <p-multiselect [filter]="false" [(ngModel)]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" class="w-full">
                                             <ng-template let-option #item>
                                                 <div class="flex items-center gap-2">
-                                                    <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                    <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                     <span>{{ option.name }}</span>
                                                 </div>
                                             </ng-template>
@@ -35052,13 +35378,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -35252,7 +35578,7 @@ import { Customer, Country } from '@/domain/customer';
                     <tr>
                         <td colspan="5">
                             <button type="button" pButton pRipple [pRowToggler]="customer" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                            <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle; display: inline-block" />
+                            <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle; display: inline-block" />
                             <span class="font-bold ml-2">{{ customer.representative.name }}</span>
                         </td>
                     </tr>
@@ -35270,7 +35596,7 @@ import { Customer, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -35470,7 +35796,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                         <p-multiselect [(ngModel)]="value" [options]="representatives()" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
                                             <ng-template let-option #item>
                                                 <div class="flex items-center gap-2">
-                                                    <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                    <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                     <span>{{ option.name }}</span>
                                                 </div>
                                             </ng-template>
@@ -35534,13 +35860,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -35707,7 +36033,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                     <p-multiselect [(ngModel)]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
                                         <ng-template let-option #item>
                                             <div class="flex items-center gap-2">
-                                                <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                 <span>{{ option.name }}</span>
                                             </div>
                                         </ng-template>
@@ -35738,13 +36064,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -36777,7 +37103,7 @@ interface ExportColumn {
                         <td style="min-width: 12rem">{{ product.code }}</td>
                         <td style="min-width: 16rem">{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>
@@ -36797,7 +37123,7 @@ interface ExportColumn {
             <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
                 <ng-template #content>
                     <div class="flex flex-col gap-6">
-                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
+                        <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
                         <div>
                             <label for="name" class="block font-bold mb-3">Name</label>
                             <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
@@ -37437,7 +37763,7 @@ import { Customer } from '@/domain/customer';
                         </td>
                         <td>{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>
@@ -37610,7 +37936,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         <td>{{ rowIndex }}</td>
                         <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -37619,7 +37945,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -38015,13 +38341,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -38036,11 +38362,11 @@ import { Customer, Representative, Country } from '@/domain/customer';
                             {{ customer.name }}
                         </td>
                         <td>
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                            <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                             <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                         </td>
                         <td>
-                            <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                            <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                             <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                         </td>
                         <td>
@@ -38254,7 +38580,7 @@ import { Customer, Country } from '@/domain/customer';
                     <tr pRowGroupHeader>
                         <td colspan="5">
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="font-bold">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -38274,7 +38600,7 @@ import { Customer, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -38386,7 +38712,7 @@ interface Column {
                     <tr>
                         <td>{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>
@@ -39068,15 +39394,15 @@ import { TabsModule } from '@openng/optimus-ui/tabs';
                         <i class="pi pi-minus"></i>
                     </ng-template>
                     <p-tab value="0" class="flex items-center !gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                         <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                     </p-tab>
                     <p-tab value="1" class="flex items-center !gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                         <span class="font-bold whitespace-nowrap">Onyama Limba</span>
                     </p-tab>
                     <p-tab value="2" class="flex items-center !gap-2">
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" shape="circle" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" shape="circle" />
                         <span class="font-bold whitespace-nowrap">Ioni Bowcher</span>
                         <p-badge value="2" />
                     </p-tab>
@@ -39548,7 +39874,7 @@ import { Country } from '@/domain/customer';
         <div class="card flex justify-center">
             <p-tag [style]="{ border: '2px solid var(--border-color)', background: 'transparent', color: 'var(--text-color)' }">
                 <div class="flex items-center gap-2 px-1">
-                    <img alt="Country" src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" class="flag flag-it" style="width: 18px" />
+                    <img alt="Country" src="https://optimus.openng.org/demo/flag/flag_placeholder.png" class="flag flag-it" style="width: 18px" />
                     <span class="text-base">Italy</span>
                 </div>
             </p-tag>
@@ -41010,7 +41336,7 @@ interface EventItem {
                 </ng-template>
                 <ng-template #content let-event>
                     <p-card [header]="event.status" [subheader]="event.date">
-                        <img *ngIf="event.image" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + event.image" [alt]="event.name" width="200" class="shadow" />
+                        <img *ngIf="event.image" [src]="'https://optimus.openng.org/demo/product/' + event.image" [alt]="event.name" width="200" class="shadow" />
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore sed consequuntur error repudiandae numquam deserunt quisquam repellat libero asperiores earum nam nobis, culpa ratione quam perferendis esse, cupiditate
                             neque quas!
@@ -41552,7 +41878,7 @@ import { MessageService } from '@openng/optimus-ui/api';
                 <ng-template let-message #message>
                     <div class="flex flex-col items-start flex-auto">
                         <div class="flex items-center gap-2">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                             <span class="font-bold">Amy Elsner</span>
                         </div>
                         <div class="font-medium text-lg my-4">{{ message.summary }}</div>
@@ -42573,7 +42899,7 @@ import { ToolbarModule } from '@openng/optimus-ui/toolbar';
                 <ng-template #end>
                     <div class="flex items-center gap-2">
                         <p-button label="Share" severity="contrast" size="small" />
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" [style]="{ width: '32px', height: '32px' }" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" [style]="{ width: '32px', height: '32px' }" />
                     </div>
                 </ng-template>
             </p-toolbar>

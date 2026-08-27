@@ -26,7 +26,7 @@
         position: relative;
         z-index: 1;
 
-        button {
+        button, a {
             background-color: transparent;
             border: 0 none;
             display: block;
@@ -45,6 +45,7 @@
             border-start-start-radius: 6px;
             white-space: nowrap;
             --p-focus-ring-offset: -1px;
+            text-decoration: none;
             @include focus-visible();
 
             &:hover {
@@ -58,7 +59,7 @@
         }
 
         &.doc-tabmenu-active {
-            button {
+            button, a {
                 border-bottom-color: var(--primary-text-color);
                 color: var(--primary-text-color);
             }

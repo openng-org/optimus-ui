@@ -15,7 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular ContextMenu Component"
+            docTitle="Angular ContextMenu Component - Optimus UI"
             header="ContextMenu"
             description="ContextMenu displays an overlay menu on right click of its target."
             [docs]="docs"

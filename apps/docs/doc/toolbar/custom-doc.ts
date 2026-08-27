@@ -55,7 +55,7 @@ import { AvatarModule } from '@openng/optimus-ui/avatar';
                 <ng-template #end>
                     <div class="flex items-center gap-2">
                         <p-button label="Share" severity="contrast" size="small" />
-                        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" [style]="{ width: '32px', height: '32px' }" />
+                        <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" [style]="{ width: '32px', height: '32px' }" />
                     </div>
                 </ng-template>
             </p-toolbar>

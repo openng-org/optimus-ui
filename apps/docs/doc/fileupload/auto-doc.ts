@@ -20,7 +20,7 @@ interface UploadEvent {
         </app-docsectiontext>
         <div class="card flex justify-center">
             <p-toast />
-            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
+            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://optimus.openng.org/api/upload" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
         </div>
         <app-code></app-code>
     `,

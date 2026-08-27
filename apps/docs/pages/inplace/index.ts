@@ -12,7 +12,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: ` <app-doc
-        docTitle="Angular Inplace Component"
+        docTitle="Angular Inplace Component - Optimus UI"
         header="Inplace"
         description="Inplace provides an easy to do editing and display at the same time where clicking the output displays the actual content."
         [docs]="docs"

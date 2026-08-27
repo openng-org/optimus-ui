@@ -26,7 +26,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                     <div>
                         <span class="font-medium text-surface-900 dark:text-surface-0 block mb-2">Share this document</span>
                         <p-inputgroup>
-                            <input pInputText value="https://primeng.org/12323ff26t2g243g423g234gg52hy25XADXAG3" readonly class="w-[25rem]" />
+                            <input pInputText value="https://optimus.openng.org/s/12323ff26t2g243g423g234gg52hy25XADXAG3" readonly class="w-[25rem]" />
                             <p-inputgroup-addon>
                                 <i class="pi pi-copy"></i>
                             </p-inputgroup-addon>
@@ -46,7 +46,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
                         <ul class="list-none p-0 m-0 flex flex-col gap-4">
                             @for (member of members; track member) {
                                 <li class="flex items-center gap-2">
-                                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" />
+                                    <img [src]="'https://optimus.openng.org/demo/avatar/' + member.image" style="width: 32px" />
                                     <div>
                                         <span class="font-medium">{{ member.name }}</span>
                                         <div class="text-sm text-muted-color">{{ member.email }}</div>
@@ -106,7 +106,7 @@ import { Product } from '@/domain/product';
                         <td>{{ product.name }}</td>
                         <td>$ {{ product.price }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="w-16 shadow-sm" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.image" class="w-16 shadow-sm" />
                         </td>
                         <td>
                             <p-button (onClick)="displayProduct($event, product)" icon="pi pi-search" severity="secondary" rounded />
@@ -119,7 +119,7 @@ import { Product } from '@/domain/product';
                     <div *ngIf="selectedProduct()" class="rounded flex flex-col">
                         <div class="flex justify-center rounded">
                             <div class="relative mx-auto">
-                                <img class="rounded w-44 sm:w-64" [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + selectedProduct().image" [alt]="selectedProduct().name" />
+                                <img class="rounded w-44 sm:w-64" [src]="'https://optimus.openng.org/demo/product/' + selectedProduct().image" [alt]="selectedProduct().name" />
                                 <p-tag [value]="selectedProduct().inventoryStatus" [severity]="getSeverity(selectedProduct())" class="absolute dark:!bg-surface-900" [style.left.px]="4" [style.top.px]="4" />
                             </div>
                         </div>
@@ -224,7 +224,7 @@ import { Popover, PopoverModule } from '@openng/optimus-ui/popover';
                         <span class="font-medium block mb-2">Team Members</span>
                         <ul class="list-none p-0 m-0 flex flex-col">
                             <li *ngFor="let member of members" class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border" (click)="selectMember(member)">
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" />
+                                <img [src]="'https://optimus.openng.org/demo/avatar/' + member.image" style="width: 32px" />
                                 <div>
                                     <span class="font-medium">{{ member.name }}</span>
                                     <div class="text-sm text-surface-500 dark:text-surface-400">{{ member.email }}</div>
@@ -271,7 +271,7 @@ import { PopoverModule } from '@openng/optimus-ui/popover';
                 <span>Target Element</span>
             </div>
             <p-popover #op>
-                <img src="https://primefaces.org/cdn/primeng/images/demo/product/bamboo-watch.jpg" alt="product" />
+                <img src="https://optimus.openng.org/demo/product/bamboo-watch.jpg" alt="product" />
             </p-popover>
         </div>
     `,

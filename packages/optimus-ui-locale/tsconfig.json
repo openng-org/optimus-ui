@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "checkJs": true,
+        "noEmit": true,
+        "module": "Node16",
+        "moduleResolution": "node16",
+        "lib": ["ES2017"],
+        "strict": true,
+        "types": []
+    },
+    "include": ["dist/js/*.js", "dist/js/locale.d.ts"]
+}

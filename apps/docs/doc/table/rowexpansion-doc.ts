@@ -52,7 +52,7 @@ import { ToastModule } from '@openng/optimus-ui/toast';
                             </td>
                             <td>{{ product.name }}</td>
                             <td>
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
+                                <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
                             </td>
                             <td>{{ product.price | currency: 'USD' }}</td>
                             <td>{{ product.category }}</td>

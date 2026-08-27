@@ -173,7 +173,7 @@ export class CustomersApp {
         this.tableData = [
             {
                 id: 1,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 active: true,
                 name: 'Brook Simmons',
                 title: 'Sales Executive ',
@@ -184,7 +184,7 @@ export class CustomersApp {
             },
             {
                 id: 2,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg',
+                image: '/demo/landing/apps/avatar9.jpg',
                 active: true,
                 name: 'Dianne Russell',
                 title: 'CEO',
@@ -195,7 +195,7 @@ export class CustomersApp {
             },
             {
                 id: 3,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 active: undefined,
                 name: 'Amy Elsner',
                 title: 'Product Manager',
@@ -206,7 +206,7 @@ export class CustomersApp {
             },
             {
                 id: 4,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 active: true,
                 name: 'Jacob Jones',
                 title: 'Manager',
@@ -241,7 +241,7 @@ export class CustomersApp {
             },
             {
                 id: 7,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png',
+                image: '/demo/landing/apps/avatar7.png',
                 active: true,
                 name: 'Guy Hawkins',
                 title: 'Director',
@@ -252,7 +252,7 @@ export class CustomersApp {
             },
             {
                 id: 8,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
+                image: '/demo/landing/apps/avatar8.png',
                 active: true,
                 name: 'Annette Black',
                 title: 'Manager',
@@ -263,7 +263,7 @@ export class CustomersApp {
             },
             {
                 id: 9,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar10.jpg',
+                image: '/demo/landing/apps/avatar10.jpg',
                 active: undefined,
                 name: 'Darrell Steward',
                 title: 'Product Manager',
@@ -286,7 +286,7 @@ export class CustomersApp {
             },
             {
                 id: 11,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
+                image: '/demo/landing/apps/avatar12.jpg',
                 active: undefined,
                 name: 'Onyama Limba',
                 title: 'Sales Executive ',

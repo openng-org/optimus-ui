@@ -24,19 +24,19 @@ export class PTViewer {
     items = [
         {
             label: 'Finder',
-            icon: 'https://primefaces.org/cdn/primevue/images/dock/finder.svg'
+            icon: 'https://optimus.openng.org/demo/dock/finder.svg'
         },
         {
             label: 'App Store',
-            icon: 'https://primefaces.org/cdn/primevue/images/dock/appstore.svg'
+            icon: 'https://optimus.openng.org/demo/dock/appstore.svg'
         },
         {
             label: 'Photos',
-            icon: 'https://primefaces.org/cdn/primevue/images/dock/photos.svg'
+            icon: 'https://optimus.openng.org/demo/dock/photos.svg'
         },
         {
             label: 'Trash',
-            icon: 'https://primefaces.org/cdn/primevue/images/dock/trash.png'
+            icon: 'https://optimus.openng.org/demo/dock/trash.png'
         }
     ];
 

@@ -23,7 +23,15 @@ import { ThumbnailDoc } from '@/doc/galleria/thumbnail-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: ` <app-doc docTitle="Angular Gallery Component" header="Galleria" description="Galleria is an advanced content gallery component." [docs]="docs" [apiDocs]="['Galleria']" [ptDocs]="ptComponent" componentName="Galleria"></app-doc>`,
+    template: ` <app-doc
+        docTitle="Angular Gallery Component - Optimus UI"
+        header="Galleria"
+        description="Galleria is an advanced content gallery component."
+        [docs]="docs"
+        [apiDocs]="['Galleria']"
+        [ptDocs]="ptComponent"
+        componentName="Galleria"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
     styleUrl: './galleriademo.scss'

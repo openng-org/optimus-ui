@@ -1,6 +1,6 @@
 # Optimus UI
 
-> The Most Complete Angular UI Component Library
+> A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.
 
 ## Guides
 
@@ -8,7 +8,7 @@
 - [Configuration](https://optimus.openng.org/configuration): Application wide configuration for Optimus UI.
 - [Styled Mode](https://optimus.openng.org/theming/styled): Choose from a variety of pre-styled themes or develop your own.
 - [Unstyled Mode](https://optimus.openng.org/theming/unstyled): Theming Optimus UI with alternative styling approaches.
-- [Icons](https://optimus.openng.org/icons): PrimeIcons is the default icon library of Optimus UI with over 250 open source icons.
+- [Icons](https://optimus.openng.org/icons): OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons.
 - [Custom Icons](https://optimus.openng.org/customicons): Use custom icons with Optimus UI components.
 - [Pass Through](https://optimus.openng.org/passthrough): Pass Through Props allow direct access to the underlying elements for complete customization.
 - [Tailwind CSS](https://optimus.openng.org/tailwind): Integration between Optimus UI and Tailwind CSS.
@@ -16,6 +16,10 @@
 - [Accessibility](https://optimus.openng.org/guides/accessibility): Optimus UI has WCAG 2.1 AA level compliance.
 - [Animations](https://optimus.openng.org/guides/animations): Built-in CSS animations for Optimus UI components.
 - [RTL](https://optimus.openng.org/guides/rtl): Right-to-left support for Optimus UI components.
+- [PrimeFlex](https://optimus.openng.org/guides/primeflex): Moving from PrimeFlex to Tailwind CSS.
+- [Philosophy](https://optimus.openng.org/philosophy): Why Optimus UI exists, what it commits to, and where it stops.
+- [FAQ](https://optimus.openng.org/faq): Licensing, migration from PrimeNG, the ecosystem, and how support works.
+- [Contribution Guide](https://optimus.openng.org/contribution): How to contribute to Optimus UI.
 
 ## Components
 
@@ -55,6 +59,7 @@
 - [Angular Gallery Component](https://optimus.openng.org/galleria): Galleria is an advanced content gallery component.
 - [Angular IconField Component](https://optimus.openng.org/iconfield): IconField wraps an input and an icon.
 - [Angular Ifta Label Component](https://optimus.openng.org/iftalabel): IftaLabel is used to create infield top aligned labels.
+- [Angular Image Component](https://optimus.openng.org/image): Displays an image with preview and tranformation options.
 - [Angular ImageCompare Component](https://optimus.openng.org/imagecompare): Compare two images side by side with a slider.
 - [Angular Inplace Component](https://optimus.openng.org/inplace): Inplace provides an easy to do editing and display at the same time where clicking the output displays the actual content.
 - [Angular InputGroup Component](https://optimus.openng.org/inputgroup): Text, icon, buttons and other content can be grouped next to an input.
@@ -110,6 +115,6 @@
 - [Angular Tree Component](https://optimus.openng.org/tree): Tree is used to display hierarchical data.
 - [Angular TreeSelect Component](https://optimus.openng.org/treeselect): TreeSelect is a form component to choose from hierarchical data.
 - [Angular TreeTable Component](https://optimus.openng.org/treetable): TreeTable is used to display hierarchical data in tabular format.
-- [Angular Virtual Scroller Component](https://optimus.openng.org/scroller): VirtualScroller is a performance-approach to handle huge data efficiently.
-- [LLMs.txt - Optimus UI](https://optimus.openng.org/llms): LLM-optimized documentation endpoints for Optimus UI components.
-- [Overlay API - Optimus UI](https://optimus.openng.org/overlay): This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.
+- [Angular Virtual Scroller Component](https://optimus.openng.org/virtualscroller): VirtualScroller is a performance-approach to handle huge data efficiently.
+- [LLMs.txt](https://optimus.openng.org/llms): LLM-optimized documentation endpoints for Optimus UI components.
+- [Overlay API](https://optimus.openng.org/overlay): This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.

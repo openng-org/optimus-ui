@@ -29,7 +29,7 @@ import { UsePresetDoc } from '@/doc/theming/styled/usepreset-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Styled Mode" header="Styled Mode" description="Choose from a variety of pre-styled themes or develop your own." [docs]="docs" docType="page"></app-doc>`,
+    template: `<app-doc docTitle="Styled Mode - Optimus UI" header="Styled Mode" description="Choose from a variety of pre-styled themes or develop your own." [docs]="docs" docType="page"></app-doc>`,
     imports: [AppDoc],
     standalone: true
 })

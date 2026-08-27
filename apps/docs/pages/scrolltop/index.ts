@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AppDoc],
     template: ` <app-doc
-        docTitle="Angular Scroll Top Component"
+        docTitle="Angular Scroll Top Component - Optimus UI"
         header="ScrollTop"
         description="ScrollTop gets displayed after a certain scroll position and used to navigates to the top of the page quickly."
         [docs]="docs"

@@ -8,7 +8,16 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Fluid Component" header="Fluid" description="Fluid is a layout component to make descendant components span full width of their container." [docs]="docs" [ptDocs]="ptComponent" themeDocs="fluid"></app-doc> `
+    template: `
+        <app-doc
+            docTitle="Angular Fluid Component - Optimus UI"
+            header="Fluid"
+            description="Fluid is a layout component to make descendant components span full width of their container."
+            [docs]="docs"
+            [ptDocs]="ptComponent"
+            themeDocs="fluid"
+        ></app-doc>
+    `
 })
 export class FluidDemo {
     ptComponent = PTComponent;

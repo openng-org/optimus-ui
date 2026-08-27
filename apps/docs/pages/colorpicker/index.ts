@@ -14,7 +14,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: ` <app-doc
-        docTitle="Angular ColorPicker Component"
+        docTitle="Angular ColorPicker Component - Optimus UI"
         header="ColorPicker"
         description="ColorPicker is an input component to select a color."
         [docs]="docs"

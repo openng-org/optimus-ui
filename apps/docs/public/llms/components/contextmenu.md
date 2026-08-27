@@ -19,7 +19,7 @@ import { ContextMenu } from '@openng/optimus-ui/contextmenu';
 @Component({
     template: `
         <div class="card flex justify-center">
-            <img #img src="https://primefaces.org/cdn/primeng/images/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-[30rem] rounded shadow-lg" />
+            <img #img src="https://optimus.openng.org/demo/nature/nature2.jpg" alt="Logo" aria-haspopup="true" class="w-full md:w-[30rem] rounded shadow-lg" />
             <p-contextmenu [target]="img" [model]="items" />
         </div>
     `,
@@ -69,7 +69,7 @@ interface Users {
                     (contextmenu)="onContextMenu($event, user)"
                 >
                     <div class="flex flex-1 items-center gap-2">
-                        <img class="w-8 h-8" [alt]="user.name" [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + user.image" />
+                        <img class="w-8 h-8" [alt]="user.name" [src]="'https://optimus.openng.org/demo/avatar/' + user.image" />
                         <span class="font-bold">{{ user.name }}</span>
                     </div>
                     <p-tag [value]="user.role" [severity]="getBadge(user)" />
@@ -307,7 +307,7 @@ import { ContextMenu } from '@openng/optimus-ui/contextmenu';
                     (contextmenu)="onContextMenu($event)"
                 >
                     <div class="flex flex-wrap p-2 items-center gap-4">
-                        <img class="w-16 shrink-0 rounded" src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" />
+                        <img class="w-16 shrink-0 rounded" src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" />
                         <div class="flex-1 flex flex-col gap-1">
                             <span class="font-bold">{{ product.name }}</span>
                             <div class="flex items-center gap-2">

@@ -9,7 +9,15 @@ import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Angular Splitter Component" header="Splitter" description="Splitter is utilized to separate and resize panels." [docs]="docs" [apiDocs]="['Splitter']" [ptDocs]="ptComponent" themeDocs="splitter"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular Splitter Component - Optimus UI"
+        header="Splitter"
+        description="Splitter is utilized to separate and resize panels."
+        [docs]="docs"
+        [apiDocs]="['Splitter']"
+        [ptDocs]="ptComponent"
+        themeDocs="splitter"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

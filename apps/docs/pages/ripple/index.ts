@@ -5,7 +5,7 @@ import { ImportDoc } from '@/doc/ripple/import-doc';
 import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 @Component({
-    template: `<app-doc docTitle="Angular Ripple Component" header="Ripple" description="Ripple directive adds ripple effect to the host element." [docs]="docs" themeDocs="ripple"></app-doc>`,
+    template: `<app-doc docTitle="Angular Ripple Component - Optimus UI" header="Ripple" description="Ripple directive adds ripple effect to the host element." [docs]="docs" themeDocs="ripple"></app-doc>`,
     standalone: true,
     imports: [AppDoc],
     styleUrl: './rippledemo.scss'

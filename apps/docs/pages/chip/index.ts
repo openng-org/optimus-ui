@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Chip Component" header="Chip" description="Chip represents entities using icons, labels and images." [docs]="docs" [apiDocs]="['Chip']" [ptDocs]="ptComponent" themeDocs="chip"></app-doc>`
+    template: ` <app-doc docTitle="Angular Chip Component - Optimus UI" header="Chip" description="Chip represents entities using icons, labels and images." [docs]="docs" [apiDocs]="['Chip']" [ptDocs]="ptComponent" themeDocs="chip"></app-doc>`
 })
 export class ChipDemo {
     ptComponent = PTComponent;

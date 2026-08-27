@@ -5,6 +5,10 @@
             "icon": "pi pi-home",
             "children": [
                 {
+                    "name": "Philosophy",
+                    "routerLink": "/philosophy"
+                },
+                {
                     "name": "Installation",
                     "routerLink": "/installation"
                 },
@@ -15,6 +19,16 @@
                 {
                     "name": "Playground",
                     "routerLink": "/playground"
+                }
+            ]
+        },
+        {
+            "name": "Templates",
+            "icon": "pi pi-clone",
+            "children": [
+                {
+                    "name": "Sparked",
+                    "routerLink": "/templates"
                 }
             ]
         },
@@ -40,7 +54,6 @@
         {
             "name": "AI Tools",
             "icon": "pi pi-sparkles",
-            "badge": "NEW",
             "children": [
                 {
                     "name": "LLMs.txt",
@@ -419,8 +432,7 @@
                         },
                         {
                             "name": "Bind",
-                            "routerLink": "/bind",
-                            "badge": "NEW"
+                            "routerLink": "/bind"
                         },
                         {
                             "name": "BlockUI",
@@ -432,16 +444,19 @@
                         },
                         {
                             "name": "ClassNames",
-                            "routerLink": "/classnames",
-                            "badge": "NEW"
+                            "routerLink": "/classnames"
                         },
                         {
-                            "name": "FocusTrap",
-                            "routerLink": "/focustrap"
+                            "name": "DragDrop",
+                            "routerLink": "/dragdrop"
                         },
                         {
                             "name": "Fluid",
                             "routerLink": "/fluid"
+                        },
+                        {
+                            "name": "FocusTrap",
+                            "routerLink": "/focustrap"
                         },
                         {
                             "name": "Inplace",
@@ -491,6 +506,10 @@
                         {
                             "name": "FilterService",
                             "routerLink": "/filterservice"
+                        },
+                        {
+                            "name": "Overlay API",
+                            "routerLink": "/overlay"
                         }
                     ]
                 }
@@ -499,8 +518,7 @@
         {
             "name": "Pass Through",
             "icon": "pi pi-directions",
-            "routerLink": "/passthrough",
-            "badge": "NEW"
+            "routerLink": "/passthrough"
         },
         {
             "name": "Guides",
@@ -510,16 +528,15 @@
                     "name": "Accessibility",
                     "routerLink": "/guides/accessibility"
                 },
-                       {
+                {
                     "name": "Animations",
-                    "routerLink": "/guides/animations",
-                    "badge": "NEW"
+                    "routerLink": "/guides/animations"
                 },
                 {
                     "name": "PrimeFlex",
                     "routerLink": "/guides/primeflex"
                 },
-                   {
+                {
                     "name": "RTL",
                     "routerLink": "/guides/rtl"
                 }
@@ -530,7 +547,7 @@
             "icon": "pi pi-eye",
             "children": [
                 {
-                    "name": "Prime Icons",
+                    "name": "OpenNG Icons",
                     "routerLink": "/icons"
                 },
                 {
@@ -544,16 +561,12 @@
             "icon": "pi pi-arrow-up",
             "children": [
                 {
-                    "name": "Updating to v21",
-                    "routerLink": "/migration/v21"
+                    "name": "From PrimeNG",
+                    "href": "https://v1.optimus.openng.org/migration/primeng"
                 },
                 {
-                    "name": "Updating to v20",
-                    "routerLink": "/migration/v20"
-                },
-                {
-                    "name": "Updating to v19",
-                    "routerLink": "/migration/v19"
+                    "name": "Update Optimus UI",
+                    "routerLink": "/migration/update"
                 }
             ]
         },
@@ -562,8 +575,12 @@
             "icon": "pi pi-question",
             "children": [
                 {
-                    "name": "Discord Server",
-                    "href": "https://discord.gg/angular"
+                    "name": "FAQ",
+                    "routerLink": "/faq"
+                },
+                {
+                    "name": "Discord",
+                    "href": "https://discord.gg/auSfMzVVPr"
                 },
                 {
                     "name": "GitHub Discussions",
@@ -585,7 +602,7 @@
                 },
                 {
                     "name": "Changelog",
-                    "href": "https://github.com/openng-org/optimus-ui/blob/main/CHANGELOG.md"
+                    "href": "https://github.com/openng-org/optimus-ui/releases"
                 },
                 {
                     "name": "Contribution",

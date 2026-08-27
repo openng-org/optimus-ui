@@ -11,7 +11,14 @@ import { PTComponent } from '@/doc/inputgroup/pt/PTComponent';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular InputGroup Component" header="InputGroup" description="Text, icon, buttons and other content can be grouped next to an input." [docs]="docs" [ptDocs]="ptComponent" themeDocs="inputgroup"></app-doc> `,
+    template: `<app-doc
+        docTitle="Angular InputGroup Component - Optimus UI"
+        header="InputGroup"
+        description="Text, icon, buttons and other content can be grouped next to an input."
+        [docs]="docs"
+        [ptDocs]="ptComponent"
+        themeDocs="inputgroup"
+    ></app-doc> `,
     standalone: true,
     imports: [AppDoc]
 })

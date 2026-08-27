@@ -15,7 +15,15 @@ import { AccessibilityDoc } from '@/doc/message/accessibility-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Message Component" header="Message" description="Message component is used to display inline messages." [docs]="docs" [apiDocs]="['Message']" [ptDocs]="ptComponent" themeDocs="message"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular Message Component - Optimus UI"
+        header="Message"
+        description="Message component is used to display inline messages."
+        [docs]="docs"
+        [apiDocs]="['Message']"
+        [ptDocs]="ptComponent"
+        themeDocs="message"
+    ></app-doc>`,
     imports: [AppDoc],
     standalone: true
 })

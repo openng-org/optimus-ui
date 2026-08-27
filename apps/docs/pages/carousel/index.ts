@@ -12,7 +12,15 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AppDoc],
     template: `
-        <app-doc docTitle="Angular Carousel Component" header="Carousel" description="Carousel is a content slider featuring various customization options." [docs]="docs" [apiDocs]="['Carousel']" [ptDocs]="ptComponent" themeDocs="Carousel"></app-doc>
+        <app-doc
+            docTitle="Angular Carousel Component - Optimus UI"
+            header="Carousel"
+            description="Carousel is a content slider featuring various customization options."
+            [docs]="docs"
+            [apiDocs]="['Carousel']"
+            [ptDocs]="ptComponent"
+            themeDocs="Carousel"
+        ></app-doc>
     `
 })
 export class CarouselDemo {

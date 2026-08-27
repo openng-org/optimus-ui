@@ -14,7 +14,7 @@ import { RouterModule } from '@angular/router';
             <p>A <i>badge</i> can be added to an Avatar with the <a href="#" [routerLink]="['/badge']">Badge</a> directive.</p>
         </app-docsectiontext>
         <div class="card flex justify-center">
-            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
+            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" pBadge value="4" severity="danger" />
         </div>
         <app-code></app-code>
     `

@@ -8,7 +8,15 @@ import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Angular PickList Component" header="PickList" description="PickList is used to reorder items between different lists." [docs]="docs" [apiDocs]="['PickList']" [ptDocs]="ptComponent" themeDocs="picklist"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular PickList Component - Optimus UI"
+        header="PickList"
+        description="PickList is used to reorder items between different lists."
+        [docs]="docs"
+        [apiDocs]="['PickList']"
+        [ptDocs]="ptComponent"
+        themeDocs="picklist"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
     styleUrl: './picklistdemo.scss'

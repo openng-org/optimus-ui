@@ -14,10 +14,10 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
         <div class="card flex justify-center">
             <p-imagecompare class="sm:!w-96 shadow-lg rounded-2xl">
                 <ng-template #left>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island1.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island1.jpg" />
                 </ng-template>
                 <ng-template #right>
-                    <img src="https://primefaces.org/cdn/primevue/images/compare/island2.jpg" />
+                    <img src="https://optimus.openng.org/demo/compare/island2.jpg" />
                 </ng-template>
             </p-imagecompare>
         </div>

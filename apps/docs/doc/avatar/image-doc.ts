@@ -16,15 +16,15 @@ import { OverlayBadgeModule } from '@openng/optimus-ui/overlaybadge';
             <div class="flex flex-wrap gap-8">
                 <div class="flex-auto">
                     <h5>Image</h5>
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
-                    <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" class="mr-2" size="xlarge" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/asiyajavayant.png" class="mr-2" size="large" shape="circle" />
+                    <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                 </div>
 
                 <div class="flex-auto">
                     <h5>Badge</h5>
                     <p-overlay-badge value="4" severity="danger" class="inline-flex">
-                        <p-avatar class="p-overlay-badge" image="https://primefaces.org/cdn/primeng/images/demo/avatar/walter.jpg" size="xlarge" />
+                        <p-avatar class="p-overlay-badge" image="https://optimus.openng.org/demo/avatar/walter.jpg" size="xlarge" />
                     </p-overlay-badge>
                 </div>
 

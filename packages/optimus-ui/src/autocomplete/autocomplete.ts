@@ -6,6 +6,7 @@ import {
     computed,
     ContentChild,
     ContentChildren,
+    EmbeddedViewRef,
     ElementRef,
     EventEmitter,
     forwardRef,
@@ -336,7 +337,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
     },
     hostDirectives: [Bind]
 })
-export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
+export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     componentName = 'AutoComplete';
 
     $pcAutoComplete: AutoComplete | undefined = inject(AUTOCOMPLETE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
@@ -572,11 +573,11 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * An array of suggestions to display.
      * @group Props
      */
-    @Input() get suggestions(): any[] {
+    @Input() get suggestions(): T[] {
         return this._suggestions();
     }
 
-    set suggestions(value: any[]) {
+    set suggestions(value: T[]) {
         this._suggestions.set(value);
         this.handleSuggestionsChange();
     }
@@ -585,12 +586,12 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Property name or getter function to use as the label of an option.
      * @group Props
      */
-    @Input() optionLabel: string | ((item: any) => string) | undefined;
+    @Input() optionLabel: string | ((item: T) => string) | undefined;
     /**
      * Property name or getter function to use as the value of an option.
      * @group Props
      */
-    @Input() optionValue: string | ((item: any) => string) | undefined;
+    @Input() optionValue: string | ((item: T) => string) | undefined;
     /**
      * Unique identifier of the component.
      * @group Props
@@ -633,7 +634,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.
      * @group Props
      */
-    @Input() optionDisabled: string | ((item: any) => string) | undefined;
+    @Input() optionDisabled: string | ((item: T) => string) | undefined;
     /**
      * When enabled, the hovered option will be focused.
      * @group Props
@@ -678,13 +679,13 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * @param {AutoCompleteSelectEvent} event - custom select event.
      * @group Emits
      */
-    @Output() onSelect: EventEmitter<AutoCompleteSelectEvent> = new EventEmitter<AutoCompleteSelectEvent>();
+    @Output() onSelect: EventEmitter<AutoCompleteSelectEvent<T>> = new EventEmitter<AutoCompleteSelectEvent<T>>();
     /**
      * Callback to invoke when a selected value is removed.
      * @param {AutoCompleteUnselectEvent} event - custom unselect event.
      * @group Emits
      */
-    @Output() onUnselect: EventEmitter<AutoCompleteUnselectEvent> = new EventEmitter<AutoCompleteUnselectEvent>();
+    @Output() onUnselect: EventEmitter<AutoCompleteUnselectEvent<T>> = new EventEmitter<AutoCompleteUnselectEvent<T>>();
     /**
      * Callback to invoke when an item is added via addOnBlur or separator features.
      * @param {AutoCompleteAddEvent} event - Custom add event.
@@ -885,6 +886,8 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
 
     focusedOptionIndex = signal<number>(-1);
 
+    selectedItemTemplateLabel = signal<string | null>(null);
+
     _componentStyle = inject(AutoCompleteStyle);
 
     $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
@@ -899,6 +902,12 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
 
         if (isNotEmpty(modelValue)) {
             if (typeof modelValue === 'object' || this.optionValueSelected) {
+                const selectedItemTemplateLabel = this.selectedItemTemplateLabel();
+
+                if (selectedItemTemplateLabel) {
+                    return selectedItemTemplateLabel;
+                }
+
                 const label = this.getOptionLabel(selectedOption);
 
                 return label != null ? label : modelValue;
@@ -1661,6 +1670,7 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         }
 
         this.value = value;
+        this.updateSelectedItemTemplateLabel(options);
         this.writeModelValue(options);
         this.onModelChange(value);
         this.updateInputValue();
@@ -1793,8 +1803,34 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
         return this.optionLabel ? resolveFieldData(option, this.optionLabel) : option && option.label != undefined ? option.label : option;
     }
 
+    getSelectedItemTemplateLabel(option: any) {
+        const template = this.selectedItemTemplate || this._selectedItemTemplate;
+
+        if (!template || option == null) {
+            return null;
+        }
+
+        const embeddedView: EmbeddedViewRef<AutoCompleteSelectedItemTemplateContext> = template.createEmbeddedView({ $implicit: option });
+
+        embeddedView.detectChanges();
+
+        const label = embeddedView.rootNodes
+            .map((node: Node) => node.textContent || '')
+            .join(' ')
+            .replace(/\s+/g, ' ')
+            .trim();
+
+        embeddedView.destroy();
+
+        return label || null;
+    }
+
+    updateSelectedItemTemplateLabel(option: any) {
+        this.selectedItemTemplateLabel.set(!this.multiple ? this.getSelectedItemTemplateLabel(option) : null);
+    }
+
     getOptionValue(option) {
-        return this.optionValue ? resolveFieldData(option, this.optionValue) : option && option.value != undefined ? option.value : option;
+        return this.optionValue ? resolveFieldData(option, this.optionValue) : option;
     }
 
     getOptionIndex(index, scrollerOptions) {
@@ -1876,19 +1912,29 @@ export class AutoComplete extends BaseInput<AutoCompletePassThrough> {
      * Writes the value to the control.
      */
     writeControlValue(value: any, setModelValue: (value: any) => void): void {
+        let resolvedValue = value;
+
         if (this.multiple) {
             const resolved = (value || []).map((val: any) => {
                 const match = this.visibleOptions().find((option: any) => equals(val, option, this.equalityKey()));
                 return match ?? val;
             });
-            setModelValue(isEmpty(value) ? value : resolved);
+            resolvedValue = isEmpty(value) ? value : resolved;
         } else {
             const option = this.visibleOptions().find((option: any) => equals(value, option, this.equalityKey()));
-            setModelValue(isEmpty(option) ? value : option);
+            resolvedValue = isEmpty(option) ? value : option;
         }
 
+        setModelValue(resolvedValue);
         this.value = value;
         this.updateInputValue();
+
+        queueMicrotask(() => {
+            this.updateSelectedItemTemplateLabel(resolvedValue);
+            this.updateInputValue();
+            this.cd.markForCheck();
+        });
+
         this.cd.markForCheck();
     }
 

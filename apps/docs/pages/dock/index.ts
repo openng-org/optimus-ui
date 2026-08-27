@@ -9,7 +9,9 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Dock Component" header="Dock" description="Dock is a navigation component consisting of menuitems." [docs]="docs" [apiDocs]="['Dock', 'MenuItem']" [ptDocs]="ptComponent" themeDocs="dock"></app-doc> `
+    template: `
+        <app-doc docTitle="Angular Dock Component - Optimus UI" header="Dock" description="Dock is a navigation component consisting of menuitems." [docs]="docs" [apiDocs]="['Dock', 'MenuItem']" [ptDocs]="ptComponent" themeDocs="dock"></app-doc>
+    `
 })
 export class DockDemo {
     docs = [

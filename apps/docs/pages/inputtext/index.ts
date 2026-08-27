@@ -19,7 +19,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: `<app-doc
-        docTitle="Angular InputText Component"
+        docTitle="Angular InputText Component - Optimus UI"
         header="InputText"
         description="InputText is an extension to standard input element with theming and keyfiltering."
         [apiDocs]="['InputText']"

@@ -8,7 +8,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular ProgressSpinner Component"
+        docTitle="Angular ProgressSpinner Component - Optimus UI"
         header="ProgressSpinner"
         description="ProgressSpinner is a process status indicator."
         [docs]="docs"

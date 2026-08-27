@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
     template: `<app-doc
         docTitle="Accessibility - Optimus UI"
         header="Accessibility"
-        description="Optimus UI targets AA level compliance on WCAG specification, refer to the accessibility documentation of each component for detailed information."
+        description="Optimus UI targets WCAG 2.1 AA level compliance, refer to the accessibility documentation of each component for detailed information."
         [docs]="docs"
         docType="page"
     ></app-doc>`

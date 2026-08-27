@@ -15,7 +15,9 @@ import { AppDoc } from '@/components/doc/app.doc';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Otp Input Component" header="InputOtp" description="Input Otp is used to enter one time passwords." [docs]="docs" [ptDocs]="ptComponent" [apiDocs]="['InputOtp']" themeDocs="inputotp"></app-doc> `,
+    template: `
+        <app-doc docTitle="Angular Otp Input Component - Optimus UI" header="InputOtp" description="Input Otp is used to enter one time passwords." [docs]="docs" [ptDocs]="ptComponent" [apiDocs]="['InputOtp']" themeDocs="inputotp"></app-doc>
+    `,
     encapsulation: ViewEncapsulation.None
 })
 export class InputOtpDemo {

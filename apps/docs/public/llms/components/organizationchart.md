@@ -111,7 +111,7 @@ import { TreeNode } from '@openng/optimus-ui/api';
             <p-organization-chart [value]="data" [collapsible]="true">
                 <ng-template let-node pTemplate="default">
                     <div class="flex flex-col items-center">
-                        <img src="https://primefaces.org/cdn/primeng/images/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
+                        <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [alt]="node.label" [class]="'flag' + ' flag-' + node.data" width="32" />
                         <div class="mt-4 font-medium text-lg">{{ node.label }}</div>
                     </div>
                 </ng-template>

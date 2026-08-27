@@ -1,4 +1,4 @@
-# Overlay API - Optimus UI
+# Overlay API
 
 This API allows overlay components to be controlled from the Optimus UI. In this way, all overlay components in the application can have the same behavior.
 

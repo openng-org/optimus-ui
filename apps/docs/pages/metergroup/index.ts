@@ -15,7 +15,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     standalone: true,
     imports: [AppDoc],
     template: ` <app-doc
-        docTitle="Angular MeterGroup Component"
+        docTitle="Angular MeterGroup Component - Optimus UI"
         header="MeterGroup"
         description="MeterGroup displays scalar measurements within a known range."
         [docs]="docs"

@@ -44,7 +44,7 @@ export class OptionsDoc {
     code3 = {
         typescript: `options: {
     cssLayer: {
-        name: 'primeng',
+        name: 'optimus',
         order: 'app-styles, optimus, another-css-library'
     }
 }`

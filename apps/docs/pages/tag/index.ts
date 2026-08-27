@@ -10,7 +10,7 @@ import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
-    template: `<app-doc docTitle="Angular Tag Component" header="Tag" description="Tag component is used to categorize content." [docs]="docs" [apiDocs]="['Tag']" [ptDocs]="ptComponent" themeDocs="tag"></app-doc>`,
+    template: `<app-doc docTitle="Angular Tag Component - Optimus UI" header="Tag" description="Tag component is used to categorize content." [docs]="docs" [apiDocs]="['Tag']" [ptDocs]="ptComponent" themeDocs="tag"></app-doc>`,
     standalone: true,
     imports: [AppDoc]
 })

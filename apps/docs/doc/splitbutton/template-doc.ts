@@ -19,8 +19,8 @@ import { RouterModule } from '@angular/router';
             <p-splitbutton label="Save" (onClick)="save()" severity="contrast" [model]="items">
                 <ng-template #content>
                     <span class="flex items-center font-bold">
-                        <img alt="logo" src="https://primefaces.org/cdn/primeng/images/logo.svg" style="height: 1rem; margin-right: 0.5rem" />
-                        <span>PrimeNG</span>
+                        <img alt="logo" src="logo-icon.svg" style="height: 1rem; margin-right: 0.5rem" />
+                        <span>Optimus UI</span>
                     </span>
                 </ng-template>
             </p-splitbutton>

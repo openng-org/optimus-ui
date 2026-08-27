@@ -43,7 +43,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                     width: 100%;
                     height: 450px;
                     position: relative;
-                    background-image: url('https://primefaces.org/cdn/primeng/images/dock/window.jpg');
+                    background-image: url('https://optimus.openng.org/demo/dock/window.jpg');
                     background-repeat: no-repeat;
                     background-size: cover;
                 }
@@ -83,19 +83,19 @@ export class BasicDoc implements OnInit {
         this.items = [
             {
                 label: 'Finder',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg'
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg'
             },
             {
                 label: 'App Store',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg'
             },
             {
                 label: 'Photos',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg'
             },
             {
                 label: 'Trash',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png'
+                icon: 'https://optimus.openng.org/demo/dock/trash.png'
             }
         ];
     }

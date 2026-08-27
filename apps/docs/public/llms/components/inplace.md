@@ -56,7 +56,7 @@ import { Photo } from '@/domain/photo';
                     </span>
                 </ng-template>
                 <ng-template #content>
-                    <img class="w-full sm:w-80 shadow-md" src="https://primefaces.org/cdn/primeng/images/demo/galleria/galleria5.jpg" alt="Nature" />
+                    <img class="w-full sm:w-80 shadow-md" src="https://optimus.openng.org/demo/galleria/galleria5.jpg" alt="Nature" />
                 </ng-template>
             </p-inplace>
         </div>

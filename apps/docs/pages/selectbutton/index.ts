@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular SelectButton Component"
+        docTitle="Angular SelectButton Component - Optimus UI"
         header="SelectButton"
         description="SelectButton is used to choose single or multiple items from a list using buttons."
         [docs]="docs"

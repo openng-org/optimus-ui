@@ -10,14 +10,14 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                The <a href="https://www.npmjs.com/package/primeclt" target="_blank" rel="noopener noreferrer">primeclt</a> is a command line utility to assist project setup and migration. The <i>pf2tw</i> command is created for smooth migration
-                between PrimeFlex to Tailwind CSS. For flawless migration, it is highly suggested to use Optimus UI v18 as the requirement of the tailwindcss plugin.
+                PrimeFlex class names map closely onto Tailwind's, so most of the work is mechanical. PrimeTek's
+                <a href="https://www.npmjs.com/package/primeclt" target="_blank" rel="noopener noreferrer">primeclt</a> ships a <i>pf2tw</i> command that does the conversion, and it works on any codebase — it rewrites class names and does not care
+                which component library you use.
             </p>
-            <p>Install PrimeCLT.</p>
             <app-code [code]="code1" [hideToggleCode]="true" [hideCodeSandbox]="true" [hideStackBlitz]="true"></app-code>
-            <p class="mt-4">Run the <i>pf2wt</i> in a directory that contains files to be migrated.</p>
+            <p class="mt-4">Run <i>pf2tw</i> in a directory containing the files to convert.</p>
             <app-code [code]="code2" [hideToggleCode]="true" [hideCodeSandbox]="true" [hideStackBlitz]="true"></app-code>
-            <p class="mt-4">There are a couple of utility classes that are not migrated as they have no counterparts, use flexbox utilities instead as replacements.</p>
+            <p class="mt-4">A handful of PrimeFlex classes have no Tailwind counterpart and are left alone. Replace them with flexbox or grid utilities by hand:</p>
             <ul class="leading-loose">
                 <li>formgrid</li>
                 <li>formgroup</li>
@@ -34,9 +34,10 @@ import { Component } from '@angular/core';
 })
 export class MigrationDoc {
     code1: Code = {
-        typescript: `npm install -g primeclt`
+        command: `npm install -g primeclt`
     };
+
     code2: Code = {
-        typescript: `prime pf2tw`
+        command: `prime pf2tw`
     };
 }

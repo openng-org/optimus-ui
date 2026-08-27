@@ -103,7 +103,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg',
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg',
                 command: () => {
                     this.displayFinder = true;
                 }
@@ -117,7 +117,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/terminal.svg',
+                icon: 'https://optimus.openng.org/demo/dock/terminal.svg',
                 command: () => {
                     this.displayTerminal = true;
                 }
@@ -131,7 +131,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg',
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg',
                 url: 'https://www.apple.com/app-store/'
             },
             {
@@ -143,7 +143,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/safari.svg'
+                icon: 'https://optimus.openng.org/demo/dock/safari.svg'
             },
             {
                 label: 'Photos',
@@ -154,7 +154,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg',
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg',
                 command: () => {
                     this.displayGalleria = true;
                 }
@@ -168,7 +168,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/github.svg',
+                icon: 'https://optimus.openng.org/demo/dock/github.svg',
                 url: 'https://github.com/openng-org/optimus-ui'
             },
             {
@@ -180,7 +180,7 @@ export class DockAdvancedDemo implements OnInit {
                     positionLeft: 15,
                     showDelay: 1000
                 },
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png',
+                icon: 'https://optimus.openng.org/demo/dock/trash.png',
                 command: () => {
                     this.messageService.add({ severity: 'info', summary: 'Trash is empty', key: 'tc' });
                 }
@@ -404,19 +404,19 @@ export class DockBasicDemo implements OnInit {
         this.items = [
             {
                 label: 'Finder',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/finder.svg'
+                icon: 'https://optimus.openng.org/demo/dock/finder.svg'
             },
             {
                 label: 'App Store',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/appstore.svg'
+                icon: 'https://optimus.openng.org/demo/dock/appstore.svg'
             },
             {
                 label: 'Photos',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/photos.svg'
+                icon: 'https://optimus.openng.org/demo/dock/photos.svg'
             },
             {
                 label: 'Trash',
-                icon: 'https://primefaces.org/cdn/primeng/images/dock/trash.png'
+                icon: 'https://optimus.openng.org/demo/dock/trash.png'
             }
         ];
     }

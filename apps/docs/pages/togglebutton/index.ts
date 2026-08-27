@@ -14,7 +14,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular ToggleButton Component"
+        docTitle="Angular ToggleButton Component - Optimus UI"
         header="ToggleButton"
         description="ToggleButton is used to select a boolean value using a button."
         [docs]="docs"

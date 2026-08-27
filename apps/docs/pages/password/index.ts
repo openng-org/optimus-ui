@@ -21,7 +21,7 @@ import { AppDoc } from '@/components/doc/app.doc';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Password Component"
+        docTitle="Angular Password Component - Optimus UI"
         header="Password"
         description="Password displays strength indicator for password fields."
         [docs]="docs"

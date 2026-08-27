@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: ` <app-doc
-        docTitle="Angular Animate On Scroll Directive"
+        docTitle="Angular Animate On Scroll Directive - Optimus UI"
         header="AnimateOnScroll"
         description="AnimateOnScroll is used to apply animations to elements when entering or leaving the viewport during scrolling."
         [docs]="docs"

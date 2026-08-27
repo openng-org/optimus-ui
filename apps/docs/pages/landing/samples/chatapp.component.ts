@@ -259,13 +259,13 @@ export class ChatApp {
         ];
         this.chats = [
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 name: 'Cody Fisher',
                 capName: 'CF',
                 active: true,
                 unreadMessageCount: 8,
                 time: '12.30',
-                lastMessage: "Hey there! I've heard about PrimeVue. Any cool tips for getting started?"
+                lastMessage: "Hey there! I've heard about Optimus UI. Any cool tips for getting started?"
             },
             {
                 image: 'logo-icon.svg',
@@ -277,7 +277,7 @@ export class ChatApp {
                 lastMessage: "Let's implement Optimus UI. Elevating our UI game! 🚀"
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 name: 'Jerome Bell',
                 capName: 'JB',
                 active: true,
@@ -286,7 +286,7 @@ export class ChatApp {
                 lastMessage: "Absolutely! Optimus UI's documentation is gold—simplifies our UI work."
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
+                image: '/demo/landing/apps/avatar12.jpg',
                 name: 'Robert Fox',
                 capName: 'RF',
                 active: false,
@@ -295,7 +295,7 @@ export class ChatApp {
                 lastMessage: "Interesting! Optimus UI sounds amazing. What's your favorite feature?"
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 name: 'Esther Howard',
                 capName: 'EH',
                 active: true,
@@ -304,7 +304,7 @@ export class ChatApp {
                 lastMessage: 'Quick one, team! Anyone using Optimus UI for mobile app development?'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg',
+                image: '/demo/landing/apps/avatar9.jpg',
                 name: 'Darlene Robertson',
                 capName: 'DR',
                 active: false,
@@ -313,7 +313,7 @@ export class ChatApp {
                 lastMessage: "Just explored Optimus UI's themes. Can we talk about those stunning designs? 😍"
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar6.png',
+                image: '/demo/landing/apps/avatar6.png',
                 name: 'Ralph Edwards',
                 capName: 'RE',
                 active: false,
@@ -340,7 +340,7 @@ export class ChatApp {
                 lastMessage: 'Sharing a quick win, Optimus UI tutorials are leveling up my UI skills. 👩‍💻'
             },
             {
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png',
+                image: '/demo/landing/apps/avatar7.png',
                 name: 'Darrell Steward',
                 capName: 'DS',
                 active: false,
@@ -363,7 +363,7 @@ export class ChatApp {
                 id: 2,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
+                image: '/demo/landing/apps/avatar8.png',
                 capName: 'A',
                 type: 'received',
                 message: 'Optimus UI rocks! Simplifies UI dev with versatile components.'
@@ -372,16 +372,16 @@ export class ChatApp {
                 id: 3,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 capName: 'A',
                 type: 'received',
                 message: 'Intriguing! Tell us more about its impact.'
             },
             {
                 id: 4,
-                attachment: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/message-image.png',
+                attachment: '/demo/landing/apps/message-image.png',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 capName: 'A',
                 type: 'received',
                 message: "It's design-neutral and compatible with Tailwind. Features accessible, high-grade components!"
@@ -390,7 +390,7 @@ export class ChatApp {
                 id: 5,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png',
+                image: '/demo/landing/apps/avatar5.png',
                 capName: 'A',
                 type: 'sent',
                 message: 'Customizable themes, responsive design – UI excellence!'
@@ -399,7 +399,7 @@ export class ChatApp {
                 id: 6,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
+                image: '/demo/landing/apps/avatar8.png',
                 capName: 'A',
                 type: 'received',
                 message: 'Love it! Fast-tracking our development is key.'
@@ -408,7 +408,7 @@ export class ChatApp {
                 id: 7,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar6.png',
+                image: '/demo/landing/apps/avatar6.png',
                 capName: 'A',
                 type: 'received',
                 message: 'Documentation rocks too – smooth integration for all.'
@@ -417,7 +417,7 @@ export class ChatApp {
                 id: 8,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png',
+                image: '/demo/landing/apps/avatar5.png',
                 capName: 'B',
                 type: 'sent',
                 message: 'The flexibility and ease of use are truly impressive. Have you explored the new components?'
@@ -426,7 +426,7 @@ export class ChatApp {
                 id: 9,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
+                image: '/demo/landing/apps/avatar12.jpg',
                 capName: 'C',
                 type: 'received',
                 message: 'Absolutely, the new calendar component has saved us a ton of development time!'
@@ -435,16 +435,16 @@ export class ChatApp {
                 id: 10,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 capName: 'D',
                 type: 'received',
                 message: "And the accessibility features are top-notch. It's great to see a library focusing on inclusivity."
             },
             {
                 id: 11,
-                attachment: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/message-image.png',
+                attachment: '/demo/landing/apps/message-image.png',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png',
+                image: '/demo/landing/apps/avatar5.png',
                 capName: 'E',
                 type: 'sent',
                 message: "I couldn't agree more. Plus, the documentation is incredibly thorough, which makes onboarding new team members a breeze."
@@ -453,7 +453,7 @@ export class ChatApp {
                 id: 12,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar6.png',
+                image: '/demo/landing/apps/avatar6.png',
                 capName: 'F',
                 type: 'received',
                 message: 'Do you have any tips for optimizing performance when using multiple complex components?'
@@ -462,7 +462,7 @@ export class ChatApp {
                 id: 13,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 capName: 'G',
                 type: 'received',
                 message: 'Yes! Lazy loading and code splitting can make a huge difference, especially in larger applications.'
@@ -480,39 +480,33 @@ export class ChatApp {
                 id: 15,
                 attachment: '',
                 name: '',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png',
+                image: '/demo/landing/apps/avatar5.png',
                 capName: 'H',
                 type: 'sent',
                 message: "That's great advice. It's amazing how much detail and thought has gone into making Optimus UI such a powerful tool for developers."
             }
         ];
-        this.chatMedia = [
-            'https://www.primefaces.org/cdn/primevue/images/landing/apps/chat-image1.png',
-            'https://www.primefaces.org/cdn/primevue/images/landing/apps/chat-image2.png',
-            'https://www.primefaces.org/cdn/primevue/images/landing/apps/chat-image3.png',
-            'https://www.primefaces.org/cdn/primevue/images/landing/apps/chat-image4.png',
-            'https://www.primefaces.org/cdn/primevue/images/landing/apps/chat-image5.png'
-        ];
+        this.chatMedia = ['/demo/landing/apps/chat-image1.png', '/demo/landing/apps/chat-image2.png', '/demo/landing/apps/chat-image3.png', '/demo/landing/apps/chat-image4.png', '/demo/landing/apps/chat-image5.png'];
         this.members = [
             {
                 name: 'Robin Jonas',
                 capName: 'RJ',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png'
+                image: '/demo/landing/apps/avatar2.png'
             },
             {
                 name: 'Cameron Williamson',
                 capName: 'CW',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg'
+                image: '/demo/landing/apps/avatar11.jpg'
             },
             {
                 name: 'Eleanor Pena',
                 capName: 'EP',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar5.png'
+                image: '/demo/landing/apps/avatar5.png'
             },
             {
                 name: 'Arlene McCoy',
                 capName: 'AM',
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png'
+                image: '/demo/landing/apps/avatar8.png'
             },
             { name: 'Dianne Russell', capName: 'DR', image: '' }
         ];

@@ -13,7 +13,9 @@ import { Component } from '@angular/core';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Drawer Component" header="Drawer" description="Drawer is a container component displayed as an overlay." [docs]="docs" [apiDocs]="['Drawer']" [ptDocs]="ptComponent" componentName="drawer"></app-doc> `
+    template: `
+        <app-doc docTitle="Angular Drawer Component - Optimus UI" header="Drawer" description="Drawer is a container component displayed as an overlay." [docs]="docs" [apiDocs]="['Drawer']" [ptDocs]="ptComponent" componentName="drawer"></app-doc>
+    `
 })
 export class DrawerDemo {
     ptComponent = PTComponent;

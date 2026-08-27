@@ -212,7 +212,7 @@ import { StyleClassModule } from '@openng/optimus-ui/styleclass';
                         <div class="mt-auto">
                             <hr class="mb-4 mx-4 border-t border-0 border-surface" />
                             <a pRipple class="m-4 flex items-center cursor-pointer p-4 gap-2 rounded-border text-surface-700 dark:text-surface-100 hover:bg-surface-100 dark:hover:bg-surface-700 duration-150 transition-colors p-ripple">
-                                <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                                <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                                 <span class="font-bold">Amy Elsner</span>
                             </a>
                         </div>

@@ -14,7 +14,7 @@ import { AppDoc } from '@/components/doc/app.doc';
     imports: [AppDoc],
     template: `
         <app-doc
-            docTitle="Angular DataView Component"
+            docTitle="Angular DataView Component - Optimus UI"
             header="DataView"
             description="DataView displays data in grid grid-cols-12 gap-4 or list layout with pagination and sorting features."
             [docs]="docs"

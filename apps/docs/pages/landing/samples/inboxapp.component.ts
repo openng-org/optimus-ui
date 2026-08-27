@@ -188,7 +188,7 @@ export class InboxApp {
             {
                 id: 1,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar12.jpg',
+                image: '/demo/landing/apps/avatar12.jpg',
                 active: false,
                 name: 'Brook Simmons',
                 type: 'Security',
@@ -199,7 +199,7 @@ export class InboxApp {
             {
                 id: 2,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar2.png',
+                image: '/demo/landing/apps/avatar2.png',
                 active: false,
                 name: 'Dianne Russell',
                 type: 'Update',
@@ -210,7 +210,7 @@ export class InboxApp {
             {
                 id: 3,
                 bookmarked: true,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar13.jpg',
+                image: '/demo/landing/apps/avatar13.jpg',
                 active: false,
                 name: 'Amy Elsner',
                 type: 'Security',
@@ -221,7 +221,7 @@ export class InboxApp {
             {
                 id: 4,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/main-avatar.png',
+                image: '/demo/landing/apps/main-avatar.png',
                 active: false,
                 name: 'Jacob Jones',
                 type: 'Marketing',
@@ -256,7 +256,7 @@ export class InboxApp {
             {
                 id: 7,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar7.png',
+                image: '/demo/landing/apps/avatar7.png',
                 active: false,
                 name: 'Guy Hawkins',
                 type: 'Events',
@@ -267,7 +267,7 @@ export class InboxApp {
             {
                 id: 8,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar8.png',
+                image: '/demo/landing/apps/avatar8.png',
                 active: false,
                 name: 'Annette Black',
                 type: '',
@@ -278,7 +278,7 @@ export class InboxApp {
             {
                 id: 9,
                 bookmarked: true,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar10.jpg',
+                image: '/demo/landing/apps/avatar10.jpg',
                 active: false,
                 name: 'Darrell Steward',
                 type: 'Discount',
@@ -301,7 +301,7 @@ export class InboxApp {
             {
                 id: 11,
                 bookmarked: false,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar11.jpg',
+                image: '/demo/landing/apps/avatar11.jpg',
                 active: false,
                 name: 'Onyama Limba',
                 type: '',
@@ -336,7 +336,7 @@ export class InboxApp {
             {
                 id: 14,
                 bookmarked: true,
-                image: 'https://www.primefaces.org/cdn/primevue/images/landing/apps/avatar9.jpg',
+                image: '/demo/landing/apps/avatar9.jpg',
                 active: false,
                 name: 'Arlene McCoy',
                 type: '',

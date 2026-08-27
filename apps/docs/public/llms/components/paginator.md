@@ -4,7 +4,7 @@ Paginator displays data in paged format and provides navigation between pages.
 
 ## Accessibility
 
-Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a dropdown component, refer to the dropdown documentation for accessibility details. Additionally, the dropdown uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the dropdown documentation for more details about keyboard support.
+Screen Reader Paginator is placed inside a nav element to indicate a navigation section. All of the paginator elements can be customized using templating however the default behavious is listed below. First, previous, next and last page navigators elements with aria-label attributes referring to the aria.firstPageLabel , aria.prevPageLabel , aria.nextPageLabel and aria.lastPageLabel properties of the locale API respectively. Page links are also button elements with an aria-label attribute derived from the aria.pageLabel of the locale API. Current page is marked with aria-current set to "page" as well. Current page report uses aria-live="polite" to instruct screen reader about the changes to the pagination state. Rows per page dropdown internally uses a Select component, refer to the Select documentation for accessibility details. Additionally, the Select uses an aria-label from the aria.rowsPerPage property of the locale API. Jump to page input is an input element with an aria-label that refers to the aria.jumpToPage property of the locale API. Keyboard Support Key Function tab Moves focus through the paginator elements. enter Executes the paginator element action. space Executes the paginator element action. Rows Per Page Dropdown Keyboard Support Refer to the Select documentation for more details about keyboard support.
 
 ## Basic
 
@@ -83,7 +83,7 @@ import { PaginatorModule } from '@openng/optimus-ui/paginator';
     template: `
         <div class="card flex flex-col gap-4 justify-center items-center">
             <p-paginator [first]="first" [rows]="1" [totalRecords]="12" (onPageChange)="onPageChange($event)" [showJumpToPageDropdown]="true" [showPageLinks]="false"></p-paginator>
-            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/nature/nature' + (first + 1) + '.jpg'" class="max-w-full rounded-xl" />
+            <img [src]="'https://optimus.openng.org/demo/nature/nature' + (first + 1) + '.jpg'" class="max-w-full rounded-xl" />
         </div>
     `,
     standalone: true,

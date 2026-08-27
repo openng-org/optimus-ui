@@ -12,7 +12,7 @@ import { Component } from '@angular/core';
 @Component({
     standalone: true,
     imports: [AppDoc],
-    template: ` <app-doc docTitle="Angular Divider Component" header="Divider" description="Divider is used to separate contents." [docs]="docs" [apiDocs]="['Divider']" themeDocs="divider" [ptDocs]="ptComponent"></app-doc> `
+    template: ` <app-doc docTitle="Angular Divider Component - Optimus UI" header="Divider" description="Divider is used to separate contents." [docs]="docs" [apiDocs]="['Divider']" themeDocs="divider" [ptDocs]="ptComponent"></app-doc> `
 })
 export class DividerDemo {
     docs = [

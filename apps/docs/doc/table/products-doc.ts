@@ -150,7 +150,7 @@ interface ExportColumn {
                             <td style="min-width: 12rem">{{ product.code }}</td>
                             <td style="min-width: 16rem">{{ product.name }}</td>
                             <td>
-                                <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+                                <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
                             </td>
                             <td>{{ product.price | currency: 'USD' }}</td>
                             <td>{{ product.category }}</td>
@@ -171,7 +171,7 @@ interface ExportColumn {
                 <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
                     <ng-template #content>
                         <div class="flex flex-col gap-6">
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
                             <div>
                                 <label for="name" class="block font-bold mb-3">Name</label>
                                 <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />

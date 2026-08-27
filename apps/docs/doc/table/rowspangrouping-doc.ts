@@ -33,7 +33,7 @@ import { TagModule } from '@openng/optimus-ui/tag';
                             <td>{{ rowIndex }}</td>
                             <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
                                 <div class="flex items-center gap-2">
-                                    <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                    <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" />
                                     <span>{{ customer.representative.name }}</span>
                                 </div>
                             </td>
@@ -42,7 +42,7 @@ import { TagModule } from '@openng/optimus-ui/tag';
                             </td>
                             <td>
                                 <div class="flex items-center gap-2">
-                                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                    <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                     <span>{{ customer.country.name }}</span>
                                 </div>
                             </td>

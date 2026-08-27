@@ -12,7 +12,15 @@ import { TooltipDoc } from '@/doc/speeddial/tooltip-doc';
 import { Component } from '@angular/core';
 
 @Component({
-    template: `<app-doc docTitle="Angular Speed Dial Component" header="Speed Dial" description="SpeedDial is a floating button with a popup menu." [docs]="docs" [apiDocs]="['SpeedDial']" [ptDocs]="ptComponent" themeDocs="speeddial"></app-doc>`,
+    template: `<app-doc
+        docTitle="Angular Speed Dial Component - Optimus UI"
+        header="Speed Dial"
+        description="SpeedDial is a floating button with a popup menu."
+        [docs]="docs"
+        [apiDocs]="['SpeedDial']"
+        [ptDocs]="ptComponent"
+        themeDocs="speeddial"
+    ></app-doc>`,
     standalone: true,
     imports: [AppDoc],
     styleUrl: './speeddialdemo.scss'

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { Component } from '@angular/core';
 
 @Component({
     selector: 'overview-doc',
@@ -8,9 +8,12 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
     template: `
         <app-docsectiontext>
             <p>
-                <a href="https://primeflex.org">PrimeFlex</a> is designed to be a lightweight CSS utility to accompany Optimus UI. The team has decided to avoid the maintenance of a CSS library and utilize the resources on improving the UI libraries
-                instead. Community feedback has been essential in this decision as well since majority of the applications have their own CSS utilities whether it is Tailwind, Bootstrap or an in-house one, as a result adding PrimeFlex to a project
-                was causing overlapping functionality.
+                <a href="https://primeflex.org" target="_blank" rel="noopener noreferrer">PrimeFlex</a> was PrimeTek's lightweight CSS utility library, designed to accompany PrimeNG. PrimeTek stopped maintaining it before the relicensing, on the
+                grounds that most applications already bring their own utility layer — Tailwind, Bootstrap or something in-house — and a second one only overlaps with it.
+            </p>
+            <p>
+                Optimus UI does not maintain PrimeFlex either, and for the same reason. Nothing in this library depends on it, and no component requires it. If your application already uses PrimeFlex it will keep working, but it will not receive
+                updates from us, and we suggest moving to Tailwind CSS.
             </p>
         </app-docsectiontext>
     `

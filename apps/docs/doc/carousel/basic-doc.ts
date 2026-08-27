@@ -22,7 +22,7 @@ import { TagModule } from '@openng/optimus-ui/tag';
                     <div class="border border-surface rounded-border m-2 p-4">
                         <div class="mb-4">
                             <div class="relative mx-auto">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
+                                <img src="https://optimus.openng.org/demo/product/{{ product.image }}" [alt]="product.name" class="w-full rounded-border" />
                                 <p-tag [value]="product.inventoryStatus" [severity]="getSeverity(product.inventoryStatus)" class="absolute dark:!bg-surface-900" [ngStyle]="{ 'left.px': 5, 'top.px': 5 }" />
                             </div>
                         </div>

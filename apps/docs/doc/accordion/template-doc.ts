@@ -25,7 +25,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/amyelsner.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Amy Elsner</span>
                             <p-badge value="3" class="ml-auto mr-2" />
                         </span>
@@ -48,7 +48,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/onyamalimba.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Onyama Limba</span>
                             <p-badge value="4" class="ml-auto mr-2" />
                         </span>
@@ -70,7 +70,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                             }
                         </ng-template>
                         <span class="flex items-center gap-2 w-full">
-                            <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/ionibowcher.png" shape="circle" />
+                            <p-avatar image="https://optimus.openng.org/demo/avatar/ionibowcher.png" shape="circle" />
                             <span class="font-bold whitespace-nowrap">Ioni Bowcher</span>
                             <p-badge value="2" class="ml-auto mr-2" />
                         </span>

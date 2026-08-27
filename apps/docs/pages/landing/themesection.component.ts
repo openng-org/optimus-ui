@@ -19,7 +19,7 @@ import { Tag } from '@openng/optimus-ui/tag';
     template: `
         <section class="landing-themes py-20">
             <div class="section-header">Components</div>
-            <p class="section-detail">The most complete UI component library for Angular based on a design-agnostic infrastructure.</p>
+            <p class="section-detail">Design-agnostic theming: swap a preset, override design tokens, or go fully unstyled.</p>
             <div class="themes-main flex mt-16 justify-center px-8 lg:px-20">
                 <div class="box overflow-hidden z-10 p-8 table-container">
                     <p-table #dt [value]="customers" [(selection)]="selectedCustomers" dataKey="id" [rowHover]="true" [rows]="5" [loading]="loading" [paginator]="true" [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']">
@@ -94,20 +94,13 @@ import { Tag } from '@openng/optimus-ui/tag';
                                 </td>
                                 <td style="width: 14%; min-width: 14rem">
                                     <div class="flex items-center gap-2">
-                                        <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" width="30" height="20" alt="country flag" />
+                                        <img src="/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" width="30" height="20" alt="country flag" />
                                         <span>{{ customer.country.name }}</span>
                                     </div>
                                 </td>
                                 <td style="width: 14%; min-width: 14rem">
                                     <div class="flex items-center gap-2">
-                                        <img
-                                            [alt]="customer.representative.name"
-                                            src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}"
-                                            width="32"
-                                            height="32"
-                                            style="vertical-align: middle"
-                                            alt="representative"
-                                        />
+                                        <img [alt]="customer.representative.name" src="/demo/avatar/{{ customer.representative.image }}" width="32" height="32" style="vertical-align: middle" alt="representative" />
                                         <span>{{ customer.representative.name }}</span>
                                     </div>
                                 </td>

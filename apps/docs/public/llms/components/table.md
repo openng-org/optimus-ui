@@ -759,7 +759,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                         <p-multiselect [filter]="false" [(ngModel)]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" class="w-full">
                                             <ng-template let-option #item>
                                                 <div class="flex items-center gap-2">
-                                                    <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                    <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                     <span>{{ option.name }}</span>
                                                 </div>
                                             </ng-template>
@@ -825,13 +825,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -1021,7 +1021,7 @@ import { Customer, Country } from '@/domain/customer';
                     <tr>
                         <td colspan="5">
                             <button type="button" pButton pRipple [pRowToggler]="customer" text rounded plain class="mr-2" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
-                            <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle; display: inline-block" />
+                            <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle; display: inline-block" />
                             <span class="font-bold ml-2">{{ customer.representative.name }}</span>
                         </td>
                     </tr>
@@ -1039,7 +1039,7 @@ import { Customer, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -1235,7 +1235,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                         <p-multiselect [(ngModel)]="value" [options]="representatives()" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
                                             <ng-template let-option #item>
                                                 <div class="flex items-center gap-2">
-                                                    <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                    <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                     <span>{{ option.name }}</span>
                                                 </div>
                                             </ng-template>
@@ -1299,13 +1299,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -1470,7 +1470,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                                     <p-multiselect [(ngModel)]="value" [options]="representatives" placeholder="Any" (onChange)="filter($event.value)" optionLabel="name" style="min-width: 14rem" [panelStyle]="{ minWidth: '16rem' }">
                                         <ng-template let-option #item>
                                             <div class="flex items-center gap-2">
-                                                <img [alt]="option.label" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ option.image }}" style="width: 32px" />
+                                                <img [alt]="option.label" src="https://optimus.openng.org/demo/avatar/{{ option.image }}" style="width: 32px" />
                                                 <span>{{ option.name }}</span>
                                             </div>
                                         </ng-template>
@@ -1501,13 +1501,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -2514,7 +2514,7 @@ interface ExportColumn {
                         <td style="min-width: 12rem">{{ product.code }}</td>
                         <td style="min-width: 16rem">{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" style="width: 64px" class="rounded" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>
@@ -2534,7 +2534,7 @@ interface ExportColumn {
             <p-dialog [(visible)]="productDialog" [style]="{ width: '450px' }" header="Product Details" [modal]="true">
                 <ng-template #content>
                     <div class="flex flex-col gap-6">
-                        <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
+                        <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.image" class="block m-auto pb-4" *ngIf="product.image" />
                         <div>
                             <label for="name" class="block font-bold mb-3">Name</label>
                             <input type="text" pInputText id="name" [(ngModel)]="product.name" required autofocus fluid />
@@ -3164,7 +3164,7 @@ import { Customer } from '@/domain/customer';
                         </td>
                         <td>{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" width="50" class="shadow-lg" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>
@@ -3335,7 +3335,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         <td>{{ rowIndex }}</td>
                         <td *ngIf="rowgroup" [attr.rowspan]="rowspan">
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" />
                                 <span>{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -3344,7 +3344,7 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -3730,13 +3730,13 @@ import { Customer, Representative, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                             </div>
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -3751,11 +3751,11 @@ import { Customer, Representative, Country } from '@/domain/customer';
                             {{ customer.name }}
                         </td>
                         <td>
-                            <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                            <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                             <span class="ml-1 align-middle">{{ customer.country.name }}</span>
                         </td>
                         <td>
-                            <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                            <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                             <span class="ml-1 align-middle">{{ customer.representative.name }}</span>
                         </td>
                         <td>
@@ -3963,7 +3963,7 @@ import { Customer, Country } from '@/domain/customer';
                     <tr pRowGroupHeader>
                         <td colspan="5">
                             <div class="flex items-center gap-2">
-                                <img [alt]="customer.representative.name" src="https://primefaces.org/cdn/primeng/images/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
+                                <img [alt]="customer.representative.name" src="https://optimus.openng.org/demo/avatar/{{ customer.representative.image }}" width="32" style="vertical-align: middle" />
                                 <span class="font-bold">{{ customer.representative.name }}</span>
                             </div>
                         </td>
@@ -3983,7 +3983,7 @@ import { Customer, Country } from '@/domain/customer';
                         </td>
                         <td>
                             <div class="flex items-center gap-2">
-                                <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
+                                <img src="https://optimus.openng.org/demo/flag/flag_placeholder.png" [class]="'flag flag-' + customer.country.code" style="width: 20px" />
                                 <span>{{ customer.country.name }}</span>
                             </div>
                         </td>
@@ -4093,7 +4093,7 @@ interface Column {
                     <tr>
                         <td>{{ product.name }}</td>
                         <td>
-                            <img [src]="'https://primefaces.org/cdn/primeng/images/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded" />
+                            <img [src]="'https://optimus.openng.org/demo/product/' + product.image" [alt]="product.name" class="w-24 rounded" />
                         </td>
                         <td>{{ product.price | currency: 'USD' }}</td>
                         <td>{{ product.category }}</td>

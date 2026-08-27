@@ -18,7 +18,15 @@ import { Component } from '@angular/core';
     standalone: true,
     imports: [AppDoc],
     template: `
-        <app-doc docTitle="Angular Checkbox Component" header="Checkbox" description="Checkbox is an extension to standard checkbox element with theming." [docs]="docs" [apiDocs]="['Checkbox']" [ptDocs]="ptComponent" themeDocs="checkbox"></app-doc>
+        <app-doc
+            docTitle="Angular Checkbox Component - Optimus UI"
+            header="Checkbox"
+            description="Checkbox is an extension to standard checkbox element with theming."
+            [docs]="docs"
+            [apiDocs]="['Checkbox']"
+            [ptDocs]="ptComponent"
+            themeDocs="checkbox"
+        ></app-doc>
     `
 })
 export class CheckboxDemo {

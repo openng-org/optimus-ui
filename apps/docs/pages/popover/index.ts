@@ -11,7 +11,7 @@ import { Component } from '@angular/core';
 
 @Component({
     template: `<app-doc
-        docTitle="Angular Popover Component"
+        docTitle="Angular Popover Component - Optimus UI"
         header="Popover"
         description="Popover is a container component that can overlay other components on page."
         [docs]="docs"

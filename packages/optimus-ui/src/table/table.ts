@@ -354,10 +354,11 @@ export class TableService {
         </span>
     `,
     providers: [TableService, TableStyle, { provide: TABLE_INSTANCE, useExisting: Table }, { provide: PARENT_INSTANCE, useExisting: Table }],
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
     host: {
         '[class]': "cn(cx('root'), styleClass)",
+        '[style.height]': 'virtualScrollViewportHeight',
         '[attr.data-p]': 'dataP'
     },
     hostDirectives: [Bind]
@@ -596,6 +597,11 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
      * @group Props
      */
     @Input() scrollHeight: string | undefined;
+
+    get virtualScrollViewportHeight(): string | null {
+        const height = this.scrollHeight;
+        return this.virtualScroll && height != null && height !== 'flex' ? height : null;
+    }
     /**
      * Whether the data should be loaded on demand during scroll.
      * @group Props
@@ -1650,8 +1656,8 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
 
     sortMultiple() {
         if (this.groupRowsBy) {
-            if (!this._multiSortMeta) this._multiSortMeta = [this.getGroupRowsMeta()];
-            else if ((<SortMeta[]>this.multiSortMeta)[0].field !== this.groupRowsBy) this._multiSortMeta = [this.getGroupRowsMeta(), ...this._multiSortMeta];
+            if (!this._multiSortMeta || !this._multiSortMeta.length) this._multiSortMeta = [this.getGroupRowsMeta()];
+            else if (this._multiSortMeta[0].field !== this.groupRowsBy) this._multiSortMeta = [this.getGroupRowsMeta(), ...this._multiSortMeta];
         }
         if (this.multiSortMeta && this.multiSortMeta.length > 0) {
             if (this.lazy) {
@@ -3028,17 +3034,7 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
     }
 
     saveColumnWidths(state: any) {
-        let widths: any[] = [];
-        let headers: any[] = [];
-
-        const container = this.el?.nativeElement;
-
-        if (container) {
-            headers = DomHandler.find(container, '[data-pc-section="thead"] > tr > th');
-        }
-
-        headers.forEach((header) => (widths as any[]).push(DomHandler.getOuterWidth(header)));
-        state.columnWidths = widths.join(',');
+        state.columnWidths = this._totalTableWidth().join(',');
 
         if (this.columnResizeMode === 'expand' && this.tableViewChild) {
             state.tableWidth = DomHandler.getOuterWidth(this.tableViewChild.nativeElement);
@@ -3387,7 +3383,7 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
             <ng-container *ngTemplateOutlet="dataTable.emptyMessageTemplate || dataTable._emptyMessageTemplate; context: { $implicit: columns, frozen: frozen }"></ng-container>
         </ng-container>
     `,
-    changeDetection: ChangeDetectionStrategy.Default,
+    changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
     host: {
         '[attr.data-p]': 'dataP'
@@ -4931,6 +4927,7 @@ export class CancelEditableRow extends BaseComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-cellEditor',
     standalone: false,
     template: `
@@ -5378,6 +5375,7 @@ export class ReorderableRow extends BaseComponent {
  * @group Components
  */
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-columnFilter, p-column-filter, p-columnfilter',
     standalone: false,
     template: `
@@ -6101,8 +6099,11 @@ export class ColumnFilter extends BaseComponent {
     }
 
     toggleMenu(event: Event) {
-        this.overlayVisible = !this.overlayVisible;
-        this.renderOverlay.set(!this.renderOverlay());
+        if (this.overlayVisible) {
+            this.hide();
+        } else {
+            this.show();
+        }
         event.stopPropagation();
     }
 
@@ -6110,7 +6111,7 @@ export class ColumnFilter extends BaseComponent {
         switch (event.key) {
             case 'Escape':
             case 'Tab':
-                this.overlayVisible = false;
+                this.hide();
                 break;
 
             case 'ArrowDown':
@@ -6133,7 +6134,7 @@ export class ColumnFilter extends BaseComponent {
     }
 
     onEscape() {
-        this.overlayVisible = false;
+        this.hide();
         this.icon?.nativeElement.focus();
     }
 
@@ -6183,12 +6184,12 @@ export class ColumnFilter extends BaseComponent {
 
     onOverlayAnimationAfterLeave(event: MotionEvent) {
         this.restoreOverlayAppend();
+        ZIndexUtils.clear(this.overlay);
         this.onOverlayHide();
         this.renderOverlay.set(false);
         if (this.overlaySubscription) {
             this.overlaySubscription.unsubscribe();
         }
-        ZIndexUtils.clear(this.overlay);
 
         this.onHide.emit({ originalEvent: event as any });
     }
@@ -6308,6 +6309,12 @@ export class ColumnFilter extends BaseComponent {
         }
     }
 
+    show() {
+        this.renderOverlay.set(true);
+        this.overlayVisible = true;
+        this.cd.markForCheck();
+    }
+
     hide() {
         this.overlayVisible = false;
         this.cd.markForCheck();
@@ -6353,6 +6360,7 @@ export class ColumnFilter extends BaseComponent {
 }
 
 @Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-columnFilterFormElement',
     standalone: false,
     template: `

@@ -25,7 +25,7 @@ interface UploadEvent {
     template: `
         <div class="card">
             <p-toast />
-            <p-fileupload name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced">
+            <p-fileupload name="demo[]" url="https://optimus.openng.org/api/upload" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced">
                 <ng-template #empty>
                     <div>Drag and drop files to here to upload.</div>
                 </ng-template>
@@ -61,7 +61,7 @@ interface UploadEvent {
     template: `
         <div class="card flex justify-center">
             <p-toast />
-            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
+            <p-fileupload mode="basic" name="demo[]" chooseIcon="pi pi-upload" url="https://optimus.openng.org/api/upload" accept="image/*" maxFileSize="1000000" (onUpload)="onBasicUploadAuto($event)" [auto]="true" chooseLabel="Browse" />
         </div>
     `,
     standalone: true,
@@ -93,7 +93,7 @@ interface UploadEvent {
     template: `
         <p-toast />
         <div class="card flex flex-wrap gap-6 items-center justify-between">
-            <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://www.primefaces.org/cdn/api/upload.php" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
+            <p-fileupload #fu mode="basic" chooseLabel="Choose" chooseIcon="pi pi-upload" name="demo[]" url="https://optimus.openng.org/api/upload" accept="image/*" maxFileSize="1000000" (onUpload)="onUpload($event)" />
             <p-button label="Upload" (onClick)="fu.upload()" severity="secondary" />
         </div>
     `,
@@ -155,7 +155,7 @@ import { MessageService } from '@openng/optimus-ui/api';
         >
         <div class="card">
             <p-toast />
-            <p-fileupload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload()" (onSelect)="onSelectedFiles($event)">
+            <p-fileupload name="myfile[]" url="https://optimus.openng.org/api/upload" [multiple]="true" accept="image/*" maxFileSize="1000000" (onUpload)="onTemplatedUpload()" (onSelect)="onSelectedFiles($event)">
                 <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
                     <div class="flex flex-wrap justify-between items-center flex-1 gap-4">
                         <div class="flex gap-2">
