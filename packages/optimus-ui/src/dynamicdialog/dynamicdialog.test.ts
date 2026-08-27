@@ -647,6 +647,15 @@ describe('DynamicDialog', () => {
             expect(dialogElement.nativeElement.getAttribute('aria-modal')).toBe('true');
         });
 
+        it('should pass ariaLabelledBy from config to the dialog', async () => {
+            mockConfig.ariaLabelledBy = 'custom-label-id';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const dialogElement = fixture.debugElement.query(By.css('[role="dialog"]'));
+            expect(dialogElement.nativeElement.getAttribute('aria-labelledby')).toBe('custom-label-id');
+        });
+
         // Focus management is now handled by Dialog component, removing focus tests
 
         it('should handle escape key press', () => {

@@ -43,6 +43,7 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
             [focusTrap]="ddconfig?.focusTrap !== false"
             [transitionOptions]="ddconfig?.transitionOptions || '150ms cubic-bezier(0, 0, 0.2, 1)'"
             [closeAriaLabel]="ddconfig?.closeAriaLabel || defaultCloseAriaLabel"
+            [ariaLabelledBy]="ddconfig?.ariaLabelledBy"
             [minimizeIcon]="minimizeIcon"
             [maximizeIcon]="maximizeIcon"
             [closeButtonProps]="{ severity: 'secondary', variant: 'text', rounded: true }"
