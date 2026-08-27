@@ -226,6 +226,29 @@ describe('DynamicDialog', () => {
             component.ngAfterViewInit();
             expect(component.ariaLabelledBy).toBeNull();
         });
+
+        it('should use ariaLabelledBy from config when provided', async () => {
+            mockConfig.showHeader = true;
+            mockConfig.ariaLabelledBy = 'custom-label-id';
+            component.visible = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            component.ngAfterViewInit();
+
+            expect(component.ariaLabelledBy).toBe('custom-label-id');
+        });
+
+        it('should prioritize ariaLabelledBy from config over header when showHeader is false', async () => {
+            mockConfig.header = null as any;
+            mockConfig.showHeader = false;
+            mockConfig.ariaLabelledBy = 'custom-label-id';
+            component.visible = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            component.ngAfterViewInit();
+
+            expect(component.ariaLabelledBy).toBe('custom-label-id');
+        });
     });
 
     describe('Dialog Display and Hide Behavior', () => {
