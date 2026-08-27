@@ -964,7 +964,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     get optionValueSelected() {
-        return typeof this.modelValue() === 'string' && this.optionValue;
+        return typeof this.modelValue() === 'string' || this.optionValue;
     }
 
     chipItemClass(index) {
