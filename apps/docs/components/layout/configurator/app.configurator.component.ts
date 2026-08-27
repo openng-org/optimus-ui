@@ -1,5 +1,5 @@
 import { AppConfigService } from '@/service/appconfigservice';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, computed, inject, PLATFORM_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { $t, updatePreset, updateSurfacePalette } from '@openng/optimus-ui-themes';
@@ -19,6 +19,9 @@ const presets = {
     Lara,
     Nora
 };
+
+// The configurator is rendered in both the topbar and the menu; the stored theme only needs to be applied once.
+let storedThemeApplied = false;
 
 export type ColorPalette = Record<string, string>;
 
@@ -111,6 +114,13 @@ export class AppConfiguratorComponent {
     platformId = inject(PLATFORM_ID);
 
     presets = Object.keys(presets);
+
+    constructor() {
+        if (isPlatformBrowser(this.platformId) && !storedThemeApplied) {
+            storedThemeApplied = true;
+            this.applyStoredTheme();
+        }
+    }
 
     onRTLChange(value: boolean) {
         this.configService.appState.update((state) => ({ ...state, RTL: value }));
@@ -488,5 +498,26 @@ export class AppConfiguratorComponent {
             this.config.ripple.set(false);
         }
         $t().preset(preset).preset(this.getPresetExt()).surfacePalette(surfacePalette).use({ useDefaultOptions: true });
+    }
+
+    private applyStoredTheme() {
+        const state = this.configService.appState();
+        const preset = presets[state.preset];
+        const surfacePalette = this.surfaces.find((s) => s.name === state.surface)?.palette;
+
+        if (state.preset === 'Material') {
+            document.body.classList.add('material');
+            this.config.ripple.set(true);
+        }
+
+        let theme = $t().preset(preset).preset(this.getPresetExt());
+
+        if (surfacePalette) {
+            theme = theme.surfacePalette(surfacePalette);
+        }
+
+        theme.use({ useDefaultOptions: true });
+
+        this.toggleRTL(state.RTL);
     }
 }
