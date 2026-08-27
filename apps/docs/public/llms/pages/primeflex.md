@@ -17,3 +17,4 @@ PrimeFlex was PrimeTek's lightweight CSS utility library, designed to accompany 
 ## Tailwindcss-
 
 Tailwind CSS is the replacement we suggest. This documentation site is itself built with it, and we publish &#64;openng/optimus-ui-tailwindcss for first-class integration — a plugin that teaches Tailwind about the theme's design tokens and puts the component styles in a cascade layer you can override cleanly. See the Tailwind CSS guide for setup with either Tailwind v3 or v4, and the next section for converting existing PrimeFlex classes.
+

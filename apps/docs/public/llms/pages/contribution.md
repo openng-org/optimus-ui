@@ -17,3 +17,4 @@ Optimus UI is a community-maintained Angular UI library, stewarded by OpenNG and
 ## Pathway-
 
 Optimus UI offers an organization structure involving contributors and the core team: Contributor Role After a certain period of frequent contributions, a community member is offered the Contributor role. On average, it may take about three months, but the exact duration can vary depending on the individual commitment. Committer Role If a contributor actively participates in the codebase and PRs, their role may be upgraded to a Committer level, providing direct commit access to the Optimus UI codebase.
+
