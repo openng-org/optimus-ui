@@ -12,11 +12,14 @@ import { TreeTableModule } from '@openng/optimus-ui/treetable';
     standalone: true,
     imports: [TreeTableModule, ButtonModule, AppCode, AppDocSectionText, DeferredDemo],
     template: ` <app-docsectiontext>
-            <p>Expansion state is controlled with <i>expandedKeys</i> property.</p>
+            <p>Expansion state is controlled with the <i>expanded</i> property.</p>
         </app-docsectiontext>
         <div class="card">
-            <p-button (click)="toggleApplications()" label="Toggle Applications" class="block mb-4" />
             <p-deferred-demo (load)="loadDemoData()">
+                <div class="flex gap-2 mb-4">
+                    <p-button (click)="toggleApplications()" label="Toggle Applications" />
+                    <p-button (click)="toggleAll()" label="Toggle All" />
+                </div>
                 <p-treetable [value]="files" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
                     <ng-template #header>
                         <tr>
@@ -63,6 +66,22 @@ export class ControlledDoc {
             const newFiles = [...this.files];
             newFiles[0] = { ...newFiles[0], expanded: !newFiles[0].expanded };
             this.files = newFiles;
+        }
+    }
+
+    toggleAll() {
+        if (!this.files || this.files.length === 0) return;
+        const newFiles = [...this.files];
+        for (const file of newFiles) {
+            this.toggleSubtree(file);
+        }
+        this.files = newFiles;
+    }
+
+    private toggleSubtree(node: TreeNode) {
+        node.expanded = !node.expanded;
+        for (const child of node.children || []) {
+            this.toggleSubtree(child);
         }
     }
 }

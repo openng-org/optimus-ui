@@ -543,7 +543,7 @@ Button is an extension to standard button element with icons and theming.
 | style | { [klass: string]: any } | - | Inline style of the element. |
 | styleClass | string | - | Class of the element. |
 | badgeClass | string | - | Style class of the badge. **(Deprecated)** |
-| badgeSeverity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | secondary | Severity type of the badge. |
+| badgeSeverity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" \| "help" \| "primary" | secondary | Severity type of the badge. |
 | ariaLabel | string | - | Used to define a string that autocomplete attribute the current element. |
 | autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
 | iconPos | ButtonIconPosition | left | Position of the icon. |

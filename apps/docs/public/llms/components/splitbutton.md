@@ -877,7 +877,7 @@ SplitButton groups a set of commands in an overlay with a default command.
 | pt | InputSignal<SplitButtonPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MenuItem[] | - | MenuModel instance to define the overlay items. |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | - | Defines the style of the button. |
+| severity | ButtonSeverity | - | Defines the style of the button. |
 | raised | boolean | false | Add a shadow to indicate elevation. |
 | rounded | boolean | false | Add a circular border radius to the button. |
 | text | boolean | false | Add a textual class to the button without a background initially. |

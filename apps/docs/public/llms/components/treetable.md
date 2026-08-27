@@ -793,16 +793,21 @@ export class TreetableContextmenuDemo implements OnInit {
 
 ## Controlled
 
-Expansion state is controlled with expandedKeys property.
+Expansion state is controlled with the expanded property.
 
 ```typescript
 import { Component, OnInit, inject } from '@angular/core';
+import { ButtonModule } from '@openng/optimus-ui/button';
 import { TreeTableModule } from '@openng/optimus-ui/treetable';
 import { NodeService } from '@/service/nodeservice';
 import { TreeNode } from '@openng/optimus-ui/api';
 
 @Component({
     template: `
+        <div class="flex gap-2 mb-4">
+            <p-button (click)="toggleApplications()" label="Toggle Applications" />
+            <p-button (click)="toggleAll()" label="Toggle All" />
+        </div>
         <p-treetable [value]="files" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template #header>
                 <tr>
@@ -826,7 +831,7 @@ import { TreeNode } from '@openng/optimus-ui/api';
         </p-treetable>
     `,
     standalone: true,
-    imports: [TreeTableModule],
+    imports: [ButtonModule, TreeTableModule],
     providers: [NodeService]
 })
 export class TreetableControlledDemo implements OnInit {
@@ -845,6 +850,15 @@ export class TreetableControlledDemo implements OnInit {
             newFiles[0] = { ...newFiles[0], expanded: !newFiles[0].expanded };
             this.files = newFiles;
         }
+    }
+
+    toggleAll() {
+        if (!this.files || this.files.length === 0) return;
+        const newFiles = [...this.files];
+        for (const file of newFiles) {
+            this.toggleSubtree(file);
+        }
+        this.files = newFiles;
     }
 }
 ```

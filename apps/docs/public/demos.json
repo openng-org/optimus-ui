@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-20T21:26:44.471Z",
+  "generatedAt": "2026-08-27T06:40:47.519Z",
   "totalDemos": 803,
   "demos": {
     "Image-template-demo": {
@@ -15069,7 +15069,7 @@
       "component": "treetable",
       "section": "controlled",
       "code": {
-        "typescript": "import { Component, OnInit, inject } from '@angular/core';\nimport { TreeTableModule } from '@openng/optimus-ui/treetable';\nimport { NodeService } from '@/service/nodeservice';\nimport { TreeNode } from '@openng/optimus-ui/api';\n\n@Component({\n    template: `\n        <p-treetable [value]=\"files\" [scrollable]=\"true\" [tableStyle]=\"{ 'min-width': '50rem' }\">\n            <ng-template #header>\n                <tr>\n                    <th>Name</th>\n                    <th>Size</th>\n                    <th>Type</th>\n                </tr>\n            </ng-template>\n            <ng-template #body let-rowNode let-rowData=\"rowData\">\n                <tr [ttRow]=\"rowNode\">\n                    <td>\n                        <div class=\"flex items-center gap-2\">\n                            <p-treetable-toggler [rowNode]=\"rowNode\" />\n                            <span>{{ rowData.name }}</span>\n                        </div>\n                    </td>\n                    <td>{{ rowData.size }}</td>\n                    <td>{{ rowData.type }}</td>\n                </tr>\n            </ng-template>\n        </p-treetable>\n    `,\n    standalone: true,\n    imports: [TreeTableModule],\n    providers: [NodeService]\n})\nexport class TreetableControlledDemo implements OnInit {\n    private nodeService = inject(NodeService);\n    files!: TreeNode[];\n\n    ngOnInit() {\n        this.nodeService.getFilesystem().then((files) => {\n            this.files = files.slice(0, 5);\n        });\n    }\n\n    toggleApplications() {\n        if (this.files && this.files.length > 0) {\n            const newFiles = [...this.files];\n            newFiles[0] = { ...newFiles[0], expanded: !newFiles[0].expanded };\n            this.files = newFiles;\n        }\n    }\n}"
+        "typescript": "import { Component, OnInit, inject } from '@angular/core';\nimport { ButtonModule } from '@openng/optimus-ui/button';\nimport { TreeTableModule } from '@openng/optimus-ui/treetable';\nimport { NodeService } from '@/service/nodeservice';\nimport { TreeNode } from '@openng/optimus-ui/api';\n\n@Component({\n    template: `\n        <div class=\"flex gap-2 mb-4\">\n            <p-button (click)=\"toggleApplications()\" label=\"Toggle Applications\" />\n            <p-button (click)=\"toggleAll()\" label=\"Toggle All\" />\n        </div>\n        <p-treetable [value]=\"files\" [scrollable]=\"true\" [tableStyle]=\"{ 'min-width': '50rem' }\">\n            <ng-template #header>\n                <tr>\n                    <th>Name</th>\n                    <th>Size</th>\n                    <th>Type</th>\n                </tr>\n            </ng-template>\n            <ng-template #body let-rowNode let-rowData=\"rowData\">\n                <tr [ttRow]=\"rowNode\">\n                    <td>\n                        <div class=\"flex items-center gap-2\">\n                            <p-treetable-toggler [rowNode]=\"rowNode\" />\n                            <span>{{ rowData.name }}</span>\n                        </div>\n                    </td>\n                    <td>{{ rowData.size }}</td>\n                    <td>{{ rowData.type }}</td>\n                </tr>\n            </ng-template>\n        </p-treetable>\n    `,\n    standalone: true,\n    imports: [ButtonModule, TreeTableModule],\n    providers: [NodeService]\n})\nexport class TreetableControlledDemo implements OnInit {\n    private nodeService = inject(NodeService);\n    files!: TreeNode[];\n\n    ngOnInit() {\n        this.nodeService.getFilesystem().then((files) => {\n            this.files = files.slice(0, 5);\n        });\n    }\n\n    toggleApplications() {\n        if (this.files && this.files.length > 0) {\n            const newFiles = [...this.files];\n            newFiles[0] = { ...newFiles[0], expanded: !newFiles[0].expanded };\n            this.files = newFiles;\n        }\n    }\n\n    toggleAll() {\n        if (!this.files || this.files.length === 0) return;\n        const newFiles = [...this.files];\n        for (const file of newFiles) {\n            this.toggleSubtree(file);\n        }\n        this.files = newFiles;\n    }\n}"
       },
       "metadata": {
         "services": [
@@ -15078,6 +15078,7 @@
         "optimusServices": [],
         "extFiles": [],
         "imports": [
+          "ButtonModule",
           "TreeTableModule"
         ]
       }
