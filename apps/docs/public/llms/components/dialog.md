@@ -501,7 +501,7 @@ Dialog is a container to display content in an overlay window.
 | unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
 | pt | InputSignal<DialogPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| header | string | - | Title text of the dialog. |
+| header | InputSignal<string> | ... | Title text of the dialog. |
 | draggable | boolean | true | Enables dragging to change the position using header. |
 | resizable | boolean | true | Enables resizing of the content. |
 | contentStyle | any | - | Style of the content section. |
@@ -538,6 +538,7 @@ Dialog is a container to display content in an overlay window.
 | visible | boolean | - | Specifies the visibility of the dialog. |
 | style | any | - | Inline style of the component. |
 | position | "top" \| "bottom" \| "center" \| "left" \| "right" \| "topleft" \| "bottomleft" \| "topright" \| "bottomright" | - | Position of the dialog. |
+| ariaLabelledBy | InputSignal<string> | ... | Identifier of the element that labels the dialog. Defaults to the id of the generated header title. |
 | appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 
 ### Emits

@@ -9,6 +9,23 @@ import { Schema, Theme } from './schema';
 
 const THEMES_PACKAGE = '@openng/optimus-ui-themes';
 const DEFAULT_THEME: Theme = 'Aura';
+const MIGRATE_COMMAND = 'ng generate @openng/optimus-ui@1:migrate-from-primeng';
+
+function projectNotFound(name: string): string {
+    return `Project "${name}" was not found in the workspace.`;
+}
+
+/**
+ * Why ng-add refuses a PrimeNG workspace, and what the user is left holding. The Angular CLI has
+ * already installed `@openng/optimus-ui` and written it into `dependencies` by the time the
+ * factory runs (`ng-add.save` is `"dependencies"`, and the CLI only cleans the entry up when
+ * `save` is `false`), so the message has to account for it rather than pretend nothing happened.
+ */
+function primengBailMessage(): string {
+    return `primeng detected — ng add only sets up Optimus UI in new projects, so no changes were made and the theme preset was not configured.
+To migrate this workspace, run: ${MIGRATE_COMMAND}
+The Angular CLI has already added @openng/optimus-ui to your dependencies. The migration schematic needs it there, so keep it — or remove it with your package manager if you did not mean to add Optimus UI to this workspace.`;
+}
 
 /** The preset import name and its subpath module for the chosen theme (e.g. `Aura` → `@openng/optimus-ui-themes/aura`). */
 function themeImport(theme: Theme): { preset: string; module: string } {
@@ -30,20 +47,46 @@ function manualInstructions(theme: Theme): string {
 /**
  * Sets up Optimus UI in a fresh (non-PrimeNG) project. Migrating an existing PrimeNG workspace is
  * a separate concern handled by the `migrate-from-primeng` schematic
- * (`ng generate @openng/optimus-ui:migrate-from-primeng`) — when primeng is detected, ng-add
- * points the user there and makes no changes.
+ * (`ng generate @openng/optimus-ui@1:migrate-from-primeng`) — when primeng is detected, ng-add
+ * makes no changes and throws, so the CLI reports the refusal as a failure (#1447). A warning was
+ * not enough: the command exited 0 after asking for a theme preset it then discarded, which reads
+ * as a successful setup, and the freshly-installed dependency in package.json reinforces that.
  */
 export function ngAdd(options: Schema): Rule {
-    return (tree: Tree, context: SchematicContext) => {
+    return async (tree: Tree) => {
         if (!tree.read('/package.json')) {
             throw new SchematicsException('Could not read /package.json.');
         }
+        // Before the primeng bail, so a mistyped --project reports the typo rather than being
+        // masked by whichever check happens to run first (#1447).
+        await assertProjectExists(tree, options);
         if (hasPrimeng(tree)) {
-            context.logger.warn('primeng detected — ng-add only sets up Optimus UI in new projects, so no changes were made.\n' + 'To migrate this workspace, run: ng generate @openng/optimus-ui:migrate-from-primeng');
-            return tree;
+            throw new SchematicsException(primengBailMessage());
         }
         return freshSetup(options);
     };
+}
+
+/**
+ * Hard-errors when an explicit `--project` names a project the workspace does not have. Anything
+ * else unexpected about the workspace (missing or unreadable angular.json, …) is left to
+ * `wireProvideOptimus`, which degrades to manual instructions rather than aborting.
+ */
+async function assertProjectExists(tree: Tree, options: Schema): Promise<void> {
+    if (!options.project) {
+        return;
+    }
+    try {
+        const workspace = await readWorkspace(tree);
+        if (!workspace.projects.has(options.project)) {
+            throw new SchematicsException(projectNotFound(options.project));
+        }
+    } catch (err) {
+        if (err instanceof SchematicsException) {
+            throw err;
+        }
+        // Unreadable or missing angular.json — not this check's business.
+    }
 }
 
 function freshSetup(options: Schema): Rule {
@@ -95,7 +138,7 @@ async function wireProvideOptimus(tree: Tree, context: SchematicContext, options
 
         if (options.project) {
             if (!workspace.projects.has(options.project)) {
-                throw new SchematicsException(`Project "${options.project}" was not found in the workspace.`);
+                throw new SchematicsException(projectNotFound(options.project));
             }
             projectName = options.project;
         } else {
@@ -132,7 +175,7 @@ async function wireProvideOptimus(tree: Tree, context: SchematicContext, options
     const primengFile = findSourceFileContaining(tree, sourceRoot, 'providePrimeNG(');
     if (primengFile) {
         context.logger.warn(`Found a providePrimeNG call in ${primengFile} — this workspace still uses PrimeNG, so provideOptimus was not wired automatically.
-To migrate this workspace, run: ng generate @openng/optimus-ui:migrate-from-primeng
+To migrate this workspace, run: ${MIGRATE_COMMAND}
 Or finish the setup manually:
 ${manualSteps(theme)}`);
         return;

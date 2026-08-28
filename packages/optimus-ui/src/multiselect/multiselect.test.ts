@@ -231,10 +231,12 @@ class TestFormMultiSelectComponent {
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template pTemplate="selectedItems" let-value let-removeChip="removeChip">
                 <div class="custom-selected-items">
-                    <div *ngFor="let city of value" class="custom-chip">
-                        {{ city.name }}
-                        <span class="remove-chip" (click)="removeChip(city)">×</span>
-                    </div>
+                    @for (city of value; track city) {
+                        <div class="custom-chip">
+                            {{ city.name }}
+                            <span class="remove-chip" (click)="removeChip(city)">×</span>
+                        </div>
+                    }
                 </div>
             </ng-template>
 
@@ -314,7 +316,9 @@ class TestGroupedMultiSelectComponent {
         <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name">
             <ng-template #selecteditems let-value let-removeChip="removeChip">
                 <div class="content-child-selected">
-                    <div *ngFor="let city of value">{{ city.name }}</div>
+                    @for (city of value; track city) {
+                        <div>{{ city.name }}</div>
+                    }
                 </div>
             </ng-template>
 
@@ -3964,4 +3968,50 @@ class TestMultiSelectLoadingIconComponent {
     options = [{ name: 'New York', code: 'NY' }];
 
     loadingIcon = signal<string | undefined>(undefined);
+}
+
+describe('MultiSelect inside a parent form', () => {
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+    });
+
+    it('should not register its internal ngModels with the parent form', async () => {
+        const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+        const isolationFixture = TestBed.createComponent(TestFormIsolationMultiSelectComponent);
+        isolationFixture.detectChanges();
+        await isolationFixture.whenStable();
+
+        // the header checkbox and the option checkboxes only exist while the panel is open
+        isolationFixture.debugElement.query(By.directive(MultiSelect)).componentInstance.show();
+        isolationFixture.detectChanges();
+        await isolationFixture.whenStable();
+
+        const internalNgModels = isolationFixture.debugElement.queryAll(By.directive(NgModel)).map((debugElement) => debugElement.injector.get(NgModel));
+        expect(internalNgModels.length).toBeGreaterThan(0);
+        expect(internalNgModels.every((ngModel) => ngModel.options?.standalone === true)).toBe(true);
+
+        // NG01354 is only reported by Angular 22.1.3 and up
+        expect(warnSpy.mock.calls.flat().join('\n')).not.toContain('NG01354');
+        expect(Object.keys(isolationFixture.componentInstance.form.controls)).toEqual(['value']);
+    });
+});
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [MultiSelect, ReactiveFormsModule],
+    template: `
+        <form [formGroup]="form">
+            <p-multiselect [options]="options" optionLabel="name" [filter]="true" [showToggleAll]="true" formControlName="value" />
+        </form>
+    `
+})
+class TestFormIsolationMultiSelectComponent {
+    form = new FormGroup({ value: new FormControl<City[]>([]) });
+    options: City[] = [
+        { name: 'Amsterdam', code: 'AMS' },
+        { name: 'Rotterdam', code: 'RTM' }
+    ];
 }

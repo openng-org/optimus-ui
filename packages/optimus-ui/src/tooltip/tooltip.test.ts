@@ -577,6 +577,30 @@ describe('Tooltip', () => {
             expect(document.createTextNode).toHaveBeenCalledWith('Test content');
         });
 
+        it('should reset previous content without assigning innerHTML when escape is true', async () => {
+            const tooltipText = document.createElement('div');
+            tooltipText.appendChild(document.createTextNode('Previous content'));
+            Object.defineProperty(tooltipText, 'innerHTML', {
+                configurable: true,
+                get: () => '',
+                set: () => {
+                    // Mimics a Trusted Types enabled document rejecting plain string assignments
+                    throw new TypeError("Failed to set the 'innerHTML' property on 'Element': This document requires 'TrustedHTML' assignment.");
+                }
+            });
+
+            tooltipDirective.tooltipText = tooltipText;
+            tooltipDirective.setOption({ escape: true });
+            tooltipDirective.setOption({ tooltipLabel: 'New content' });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(() => tooltipDirective.updateText()).not.toThrow();
+            expect(tooltipText.childNodes.length).toBe(1);
+            expect(tooltipText.textContent).toBe('New content');
+        });
+
         it('should handle HTML content when escape is false', async () => {
             tooltipDirective.tooltipText = document.createElement('div');
             tooltipDirective.setOption({ escape: false });

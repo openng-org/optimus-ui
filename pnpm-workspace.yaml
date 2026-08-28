@@ -18,21 +18,21 @@ catalog:
 
 catalogs:
   angular22:
-    "@angular-devkit/build-angular": ^22.1.5
-    "@angular/animations": ^22.1.2
-    "@angular/build": ^22.1.5
-    "@angular/cdk": ^22.1.3
-    "@angular/cli": ^22.1.5
-    "@angular/common": ^22.1.2
-    "@angular/compiler": ^22.1.2
-    "@angular/compiler-cli": ^22.1.2
-    "@angular/core": ^22.1.2
-    "@angular/forms": ^22.1.2
-    "@angular/platform-browser": ^22.1.2
-    "@angular/platform-browser-dynamic": ^22.1.2
-    "@angular/platform-server": ^22.1.2
-    "@angular/router": ^22.1.2
-    "@angular/ssr": ^22.1.5
+    "@angular-devkit/build-angular": ^22.1.6
+    "@angular/animations": ^22.1.4
+    "@angular/build": ^22.1.6
+    "@angular/cdk": ^22.1.4
+    "@angular/cli": ^22.1.6
+    "@angular/common": ^22.1.4
+    "@angular/compiler": ^22.1.4
+    "@angular/compiler-cli": ^22.1.4
+    "@angular/core": ^22.1.4
+    "@angular/forms": ^22.1.4
+    "@angular/platform-browser": ^22.1.4
+    "@angular/platform-browser-dynamic": ^22.1.4
+    "@angular/platform-server": ^22.1.4
+    "@angular/router": ^22.1.4
+    "@angular/ssr": ^22.1.6
     "@angular-eslint/eslint-plugin": ^22.1.0
     "@angular-eslint/eslint-plugin-template": ^22.1.0
     "@angular-eslint/schematics": ^22.1.0
@@ -44,3 +44,13 @@ minimumReleaseAgeExclude:
   - pnpm@11.13.1
   - '@openng/icons@1.0.0'
   - tsdown@0.22.9
+  - '@angular/animations@22.1.4'
+  - '@angular/common@22.1.4'
+  - '@angular/compiler-cli@22.1.4'
+  - '@angular/compiler@22.1.4'
+  - '@angular/core@22.1.4'
+  - '@angular/forms@22.1.4'
+  - '@angular/platform-browser-dynamic@22.1.4'
+  - '@angular/platform-browser@22.1.4'
+  - '@angular/platform-server@22.1.4'
+  - '@angular/router@22.1.4'

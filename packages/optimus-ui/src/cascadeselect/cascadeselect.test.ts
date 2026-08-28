@@ -90,17 +90,27 @@ const mockCountries = [
             <!-- Value template -->
             <ng-template #value let-value let-placeholder="placeholder">
                 <div class="custom-value" data-testid="template-value">
-                    <span *ngIf="value">{{ value.cname || value.name }} - Custom</span>
-                    <span *ngIf="!value">{{ placeholder }}</span>
+                    @if (value) {
+                        <span>{{ value.cname || value.name }} - Custom</span>
+                    }
+                    @if (!value) {
+                        <span>{{ placeholder }}</span>
+                    }
                 </div>
             </ng-template>
 
             <!-- Option template -->
             <ng-template #option let-option let-level="level">
                 <div class="custom-option" data-testid="template-option">
-                    <i class="pi pi-map-marker" *ngIf="level === 0"></i>
-                    <i class="pi pi-building" *ngIf="level === 1"></i>
-                    <i class="pi pi-home" *ngIf="level === 2"></i>
+                    @if (level === 0) {
+                        <i class="pi pi-map-marker"></i>
+                    }
+                    @if (level === 1) {
+                        <i class="pi pi-building"></i>
+                    }
+                    @if (level === 2) {
+                        <i class="pi pi-home"></i>
+                    }
                     <span>{{ option.name || option.cname }}</span>
                 </div>
             </ng-template>
@@ -142,9 +152,11 @@ const mockCountries = [
         </p-cascadeselect>
 
         <!-- Reactive Forms test -->
-        <form [formGroup]="reactiveForm" *ngIf="showReactiveForm">
-            <p-cascadeselect formControlName="selectedItems" [options]="formOptions" [optionLabel]="'cname'" [optionGroupLabel]="'name'" [optionGroupChildren]="['states', 'cities']" (onChange)="onFormChange($event)"> </p-cascadeselect>
-        </form>
+        @if (showReactiveForm) {
+            <form [formGroup]="reactiveForm">
+                <p-cascadeselect formControlName="selectedItems" [options]="formOptions" [optionLabel]="'cname'" [optionGroupLabel]="'name'" [optionGroupChildren]="['states', 'cities']" (onChange)="onFormChange($event)"> </p-cascadeselect>
+            </form>
+        }
     `
 })
 class TestCascadeSelectComponent {
@@ -292,17 +304,27 @@ class TestCascadeSelectComponent {
             <!-- Value template with pTemplate -->
             <ng-template pTemplate="value" let-value let-placeholder="placeholder">
                 <div class="ptemplate-value" [attr.data-testid]="'ptemplate-value'">
-                    <span class="value-text" *ngIf="value">{{ value.cname || value.name }} - pTemplate</span>
-                    <span class="placeholder-text" *ngIf="!value">{{ placeholder }} (pTemplate)</span>
+                    @if (value) {
+                        <span class="value-text">{{ value.cname || value.name }} - pTemplate</span>
+                    }
+                    @if (!value) {
+                        <span class="placeholder-text">{{ placeholder }} (pTemplate)</span>
+                    }
                 </div>
             </ng-template>
 
             <!-- Option template with pTemplate -->
             <ng-template pTemplate="option" let-option let-level="level">
                 <div class="ptemplate-option" [attr.data-testid]="'ptemplate-option'" [attr.data-level]="level">
-                    <i class="pi pi-flag" *ngIf="level === 0"></i>
-                    <i class="pi pi-map" *ngIf="level === 1"></i>
-                    <i class="pi pi-building" *ngIf="level === 2"></i>
+                    @if (level === 0) {
+                        <i class="pi pi-flag"></i>
+                    }
+                    @if (level === 1) {
+                        <i class="pi pi-map"></i>
+                    }
+                    @if (level === 2) {
+                        <i class="pi pi-building"></i>
+                    }
                     <span class="option-text">{{ option.name || option.cname }} (Level {{ level }})</span>
                 </div>
             </ng-template>

@@ -299,7 +299,7 @@ Message groups a collection of contents in tabs.
 | unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
 | pt | InputSignal<MessagePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| severity | "error" \| "success" \| "info" \| "warn" \| "secondary" \| "contrast" | 'info' | Severity level of the message. |
+| severity | MessageSeverity | 'info' | Severity level of the message. |
 | text | string | - | Text content. **(Deprecated)** |
 | escape | boolean | true | Whether displaying messages would be escaped or not. **(Deprecated)** |
 | style | { [klass: string]: any } | - | Inline style of the component. |

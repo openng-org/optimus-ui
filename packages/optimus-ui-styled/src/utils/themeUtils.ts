@@ -80,13 +80,13 @@ export default {
             primitive_css = this.transformCSS(name, prim_css, 'light', 'variable', options, set, defaults);
             primitive_tokens = prim_tokens;
 
-            const semantic_light_css = this.transformCSS(name, `${sRest_css}${csRest_css}`, 'light', 'variable', options, set, defaults);
+            const semantic_light_css = this.transformCSS(name, `${csRest_css}${sRest_css}`, 'light', 'variable', options, set, defaults);
             const semantic_dark_css = this.transformCSS(name, `${csDark_css}`, 'dark', 'variable', options, set, defaults);
 
             semantic_css = `${semantic_light_css}${semantic_dark_css}`;
             semantic_tokens = [...new Set([...sRest_tokens, ...csRest_tokens, ...csDark_tokens])];
 
-            const global_light_css = this.transformCSS(name, `${eRest_css}${ecsRest_css}color-scheme:light`, 'light', 'variable', options, set, defaults);
+            const global_light_css = this.transformCSS(name, `${ecsRest_css}${eRest_css}color-scheme:light`, 'light', 'variable', options, set, defaults);
             const global_dark_css = this.transformCSS(name, `${ecsDark_css}color-scheme:dark`, 'dark', 'variable', options, set, defaults);
 
             global_css = `${global_light_css}${global_dark_css}`;
@@ -132,7 +132,7 @@ export default {
             const [csRest_css, csRest_tokens] = [csRest_var.declarations ?? '', csRest_var.tokens || []];
             const [csDark_css, csDark_tokens] = [csDark_var.declarations ?? '', csDark_var.tokens || []];
 
-            const light_variable_css = this.transformCSS(_name, `${vRest_css}${csRest_css}`, 'light', 'variable', options, set, defaults, selector);
+            const light_variable_css = this.transformCSS(_name, `${csRest_css}${vRest_css}`, 'light', 'variable', options, set, defaults, selector);
             const dark_variable_css = this.transformCSS(_name, csDark_css, 'dark', 'variable', options, set, defaults, selector);
 
             p_css = `${light_variable_css}${dark_variable_css}`;

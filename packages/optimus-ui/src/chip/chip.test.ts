@@ -157,7 +157,9 @@ class TestChipPropsComponent {
     selector: 'test-dynamic-chip',
     template: `
         <p-chip [label]="label" [icon]="icon" [image]="image" [alt]="alt" [removable]="removable" [removeIcon]="removeIcon" [styleClass]="styleClass" [chipProps]="chipProps" (onRemove)="onRemove($event)" (onImageError)="onImageError($event)">
-            <div class="dynamic-content" *ngIf="showContent">{{ content }}</div>
+            @if (showContent) {
+                <div class="dynamic-content">{{ content }}</div>
+            }
         </p-chip>
     `
 })

@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
 
             <h3>How do I migrate from PrimeNG? Is it automatic?</h3>
             <p>
-                Mostly, but not through <i>ng add</i>, which only sets up new projects and makes no changes when it finds an existing <i>primeng</i> dependency. Install <i>&#64;openng/optimus-ui</i>, then run
+                Mostly, but not through <i>ng add</i>, which only sets up new projects and fails without changing anything when it finds an existing <i>primeng</i> dependency. Install <i>&#64;openng/optimus-ui</i>, then run
                 <i>ng generate &#64;openng/optimus-ui:migrate-from-primeng</i> in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line
                 numbers. The <a href="https://v1.optimus.openng.org/migration/primeng" target="_blank" rel="noopener noreferrer" class="doc-link">migration guide</a> covers the details and the manual cases.
             </p>
