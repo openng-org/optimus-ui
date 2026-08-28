@@ -2155,7 +2155,7 @@ describe('AutoComplete', () => {
                 const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
                 const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
 
-                inputElement.nativeElement.value = 'Item1,';
+                inputElement.nativeElement.value = '';
                 const preventDefault = vi.fn();
                 const pasteEvent = {
                     clipboardData: { getData: () => 'Item1,' },
@@ -2169,6 +2169,54 @@ describe('AutoComplete', () => {
                 expect(preventDefault).toHaveBeenCalled();
                 expect(inputElement.nativeElement.value).toBe('');
                 expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should keep text the user already typed when a paste adds nothing', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'half-typed';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Item1,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('half-typed');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should clear the input when a paste does add values', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'half-typed';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Alpha,Beta,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Alpha', 'Beta']);
             });
         });
 

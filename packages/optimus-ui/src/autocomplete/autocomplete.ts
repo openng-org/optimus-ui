@@ -1340,10 +1340,13 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
         }
 
         // Same reasoning as handleSeparatorKey: the raw text must never reach the input, or its
-        // separators are left behind when every pasted value is a duplicate.
+        // separators are left behind when every pasted value is a duplicate. Only clear once the
+        // paste has committed something, so a paste that adds nothing leaves any typed text alone.
         event.preventDefault();
-        this.addSeparatedValues(this.splitBySeparator(pastedData), event);
-        this.clearMultipleInput(event);
+
+        if (this.addSeparatedValues(this.splitBySeparator(pastedData), event)) {
+            this.clearMultipleInput(event);
+        }
     }
 
     onInputKeyUp(event) {
@@ -1678,7 +1681,8 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
         return (this.separator ? text.split(this.separator) : [text]).map((value) => value.trim()).filter((value) => value.length > 0);
     }
 
-    private addSeparatedValues(values: string[], event: Event): void {
+    /** Returns whether anything was actually added to the model. */
+    private addSeparatedValues(values: string[], event: Event): boolean {
         const added: string[] = [];
         const newValues = [...(this.modelValue() || [])];
 
@@ -1692,11 +1696,13 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
         });
 
         if (!added.length) {
-            return;
+            return false;
         }
 
         this.updateModel(newValues);
         added.forEach((value) => this.onAdd.emit({ originalEvent: event, value }));
+
+        return true;
     }
 
     private clearMultipleInput(event: Event): void {
