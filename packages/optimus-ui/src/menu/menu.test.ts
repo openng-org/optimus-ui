@@ -160,7 +160,9 @@ class TestSubmenuMenuComponent {
         <p-menu [model]="model">
             <ng-template #item let-item>
                 <div class="custom-menu-item">
-                    <i [class]="item.icon" *ngIf="item.icon"></i>
+                    @if (item.icon) {
+                        <i [class]="item.icon"></i>
+                    }
                     <span class="custom-label">{{ item.label }}</span>
                 </div>
             </ng-template>

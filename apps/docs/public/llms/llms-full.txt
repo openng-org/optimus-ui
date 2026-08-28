@@ -1,6 +1,6 @@
 # Optimus UI Documentation
 
-Generated: 2026-08-20
+Generated: 2026-08-28
 
 ---
 
@@ -28,7 +28,7 @@ Once you have Optimus UI up and running, we recommend exploring the following re
 
 ## Ngadd-
 
-The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.
+The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it changes nothing and fails with an error rather than reporting success, and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you. The Angular CLI installs &#64;openng/optimus-ui before the schematic runs, so the dependency stays in your package.json — the migration schematic needs it there.
 
 ## Prerequisites-
 
@@ -767,7 +767,7 @@ Do the PrimeNG themes work? The built-in presets do — Aura, Material, Lara and
 
 ## Migration-
 
-Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and makes no changes when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
+Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and fails without changing anything when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.
 
 ## Project-
 
@@ -2723,9 +2723,9 @@ AutoComplete is an input component that provides real-time suggestions when bein
 | optionGroupChildren | string | items | Name of the options field of an option group. |
 | optionGroupLabel | string | label | Name of the label field of an option group. |
 | overlayOptions | OverlayOptions | - | Options for the overlay element. |
-| suggestions | any[] | - | An array of suggestions to display. |
-| optionLabel | string \| ((item: any) => string) | - | Property name or getter function to use as the label of an option. |
-| optionValue | string \| ((item: any) => string) | - | Property name or getter function to use as the value of an option. |
+| suggestions | T[] | - | An array of suggestions to display. |
+| optionLabel | string \| ((item: T) => string) | - | Property name or getter function to use as the label of an option. |
+| optionValue | string \| ((item: T) => string) | - | Property name or getter function to use as the value of an option. |
 | id | string | - | Unique identifier of the component. |
 | searchMessage | string | '{0} results are available' | Text to display when the search is active. Defaults to global value in i18n translation configuration. |
 | emptySelectionMessage | string | 'No selected item' | Text to display when filtering does not return any results. Defaults to global value in i18n translation configuration. |
@@ -2733,7 +2733,7 @@ AutoComplete is an input component that provides real-time suggestions when bein
 | autoOptionFocus | boolean | false | Whether to focus on the first visible or selected element when the overlay panel is shown. |
 | selectOnFocus | boolean | false | When enabled, the focused option is selected. |
 | searchLocale | boolean | false | Locale to use in searching. The default locale is the host environment's current locale. |
-| optionDisabled | string \| ((item: any) => string) | - | Property name or getter function to use as the disabled flag of an option, defaults to false when not defined. |
+| optionDisabled | string \| ((item: T) => string) | - | Property name or getter function to use as the disabled flag of an option, defaults to false when not defined. |
 | focusOnHover | boolean | true | When enabled, the hovered option will be focused. |
 | typeahead | boolean | true | Whether typeahead is active or not. |
 | addOnBlur | boolean | false | Whether to add an item on blur event if the input has value and typeahead is false with multiple mode. |
@@ -2764,9 +2764,9 @@ AutoComplete is an input component that provides real-time suggestions when bein
 | Name | Parameters | Description |
 |------|------------|-------------|
 | completeMethod | event: AutoCompleteCompleteEvent | Callback to invoke to search for suggestions. |
-| onSelect | event: AutoCompleteSelectEvent | Callback to invoke when a suggestion is selected. |
-| onUnselect | event: AutoCompleteUnselectEvent | Callback to invoke when a selected value is removed. |
-| onAdd | event: AutoCompleteAddEvent | Callback to invoke when an item is added via addOnBlur or separator features. |
+| onSelect | event: AutoCompleteSelectEvent<T | Callback to invoke when a suggestion is selected. |
+| onUnselect | event: AutoCompleteUnselectEvent<T | Callback to invoke when a selected value is removed. |
+| onAdd | event: AutoCompleteAddEvent<string | Callback to invoke when an item is added via addOnBlur or separator features. |
 | onFocus | event: Event | Callback to invoke when the component receives focus. |
 | onBlur | event: Event | Callback to invoke when the component loses focus. |
 | onDropdownClick | event: AutoCompleteDropdownClickEvent | Callback to invoke to when dropdown button is clicked. |
@@ -3587,7 +3587,7 @@ Badge Directive is directive usage of badge component.
 | disabled | boolean | false | When specified, disables the component. |
 | badgeSize | "small" \| "large" \| "xlarge" | - | Size of the badge, valid options are "large" and "xlarge". |
 | size | "small" \| "large" \| "xlarge" | - | Size of the badge, valid options are "large" and "xlarge". **(Deprecated)** |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" | - | Severity type of the badge. |
+| severity | BadgeSeverity | - | Severity type of the badge. |
 | value | string \| number | - | Value to display inside the badge. |
 | badgeStyle | { [klass: string]: any } | - | Inline style of the element. |
 | badgeStyleClass | string | - | Class of the element. |
@@ -3607,7 +3607,7 @@ Badge is a small status indicator for another element.
 | styleClass | InputSignal<string> | ... | Class of the element. **(Deprecated)** |
 | badgeSize | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
 | size | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
-| severity | InputSignal<"success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast"> | ... | Severity type of the badge. |
+| severity | InputSignal<BadgeSeverity> | ... | Severity type of the badge. |
 | value | InputSignal<string \| number> | ... | Value to display inside the badge. |
 | badgeDisabled | InputSignalWithTransform<boolean, boolean> | ... | When specified, disables the component. |
 | dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
@@ -4579,7 +4579,7 @@ Button is an extension to standard button element with icons and theming.
 | style | { [klass: string]: any } | - | Inline style of the element. |
 | styleClass | string | - | Class of the element. |
 | badgeClass | string | - | Style class of the badge. **(Deprecated)** |
-| badgeSeverity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | secondary | Severity type of the badge. |
+| badgeSeverity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" \| "help" \| "primary" | secondary | Severity type of the badge. |
 | ariaLabel | string | - | Used to define a string that autocomplete attribute the current element. |
 | autofocus | boolean | false | When present, it specifies that the component should automatically get focus on load. |
 | iconPos | ButtonIconPosition | left | Position of the icon. |
@@ -12919,7 +12919,7 @@ Dialog is a container to display content in an overlay window.
 | unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
 | pt | InputSignal<DialogPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| header | string | - | Title text of the dialog. |
+| header | InputSignal<string> | ... | Title text of the dialog. |
 | draggable | boolean | true | Enables dragging to change the position using header. |
 | resizable | boolean | true | Enables resizing of the content. |
 | contentStyle | any | - | Style of the content section. |
@@ -12956,6 +12956,7 @@ Dialog is a container to display content in an overlay window.
 | visible | boolean | - | Specifies the visibility of the dialog. |
 | style | any | - | Inline style of the component. |
 | position | "top" \| "bottom" \| "center" \| "left" \| "right" \| "topleft" \| "bottomleft" \| "topright" \| "bottomright" | - | Position of the dialog. |
+| ariaLabelledBy | InputSignal<string> | ... | Identifier of the element that labels the dialog. Defaults to the id of the generated header title. |
 | appendTo | InputSignal<any> | 'self' | Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name). |
 
 ### Emits
@@ -23238,7 +23239,7 @@ Message groups a collection of contents in tabs.
 | unstyled | InputSignal<boolean> | undefined | Indicates whether the component should be rendered without styles. |
 | pt | InputSignal<MessagePassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
-| severity | "error" \| "success" \| "info" \| "warn" \| "secondary" \| "contrast" | 'info' | Severity level of the message. |
+| severity | MessageSeverity | 'info' | Severity level of the message. |
 | text | string | - | Text content. **(Deprecated)** |
 | escape | boolean | true | Whether displaying messages would be escaped or not. **(Deprecated)** |
 | style | { [klass: string]: any } | - | Inline style of the component. |
@@ -33626,7 +33627,7 @@ SplitButton groups a set of commands in an overlay with a default command.
 | pt | InputSignal<SplitButtonPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
 | model | MenuItem[] | - | MenuModel instance to define the overlay items. |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "help" \| "primary" \| "secondary" \| "contrast" | - | Defines the style of the button. |
+| severity | ButtonSeverity | - | Defines the style of the button. |
 | raised | boolean | false | Add a shadow to indicate elevation. |
 | rounded | boolean | false | Add a circular border radius to the button. |
 | text | boolean | false | Add a textual class to the button without a background initially. |
@@ -39899,7 +39900,7 @@ Tag component is used to categorize content.
 | pt | InputSignal<TagPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
 | styleClass | string | - | Style class of the component. **(Deprecated)** |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" | - | Severity type of the tag. |
+| severity | BadgeSeverity | - | Severity type of the tag. |
 | value | string | - | Value to display inside the tag. |
 | icon | string | - | Icon of the tag to display next to the value. |
 | rounded | boolean | false | Whether the corners of the tag are rounded. |

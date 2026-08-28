@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, HostBinding, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -15,7 +14,7 @@ const AVATARGROUP_INSTANCE = new InjectionToken<AvatarGroup>('AVATARGROUP_INSTAN
 @Component({
     selector: 'p-avatarGroup, p-avatar-group, p-avatargroup',
     standalone: true,
-    imports: [CommonModule, SharedModule],
+    imports: [SharedModule],
     template: ` <ng-content></ng-content> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
