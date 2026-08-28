@@ -143,7 +143,7 @@ Tag component is used to categorize content.
 | pt | InputSignal<TagPassThrough> | undefined | Used to pass attributes to DOM elements inside the component. |
 | ptOptions | InputSignal<PassThroughOptions> | undefined | Used to configure passthrough(pt) options of the component. |
 | styleClass | string | - | Style class of the component. **(Deprecated)** |
-| severity | "success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast" | - | Severity type of the tag. |
+| severity | BadgeSeverity | - | Severity type of the tag. |
 | value | string | - | Value to display inside the tag. |
 | icon | string | - | Icon of the tag to display next to the value. |
 | rounded | boolean | false | Whether the corners of the tag are rounded. |

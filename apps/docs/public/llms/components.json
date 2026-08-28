@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generatedAt": "2026-08-20",
+  "generatedAt": "2026-08-28",
   "components": [
     {
       "name": "Image",
@@ -1514,21 +1514,21 @@
           },
           {
             "name": "suggestions",
-            "type": "any[]",
+            "type": "T[]",
             "default": "-",
             "description": "An array of suggestions to display.",
             "deprecated": ""
           },
           {
             "name": "optionLabel",
-            "type": "string | ((item: any) => string)",
+            "type": "string | ((item: T) => string)",
             "default": "-",
             "description": "Property name or getter function to use as the label of an option.",
             "deprecated": ""
           },
           {
             "name": "optionValue",
-            "type": "string | ((item: any) => string)",
+            "type": "string | ((item: T) => string)",
             "default": "-",
             "description": "Property name or getter function to use as the value of an option.",
             "deprecated": ""
@@ -1584,7 +1584,7 @@
           },
           {
             "name": "optionDisabled",
-            "type": "string | ((item: any) => string)",
+            "type": "string | ((item: T) => string)",
             "default": "-",
             "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined.",
             "deprecated": ""
@@ -1831,7 +1831,7 @@
             "parameters": [
               {
                 "name": "event",
-                "type": "AutoCompleteSelectEvent"
+                "type": "AutoCompleteSelectEvent<T"
               }
             ],
             "description": "Callback to invoke when a suggestion is selected."
@@ -1841,7 +1841,7 @@
             "parameters": [
               {
                 "name": "event",
-                "type": "AutoCompleteUnselectEvent"
+                "type": "AutoCompleteUnselectEvent<T"
               }
             ],
             "description": "Callback to invoke when a selected value is removed."
@@ -1851,7 +1851,7 @@
             "parameters": [
               {
                 "name": "event",
-                "type": "AutoCompleteAddEvent"
+                "type": "AutoCompleteAddEvent<string"
               }
             ],
             "description": "Callback to invoke when an item is added via addOnBlur or separator features."
@@ -2938,7 +2938,7 @@
           },
           {
             "name": "severity",
-            "type": "InputSignal<\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\">",
+            "type": "InputSignal<BadgeSeverity>",
             "default": "...",
             "description": "Severity type of the badge.",
             "deprecated": ""
@@ -3876,7 +3876,7 @@
           },
           {
             "name": "badgeSeverity",
-            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\" | \"help\" | \"primary\"",
             "default": "secondary",
             "description": "Severity type of the badge.",
             "deprecated": ""
@@ -11960,8 +11960,8 @@
           },
           {
             "name": "header",
-            "type": "string",
-            "default": "-",
+            "type": "InputSignal<string>",
+            "default": "...",
             "description": "Title text of the dialog.",
             "deprecated": ""
           },
@@ -12215,6 +12215,13 @@
             "type": "\"top\" | \"bottom\" | \"center\" | \"left\" | \"right\" | \"topleft\" | \"bottomleft\" | \"topright\" | \"bottomright\"",
             "default": "-",
             "description": "Position of the dialog.",
+            "deprecated": ""
+          },
+          {
+            "name": "ariaLabelledBy",
+            "type": "InputSignal<string>",
+            "default": "...",
+            "description": "Identifier of the element that labels the dialog. Defaults to the id of the generated header title.",
             "deprecated": ""
           },
           {
@@ -22557,7 +22564,7 @@
           },
           {
             "name": "severity",
-            "type": "\"error\" | \"success\" | \"info\" | \"warn\" | \"secondary\" | \"contrast\"",
+            "type": "MessageSeverity",
             "default": "'info'",
             "description": "Severity level of the message.",
             "deprecated": ""
@@ -34134,7 +34141,7 @@
           },
           {
             "name": "severity",
-            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+            "type": "ButtonSeverity",
             "default": "-",
             "description": "Defines the style of the button.",
             "deprecated": ""
@@ -37199,7 +37206,7 @@
           },
           {
             "name": "severity",
-            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+            "type": "BadgeSeverity",
             "default": "-",
             "description": "Severity type of the tag.",
             "deprecated": ""
@@ -44478,7 +44485,7 @@
         {
           "id": "ngadd-",
           "label": "Ngadd-",
-          "description": "The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it makes no changes to your code and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you.",
+          "description": "The recommended way to add Optimus UI to an Angular CLI workspace is a single command. The schematic asks which theme preset you want and then does the rest: adds &#64;openng/optimus-ui and &#64;openng/optimus-ui-themes to your dependencies wires provideOptimus into your root providers with the chosen preset, in app.config.ts or your root NgModule installs the packages Pass the preset up front to skip the prompt, or skip the install step if you want to run it yourself: If the schematic cannot find a providers array to update it prints the three manual steps instead of guessing, so nothing in your workspace is rewritten unexpectedly. If it detects an existing primeng dependency it changes nothing and fails with an error rather than reporting success, and points you at the migration guide , which covers the migrate-from-primeng schematic. It does not run that schematic for you. The Angular CLI installs &#64;openng/optimus-ui before the schematic runs, so the dependency stays in your package.json — the migration schematic needs it there.",
           "examples": {
             "command": "ng add @openng/optimus-ui"
           }
@@ -45260,7 +45267,7 @@
         {
           "id": "migration-",
           "label": "Migration-",
-          "description": "Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and makes no changes when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.",
+          "description": "Which Angular versions are supported? Angular v21 and newer. Our majors follow Angular's — when a new Angular major ships, a compatible Optimus UI major is the first thing we work on. See the version compatibility table in the update guide. How do I migrate from PrimeNG? Is it automatic? Mostly, but not through ng add , which only sets up new projects and fails without changing anything when it finds an existing primeng dependency. Install &#64;openng/optimus-ui , then run ng generate &#64;openng/optimus-ui:migrate-from-primeng in a PrimeNG v21 workspace: packages swapped, imports rewritten, dependencies installed. It then prints a report of anything it could not rewrite, with file and line numbers. The migration guide covers the details and the manual cases. I am on PrimeNG v20 or older. Can I migrate directly? No. Upgrade to PrimeNG v21 first, using PrimeNG's own migration guides, then run the schematic. The schematic checks the version and refuses rather than producing a half-migrated workspace. What happens to my PrimeNG license? Nothing — it is unrelated. A PrimeNG v22 commercial license covers PrimeNG. Optimus UI needs no license at all. If you hold a PrimeTek subscription for their templates or theme designer, those remain their products and do not carry over here. I had an open PR on primefaces/primeng. Can I bring it here? Yes, and we would like you to. Append .patch to your original pull request URL and apply it with git am — the contributing guide in the repository walks through it, including what to do when the patch no longer applies cleanly. Can I run PrimeNG and Optimus UI side by side? Technically yes, since the package names and the CSS cascade layer differ, but you will ship two copies of the same components and two theme runtimes. Treat it as a temporary state during migration rather than a supported configuration.",
           "examples": null
         },
         {

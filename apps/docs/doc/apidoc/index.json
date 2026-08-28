@@ -4099,21 +4099,21 @@
                             "name": "suggestions",
                             "optional": false,
                             "readonly": false,
-                            "type": "any[]",
+                            "type": "T[]",
                             "description": "An array of suggestions to display."
                         },
                         {
                             "name": "optionLabel",
                             "optional": false,
                             "readonly": false,
-                            "type": "string | ((item: any) => string)",
+                            "type": "string | ((item: T) => string)",
                             "description": "Property name or getter function to use as the label of an option."
                         },
                         {
                             "name": "optionValue",
                             "optional": false,
                             "readonly": false,
-                            "type": "string | ((item: any) => string)",
+                            "type": "string | ((item: T) => string)",
                             "description": "Property name or getter function to use as the value of an option."
                         },
                         {
@@ -4175,7 +4175,7 @@
                             "name": "optionDisabled",
                             "optional": false,
                             "readonly": false,
-                            "type": "string | ((item: any) => string)",
+                            "type": "string | ((item: T) => string)",
                             "description": "Property name or getter function to use as the disabled flag of an option, defaults to false when not defined."
                         },
                         {
@@ -4389,7 +4389,7 @@
                             "parameters": [
                                 {
                                     "name": "event",
-                                    "type": "AutoCompleteSelectEvent"
+                                    "type": "AutoCompleteSelectEvent<T"
                                 }
                             ],
                             "description": "Callback to invoke when a suggestion is selected."
@@ -4399,7 +4399,7 @@
                             "parameters": [
                                 {
                                     "name": "event",
-                                    "type": "AutoCompleteUnselectEvent"
+                                    "type": "AutoCompleteUnselectEvent<T"
                                 }
                             ],
                             "description": "Callback to invoke when a selected value is removed."
@@ -4409,7 +4409,7 @@
                             "parameters": [
                                 {
                                     "name": "event",
-                                    "type": "AutoCompleteAddEvent"
+                                    "type": "AutoCompleteAddEvent<string"
                                 }
                             ],
                             "description": "Callback to invoke when an item is added via addOnBlur or separator features."
@@ -4706,7 +4706,7 @@
                                 "name": "value",
                                 "optional": false,
                                 "readonly": false,
-                                "type": "any",
+                                "type": "unknown",
                                 "description": "Selected value."
                             }
                         ]
@@ -4726,7 +4726,7 @@
                                 "name": "value",
                                 "optional": false,
                                 "readonly": false,
-                                "type": "any",
+                                "type": "unknown",
                                 "description": "Removed value."
                             }
                         ]
@@ -4746,7 +4746,7 @@
                                 "name": "value",
                                 "optional": false,
                                 "readonly": false,
-                                "type": "any",
+                                "type": "unknown",
                                 "description": "Added value."
                             }
                         ]
@@ -5515,7 +5515,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                            "type": "BadgeSeverity",
                             "description": "Severity type of the badge."
                         },
                         {
@@ -5608,7 +5608,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "InputSignal<\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\">",
+                            "type": "InputSignal<BadgeSeverity>",
                             "default": "...",
                             "description": "Severity type of the badge."
                         },
@@ -5699,6 +5699,16 @@
                                 "description": "Used to pass attributes to the root's DOM element."
                             }
                         ]
+                    }
+                ]
+            },
+            "types": {
+                "description": "Defines the custom types used by the module.",
+                "values": [
+                    {
+                        "name": "BadgeSeverity",
+                        "value": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                        "description": "Severity levels of the badge, also shared by the components that render one or follow the same severities, such as Tag, OverlayBadge and FileUpload."
                     }
                 ]
             }
@@ -6481,7 +6491,7 @@
                             "name": "badgeSeverity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\" | \"help\" | \"primary\"",
                             "default": "secondary",
                             "description": "Severity type of the badge."
                         },
@@ -6771,6 +6781,16 @@
                                 "description": "Pass-through options for the loading icon element."
                             }
                         ]
+                    }
+                ]
+            },
+            "types": {
+                "description": "Defines the custom types used by the module.",
+                "values": [
+                    {
+                        "name": "ButtonSeverity",
+                        "value": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\" | null | undefined",
+                        "description": "Severity levels of the button."
                     }
                 ]
             }
@@ -13752,7 +13772,8 @@
                             "name": "header",
                             "optional": false,
                             "readonly": false,
-                            "type": "string",
+                            "type": "InputSignal<string>",
+                            "default": "...",
                             "description": "Title text of the dialog."
                         },
                         {
@@ -14030,6 +14051,14 @@
                             "readonly": false,
                             "type": "\"top\" | \"bottom\" | \"center\" | \"left\" | \"right\" | \"topleft\" | \"bottomleft\" | \"topright\" | \"bottomright\"",
                             "description": "Position of the dialog."
+                        },
+                        {
+                            "name": "ariaLabelledBy",
+                            "optional": false,
+                            "readonly": false,
+                            "type": "InputSignal<string>",
+                            "default": "...",
+                            "description": "Identifier of the element that labels the dialog. Defaults to the id of the generated header title."
                         },
                         {
                             "name": "appendTo",
@@ -25360,7 +25389,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"error\" | \"success\" | \"info\" | \"warn\" | \"secondary\" | \"contrast\"",
+                            "type": "MessageSeverity",
                             "default": "'info'",
                             "description": "Severity level of the message."
                         },
@@ -25669,6 +25698,16 @@
                                 "description": "Callback to close the message."
                             }
                         ]
+                    }
+                ]
+            },
+            "types": {
+                "description": "Defines the custom types used by the module.",
+                "values": [
+                    {
+                        "name": "MessageSeverity",
+                        "value": "\"success\" | \"info\" | \"warn\" | \"error\" | \"secondary\" | \"contrast\"",
+                        "description": "Severity levels of the message, using 'error' instead of 'danger'."
                     }
                 ]
             }
@@ -29845,7 +29884,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                            "type": "BadgeSeverity",
                             "description": "Severity type of the badge."
                         },
                         {
@@ -38646,7 +38685,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"help\" | \"primary\" | \"secondary\" | \"contrast\"",
+                            "type": "ButtonSeverity",
                             "description": "Defines the style of the button."
                         },
                         {
@@ -43138,7 +43177,7 @@
                             "name": "severity",
                             "optional": false,
                             "readonly": false,
-                            "type": "\"success\" | \"info\" | \"warn\" | \"danger\" | \"secondary\" | \"contrast\"",
+                            "type": "BadgeSeverity",
                             "description": "Severity type of the tag."
                         },
                         {

@@ -175,7 +175,7 @@ Badge is a small status indicator for another element.
 | styleClass | InputSignal<string> | ... | Class of the element. **(Deprecated)** |
 | badgeSize | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
 | size | InputSignal<"small" \| "large" \| "xlarge"> | ... | Size of the badge, valid options are "large" and "xlarge". |
-| severity | InputSignal<"success" \| "info" \| "warn" \| "danger" \| "secondary" \| "contrast"> | ... | Severity type of the badge. |
+| severity | InputSignal<BadgeSeverity> | ... | Severity type of the badge. |
 | value | InputSignal<string \| number> | ... | Value to display inside the badge. |
 | badgeDisabled | InputSignalWithTransform<boolean, boolean> | ... | When specified, disables the component. |
 | dt | InputSignal<Object> | undefined | Defines scoped design tokens of the component. |
