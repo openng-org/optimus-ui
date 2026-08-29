@@ -213,30 +213,33 @@ export class MenuItemContent extends BaseComponent {
                 >
                     @if (hasSubMenu()) {
                         @for (submenu of model; track submenu; let i = $index) {
-                            @if (submenu.separator && submenu.visible !== false) {
-                                <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
-                            }
-                            @if (!submenu.separator) {
-                                <li
-                                    [class]="cx('submenuLabel')"
-                                    [pBind]="ptm('submenuLabel')"
-                                    [attr.data-automationid]="submenu.automationId"
-                                    pTooltip
-                                    [tooltipOptions]="submenu.tooltipOptions"
-                                    [pTooltipUnstyled]="unstyled()"
-                                    role="none"
-                                    [attr.id]="menuitemId(submenu, id, i)"
-                                    [attr.data-pc-section]="'submenulabel'"
-                                >
-                                    @if (!submenuHeaderTemplate && !_submenuHeaderTemplate) {
-                                        @if (submenu.escape !== false) {
-                                            <span>{{ submenu.label }}</span>
+                            @if (submenu.visible !== false) {
+                                @if (submenu.separator) {
+                                    <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
+                                } @else {
+                                    <li
+                                        [class]="cx('submenuLabel')"
+                                        [pBind]="ptm('submenuLabel')"
+                                        [attr.data-automationid]="submenu.automationId"
+                                        pTooltip
+                                        [tooltipOptions]="submenu.tooltipOptions"
+                                        [pTooltipUnstyled]="unstyled()"
+                                        role="none"
+                                        [attr.id]="menuitemId(submenu, id, i)"
+                                        [attr.data-pc-section]="'submenulabel'"
+                                    >
+                                        @let submenuHeader = submenuHeaderTemplate ?? _submenuHeaderTemplate;
+                                        @if (submenuHeader) {
+                                            <ng-container *ngTemplateOutlet="submenuHeader; context: { $implicit: submenu }"></ng-container>
                                         } @else {
-                                            <span [innerHTML]="submenu.label | safeHtml"></span>
+                                            @if (submenu.escape !== false) {
+                                                <span>{{ submenu.label }}</span>
+                                            } @else {
+                                                <span [innerHTML]="submenu.label ?? '' | safeHtml"></span>
+                                            }
                                         }
-                                    }
-                                    <ng-container *ngTemplateOutlet="submenuHeaderTemplate ?? _submenuHeaderTemplate; context: { $implicit: submenu }"></ng-container>
-                                </li>
+                                    </li>
+                                }
                             }
                             @for (item of submenu.items; track item; let j = $index) {
                                 @if (item.separator && (item.visible !== false || submenu.visible !== false)) {
