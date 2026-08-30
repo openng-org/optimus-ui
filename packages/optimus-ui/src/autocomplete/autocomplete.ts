@@ -910,7 +910,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
                 const label = this.getOptionLabel(selectedOption);
 
-                return label != null ? label : modelValue;
+                return label != null ? label : typeof modelValue === 'object' ? '' : modelValue;
             } else {
                 return modelValue;
             }

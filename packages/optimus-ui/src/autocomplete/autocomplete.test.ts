@@ -662,9 +662,9 @@ describe('AutoComplete', () => {
             expect(labelResult).toBe('Custom Afghanistan');
         });
 
-        it('should render an empty input when optionLabel resolves to null', async () => {
+        it.each([null, undefined])('should render an empty input when optionLabel resolves to %s', async (name) => {
             fixture.componentRef.setInput('optionLabel', 'name');
-            component.writeValue({ name: null, code: null });
+            component.writeValue({ name, code: null });
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
