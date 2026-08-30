@@ -583,7 +583,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     /**
-     * Property name or getter function to use as the label of an option.
+     * Property name or getter function to use as the label of an option. If it resolves to null or undefined for a selected object, the input is rendered empty.
      * @group Props
      */
     @Input() optionLabel: string | ((item: T) => string) | undefined;

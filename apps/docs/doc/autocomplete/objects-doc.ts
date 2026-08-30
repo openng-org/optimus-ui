@@ -19,6 +19,7 @@ interface AutoCompleteCompleteEvent {
                 AutoComplete can also work with objects using the <i>optionLabel</i> property that defines the label to display as a suggestion. The value passed to the model would still be the object instance of a suggestion. Here is an example with
                 a Country object that has name and code fields such as <i>&#123;name: "United States", code:"USA"&#125;</i>.
             </p>
+            <p>When <i>optionLabel</i> resolves to <i>null</i> or <i>undefined</i> for a selected object, the input is displayed empty.</p>
         </app-docsectiontext>
         <div class="card flex justify-center">
             <p-autocomplete [(ngModel)]="selectedCountry" [suggestions]="filteredCountries" (completeMethod)="filterCountry($event)" optionLabel="name" />

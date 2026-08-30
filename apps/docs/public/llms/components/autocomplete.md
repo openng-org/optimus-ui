@@ -640,7 +640,7 @@ export class AutocompleteMultipleDemo {
 
 ## Objects
 
-AutoComplete can also work with objects using the optionLabel property that defines the label to display as a suggestion. The value passed to the model would still be the object instance of a suggestion. Here is an example with a Country object that has name and code fields such as &#123;name: "United States", code:"USA"&#125; .
+AutoComplete can also work with objects using the optionLabel property that defines the label to display as a suggestion. The value passed to the model would still be the object instance of a suggestion. Here is an example with a Country object that has name and code fields such as &#123;name: "United States", code:"USA"&#125; . When optionLabel resolves to null or undefined for a selected object, the input is displayed empty.
 
 ```typescript
 import { Component, OnInit, inject } from '@angular/core';
