@@ -49,7 +49,7 @@ describe('DialogService issue #631 reproduction', () => {
 
         try {
             const dialogService = hostRef.injector.get(DialogService);
-            const config = new DynamicDialogConfig() as DynamicDialogConfig & { environmentInjector: EnvironmentInjector };
+            const config = new DynamicDialogConfig();
             config.environmentInjector = featureModule.injector;
             dialogRef = dialogService.open(ReproDialogContentComponent, config);
 
