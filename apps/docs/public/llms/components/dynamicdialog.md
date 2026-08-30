@@ -10,6 +10,10 @@ Most of the time, requirement is returning a value from the dialog. DialogRef's 
 
 DynamicDialog uses the Dialog component internally, visit dialog for more information about the available props.
 
+## Feature Providers
+
+When dialog content depends on providers from a feature or lazy-loaded environment, pass the caller's EnvironmentInjector in the dialog configuration.
+
 ## Example
 
 Dynamic dialogs require an instance of a DialogService that is responsible for displaying a dialog with a component as its content. Calling open method of DialogService will display dynamic dialog. First parameter of open method is the type of component to load and the second parameter is the configuration of the Dialog such as header , width and more.

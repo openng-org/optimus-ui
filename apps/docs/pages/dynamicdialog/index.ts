@@ -1,6 +1,7 @@
 import { AppDoc } from '@/components/doc/app.doc';
 import { CloseDoc } from '@/doc/dynamicdialog/close-doc';
 import { CustomizationDoc } from '@/doc/dynamicdialog/customization-doc';
+import { EnvironmentInjectorDoc } from '@/doc/dynamicdialog/environmentinjector-doc';
 import { ExampleDoc } from '@/doc/dynamicdialog/example-doc';
 import { ImportDoc } from '@/doc/dynamicdialog/import-doc';
 import { OpenDoc } from '@/doc/dynamicdialog/open-doc';
@@ -43,6 +44,11 @@ export class DynamicDialogDemo {
             id: 'open',
             label: 'Opening a Dialog',
             component: OpenDoc
+        },
+        {
+            id: 'environmentinjector',
+            label: 'Feature Providers',
+            component: EnvironmentInjectorDoc
         },
         {
             id: 'customization',

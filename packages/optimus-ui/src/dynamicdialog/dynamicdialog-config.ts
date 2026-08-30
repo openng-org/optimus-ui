@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { EnvironmentInjector, Type } from '@angular/core';
 import type { DialogPassThrough } from '@openng/optimus-ui/types/dialog';
 
 /**
@@ -6,6 +6,11 @@ import type { DialogPassThrough } from '@openng/optimus-ui/types/dialog';
  * @group Components
  */
 export class DynamicDialogConfig<DataType = any, InputValuesType extends Record<string, any> = {}> {
+    /**
+     * Environment injector used to create the dynamically loaded component. Use the injector from the caller's feature or lazy-loaded environment when the component depends on providers scoped there.
+     * @group Props
+     */
+    environmentInjector?: EnvironmentInjector;
     /**
      * An object to pass to the component loaded inside the Dialog.
      * @group Props

@@ -292,7 +292,8 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
         let viewContainerRef = this.insertionPoint?.viewContainerRef;
         viewContainerRef?.clear();
 
-        this.componentRef = viewContainerRef?.createComponent(componentType);
+        const environmentInjector = this.ddconfig.environmentInjector;
+        this.componentRef = environmentInjector ? viewContainerRef?.createComponent(componentType, { environmentInjector }) : viewContainerRef?.createComponent(componentType);
 
         if (this.inputValues && this.componentRef) {
             Object.entries(this.inputValues).forEach(([key, value]) => {
