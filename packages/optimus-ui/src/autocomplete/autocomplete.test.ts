@@ -662,6 +662,16 @@ describe('AutoComplete', () => {
             expect(labelResult).toBe('Custom Afghanistan');
         });
 
+        it('should render an empty input when optionLabel resolves to null', async () => {
+            fixture.componentRef.setInput('optionLabel', 'name');
+            component.writeValue({ name: null, code: null });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const inputElement = fixture.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
+            expect(inputElement.value).toBe('');
+        });
+
         it('should work with optionValue as string', async () => {
             testComponent.optionValue = 'code';
             testComponent.suggestions = testComponent.objectOptions;
