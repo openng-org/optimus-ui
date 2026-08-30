@@ -185,6 +185,19 @@ class TestButtonDirectiveComponent {
 })
 class TestButtonWithIconLabelDirectiveComponent {}
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-button label="Custom icon" [iconPos]="iconPos">
+            <span pButtonIcon class="custom-icon"></span>
+        </p-button>
+    `
+})
+class TestButtonWithPositionedIconDirectiveComponent {
+    iconPos: 'left' | 'right' | 'top' | 'bottom' = 'right';
+}
+
 // Loading Button Test
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -282,6 +295,7 @@ describe('Button', () => {
                 TestContentTemplateButtonComponent,
                 TestButtonDirectiveComponent,
                 TestButtonWithIconLabelDirectiveComponent,
+                TestButtonWithPositionedIconDirectiveComponent,
                 TestLoadingButtonComponent,
                 TestSeverityButtonComponent,
                 TestButtonVariantsComponent,
@@ -1488,7 +1502,7 @@ describe('ButtonDirective', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent],
+            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent, TestButtonWithPositionedIconDirectiveComponent],
             imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1562,6 +1576,23 @@ describe('ButtonDirective', () => {
 
             expect(iconNativeElement.classList.contains('p-button-icon')).toBe(true);
             expect(labelNativeElement.classList.contains('p-button-label')).toBe(true);
+        });
+
+        it('should apply icon position classes to custom icons', async () => {
+            const positionedIconFixture = TestBed.createComponent(TestButtonWithPositionedIconDirectiveComponent);
+            const positionedIconComponent = positionedIconFixture.componentInstance;
+            positionedIconFixture.detectChanges();
+            await positionedIconFixture.whenStable();
+
+            const iconElement = positionedIconFixture.debugElement.query(By.directive(ButtonIcon)).nativeElement as HTMLElement;
+            expect(iconElement.classList.contains('p-button-icon-right')).toBe(true);
+
+            positionedIconComponent.iconPos = 'bottom';
+            positionedIconFixture.changeDetectorRef.markForCheck();
+            await positionedIconFixture.whenStable();
+            positionedIconFixture.detectChanges();
+
+            expect(iconElement.classList.contains('p-button-icon-bottom')).toBe(true);
         });
     });
 
