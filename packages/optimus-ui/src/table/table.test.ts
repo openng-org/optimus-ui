@@ -377,6 +377,39 @@ describe('Table', () => {
         ];
     }
 
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products" [dataKey]="'id'" [showGridlines]="true" [expandedRowKeys]="expandedRowKeys">
+                <ng-template #header
+                    ><tr>
+                        <th>Name</th>
+                    </tr></ng-template
+                >
+                <ng-template #body let-product
+                    ><tr>
+                        <td>{{ product.name }}</td>
+                    </tr></ng-template
+                >
+                <ng-template #expandedrow let-product
+                    ><tr class="p-datatable-row-expansion">
+                        <td>Details for {{ product.name }}</td>
+                    </tr></ng-template
+                >
+                <ng-template #footer
+                    ><tr>
+                        <td>Footer</td>
+                    </tr></ng-template
+                >
+            </p-table>
+        `
+    })
+    class TestExpandedRowFooterTableComponent {
+        products = [{ id: '1', name: 'Product' }];
+        expandedRowKeys = { '1': true };
+    }
+
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [
@@ -391,7 +424,8 @@ describe('Table', () => {
                 TestScrollableNonVirtualTableComponent,
                 TestVirtualScrollFlexHeightTableComponent,
                 TestLazyLoadTableComponent,
-                TestTemplatesTableComponent
+                TestTemplatesTableComponent,
+                TestExpandedRowFooterTableComponent
             ],
             imports: [CommonModule, FormsModule, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
@@ -676,6 +710,20 @@ describe('Table', () => {
         it('should display correct product count in summary', () => {
             const summaryText = testFixture.nativeElement.textContent;
             expect(summaryText).toContain('Total Products: 2');
+        });
+    });
+
+    describe('Row Expansion and Gridlines', () => {
+        it('should keep the bottom border on the last expanded row before the footer', async () => {
+            const testFixture = TestBed.createComponent(TestExpandedRowFooterTableComponent);
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const expansionCell = testFixture.nativeElement.querySelector('.p-datatable-row-expansion > td');
+
+            expect(expansionCell).toBeTruthy();
+            expect(getComputedStyle(expansionCell).borderBottomWidth).toBe('1px');
         });
     });
 

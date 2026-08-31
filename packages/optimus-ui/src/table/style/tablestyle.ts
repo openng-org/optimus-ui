@@ -5,6 +5,15 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 const style = /*css*/ `
 ${datatable_style}
 
+/* Keep the final expanded row separated from the footer when gridlines are enabled. */
+.p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr.p-datatable-row-expansion > td {
+    border-width: 1px 0 1px 1px !important;
+}
+
+.p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr.p-datatable-row-expansion > td:last-child {
+    border-width: 1px !important;
+}
+
 /* For Optimus */
 .p-datatable-scrollable-table > .p-datatable-thead {
     top: 0;
