@@ -538,7 +538,7 @@ describe('SelectButton pTemplate Tests', () => {
     it('should create component with pTemplate templates', async () => {
         expect(component).toBeTruthy();
         expect(selectButtonInstance).toBeTruthy();
-        expect(() => selectButtonInstance.itemTemplate).not.toThrow();
+        expect(() => selectButtonInstance.itemTemplate()).not.toThrow();
     });
 
     it('should pass context parameters to item template', async () => {
@@ -617,7 +617,7 @@ describe('SelectButton #template Reference Tests', () => {
     it('should create component with #template references', async () => {
         expect(component).toBeTruthy();
         expect(selectButtonInstance).toBeTruthy();
-        expect(() => selectButtonInstance.itemTemplate).not.toThrow();
+        expect(() => selectButtonInstance.itemTemplate()).not.toThrow();
     });
 
     it('should pass context parameters to item template', async () => {
