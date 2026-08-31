@@ -66,6 +66,7 @@
         "@types/node": "^26.2.0",
         "@vitest/browser-playwright": "^4.1.11",
         "@vitest/coverage-v8": "^4.1.11",
+        "jsdom": "^30.0.1",
         "tslib": "^2.8.1",
         "typescript": "catalog:angular22",
         "vitest": "^4.1.11"

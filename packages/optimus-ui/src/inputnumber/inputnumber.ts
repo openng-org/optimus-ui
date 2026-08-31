@@ -34,6 +34,33 @@ import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import type { InputNumberInputEvent, InputNumberPassThrough } from '@openng/optimus-ui/types/inputnumber';
 import { InputNumberStyle } from './style/inputnumberstyle';
 
+export interface InputNumberDataAdapter<T> {
+    fromString: (value: string) => T | null;
+    toString: (value: T | null) => string;
+    isLessThan: (value: T, other: T) => boolean;
+}
+
+export const INPUTNUMBER_DATA_ADAPTER_NUMBER: InputNumberDataAdapter<number> = {
+    fromString: (value: string) => {
+        const parsedValue = parseFloat(value);
+        return isNaN(parsedValue) ? null : parsedValue;
+    },
+    toString: (value: number | null) => (value != null ? value.toString() : ''),
+    isLessThan: (value: number, other: number) => value < other
+};
+
+export const INPUTNUMBER_DATA_ADAPTER_BIGINT: InputNumberDataAdapter<bigint> = {
+    fromString: (value: string) => {
+        try {
+            return BigInt(value);
+        } catch {
+            return null;
+        }
+    },
+    toString: (value: bigint | null) => (value != null ? value.toString() : ''),
+    isLessThan: (value: bigint, other: bigint) => value < other
+};
+
 const INPUTNUMBER_INSTANCE = new InjectionToken<InputNumber>('INPUTNUMBER_INSTANCE');
 
 export const INPUTNUMBER_VALUE_ACCESSOR: any = {
@@ -400,6 +427,11 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
      */
     @Input({ transform: booleanAttribute }) autofocus: boolean | undefined;
     /**
+     * Custom data adapter for parsing and formatting the input value.
+     * @group Props
+     */
+    @Input() dataAdapter: InputNumberDataAdapter<any> = INPUTNUMBER_DATA_ADAPTER_NUMBER;
+    /**
      * Callback to invoke on input.
      * @param {InputNumberInputEvent} event - Custom input event.
      * @group Emits
@@ -456,7 +488,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     _decrementButtonIconTemplate: TemplateRef<void> | undefined;
 
-    value: Nullable<number>;
+    value: Nullable<number | bigint>;
 
     focused: Nullable<boolean>;
 
@@ -681,7 +713,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 return formattedValue;
             }
 
-            return value.toString();
+            return this.dataAdapter.toString(value);
         }
 
         return '';
@@ -708,8 +740,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 // Minus sign
                 return filteredText;
 
-            let parsedValue = +filteredText;
-            return isNaN(parsedValue) ? null : parsedValue;
+            return this.dataAdapter.fromString(filteredText);
         }
 
         return null;
@@ -1316,18 +1347,18 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         return false;
     }
 
-    validateValue(value: number | string) {
+    validateValue(value: number | bigint | string) {
         if (value === '-' || value == null) {
             return null;
         }
         const min = this.min();
         const max = this.max();
 
-        if (min != null && (value as number) < min) {
-            return this.min();
+        if (min != null && this.dataAdapter.isLessThan(value, min)) {
+            return min;
         }
 
-        if (max != null && (value as number) > max) {
+        if (max != null && this.dataAdapter.isLessThan(max, value)) {
             return max;
         }
 

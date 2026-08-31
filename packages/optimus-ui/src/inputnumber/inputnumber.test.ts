@@ -3,10 +3,11 @@ import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } fr
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-
 import { provideOptimus } from '@openng/optimus-ui/config';
 import type { InputNumberInputEvent } from '@openng/optimus-ui/types/inputnumber';
-import { InputNumber, InputNumberModule } from './inputnumber';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { userEvent } from 'vitest/browser';
+import { InputNumber, InputNumberDataAdapter, InputNumberModule } from './inputnumber';
 
 // Test Components
 @Component({
@@ -180,6 +181,27 @@ class TestInputNumberRefTemplateComponent {
     step: number = 0.01;
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `<p-inputNumber [(ngModel)]="value" [readonly]="false" [disabled]="false" [format]="false" [dataAdapter]="bigIntDataAdapter"></p-inputNumber>`
+})
+class TestInputNumberDataAdapterComponent {
+    value: bigint | null = null;
+
+    bigIntDataAdapter: InputNumberDataAdapter<bigint> = {
+        fromString: (value: string) => {
+            try {
+                return BigInt(value);
+            } catch {
+                return null;
+            }
+        },
+        toString: (value: bigint | null) => (value != null ? value.toString() : ''),
+        isLessThan: (value: bigint, other: bigint) => value < other
+    };
+}
+
 describe('InputNumber', () => {
     let component: InputNumber;
     let fixture: ComponentFixture<InputNumber>;
@@ -187,7 +209,7 @@ describe('InputNumber', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [InputNumberModule, FormsModule, ReactiveFormsModule, CommonModule],
-            declarations: [TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberPTemplateComponent, TestInputNumberRefTemplateComponent],
+            declarations: [TestBasicInputNumberComponent, TestFormInputNumberComponent, TestInputNumberPTemplateComponent, TestInputNumberRefTemplateComponent, TestInputNumberDataAdapterComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -227,16 +249,15 @@ describe('InputNumber', () => {
     });
 
     describe('Number Validation and Formatting', () => {
-        // TODO: Feature works, test will be debugged.
-        // it('should format numbers correctly in decimal mode', () => {
-        //     component.value = 1234.567;
-        //     component.mode = 'decimal';
-        //     component.maxFractionDigits = 2;
-        //     fixture.detectChanges();
+        it('should format numbers correctly in decimal mode', () => {
+            component.value = 1234.567;
+            component.mode = 'decimal';
+            component.maxFractionDigits = 2;
+            fixture.detectChanges();
 
-        //     const formatted = component.formatValue(1234.567);
-        //     expect(formatted).toContain('1,234.57'); // May vary based on locale
-        // });
+            const formatted = component.formatValue(1234.567);
+            expect(formatted).toContain('1,234.57'); // May vary based on locale
+        });
 
         it('should format currency correctly', () => {
             component.mode = 'currency';
@@ -285,15 +306,42 @@ describe('InputNumber', () => {
             expect(formatted).toContain('123'); // Should contain the number
         });
 
-        // TODO: Feature works, test will be debugged.
-        // it('should handle grouping separators', () => {
-        //     component.useGrouping = true;
-        //     component.value = 1234567;
-        //     fixture.detectChanges();
+        it('should handle grouping separators', () => {
+            component.useGrouping = true;
+            component.value = 1234567;
+            fixture.detectChanges();
 
-        //     const formatted = component.formatValue(1234567);
-        //     expect(formatted).toContain('1,234,567'); // Should have thousand separators
-        // });
+            const formatted = component.formatValue(1234567);
+            expect(formatted).toContain('1,234,567'); // Should have thousand separators
+        });
+    });
+
+    describe('Data adapter tests', () => {
+        it('should handle bigints value -> input', async () => {
+            const testFixture = TestBed.createComponent(TestInputNumberDataAdapterComponent);
+            const testComponent = testFixture.componentInstance as TestInputNumberDataAdapterComponent;
+            testComponent.value = 1045435657657878795845364325n;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance as InputNumber;
+
+            const formatted = inputNumberInstance.formattedValue();
+            expect(formatted).toContain('1.0454356576578788e+27'); // Should contain the number
+        });
+
+        it('should handle bigints input -> value', async () => {
+            const testFixture = TestBed.createComponent(TestInputNumberDataAdapterComponent);
+            const testComponent = testFixture.componentInstance as TestInputNumberDataAdapterComponent;
+
+            const testInputElement = testFixture.debugElement.query(By.css('input')).nativeElement;
+            await userEvent.fill(testInputElement, '1045435657657878795845364325');
+            await userEvent.tab();
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            expect(testComponent.value).toBe(1045435657657878795845364325n);
+        });
     });
 
     describe('User Input Handling', () => {
@@ -311,8 +359,7 @@ describe('InputNumber', () => {
         it('should handle valid numeric input', async () => {
             testFixture.detectChanges();
 
-            inputElement.value = '123.45';
-            inputElement.dispatchEvent(new Event('input'));
+            await userEvent.fill(inputElement, '123.45');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -326,8 +373,7 @@ describe('InputNumber', () => {
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
-            inputElement.value = 'abc';
-            inputElement.dispatchEvent(new Event('input'));
+            await userEvent.fill(inputElement, 'abc');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -349,22 +395,25 @@ describe('InputNumber', () => {
             expect(testComponent.value).toBe(_initialValue);
         });
 
-        // TODO: Feature works, test will be debugged.
-        // it('should handle paste events', fakeAsync(() => {
-        //     const pasteEvent = new Event('paste') as any;
-        //     pasteEvent.clipboardData = { getData: () => '123.45' };
+        it('should handle paste events', async () => {
+            await userEvent.click(inputElement);
+            await userEvent.fill(inputElement, '123.45');
+            await userEvent.dblClick(inputElement);
+            await userEvent.cut();
+            await userEvent.click(inputElement);
+            await userEvent.paste();
 
-        //     inputElement.dispatchEvent(pasteEvent);
-        //     tick();
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
 
-        //     expect(testComponent.value).toBe(123.45);
-        //     // Don't flush to avoid timer overflow
-        // }));
+            expect(testComponent.value).toBe(123.45);
+            // Don't flush to avoid timer overflow
+        });
 
         it('should handle focus events', async () => {
             vi.spyOn(testComponent, 'onFocusChange').mockImplementation(() => {});
 
-            inputElement.dispatchEvent(new Event('focus'));
+            await userEvent.click(inputElement);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -374,7 +423,8 @@ describe('InputNumber', () => {
         it('should handle blur events', async () => {
             vi.spyOn(testComponent, 'onBlurChange').mockImplementation(() => {});
 
-            inputElement.dispatchEvent(new Event('blur'));
+            await userEvent.click(inputElement);
+            await userEvent.tab();
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -399,8 +449,8 @@ describe('InputNumber', () => {
         it('should increment value on Arrow Up', async () => {
             const _initialValue = testComponent.value || 0;
 
-            const keyEvent = new KeyboardEvent('keydown', { key: 'ArrowUp' });
-            inputElement.dispatchEvent(keyEvent);
+            await userEvent.click(inputElement);
+            await userEvent.keyboard('{ArrowUp}');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -411,8 +461,8 @@ describe('InputNumber', () => {
         });
 
         it('should decrement value on Arrow Down', async () => {
-            const keyEvent = new KeyboardEvent('keydown', { key: 'ArrowDown' });
-            inputElement.dispatchEvent(keyEvent);
+            await userEvent.click(inputElement);
+            await userEvent.keyboard('{ArrowDown}');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 
@@ -423,8 +473,8 @@ describe('InputNumber', () => {
         it('should handle Enter key', async () => {
             vi.spyOn(testComponent, 'onKeyDownChange').mockImplementation(() => {});
 
-            const keyEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-            inputElement.dispatchEvent(keyEvent);
+            await userEvent.click(inputElement);
+            await userEvent.keyboard('{Enter}');
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
 

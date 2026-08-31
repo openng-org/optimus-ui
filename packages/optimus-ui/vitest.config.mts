@@ -7,6 +7,7 @@ import { defineConfig } from 'vitest/config';
 // in this file.
 export default defineConfig({
     test: {
-        restoreMocks: true
+        restoreMocks: true,
+        environment: 'jsdom'
     }
 });
