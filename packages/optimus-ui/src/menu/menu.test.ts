@@ -2189,3 +2189,38 @@ describe('Menu popup positioning', () => {
         expect(Math.abs(overlayRect.left - buttonRect.left)).toBeLessThan(1);
     });
 });
+
+// ---------------------------------------------------------------------------
+// Signal query API
+// ---------------------------------------------------------------------------
+
+@Component({
+    standalone: true,
+    imports: [Menu, SharedModule],
+    template: `
+        <p-menu [model]="model">
+            <ng-template #submenuheader let-item>{{ item?.label }}</ng-template>
+        </p-menu>
+    `
+})
+class MenuQueryApiHostComponent {
+    model = [{ label: 'a' }];
+}
+
+describe('Menu Signal Query API', () => {
+    it('should resolve its signal-based view/content queries', async () => {
+        TestBed.resetTestingModule();
+        TestBed.configureTestingModule({
+            imports: [MenuQueryApiHostComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
+        });
+        const fixture = TestBed.createComponent(MenuQueryApiHostComponent);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        const instance = fixture.debugElement.query(By.directive(Menu)).componentInstance;
+
+        expect(instance.submenuHeaderTemplate()).toBeDefined();
+        expect(instance.listViewChild()).toBeDefined();
+        expect(instance.containerViewChild()).toBeDefined();
+    });
+});
