@@ -134,6 +134,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
             [attr.data-p]="inputMultipleDataP"
             [tabindex]="-1"
             role="listbox"
+            [attr.aria-label]="selectedItemsLabel"
             [attr.aria-orientation]="'horizontal'"
             [attr.aria-activedescendant]="focused ? focusedMultipleOptionId : undefined"
             (focus)="onMultipleContainerFocus($event)"
@@ -157,8 +158,8 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
                     [class]="cx('pcChip')"
                     [label]="!selectedItemTemplate && !_selectedItemTemplate && getOptionLabel(option)"
                     [disabled]="$disabled()"
-                    [removable]="true"
-                    (onRemove)="!readonly ? removeOption($event, i) : ''"
+                    [removable]="!readonly && !$disabled()"
+                    (onRemove)="removeOption($event, i)"
                     [unstyled]="unstyled()"
                 >
                     <ng-container *ngTemplateOutlet="selectedItemTemplate || _selectedItemTemplate; context: { $implicit: option }"></ng-container>
@@ -959,6 +960,10 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
         return this.config.getTranslation(TranslationKeys.ARIA)['listLabel'];
     }
 
+    get selectedItemsLabel(): string {
+        return this.config.getTranslation(TranslationKeys.ARIA)['selectedItems'];
+    }
+
     get virtualScrollerDisabled() {
         return !this.virtualScroll;
     }
@@ -1323,35 +1328,24 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     onInputPaste(event) {
-        if (this.separator && this.multiple && !this.typeahead) {
-            const pastedData = (event.clipboardData || (window as any)['clipboardData'])?.getData('Text');
-            if (pastedData) {
-                const values = pastedData.split(this.separator);
-                const newValues = [...(this.modelValue() || [])];
-
-                values.forEach((value: string) => {
-                    const trimmedValue = value.trim();
-                    if (trimmedValue && !this.isSelected(trimmedValue)) {
-                        newValues.push(trimmedValue);
-                    }
-                });
-
-                if (newValues.length > (this.modelValue() || []).length) {
-                    const addedValues = newValues.slice((this.modelValue() || []).length);
-                    this.updateModel(newValues);
-                    addedValues.forEach((addedValue) => {
-                        this.onAdd.emit({ originalEvent: event, value: addedValue });
-                    });
-                    if (this.multiInputEl?.nativeElement) {
-                        this.multiInputEl.nativeElement.value = '';
-                    } else {
-                        event.target.value = '';
-                    }
-                    event.preventDefault();
-                }
-            }
-        } else {
+        if (!this.isSeparatorMode()) {
             this.onKeyDown(event);
+            return;
+        }
+
+        const pastedData = (event.clipboardData || (window as any)['clipboardData'])?.getData('Text');
+
+        if (!pastedData) {
+            return;
+        }
+
+        // Same reasoning as handleSeparatorKey: the raw text must never reach the input, or its
+        // separators are left behind when every pasted value is a duplicate. Only clear once the
+        // paste has committed something, so a paste that adds nothing leaves any typed text alone.
+        event.preventDefault();
+
+        if (this.addSeparatedValues(this.splitBySeparator(pastedData), event)) {
+            this.clearMultipleInput(event);
         }
     }
 
@@ -1431,21 +1425,21 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     handleSeparatorKey(event) {
-        if (this.separator && this.multiple && !this.typeahead) {
-            if (this.separator === event.key || (typeof this.separator === 'string' && event.key === this.separator) || (this.separator instanceof RegExp && event.key.match(this.separator))) {
-                const inputValue = (this.multiInputEl?.nativeElement?.value || event.target.value || '').trim();
-                if (inputValue && !this.isSelected(inputValue)) {
-                    this.updateModel([...(this.modelValue() || []), inputValue]);
-                    this.onAdd.emit({ originalEvent: event, value: inputValue });
-                    if (this.multiInputEl?.nativeElement) {
-                        this.multiInputEl.nativeElement.value = '';
-                    } else {
-                        event.target.value = '';
-                    }
-                    event.preventDefault();
-                }
-            }
+        if (!this.isSeparatorMode()) {
+            return;
         }
+
+        const isSeparatorKey = this.separator instanceof RegExp ? !!event.key.match(this.separator) : event.key === this.separator;
+
+        if (!isSeparatorKey) {
+            return;
+        }
+
+        // The separator is a delimiter, never a character: swallow it and clear the input even when
+        // nothing is added, otherwise it is left behind and ends up inside the next chip.
+        event.preventDefault();
+        this.addSeparatedValues(this.splitBySeparator(this.multiInputEl?.nativeElement?.value || event.target.value || ''), event);
+        this.clearMultipleInput(event);
     }
 
     onArrowDownKey(event) {
@@ -1677,6 +1671,46 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
         this.updateModel(value);
         this.onUnselect.emit({ originalEvent: event, value: removedOption });
         focus(this.inputEL?.nativeElement);
+    }
+
+    private isSeparatorMode(): boolean {
+        return !!this.separator && !!this.multiple && !this.typeahead;
+    }
+
+    private splitBySeparator(text: string): string[] {
+        return (this.separator ? text.split(this.separator) : [text]).map((value) => value.trim()).filter((value) => value.length > 0);
+    }
+
+    /** Returns whether anything was actually added to the model. */
+    private addSeparatedValues(values: string[], event: Event): boolean {
+        const added: string[] = [];
+        const newValues = [...(this.modelValue() || [])];
+
+        values.forEach((value) => {
+            if (this.isSelected(value) || (this.unique && added.includes(value))) {
+                return;
+            }
+
+            newValues.push(value);
+            added.push(value);
+        });
+
+        if (!added.length) {
+            return false;
+        }
+
+        this.updateModel(newValues);
+        added.forEach((value) => this.onAdd.emit({ originalEvent: event, value }));
+
+        return true;
+    }
+
+    private clearMultipleInput(event: Event): void {
+        if (this.multiInputEl?.nativeElement) {
+            this.multiInputEl.nativeElement.value = '';
+        } else if ((event.target as HTMLInputElement)?.value !== undefined) {
+            (event.target as HTMLInputElement).value = '';
+        }
     }
 
     updateModel(options) {
