@@ -86,7 +86,6 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
             (input)="onUserInput($event)"
             (keydown)="onInputKeyDown($event)"
             (keypress)="onInputKeyPress($event)"
-            (paste)="onPaste($event)"
             (click)="onInputClick()"
             (focus)="onInputFocus($event)"
             (blur)="onInputBlur($event)"
@@ -829,6 +828,19 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             return;
         }
 
+        let data = this.input.nativeElement.value;
+        if (data) {
+            if (this.inputId === 'integeronly') {
+                data = data.replace(/[^\d-]/g, '');
+            }
+
+            if (this.maxlength()) {
+                data = data.substring(0, this.maxlength()!);
+            }
+
+            this.input.nativeElement.value = data;
+        }
+
         if (this.isSpecialChar) {
             (event.target as HTMLInputElement).value = this.lastValue as string;
         }
@@ -1043,26 +1055,6 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
         if ((48 <= code && code <= 57) || isMinusSign || isDecimalSign) {
             this.insert(event, char, { isDecimalSign, isMinusSign });
-        }
-    }
-
-    onPaste(event: ClipboardEvent) {
-        if (!this.$disabled() && !this.readonly) {
-            event.preventDefault();
-            let data = (event.clipboardData || (this.document as any).defaultView['clipboardData']).getData('Text');
-            if (this.inputId === 'integeronly' && /[^\d-]/.test(data)) {
-                return;
-            }
-            if (data) {
-                if (this.maxlength()) {
-                    data = data.toString().substring(0, this.maxlength());
-                }
-
-                let filteredData = this.parseValue(data);
-                if (filteredData != null) {
-                    this.insert(event, filteredData.toString());
-                }
-            }
         }
     }
 
