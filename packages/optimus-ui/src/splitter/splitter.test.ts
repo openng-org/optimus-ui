@@ -665,9 +665,12 @@ describe('Splitter', () => {
     });
 
     describe('Accessibility', () => {
-        it.skip('should have separator role on gutter', () => {
+        it('should have separator role on gutter handle', () => {
             const gutter = testFixture.debugElement.query(By.css('.p-splitter-gutter'));
-            expect(gutter.nativeElement.getAttribute('role')).toBe('separator');
+            expect(gutter.nativeElement.getAttribute('role')).toBeNull();
+
+            const handle = testFixture.debugElement.query(By.css('.p-splitter-gutter-handle'));
+            expect(handle.nativeElement.getAttribute('role')).toBe('separator');
         });
 
         it.skip('should set aria-orientation on handle', async () => {

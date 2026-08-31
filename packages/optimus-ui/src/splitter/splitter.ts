@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, contentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, inject, InjectionToken, Input, NgModule, numberAttribute, Output, QueryList, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChild, ContentChildren, ElementRef, EventEmitter, forwardRef, inject, InjectionToken, Input, NgModule, numberAttribute, Output, QueryList, signal, ViewEncapsulation } from '@angular/core';
 import { addClass, getHeight, getOuterHeight, getOuterWidth, getWidth, hasClass, isRTL, removeClass } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -28,7 +28,6 @@ const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
                 <div
                     [pBind]="ptm('gutter')"
                     [class]="cx('gutter')"
-                    role="separator"
                     tabindex="-1"
                     (mousedown)="onGutterMouseDown($event, i)"
                     (touchstart)="onGutterTouchStart($event, i)"
@@ -40,10 +39,11 @@ const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
                     <div
                         [pBind]="ptm('gutterHandle')"
                         [class]="cx('gutterHandle')"
+                        role="separator"
                         tabindex="0"
                         [ngStyle]="gutterStyle()"
                         [attr.aria-orientation]="layout"
-                        [attr.aria-valuenow]="prevSize"
+                        [attr.aria-valuenow]="ariaValueNow()"
                         (keyup)="onGutterKeyUp($event)"
                         (keydown)="onGutterKeyDown($event, i)"
                     ></div>
@@ -192,7 +192,12 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
 
     timer: any;
 
-    prevSize: any;
+    prevSize = signal(0);
+
+    /**
+     * Size of the previous panel in percent, rounded for assistive technology announcements.
+     */
+    ariaValueNow = computed(() => Math.round(this.prevSize()));
 
     _componentStyle = inject(SplitterStyle);
 
@@ -238,7 +243,7 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
 
                     this._panelSizes = _panelSizes;
 
-                    this.prevSize = parseFloat(_panelSizes[0]).toFixed(4);
+                    this.prevSize.set(parseFloat(_panelSizes[0]));
                 }
             }
         }
@@ -298,7 +303,7 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
             newNextPanelSize = (this.nextPanelSize as number) - newPos;
         }
 
-        this.prevSize = parseFloat(newPrevPanelSize).toFixed(4);
+        this.prevSize.set(parseFloat(newPrevPanelSize));
 
         if (this.validateResize(newPrevPanelSize, newNextPanelSize)) {
             (this.prevPanelElement as HTMLElement).style.flexBasis = 'calc(' + newPrevPanelSize + '% - ' + (this.panels.length - 1) * this.gutterSize + 'px)';
