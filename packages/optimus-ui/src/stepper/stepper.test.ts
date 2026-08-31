@@ -420,12 +420,12 @@ describe('Stepper', () => {
 
     describe('Accessibility', () => {
         it('should have correct ARIA roles', () => {
-            const stepperElement = fixture.debugElement.query(By.css('p-stepper'));
-            const stepButtons = fixture.debugElement.queryAll(By.css('p-step button'));
+            const stepListElement = fixture.debugElement.query(By.css('p-step-list'));
+            const steps = fixture.debugElement.queryAll(By.css('p-step'));
             const stepPanels = fixture.debugElement.queryAll(By.css('p-step-panel'));
 
-            expect(stepperElement.nativeElement.getAttribute('role')).toBe('tablist');
-            expect(stepButtons[0].nativeElement.getAttribute('role')).toBe('tab');
+            expect(stepListElement.nativeElement.getAttribute('role')).toBe('tablist');
+            expect(steps[0].nativeElement.getAttribute('role')).toBe('tab');
             expect(stepPanels[0].nativeElement.getAttribute('role')).toBe('tabpanel');
         });
 
@@ -444,8 +444,8 @@ describe('Stepper', () => {
             fixture.detectChanges();
 
             const steps = fixture.debugElement.queryAll(By.css('p-step'));
-            expect(steps[1].nativeElement.getAttribute('aria-current')).toBe('step');
-            expect(steps[0].nativeElement.getAttribute('aria-current')).toBeNull();
+            expect(steps[1].nativeElement.getAttribute('aria-selected')).toBe('true');
+            expect(steps[0].nativeElement.getAttribute('aria-selected')).toBe('false');
         });
 
         it('should set correct tabindex for disabled steps', async () => {
