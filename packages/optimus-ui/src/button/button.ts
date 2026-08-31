@@ -110,12 +110,20 @@ export class ButtonLabel extends BaseComponent {
     providers: [ButtonStyle, { provide: BUTTON_ICON_INSTANCE, useExisting: ButtonIcon }, { provide: PARENT_INSTANCE, useExisting: ButtonIcon }],
     standalone: true,
     host: {
-        '[class.p-button-icon]': '!$unstyled() && true'
+        '[class.p-button-icon]': '!$unstyled() && true',
+        '[class.p-button-icon-left]': "!$unstyled() && iconPos === 'left'",
+        '[class.p-button-icon-right]': "!$unstyled() && iconPos === 'right'",
+        '[class.p-button-icon-top]': "!$unstyled() && iconPos === 'top'",
+        '[class.p-button-icon-bottom]': "!$unstyled() && iconPos === 'bottom'"
     },
     hostDirectives: [Bind]
 })
 export class ButtonIcon extends BaseComponent {
     componentName = 'ButtonIcon';
+
+    get iconPos(): ButtonIconPosition | undefined {
+        return (this.$parentInstance as Button | undefined)?.iconPos;
+    }
 
     /**
      * Used to pass attributes to DOM elements inside the pButtonIcon.
