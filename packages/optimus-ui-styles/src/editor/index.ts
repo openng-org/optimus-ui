@@ -114,89 +114,89 @@ export const style = /*css*/ `
     .ql-editor ul li.ql-direction-rtl {
         padding-inline-end: 1.5rem;
     }
-    .ql-editor ol li {
+    .ql-editor ol li[data-list='ordered'] {
         counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
         counter-increment: list-0;
     }
-    .ql-editor ol li:before {
+    .ql-editor ol li[data-list='ordered']:before {
         content: counter(list-0, decimal) '. ';
     }
-    .ql-editor ol li.ql-indent-1 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-1 {
         counter-increment: list-1;
     }
-    .ql-editor ol li.ql-indent-1:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-1:before {
         content: counter(list-1, lower-alpha) '. ';
     }
-    .ql-editor ol li.ql-indent-1 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-1 {
         counter-reset: list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-2 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-2 {
         counter-increment: list-2;
     }
-    .ql-editor ol li.ql-indent-2:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-2:before {
         content: counter(list-2, lower-roman) '. ';
     }
-    .ql-editor ol li.ql-indent-2 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-2 {
         counter-reset: list-3 list-4 list-5 list-6 list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-3 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-3 {
         counter-increment: list-3;
     }
-    .ql-editor ol li.ql-indent-3:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-3:before {
         content: counter(list-3, decimal) '. ';
     }
-    .ql-editor ol li.ql-indent-3 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-3 {
         counter-reset: list-4 list-5 list-6 list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-4 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-4 {
         counter-increment: list-4;
     }
-    .ql-editor ol li.ql-indent-4:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-4:before {
         content: counter(list-4, lower-alpha) '. ';
     }
-    .ql-editor ol li.ql-indent-4 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-4 {
         counter-reset: list-5 list-6 list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-5 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-5 {
         counter-increment: list-5;
     }
-    .ql-editor ol li.ql-indent-5:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-5:before {
         content: counter(list-5, lower-roman) '. ';
     }
-    .ql-editor ol li.ql-indent-5 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-5 {
         counter-reset: list-6 list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-6 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-6 {
         counter-increment: list-6;
     }
-    .ql-editor ol li.ql-indent-6:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-6:before {
         content: counter(list-6, decimal) '. ';
     }
-    .ql-editor ol li.ql-indent-6 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-6 {
         counter-reset: list-7 list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-7 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-7 {
         counter-increment: list-7;
     }
-    .ql-editor ol li.ql-indent-7:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-7:before {
         content: counter(list-7, lower-alpha) '. ';
     }
-    .ql-editor ol li.ql-indent-7 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-7 {
         counter-reset: list-8 list-9;
     }
-    .ql-editor ol li.ql-indent-8 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-8 {
         counter-increment: list-8;
     }
-    .ql-editor ol li.ql-indent-8:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-8:before {
         content: counter(list-8, lower-roman) '. ';
     }
-    .ql-editor ol li.ql-indent-8 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-8 {
         counter-reset: list-9;
     }
-    .ql-editor ol li.ql-indent-9 {
+    .ql-editor ol li[data-list='ordered'].ql-indent-9 {
         counter-increment: list-9;
     }
-    .ql-editor ol li.ql-indent-9:before {
+    .ql-editor ol li[data-list='ordered'].ql-indent-9:before {
         content: counter(list-9, decimal) '. ';
     }
     .ql-editor .ql-video {
