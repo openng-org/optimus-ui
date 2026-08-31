@@ -1578,7 +1578,7 @@ describe('DatePicker', () => {
 
                 // Templates should be available for context binding
                 if (datePickerComponent.templates) {
-                    datePickerComponent.templates.forEach((template: any) => {
+                    datePickerComponent.templates().forEach((template: any) => {
                         expect(template).toBeTruthy();
                     });
                 }
