@@ -1071,10 +1071,12 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
 
     currentHour: Nullable<number>;
 
+    currentHour24: Nullable<number>;
+
     currentMinute: Nullable<number>;
 
     currentSecond: Nullable<number>;
-    p;
+
     pm: Nullable<boolean>;
 
     mask: Nullable<HTMLDivElement>;
@@ -1560,15 +1562,13 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     }
 
     initTime(date: Date) {
-        this.pm = date.getHours() > 11;
-
         if (this.showTime) {
+            this.setCurrentHourPM(date.getHours());
             this.currentMinute = date.getMinutes();
             this.currentSecond = this.showSeconds ? date.getSeconds() : 0;
-            this.setCurrentHourPM(date.getHours());
         } else if (this.timeOnly) {
+            this.setCurrentHourPM(0);
             this.currentMinute = 0;
-            this.currentHour = 0;
             this.currentSecond = 0;
         }
     }
@@ -1803,15 +1803,24 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     }
 
     setCurrentHourPM(hours: number) {
-        if (this.hourFormat == '12') {
-            this.pm = hours > 11;
-            if (hours >= 12) {
-                this.currentHour = hours == 12 ? 12 : hours - 12;
+        this.currentHour24 = hours;
+        this.updateCurrentHourPM();
+    }
+
+    updateCurrentHourPM() {
+        this.currentHour = this.currentHour24;
+        if (this.currentHour24 !== null && this.currentHour24 !== undefined && this.hourFormat == '12') {
+            if (this.currentHour24 > 12) {
+                this.currentHour = this.currentHour24 - 12;
+                this.pm = true;
+            } else if (this.currentHour24 === 12) {
+                this.pm = true;
+            } else if (this.currentHour24 === 0) {
+                this.currentHour = 12;
+                this.pm = false;
             } else {
-                this.currentHour = hours == 0 ? 12 : hours;
+                this.pm = false;
             }
-        } else {
-            this.currentHour = hours;
         }
     }
 
@@ -1825,13 +1834,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         let date = this.formatDateMetaToDate(dateMeta);
 
         if (this.showTime) {
-            if (this.hourFormat == '12') {
-                if (this.currentHour === 12) date.setHours(this.pm ? 12 : 0);
-                else date.setHours(this.pm ? <number>this.currentHour + 12 : <number>this.currentHour);
-            } else {
-                date.setHours(<number>this.currentHour);
-            }
-
+            date.setHours(<number>this.currentHour24);
             date.setMinutes(<number>this.currentMinute);
             date.setSeconds(<number>this.currentSecond);
         }
@@ -2771,23 +2774,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         this.createMonths(this.currentMonth, this.currentYear);
     }
 
-    convertTo24Hour(hours: number, pm: boolean) {
-        //@ts-ignore
-        if (this.hourFormat == '12') {
-            if (hours === 12) {
-                return pm ? 12 : 0;
-            } else {
-                return pm ? hours + 12 : hours;
-            }
-        }
-        return hours;
-    }
-
-    constrainTime(hour: number, minute: number, second: number, pm: boolean) {
-        let returnTimeTriple: number[] = [hour, minute, second];
-        let minHoursExceeds12: boolean = false;
+    constrainTime() {
         let value = this.value;
-        const convertedHour = this.convertTo24Hour(hour, pm);
         const isRange = this.isRangeSelection(),
             isMultiple = this.isMultipleSelection(),
             isMultiValue = isRange || isMultiple;
@@ -2803,86 +2791,41 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
                 value = this.value[this.value.length - 1];
             }
         }
+
         const valueDateString = value && isDate(value) ? value.toDateString() : null;
-        let isMinDate = this.minDate && valueDateString && this.minDate.toDateString() === valueDateString;
-        let isMaxDate = this.maxDate && valueDateString && this.maxDate.toDateString() === valueDateString;
+        if (!valueDateString) return;
 
-        if (isMinDate) {
-            minHoursExceeds12 = this.minDate!.getHours() >= 12;
-        }
-
-        switch (
-            true // intentional fall through
-        ) {
-            case isMinDate && minHoursExceeds12 && this.minDate!.getHours() === 12 && this.minDate!.getHours() > convertedHour:
-                returnTimeTriple[0] = 11;
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate!.getMinutes();
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() === minute && this.minDate!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate!.getSeconds();
-                break;
-            case isMinDate && !minHoursExceeds12 && this.minDate!.getHours() - 1 === convertedHour && this.minDate!.getHours() > convertedHour:
-                returnTimeTriple[0] = 11;
-                this.pm = true;
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate!.getMinutes();
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() === minute && this.minDate!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate!.getSeconds();
-                break;
-
-            case isMinDate && minHoursExceeds12 && this.minDate!.getHours() > convertedHour && convertedHour !== 12:
-                this.setCurrentHourPM(this.minDate!.getHours());
-                returnTimeTriple[0] = this.currentHour || 0;
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate!.getMinutes();
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() === minute && this.minDate!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate!.getSeconds();
-                break;
-            case isMinDate && this.minDate!.getHours() > convertedHour:
-                returnTimeTriple[0] = this.minDate!.getHours();
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() > minute:
-                returnTimeTriple[1] = this.minDate!.getMinutes();
-            case isMinDate && this.minDate!.getHours() === convertedHour && this.minDate!.getMinutes() === minute && this.minDate!.getSeconds() > second:
-                returnTimeTriple[2] = this.minDate!.getSeconds();
-                break;
-            case isMaxDate && this.maxDate!.getHours() < convertedHour:
-                returnTimeTriple[0] = this.maxDate!.getHours();
-            case isMaxDate && this.maxDate!.getHours() === convertedHour && this.maxDate!.getMinutes() < minute:
-                returnTimeTriple[1] = this.maxDate!.getMinutes();
-            case isMaxDate && this.maxDate!.getHours() === convertedHour && this.maxDate!.getMinutes() === minute && this.maxDate!.getSeconds() < second:
-                returnTimeTriple[2] = this.maxDate!.getSeconds();
-                break;
-        }
-
-        return returnTimeTriple;
-    }
-
-    incrementHour(event: any) {
-        const prevHour = this.currentHour ?? 0;
-        let newHour = (this.currentHour ?? 0) + this.stepHour;
-        let newPM = this.pm;
-        if (this.hourFormat == '24') newHour = newHour >= 24 ? newHour - 24 : newHour;
-        else if (this.hourFormat == '12') {
-            // Before the AM/PM break, now after
-            if (prevHour < 12 && newHour > 11) {
-                newPM = !this.pm;
+        if (this.minDate && this.minDate.toDateString() === valueDateString) {
+            if (this.currentHour24! < this.minDate!.getHours()) {
+                this.currentHour24 = this.minDate!.getHours();
+                this.currentMinute = this.minDate!.getMinutes();
+                this.currentSecond = this.minDate!.getSeconds();
+            } else if (this.currentHour24 === this.minDate!.getHours()) {
+                if (this.currentMinute! < this.minDate!.getMinutes()) {
+                    this.currentMinute = this.minDate!.getMinutes();
+                    this.currentSecond = this.minDate!.getSeconds();
+                } else if (this.currentMinute === this.minDate!.getMinutes() && this.currentSecond! < this.minDate!.getSeconds()) {
+                    this.currentSecond = this.minDate!.getSeconds();
+                }
             }
-            newHour = newHour >= 13 ? newHour - 12 : newHour;
         }
-        this.toggleAMPMIfNotMinDate(newPM!);
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(newHour, this.currentMinute!, this.currentSecond!, newPM!);
-        event.preventDefault();
-    }
 
-    toggleAMPMIfNotMinDate(newPM: boolean) {
-        let value = this.value;
-        const valueDateString = value && isDate(value) ? value.toDateString() : null;
-        let isMinDate = this.minDate && valueDateString && this.minDate.toDateString() === valueDateString;
-        if (isMinDate && this.minDate!.getHours() >= 12) {
-            this.pm = true;
-        } else {
-            this.pm = newPM;
+        if (this.maxDate && this.maxDate.toDateString() === valueDateString) {
+            if (this.currentHour24! > this.maxDate!.getHours()) {
+                this.currentHour24 = this.maxDate!.getHours();
+                this.currentMinute = this.maxDate!.getMinutes();
+                this.currentSecond = this.maxDate!.getSeconds();
+            } else if (this.currentHour24 === this.maxDate!.getHours()) {
+                if (this.currentMinute! > this.maxDate!.getMinutes()) {
+                    this.currentMinute = this.maxDate!.getMinutes();
+                    this.currentSecond = this.maxDate!.getSeconds();
+                } else if (this.currentMinute === this.maxDate!.getMinutes() && this.currentSecond! > this.maxDate!.getSeconds()) {
+                    this.currentSecond = this.maxDate!.getSeconds();
+                }
+            }
         }
+
+        this.updateCurrentHourPM();
     }
 
     onTimePickerElementMouseDown(event: Event, type: number, direction: number) {
@@ -2942,47 +2885,48 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         }
     }
 
+    incrementHour(event: any) {
+        this.currentHour24 = ((this.currentHour24 ?? 0) + this.stepHour) % 24;
+        this.constrainTime();
+        event.preventDefault();
+    }
+
     decrementHour(event: any) {
-        let newHour = (this.currentHour ?? 0) - this.stepHour;
-        let newPM = this.pm;
-        if (this.hourFormat == '24') newHour = newHour < 0 ? 24 + newHour : newHour;
-        else if (this.hourFormat == '12') {
-            // If we were at noon/midnight, then switch
-            if (this.currentHour === 12) {
-                newPM = !this.pm;
-            }
-            newHour = newHour <= 0 ? 12 + newHour : newHour;
+        this.currentHour24 = (this.currentHour24 ?? 0) - this.stepHour;
+        if (this.currentHour24 < 0) {
+            this.currentHour24 += 24;
         }
-        this.toggleAMPMIfNotMinDate(newPM!);
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(newHour, this.currentMinute!, this.currentSecond!, newPM!);
+        this.constrainTime();
         event.preventDefault();
     }
 
     incrementMinute(event: any) {
-        let newMinute = (this.currentMinute ?? 0) + this.stepMinute;
-        newMinute = newMinute > 59 ? newMinute - 60 : newMinute;
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(this.currentHour || 0, newMinute, this.currentSecond!, this.pm!);
+        this.currentMinute = ((this.currentMinute ?? 0) + this.stepMinute) % 60;
+        this.constrainTime();
         event.preventDefault();
     }
 
     decrementMinute(event: any) {
-        let newMinute = (this.currentMinute ?? 0) - this.stepMinute;
-        newMinute = newMinute < 0 ? 60 + newMinute : newMinute;
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(this.currentHour || 0, newMinute, this.currentSecond || 0, this.pm!);
+        this.currentMinute = (this.currentMinute ?? 0) - this.stepMinute;
+        if (this.currentMinute < 0) {
+            this.currentMinute += 60;
+        }
+        this.constrainTime();
         event.preventDefault();
     }
 
     incrementSecond(event: any) {
-        let newSecond = <any>this.currentSecond + this.stepSecond;
-        newSecond = newSecond > 59 ? newSecond - 60 : newSecond;
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(this.currentHour || 0, this.currentMinute || 0, newSecond, this.pm!);
+        this.currentSecond = ((this.currentSecond ?? 0) + this.stepSecond) % 60;
+        this.constrainTime();
         event.preventDefault();
     }
 
     decrementSecond(event: any) {
-        let newSecond = <any>this.currentSecond - this.stepSecond;
-        newSecond = newSecond < 0 ? 60 + newSecond : newSecond;
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(this.currentHour || 0, this.currentMinute || 0, newSecond, this.pm!);
+        this.currentSecond = (this.currentSecond ?? 0) - this.stepSecond;
+        if (this.currentSecond < 0) {
+            this.currentSecond += 60;
+        }
+        this.constrainTime();
         event.preventDefault();
     }
 
@@ -2996,13 +2940,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         }
         value = value && isDate(value) ? new Date(value.getTime()) : new Date();
 
-        if (this.hourFormat == '12') {
-            if (this.currentHour === 12) value.setHours(this.pm ? 12 : 0);
-            else value.setHours(this.pm ? <number>this.currentHour + 12 : this.currentHour);
-        } else {
-            value.setHours(this.currentHour);
-        }
-
+        value.setHours(this.currentHour24);
         value.setMinutes(this.currentMinute);
         value.setSeconds(this.currentSecond);
         if (this.isRangeSelection()) {
@@ -3020,9 +2958,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     }
 
     toggleAMPM(event: any) {
-        const newPM = !this.pm;
-        this.pm = newPM;
-        [this.currentHour, this.currentMinute, this.currentSecond] = this.constrainTime(this.currentHour || 0, this.currentMinute || 0, this.currentSecond || 0, newPM);
+        this.currentHour24 = ((this.currentHour24 ?? 0) + 12) % 24;
+        this.constrainTime();
         this.updateTime();
         event.preventDefault();
     }
@@ -3118,8 +3055,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             throw 'Invalid Time';
         }
 
-        this.pm = ampm === 'PM' || ampm === 'pm';
-        let time = this.parseTime(timeString);
+        let pm = ampm === 'PM' || ampm === 'pm';
+        let time = this.parseTime(timeString, pm);
         value.setHours(time.hour);
         value.setMinutes(time.minute);
         value.setSeconds(time.second);
@@ -3429,7 +3366,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         return output;
     }
 
-    parseTime(value: any) {
+    parseTime(value: any, pm: boolean) {
         let tokens: string[] = value.split(':');
         let validTokenLength = this.showSeconds ? 3 : 2;
 
@@ -3445,9 +3382,9 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             throw 'Invalid time';
         } else {
             if (this.hourFormat == '12') {
-                if (h !== 12 && this.pm) {
+                if (h !== 12 && pm) {
                     h += 12;
-                } else if (!this.pm && h === 12) {
+                } else if (!pm && h === 12) {
                     h -= 12;
                 }
             }
