@@ -34,29 +34,27 @@ describe('ToggleSwitch', () => {
         });
 
         it('should have default values', () => {
-            expect(component.trueValue).toBe(true);
-            expect(component.falseValue).toBe(false);
-            expect(component.focused).toBe(false);
-            expect(component.readonly).toBeUndefined();
-            expect(component.tabindex).toBeUndefined();
+            expect(component.trueValue()).toBe(true);
+            expect(component.falseValue()).toBe(false);
+            expect(component.focused()).toBe(false);
+            expect(component.readonly()).toBeUndefined();
+            expect(component.tabindex()).toBeUndefined();
         });
 
         it('should accept custom values', () => {
-            component.trueValue = 'yes';
-            component.falseValue = 'no';
-            component.styleClass = 'custom-class';
-            component.inputId = 'test-input';
-            component.readonly = true;
-            component.tabindex = 5;
+            fixture.componentRef.setInput('trueValue', 'yes');
+            fixture.componentRef.setInput('falseValue', 'no');
+            fixture.componentRef.setInput('inputId', 'test-input');
+            fixture.componentRef.setInput('readonly', true);
+            fixture.componentRef.setInput('tabindex', 5);
 
             fixture.detectChanges();
 
-            expect(component.trueValue).toBe('yes');
-            expect(component.falseValue).toBe('no');
-            expect(component.styleClass).toBe('custom-class');
-            expect(component.inputId).toBe('test-input');
-            expect(component.readonly).toBe(true);
-            expect(component.tabindex).toBe(5);
+            expect(component.trueValue()).toBe('yes');
+            expect(component.falseValue()).toBe('no');
+            expect(component.inputId()).toBe('test-input');
+            expect(component.readonly()).toBe(true);
+            expect(component.tabindex()).toBe(5);
         });
 
         it('should handle size input', () => {
@@ -78,8 +76,8 @@ describe('ToggleSwitch', () => {
             expect(component.checked()).toBe(false);
 
             // Test with custom true/false values
-            component.trueValue = 'on';
-            component.falseValue = 'off';
+            fixture.componentRef.setInput('trueValue', 'on');
+            fixture.componentRef.setInput('falseValue', 'off');
             component.writeModelValue('on');
             expect(component.checked()).toBe(true);
 
@@ -139,7 +137,7 @@ describe('ToggleSwitch', () => {
 
         it('should not handle onClick when readonly', () => {
             const mockEvent = new Event('click');
-            component.readonly = true;
+            fixture.componentRef.setInput('readonly', true);
             vi.spyOn(component.onChange, 'emit').mockImplementation(() => {});
             vi.spyOn(component, 'writeModelValue').mockImplementation(() => {});
 
@@ -151,16 +149,16 @@ describe('ToggleSwitch', () => {
 
         it('should handle focus events', () => {
             component.onFocus();
-            expect(component.focused).toBe(true);
+            expect(component.focused()).toBe(true);
         });
 
         it('should handle blur events', () => {
-            component.focused = true;
+            component.focused.set(true);
             (vi.spyOn(component, 'onModelTouched') as Mock).mockImplementation(() => {});
 
             component.onBlur();
 
-            expect(component.focused).toBe(false);
+            expect(component.focused()).toBe(false);
             expect(component.onModelTouched).toHaveBeenCalled();
         });
 
@@ -290,7 +288,7 @@ describe('ToggleSwitch', () => {
             primeTemplateFixture.detectChanges();
 
             expect(toggleSwitchInstance).toBeTruthy();
-            expect(toggleSwitchInstance._handleTemplate !== undefined || toggleSwitchInstance._handleTemplate === undefined).toBe(true);
+            expect(toggleSwitchInstance.$handleTemplate() !== undefined || toggleSwitchInstance.$handleTemplate() === undefined).toBe(true);
         });
     });
 
@@ -460,8 +458,8 @@ describe('ToggleSwitch', () => {
 
     describe('Edge Cases', () => {
         it('should handle custom trueValue and falseValue', () => {
-            component.trueValue = 1;
-            component.falseValue = 0;
+            fixture.componentRef.setInput('trueValue', 1);
+            fixture.componentRef.setInput('falseValue', 0);
 
             component.writeModelValue(1);
             expect(component.checked()).toBe(true);
@@ -474,8 +472,8 @@ describe('ToggleSwitch', () => {
         });
 
         it('should handle string trueValue and falseValue', () => {
-            component.trueValue = 'enabled';
-            component.falseValue = 'disabled';
+            fixture.componentRef.setInput('trueValue', 'enabled');
+            fixture.componentRef.setInput('falseValue', 'disabled');
 
             component.writeModelValue('enabled');
             expect(component.checked()).toBe(true);
@@ -488,8 +486,8 @@ describe('ToggleSwitch', () => {
             const trueObj = { status: 'active' };
             const falseObj = { status: 'inactive' };
 
-            component.trueValue = trueObj;
-            component.falseValue = falseObj;
+            fixture.componentRef.setInput('trueValue', trueObj);
+            fixture.componentRef.setInput('falseValue', falseObj);
 
             component.writeModelValue(trueObj);
             expect(component.checked()).toBe(true);
@@ -499,8 +497,8 @@ describe('ToggleSwitch', () => {
         });
 
         it('should handle null and undefined values', () => {
-            component.trueValue = true;
-            component.falseValue = false;
+            fixture.componentRef.setInput('trueValue', true);
+            fixture.componentRef.setInput('falseValue', false);
 
             component.writeModelValue(null);
             expect(component.checked()).toBe(false);
@@ -558,25 +556,20 @@ describe('ToggleSwitch', () => {
     });
 
     describe('Input Properties and Styling', () => {
-        it('should handle styleClass input', () => {
-            component.styleClass = 'custom-toggle';
-            expect(component.styleClass).toBe('custom-toggle');
-        });
-
         it('should handle inputId', () => {
-            component.inputId = 'my-toggle-input';
+            fixture.componentRef.setInput('inputId', 'my-toggle-input');
             fixture.detectChanges();
 
             const input = fixture.debugElement.query(By.css('input'));
             if (input) {
                 expect(input.nativeElement.getAttribute('id')).toBe('my-toggle-input');
             } else {
-                expect(component.inputId).toBe('my-toggle-input');
+                expect(component.inputId()).toBe('my-toggle-input');
             }
         });
 
         it('should handle readonly state', () => {
-            component.readonly = true;
+            fixture.componentRef.setInput('readonly', true);
 
             const mockEvent = new Event('click');
             vi.spyOn(component, 'writeModelValue').mockImplementation(() => {});
