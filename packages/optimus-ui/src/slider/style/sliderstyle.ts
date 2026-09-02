@@ -13,9 +13,9 @@ const classes = {
         {
             'p-disabled': instance.$disabled(),
             'p-invalid': instance.invalid(),
-            'p-slider-horizontal': instance.orientation === 'horizontal',
-            'p-slider-vertical': instance.orientation === 'vertical',
-            'p-slider-animate': instance.animate
+            'p-slider-horizontal': instance.orientation() === 'horizontal',
+            'p-slider-vertical': instance.orientation() === 'vertical',
+            'p-slider-animate': instance.animate()
         }
     ],
     range: 'p-slider-range',
