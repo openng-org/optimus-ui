@@ -31,161 +31,161 @@ describe('SelectButton', () => {
         });
 
         it('should have default values', () => {
-            expect(component.multiple).toBeUndefined();
-            expect(component.allowEmpty).toBe(true);
-            expect(component.tabindex).toBe(0);
+            expect(component.multiple()).toBeUndefined();
+            expect(component.allowEmpty()).toBe(true);
+            expect(component.tabindex()).toBe(0);
             expect(component.focusedIndex).toBe(0);
-            expect(component.unselectable).toBe(false);
+            expect(component.unselectable()).toBe(false);
         });
 
         it('should accept custom values', async () => {
-            component.options = [{ label: 'Option 1', value: 'opt1' }];
-            component.multiple = true;
-            component.allowEmpty = false;
-            component.styleClass = 'custom-class';
+            fixture.componentRef.setInput('options', [{ label: 'Option 1', value: 'opt1' }]);
+            fixture.componentRef.setInput('multiple', true);
+            fixture.componentRef.setInput('allowEmpty', false);
+            fixture.componentRef.setInput('styleClass', 'custom-class');
 
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.options?.length).toBe(1);
-            expect(component.multiple).toBe(true);
-            expect(component.allowEmpty).toBe(false);
-            expect(component.styleClass).toBe('custom-class');
+            expect(component.options()?.length).toBe(1);
+            expect(component.multiple()).toBe(true);
+            expect(component.allowEmpty()).toBe(false);
+            expect(component.styleClass()).toBe('custom-class');
         });
 
         it('should set unselectable property correctly', () => {
-            component.unselectable = true;
-            expect(component.unselectable).toBe(true);
-            expect(component.allowEmpty).toBe(false);
+            fixture.componentRef.setInput('unselectable', true);
+            expect(component.unselectable()).toBe(true);
+            expect(component.$allowEmpty()).toBe(false);
 
-            component.unselectable = false;
-            expect(component.unselectable).toBe(false);
-            expect(component.allowEmpty).toBe(true);
+            fixture.componentRef.setInput('unselectable', false);
+            expect(component.unselectable()).toBe(false);
+            expect(component.$allowEmpty()).toBe(true);
         });
     });
 
     describe('Public Methods', () => {
         beforeEach(async () => {
-            component.options = [
+            fixture.componentRef.setInput('options', [
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2' },
                 { label: 'Option 3', value: 'opt3', disabled: true }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
         });
 
         it('should get option label correctly', () => {
-            expect(component.getOptionLabel(component.options![0])).toBe('Option 1');
+            expect(component.getOptionLabel(component.options()![0])).toBe('Option 1');
 
-            component.optionLabel = 'label';
+            fixture.componentRef.setInput('optionLabel', 'label');
             expect(component.getOptionLabel({ label: 'Custom Label' })).toBe('Custom Label');
 
             // Test with object that has no label property - should return the object itself
-            component.optionLabel = undefined as any;
+            fixture.componentRef.setInput('optionLabel', undefined as any);
             const objectOption = { name: 'Test Object', id: 1 };
             const result = component.getOptionLabel(objectOption);
             expect(result).toEqual(objectOption);
         });
 
         it('should get option value correctly', () => {
-            expect(component.getOptionValue(component.options![0])).toBe('opt1');
+            expect(component.getOptionValue(component.options()![0])).toBe('opt1');
 
-            component.optionValue = 'value';
+            fixture.componentRef.setInput('optionValue', 'value');
             expect(component.getOptionValue({ value: 'custom-value' })).toBe('custom-value');
 
-            component.optionValue = undefined as any;
-            component.optionLabel = undefined as any;
+            fixture.componentRef.setInput('optionValue', undefined as any);
+            fixture.componentRef.setInput('optionLabel', undefined as any);
             expect(component.getOptionValue({ id: 1, name: 'Test' })).toEqual({ id: 1, name: 'Test' });
         });
 
         it('should check if option is disabled', () => {
-            expect(component.isOptionDisabled(component.options![0])).toBe(false);
-            expect(component.isOptionDisabled(component.options![2])).toBe(true);
+            expect(component.isOptionDisabled(component.options()![0])).toBe(false);
+            expect(component.isOptionDisabled(component.options()![2])).toBe(true);
 
-            component.optionDisabled = 'disabled';
+            fixture.componentRef.setInput('optionDisabled', 'disabled');
             expect(component.isOptionDisabled({ disabled: true })).toBe(true);
             expect(component.isOptionDisabled({ disabled: false })).toBe(false);
         });
 
         it('should check if option is selected in single mode', () => {
-            component.value = 'opt1';
-            expect(component.isSelected(component.options![0])).toBe(true);
-            expect(component.isSelected(component.options![1])).toBe(false);
+            component.value.set('opt1');
+            expect(component.isSelected(component.options()![0])).toBe(true);
+            expect(component.isSelected(component.options()![1])).toBe(false);
         });
 
         it('should check if option is selected in multiple mode', () => {
-            component.multiple = true;
-            component.value = ['opt1', 'opt2'];
+            fixture.componentRef.setInput('multiple', true);
+            component.value.set(['opt1', 'opt2']);
 
-            expect(component.isSelected(component.options![0])).toBe(true);
-            expect(component.isSelected(component.options![1])).toBe(true);
-            expect(component.isSelected(component.options![2])).toBe(false);
+            expect(component.isSelected(component.options()![0])).toBe(true);
+            expect(component.isSelected(component.options()![1])).toBe(true);
+            expect(component.isSelected(component.options()![2])).toBe(false);
         });
 
         it('should remove option from value array', () => {
-            component.multiple = true;
-            component.value = ['opt1', 'opt2'];
+            fixture.componentRef.setInput('multiple', true);
+            component.value.set(['opt1', 'opt2']);
 
-            component.removeOption(component.options![0]);
+            component.removeOption(component.options()![0]);
 
-            expect(component.value).toEqual(['opt2']);
+            expect(component.value()).toEqual(['opt2']);
         });
 
         it('should get correct allow empty value for single mode', () => {
-            component.allowEmpty = true;
+            fixture.componentRef.setInput('allowEmpty', true);
             expect(component.getAllowEmpty()).toBe(true);
 
-            component.allowEmpty = false;
+            fixture.componentRef.setInput('allowEmpty', false);
             expect(component.getAllowEmpty()).toBe(false);
         });
 
         it('should get correct allow empty value for multiple mode', () => {
-            component.multiple = true;
-            component.allowEmpty = false;
-            component.value = ['opt1'];
+            fixture.componentRef.setInput('multiple', true);
+            fixture.componentRef.setInput('allowEmpty', false);
+            component.value.set(['opt1']);
 
             expect(component.getAllowEmpty()).toBe(false);
 
-            component.value = ['opt1', 'opt2'];
+            component.value.set(['opt1', 'opt2']);
             expect(component.getAllowEmpty()).toBe(true);
         });
 
         it('should handle option selection in single mode', () => {
             const mockEvent = new Event('click');
-            component.onOptionSelect(mockEvent, component.options![0], 0);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
 
-            expect(component.value).toBe('opt1');
+            expect(component.value()).toBe('opt1');
             expect(component.focusedIndex).toBe(0);
         });
 
         it('should handle option selection in multiple mode', () => {
-            component.multiple = true;
+            fixture.componentRef.setInput('multiple', true);
             const mockEvent = new Event('click');
 
-            component.onOptionSelect(mockEvent, component.options![0], 0);
-            expect(component.value).toEqual(['opt1']);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
+            expect(component.value()).toEqual(['opt1']);
 
-            component.onOptionSelect(mockEvent, component.options![1], 1);
-            expect(component.value).toEqual(['opt1', 'opt2']);
+            component.onOptionSelect(mockEvent, component.options()![1], 1);
+            expect(component.value()).toEqual(['opt1', 'opt2']);
         });
 
         it('should handle deselection in multiple mode', () => {
-            component.multiple = true;
-            component.value = ['opt1', 'opt2'];
+            fixture.componentRef.setInput('multiple', true);
+            component.value.set(['opt1', 'opt2']);
             const mockEvent = new Event('click');
 
-            component.onOptionSelect(mockEvent, component.options![0], 0);
-            expect(component.value).toEqual(['opt2']);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
+            expect(component.value()).toEqual(['opt2']);
         });
 
         it('should not select disabled options', () => {
             const mockEvent = new Event('click');
-            component.onOptionSelect(mockEvent, component.options![2], 2);
+            component.onOptionSelect(mockEvent, component.options()![2], 2);
 
-            expect(component.value).toBeUndefined();
+            expect(component.value()).toBeUndefined();
         });
 
         it('should emit onChange and onOptionClick events', () => {
@@ -193,16 +193,16 @@ describe('SelectButton', () => {
             vi.spyOn(component.onOptionClick, 'emit').mockImplementation(() => {});
 
             const mockEvent = new Event('click');
-            component.onOptionSelect(mockEvent, component.options![0], 0);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
 
             expect(component.onChange.emit).toHaveBeenCalledWith({
                 originalEvent: mockEvent,
-                value: component.value
+                value: component.value()
             });
 
             expect(component.onOptionClick.emit).toHaveBeenCalledWith({
                 originalEvent: mockEvent,
-                option: component.options![0],
+                option: component.options()![0],
                 index: 0
             });
         });
@@ -263,97 +263,97 @@ describe('SelectButton', () => {
             expect(selectButtonInstance).toBeTruthy();
             // Test that the component has template processing capability
             expect(selectButtonInstance).toBeTruthy();
-            expect(selectButtonInstance._itemTemplate !== undefined || selectButtonInstance._itemTemplate === undefined).toBe(true);
+            expect(selectButtonInstance.$itemTemplate()).toBeDefined();
         });
     });
 
     describe('Edge Cases', () => {
         it('should handle null/undefined options', () => {
-            component.options = null as any;
+            fixture.componentRef.setInput('options', null as any);
             expect(() => fixture.detectChanges()).not.toThrow();
 
-            component.options = undefined as any;
+            fixture.componentRef.setInput('options', undefined as any);
             expect(() => fixture.detectChanges()).not.toThrow();
         });
 
         it('should handle empty options array', () => {
-            component.options = [];
+            fixture.componentRef.setInput('options', []);
             expect(() => fixture.detectChanges()).not.toThrow();
         });
 
         it('should handle options with missing properties', () => {
-            component.options = [{ value: 'opt1' }, { label: 'Option 2' }, {}];
+            fixture.componentRef.setInput('options', [{ value: 'opt1' }, { label: 'Option 2' }, {}]);
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            expect(component.getOptionLabel(component.options![0])).toBe(component.options![0]);
-            expect(component.getOptionValue(component.options![1])).toBe(component.options![1]);
+            expect(component.getOptionLabel(component.options()![0])).toBe(component.options()![0]);
+            expect(component.getOptionValue(component.options()![1])).toBe(component.options()![1]);
         });
 
         it('should handle selection with dataKey', async () => {
-            component.dataKey = 'id';
-            component.options = [
+            fixture.componentRef.setInput('dataKey', 'id');
+            fixture.componentRef.setInput('options', [
                 { id: 1, label: 'Option 1' },
                 { id: 2, label: 'Option 2' }
-            ];
-            component.value = { id: 1, label: 'Option 1' };
+            ]);
+            component.value.set({ id: 1, label: 'Option 1' });
 
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(component.isSelected(component.options![0])).toBe(true);
-            expect(component.isSelected(component.options![1])).toBe(false);
+            expect(component.isSelected(component.options()![0])).toBe(true);
+            expect(component.isSelected(component.options()![1])).toBe(false);
         });
 
         it('should handle rapid selection changes', async () => {
-            component.options = [
+            fixture.componentRef.setInput('options', [
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
             for (let i = 0; i < 5; i++) {
                 const optionIndex = i % 2;
-                component.onOptionSelect(new Event('click'), component.options![optionIndex], optionIndex);
+                component.onOptionSelect(new Event('click'), component.options()![optionIndex], optionIndex);
                 await new Promise((resolve) => setTimeout(resolve, 10));
                 await fixture.whenStable();
             }
 
-            expect(component.value).toBeDefined();
+            expect(component.value()).toBeDefined();
         });
 
         it('should handle unselectable option correctly', () => {
-            component.options = [
+            fixture.componentRef.setInput('options', [
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2' }
-            ];
-            component.unselectable = false;
-            component.allowEmpty = false;
-            component.value = 'opt1';
+            ]);
+            fixture.componentRef.setInput('unselectable', false);
+            fixture.componentRef.setInput('allowEmpty', false);
+            component.value.set('opt1');
 
             const mockEvent = new Event('click');
-            component.onOptionSelect(mockEvent, component.options![0], 0);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
 
-            expect(component.value).toBe('opt1');
+            expect(component.value()).toBe('opt1');
         });
 
         it('should handle disabled component', async () => {
-            component.options = [
+            fixture.componentRef.setInput('options', [
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             // Mock the disabled state by creating a spy
             vi.spyOn(component, '$disabled').mockReturnValue(true);
             const mockEvent = new Event('click');
-            const initialValue = component.value;
+            const initialValue = component.value();
 
-            component.onOptionSelect(mockEvent, component.options![0], 0);
+            component.onOptionSelect(mockEvent, component.options()![0], 0);
 
-            expect(component.value).toBe(initialValue);
+            expect(component.value()).toBe(initialValue);
         });
     });
 
@@ -368,11 +368,11 @@ describe('SelectButton', () => {
         });
 
         it('should change tab indexes correctly', async () => {
-            component.options = [
+            fixture.componentRef.setInput('options', [
                 { label: 'Option 1', value: 'opt1' },
                 { label: 'Option 2', value: 'opt2' },
                 { label: 'Option 3', value: 'opt3' }
-            ];
+            ]);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -386,11 +386,11 @@ describe('SelectButton', () => {
             // Initially equalityKey getter returns null when no dataKey is set
             expect(component.equalityKey).toBeFalsy();
 
-            component.dataKey = 'id';
+            fixture.componentRef.setInput('dataKey', 'id');
             expect(component.equalityKey).toBe('id');
 
-            component.optionValue = 'value';
-            component.dataKey = undefined as any;
+            fixture.componentRef.setInput('optionValue', 'value');
+            fixture.componentRef.setInput('dataKey', undefined as any);
             expect(component.equalityKey).toBeFalsy();
         });
     });
@@ -411,13 +411,13 @@ describe('SelectButton', () => {
         });
 
         it('should handle styleClass input', () => {
-            component.styleClass = 'custom-class';
-            expect(component.styleClass).toBe('custom-class');
+            fixture.componentRef.setInput('styleClass', 'custom-class');
+            expect(component.styleClass()).toBe('custom-class');
         });
 
         it('should handle ariaLabelledBy input', () => {
-            component.ariaLabelledBy = 'test-label';
-            expect(component.ariaLabelledBy).toBe('test-label');
+            fixture.componentRef.setInput('ariaLabelledBy', 'test-label');
+            expect(component.ariaLabelledBy()).toBe('test-label');
         });
     });
 });
@@ -539,8 +539,8 @@ describe('SelectButton pTemplate Tests', () => {
 
     it('should pass context parameters to item template', async () => {
         // Verify that the select button component is working with options
-        expect(selectButtonInstance.options).toBeDefined();
-        expect(selectButtonInstance.options?.length).toBe(3);
+        expect(selectButtonInstance.options()).toBeDefined();
+        expect(selectButtonInstance.options()?.length).toBe(3);
         expect(component.options.length).toBe(3);
     });
 
@@ -551,13 +551,13 @@ describe('SelectButton pTemplate Tests', () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
         await fixture.whenStable();
 
-        expect(selectButtonInstance.value).toBe('opt1');
+        expect(selectButtonInstance.value()).toBe('opt1');
         expect(component.selectedValue).toBe('opt1');
     });
 
     it('should update templates when selection changes', async () => {
         // Initially no selection
-        expect(selectButtonInstance.value).toBeUndefined();
+        expect(selectButtonInstance.value()).toBeUndefined();
 
         // Select option
         component.selectedValue = 'opt2';
@@ -565,7 +565,7 @@ describe('SelectButton pTemplate Tests', () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
         await fixture.whenStable();
 
-        expect(selectButtonInstance.value).toBe('opt2');
+        expect(selectButtonInstance.value()).toBe('opt2');
     });
 
     it('should apply context to templates correctly', async () => {
@@ -575,7 +575,7 @@ describe('SelectButton pTemplate Tests', () => {
         await fixture.whenStable();
 
         // Verify that the select button component works correctly
-        expect(selectButtonInstance.value).toBe('opt3');
+        expect(selectButtonInstance.value()).toBe('opt3');
         expect(selectButtonInstance.isSelected(component.options![2])).toBe(true);
     });
 
@@ -587,7 +587,7 @@ describe('SelectButton pTemplate Tests', () => {
             await fixture.whenStable();
 
             // Verify that ngAfterContentInit is called correctly
-            expect(selectButtonInstance.options).toBeDefined();
+            expect(selectButtonInstance.options()).toBeDefined();
             expect(component.options).toBeDefined();
         }
     });
@@ -618,8 +618,8 @@ describe('SelectButton #template Reference Tests', () => {
 
     it('should pass context parameters to item template', async () => {
         // Verify that the select button component is working with options
-        expect(selectButtonInstance.options).toBeDefined();
-        expect(selectButtonInstance.options?.length).toBe(3);
+        expect(selectButtonInstance.options()).toBeDefined();
+        expect(selectButtonInstance.options()?.length).toBe(3);
         expect(component.options.length).toBe(3);
     });
 
@@ -630,13 +630,13 @@ describe('SelectButton #template Reference Tests', () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
         await fixture.whenStable();
 
-        expect(selectButtonInstance.value).toBe('item1');
+        expect(selectButtonInstance.value()).toBe('item1');
         expect(component.selectedValue).toBe('item1');
     });
 
     it('should update templates when selection changes', async () => {
         // Initially no selection
-        expect(selectButtonInstance.value).toBeUndefined();
+        expect(selectButtonInstance.value()).toBeUndefined();
 
         // Select option
         component.selectedValue = 'item2';
@@ -644,7 +644,7 @@ describe('SelectButton #template Reference Tests', () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
         await fixture.whenStable();
 
-        expect(selectButtonInstance.value).toBe('item2');
+        expect(selectButtonInstance.value()).toBe('item2');
     });
 
     it('should apply context to templates correctly', async () => {
@@ -654,7 +654,7 @@ describe('SelectButton #template Reference Tests', () => {
         await fixture.whenStable();
 
         // Verify that the select button component works correctly
-        expect(selectButtonInstance.value).toBe('item3');
+        expect(selectButtonInstance.value()).toBe('item3');
         expect(selectButtonInstance.isSelected(component.options![2])).toBe(true);
     });
 
@@ -666,7 +666,7 @@ describe('SelectButton #template Reference Tests', () => {
             await fixture.whenStable();
 
             // Verify that ngAfterContentInit is called correctly
-            expect(selectButtonInstance.options).toBeDefined();
+            expect(selectButtonInstance.options()).toBeDefined();
             expect(component.options).toBeDefined();
         }
     });
@@ -685,7 +685,7 @@ describe('SelectButton PassThrough Tests', () => {
 
         fixture = TestBed.createComponent(SelectButton);
         component = fixture.componentInstance;
-        component.options = ['One-Way', 'Return'];
+        fixture.componentRef.setInput('options', ['One-Way', 'Return']);
         fixture.changeDetectorRef.markForCheck();
         await fixture.whenStable();
         hostElement = fixture.nativeElement;
@@ -800,12 +800,12 @@ describe('SelectButton PassThrough Tests', () => {
 
     describe('PT Case 4: Use variables from instance', () => {
         it('should access instance variables in PT function', async () => {
-            component.value = 'One-Way';
+            component.value.set('One-Way');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.value ? 'HAS_VALUE' : ''
+                    class: instance?.value() ? 'HAS_VALUE' : ''
                 })
             });
             fixture.detectChanges();
@@ -814,13 +814,13 @@ describe('SelectButton PassThrough Tests', () => {
         });
 
         it('should conditionally apply styles based on instance state', async () => {
-            component.value = 'Return';
+            component.value.set('Return');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
                     style: {
-                        'background-color': instance?.value === 'Return' ? 'yellow' : 'red'
+                        'background-color': instance?.value() === 'Return' ? 'yellow' : 'red'
                     }
                 })
             });
@@ -830,13 +830,13 @@ describe('SelectButton PassThrough Tests', () => {
         });
 
         it('should access multiple instance properties', async () => {
-            component.value = 'One-Way';
-            component.multiple = true;
+            component.value.set('One-Way');
+            fixture.componentRef.setInput('multiple', true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: (instance?.multiple ? 'MULTIPLE_MODE ' : '') + (instance?.value ? 'HAS_SELECTION' : '')
+                    class: (instance?.multiple() ? 'MULTIPLE_MODE ' : '') + (instance?.value() ? 'HAS_SELECTION' : '')
                 })
             });
             fixture.detectChanges();
@@ -869,17 +869,22 @@ describe('SelectButton PassThrough Tests', () => {
         });
 
         it('should modify instance through PT event', () => {
+            // The PT function must return a stable onclick identity — a fresh closure per
+            // resolution re-triggers the afterEveryRender PT re-application (NG0103).
+            let currentInstance: any;
+            const onclick = () => {
+                currentInstance?.value.set('MODIFIED');
+            };
             fixture.componentRef.setInput('pt', {
-                root: ({ instance }: any) => ({
-                    onclick: () => {
-                        instance.value = 'MODIFIED';
-                    }
-                })
+                root: ({ instance }: any) => {
+                    currentInstance = instance;
+                    return { onclick };
+                }
             });
             fixture.detectChanges();
 
             hostElement.click();
-            expect(component.value).toBe('MODIFIED');
+            expect(component.value()).toBe('MODIFIED');
         });
     });
 
@@ -922,7 +927,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const globalFixture = TestBed.createComponent(SelectButton);
             const globalComponent = globalFixture.componentInstance;
-            globalComponent.options = ['One', 'Two'];
+            globalFixture.componentRef.setInput('options', ['One', 'Two']);
             globalFixture.changeDetectorRef.markForCheck();
             await globalFixture.whenStable();
             globalFixture.detectChanges();
@@ -988,7 +993,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const hookFixture = TestBed.createComponent(SelectButton);
             const hookComponent = hookFixture.componentInstance;
-            hookComponent.options = ['A', 'B'];
+            hookFixture.componentRef.setInput('options', ['A', 'B']);
             hookFixture.changeDetectorRef.markForCheck();
             await hookFixture.whenStable();
             hookFixture.detectChanges();
@@ -1019,7 +1024,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const hookFixture = TestBed.createComponent(SelectButton);
             const hookComponent = hookFixture.componentInstance;
-            hookComponent.options = ['X', 'Y'];
+            hookFixture.componentRef.setInput('options', ['X', 'Y']);
             hookFixture.changeDetectorRef.markForCheck();
             await hookFixture.whenStable();
             hookFixture.detectChanges();
@@ -1052,7 +1057,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const hookFixture = TestBed.createComponent(SelectButton);
             const hookComponent = hookFixture.componentInstance;
-            hookComponent.options = ['M', 'N'];
+            hookFixture.componentRef.setInput('options', ['M', 'N']);
             hookFixture.changeDetectorRef.markForCheck();
             await hookFixture.whenStable();
             hookFixture.detectChanges();
@@ -1083,7 +1088,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const hookFixture = TestBed.createComponent(SelectButton);
             const hookComponent = hookFixture.componentInstance;
-            hookComponent.options = ['P', 'Q'];
+            hookFixture.componentRef.setInput('options', ['P', 'Q']);
             hookFixture.changeDetectorRef.markForCheck();
             await hookFixture.whenStable();
             hookFixture.detectChanges();
@@ -1127,7 +1132,7 @@ describe('SelectButton PassThrough Tests', () => {
 
             const hookFixture = TestBed.createComponent(SelectButton);
             const hookComponent = hookFixture.componentInstance;
-            hookComponent.options = ['R', 'S'];
+            hookFixture.componentRef.setInput('options', ['R', 'S']);
             hookFixture.changeDetectorRef.markForCheck();
             await hookFixture.whenStable();
             hookFixture.detectChanges();
