@@ -1,5 +1,5 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Directive, ElementRef, inject, Input, NgModule, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { afterEveryRender, Directive, input, NgModule, signal } from '@angular/core';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 import { DomHandler } from '@openng/optimus-ui/dom';
 
@@ -9,55 +9,50 @@ import { DomHandler } from '@openng/optimus-ui/dom';
  */
 @Directive({
     selector: '[pAutoFocus]',
-    standalone: true
+    standalone: true,
+    host: {
+        // This sets the `attr.autofocus` which is different than the Input `autofocus` attribute.
+        '[attr.autofocus]': 'autofocus() ? true : null'
+    }
 })
 export class AutoFocus extends BaseComponent {
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
-    @Input('pAutoFocus') autofocus: boolean = false;
+    readonly autofocus = input<boolean>(false, { alias: 'pAutoFocus' });
 
-    focused: boolean = false;
+    readonly focused = signal(false);
 
-    platformId = inject(PLATFORM_ID);
-
-    document: Document = inject(DOCUMENT);
-
-    host: ElementRef = inject(ElementRef);
-
-    onAfterContentChecked() {
-        // This sets the `attr.autofocus` which is different than the Input `autofocus` attribute.
-        if (this.autofocus === false) {
-            this.host.nativeElement.removeAttribute('autofocus');
-        } else {
-            this.host.nativeElement.setAttribute('autofocus', true);
-        }
-
-        if (!this.focused) {
-            this.autoFocus();
-        }
-    }
-
-    onAfterViewChecked() {
-        if (!this.focused) {
-            this.autoFocus();
-        }
+    constructor() {
+        super();
+        // Keep attempting to focus until it succeeds — content projected or rendered later
+        // (dialogs, drawers) becomes focusable on a subsequent render (replaces the former
+        // ngAfterContentChecked/ngAfterViewChecked hooks).
+        afterEveryRender(() => {
+            if (!this.focused()) {
+                this.autoFocus();
+            }
+        });
     }
 
     autoFocus() {
-        if (isPlatformBrowser(this.platformId) && this.autofocus) {
+        if (isPlatformBrowser(this.platformId) && this.autofocus()) {
             setTimeout(() => {
-                const focusableElements = DomHandler.getFocusableElements(this.host?.nativeElement);
+                const host = this.el?.nativeElement;
+                if (!host) {
+                    return;
+                }
+                const focusableElements = DomHandler.getFocusableElements(host);
 
                 if (focusableElements.length === 0) {
-                    this.host.nativeElement.focus();
+                    host.focus?.();
                 }
                 if (focusableElements.length > 0) {
                     focusableElements[0].focus();
                 }
 
-                this.focused = true;
+                this.focused.set(true);
             });
         }
     }
