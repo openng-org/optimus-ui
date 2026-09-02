@@ -1,5 +1,24 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, contentChild, ElementRef, forwardRef, inject, InjectionToken, Input, NgModule, numberAttribute, ViewEncapsulation, contentChildren, output } from '@angular/core';
+import {
+    afterEveryRender,
+    afterNextRender,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    contentChild,
+    contentChildren,
+    effect,
+    ElementRef,
+    forwardRef,
+    inject,
+    input,
+    NgModule,
+    numberAttribute,
+    output,
+    signal,
+    untracked,
+    ViewEncapsulation
+} from '@angular/core';
 import { addClass, getHeight, getOuterHeight, getOuterWidth, getWidth, hasClass, isRTL, removeClass } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -8,8 +27,6 @@ import { Nullable, VoidListener } from '@openng/optimus-ui/ts-helpers';
 import type { SplitterResizeEndEvent, SplitterResizeStartEvent } from '@openng/optimus-ui/types/splitter';
 import { SplitterStyle } from './style/splitterstyle';
 import { SplitterPassThrough } from '@openng/optimus-ui/types/splitter';
-
-const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
 
 /**
  * Splitter is utilized to separate and resize panels.
@@ -20,11 +37,11 @@ const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
     standalone: true,
     imports: [CommonModule, SharedModule, BindModule],
     template: `
-        @for (panel of panels; track panel; let i = $index) {
-            <div [pBind]="ptm('panel')" [class]="cn(cx('panel'), panelStyleClass)" [ngStyle]="panelStyle" tabindex="-1">
+        @for (panel of panels(); track panel; let i = $index) {
+            <div [pBind]="ptm('panel')" [class]="cn(cx('panel'), panelStyleClass())" [ngStyle]="panelStyle()" tabindex="-1">
                 <ng-container *ngTemplateOutlet="panel"></ng-container>
             </div>
-            @if (i !== panels.length - 1) {
+            @if (i !== panels().length - 1) {
                 <div
                     [pBind]="ptm('gutter')"
                     [class]="cx('gutter')"
@@ -35,15 +52,15 @@ const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
                     (touchmove)="onGutterTouchMove($event)"
                     (touchend)="onGutterTouchEnd($event)"
                     [attr.data-p-gutter-resizing]="false"
-                    [attr.data-p]="dataP"
+                    [attr.data-p]="dataP()"
                 >
                     <div
                         [pBind]="ptm('gutterHandle')"
                         [class]="cx('gutterHandle')"
                         tabindex="0"
                         [ngStyle]="gutterStyle()"
-                        [attr.aria-orientation]="layout"
-                        [attr.aria-valuenow]="prevSize"
+                        [attr.aria-orientation]="layout()"
+                        [attr.aria-valuenow]="prevSize()"
                         (keyup)="onGutterKeyUp($event)"
                         (keydown)="onGutterKeyDown($event, i)"
                     ></div>
@@ -54,97 +71,79 @@ const SPLITTER_INSTANCE = new InjectionToken<Splitter>('SPLITTER_INSTANCE');
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
-        '[class]': "cn(cx('root'), styleClass)",
+        '[class]': "cx('root')",
         '[attr.data-p-gutter-resizing]': 'false',
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP()'
     },
-    providers: [SplitterStyle, { provide: SPLITTER_INSTANCE, useExisting: Splitter }, { provide: PARENT_INSTANCE, useExisting: Splitter }],
+    providers: [SplitterStyle, { provide: PARENT_INSTANCE, useExisting: Splitter }],
     hostDirectives: [Bind]
 })
 export class Splitter extends BaseComponent<SplitterPassThrough> {
-    componentName = 'Splitter';
-    $pcSplitter: Splitter | undefined = inject(SPLITTER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-    /**
-     * Style class of the component.
-     * @deprecated since v20. Use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    _componentStyle = inject(SplitterStyle);
+
     /**
      * Style class of the panel.
      * @group Props
      */
-    @Input() panelStyleClass: string | undefined;
+    readonly panelStyleClass = input<string>();
+
     /**
      * Inline style of the panel.
      * @group Props
      */
-    @Input() panelStyle: { [klass: string]: any } | null | undefined;
+    readonly panelStyle = input<{ [klass: string]: any } | null>();
+
     /**
      * Defines where a stateful splitter keeps its state, valid values are 'session' for sessionStorage and 'local' for localStorage.
      * @group Props
      */
-    @Input() stateStorage: string | undefined = 'session';
+    readonly stateStorage = input<string>('session');
+
     /**
      * Storage identifier of a stateful Splitter.
      * @group Props
      */
-    @Input() stateKey: string | undefined | null = null;
+    readonly stateKey = input<string | null>(null);
+
     /**
      * Orientation of the panels. Valid values are 'horizontal' and 'vertical'.
      * @group Props
      */
-    @Input() layout: string | undefined = 'horizontal';
+    readonly layout = input<string>('horizontal');
+
     /**
      * Size of the divider in pixels.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) gutterSize: number = 4;
+    readonly gutterSize = input<number, unknown>(4, { transform: numberAttribute });
+
     /**
      * Step factor to increment/decrement the size of the panels while pressing the arrow keys.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) step: number = 5;
+    readonly step = input<number, unknown>(5, { transform: numberAttribute });
+
     /**
      * Minimum size of the elements relative to 100%.
      * @group Props
      */
-    @Input() minSizes: number[] = [];
+    readonly minSizes = input<number[]>([]);
+
     /**
      * Size of the elements relative to 100%.
      * @group Props
      */
-    @Input() get panelSizes(): number[] {
-        return this._panelSizes;
-    }
-    set panelSizes(val: number[]) {
-        this._panelSizes = val;
+    readonly panelSizes = input<number[]>([]);
 
-        if (this.el && this.el.nativeElement && this.panels.length > 0) {
-            let children = [...this.el.nativeElement.children].filter((child) => child.getAttribute('data-pc-section') === 'panel');
-            let _panelSizes: any = [];
-
-            this.panels.map((panel, i) => {
-                let panelInitialSize = this.panelSizes.length - 1 >= i ? this.panelSizes[i] : null;
-                let panelSize = panelInitialSize || 100 / this.panels.length;
-
-                _panelSizes[i] = panelSize;
-                children[i].style.flexBasis = 'calc(' + panelSize + '% - ' + (this.panels.length - 1) * this.gutterSize + 'px)';
-            });
-        }
-    }
     /**
      * Callback to invoke when resize ends.
      * @param {SplitterResizeEndEvent} event - Custom panel resize end event
      * @group Emits
      */
     readonly onResizeEnd = output<SplitterResizeEndEvent>();
+
     /**
      * Callback to invoke when resize starts.
      * @param {SplitterResizeStartEvent} event - Custom panel resize start event
@@ -152,15 +151,40 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
      */
     readonly onResizeStart = output<SplitterResizeStartEvent>();
 
+    splitter = contentChild(forwardRef(() => Splitter));
+
     readonly templates = contentChildren(PrimeTemplate);
 
     readonly panelChildren = contentChildren<ElementRef>('panel');
 
-    splitter = contentChild(forwardRef(() => Splitter));
+    componentName = 'Splitter';
+
+    /** Re-applies the panel flex-basis values when the `panelSizes` input changes (legacy setter behavior). */
+    private readonly panelSizesEffect = effect(() => {
+        const panelSizes = this.panelSizes();
+        untracked(() => {
+            this._panelSizes = panelSizes;
+
+            const panels = this.panels();
+            if (this.el && this.el.nativeElement && panels.length > 0) {
+                let children = [...this.el.nativeElement.children].filter((child) => child.getAttribute('data-pc-section') === 'panel');
+
+                panels.map((panel, i) => {
+                    let panelInitialSize = panelSizes.length - 1 >= i ? panelSizes[i] : null;
+                    let panelSize = panelInitialSize || 100 / panels.length;
+
+                    if (children[i]) {
+                        children[i].style.flexBasis = 'calc(' + panelSize + '% - ' + (panels.length - 1) * this.gutterSize() + 'px)';
+                    }
+                });
+            }
+        });
+    });
 
     nestedState = computed(() => this.splitter());
 
-    panels: any[] = [];
+    /** The panel templates to render: projected `pTemplate` panels followed by `#panel` children. */
+    readonly panels = computed<any[]>(() => [...this.templates().map((item) => item.template), ...this.panelChildren()]);
 
     dragging: boolean = false;
 
@@ -192,58 +216,60 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
 
     timer: any;
 
-    prevSize: any;
+    readonly prevSize = signal<any>(undefined);
 
-    _componentStyle = inject(SplitterStyle);
+    /** Inline size style of a gutter, derived from the layout and gutter size. */
+    readonly gutterStyle = computed(() => {
+        if (this.horizontal()) return { width: this.gutterSize() + 'px' };
+        else return { height: this.gutterSize() + 'px' };
+    });
 
-    onAfterContentInit() {
-        const templates = this.templates();
-        if (templates && templates.length > 0) {
-            templates.forEach((item) => {
-                switch (item.getType()) {
-                    case 'panel':
-                        this.panels.push(item.template);
-                        break;
-                    default:
-                        this.panels.push(item.template);
-                        break;
-                }
-            });
-        }
-        const panelChildren = this.panelChildren();
-        if (panelChildren && panelChildren.length > 0) {
-            panelChildren.forEach((item) => {
-                this.panels.push(item);
-            });
-        }
-    }
+    /** Whether the splitter lays panels out horizontally. */
+    readonly horizontal = computed(() => this.layout() === 'horizontal');
 
-    onAfterViewInit() {
-        if (isPlatformBrowser(this.platformId)) {
-            if (this.panels && this.panels.length) {
-                let initialized = false;
-                if (this.isStateful()) {
-                    initialized = this.restoreState();
-                }
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.layout() as string]: this.layout(),
+            nested: this.nestedState() != null
+        })
+    );
 
-                if (!initialized) {
-                    let children = [...this.el.nativeElement.children].filter((child) => child.getAttribute('data-pc-section') === 'panel');
-                    let _panelSizes: any = [];
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+        afterNextRender(() => {
+            if (isPlatformBrowser(this.platformId)) {
+                const panels = this.panels();
+                if (panels && panels.length) {
+                    let initialized = false;
+                    if (this.isStateful()) {
+                        initialized = this.restoreState();
+                    }
 
-                    this.panels.map((panel, i) => {
-                        let panelInitialSize = this.panelSizes.length - 1 >= i ? this.panelSizes[i] : null;
-                        let panelSize = panelInitialSize || 100 / this.panels.length;
+                    if (!initialized) {
+                        let children = [...this.el.nativeElement.children].filter((child) => child.getAttribute('data-pc-section') === 'panel');
+                        let _panelSizes: any = [];
 
-                        _panelSizes[i] = panelSize;
-                        children[i].style.flexBasis = 'calc(' + panelSize + '% - ' + (this.panels.length - 1) * (this.gutterSize as number) + 'px)';
-                    });
+                        panels.map((panel, i) => {
+                            let panelInitialSize = this.panelSizes().length - 1 >= i ? this.panelSizes()[i] : null;
+                            let panelSize = panelInitialSize || 100 / panels.length;
 
-                    this._panelSizes = _panelSizes;
+                            _panelSizes[i] = panelSize;
+                            children[i].style.flexBasis = 'calc(' + panelSize + '% - ' + (panels.length - 1) * this.gutterSize() + 'px)';
+                        });
 
-                    this.prevSize = parseFloat(_panelSizes[0]).toFixed(4);
+                        this._panelSizes = _panelSizes;
+
+                        this.prevSize.set(parseFloat(_panelSizes[0]).toFixed(4));
+                    }
                 }
             }
-        }
+        });
     }
 
     resizeStart(event: TouchEvent | MouseEvent, index: number, isKeyDown?: boolean) {
@@ -300,11 +326,11 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
             newNextPanelSize = (this.nextPanelSize as number) - newPos;
         }
 
-        this.prevSize = parseFloat(newPrevPanelSize).toFixed(4);
+        this.prevSize.set(parseFloat(newPrevPanelSize).toFixed(4));
 
         if (this.validateResize(newPrevPanelSize, newNextPanelSize)) {
-            (this.prevPanelElement as HTMLElement).style.flexBasis = 'calc(' + newPrevPanelSize + '% - ' + (this.panels.length - 1) * this.gutterSize + 'px)';
-            (this.nextPanelElement as HTMLElement).style.flexBasis = 'calc(' + newNextPanelSize + '% - ' + (this.panels.length - 1) * this.gutterSize + 'px)';
+            (this.prevPanelElement as HTMLElement).style.flexBasis = 'calc(' + newPrevPanelSize + '% - ' + (this.panels().length - 1) * this.gutterSize() + 'px)';
+            (this.nextPanelElement as HTMLElement).style.flexBasis = 'calc(' + newNextPanelSize + '% - ' + (this.panels().length - 1) * this.gutterSize() + 'px)';
             this._panelSizes[this.prevPanelIndex as number] = newPrevPanelSize;
             this._panelSizes[(this.prevPanelIndex as number) + 1] = newNextPanelSize;
         }
@@ -373,8 +399,8 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
     onGutterKeyDown(event, index) {
         switch (event.code) {
             case 'ArrowLeft': {
-                if (this.layout === 'horizontal') {
-                    this.setTimer(event, index, this.step * -1);
+                if (this.layout() === 'horizontal') {
+                    this.setTimer(event, index, this.step() * -1);
                 }
 
                 event.preventDefault();
@@ -382,8 +408,8 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
             }
 
             case 'ArrowRight': {
-                if (this.layout === 'horizontal') {
-                    this.setTimer(event, index, this.step);
+                if (this.layout() === 'horizontal') {
+                    this.setTimer(event, index, this.step());
                 }
 
                 event.preventDefault();
@@ -391,8 +417,8 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
             }
 
             case 'ArrowDown': {
-                if (this.layout === 'vertical') {
-                    this.setTimer(event, index, this.step * -1);
+                if (this.layout() === 'vertical') {
+                    this.setTimer(event, index, this.step() * -1);
                 }
 
                 event.preventDefault();
@@ -400,8 +426,8 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
             }
 
             case 'ArrowUp': {
-                if (this.layout === 'vertical') {
-                    this.setTimer(event, index, this.step);
+                if (this.layout() === 'vertical') {
+                    this.setTimer(event, index, this.step());
                 }
 
                 event.preventDefault();
@@ -415,11 +441,12 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
     }
 
     validateResize(newPrevPanelSize: number, newNextPanelSize: number) {
-        if (this.minSizes.length >= 1 && this.minSizes[0] && this.minSizes[0] > newPrevPanelSize) {
+        const minSizes = this.minSizes();
+        if (minSizes.length >= 1 && minSizes[0] && minSizes[0] > newPrevPanelSize) {
             return false;
         }
 
-        if (this.minSizes.length > 1 && this.minSizes[1] && this.minSizes[1] > newNextPanelSize) {
+        if (minSizes.length > 1 && minSizes[1] && minSizes[1] > newNextPanelSize) {
             return false;
         }
 
@@ -493,12 +520,12 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
     }
 
     isStateful() {
-        return this.stateKey != null;
+        return this.stateKey() != null;
     }
 
     getStorage() {
         if (isPlatformBrowser(this.platformId)) {
-            switch (this.stateStorage) {
+            switch (this.stateStorage()) {
                 case 'local':
                     return this.document.defaultView?.localStorage;
 
@@ -506,7 +533,7 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
                     return this.document.defaultView?.sessionStorage;
 
                 default:
-                    throw new Error(this.stateStorage + ' is not a valid value for the state storage, supported values are "local" and "session".');
+                    throw new Error(this.stateStorage() + ' is not a valid value for the state storage, supported values are "local" and "session".');
             }
         } else {
             throw new Error('Storage is not a available by default on the server.');
@@ -514,40 +541,24 @@ export class Splitter extends BaseComponent<SplitterPassThrough> {
     }
 
     saveState() {
-        this.getStorage()?.setItem(this.stateKey as string, JSON.stringify(this._panelSizes));
+        this.getStorage()?.setItem(this.stateKey() as string, JSON.stringify(this._panelSizes));
     }
 
     restoreState() {
         const storage = this.getStorage();
-        const stateString = storage?.getItem(this.stateKey as string);
+        const stateString = storage?.getItem(this.stateKey() as string);
 
         if (stateString) {
             this._panelSizes = JSON.parse(stateString);
             let children = [...(this.el as ElementRef).nativeElement.children].filter((child) => child.getAttribute('data-pc-section') === 'panel');
             children.forEach((child, i) => {
-                child.style.flexBasis = 'calc(' + this._panelSizes[i] + '% - ' + (this.panels.length - 1) * this.gutterSize + 'px)';
+                child.style.flexBasis = 'calc(' + this._panelSizes[i] + '% - ' + (this.panels().length - 1) * this.gutterSize() + 'px)';
             });
 
             return true;
         }
 
         return false;
-    }
-
-    gutterStyle() {
-        if (this.horizontal()) return { width: this.gutterSize + 'px' };
-        else return { height: this.gutterSize + 'px' };
-    }
-
-    horizontal() {
-        return this.layout === 'horizontal';
-    }
-
-    get dataP() {
-        return this.cn({
-            [this.layout as string]: this.layout,
-            nested: this.nestedState() != null
-        });
     }
 }
 

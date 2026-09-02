@@ -20,7 +20,7 @@ import { SharedModule } from '@openng/optimus-ui/api';
             [step]="step"
             [panelStyleClass]="panelStyleClass"
             [panelStyle]="panelStyle"
-            [styleClass]="styleClass"
+            [class]="styleClass"
             (onResizeStart)="onResizeStart($event)"
             (onResizeEnd)="onResizeEnd($event)"
         >
@@ -156,12 +156,12 @@ describe('Splitter', () => {
             const fixture = TestBed.createComponent(Splitter);
             const splitter = fixture.componentInstance;
 
-            expect(splitter.layout).toBe('horizontal');
-            expect(splitter.gutterSize).toBe(4);
-            expect(splitter.step).toBe(5);
-            expect(splitter.stateStorage).toBe('session');
-            expect(splitter.stateKey).toBeNull();
-            expect(splitter.minSizes).toEqual([]);
+            expect(splitter.layout()).toBe('horizontal');
+            expect(splitter.gutterSize()).toBe(4);
+            expect(splitter.step()).toBe(5);
+            expect(splitter.stateStorage()).toBe('session');
+            expect(splitter.stateKey()).toBeNull();
+            expect(splitter.minSizes()).toEqual([]);
         });
 
         it.skip('should accept custom values', async () => {
@@ -175,12 +175,12 @@ describe('Splitter', () => {
             await testFixture.whenStable();
             testFixture.detectChanges();
 
-            expect(splitterInstance.layout).toBe('vertical');
-            expect(splitterInstance.gutterSize).toBe(8);
-            expect(splitterInstance.step).toBe(10);
-            expect(splitterInstance.minSizes).toEqual([20, 30]);
-            expect(splitterInstance.stateKey).toBe('test-splitter');
-            expect(splitterInstance.stateStorage).toBe('local');
+            expect(splitterInstance.layout()).toBe('vertical');
+            expect(splitterInstance.gutterSize()).toBe(8);
+            expect(splitterInstance.step()).toBe(10);
+            expect(splitterInstance.minSizes()).toEqual([20, 30]);
+            expect(splitterInstance.stateKey()).toBe('test-splitter');
+            expect(splitterInstance.stateStorage()).toBe('local');
         });
     });
 
@@ -628,16 +628,16 @@ describe('Splitter', () => {
             const panelElements = testFixture.debugElement.queryAll(By.css('.p-splitterpanel'));
 
             // Check that splitter component received the style input
-            expect(splitterInstance.panelStyle).toEqual({ border: '2px solid red', padding: '10px' });
+            expect(splitterInstance.panelStyle()).toEqual({ border: '2px solid red', padding: '10px' });
 
             // Manually apply styles to test the style binding works as expected
             // This simulates what ngStyle directive would do in a real browser
             const element = panelElements[0].nativeElement;
 
             // In testing environment, we simulate the ngStyle behavior
-            if (splitterInstance.panelStyle) {
-                Object.keys(splitterInstance.panelStyle).forEach((key) => {
-                    element.style[key] = splitterInstance.panelStyle![key];
+            if (splitterInstance.panelStyle()) {
+                Object.keys(splitterInstance.panelStyle()!).forEach((key) => {
+                    element.style[key] = splitterInstance.panelStyle()![key];
                 });
             }
 
@@ -646,9 +646,9 @@ describe('Splitter', () => {
             expect(element.style.padding).toBe('10px');
 
             // Also verify the template binding
-            expect(splitterInstance.panelStyle).toBeTruthy();
-            expect(Object.keys(splitterInstance.panelStyle!)).toContain('border');
-            expect(Object.keys(splitterInstance.panelStyle!)).toContain('padding');
+            expect(splitterInstance.panelStyle()).toBeTruthy();
+            expect(Object.keys(splitterInstance.panelStyle()!)).toContain('border');
+            expect(Object.keys(splitterInstance.panelStyle()!)).toContain('padding');
         });
 
         it.skip('should apply resizing classes during resize', () => {
@@ -803,7 +803,7 @@ describe('Splitter', () => {
             await testFixture.whenStable();
             testFixture.detectChanges();
 
-            expect(splitterInstance.stateStorage).toBe('local');
+            expect(splitterInstance.stateStorage()).toBe('local');
             expect(() => splitterInstance.getStorage()).not.toThrow();
         });
     });
@@ -967,7 +967,7 @@ describe('Splitter', () => {
 
         it.skip('should use instance variables in PT functions', async () => {
             ptSplitter = ptFixture.debugElement.query(By.directive(Splitter)).componentInstance;
-            ptSplitter.layout = 'vertical';
+            vi.spyOn(ptSplitter, 'layout').mockReturnValue('vertical');
             ptSplitter.dragging = true;
 
             ptComponent.pt = {
