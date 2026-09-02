@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, numberAttribute, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, numberAttribute, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
@@ -46,49 +46,10 @@ const PROGRESSBAR_INSTANCE = new InjectionToken<ProgressBar>('PROGRESSBAR_INSTAN
     hostDirectives: [Bind]
 })
 export class ProgressBar extends BaseComponent<ProgressBarPassThrough> {
-    componentName = 'ProgressBar';
-
-    $pcProgressBar: ProgressBar | undefined = inject(PROGRESSBAR_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    /**
-     * Current value of the progress.
-     * @group Props
-     */
-    @Input({ transform: numberAttribute }) value: number | undefined;
-    /**
-     * Whether to display the progress bar value.
-     * @group Props
-     */
-    @Input({ transform: booleanAttribute }) showValue: boolean = true;
-    /**
-     * Style class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
-    /**
-     * Style class of the value element.
-     * @group Props
-     */
-    @Input() valueStyleClass: string | undefined;
-    /**
-     * Unit sign appended to the value.
-     * @group Props
-     */
-    @Input() unit: string = '%';
-    /**
-     * Defines the mode of the progress
-     * @defaultValue 'determinate'
-     * @group Props
-     */
-    @Input() mode: 'determinate' | 'indeterminate' = 'determinate';
-    /**
-     * Color for the background of the progress.
-     * @group Props
-     */
-    @Input() color: string | undefined;
+    _componentStyle = inject(ProgressBarStyle);
+
     /**
      * Template of the content.
      * @param {ProgressBarContentTemplateContext} context - content context.
@@ -97,15 +58,72 @@ export class ProgressBar extends BaseComponent<ProgressBarPassThrough> {
      */
     readonly contentTemplate = contentChild<TemplateRef<ProgressBarContentTemplateContext>>('content', { descendants: false });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-
-    _componentStyle = inject(ProgressBarStyle);
-
     readonly templates = contentChildren(PrimeTemplate);
 
+    componentName = 'ProgressBar';
+
+    $pcProgressBar: ProgressBar | undefined = inject(PROGRESSBAR_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+
+    /**
+     * Current value of the progress.
+     * @group Props
+     */
+    @Input({ transform: numberAttribute }) value: number | undefined;
+
+    /**
+     * Whether to display the progress bar value.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) showValue: boolean = true;
+
+    /**
+     * Style class of the element.
+     * @deprecated since v20.0.0, use `class` instead.
+     * @group Props
+     */
+    @Input() styleClass: string | undefined;
+
+    /**
+     * Style class of the value element.
+     * @group Props
+     */
+    @Input() valueStyleClass: string | undefined;
+
+    /**
+     * Unit sign appended to the value.
+     * @group Props
+     */
+    @Input() unit: string = '%';
+
+    /**
+     * Defines the mode of the progress
+     * @defaultValue 'determinate'
+     * @group Props
+     */
+    @Input() mode: 'determinate' | 'indeterminate' = 'determinate';
+
+    /**
+     * Color for the background of the progress.
+     * @group Props
+     */
+    @Input() color: string | undefined;
+
     _contentTemplate: TemplateRef<ProgressBarContentTemplateContext> | undefined;
+
+    get dataP() {
+        return this.cn({
+            determinate: this.mode === 'determinate',
+            indeterminate: this.mode === 'indeterminate'
+        });
+    }
+
+    constructor() {
+        super();
+
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     onAfterContentInit() {
         this.templates()?.forEach((item) => {
@@ -116,13 +134,6 @@ export class ProgressBar extends BaseComponent<ProgressBarPassThrough> {
                 default:
                     this._contentTemplate = item.template;
             }
-        });
-    }
-
-    get dataP() {
-        return this.cn({
-            determinate: this.mode === 'determinate',
-            indeterminate: this.mode === 'indeterminate'
         });
     }
 }
