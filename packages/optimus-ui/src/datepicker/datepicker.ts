@@ -3638,10 +3638,20 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     }
 
     isValidDateForTimeConstraints(selectedDate: Date) {
-        if (this.keepInvalid) {
+        if (!selectedDate || !isDate(selectedDate) || this.keepInvalid) {
             return true; // If we are keeping invalid dates, we don't need to check for time constraints
         }
-        return (!this.minDate || selectedDate >= this.minDate) && (!this.maxDate || selectedDate <= this.maxDate);
+        if (this.showTime || this.timeOnly) {
+            // compare both date and time
+            return (!this.minDate || selectedDate >= this.minDate) && (!this.maxDate || selectedDate <= this.maxDate);
+        }
+        // compare only dates
+        const selectedDateWithoutTime = this.getDateWithoutTime(selectedDate);
+        return (!this.minDate || this.getDateWithoutTime(this.minDate) <= selectedDateWithoutTime) && (!this.maxDate || selectedDateWithoutTime <= this.getDateWithoutTime(this.maxDate));
+    }
+
+    private getDateWithoutTime(date: Date): Date {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
     onTodayButtonClick(event: any) {
@@ -3812,9 +3822,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             try {
                 this.value = this.parseValueFromString(this.value);
             } catch {
-                if (this.keepInvalid) {
-                    this.value = value;
-                }
+                this.value = this.keepInvalid ? value : null;
             }
         }
 
