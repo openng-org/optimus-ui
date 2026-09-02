@@ -16,7 +16,7 @@ class TestBasicDividerComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-divider [layout]="layout" [type]="type" [align]="align" [styleClass]="styleClass">
+        <p-divider [layout]="layout" [type]="type" [align]="align" [class]="styleClass">
             <div class="custom-content">Custom Divider Content</div>
         </p-divider>
     `
@@ -126,10 +126,9 @@ describe('Divider', () => {
         });
 
         it('should have default values', () => {
-            expect(divider.layout).toBe('horizontal');
-            expect(divider.type).toBe('solid');
-            expect(divider.align).toBeUndefined();
-            expect(divider.styleClass).toBeUndefined();
+            expect(divider.layout()).toBe('horizontal');
+            expect(divider.type()).toBe('solid');
+            expect(divider.align()).toBeUndefined();
         });
 
         it('should have correct host attributes', () => {
@@ -957,7 +956,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.layout === 'vertical' ? 'VERTICAL_LAYOUT' : ''
+                            class: instance.layout() === 'vertical' ? 'VERTICAL_LAYOUT' : ''
                         };
                     }
                 });
@@ -974,7 +973,7 @@ describe('Divider', () => {
                     content: ({ instance }) => {
                         return {
                             style: {
-                                'border-color': instance.type === 'dashed' ? 'yellow' : 'red'
+                                'border-color': instance.type() === 'dashed' ? 'yellow' : 'red'
                             }
                         };
                     }
@@ -992,7 +991,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.align === 'center' ? 'CENTERED' : ''
+                            class: instance.align() === 'center' ? 'CENTERED' : ''
                         };
                     }
                 });
@@ -1009,7 +1008,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.layout === 'horizontal' && instance.type === 'dotted' ? 'HORIZONTAL_DOTTED' : ''
+                            class: instance.layout() === 'horizontal' && instance.type() === 'dotted' ? 'HORIZONTAL_DOTTED' : ''
                         };
                     }
                 });
@@ -1058,22 +1057,26 @@ describe('Divider', () => {
 
             it('should bind onclick event with instance reference', async () => {
                 const ptFixture = TestBed.createComponent(Divider);
-                let instanceLayout = '';
+                let received: Divider | undefined;
+                let clicked = false;
+                // hoisted so the PT resolution stays referentially stable across renders (a fresh
+                // closure per resolution would defeat Bind.setAttrs' equality check and loop CD)
+                const onclick = () => {
+                    clicked = true;
+                };
                 ptFixture.componentRef.setInput('layout', 'vertical');
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
-                        return {
-                            onclick: () => {
-                                instanceLayout = instance.layout || '';
-                            }
-                        };
+                        received = instance;
+                        return { onclick };
                     }
                 });
                 ptFixture.changeDetectorRef.markForCheck();
                 await ptFixture.whenStable();
 
                 ptFixture.nativeElement.click();
-                expect(instanceLayout).toBe('vertical');
+                expect(clicked).toBe(true);
+                expect(received?.layout()).toBe('vertical');
             });
         });
 
