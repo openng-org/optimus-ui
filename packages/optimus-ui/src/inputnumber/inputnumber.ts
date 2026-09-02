@@ -1,18 +1,21 @@
 import { CommonModule } from '@angular/common';
 import {
+    afterEveryRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
+    computed,
+    effect,
     ElementRef,
     forwardRef,
     inject,
-    InjectionToken,
     Injector,
-    Input,
+    input,
     NgModule,
     numberAttribute,
-    SimpleChanges,
+    signal,
     TemplateRef,
+    untracked,
     ViewEncapsulation,
     contentChild,
     contentChildren,
@@ -32,8 +35,6 @@ import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import type { InputNumberInputEvent, InputNumberPassThrough } from '@openng/optimus-ui/types/inputnumber';
 import { InputNumberStyle } from './style/inputnumberstyle';
 
-const INPUTNUMBER_INSTANCE = new InjectionToken<InputNumber>('INPUTNUMBER_INSTANCE');
-
 export const INPUTNUMBER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
     useExisting: forwardRef(() => InputNumber),
@@ -51,34 +52,34 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
         <input
             pInputText
             #input
-            [attr.id]="inputId"
+            [attr.id]="inputId()"
             role="spinbutton"
-            [class]="cn(cx('pcInputText'), inputStyleClass)"
+            [class]="cn(cx('pcInputText'), inputStyleClass())"
             [value]="formattedValue()"
-            [ngStyle]="inputStyle"
+            [ngStyle]="inputStyle()"
             [variant]="$variant()"
             [invalid]="invalid()"
             [attr.aria-valuemin]="min()"
             [attr.aria-valuemax]="max()"
-            [attr.aria-valuenow]="value"
-            [attr.placeholder]="placeholder"
-            [attr.aria-label]="ariaLabel"
-            [attr.aria-labelledby]="ariaLabelledBy"
-            [attr.aria-describedby]="ariaDescribedBy"
-            [attr.title]="title"
+            [attr.aria-valuenow]="value()"
+            [attr.placeholder]="placeholder()"
+            [attr.aria-label]="ariaLabel()"
+            [attr.aria-labelledby]="ariaLabelledBy()"
+            [attr.aria-describedby]="ariaDescribedBy()"
+            [attr.title]="title()"
             [pSize]="size()"
             [attr.size]="inputSize()"
             [attr.name]="name()"
-            [attr.autocomplete]="autocomplete"
+            [attr.autocomplete]="autocomplete()"
             [attr.maxlength]="maxlength()"
             [attr.minlength]="minlength()"
-            [attr.tabindex]="tabindex"
-            [attr.aria-required]="ariaRequired"
+            [attr.tabindex]="tabindex()"
+            [attr.aria-required]="ariaRequired()"
             [attr.min]="min()"
             [attr.max]="max()"
             [attr.step]="step() ?? 1"
             [attr.required]="required() ? '' : undefined"
-            [attr.readonly]="readonly ? '' : undefined"
+            [attr.readonly]="readonly() ? '' : undefined"
             [attr.disabled]="$disabled() ? '' : undefined"
             inputmode="decimal"
             (input)="onUserInput($event)"
@@ -90,26 +91,26 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
             (blur)="onInputBlur($event)"
             [pt]="ptm('pcInputText')"
             [unstyled]="unstyled()"
-            [pAutoFocus]="autofocus"
+            [pAutoFocus]="autofocus()"
             [fluid]="hasFluid"
             [attr.data-p]="dataP"
         />
-        @if (buttonLayout != 'vertical' && showClear && value) {
-            @if (!clearIconTemplate() && !_clearIconTemplate) {
+        @if (buttonLayout() != 'vertical' && showClear() && value()) {
+            @if (!$clearIconTemplate()) {
                 <svg data-p-icon="times" [pBind]="ptm('clearIcon')" [class]="cx('clearIcon')" (click)="clear()" />
             }
-            @if (clearIconTemplate() || _clearIconTemplate) {
+            @if ($clearIconTemplate()) {
                 <span [pBind]="ptm('clearIcon')" (click)="clear()" [class]="cx('clearIcon')">
-                    <ng-template *ngTemplateOutlet="clearIconTemplate() || _clearIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$clearIconTemplate()"></ng-template>
                 </span>
             }
         }
-        @if (showButtons && buttonLayout === 'stacked') {
+        @if (showButtons() && buttonLayout() === 'stacked') {
             <span [pBind]="ptm('buttonGroup')" [class]="cx('buttonGroup')" [attr.data-p]="dataP">
                 <button
                     type="button"
                     [pBind]="ptm('incrementButton')"
-                    [class]="cn(cx('incrementButton'), incrementButtonClass)"
+                    [class]="cn(cx('incrementButton'), incrementButtonClass())"
                     [attr.disabled]="$disabled() ? '' : undefined"
                     tabindex="-1"
                     (mousedown)="onUpButtonMouseDown($event)"
@@ -120,20 +121,20 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
                     [attr.aria-hidden]="true"
                     [attr.data-p]="dataP"
                 >
-                    @if (incrementButtonIcon) {
-                        <span [pBind]="ptm('incrementButtonIcon')" [ngClass]="incrementButtonIcon"></span>
+                    @if (incrementButtonIcon()) {
+                        <span [pBind]="ptm('incrementButtonIcon')" [ngClass]="incrementButtonIcon()"></span>
                     }
-                    @if (!incrementButtonIcon) {
-                        @if (!incrementButtonIconTemplate() && !_incrementButtonIconTemplate) {
+                    @if (!incrementButtonIcon()) {
+                        @if (!$incrementButtonIconTemplate()) {
                             <svg data-p-icon="angle-up" [pBind]="ptm('incrementButtonIcon')" />
                         }
-                        <ng-template *ngTemplateOutlet="incrementButtonIconTemplate() || _incrementButtonIconTemplate"></ng-template>
+                        <ng-template *ngTemplateOutlet="$incrementButtonIconTemplate()"></ng-template>
                     }
                 </button>
                 <button
                     type="button"
                     [pBind]="ptm('decrementButton')"
-                    [class]="cn(cx('decrementButton'), decrementButtonClass)"
+                    [class]="cn(cx('decrementButton'), decrementButtonClass())"
                     [attr.disabled]="$disabled() ? '' : undefined"
                     tabindex="-1"
                     [attr.aria-hidden]="true"
@@ -144,23 +145,23 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
                     (keyup)="onDownButtonKeyUp()"
                     [attr.data-p]="dataP"
                 >
-                    @if (decrementButtonIcon) {
-                        <span [pBind]="ptm('decrementButtonIcon')" [ngClass]="decrementButtonIcon"></span>
+                    @if (decrementButtonIcon()) {
+                        <span [pBind]="ptm('decrementButtonIcon')" [ngClass]="decrementButtonIcon()"></span>
                     }
-                    @if (!decrementButtonIcon) {
-                        @if (!decrementButtonIconTemplate() && !_decrementButtonIconTemplate) {
+                    @if (!decrementButtonIcon()) {
+                        @if (!$decrementButtonIconTemplate()) {
                             <svg data-p-icon="angle-down" [pBind]="ptm('decrementButtonIcon')" />
                         }
-                        <ng-template *ngTemplateOutlet="decrementButtonIconTemplate() || _decrementButtonIconTemplate"></ng-template>
+                        <ng-template *ngTemplateOutlet="$decrementButtonIconTemplate()"></ng-template>
                     }
                 </button>
             </span>
         }
-        @if (showButtons && buttonLayout !== 'stacked') {
+        @if (showButtons() && buttonLayout() !== 'stacked') {
             <button
                 type="button"
                 [pBind]="ptm('incrementButton')"
-                [class]="cn(cx('incrementButton'), incrementButtonClass)"
+                [class]="cn(cx('incrementButton'), incrementButtonClass())"
                 [attr.disabled]="$disabled() ? '' : undefined"
                 tabindex="-1"
                 [attr.aria-hidden]="true"
@@ -171,22 +172,22 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
                 (keyup)="onUpButtonKeyUp()"
                 [attr.data-p]="dataP"
             >
-                @if (incrementButtonIcon) {
-                    <span [pBind]="ptm('incrementButtonIcon')" [ngClass]="incrementButtonIcon"></span>
+                @if (incrementButtonIcon()) {
+                    <span [pBind]="ptm('incrementButtonIcon')" [ngClass]="incrementButtonIcon()"></span>
                 }
-                @if (!incrementButtonIcon) {
-                    @if (!incrementButtonIconTemplate() && !_incrementButtonIconTemplate) {
+                @if (!incrementButtonIcon()) {
+                    @if (!$incrementButtonIconTemplate()) {
                         <svg data-p-icon="angle-up" [pBind]="ptm('incrementButtonIcon')" />
                     }
-                    <ng-template *ngTemplateOutlet="incrementButtonIconTemplate() || _incrementButtonIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$incrementButtonIconTemplate()"></ng-template>
                 }
             </button>
         }
-        @if (showButtons && buttonLayout !== 'stacked') {
+        @if (showButtons() && buttonLayout() !== 'stacked') {
             <button
                 type="button"
                 [pBind]="ptm('decrementButton')"
-                [class]="cn(cx('decrementButton'), decrementButtonClass)"
+                [class]="cn(cx('decrementButton'), decrementButtonClass())"
                 [attr.disabled]="$disabled() ? '' : undefined"
                 tabindex="-1"
                 [attr.aria-hidden]="true"
@@ -197,23 +198,23 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
                 (keyup)="onDownButtonKeyUp()"
                 [attr.data-p]="dataP"
             >
-                @if (decrementButtonIcon) {
-                    <span [pBind]="ptm('decrementButtonIcon')" [ngClass]="decrementButtonIcon"></span>
+                @if (decrementButtonIcon()) {
+                    <span [pBind]="ptm('decrementButtonIcon')" [ngClass]="decrementButtonIcon()"></span>
                 }
-                @if (!decrementButtonIcon) {
-                    @if (!decrementButtonIconTemplate() && !_decrementButtonIconTemplate) {
+                @if (!decrementButtonIcon()) {
+                    @if (!$decrementButtonIconTemplate()) {
                         <svg data-p-icon="angle-down" [pBind]="ptm('decrementButtonIcon')" />
                     }
-                    <ng-template *ngTemplateOutlet="decrementButtonIconTemplate() || _decrementButtonIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$decrementButtonIconTemplate()"></ng-template>
                 }
             </button>
         }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [INPUTNUMBER_VALUE_ACCESSOR, InputNumberStyle, { provide: INPUTNUMBER_INSTANCE, useExisting: InputNumber }, { provide: PARENT_INSTANCE, useExisting: InputNumber }],
+    providers: [INPUTNUMBER_VALUE_ACCESSOR, InputNumberStyle, { provide: PARENT_INSTANCE, useExisting: InputNumber }],
     encapsulation: ViewEncapsulation.None,
     host: {
-        '[class]': "cn(cx('root'), styleClass)",
+        '[class]': "cx('root')",
         '[attr.data-p]': 'dataP'
     },
     hostDirectives: [Bind]
@@ -221,219 +222,244 @@ export const INPUTNUMBER_VALUE_ACCESSOR: any = {
 export class InputNumber extends BaseInput<InputNumberPassThrough> {
     readonly injector = inject(Injector);
 
-    componentName = 'InputNumber';
-
-    $pcInputNumber: InputNumber | undefined = inject(INPUTNUMBER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     _componentStyle = inject(InputNumberStyle);
 
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
 
     /**
      * Displays spinner buttons.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) showButtons: boolean = false;
+    readonly showButtons = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Whether to format the value.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) format: boolean = true;
+    readonly format = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Layout of the buttons, valid values are "stacked" (default), "horizontal" and "vertical".
      * @group Props
      */
-    @Input() buttonLayout: string = 'stacked';
+    readonly buttonLayout = input<string>('stacked');
+
     /**
      * Identifier of the focus input to match a label defined for the component.
      * @group Props
      */
-    @Input() inputId: string | undefined;
-    /**
-     * Style class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    readonly inputId = input<string>();
+
     /**
      * Advisory information to display on input.
      * @group Props
      */
-    @Input() placeholder: string | undefined;
+    readonly placeholder = input<string>();
+
     /**
      * Specifies tab order of the element.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) tabindex: number | undefined;
+    readonly tabindex = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Title text of the input text.
      * @group Props
      */
-    @Input() title: string | undefined;
+    readonly title = input<string>();
+
     /**
      * Specifies one or more IDs in the DOM that labels the input field.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Specifies one or more IDs in the DOM that describes the input field.
      * @group Props
      */
-    @Input() ariaDescribedBy: string | undefined;
+    readonly ariaDescribedBy = input<string>();
+
     /**
      * Used to define a string that labels the input element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Used to indicate that user input is required on an element before a form can be submitted.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) ariaRequired: boolean | undefined;
+    readonly ariaRequired = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Used to define a string that autocomplete attribute the current element.
      * @group Props
      */
-    @Input() autocomplete: string | undefined;
+    readonly autocomplete = input<string>();
+
     /**
      * Style class of the increment button.
      * @group Props
      */
-    @Input() incrementButtonClass: string | undefined;
+    readonly incrementButtonClass = input<string>();
+
     /**
      * Style class of the decrement button.
      * @group Props
      */
-    @Input() decrementButtonClass: string | undefined;
+    readonly decrementButtonClass = input<string>();
+
     /**
      * Style class of the increment button.
      * @group Props
      */
-    @Input() incrementButtonIcon: string | undefined;
+    readonly incrementButtonIcon = input<string>();
+
     /**
      * Style class of the decrement button.
      * @group Props
      */
-    @Input() decrementButtonIcon: string | undefined;
+    readonly decrementButtonIcon = input<string>();
+
     /**
      * When present, it specifies that an input field is read-only.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) readonly: boolean | undefined;
+    readonly readonly = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Determines whether the input field is empty.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) allowEmpty: boolean = true;
+    readonly allowEmpty = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Locale to be used in formatting.
      * @group Props
      */
-    @Input() locale: string | undefined;
+    readonly locale = input<string>();
+
     /**
      * The locale matching algorithm to use. Possible values are "lookup" and "best fit"; the default is "best fit". See Locale Negotiation for details.
      * @group Props
      */
-    @Input() localeMatcher: any;
+    readonly localeMatcher = input<any>();
+
     /**
      * Defines the behavior of the component, valid values are "decimal" and "currency".
      * @group Props
      */
-    @Input() mode: string | any = 'decimal';
+    readonly mode = input<string | any>('decimal');
+
     /**
      * The currency to use in currency formatting. Possible values are the ISO 4217 currency codes, such as "USD" for the US dollar, "EUR" for the euro, or "CNY" for the Chinese RMB. There is no default value; if the style is "currency", the currency property must be provided.
      * @group Props
      */
-    @Input() currency: string | undefined;
+    readonly currency = input<string>();
+
     /**
      * How to display the currency in currency formatting. Possible values are "symbol" to use a localized currency symbol such as €, ü"code" to use the ISO currency code, "name" to use a localized currency name such as "dollar"; the default is "symbol".
      * @group Props
      */
-    @Input() currencyDisplay: string | undefined | any;
+    readonly currencyDisplay = input<string | undefined | any>();
+
     /**
      * Whether to use grouping separators, such as thousands separators or thousand/lakh/crore separators.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) useGrouping: boolean = true;
+    readonly useGrouping = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information).
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) }) minFractionDigits: number | undefined;
+    readonly minFractionDigits = input<number | undefined, unknown>(undefined, { transform: (value: unknown) => numberAttribute(value, undefined) });
+
     /**
      * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information).
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) }) maxFractionDigits: number | undefined;
+    readonly maxFractionDigits = input<number | undefined, unknown>(undefined, { transform: (value: unknown) => numberAttribute(value, undefined) });
+
     /**
      * Text to display before the value.
      * @group Props
      */
-    @Input() prefix: string | undefined;
+    readonly prefix = input<string>();
+
     /**
      * Text to display after the value.
      * @group Props
      */
-    @Input() suffix: string | undefined;
+    readonly suffix = input<string>();
+
     /**
      * Inline style of the input field.
      * @group Props
      */
-    @Input() inputStyle: any;
+    readonly inputStyle = input<any>();
+
     /**
      * Style class of the input field.
      * @group Props
      */
-    @Input() inputStyleClass: string | undefined;
+    readonly inputStyleClass = input<string>();
+
     /**
      * When enabled, a clear icon is displayed to clear the value.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) showClear: boolean = false;
+    readonly showClear = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autofocus: boolean | undefined;
+    readonly autofocus = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Callback to invoke on input.
      * @param {InputNumberInputEvent} event - Custom input event.
      * @group Emits
      */
     readonly onInput = output<InputNumberInputEvent>();
+
     /**
      * Callback to invoke when the component receives focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onFocus = output<Event>();
+
     /**
      * Callback to invoke when the component loses focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onBlur = output<Event>();
+
     /**
      * Callback to invoke on input key press.
      * @param {KeyboardEvent} event - Keyboard event.
      * @group Emits
      */
     readonly onKeyDown = output<KeyboardEvent>();
+
     /**
      * Callback to invoke when clear token is clicked.
      * @group Emits
      */
     readonly onClear = output<void>();
 
+    readonly input = viewChild.required<ElementRef<HTMLInputElement>>('input');
+
     /**
      * Custom clear icon template.
      * @group Templates
      */
     readonly clearIconTemplate = contentChild<Nullable<TemplateRef<void>>>('clearicon', { descendants: false });
+
     /**
      * Custom increment button icon template.
      * @group Templates
@@ -448,15 +474,36 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    readonly input = viewChild.required<ElementRef<HTMLInputElement>>('input');
+    componentName = 'InputNumber';
 
-    _clearIconTemplate: TemplateRef<void> | undefined;
+    /** Effective clear icon template: the `#clearicon` content child or the `pTemplate="clearicon"`. */
+    readonly $clearIconTemplate = computed(
+        () =>
+            this.clearIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'clearicon')
+                .at(-1)?.template
+    );
 
-    _incrementButtonIconTemplate: TemplateRef<void> | undefined;
+    /** Effective increment button icon template: the `#incrementbuttonicon` content child or the `pTemplate="incrementbuttonicon"`. */
+    readonly $incrementButtonIconTemplate = computed(
+        () =>
+            this.incrementButtonIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'incrementbuttonicon')
+                .at(-1)?.template
+    );
 
-    _decrementButtonIconTemplate: TemplateRef<void> | undefined;
+    /** Effective decrement button icon template: the `#decrementbuttonicon` content child or the `pTemplate="decrementbuttonicon"`. */
+    readonly $decrementButtonIconTemplate = computed(
+        () =>
+            this.decrementButtonIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'decrementbuttonicon')
+                .at(-1)?.template
+    );
 
-    value: Nullable<number>;
+    value = signal<Nullable<number>>(undefined);
 
     focused: Nullable<boolean>;
 
@@ -496,11 +543,53 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     private ngControl: NgControl | null = null;
 
-    onChanges(simpleChange: SimpleChanges) {
-        const props = ['locale', 'localeMatcher', 'mode', 'currency', 'currencyDisplay', 'useGrouping', 'minFractionDigits', 'maxFractionDigits', 'prefix', 'suffix'];
-        if (props.some((p) => !!simpleChange[p])) {
-            this.updateConstructParser();
+    private parserInputsEffectFirstRun = true;
+
+    /**
+     * Rebuilds the number parser whenever a formatting-related input changes
+     * (replaces the former ngOnChanges hook). The first run is skipped: `onInit`
+     * already calls `constructParser()` eagerly before the first effect flush.
+     */
+    private readonly parserInputsEffect = effect(() => {
+        this.locale();
+        this.localeMatcher();
+        this.mode();
+        this.currency();
+        this.currencyDisplay();
+        this.useGrouping();
+        this.minFractionDigits();
+        this.maxFractionDigits();
+        this.prefix();
+        this.suffix();
+
+        if (this.parserInputsEffectFirstRun) {
+            this.parserInputsEffectFirstRun = false;
+            return;
         }
+
+        untracked(() => this.updateConstructParser());
+    });
+
+    get dataP() {
+        return this.cn({
+            invalid: this.invalid(),
+            disabled: this.$disabled(),
+            focus: this.focused,
+            fluid: this.hasFluid,
+            filled: this.$variant() === 'filled',
+            empty: !this.$filled(),
+            [this.size() as string]: this.size(),
+            [this.buttonLayout()]: this.showButtons() && this.buttonLayout()
+        });
+    }
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 
     onInit() {
@@ -509,24 +598,6 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         this.constructParser();
 
         this.initialized = true;
-    }
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'clearicon':
-                    this._clearIconTemplate = item.template;
-                    break;
-
-                case 'incrementbuttonicon':
-                    this._incrementButtonIconTemplate = item.template;
-                    break;
-
-                case 'decrementbuttonicon':
-                    this._decrementButtonIconTemplate = item.template;
-                    break;
-            }
-        });
     }
 
     getOptions() {
@@ -539,18 +610,18 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             return Math.max(min, Math.min(max, Math.floor(value)));
         };
 
-        const minFractionDigits = validateFractionDigits(this.minFractionDigits, 0, 20);
-        const maxFractionDigits = validateFractionDigits(this.maxFractionDigits, 0, 100);
+        const minFractionDigits = validateFractionDigits(this.minFractionDigits(), 0, 20);
+        const maxFractionDigits = validateFractionDigits(this.maxFractionDigits(), 0, 100);
 
         // Ensure minFractionDigits <= maxFractionDigits
         const validatedMinFractionDigits = minFractionDigits != null && maxFractionDigits != null && minFractionDigits > maxFractionDigits ? maxFractionDigits : minFractionDigits;
 
         return {
-            localeMatcher: this.localeMatcher,
-            style: this.mode,
-            currency: this.currency,
-            currencyDisplay: this.currencyDisplay,
-            useGrouping: this.useGrouping,
+            localeMatcher: this.localeMatcher(),
+            style: this.mode(),
+            currency: this.currency(),
+            currencyDisplay: this.currencyDisplay(),
+            useGrouping: this.useGrouping(),
             minimumFractionDigits: validatedMinFractionDigits,
             maximumFractionDigits: maxFractionDigits
         };
@@ -560,8 +631,8 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         const options = this.getOptions();
         // Remove any properties with undefined or invalid values to let Intl.NumberFormat use defaults
         const cleanOptions = Object.fromEntries(Object.entries(options).filter(([_key, value]) => value !== undefined));
-        this.numberFormat = new Intl.NumberFormat(this.locale, cleanOptions);
-        const numerals = [...new Intl.NumberFormat(this.locale, { useGrouping: false }).format(9876543210)].reverse();
+        this.numberFormat = new Intl.NumberFormat(this.locale(), cleanOptions);
+        const numerals = [...new Intl.NumberFormat(this.locale(), { useGrouping: false }).format(9876543210)].reverse();
         const index = new Map(numerals.map((d, i) => [d, i]));
         this._numeral = new RegExp(`[${numerals.join('')}]`, 'g');
         this._group = this.getGroupingExpression();
@@ -588,8 +659,9 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         const decimalChar = this.getDecimalChar();
         return new RegExp(`[${decimalChar}]`, 'g');
     }
+
     getDecimalChar(): string {
-        const formatter = new Intl.NumberFormat(this.locale, { ...this.getOptions(), useGrouping: false });
+        const formatter = new Intl.NumberFormat(this.locale(), { ...this.getOptions(), useGrouping: false });
         return formatter
             .format(1.1)
             .replace(this._currency as RegExp | string, '')
@@ -598,22 +670,22 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     getGroupingExpression(): RegExp {
-        const formatter = new Intl.NumberFormat(this.locale, { useGrouping: true });
+        const formatter = new Intl.NumberFormat(this.locale(), { useGrouping: true });
         this.groupChar = formatter.format(1000000).trim().replace(this._numeral, '').charAt(0);
         return new RegExp(`[${this.groupChar}]`, 'g');
     }
 
     getMinusSignExpression(): RegExp {
-        const formatter = new Intl.NumberFormat(this.locale, { useGrouping: false });
+        const formatter = new Intl.NumberFormat(this.locale(), { useGrouping: false });
         return new RegExp(`[${formatter.format(-1).trim().replace(this._numeral, '')}]`, 'g');
     }
 
     getCurrencyExpression(): RegExp {
-        if (this.currency) {
-            const formatter = new Intl.NumberFormat(this.locale, {
+        if (this.currency()) {
+            const formatter = new Intl.NumberFormat(this.locale(), {
                 style: 'currency',
-                currency: this.currency,
-                currencyDisplay: this.currencyDisplay,
+                currency: this.currency(),
+                currencyDisplay: this.currencyDisplay(),
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             });
@@ -624,13 +696,13 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     getPrefixExpression(): RegExp {
-        if (this.prefix) {
-            this.prefixChar = this.prefix;
+        if (this.prefix()) {
+            this.prefixChar = this.prefix()!;
         } else {
-            const formatter = new Intl.NumberFormat(this.locale, {
-                style: this.mode,
-                currency: this.currency,
-                currencyDisplay: this.currencyDisplay
+            const formatter = new Intl.NumberFormat(this.locale(), {
+                style: this.mode(),
+                currency: this.currency(),
+                currencyDisplay: this.currencyDisplay()
             });
             this.prefixChar = formatter.format(1).split('1')[0];
         }
@@ -639,13 +711,13 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     getSuffixExpression(): RegExp {
-        if (this.suffix) {
-            this.suffixChar = this.suffix;
+        if (this.suffix()) {
+            this.suffixChar = this.suffix()!;
         } else {
-            const formatter = new Intl.NumberFormat(this.locale, {
-                style: this.mode,
-                currency: this.currency,
-                currencyDisplay: this.currencyDisplay,
+            const formatter = new Intl.NumberFormat(this.locale(), {
+                style: this.mode(),
+                currency: this.currency(),
+                currencyDisplay: this.currencyDisplay(),
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0
             });
@@ -662,16 +734,16 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 return value;
             }
 
-            if (this.format) {
-                let formatter = new Intl.NumberFormat(this.locale, this.getOptions());
+            if (this.format()) {
+                let formatter = new Intl.NumberFormat(this.locale(), this.getOptions());
                 let formattedValue = formatter.format(value);
 
-                if (this.prefix && value != this.prefix) {
-                    formattedValue = this.prefix + formattedValue;
+                if (this.prefix() && value != this.prefix()) {
+                    formattedValue = this.prefix() + formattedValue;
                 }
 
-                if (this.suffix && value != this.suffix) {
-                    formattedValue = formattedValue + this.suffix;
+                if (this.suffix() && value != this.suffix()) {
+                    formattedValue = formattedValue + this.suffix();
                 }
 
                 return formattedValue;
@@ -712,7 +784,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     repeat(event: Event, interval: number | null, dir: number) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -742,8 +814,8 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     clear() {
-        this.value = null;
-        this.onModelChange(this.value);
+        this.value.set(null);
+        this.onModelChange(this.value());
         this.onClear.emit();
     }
 
@@ -821,7 +893,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     onUserInput(event: Event) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -832,7 +904,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     onInputKeyDown(event: KeyboardEvent) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -894,7 +966,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 event.preventDefault();
 
                 if (selectionStart === selectionEnd) {
-                    if ((selectionStart == 1 && this.prefix) || (selectionStart == inputValue.length && this.suffix)) {
+                    if ((selectionStart == 1 && this.prefix()) || (selectionStart == inputValue.length && this.suffix())) {
                         break;
                     }
 
@@ -916,7 +988,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                                 newValueStr = inputValue.slice(0, selectionStart - 1) + inputValue.slice(selectionStart);
                             }
                         } else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
-                            const insertedText = this.isDecimalMode() && (this.minFractionDigits || 0) < decimalLength ? '' : '0';
+                            const insertedText = this.isDecimalMode() && (this.minFractionDigits() || 0) < decimalLength ? '' : '0';
                             newValueStr = inputValue.slice(0, selectionStart - 1) + insertedText + inputValue.slice(selectionStart);
                         } else if (decimalCharIndexWithoutPrefix === 1) {
                             newValueStr = inputValue.slice(0, selectionStart - 1) + '0' + inputValue.slice(selectionStart);
@@ -924,7 +996,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                         } else {
                             newValueStr = inputValue.slice(0, selectionStart - 1) + inputValue.slice(selectionStart);
                         }
-                    } else if (this.mode === 'currency' && this._currency && deleteChar.search(this._currency as RegExp) != -1) {
+                    } else if (this.mode() === 'currency' && this._currency && deleteChar.search(this._currency as RegExp) != -1) {
                         newValueStr = inputValue.slice(1);
                     }
 
@@ -941,7 +1013,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                 event.preventDefault();
 
                 if (selectionStart === selectionEnd) {
-                    if ((selectionStart == 0 && this.prefix) || (selectionStart == inputValue.length - 1 && this.suffix)) {
+                    if ((selectionStart == 0 && this.prefix()) || (selectionStart == inputValue.length - 1 && this.suffix())) {
                         break;
                     }
                     const deleteChar = inputValue.charAt(selectionStart);
@@ -962,7 +1034,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
                                 newValueStr = inputValue.slice(0, selectionStart) + inputValue.slice(selectionStart + 1);
                             }
                         } else if (decimalCharIndex > 0 && selectionStart > decimalCharIndex) {
-                            const insertedText = this.isDecimalMode() && (this.minFractionDigits || 0) < decimalLength ? '' : '0';
+                            const insertedText = this.isDecimalMode() && (this.minFractionDigits() || 0) < decimalLength ? '' : '0';
                             newValueStr = inputValue.slice(0, selectionStart) + insertedText + inputValue.slice(selectionStart + 1);
                         } else if (decimalCharIndexWithoutPrefix === 1) {
                             newValueStr = inputValue.slice(0, selectionStart) + '0' + inputValue.slice(selectionStart + 1);
@@ -1001,7 +1073,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     onInputKeyPress(event: KeyboardEvent) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -1044,10 +1116,10 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     onPaste(event: ClipboardEvent) {
-        if (!this.$disabled() && !this.readonly) {
+        if (!this.$disabled() && !this.readonly()) {
             event.preventDefault();
             let data = (event.clipboardData || (this.document as any).defaultView['clipboardData']).getData('Text');
-            if (this.inputId === 'integeronly' && /[^\d-]/.test(data)) {
+            if (this.inputId() === 'integeronly' && /[^\d-]/.test(data)) {
                 return;
             }
             if (data) {
@@ -1088,7 +1160,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     isDecimalMode() {
-        return this.mode === 'decimal';
+        return this.mode() === 'decimal';
     }
 
     getDecimalCharIndexes(val: string) {
@@ -1148,7 +1220,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             } else if (decimalCharIndex > selectionStart && decimalCharIndex < selectionEnd) {
                 newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
                 this.updateValue(event, newValueStr, text, 'insert');
-            } else if (decimalCharIndex === -1 && this.maxFractionDigits) {
+            } else if (decimalCharIndex === -1 && this.maxFractionDigits()) {
                 newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
                 this.updateValue(event, newValueStr, text, 'insert');
             }
@@ -1259,7 +1331,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     onInputClick() {
         const currentValue = this.input().nativeElement.value;
 
-        if (!this.readonly && currentValue !== getSelection()) {
+        if (!this.readonly() && currentValue !== getSelection()) {
             this.initCursor();
         }
     }
@@ -1286,7 +1358,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
         if (valueStr != null) {
             newValue = this.parseValue(valueStr);
-            newValue = !newValue && !this.allowEmpty ? 0 : newValue;
+            newValue = !newValue && !this.allowEmpty() ? 0 : newValue;
             this.updateInput(newValue, insertedValueStr, operation, valueStr);
 
             this.handleOnInput(event, currentValue, newValue);
@@ -1461,15 +1533,15 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
     }
 
     formattedValue() {
-        const val = !this.value && !this.allowEmpty ? 0 : this.value;
+        const val = !this.value() && !this.allowEmpty() ? 0 : this.value();
         return this.formatValue(val);
     }
 
     updateModel(event: Event, value: any) {
         const isBlurUpdateOnMode = this.ngControl?.control?.updateOn === 'blur';
 
-        if (this.value !== value) {
-            this.value = value;
+        if (this.value() !== value) {
+            this.value.set(value);
 
             if (!(isBlurUpdateOnMode && this.focused)) {
                 this.onModelChange(value);
@@ -1486,7 +1558,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
      * Writes the value to the control.
      */
     writeControlValue(value: any, setModelValue: (value: any) => void): void {
-        this.value = value ? Number(value) : value;
+        this.value.set(value ? Number(value) : value);
         setModelValue(value);
         this.cd.markForCheck();
     }
@@ -1495,19 +1567,6 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         if (this.timer) {
             clearInterval(this.timer);
         }
-    }
-
-    get dataP() {
-        return this.cn({
-            invalid: this.invalid(),
-            disabled: this.$disabled(),
-            focus: this.focused,
-            fluid: this.hasFluid,
-            filled: this.$variant() === 'filled',
-            empty: !this.$filled(),
-            [this.size() as string]: this.size(),
-            [this.buttonLayout]: this.showButtons && this.buttonLayout
-        });
     }
 }
 
