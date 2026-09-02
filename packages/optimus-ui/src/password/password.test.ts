@@ -25,7 +25,7 @@ import { provideNoopAnimations } from '@angular/platform-browser/animations';
             [placeholder]="placeholder"
             [inputId]="inputId"
             [inputStyleClass]="inputStyleClass"
-            [styleClass]="styleClass"
+            [class]="styleClass"
             [inputStyle]="inputStyle"
             [tabindex]="tabindex"
             [ariaLabel]="ariaLabel"
@@ -278,39 +278,39 @@ describe('Password', () => {
         });
 
         it('should have default values', () => {
-            expect(component.feedback).toBe(true);
-            expect(component.toggleMask).toBeUndefined();
-            expect(component.showClear).toBe(false);
-            expect(component.autofocus).toBeUndefined();
-            expect(component.mediumRegex).toContain('(?=.*[a-z])(?=.*[A-Z])');
-            expect(component.strongRegex).toContain('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])');
-            expect(component.overlayVisible).toBe(false);
-            expect(component.unmasked).toBe(false);
+            expect(component.feedback()).toBe(true);
+            expect(component.toggleMask()).toBeUndefined();
+            expect(component.showClear()).toBe(false);
+            expect(component.autofocus()).toBeUndefined();
+            expect(component.mediumRegex()).toContain('(?=.*[a-z])(?=.*[A-Z])');
+            expect(component.strongRegex()).toContain('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])');
+            expect(component.overlayVisible()).toBe(false);
+            expect(component.unmasked()).toBe(false);
         });
 
         it('should initialize properties correctly', () => {
-            component.promptLabel = 'Custom prompt';
-            component.weakLabel = 'Custom weak';
-            component.mediumLabel = 'Custom medium';
-            component.strongLabel = 'Custom strong';
-            component.inputId = 'pwd-input';
-            component.placeholder = 'Password placeholder';
+            fixture.componentRef.setInput('promptLabel', 'Custom prompt');
+            fixture.componentRef.setInput('weakLabel', 'Custom weak');
+            fixture.componentRef.setInput('mediumLabel', 'Custom medium');
+            fixture.componentRef.setInput('strongLabel', 'Custom strong');
+            fixture.componentRef.setInput('inputId', 'pwd-input');
+            fixture.componentRef.setInput('placeholder', 'Password placeholder');
 
             fixture.detectChanges();
 
-            expect(component.promptLabel).toBe('Custom prompt');
-            expect(component.weakLabel).toBe('Custom weak');
-            expect(component.mediumLabel).toBe('Custom medium');
-            expect(component.strongLabel).toBe('Custom strong');
-            expect(component.inputId).toBe('pwd-input');
-            expect(component.placeholder).toBe('Password placeholder');
+            expect(component.promptLabel()).toBe('Custom prompt');
+            expect(component.weakLabel()).toBe('Custom weak');
+            expect(component.mediumLabel()).toBe('Custom medium');
+            expect(component.strongLabel()).toBe('Custom strong');
+            expect(component.inputId()).toBe('pwd-input');
+            expect(component.placeholder()).toBe('Password placeholder');
         });
 
         it('should initialize regex patterns', () => {
             component.ngOnInit();
 
-            expect(component.mediumCheckRegExp).toBeInstanceOf(RegExp);
-            expect(component.strongCheckRegExp).toBeInstanceOf(RegExp);
+            expect(component.mediumCheckRegExp()).toBeInstanceOf(RegExp);
+            expect(component.strongCheckRegExp()).toBeInstanceOf(RegExp);
         });
     });
 
@@ -340,8 +340,8 @@ describe('Password', () => {
         });
 
         it('should handle custom regex patterns', () => {
-            component.mediumRegex = '^(?=.{4,})';
-            component.strongRegex = '^(?=.{8,})';
+            fixture.componentRef.setInput('mediumRegex', '^(?=.{4,})');
+            fixture.componentRef.setInput('strongRegex', '^(?=.{8,})');
             component.ngOnInit();
 
             expect(component.testStrength('abc')).toBe(1);
@@ -358,44 +358,44 @@ describe('Password', () => {
         it('should update UI for empty value', () => {
             component.updateUI('');
 
-            expect(component.meter).toBeNull();
-            expect(component.infoText).toBe(component.promptText());
+            expect(component.meter()).toBeNull();
+            expect(component.infoText()).toBe(component.promptText());
         });
 
         it('should update UI for weak password', () => {
             component.updateUI('abc');
 
-            expect(component.meter?.strength).toBe('weak');
-            expect(component.meter?.width).toBe('33.33%');
-            expect(component.infoText).toBe(component.weakText());
+            expect(component.meter()?.strength).toBe('weak');
+            expect(component.meter()?.width).toBe('33.33%');
+            expect(component.infoText()).toBe(component.weakText());
         });
 
         it('should update UI for medium password', () => {
             component.updateUI('abcDEF');
 
-            expect(component.meter?.strength).toBe('medium');
-            expect(component.meter?.width).toBe('66.66%');
-            expect(component.infoText).toBe(component.mediumText());
+            expect(component.meter()?.strength).toBe('medium');
+            expect(component.meter()?.width).toBe('66.66%');
+            expect(component.infoText()).toBe(component.mediumText());
         });
 
         it('should update UI for strong password', () => {
             component.updateUI('abcDEF123');
 
-            expect(component.meter?.strength).toBe('strong');
-            expect(component.meter?.width).toBe('100%');
-            expect(component.infoText).toBe(component.strongText());
+            expect(component.meter()?.strength).toBe('strong');
+            expect(component.meter()?.width).toBe('100%');
+            expect(component.infoText()).toBe(component.strongText());
         });
     });
 
     describe('Public Methods', () => {
         it('should toggle mask visibility', () => {
-            expect(component.unmasked).toBe(false);
+            expect(component.unmasked()).toBe(false);
 
             component.onMaskToggle();
-            expect(component.unmasked).toBe(true);
+            expect(component.unmasked()).toBe(true);
 
             component.onMaskToggle();
-            expect(component.unmasked).toBe(false);
+            expect(component.unmasked()).toBe(false);
         });
 
         it('should clear password value', () => {
@@ -403,31 +403,38 @@ describe('Password', () => {
             vi.spyOn(component, 'writeValue').mockImplementation(() => {});
             vi.spyOn(component.onClear, 'emit').mockImplementation(() => {});
 
-            component.value = 'password123';
+            component.value.set('password123');
             component.clear();
 
-            expect(component.value).toBeNull();
+            expect(component.value()).toBeNull();
             expect(component.onModelChange).toHaveBeenCalledWith(null);
             expect(component.writeValue).toHaveBeenCalledWith(null);
             expect(component.onClear.emit).toHaveBeenCalled();
         });
 
-        it('should return correct input type', () => {
-            expect(component.inputType(false)).toBe('password');
-            expect(component.inputType(true)).toBe('text');
+        it('should render the input type from the unmasked state', async () => {
+            fixture.detectChanges();
+            await fixture.whenStable();
+            const inputEl = fixture.debugElement.query(By.css('input'));
+            expect(inputEl.nativeElement.getAttribute('type')).toBe('password');
+
+            component.unmasked.set(true);
+            fixture.detectChanges();
+            await fixture.whenStable();
+            expect(inputEl.nativeElement.getAttribute('type')).toBe('text');
         });
 
         it('should get translation texts', () => {
-            component.promptLabel = 'Custom prompt';
+            fixture.componentRef.setInput('promptLabel', 'Custom prompt');
             expect(component.promptText()).toBe('Custom prompt');
 
-            component.weakLabel = 'Custom weak';
+            fixture.componentRef.setInput('weakLabel', 'Custom weak');
             expect(component.weakText()).toBe('Custom weak');
 
-            component.mediumLabel = 'Custom medium';
+            fixture.componentRef.setInput('mediumLabel', 'Custom medium');
             expect(component.mediumText()).toBe('Custom medium');
 
-            component.strongLabel = 'Custom strong';
+            fixture.componentRef.setInput('strongLabel', 'Custom strong');
             expect(component.strongText()).toBe('Custom strong');
         });
     });
@@ -505,7 +512,7 @@ describe('Password', () => {
                 testFixture.detectChanges();
                 await testFixture.whenStable();
 
-                expect(passwordComponent.overlayVisible).toBe(true);
+                expect(passwordComponent.overlayVisible()).toBe(true);
             } else {
                 expect(true).toBe(true); // Placeholder expectation when input not found
             }
@@ -516,7 +523,7 @@ describe('Password', () => {
             testFixture.detectChanges();
 
             const passwordComponent = testFixture.debugElement.query(By.css('p-password')).componentInstance;
-            passwordComponent.overlayVisible = true;
+            passwordComponent.overlayVisible.set(true);
 
             const inputEl = testFixture.debugElement.query(By.css('input'));
             if (inputEl?.nativeElement) {
@@ -527,7 +534,7 @@ describe('Password', () => {
             testFixture.detectChanges();
             await testFixture.whenStable();
 
-            expect(passwordComponent.overlayVisible).toBe(false);
+            expect(passwordComponent.overlayVisible()).toBe(false);
         });
 
         it('should handle clear button click', async () => {
@@ -561,7 +568,7 @@ describe('Password', () => {
             if (showIcon?.nativeElement) {
                 showIcon.nativeElement.dispatchEvent(new Event('click'));
                 testFixture.detectChanges();
-                expect(passwordComponent.unmasked).toBe(true);
+                expect(passwordComponent.unmasked()).toBe(true);
             } else {
                 expect(true).toBe(true); // Placeholder expectation when button not found
             }
@@ -587,19 +594,19 @@ describe('Password', () => {
             testFixture.detectChanges();
             await testFixture.whenStable();
 
-            expect(passwordComponent.overlayVisible).toBe(true);
+            expect(passwordComponent.overlayVisible()).toBe(true);
         });
 
         it('should hide overlay on blur when feedback is enabled', async () => {
             const passwordComponent = testFixture.debugElement.query(By.css('p-password')).componentInstance;
             const inputEl = testFixture.debugElement.query(By.css('input'));
 
-            passwordComponent.overlayVisible = true;
+            passwordComponent.overlayVisible.set(true);
             inputEl.nativeElement.dispatchEvent(new Event('blur'));
             testFixture.detectChanges();
             await testFixture.whenStable();
 
-            expect(passwordComponent.overlayVisible).toBe(false);
+            expect(passwordComponent.overlayVisible()).toBe(false);
         });
 
         it('should not show overlay when feedback is disabled', async () => {
@@ -615,7 +622,7 @@ describe('Password', () => {
             testFixture.detectChanges();
             await testFixture.whenStable();
 
-            expect(passwordComponent.overlayVisible).toBe(false);
+            expect(passwordComponent.overlayVisible()).toBe(false);
         });
     });
 
@@ -1071,8 +1078,8 @@ describe('Password', () => {
 
         it('should handle invalid regex patterns gracefully', () => {
             expect(() => {
-                component.mediumRegex = '[invalid regex';
-                component.ngOnInit();
+                fixture.componentRef.setInput('mediumRegex', '[invalid regex');
+                component.testStrength('abc');
             }).toThrow();
         });
 
@@ -1093,10 +1100,10 @@ describe('Password', () => {
             vi.spyOn(component, 'updateUI').mockImplementation(() => {});
             const mockSetValue = vi.fn();
 
-            component.feedback = true;
+            fixture.componentRef.setInput('feedback', true);
             component.writeControlValue('testPassword', mockSetValue);
 
-            expect(component.value).toBe('testPassword');
+            expect(component.value()).toBe('testPassword');
             expect(mockSetValue).toHaveBeenCalledWith('testPassword');
             expect(component.updateUI).toHaveBeenCalledWith('testPassword');
             expect(component.cd.markForCheck).toHaveBeenCalled();
@@ -1117,21 +1124,21 @@ describe('Password', () => {
 
     describe('Input Properties', () => {
         it('should handle maxLength property', () => {
-            component.maxLength = 20;
-            expect(component.maxLength).toBe(20);
+            fixture.componentRef.setInput('maxLength', 20);
+            expect(component.maxLength()).toBe(20);
         });
 
         it('should handle transition options', () => {
-            component.showTransitionOptions = '.2s ease-in';
-            component.hideTransitionOptions = '.1s ease-out';
+            fixture.componentRef.setInput('showTransitionOptions', '.2s ease-in');
+            fixture.componentRef.setInput('hideTransitionOptions', '.1s ease-out');
 
-            expect(component.showTransitionOptions).toBe('.2s ease-in');
-            expect(component.hideTransitionOptions).toBe('.1s ease-out');
+            expect(component.showTransitionOptions()).toBe('.2s ease-in');
+            expect(component.hideTransitionOptions()).toBe('.1s ease-out');
         });
 
         it('should handle autocomplete attribute', () => {
-            component.autocomplete = 'new-password';
-            expect(component.autocomplete).toBe('new-password');
+            fixture.componentRef.setInput('autocomplete', 'new-password');
+            expect(component.autocomplete()).toBe('new-password');
         });
     });
 
@@ -1170,7 +1177,7 @@ describe('Password', () => {
         });
 
         it('should handle rapid UI updates efficiently', async () => {
-            component.feedback = true;
+            fixture.componentRef.setInput('feedback', true);
             const passwords = ['a', 'aB', 'aB1', 'aB1!', 'aB1!cD2@'];
 
             const startTime = performance.now();
@@ -1187,10 +1194,10 @@ describe('Password', () => {
 
     describe('Internationalization Tests', () => {
         it('should handle RTL languages', () => {
-            component.promptLabel = 'أدخل كلمة مرور';
-            component.weakLabel = 'ضعيف';
-            component.mediumLabel = 'متوسط';
-            component.strongLabel = 'قوي';
+            fixture.componentRef.setInput('promptLabel', 'أدخل كلمة مرور');
+            fixture.componentRef.setInput('weakLabel', 'ضعيف');
+            fixture.componentRef.setInput('mediumLabel', 'متوسط');
+            fixture.componentRef.setInput('strongLabel', 'قوي');
 
             expect(component.promptText()).toBe('أدخل كلمة مرور');
             expect(component.weakText()).toBe('ضعيف');
@@ -1222,8 +1229,8 @@ describe('Password', () => {
 
             malformedPatterns.forEach((pattern) => {
                 expect(() => {
-                    component.mediumRegex = pattern;
-                    component.ngOnInit();
+                    fixture.componentRef.setInput('mediumRegex', pattern);
+                    component.testStrength('abc');
                 }).toThrow();
             });
         });
@@ -1294,11 +1301,11 @@ describe('PasswordDirective', () => {
         });
 
         it('should have default values', () => {
-            expect(directive.promptLabel).toBe('Enter a password');
-            expect(directive.weakLabel).toBe('Weak');
-            expect(directive.mediumLabel).toBe('Medium');
-            expect(directive.strongLabel).toBe('Strong');
-            expect(directive.feedback).toBe(true);
+            expect(directive.promptLabel()).toBe('Enter a password');
+            expect(directive.weakLabel()).toBe('Weak');
+            expect(directive.mediumLabel()).toBe('Medium');
+            expect(directive.strongLabel()).toBe('Strong');
+            expect(directive.feedback()).toBe(true);
         });
     });
 
@@ -1554,7 +1561,7 @@ describe('PasswordDirective', () => {
                 ptComponent.feedback = true;
                 ptComponent.pt = {
                     host: ({ instance }) => {
-                        if ((instance as any)?.feedback === true) {
+                        if ((instance as any)?.feedback?.() === true) {
                             return { class: 'DIRECTIVE_FEEDBACK_CLASS' };
                         }
                         return { class: 'DIRECTIVE_NO_FEEDBACK_CLASS' };
@@ -1845,7 +1852,7 @@ describe('Password Integration Tests', () => {
         testFixture.detectChanges();
         await testFixture.whenStable();
 
-        expect(passwordComponent.overlayVisible).toBe(true);
+        expect(passwordComponent.overlayVisible()).toBe(true);
 
         // Test keyup (should update strength)
         const keyupEvent = new KeyboardEvent('keyup');
@@ -1854,15 +1861,15 @@ describe('Password Integration Tests', () => {
         testFixture.detectChanges();
         await testFixture.whenStable();
 
-        expect(passwordComponent.meter?.strength).toBe('strong');
-        expect(passwordComponent.infoText).toBe(passwordComponent.strongText());
+        expect(passwordComponent.meter()?.strength).toBe('strong');
+        expect(passwordComponent.infoText()).toBe(passwordComponent.strongText());
 
         // Test toggle mask
         const showIcon = testFixture.debugElement.query(By.css('[data-pc-section="showIcon"]'));
         if (showIcon?.nativeElement) {
             showIcon.nativeElement.dispatchEvent(new Event('click'));
             testFixture.detectChanges();
-            expect(passwordComponent.unmasked).toBe(true);
+            expect(passwordComponent.unmasked()).toBe(true);
         }
 
         // Test blur (should hide overlay)
@@ -1870,7 +1877,7 @@ describe('Password Integration Tests', () => {
         testFixture.detectChanges();
         await testFixture.whenStable();
 
-        expect(passwordComponent.overlayVisible).toBe(false);
+        expect(passwordComponent.overlayVisible()).toBe(false);
     });
 });
 
@@ -2071,7 +2078,7 @@ describe('Password PassThrough Tests', () => {
             let instanceAccessed = false;
             component.pt = {
                 root: ({ instance }) => {
-                    if ((instance as any)?.value === 'testPassword') {
+                    if ((instance as any)?.value() === 'testPassword') {
                         instanceAccessed = true;
                     }
                     return { class: 'INSTANCE_ROOT_CLASS' };
@@ -2089,7 +2096,7 @@ describe('Password PassThrough Tests', () => {
             let feedbackAccessed = false;
             component.pt = {
                 root: ({ instance }) => {
-                    if ((instance as any)?.feedback === true) {
+                    if ((instance as any)?.feedback() === true) {
                         feedbackAccessed = true;
                     }
                     return { class: 'FEEDBACK_CLASS' };
@@ -2109,7 +2116,7 @@ describe('Password PassThrough Tests', () => {
             component.pt = {
                 overlay: ({ instance }) => {
                     overlayCallbackExecuted = true;
-                    const hasValue = !!(instance as any)?.value;
+                    const hasValue = !!(instance as any)?.value();
                     return {
                         class: {
                             HAS_VALUE: hasValue,

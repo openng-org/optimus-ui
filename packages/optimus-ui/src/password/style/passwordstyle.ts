@@ -61,7 +61,7 @@ const classes = {
         {
             'p-inputwrapper-filled': instance.$filled(),
             'p-variant-filled': instance.$variant() === 'filled',
-            'p-inputwrapper-focus': instance.focused,
+            'p-inputwrapper-focus': instance.focused(),
             'p-password-fluid': instance.hasFluid
         }
     ],
@@ -79,7 +79,7 @@ const classes = {
     overlay: 'p-password-overlay p-component',
     content: 'p-password-content',
     meter: 'p-password-meter',
-    meterLabel: ({ instance }) => `p-password-meter-label ${instance.meter ? 'p-password-meter-' + instance.meter.strength : ''}`,
+    meterLabel: ({ instance }) => `p-password-meter-label ${instance.meter() ? 'p-password-meter-' + instance.meter().strength : ''}`,
     meterText: 'p-password-meter-text',
     clearIcon: 'p-password-clear-icon'
 };
