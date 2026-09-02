@@ -65,8 +65,8 @@ describe('KeyFilter', () => {
         });
 
         it('should have default regex pattern', () => {
-            expect(directive.regex).toBeTruthy();
-            expect(directive.regex.toString()).toBe('/./');
+            expect(directive.regex()).toBeTruthy();
+            expect(directive.regex().toString()).toBe('/./');
         });
 
         it('should initialize with browser platform detection', () => {
@@ -86,95 +86,95 @@ describe('KeyFilter', () => {
             testComponent.pattern = customRegex;
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe(customRegex);
-            expect(directive.regex).toBe(customRegex);
+            expect(directive.pattern()).toBe(customRegex);
+            expect(directive.regex()).toBe(customRegex);
         });
 
         it('should recognize pint pattern', () => {
             testComponent.pattern = 'pint';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('pint');
-            expect(directive.regex.toString()).toBe('/^[\\d]*$/');
+            expect(directive.pattern()).toBe('pint');
+            expect(directive.regex().toString()).toBe('/^[\\d]*$/');
         });
 
         it('should recognize int pattern', () => {
             testComponent.pattern = 'int';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('int');
-            expect(directive.regex.toString()).toBe('/^[-]?[\\d]*$/');
+            expect(directive.pattern()).toBe('int');
+            expect(directive.regex().toString()).toBe('/^[-]?[\\d]*$/');
         });
 
         it('should recognize pnum pattern', () => {
             testComponent.pattern = 'pnum';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('pnum');
-            expect(directive.regex.toString()).toBe('/^[\\d\\.]*$/');
+            expect(directive.pattern()).toBe('pnum');
+            expect(directive.regex().toString()).toBe('/^[\\d\\.]*$/');
         });
 
         it('should recognize money pattern', () => {
             testComponent.pattern = 'money';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('money');
-            expect(directive.regex.toString()).toBe('/^[\\d\\.\\s,]*$/');
+            expect(directive.pattern()).toBe('money');
+            expect(directive.regex().toString()).toBe('/^[\\d\\.\\s,]*$/');
         });
 
         it('should recognize num pattern', () => {
             testComponent.pattern = 'num';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('num');
-            expect(directive.regex.toString()).toBe('/^[-]?[\\d\\.]*$/');
+            expect(directive.pattern()).toBe('num');
+            expect(directive.regex().toString()).toBe('/^[-]?[\\d\\.]*$/');
         });
 
         it('should recognize hex pattern', () => {
             testComponent.pattern = 'hex';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('hex');
-            expect(directive.regex.toString()).toBe('/^[0-9a-f]*$/i');
+            expect(directive.pattern()).toBe('hex');
+            expect(directive.regex().toString()).toBe('/^[0-9a-f]*$/i');
         });
 
         it('should recognize email pattern', () => {
             testComponent.pattern = 'email';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('email');
-            expect(directive.regex.toString()).toBe('/^[a-z0-9_\\.\\-@]*$/i');
+            expect(directive.pattern()).toBe('email');
+            expect(directive.regex().toString()).toBe('/^[a-z0-9_\\.\\-@]*$/i');
         });
 
         it('should recognize alpha pattern', () => {
             testComponent.pattern = 'alpha';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('alpha');
-            expect(directive.regex.toString()).toBe('/^[a-z_]*$/i');
+            expect(directive.pattern()).toBe('alpha');
+            expect(directive.regex().toString()).toBe('/^[a-z_]*$/i');
         });
 
         it('should recognize alphanum pattern', () => {
             testComponent.pattern = 'alphanum';
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe('alphanum');
-            expect(directive.regex.toString()).toBe('/^[a-z0-9_]*$/i');
+            expect(directive.pattern()).toBe('alphanum');
+            expect(directive.regex().toString()).toBe('/^[a-z0-9_]*$/i');
         });
 
         it('should use default regex for unknown pattern', () => {
             testComponent.pattern = 'unknown' as KeyFilterPattern;
             fixture.detectChanges();
 
-            expect(directive.regex.toString()).toBe('/./');
+            expect(directive.regex().toString()).toBe('/./');
         });
 
         it('should handle null pattern', () => {
             testComponent.pattern = null as any;
             fixture.detectChanges();
 
-            expect(directive.pattern).toBe(null);
-            expect(directive.regex.toString()).toBe('/./');
+            expect(directive.pattern()).toBe(null);
+            expect(directive.regex().toString()).toBe('/./');
         });
     });
 
