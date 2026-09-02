@@ -252,25 +252,25 @@ describe('Galleria', () => {
         });
 
         it('should have default values', () => {
-            expect(galleriaInstance.activeIndex).toBe(0);
-            expect(galleriaInstance.fullScreen).toBe(false);
-            expect(galleriaInstance.numVisible).toBe(3);
-            expect(galleriaInstance.showItemNavigators).toBe(false);
-            expect(galleriaInstance.showThumbnailNavigators).toBe(true);
-            expect(galleriaInstance.showItemNavigatorsOnHover).toBe(false);
-            expect(galleriaInstance.changeItemOnIndicatorHover).toBe(false);
-            expect(galleriaInstance.circular).toBe(false);
-            expect(galleriaInstance.autoPlay).toBe(false);
-            expect(galleriaInstance.shouldStopAutoplayByClick).toBe(true);
-            expect(galleriaInstance.transitionInterval).toBe(4000);
-            expect(galleriaInstance.showThumbnails).toBe(true);
-            expect(galleriaInstance.thumbnailsPosition).toBe('bottom');
-            expect(galleriaInstance.verticalThumbnailViewPortHeight).toBe('300px');
-            expect(galleriaInstance.showIndicators).toBe(false);
-            expect(galleriaInstance.showIndicatorsOnItem).toBe(false);
-            expect(galleriaInstance.indicatorsPosition).toBe('bottom');
-            expect(galleriaInstance.baseZIndex).toBe(0);
-            expect(galleriaInstance.visible).toBe(false);
+            expect(galleriaInstance.$activeIndex()).toBe(0);
+            expect(galleriaInstance.fullScreen()).toBe(false);
+            expect(galleriaInstance.numVisible()).toBe(3);
+            expect(galleriaInstance.showItemNavigators()).toBe(false);
+            expect(galleriaInstance.showThumbnailNavigators()).toBe(true);
+            expect(galleriaInstance.showItemNavigatorsOnHover()).toBe(false);
+            expect(galleriaInstance.changeItemOnIndicatorHover()).toBe(false);
+            expect(galleriaInstance.circular()).toBe(false);
+            expect(galleriaInstance.autoPlay()).toBe(false);
+            expect(galleriaInstance.shouldStopAutoplayByClick()).toBe(true);
+            expect(galleriaInstance.transitionInterval()).toBe(4000);
+            expect(galleriaInstance.showThumbnails()).toBe(true);
+            expect(galleriaInstance.thumbnailsPosition()).toBe('bottom');
+            expect(galleriaInstance.verticalThumbnailViewPortHeight()).toBe('300px');
+            expect(galleriaInstance.showIndicators()).toBe(false);
+            expect(galleriaInstance.showIndicatorsOnItem()).toBe(false);
+            expect(galleriaInstance.indicatorsPosition()).toBe('bottom');
+            expect(galleriaInstance.baseZIndex()).toBe(0);
+            expect(galleriaInstance.$visible()).toBe(false);
         });
 
         it('should accept input values', async () => {
@@ -286,20 +286,20 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.activeIndex).toBe(2);
-            expect(galleriaInstance.fullScreen).toBe(true);
-            expect(galleriaInstance.numVisible).toBe(5);
-            expect(galleriaInstance.showItemNavigators).toBe(true);
-            expect(galleriaInstance.circular).toBe(true);
-            expect(galleriaInstance.autoPlay).toBe(true);
-            expect(galleriaInstance.transitionInterval).toBe(2000);
-            expect(galleriaInstance.showIndicators).toBe(true);
-            expect(galleriaInstance.baseZIndex).toBe(1000);
+            expect(galleriaInstance.$activeIndex()).toBe(2);
+            expect(galleriaInstance.fullScreen()).toBe(true);
+            expect(galleriaInstance.numVisible()).toBe(5);
+            expect(galleriaInstance.showItemNavigators()).toBe(true);
+            expect(galleriaInstance.circular()).toBe(true);
+            expect(galleriaInstance.autoPlay()).toBe(true);
+            expect(galleriaInstance.transitionInterval()).toBe(2000);
+            expect(galleriaInstance.showIndicators()).toBe(true);
+            expect(galleriaInstance.baseZIndex()).toBe(1000);
         });
 
         it('should initialize with value array', () => {
-            expect(galleriaInstance.value).toEqual(mockImages);
-            expect(galleriaInstance.value?.length).toBe(5);
+            expect(galleriaInstance.value()).toEqual(mockImages);
+            expect(galleriaInstance.value()?.length).toBe(5);
         });
 
         it('should set numVisibleLimit when value length is less than numVisible', async () => {
@@ -308,7 +308,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.numVisibleLimit).toBe(2);
+            expect(galleriaInstance.numVisibleLimit()).toBe(2);
         });
     });
 
@@ -327,21 +327,23 @@ describe('Galleria', () => {
         });
 
         it('should handle activeIndex getter and setter', () => {
-            galleriaInstance.activeIndex = 3;
-            expect(galleriaInstance.activeIndex).toBe(3);
+            galleriaInstance.$activeIndex.set(3);
+            expect(galleriaInstance.$activeIndex()).toBe(3);
         });
 
         it('should handle visible getter and setter', () => {
-            galleriaInstance.visible = true;
-            expect(galleriaInstance.visible).toBe(true);
-            expect(galleriaInstance.maskVisible).toBe(true);
+            galleriaInstance.$visible.set(true);
+            fixture.detectChanges();
+            expect(galleriaInstance.$visible()).toBe(true);
+            expect(galleriaInstance.maskVisible()).toBe(true);
         });
 
         it('should handle mask visibility correctly', () => {
-            expect(galleriaInstance.maskVisible).toBe(false);
+            expect(galleriaInstance.maskVisible()).toBe(false);
 
-            galleriaInstance.visible = true;
-            expect(galleriaInstance.maskVisible).toBe(true);
+            galleriaInstance.$visible.set(true);
+            fixture.detectChanges();
+            expect(galleriaInstance.maskVisible()).toBe(true);
         });
     });
 
@@ -365,13 +367,13 @@ describe('Galleria', () => {
             galleriaInstance.onActiveItemChange(2);
 
             expect(component.onActiveIndexChange).toHaveBeenCalledWith(2);
-            expect(galleriaInstance.activeIndex).toBe(2);
+            expect(galleriaInstance.$activeIndex()).toBe(2);
         });
 
         it('should not emit activeIndexChange if index is same', () => {
             vi.spyOn(galleriaInstance.activeIndexChange, 'emit').mockImplementation(() => {});
 
-            galleriaInstance.activeIndex = 1;
+            galleriaInstance.$activeIndex.set(1);
             galleriaInstance.onActiveItemChange(1);
 
             expect(galleriaInstance.activeIndexChange.emit).not.toHaveBeenCalled();
@@ -383,7 +385,7 @@ describe('Galleria', () => {
             galleriaInstance.onMaskHide();
 
             expect(component.onVisibleChange).toHaveBeenCalledWith(false);
-            expect(galleriaInstance.visible).toBe(false);
+            expect(galleriaInstance.$visible()).toBe(false);
         });
 
         it('should handle onMaskHide with event target check', () => {
@@ -420,12 +422,12 @@ describe('Galleria', () => {
         });
 
         it('should enable fullScreen mode', () => {
-            expect(galleriaInstance.fullScreen).toBe(true);
+            expect(galleriaInstance.fullScreen()).toBe(true);
         });
 
         it('should show mask when in fullScreen and visible', () => {
-            expect(galleriaInstance.visible).toBe(true);
-            expect(galleriaInstance.maskVisible).toBe(true);
+            expect(galleriaInstance.$visible()).toBe(true);
+            expect(galleriaInstance.maskVisible()).toBe(true);
         });
 
         it('should render fullScreen template structure', () => {
@@ -452,13 +454,13 @@ describe('Galleria', () => {
         });
 
         it('should enable autoPlay mode', () => {
-            expect(galleriaInstance.autoPlay).toBe(true);
-            expect(galleriaInstance.circular).toBe(true);
-            expect(galleriaInstance.transitionInterval).toBe(1000);
+            expect(galleriaInstance.autoPlay()).toBe(true);
+            expect(galleriaInstance.circular()).toBe(true);
+            expect(galleriaInstance.transitionInterval()).toBe(1000);
         });
 
         it('should have shouldStopAutoplayByClick enabled by default', () => {
-            expect(galleriaInstance.shouldStopAutoplayByClick).toBe(true);
+            expect(galleriaInstance.shouldStopAutoplayByClick()).toBe(true);
         });
     });
 
@@ -477,12 +479,12 @@ describe('Galleria', () => {
         });
 
         it('should accept responsive options', () => {
-            expect(galleriaInstance.responsiveOptions).toEqual(component.responsiveOptions);
-            expect(galleriaInstance.responsiveOptions?.length).toBe(3);
+            expect(galleriaInstance.responsiveOptions()).toEqual(component.responsiveOptions);
+            expect(galleriaInstance.responsiveOptions()?.length).toBe(3);
         });
 
         it('should have correct breakpoints and numVisible values', () => {
-            const options = galleriaInstance.responsiveOptions!;
+            const options = galleriaInstance.responsiveOptions()!;
             expect(options[0].breakpoint).toBe('1024px');
             expect(options[0].numVisible).toBe(3);
             expect(options[1].breakpoint).toBe('768px');
@@ -507,13 +509,13 @@ describe('Galleria', () => {
         });
 
         it('should enable indicators and disable thumbnails', () => {
-            expect(galleriaInstance.showIndicators).toBe(true);
-            expect(galleriaInstance.showThumbnails).toBe(false);
+            expect(galleriaInstance.showIndicators()).toBe(true);
+            expect(galleriaInstance.showThumbnails()).toBe(false);
         });
 
         it('should use default indicator position', () => {
-            expect(galleriaInstance.indicatorsPosition).toBe('bottom');
-            expect(galleriaInstance.showIndicatorsOnItem).toBe(false);
+            expect(galleriaInstance.indicatorsPosition()).toBe('bottom');
+            expect(galleriaInstance.showIndicatorsOnItem()).toBe(false);
         });
     });
 
@@ -633,7 +635,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.maskClass).toBe('custom-mask-class');
+            expect(galleriaInstance.maskClass()).toBe('custom-mask-class');
         });
 
         it('should apply custom container class and style', async () => {
@@ -642,8 +644,8 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.containerClass).toBe('custom-container-class');
-            expect(galleriaInstance.containerStyle).toEqual({ width: '800px', height: '600px' });
+            expect(galleriaInstance.containerClass()).toBe('custom-container-class');
+            expect(galleriaInstance.containerStyle()).toEqual({ width: '800px', height: '600px' });
         });
 
         it('should apply custom transition options', async () => {
@@ -652,8 +654,8 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.showTransitionOptions).toBe('300ms ease-in');
-            expect(galleriaInstance.hideTransitionOptions).toBe('200ms ease-out');
+            expect(galleriaInstance.showTransitionOptions()).toBe('300ms ease-in');
+            expect(galleriaInstance.hideTransitionOptions()).toBe('200ms ease-out');
         });
 
         it('should have proper galleria root structure', () => {
@@ -683,7 +685,7 @@ describe('Galleria', () => {
                 component.thumbnailsPosition = position;
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
-                expect(galleriaInstance.thumbnailsPosition).toBe(position);
+                expect(galleriaInstance.thumbnailsPosition()).toBe(position);
             }
         });
 
@@ -694,7 +696,7 @@ describe('Galleria', () => {
                 component.indicatorsPosition = position;
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
-                expect(galleriaInstance.indicatorsPosition).toBe(position);
+                expect(galleriaInstance.indicatorsPosition()).toBe(position);
             }
         });
 
@@ -703,7 +705,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.verticalThumbnailViewPortHeight).toBe('400px');
+            expect(galleriaInstance.verticalThumbnailViewPortHeight()).toBe('400px');
         });
 
         it('should handle show indicators on item', async () => {
@@ -711,7 +713,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.showIndicatorsOnItem).toBe(true);
+            expect(galleriaInstance.showIndicatorsOnItem()).toBe(true);
         });
     });
 
@@ -796,7 +798,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.value).toEqual([]);
+            expect(galleriaInstance.value()).toEqual([]);
         });
 
         it('should handle null images', async () => {
@@ -804,7 +806,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.value).toBe(null as any);
+            expect(galleriaInstance.value()).toBe(null as any);
         });
 
         it('should handle single image', async () => {
@@ -812,24 +814,24 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.value?.length).toBe(1);
+            expect(galleriaInstance.value()?.length).toBe(1);
         });
 
         it('should handle activeIndex beyond bounds', () => {
-            galleriaInstance.activeIndex = 999;
-            expect(galleriaInstance.activeIndex).toBe(999); // Component should accept any value
+            galleriaInstance.$activeIndex.set(999);
+            expect(galleriaInstance.$activeIndex()).toBe(999); // Component should accept any value
         });
 
         it('should handle negative activeIndex', () => {
-            galleriaInstance.activeIndex = -1;
-            expect(galleriaInstance.activeIndex).toBe(-1);
+            galleriaInstance.$activeIndex.set(-1);
+            expect(galleriaInstance.$activeIndex()).toBe(-1);
         });
 
         it('should handle undefined id', () => {
             component.id = undefined as any;
             fixture.detectChanges();
 
-            expect(galleriaInstance.id).toBeUndefined();
+            expect(galleriaInstance.id()).toBeUndefined();
         });
 
         it('should handle custom id', async () => {
@@ -837,7 +839,7 @@ describe('Galleria', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(galleriaInstance.id).toBe('custom-galleria-id');
+            expect(galleriaInstance.id()).toBe('custom-galleria-id');
         });
 
         it('should handle animation events with missing elements', () => {
@@ -892,7 +894,7 @@ describe('Galleria', () => {
                 }
             });
 
-            expect(galleriaInstance.numVisibleLimit).toBe(2);
+            expect(galleriaInstance.numVisibleLimit()).toBe(2);
         });
 
         it('should reset numVisibleLimit when value is sufficient', async () => {
@@ -910,7 +912,7 @@ describe('Galleria', () => {
                 }
             });
 
-            expect(galleriaInstance.numVisibleLimit).toBe(0);
+            expect(galleriaInstance.numVisibleLimit()).toBe(0);
         });
     });
 
@@ -1350,7 +1352,7 @@ describe('GalleriaContent', () => {
         await TestBed.resetTestingModule();
         await TestBed.configureTestingModule({
             imports: [CommonModule, GalleriaModule, SharedModule, PrimeTemplate],
-            providers: [provideZonelessChangeDetection(), { provide: Galleria, useValue: {} as unknown as Galleria }]
+            providers: [provideZonelessChangeDetection(), { provide: Galleria, useValue: { id: () => undefined } as unknown as Galleria }]
         }).compileComponents();
     });
 
@@ -1378,19 +1380,19 @@ describe('GalleriaContent', () => {
     it('should emit activeItemChange when onActiveIndexChange is called with a new index', () => {
         const fixture = TestBed.createComponent(GalleriaContent);
         const instance = fixture.componentInstance;
-        instance.activeIndex = 0;
+        fixture.componentRef.setInput('activeIndex', 0);
 
         vi.spyOn(instance.activeItemChange, 'emit');
         instance.onActiveIndexChange(3);
 
         expect(instance.activeItemChange.emit).toHaveBeenCalledWith(3);
-        expect(instance.activeIndex).toBe(3);
+        expect(instance.$activeIndex()).toBe(3);
     });
 
     it('should not emit activeItemChange when onActiveIndexChange is called with the same index', () => {
         const fixture = TestBed.createComponent(GalleriaContent);
         const instance = fixture.componentInstance;
-        instance.activeIndex = 2;
+        fixture.componentRef.setInput('activeIndex', 2);
 
         vi.spyOn(instance.activeItemChange, 'emit');
         instance.onActiveIndexChange(2);
@@ -1400,23 +1402,45 @@ describe('GalleriaContent', () => {
 });
 
 describe('GalleriaItem', () => {
+    // A minimal Galleria stand-in that supports rendering GalleriaItem (and its ItemSlot child)
+    // when effects need to be flushed via change detection.
+    const galleriaMock = {
+        config: { translation: {} },
+        templates: () => [],
+        headerTemplate: () => undefined,
+        footerTemplate: () => undefined,
+        indicatorTemplate: () => undefined,
+        captionTemplate: () => undefined,
+        _itemTemplate: () => undefined,
+        itemTemplate: () => undefined,
+        _thumbnailTemplate: () => undefined,
+        thumbnailTemplate: () => undefined,
+        captionFacet: () => undefined,
+        indicatorFacet: () => undefined,
+        itemPreviousIconTemplate: () => undefined,
+        _itemPreviousIconTemplate: () => undefined,
+        itemNextIconTemplate: () => undefined,
+        _itemNextIconTemplate: () => undefined
+    } as unknown as Galleria;
+
     beforeEach(async () => {
         await TestBed.resetTestingModule();
         await TestBed.configureTestingModule({
             imports: [CommonModule, GalleriaModule, SharedModule, PrimeTemplate],
-            providers: [provideZonelessChangeDetection(), { provide: Galleria, useValue: {} as unknown as Galleria }]
+            providers: [provideZonelessChangeDetection(), { provide: Galleria, useValue: galleriaMock }]
         }).compileComponents();
     });
 
-    function createInstance() {
-        return TestBed.createComponent(GalleriaItem).componentInstance;
+    function createFixture() {
+        return TestBed.createComponent(GalleriaItem);
     }
 
     it('should emit onActiveIndexChange when navigating to the next item', () => {
-        const instance = createInstance();
-        instance.value = mockImages;
-        instance.activeIndex = 0;
-        instance.circular = false;
+        const fixture = createFixture();
+        const instance = fixture.componentInstance;
+        fixture.componentRef.setInput('value', mockImages);
+        fixture.componentRef.setInput('activeIndex', 0);
+        fixture.componentRef.setInput('circular', false);
 
         vi.spyOn(instance.onActiveIndexChange, 'emit');
         instance.next();
@@ -1424,20 +1448,23 @@ describe('GalleriaItem', () => {
         expect(instance.onActiveIndexChange.emit).toHaveBeenCalledWith(1);
     });
 
-    it('should emit startSlideShow when autoPlay changes to true', () => {
-        const instance = createInstance();
+    it('should emit startSlideShow when autoPlay is enabled (former ngOnChanges behavior)', () => {
+        const fixture = createFixture();
+        const instance = fixture.componentInstance;
+        fixture.componentRef.setInput('value', []);
+        fixture.componentRef.setInput('showIndicators', false);
 
         vi.spyOn(instance.startSlideShow, 'emit');
-        instance.onChanges({
-            autoPlay: { currentValue: true, previousValue: false, firstChange: true, isFirstChange: () => true }
-        } as any);
+        fixture.componentRef.setInput('autoPlay', true);
+        fixture.detectChanges();
 
         expect(instance.startSlideShow.emit).toHaveBeenCalledWith(undefined);
     });
 
     it('should emit stopSlideShow via stopTheSlideShow when the slideshow is active', () => {
-        const instance = createInstance();
-        instance.slideShowActive = true;
+        const fixture = createFixture();
+        const instance = fixture.componentInstance;
+        fixture.componentRef.setInput('slideShowActive', true);
 
         vi.spyOn(instance.stopSlideShow, 'emit');
         instance.stopTheSlideShow();
@@ -1455,14 +1482,15 @@ describe('GalleriaThumbnails', () => {
         }).compileComponents();
     });
 
-    function createInstance() {
-        return TestBed.createComponent(GalleriaThumbnails).componentInstance;
+    function createFixture() {
+        return TestBed.createComponent(GalleriaThumbnails);
     }
 
     it('should emit onActiveIndexChange when a thumbnail item is clicked', () => {
-        const instance = createInstance();
-        instance.value = mockImages;
-        instance.activeIndex = 0;
+        const fixture = createFixture();
+        const instance = fixture.componentInstance;
+        fixture.componentRef.setInput('value', mockImages);
+        fixture.componentRef.setInput('activeIndex', 0);
 
         vi.spyOn(instance.onActiveIndexChange, 'emit');
         instance.onItemClick(2);
@@ -1471,8 +1499,9 @@ describe('GalleriaThumbnails', () => {
     });
 
     it('should emit stopSlideShow via stopTheSlideShow when the slideshow is active', () => {
-        const instance = createInstance();
-        instance.slideShowActive = true;
+        const fixture = createFixture();
+        const instance = fixture.componentInstance;
+        fixture.componentRef.setInput('slideShowActive', true);
 
         vi.spyOn(instance.stopSlideShow, 'emit');
         instance.stopTheSlideShow();
