@@ -8,7 +8,7 @@ import { ScrollPanel } from './scrollpanel';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-scrollpanel [styleClass]="styleClass" [step]="step" style="width: 400px; height: 200px;">
+        <p-scrollpanel [class]="styleClass" [step]="step" style="width: 400px; height: 200px;">
             <div class="content-div" style="width: 800px; height: 600px; padding: 20px;">
                 <h2>Scrollable Content</h2>
                 <p>This is content that will cause scrollbars to appear.</p>
@@ -113,11 +113,11 @@ describe('ScrollPanel', () => {
             const fixture = TestBed.createComponent(ScrollPanel);
             const scrollPanelInstance = fixture.componentInstance;
 
-            expect(scrollPanelInstance.step).toBe(5);
+            expect(scrollPanelInstance.step()).toBe(5);
             expect(scrollPanelInstance.initialized).toBe(false);
-            expect(scrollPanelInstance.lastScrollLeft).toBe(0);
-            expect(scrollPanelInstance.lastScrollTop).toBe(0);
-            expect(scrollPanelInstance.orientation).toBe('vertical');
+            expect(scrollPanelInstance.lastScrollLeft()).toBe(0);
+            expect(scrollPanelInstance.lastScrollTop()).toBe(0);
+            expect(scrollPanelInstance.orientation()).toBe('vertical');
         });
 
         it('should accept custom step value', async () => {
@@ -126,7 +126,7 @@ describe('ScrollPanel', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(scrollPanel.step).toBe(10);
+            expect(scrollPanel.step()).toBe(10);
         });
 
         it('should generate unique content ID', () => {
@@ -245,8 +245,8 @@ describe('ScrollPanel', () => {
 
         it('should handle content scroll events', async () => {
             // Initialize with different values to trigger the update logic
-            scrollPanel.lastScrollLeft = 0;
-            scrollPanel.lastScrollTop = 0;
+            scrollPanel.lastScrollLeft.set(0);
+            scrollPanel.lastScrollTop.set(0);
 
             // First scroll event with scrollLeft change
             const scrollEvent1 = {
@@ -256,8 +256,8 @@ describe('ScrollPanel', () => {
                 }
             };
             scrollPanel.onScroll(scrollEvent1);
-            expect(scrollPanel.lastScrollLeft).toBe(100);
-            expect(scrollPanel.orientation).toBe('horizontal');
+            expect(scrollPanel.lastScrollLeft()).toBe(100);
+            expect(scrollPanel.orientation()).toBe('horizontal');
 
             // Second scroll event with scrollTop change (scrollLeft unchanged)
             const scrollEvent2 = {
@@ -270,9 +270,9 @@ describe('ScrollPanel', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(scrollPanel.lastScrollLeft).toBe(100);
-            expect(scrollPanel.lastScrollTop).toBe(150);
-            expect(scrollPanel.orientation).toBe('vertical');
+            expect(scrollPanel.lastScrollLeft()).toBe(100);
+            expect(scrollPanel.lastScrollTop()).toBe(150);
+            expect(scrollPanel.orientation()).toBe('vertical');
         });
 
         it('should update orientation based on scroll direction', () => {
@@ -284,12 +284,12 @@ describe('ScrollPanel', () => {
             };
 
             scrollPanel.onScroll(scrollEvent);
-            expect(scrollPanel.orientation).toBe('horizontal');
+            expect(scrollPanel.orientation()).toBe('horizontal');
 
             scrollEvent.target.scrollLeft = 100;
             scrollEvent.target.scrollTop = 50;
             scrollPanel.onScroll(scrollEvent);
-            expect(scrollPanel.orientation).toBe('vertical');
+            expect(scrollPanel.orientation()).toBe('vertical');
         });
 
         it('should programmatically scroll to top position', async () => {
@@ -332,7 +332,7 @@ describe('ScrollPanel', () => {
         });
 
         it('should handle arrow key navigation in vertical orientation', async () => {
-            scrollPanel.orientation = 'vertical';
+            scrollPanel.orientation.set('vertical');
 
             const yBar = fixture.debugElement.query(By.css('.p-scrollpanel-bar-y'));
             const arrowDownEvent = new KeyboardEvent('keydown', { code: 'ArrowDown' });
@@ -352,7 +352,7 @@ describe('ScrollPanel', () => {
         });
 
         it('should handle arrow key navigation in horizontal orientation', async () => {
-            scrollPanel.orientation = 'horizontal';
+            scrollPanel.orientation.set('horizontal');
 
             const arrowRightEvent = new KeyboardEvent('keydown', { code: 'ArrowRight' });
             const arrowLeftEvent = new KeyboardEvent('keydown', { code: 'ArrowLeft' });
@@ -387,16 +387,16 @@ describe('ScrollPanel', () => {
             const yBar = fixture.debugElement.query(By.css('.p-scrollpanel-bar-y'));
 
             scrollPanel.onFocus({ target: xBar.nativeElement });
-            expect(scrollPanel.orientation).toBe('horizontal');
+            expect(scrollPanel.orientation()).toBe('horizontal');
 
             scrollPanel.onFocus({ target: yBar.nativeElement });
-            expect(scrollPanel.orientation).toBe('vertical');
+            expect(scrollPanel.orientation()).toBe('vertical');
         });
 
         it('should reset orientation on blur', () => {
-            scrollPanel.orientation = 'horizontal';
+            scrollPanel.orientation.set('horizontal');
             scrollPanel.onBlur();
-            expect(scrollPanel.orientation).toBe('vertical');
+            expect(scrollPanel.orientation()).toBe('vertical');
         });
     });
 
@@ -615,8 +615,8 @@ describe('ScrollPanel', () => {
             const xBar = fixture.debugElement.query(By.css('.p-scrollpanel-bar-x'));
             const yBar = fixture.debugElement.query(By.css('.p-scrollpanel-bar-y'));
 
-            scrollPanel.lastScrollLeft = 50;
-            scrollPanel.lastScrollTop = 75;
+            scrollPanel.lastScrollLeft.set(50);
+            scrollPanel.lastScrollTop.set(75);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
@@ -645,8 +645,8 @@ describe('ScrollPanel', () => {
 
         it('should handle rapid scroll events', async () => {
             // Initialize with starting values
-            scrollPanel.lastScrollLeft = 0;
-            scrollPanel.lastScrollTop = 0;
+            scrollPanel.lastScrollLeft.set(0);
+            scrollPanel.lastScrollTop.set(0);
 
             // Due to if/else if logic, only one dimension updates per call
             // First, trigger horizontal scrolls
@@ -660,8 +660,8 @@ describe('ScrollPanel', () => {
                 scrollPanel.onScroll(scrollEvent);
             }
 
-            expect(scrollPanel.lastScrollLeft).toBe(100);
-            expect(scrollPanel.orientation).toBe('horizontal');
+            expect(scrollPanel.lastScrollLeft()).toBe(100);
+            expect(scrollPanel.orientation()).toBe('horizontal');
 
             // Then trigger vertical scrolls
             for (let i = 1; i <= 10; i++) {
@@ -674,8 +674,8 @@ describe('ScrollPanel', () => {
                 scrollPanel.onScroll(scrollEvent);
             }
 
-            expect(scrollPanel.lastScrollTop).toBe(150);
-            expect(scrollPanel.orientation).toBe('vertical');
+            expect(scrollPanel.lastScrollTop()).toBe(150);
+            expect(scrollPanel.orientation()).toBe('vertical');
 
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
@@ -686,19 +686,19 @@ describe('ScrollPanel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
-            expect(scrollPanel.step).toBe(0);
+            expect(scrollPanel.step()).toBe(0);
 
             component.step = 1000;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
-            expect(scrollPanel.step).toBe(1000);
+            expect(scrollPanel.step()).toBe(1000);
 
             component.step = -5;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
-            expect(scrollPanel.step).toBe(-5);
+            expect(scrollPanel.step()).toBe(-5);
         });
 
         it('should handle window resize during scrollbar operations', async () => {
@@ -954,17 +954,17 @@ describe('ScrollPanel', () => {
         it('should use instance variables in PT functions', async () => {
             ptScrollPanel = ptFixture.debugElement.query(By.directive(ScrollPanel)).componentInstance;
             ptScrollPanel.initialized = true;
-            ptScrollPanel.orientation = 'horizontal';
+            ptScrollPanel.orientation.set('horizontal');
 
             ptComponent.pt = {
                 root: ({ instance }) => ({
                     class: instance?.initialized ? 'INITIALIZED' : 'NOT_INITIALIZED'
                 }),
                 barX: ({ instance }) => {
-                    const bgColor = instance?.orientation === 'horizontal' ? 'yellow' : 'blue';
+                    const bgColor = instance?.orientation() === 'horizontal' ? 'yellow' : 'blue';
                     return {
                         class: 'INSTANCE_BAR',
-                        'data-orientation': instance?.orientation
+                        'data-orientation': instance?.orientation()
                     };
                 }
             };

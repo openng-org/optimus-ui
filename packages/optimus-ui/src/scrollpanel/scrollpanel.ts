@@ -1,5 +1,23 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, inject, InjectionToken, Input, NgModule, NgZone, numberAttribute, TemplateRef, ViewEncapsulation, viewChild, contentChild, contentChildren } from '@angular/core';
+import {
+    afterEveryRender,
+    afterNextRender,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    contentChild,
+    contentChildren,
+    ElementRef,
+    inject,
+    input,
+    NgModule,
+    NgZone,
+    numberAttribute,
+    signal,
+    TemplateRef,
+    viewChild,
+    ViewEncapsulation
+} from '@angular/core';
 import { addClass, getHeight, removeClass, uuid } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -7,8 +25,6 @@ import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import { ScrollPanelPassThrough } from '@openng/optimus-ui/types/scrollpanel';
 import { ScrollPanelStyle } from './style/scrollpanelstyle';
-
-const SCROLLPANEL_INSTANCE = new InjectionToken<ScrollPanel>('SCROLLPANEL_INSTANCE');
 
 /**
  * ScrollPanel is a cross browser, lightweight and themable alternative to native browser scrollbar.
@@ -21,10 +37,10 @@ const SCROLLPANEL_INSTANCE = new InjectionToken<ScrollPanel>('SCROLLPANEL_INSTAN
     template: `
         <div [pBind]="ptm('contentContainer')" [class]="cx('contentContainer')">
             <div #content [pBind]="ptm('content')" [class]="cx('content')" (mouseenter)="moveBar()" (scroll)="onScroll($event)">
-                @if (!contentTemplate() && !_contentTemplate) {
+                @if (!$contentTemplate()) {
                     <ng-content></ng-content>
                 }
-                <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="$contentTemplate()"></ng-container>
             </div>
         </div>
         <div
@@ -34,7 +50,7 @@ const SCROLLPANEL_INSTANCE = new InjectionToken<ScrollPanel>('SCROLLPANEL_INSTAN
             tabindex="0"
             role="scrollbar"
             [attr.aria-orientation]="'horizontal'"
-            [attr.aria-valuenow]="lastScrollLeft"
+            [attr.aria-valuenow]="lastScrollLeft()"
             [attr.aria-controls]="contentId"
             [attr.data-pc-group-section]="'bar'"
             (mousedown)="onXBarMouseDown($event)"
@@ -50,7 +66,7 @@ const SCROLLPANEL_INSTANCE = new InjectionToken<ScrollPanel>('SCROLLPANEL_INSTAN
             tabindex="0"
             role="scrollbar"
             [attr.aria-orientation]="'vertical'"
-            [attr.aria-valuenow]="lastScrollTop"
+            [attr.aria-valuenow]="lastScrollTop()"
             [attr.aria-controls]="contentId"
             (mousedown)="onYBarMouseDown($event)"
             (keydown)="onKeyDown($event)"
@@ -61,39 +77,31 @@ const SCROLLPANEL_INSTANCE = new InjectionToken<ScrollPanel>('SCROLLPANEL_INSTAN
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [ScrollPanelStyle, { provide: SCROLLPANEL_INSTANCE, useExisting: ScrollPanel }, { provide: PARENT_INSTANCE, useExisting: ScrollPanel }],
+    providers: [ScrollPanelStyle, { provide: PARENT_INSTANCE, useExisting: ScrollPanel }],
     host: {
-        '[class]': 'cn(cx("root"), styleClass)'
+        '[class]': 'cx("root")'
     },
     hostDirectives: [Bind]
 })
 export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
-    componentName = 'ScrollPanel';
-
-    $pcScrollPanel: ScrollPanel | undefined = inject(SCROLLPANEL_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-    /**
-     * Style class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    _componentStyle = inject(ScrollPanelStyle);
+
+    zone: NgZone = inject(NgZone);
+
     /**
      * Step factor to scroll the content while pressing the arrow keys.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) step: number = 5;
+    readonly step = input<number, unknown>(5, { transform: numberAttribute });
 
     readonly contentViewChild = viewChild.required<ElementRef>('content');
 
     readonly xBarViewChild = viewChild.required<ElementRef>('xBar');
 
     readonly yBarViewChild = viewChild.required<ElementRef>('yBar');
+
     /**
      * Custom content template.
      * @group Templates
@@ -102,7 +110,13 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _contentTemplate: TemplateRef<void> | undefined;
+    componentName = 'ScrollPanel';
+
+    /**
+     * Effective content template: the `#content` content child, or (legacy behavior) the last
+     * projected `pTemplate` of any type.
+     */
+    readonly $contentTemplate = computed(() => this.contentTemplate() ?? this.templates().at(-1)?.template);
 
     scrollYRatio: number | undefined;
 
@@ -120,15 +134,15 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
 
     isYBarClicked: boolean = false;
 
-    lastScrollLeft: number = 0;
+    readonly lastScrollLeft = signal<number>(0);
 
-    lastScrollTop: number = 0;
+    readonly lastScrollTop = signal<number>(0);
 
-    orientation: string = 'vertical';
+    readonly orientation = signal<string>('vertical');
 
     timer: any;
 
-    contentId: string | undefined;
+    contentId: string = uuid('pn_id_') + '_content';
 
     windowResizeListener: VoidFunction | null | undefined;
 
@@ -144,48 +158,41 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
 
     documentMouseUpListener: Nullable<(event?: any) => void>;
 
-    _componentStyle = inject(ScrollPanelStyle);
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+        afterNextRender(() => {
+            if (isPlatformBrowser(this.platformId)) {
+                this.zone.runOutsideAngular(() => {
+                    this.moveBar();
+                    this.moveBar = this.moveBar.bind(this);
+                    this.onXBarMouseDown = this.onXBarMouseDown.bind(this);
+                    this.onYBarMouseDown = this.onYBarMouseDown.bind(this);
+                    this.onDocumentMouseMove = this.onDocumentMouseMove.bind(this);
+                    this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
 
-    zone: NgZone = inject(NgZone);
+                    this.windowResizeListener = this.renderer.listen(window, 'resize', this.moveBar);
+                    this.contentScrollListener = this.renderer.listen((this.contentViewChild() as ElementRef).nativeElement, 'scroll', this.moveBar);
+                    this.mouseEnterListener = this.renderer.listen((this.contentViewChild() as ElementRef).nativeElement, 'mouseenter', this.moveBar);
+                    this.xBarMouseDownListener = this.renderer.listen((this.xBarViewChild() as ElementRef).nativeElement, 'mousedown', this.onXBarMouseDown);
+                    this.yBarMouseDownListener = this.renderer.listen((this.yBarViewChild() as ElementRef).nativeElement, 'mousedown', this.onYBarMouseDown);
+                    this.calculateContainerHeight();
 
-    onInit() {
-        this.contentId = uuid('pn_id_') + '_content';
-    }
-
-    onAfterViewInit() {
-        if (isPlatformBrowser(this.platformId)) {
-            this.zone.runOutsideAngular(() => {
-                this.moveBar();
-                this.moveBar = this.moveBar.bind(this);
-                this.onXBarMouseDown = this.onXBarMouseDown.bind(this);
-                this.onYBarMouseDown = this.onYBarMouseDown.bind(this);
-                this.onDocumentMouseMove = this.onDocumentMouseMove.bind(this);
-                this.onDocumentMouseUp = this.onDocumentMouseUp.bind(this);
-
-                this.windowResizeListener = this.renderer.listen(window, 'resize', this.moveBar);
-                this.contentScrollListener = this.renderer.listen((this.contentViewChild() as ElementRef).nativeElement, 'scroll', this.moveBar);
-                this.mouseEnterListener = this.renderer.listen((this.contentViewChild() as ElementRef).nativeElement, 'mouseenter', this.moveBar);
-                this.xBarMouseDownListener = this.renderer.listen((this.xBarViewChild() as ElementRef).nativeElement, 'mousedown', this.onXBarMouseDown);
-                this.yBarMouseDownListener = this.renderer.listen((this.yBarViewChild() as ElementRef).nativeElement, 'mousedown', this.onYBarMouseDown);
-                this.calculateContainerHeight();
-
-                this.initialized = true;
-            });
-        }
-    }
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-
-                default:
-                    this._contentTemplate = item.template;
-                    break;
+                    this.initialized = true;
+                });
             }
         });
+    }
+
+    onDestroy() {
+        if (this.initialized) {
+            this.unbindListeners();
+        }
     }
 
     calculateContainerHeight() {
@@ -254,28 +261,28 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
     }
 
     onScroll(event) {
-        if (this.lastScrollLeft !== event.target.scrollLeft) {
-            this.lastScrollLeft = event.target.scrollLeft;
-            this.orientation = 'horizontal';
-        } else if (this.lastScrollTop !== event.target.scrollTop) {
-            this.lastScrollTop = event.target.scrollTop;
-            this.orientation = 'vertical';
+        if (this.lastScrollLeft() !== event.target.scrollLeft) {
+            this.lastScrollLeft.set(event.target.scrollLeft);
+            this.orientation.set('horizontal');
+        } else if (this.lastScrollTop() !== event.target.scrollTop) {
+            this.lastScrollTop.set(event.target.scrollTop);
+            this.orientation.set('vertical');
         }
 
         this.moveBar();
     }
 
     onKeyDown(event) {
-        if (this.orientation === 'vertical') {
+        if (this.orientation() === 'vertical') {
             switch (event.code) {
                 case 'ArrowDown': {
-                    this.setTimer('scrollTop', this.step);
+                    this.setTimer('scrollTop', this.step());
                     event.preventDefault();
                     break;
                 }
 
                 case 'ArrowUp': {
-                    this.setTimer('scrollTop', this.step * -1);
+                    this.setTimer('scrollTop', this.step() * -1);
                     event.preventDefault();
                     break;
                 }
@@ -291,16 +298,16 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
                     //no op
                     break;
             }
-        } else if (this.orientation === 'horizontal') {
+        } else if (this.orientation() === 'horizontal') {
             switch (event.code) {
                 case 'ArrowRight': {
-                    this.setTimer('scrollLeft', this.step);
+                    this.setTimer('scrollLeft', this.step());
                     event.preventDefault();
                     break;
                 }
 
                 case 'ArrowLeft': {
-                    this.setTimer('scrollLeft', this.step * -1);
+                    this.setTimer('scrollLeft', this.step() * -1);
                     event.preventDefault();
                     break;
                 }
@@ -429,6 +436,7 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
             (this.contentViewChild() as ElementRef).nativeElement.scrollTop += deltaY / (this.scrollYRatio as number);
         });
     }
+
     /**
      * Scrolls the top location to the given value.
      * @param scrollTop
@@ -442,15 +450,15 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
 
     onFocus(event) {
         if (this.xBarViewChild().nativeElement?.isSameNode(event.target)) {
-            this.orientation = 'horizontal';
+            this.orientation.set('horizontal');
         } else if (this.yBarViewChild().nativeElement?.isSameNode(event.target)) {
-            this.orientation = 'vertical';
+            this.orientation.set('vertical');
         }
     }
 
     onBlur() {
-        if (this.orientation === 'horizontal') {
-            this.orientation = 'vertical';
+        if (this.orientation() === 'horizontal') {
+            this.orientation.set('vertical');
         }
     }
 
@@ -501,11 +509,6 @@ export class ScrollPanel extends BaseComponent<ScrollPanelPassThrough> {
         }
     }
 
-    onDestroy() {
-        if (this.initialized) {
-            this.unbindListeners();
-        }
-    }
     /**
      * Refreshes the position and size of the scrollbar.
      * @group Method
