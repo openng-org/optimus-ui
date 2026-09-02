@@ -322,11 +322,11 @@ describe('ConfirmPopup', () => {
         });
 
         it('should have correct default values', () => {
-            expect(confirmPopupInstance.defaultFocus).toBe('accept');
-            expect(confirmPopupInstance.showTransitionOptions).toBe('.12s cubic-bezier(0, 0, 0.2, 1)');
-            expect(confirmPopupInstance.hideTransitionOptions).toBe('.1s linear');
-            expect(confirmPopupInstance.autoZIndex).toBe(true);
-            expect(confirmPopupInstance.baseZIndex).toBe(0);
+            expect(confirmPopupInstance.defaultFocus()).toBe('accept');
+            expect(confirmPopupInstance.showTransitionOptions()).toBe('.12s cubic-bezier(0, 0, 0.2, 1)');
+            expect(confirmPopupInstance.hideTransitionOptions()).toBe('.1s linear');
+            expect(confirmPopupInstance.autoZIndex()).toBe(true);
+            expect(confirmPopupInstance.baseZIndex()).toBe(0);
         });
 
         it('should subscribe to confirmation service', () => {
@@ -345,7 +345,7 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.key).toBe('testKey');
+            expect(confirmPopupInstance.key()).toBe('testKey');
         });
 
         it('should update defaultFocus property', async () => {
@@ -353,7 +353,7 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.defaultFocus).toBe('reject');
+            expect(confirmPopupInstance.defaultFocus()).toBe('reject');
         });
 
         it('should update transition options', async () => {
@@ -362,8 +362,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.showTransitionOptions).toBe('.2s ease-in');
-            expect(confirmPopupInstance.hideTransitionOptions).toBe('.15s ease-out');
+            expect(confirmPopupInstance.showTransitionOptions()).toBe('.2s ease-in');
+            expect(confirmPopupInstance.hideTransitionOptions()).toBe('.15s ease-out');
         });
 
         it('should update autoZIndex and baseZIndex', async () => {
@@ -372,8 +372,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.autoZIndex).toBe(false);
-            expect(confirmPopupInstance.baseZIndex).toBe(1000);
+            expect(confirmPopupInstance.autoZIndex()).toBe(false);
+            expect(confirmPopupInstance.baseZIndex()).toBe(1000);
         });
 
         it('should update style and styleClass', async () => {
@@ -382,8 +382,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.style).toEqual({ width: '300px' });
-            expect(confirmPopupInstance.styleClass).toBe('custom-popup');
+            expect(confirmPopupInstance.style()).toEqual({ width: '300px' });
+            expect(confirmPopupInstance.styleClass()).toBe('custom-popup');
         });
 
         it('should update visible property', async () => {
@@ -405,8 +405,8 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
 
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation).toBeDefined();
-            expect(confirmPopupInstance.confirmation?.message).toBe('Are you sure?');
+            expect(confirmPopupInstance.confirmation()).toBeDefined();
+            expect(confirmPopupInstance.confirmation()?.message).toBe('Are you sure?');
         });
 
         it('should handle accept action', async () => {
@@ -476,7 +476,7 @@ describe('ConfirmPopup', () => {
         });
 
         it('should only respond to confirmations with matching key', async () => {
-            confirmPopupInstance.key = 'specificKey';
+            vi.spyOn(confirmPopupInstance, 'key').mockReturnValue('specificKey');
 
             confirmationService.confirm({
                 key: 'differentKey',
@@ -518,7 +518,7 @@ describe('ConfirmPopup', () => {
 
             // Verify handleFocus was called and defaultFocus is set to accept
             expect(handleFocusSpy).toHaveBeenCalled();
-            expect(confirmPopupInstance.defaultFocus).toBe('accept');
+            expect(confirmPopupInstance.defaultFocus()).toBe('accept');
         });
 
         it('should focus reject button when defaultFocus is reject', async () => {
@@ -544,7 +544,7 @@ describe('ConfirmPopup', () => {
 
             // Verify handleFocus was called and defaultFocus is set to reject
             expect(handleFocusSpy).toHaveBeenCalled();
-            expect(confirmPopupInstance.defaultFocus).toBe('reject');
+            expect(confirmPopupInstance.defaultFocus()).toBe('reject');
         });
 
         it('should not focus any button when defaultFocus is none', async () => {
@@ -562,8 +562,8 @@ describe('ConfirmPopup', () => {
             await focusFixture.whenStable();
 
             const confirmPopupInstance = focusFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
-            expect(confirmPopupInstance.autoFocusAccept).toBe(false);
-            expect(confirmPopupInstance.autoFocusReject).toBe(false);
+            expect(confirmPopupInstance.autoFocusAccept()).toBe(false);
+            expect(confirmPopupInstance.autoFocusReject()).toBe(false);
         });
     });
 
@@ -748,7 +748,7 @@ describe('ConfirmPopup', () => {
             await buttonPropsFixture.whenStable();
 
             const confirmPopupInstance = buttonPropsFixture.debugElement.query(By.directive(ConfirmPopup)).componentInstance;
-            const confirmation = confirmPopupInstance.confirmation;
+            const confirmation = confirmPopupInstance.confirmation();
 
             expect(confirmation?.acceptIcon).toBe('pi pi-check');
             expect(confirmation?.rejectIcon).toBe('pi pi-times');
@@ -766,8 +766,8 @@ describe('ConfirmPopup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.confirmation?.acceptVisible).toBe(false);
-            expect(confirmPopupInstance.confirmation?.rejectVisible).toBe(true);
+            expect(confirmPopupInstance.confirmation()?.acceptVisible).toBe(false);
+            expect(confirmPopupInstance.confirmation()?.rejectVisible).toBe(true);
         });
     });
 
@@ -813,7 +813,7 @@ describe('ConfirmPopup', () => {
         it('should not copy confirmation keys onto the component instance', async () => {
             await showConfirmation({ message: 'First', defaultFocus: 'reject', acceptButtonProps: { severity: 'danger' } });
 
-            expect(confirmPopupInstance.defaultFocus).toBe('accept');
+            expect(confirmPopupInstance.defaultFocus()).toBe('accept');
             expect((confirmPopupInstance as any).acceptButtonProps).toBeUndefined();
         });
 
@@ -1114,7 +1114,7 @@ describe('ConfirmPopup', () => {
 
             // Verify popup is visible
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBe(true);
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBe(true);
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1137,7 +1137,7 @@ describe('ConfirmPopup', () => {
             await fixture.whenStable();
 
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBe(false);
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBe(false);
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1159,7 +1159,7 @@ describe('ConfirmPopup', () => {
 
             // Default behavior - closeOnEscape is undefined, should work as true
             expect(confirmPopupInstance.computedVisible()).toBe(true);
-            expect(confirmPopupInstance.confirmation?.closeOnEscape).toBeUndefined();
+            expect(confirmPopupInstance.confirmation()?.closeOnEscape).toBeUndefined();
 
             // Test the onEscapeKeydown method directly
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
@@ -1172,7 +1172,7 @@ describe('ConfirmPopup', () => {
         });
 
         it('should not handle Escape key when confirmation is null', () => {
-            confirmPopupInstance.confirmation = null as any;
+            confirmPopupInstance.confirmation.set(null);
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape' });
             vi.spyOn(confirmPopupInstance, 'onReject').mockImplementation(() => {});
 
@@ -1293,7 +1293,7 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.styleClass).toBe('my-custom-popup');
+            expect(fixture.debugElement.query(By.css('[role="alertdialog"]'))?.nativeElement.classList.contains('my-custom-popup')).toBe(true);
         });
 
         it('should apply inline styles', async () => {
@@ -1308,7 +1308,7 @@ describe('ConfirmPopup', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(confirmPopupInstance.style).toEqual({ backgroundColor: 'red' });
+            expect(confirmPopupInstance.style()).toEqual({ backgroundColor: 'red' });
         });
     });
 
