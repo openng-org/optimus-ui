@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, SimpleChange } from '@angular/core';
+import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -435,7 +435,7 @@ describe('Table', () => {
 
         it('should have correct dataKey', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.dataKey).toBe('id');
+            expect(tableInstance.dataKey()).toBe('id');
         });
     });
 
@@ -452,7 +452,7 @@ describe('Table', () => {
 
         it('should enable multiple selection', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.selectionMode).toBe('multiple');
+            expect(tableInstance.selectionMode()).toBe('multiple');
         });
 
         it('should render checkboxes for selection', () => {
@@ -479,7 +479,7 @@ describe('Table', () => {
 
         it('should enable multiple sort mode', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.sortMode).toBe('multiple');
+            expect(tableInstance.sortMode()).toBe('multiple');
         });
 
         it('should render sort icons', () => {
@@ -512,8 +512,8 @@ describe('Table', () => {
 
                 const tableInstance: Table = groupedFixture.debugElement.query(By.css('p-table')).componentInstance;
 
-                expect(tableInstance.multiSortMeta).toEqual([{ field: 'category', order: 1 }]);
-                expect(tableInstance.value.map((product: any) => product.category)).toEqual(['Accessories', 'Accessories', 'Electronics']);
+                expect(tableInstance._multiSortMeta()).toEqual([{ field: 'category', order: 1 }]);
+                expect(tableInstance._value().map((product: any) => product.category)).toEqual(['Accessories', 'Accessories', 'Electronics']);
             });
 
             it('should keep the grouped field first when multiSortMeta is emptied later', async () => {
@@ -525,7 +525,7 @@ describe('Table', () => {
 
                 const tableInstance: Table = groupedFixture.debugElement.query(By.css('p-table')).componentInstance;
 
-                expect(tableInstance.multiSortMeta).toEqual([{ field: 'category', order: 1 }]);
+                expect(tableInstance._multiSortMeta()).toEqual([{ field: 'category', order: 1 }]);
             });
         });
     });
@@ -543,7 +543,7 @@ describe('Table', () => {
 
         it('should have global filter fields configured', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.globalFilterFields).toEqual(['name', 'category']);
+            expect(tableInstance.globalFilterFields()).toEqual(['name', 'category']);
         });
 
         it('should render column filters', () => {
@@ -565,12 +565,12 @@ describe('Table', () => {
 
         it('should enable virtual scrolling', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.virtualScroll).toBe(true);
+            expect(tableInstance.virtualScroll()).toBe(true);
         });
 
         it('should have correct virtual scroll item size', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.virtualScrollItemSize).toBe(46);
+            expect(tableInstance.virtualScrollItemSize()).toBe(46);
         });
 
         it('should handle large datasets efficiently', () => {
@@ -640,12 +640,12 @@ describe('Table', () => {
 
         it('should enable lazy loading', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.lazy).toBe(true);
+            expect(tableInstance.lazy()).toBe(true);
         });
 
         it('should have correct total records', () => {
             const tableInstance = testFixture.debugElement.query(By.css('p-table')).componentInstance;
-            expect(tableInstance.totalRecords).toBe(1000);
+            expect(tableInstance.$totalRecords()).toBe(1000);
         });
 
         it('should emit lazy load event through a real trigger (onPageChange), not a manual .emit() call', () => {
@@ -710,7 +710,7 @@ describe('Table', () => {
             await new Promise((resolve) => setTimeout(resolve, 350));
             await ecommerceFixture.whenStable();
 
-            const inStockProducts = tableInstance.filteredValue || tableInstance.value;
+            const inStockProducts = tableInstance.filteredValue() || tableInstance._value();
             const inStock = inStockProducts.filter((product: any) => product.inventoryStatus === 'INSTOCK');
             expect(inStock.length).toBe(3);
         });
@@ -721,8 +721,8 @@ describe('Table', () => {
             tableInstance.sort({ field: 'price', order: 1 });
             await ecommerceFixture.whenStable();
 
-            expect(tableInstance.sortField).toBe('price');
-            expect(tableInstance.sortOrder).toBe(1);
+            expect(tableInstance._sortField()).toBe('price');
+            expect(tableInstance._sortOrder()).toBe(1);
         });
 
         it('should support price range filtering for budget constraints', async () => {
@@ -732,7 +732,7 @@ describe('Table', () => {
             await new Promise((resolve) => setTimeout(resolve, 350));
             await ecommerceFixture.whenStable();
 
-            const filteredData = tableInstance.filteredValue || tableInstance.value;
+            const filteredData = tableInstance.filteredValue() || tableInstance._value();
             const affordableProducts = filteredData.filter((product: any) => product.price < 100);
             expect(affordableProducts.length).toBe(1); // Only the mouse under $100
         });
@@ -774,17 +774,17 @@ describe('Table', () => {
             it('should maintain state across user interactions', () => {
                 const tableInstance = ecommerceFixture.debugElement.query(By.css('p-table')).componentInstance;
                 expect(tableInstance).toBeTruthy();
-                expect(tableInstance.value).toBeDefined();
+                expect(tableInstance._value()).toBeDefined();
             });
 
             it('should support row expansion for master-detail views', () => {
-                expect(component.expandedRowKeys).toBeDefined();
+                expect(component.$expandedRowKeys()).toBeDefined();
             });
 
             it('should handle column reordering and resizing', () => {
                 const tableInstance = ecommerceFixture.debugElement.query(By.css('p-table')).componentInstance;
                 expect(tableInstance).toBeTruthy();
-                expect(tableInstance.value).toBeDefined();
+                expect(tableInstance._value()).toBeDefined();
             });
 
             it('should provide advanced sorting capabilities', () => {
@@ -825,10 +825,10 @@ describe('Table', () => {
 
         describe('Selection outputs', () => {
             it('emits selectionChange and onRowSelect via handleRowClick (select)', () => {
-                outputComponent.selectionMode = 'single';
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'selectionMode').mockReturnValue('single');
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rowData = { id: '1', name: 'Row 1' };
-                outputComponent.value = [rowData, { id: '2', name: 'Row 2' }];
+                outputComponent._value.set([rowData, { id: '2', name: 'Row 2' }]);
                 vi.spyOn(outputComponent.selectionChange, 'emit');
                 vi.spyOn(outputComponent.onRowSelect, 'emit');
 
@@ -839,12 +839,13 @@ describe('Table', () => {
             });
 
             it('emits selectionChange and onRowUnselect via handleRowClick (unselect an already-selected row)', () => {
-                outputComponent.selectionMode = 'single';
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'selectionMode').mockReturnValue('single');
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rowData = { id: '1', name: 'Row 1' };
-                outputComponent.value = [rowData];
-                outputComponent.selection = rowData;
-                outputComponent.ngOnChanges({ selection: new SimpleChange(null, rowData, false) });
+                outputComponent._value.set([rowData]);
+                outputComponent._selection.set(rowData);
+                outputFixture.componentRef.setInput('selection', rowData);
+                outputFixture.detectChanges();
                 vi.spyOn(outputComponent.selectionChange, 'emit');
                 vi.spyOn(outputComponent.onRowUnselect, 'emit');
 
@@ -855,15 +856,15 @@ describe('Table', () => {
             });
 
             it('emits selectionChange and onRowSelect via selectRange (shift-click multi-select)', () => {
-                outputComponent.selectionMode = 'multiple';
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'selectionMode').mockReturnValue('multiple');
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rows = [
                     { id: '1', name: 'Row 1' },
                     { id: '2', name: 'Row 2' },
                     { id: '3', name: 'Row 3' }
                 ];
-                outputComponent.value = rows;
-                outputComponent.selection = [];
+                outputComponent._value.set(rows);
+                outputComponent._selection.set([]);
                 outputComponent.anchorRowIndex = 0;
                 vi.spyOn(outputComponent.selectionChange, 'emit');
                 vi.spyOn(outputComponent.onRowSelect, 'emit');
@@ -875,13 +876,13 @@ describe('Table', () => {
             });
 
             it('emits onRowUnselect via clearSelectionRange', () => {
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rows = [
                     { id: '1', name: 'Row 1' },
                     { id: '2', name: 'Row 2' }
                 ];
-                outputComponent.value = rows;
-                outputComponent.selection = [...rows];
+                outputComponent._value.set(rows);
+                outputComponent._selection.set([...rows]);
                 outputComponent.selectionKeys = { '1': 1, '2': 1 };
                 outputComponent.anchorRowIndex = 0;
                 outputComponent.rangeRowIndex = 1;
@@ -893,9 +894,9 @@ describe('Table', () => {
             });
 
             it('emits selectionChange and onRowSelect/onRowUnselect via toggleRowWithRadio', () => {
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rowData = { id: '1', name: 'Row 1' };
-                outputComponent.value = [rowData];
+                outputComponent._value.set([rowData]);
                 vi.spyOn(outputComponent.selectionChange, 'emit');
                 vi.spyOn(outputComponent.onRowSelect, 'emit');
                 vi.spyOn(outputComponent.onRowUnselect, 'emit');
@@ -917,9 +918,10 @@ describe('Table', () => {
             // path. See final report for details -- this was left as-is per instructions to not
             // silently work around a source bug.
             it('emits selectAllChange via toggleRowsWithCheckbox when selectAll is bound (not null)', () => {
-                outputComponent.value = [{ id: '1' }, { id: '2' }];
-                outputComponent.dataKey = 'id';
-                outputComponent.ngOnChanges({ selectAll: new SimpleChange(null, false, false) });
+                outputComponent._value.set([{ id: '1' }, { id: '2' }]);
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
+                outputFixture.componentRef.setInput('selectAll', false);
+                outputFixture.detectChanges();
                 vi.spyOn(outputComponent.selectAllChange, 'emit');
 
                 const originalEvent = new Event('change');
@@ -929,8 +931,8 @@ describe('Table', () => {
             });
 
             it('emits onHeaderCheckboxToggle and selectionChange via toggleRowsWithCheckbox (selectAll not bound)', () => {
-                outputComponent.value = [{ id: '1' }, { id: '2' }];
-                outputComponent.dataKey = 'id';
+                outputComponent._value.set([{ id: '1' }, { id: '2' }]);
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 vi.spyOn(outputComponent.selectionChange, 'emit');
                 vi.spyOn(outputComponent.onHeaderCheckboxToggle, 'emit');
 
@@ -944,10 +946,10 @@ describe('Table', () => {
 
         describe('Context menu outputs', () => {
             it('emits contextMenuSelectionChange and onContextMenuSelect via handleRowRightClick', () => {
-                outputComponent.contextMenu = { show: vi.fn() };
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'contextMenu').mockReturnValue({ show: vi.fn() });
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rowData = { id: '1', name: 'Row 1' };
-                outputComponent.value = [rowData];
+                outputComponent._value.set([rowData]);
                 vi.spyOn(outputComponent.contextMenuSelectionChange, 'emit');
                 vi.spyOn(outputComponent.onContextMenuSelect, 'emit');
 
@@ -961,7 +963,7 @@ describe('Table', () => {
 
         describe('Paging outputs', () => {
             it('emits onPage, firstChange and rowsChange via onPageChange', () => {
-                outputComponent.value = [{ id: '1' }];
+                outputComponent._value.set([{ id: '1' }]);
                 vi.spyOn(outputComponent.onPage, 'emit');
                 vi.spyOn(outputComponent.firstChange, 'emit');
                 vi.spyOn(outputComponent.rowsChange, 'emit');
@@ -976,9 +978,9 @@ describe('Table', () => {
 
         describe('Sorting outputs', () => {
             it('emits onSort via sortSingle', () => {
-                outputComponent.value = [{ name: 'b' }, { name: 'a' }];
-                outputComponent.sortField = 'name';
-                outputComponent.sortOrder = 1;
+                outputComponent._value.set([{ name: 'b' }, { name: 'a' }]);
+                outputComponent._sortField.set('name');
+                outputComponent._sortOrder.set(1);
                 vi.spyOn(outputComponent.onSort, 'emit');
 
                 outputComponent.sortSingle();
@@ -987,42 +989,42 @@ describe('Table', () => {
             });
 
             it('emits sortFunction and onSort via sortMultiple when customSort is enabled', () => {
-                outputComponent.value = [{ name: 'b' }, { name: 'a' }];
-                outputComponent.sortMode = 'multiple';
-                outputComponent.multiSortMeta = [{ field: 'name', order: 1 }];
-                outputComponent.customSort = true;
+                outputComponent._value.set([{ name: 'b' }, { name: 'a' }]);
+                vi.spyOn(outputComponent, 'sortMode').mockReturnValue('multiple');
+                outputComponent._multiSortMeta.set([{ field: 'name', order: 1 }]);
+                vi.spyOn(outputComponent, 'customSort').mockReturnValue(true);
                 vi.spyOn(outputComponent.sortFunction, 'emit');
                 vi.spyOn(outputComponent.onSort, 'emit');
 
                 outputComponent.sortMultiple();
 
                 expect(outputComponent.sortFunction.emit).toHaveBeenCalledWith({
-                    data: outputComponent.value,
+                    data: outputComponent._value(),
                     mode: 'multiple',
-                    multiSortMeta: outputComponent.multiSortMeta
+                    multiSortMeta: outputComponent._multiSortMeta()
                 });
-                expect(outputComponent.onSort.emit).toHaveBeenCalledWith({ multisortmeta: outputComponent.multiSortMeta });
+                expect(outputComponent.onSort.emit).toHaveBeenCalledWith({ multisortmeta: outputComponent._multiSortMeta() });
             });
         });
 
         describe('Filtering outputs', () => {
             it('emits onFilter and firstChange via _filter', () => {
-                outputComponent.value = [{ name: 'a' }, { name: 'b' }];
-                outputComponent.filters = { name: { value: 'a', matchMode: 'equals' } };
+                outputComponent._value.set([{ name: 'a' }, { name: 'b' }]);
+                outputComponent.$filters.set({ name: { value: 'a', matchMode: 'equals' } });
                 vi.spyOn(outputComponent.onFilter, 'emit');
                 vi.spyOn(outputComponent.firstChange, 'emit');
 
                 outputComponent._filter();
 
                 expect(outputComponent.firstChange.emit).toHaveBeenCalledWith(0);
-                expect(outputComponent.onFilter.emit).toHaveBeenCalledWith(expect.objectContaining({ filters: outputComponent.filters }));
+                expect(outputComponent.onFilter.emit).toHaveBeenCalledWith(expect.objectContaining({ filters: outputComponent.$filters() }));
             });
         });
 
         describe('Row expand/collapse outputs', () => {
             it('emits onRowExpand via toggleRow on a collapsed row', () => {
-                outputComponent.dataKey = 'id';
-                outputComponent.expandedRowKeys = {};
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
+                outputComponent.$expandedRowKeys.set({});
                 const rowData = { id: '1', name: 'Row 1' };
                 vi.spyOn(outputComponent.onRowExpand, 'emit');
 
@@ -1032,9 +1034,9 @@ describe('Table', () => {
             });
 
             it('emits onRowCollapse via toggleRow on an already-expanded row', () => {
-                outputComponent.dataKey = 'id';
+                vi.spyOn(outputComponent, 'dataKey').mockReturnValue('id');
                 const rowData = { id: '1', name: 'Row 1' };
-                outputComponent.expandedRowKeys = { '1': true };
+                outputComponent.$expandedRowKeys.set({ '1': true });
                 vi.spyOn(outputComponent.onRowCollapse, 'emit');
 
                 outputComponent.toggleRow(rowData);
@@ -1045,7 +1047,7 @@ describe('Table', () => {
 
         describe('Column resize/reorder outputs', () => {
             it('emits onColResize via onColumnResizeEnd', async () => {
-                outputComponent.resizableColumns = true;
+                vi.spyOn(outputComponent, 'resizableColumns').mockReturnValue(true);
                 outputFixture.changeDetectorRef.markForCheck();
                 await outputFixture.whenStable();
                 outputFixture.detectChanges();
@@ -1067,7 +1069,7 @@ describe('Table', () => {
             });
 
             it('emits onColReorder via onColumnDrop', async () => {
-                outputComponent.reorderableColumns = true;
+                vi.spyOn(outputComponent, 'reorderableColumns').mockReturnValue(true);
                 outputFixture.changeDetectorRef.markForCheck();
                 await outputFixture.whenStable();
                 outputFixture.detectChanges();
@@ -1080,7 +1082,7 @@ describe('Table', () => {
                 row.appendChild(col1);
                 row.appendChild(col2);
 
-                outputComponent.columns = [{ field: 'name' }, { field: 'price' }];
+                outputComponent._columns.set([{ field: 'name' }, { field: 'price' }]);
                 outputComponent.onColumnDragStart({ dataTransfer: { setData: vi.fn() } } as any, col1);
                 vi.spyOn(outputComponent.onColReorder, 'emit');
 
@@ -1092,7 +1094,7 @@ describe('Table', () => {
 
         describe('Row reorder output', () => {
             it('emits onRowReorder via onRowDrop', () => {
-                outputComponent.value = [{ id: '1' }, { id: '2' }, { id: '3' }];
+                outputComponent._value.set([{ id: '1' }, { id: '2' }, { id: '3' }]);
                 outputComponent.draggedRowIndex = 0;
                 outputComponent.droppedRowIndex = 2;
                 vi.spyOn(outputComponent.onRowReorder, 'emit');
@@ -1105,8 +1107,8 @@ describe('Table', () => {
 
         describe('State outputs', () => {
             it('emits onStateSave via saveState', () => {
-                outputComponent.stateKey = 'output-events-test-state-save';
-                outputComponent.value = [{ id: '1' }];
+                vi.spyOn(outputComponent, 'stateKey').mockReturnValue('output-events-test-state-save');
+                outputComponent._value.set([{ id: '1' }]);
                 vi.spyOn(outputComponent.onStateSave, 'emit');
 
                 outputComponent.saveState();
@@ -1116,10 +1118,10 @@ describe('Table', () => {
 
             it('emits onStateRestore, firstChange and rowsChange via restoreState', () => {
                 const stateKey = 'output-events-test-state-restore';
-                outputComponent.stateKey = stateKey;
-                outputComponent.paginator = true;
-                outputComponent.first = 0;
-                outputComponent.rows = 10;
+                vi.spyOn(outputComponent, 'stateKey').mockReturnValue(stateKey);
+                vi.spyOn(outputComponent, 'paginator').mockReturnValue(true);
+                outputComponent._first.set(0);
+                outputComponent._rows.set(10);
                 window.sessionStorage.setItem(stateKey, JSON.stringify({ first: 20, rows: 50 }));
 
                 vi.spyOn(outputComponent.onStateRestore, 'emit');
@@ -1140,7 +1142,7 @@ describe('Table', () => {
             it('emits onLazyLoad on init when lazy is true (real lifecycle trigger)', () => {
                 const freshFixture = TestBed.createComponent(Table);
                 const freshComponent = freshFixture.componentInstance;
-                freshComponent.lazy = true;
+                vi.spyOn(freshComponent, 'lazy').mockReturnValue(true);
                 vi.spyOn(freshComponent.onLazyLoad, 'emit');
 
                 freshFixture.detectChanges(); // triggers ngOnInit -> onInit()

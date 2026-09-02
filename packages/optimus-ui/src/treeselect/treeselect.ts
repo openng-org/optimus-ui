@@ -1,18 +1,19 @@
 import { CommonModule } from '@angular/common';
 import {
+    afterEveryRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
     computed,
+    effect,
     ElementRef,
     forwardRef,
-    HostListener,
     inject,
-    InjectionToken,
     input,
-    Input,
     NgModule,
+    signal,
     TemplateRef,
+    untracked,
     ViewEncapsulation,
     viewChild,
     contentChild,
@@ -50,8 +51,6 @@ export const TREESELECT_VALUE_ACCESSOR: any = {
     multi: true
 };
 
-const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE');
-
 /**
  * TreeSelect is a form component to choose from hierarchical data.
  * @group Components
@@ -67,59 +66,59 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
                 #focusInput
                 type="text"
                 role="combobox"
-                [attr.id]="inputId"
+                [attr.id]="inputId()"
                 readonly
                 [attr.disabled]="$disabled() ? '' : undefined"
                 (focus)="onInputFocus($event)"
                 (blur)="onInputBlur($event)"
                 (keydown)="onKeyDown($event)"
-                [attr.tabindex]="!$disabled() ? tabindex : -1"
-                [attr.aria-controls]="overlayVisible ? listId : null"
+                [attr.tabindex]="!$disabled() ? tabindex() : -1"
+                [attr.aria-controls]="overlayVisible() ? listId : null"
                 [attr.aria-haspopup]="'tree'"
-                [attr.aria-expanded]="overlayVisible ?? false"
-                [attr.aria-labelledby]="ariaLabelledBy"
-                [attr.aria-label]="ariaLabel || (label === 'p-emptylabel' ? undefined : label)"
-                [pAutoFocus]="autofocus"
+                [attr.aria-expanded]="overlayVisible() ?? false"
+                [attr.aria-labelledby]="ariaLabelledBy()"
+                [attr.aria-label]="ariaLabel() || (label() === 'p-emptylabel' ? undefined : label())"
+                [pAutoFocus]="autofocus()"
                 [pBind]="ptm('hiddenInput')"
             />
         </div>
         <div [class]="cx('labelContainer')" [pBind]="ptm('labelContainer')">
-            <div [class]="cn(cx('label'), labelStyleClass)" [ngStyle]="labelStyle" [pBind]="ptm('label')">
-                @if (valueTemplate() || _valueTemplate) {
-                    <ng-container *ngTemplateOutlet="valueTemplate() || _valueTemplate; context: { $implicit: value, placeholder: placeholder }"></ng-container>
+            <div [class]="cn(cx('label'), labelStyleClass())" [ngStyle]="labelStyle()" [pBind]="ptm('label')">
+                @if ($valueTemplate()) {
+                    <ng-container *ngTemplateOutlet="$valueTemplate(); context: { $implicit: value(), placeholder: placeholder() }"></ng-container>
                 } @else {
-                    @if (display === 'comma') {
-                        {{ label || 'empty' }}
+                    @if (display() === 'comma') {
+                        {{ label() || 'empty' }}
                     } @else {
-                        @for (node of value; track node) {
+                        @for (node of value(); track node) {
                             <div [class]="cx('chipItem')" [pBind]="ptm('chipItem')">
                                 <p-chip [unstyled]="unstyled()" [label]="node.label" [class]="cx('pcChip')" [pt]="ptm('pcChip')" />
                             </div>
                         }
-                        @if (emptyValue) {
-                            {{ placeholder || 'empty' }}
+                        @if (emptyValue()) {
+                            {{ placeholder() || 'empty' }}
                         }
                     }
                 }
             </div>
         </div>
-        @if (checkValue() && !$disabled() && showClear) {
-            @if (!clearIconTemplate() && !_clearIconTemplate) {
+        @if (checkValue() && !$disabled() && showClear()) {
+            @if (!$clearIconTemplate()) {
                 <svg data-p-icon="times" [class]="cx('clearIcon')" (click)="clear($event)" [pBind]="ptm('clearIcon')" />
             }
-            @if (clearIconTemplate() || clearIconTemplate()) {
+            @if ($clearIconTemplate()) {
                 <span [class]="cx('clearIcon')" (click)="clear($event)" [pBind]="ptm('clearIcon')">
-                    <ng-template *ngTemplateOutlet="clearIconTemplate() || _clearIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$clearIconTemplate()"></ng-template>
                 </span>
             }
         }
-        <div [class]="cx('dropdown')" role="button" aria-haspopup="tree" [attr.aria-expanded]="overlayVisible ?? false" [attr.aria-label]="'treeselect trigger'" [pBind]="ptm('dropdown')">
-            @if (!triggerIconTemplate() && !_triggerIconTemplate && !dropdownIconTemplate() && !_dropdownIconTemplate) {
+        <div [class]="cx('dropdown')" role="button" aria-haspopup="tree" [attr.aria-expanded]="overlayVisible() ?? false" [attr.aria-label]="'treeselect trigger'" [pBind]="ptm('dropdown')">
+            @if (!$triggerIconTemplate() && !$dropdownIconTemplate()) {
                 <svg data-p-icon="chevron-down" [class]="cx('dropdownIcon')" [pBind]="ptm('dropdownIcon')" />
             }
-            @if (triggerIconTemplate() || _triggerIconTemplate || dropdownIconTemplate() || _dropdownIconTemplate) {
+            @if ($triggerIconTemplate() || $dropdownIconTemplate()) {
                 <span [class]="cx('dropdownIcon')" [pBind]="ptm('dropdownIcon')">
-                    <ng-template *ngTemplateOutlet="triggerIconTemplate() || _triggerIconTemplate || dropdownIconTemplate() || _dropdownIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$triggerIconTemplate() || $dropdownIconTemplate()"></ng-template>
                 </span>
             }
         </div>
@@ -127,7 +126,7 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
             #overlay
             [hostAttrSelector]="$attrSelector"
             [(visible)]="overlayVisible"
-            [options]="overlayOptions"
+            [options]="overlayOptions()"
             [target]="'@parent'"
             [appendTo]="$appendTo()"
             [unstyled]="unstyled()"
@@ -139,7 +138,7 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
             (onHide)="hide($event)"
         >
             <ng-template #content>
-                <div #panel [attr.id]="listId" [class]="cn(cx('panel'), panelStyleClass, panelClass)" [ngStyle]="panelStyle" [pBind]="ptm('panel')">
+                <div #panel [attr.id]="listId" [class]="cn(cx('panel'), panelStyleClass(), panelClass())" [ngStyle]="panelStyle()" [pBind]="ptm('panel')">
                     <span
                         #firstHiddenFocusableEl
                         role="presentation"
@@ -151,64 +150,64 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
                         [pBind]="ptm('hiddenFirstFocusableEl')"
                     >
                     </span>
-                    <ng-container *ngTemplateOutlet="headerTemplate() || _headerTemplate; context: { $implicit: value, options: options }"></ng-container>
-                    <div [class]="cx('treeContainer')" [ngStyle]="{ 'max-height': scrollHeight }" [pBind]="ptm('treeContainer')">
+                    <ng-container *ngTemplateOutlet="$headerTemplate(); context: { $implicit: value(), options: options() }"></ng-container>
+                    <div [class]="cx('treeContainer')" [ngStyle]="{ 'max-height': scrollHeight() }" [pBind]="ptm('treeContainer')">
                         <p-tree
                             #tree
-                            [value]="options"
-                            [propagateSelectionDown]="propagateSelectionDown"
-                            [propagateSelectionUp]="propagateSelectionUp"
-                            [selectionMode]="selectionMode"
+                            [value]="options()"
+                            [propagateSelectionDown]="propagateSelectionDown()"
+                            [propagateSelectionUp]="propagateSelectionUp()"
+                            [selectionMode]="selectionMode()"
                             (selectionChange)="onSelectionChange($event)"
-                            [selection]="value"
-                            [metaKeySelection]="metaKeySelection"
+                            [selection]="value()"
+                            [metaKeySelection]="metaKeySelection()"
                             (onNodeExpand)="nodeExpand($event)"
                             (onNodeCollapse)="nodeCollapse($event)"
                             (onNodeSelect)="onSelect($event)"
-                            [emptyMessage]="emptyMessage"
+                            [emptyMessage]="emptyMessage()"
                             (onNodeUnselect)="onUnselect($event)"
-                            [filter]="filter"
-                            [filterBy]="filterBy"
-                            [filterMode]="filterMode"
-                            [filterPlaceholder]="filterPlaceholder"
-                            [filterLocale]="filterLocale"
-                            [filteredNodes]="filteredNodes"
-                            [virtualScroll]="virtualScroll"
-                            [virtualScrollItemSize]="virtualScrollItemSize"
-                            [virtualScrollOptions]="virtualScrollOptions"
-                            [_templateMap]="templateMap"
-                            [loading]="loading"
-                            [filterInputAutoFocus]="filterInputAutoFocus"
-                            [loadingMode]="loadingMode"
+                            [filter]="filter()"
+                            [filterBy]="filterBy()"
+                            [filterMode]="filterMode()"
+                            [filterPlaceholder]="filterPlaceholder()"
+                            [filterLocale]="filterLocale()"
+                            [filteredNodes]="filteredNodes()"
+                            [virtualScroll]="virtualScroll()"
+                            [virtualScrollItemSize]="virtualScrollItemSize()"
+                            [virtualScrollOptions]="virtualScrollOptions()"
+                            [_templateMap]="$templateMap()"
+                            [loading]="loading()"
+                            [filterInputAutoFocus]="filterInputAutoFocus()"
+                            [loadingMode]="loadingMode()"
                             [pt]="ptm('pcTree')"
                             [unstyled]="unstyled()"
                         >
-                            @if (emptyTemplate() || _emptyTemplate) {
+                            @if ($emptyTemplate()) {
                                 <ng-template #empty>
-                                    <ng-container *ngTemplateOutlet="emptyTemplate() || _emptyTemplate"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$emptyTemplate()"></ng-container>
                                 </ng-template>
                             }
-                            @if (itemTogglerIconTemplate() || _itemTogglerIconTemplate; as expanded) {
+                            @if ($itemTogglerIconTemplate(); as expanded) {
                                 <ng-template #togglericon let-expanded>
-                                    <ng-container *ngTemplateOutlet="itemTogglerIconTemplate() || _itemTogglerIconTemplate; context: { $implicit: expanded }"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$itemTogglerIconTemplate(); context: { $implicit: expanded }"></ng-container>
                                 </ng-template>
                             }
-                            <ng-template #checkboxicon let-selected let-partialSelected="partialSelected" *ngIf="itemCheckboxIconTemplate() || _itemCheckboxIconTemplate">
-                                <ng-container *ngTemplateOutlet="itemCheckboxIconTemplate() || _itemCheckboxIconTemplate; context: { $implicit: selected, partialSelected: partialSelected }"></ng-container>
+                            <ng-template #checkboxicon let-selected let-partialSelected="partialSelected" *ngIf="$itemCheckboxIconTemplate()">
+                                <ng-container *ngTemplateOutlet="$itemCheckboxIconTemplate(); context: { $implicit: selected, partialSelected: partialSelected }"></ng-container>
                             </ng-template>
-                            @if (itemLoadingIconTemplate() || _itemLoadingIconTemplate) {
+                            @if ($itemLoadingIconTemplate()) {
                                 <ng-template #loadingicon>
-                                    <ng-container *ngTemplateOutlet="itemLoadingIconTemplate() || _itemLoadingIconTemplate"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$itemLoadingIconTemplate()"></ng-container>
                                 </ng-template>
                             }
-                            @if (filterIconTemplate() || _filterIconTemplate) {
+                            @if ($filterIconTemplate()) {
                                 <ng-template #filtericon>
-                                    <ng-container *ngTemplateOutlet="filterIconTemplate() || _filterIconTemplate"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$filterIconTemplate()"></ng-container>
                                 </ng-template>
                             }
                         </p-tree>
                     </div>
-                    <ng-container *ngTemplateOutlet="footerTemplate(); context: { $implicit: value, options: options }"></ng-container>
+                    <ng-container *ngTemplateOutlet="$footerTemplate(); context: { $implicit: value(), options: options() }"></ng-container>
                     <span
                         #lastHiddenFocusableEl
                         role="presentation"
@@ -228,306 +227,324 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
         TREESELECT_VALUE_ACCESSOR,
         TreeSelectStyle,
         {
-            provide: TREESELECT_INSTANCE,
-            useExisting: TreeSelect
-        },
-        {
             provide: PARENT_INSTANCE,
             useExisting: TreeSelect
         }
     ],
     encapsulation: ViewEncapsulation.None,
     host: {
-        '[class]': "cn(cx('root'), containerStyleClass)",
-        '[style]': "sx('root')"
+        '[class]': "cx('root')",
+        '[style]': "sx('root')",
+        '(mousedown)': 'onClick($event)'
     }
 })
 export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
-    componentName = 'TreeSelect';
-
-    $pcTreeSelect: TreeSelect | undefined = inject(TREESELECT_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
     _componentStyle = inject(TreeSelectStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    pcFluid: Fluid | null = inject(Fluid, { optional: true, host: true, skipSelf: true });
 
     /**
      * Identifier of the underlying input element.
      * @group Props
      */
-    @Input() inputId: string | undefined;
+    readonly inputId = input<string>();
+
     /**
      * Height of the viewport, a scrollbar is defined if height of list exceeds this value.
      * @group Props
      */
-    @Input() scrollHeight: string = '400px';
+    readonly scrollHeight = input<string>('400px');
+
     /**
      * Defines how multiple items can be selected, when true metaKey needs to be pressed to select or unselect an item and when set to false selection of each item can be toggled individually. On touch enabled devices, metaKeySelection is turned off automatically.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) metaKeySelection: boolean = false;
+    readonly metaKeySelection = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Defines how the selected items are displayed.
      * @group Props
      */
-    @Input() display: 'comma' | 'chip' = 'comma';
+    readonly display = input<'comma' | 'chip'>('comma');
+
     /**
      * Defines the selection mode.
      * @group Props
      */
-    @Input() selectionMode: 'single' | 'multiple' | 'checkbox' = 'single';
+    readonly selectionMode = input<'single' | 'multiple' | 'checkbox'>('single');
+
     /**
      * Index of the element in tabbing order.
      * @group Props
      */
-    @Input() tabindex: string | undefined = '0';
+    readonly tabindex = input<string | undefined>('0');
+
     /**
      * Defines a string that labels the input for accessibility.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Label to display when there are no selections.
      * @group Props
      */
-    @Input() placeholder: string | undefined;
+    readonly placeholder = input<string>();
+
     /**
      * Style class of the overlay panel.
      * @group Props
      */
-    @Input() panelClass: string | string[] | Set<string> | { [klass: string]: any } | undefined;
+    readonly panelClass = input<string | string[] | Set<string> | { [klass: string]: any }>();
+
     /**
      * Inline style of the panel element.
      * @group Props
      */
-    @Input() panelStyle: { [klass: string]: any } | null | undefined;
+    readonly panelStyle = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the panel element.
      * @group Props
      */
-    @Input() panelStyleClass: string | undefined;
-    /**
-     * Inline style of the container element.
-     * @deprecated since v20.0.0, use `style` instead.
-     * @group Props
-     */
-    @Input() containerStyle: { [klass: string]: any } | null | undefined;
-    /**
-     * Style class of the container element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() containerStyleClass: string | undefined;
+    readonly panelStyleClass = input<string>();
+
     /**
      * Inline style of the label element.
      * @group Props
      */
-    @Input() labelStyle: { [klass: string]: any } | null | undefined;
+    readonly labelStyle = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the label element.
      * @group Props
      */
-    @Input() labelStyleClass: string | undefined;
+    readonly labelStyleClass = input<string>();
+
     /**
      * Specifies the options for the overlay.
      * @group Props
      */
-    @Input() overlayOptions: OverlayOptions | undefined;
+    readonly overlayOptions = input<OverlayOptions>();
+
     /**
      * Text to display when there are no options available. Defaults to value from Optimus locale configuration.
      * @group Props
      */
-    @Input() emptyMessage: string = '';
+    readonly emptyMessage = input<string>('');
+
     /**
      * When specified, displays an input field to filter the items.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) filter: boolean = false;
+    readonly filter = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * When filtering is enabled, filterBy decides which field or fields (comma separated) to search against.
      * @group Props
      */
-    @Input() filterBy: string = 'label';
+    readonly filterBy = input<string>('label');
+
     /**
      * Mode for filtering valid values are "lenient" and "strict". Default is lenient.
      * @group Props
      */
-    @Input() filterMode: string = 'lenient';
+    readonly filterMode = input<string>('lenient');
+
     /**
      * Placeholder text to show when filter input is empty.
      * @group Props
      */
-    @Input() filterPlaceholder: string | undefined;
+    readonly filterPlaceholder = input<string>();
+
     /**
      * Locale to use in filtering. The default locale is the host environment's current locale.
      * @group Props
      */
-    @Input() filterLocale: string | undefined;
+    readonly filterLocale = input<string>();
+
     /**
      * Determines whether the filter input should be automatically focused when the component is rendered.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) filterInputAutoFocus: boolean = true;
+    readonly filterInputAutoFocus = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether checkbox selections propagate to descendant nodes.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) propagateSelectionDown: boolean = true;
+    readonly propagateSelectionDown = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether checkbox selections propagate to ancestor nodes.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) propagateSelectionUp: boolean = true;
+    readonly propagateSelectionUp = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * When enabled, a clear icon is displayed to clear the value.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) showClear: boolean = false;
+    readonly showClear = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Clears the filter value when hiding the dropdown.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) resetFilterOnHide: boolean = true;
+    readonly resetFilterOnHide = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether the data should be loaded on demand during scroll.
      * @group Props
      */
-    @Input() virtualScroll: boolean | undefined;
+    readonly virtualScroll = input<boolean>();
+
     /**
      * Height of an item in the list for VirtualScrolling.
      * @group Props
      */
-    @Input() virtualScrollItemSize: number | undefined;
+    readonly virtualScrollItemSize = input<number>();
+
     /**
      * Whether to use the scroller feature. The properties of scroller component can be used like an object in it.
      * @group Props
      */
-    @Input() virtualScrollOptions: ScrollerOptions | undefined;
+    readonly virtualScrollOptions = input<ScrollerOptions>();
+
     /**
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autofocus: boolean | undefined;
+    readonly autofocus = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * An array of treenodes.
      * @defaultValue undefined
      * @group Props
      */
-    @Input() get options(): TreeNode[] | undefined {
-        return this._options;
-    }
-    set options(options: TreeNode[] | undefined) {
-        this._options = options;
-        this.updateTreeState();
-    }
+    readonly options = input<TreeNode[]>();
+
     /**
      * Displays a loader to indicate data load is in progress.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) loading: boolean | undefined;
+    readonly loading = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Loading mode display.
      * @group Props
      */
-    @Input() loadingMode: 'mask' | 'icon' = 'mask';
+    readonly loadingMode = input<'mask' | 'icon'>('mask');
+
     /**
      * Specifies the size of the component.
      * @defaultValue undefined
      * @group Props
      */
     size = input<'large' | 'small' | undefined>();
+
     /**
      * Specifies the input variant of the component.
      * @defaultValue undefined
      * @group Props
      */
     variant = input<'filled' | 'outlined' | undefined>();
+
     /**
      * Spans 100% width of the container when enabled.
      * @defaultValue undefined
      * @group Props
      */
     fluid = input(undefined, { transform: booleanAttribute });
+
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
      */
     appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>(undefined);
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
+
     /**
      * Callback to invoke when a node is expanded.
      * @param {TreeSelectNodeExpandEvent} event - Custom node expand event.
      * @group Emits
      */
     readonly onNodeExpand = output<TreeSelectNodeExpandEvent>();
+
     /**
      * Callback to invoke when a node is collapsed.
      * @param {TreeSelectNodeCollapseEvent} event - Custom node collapse event.
      * @group Emits
      */
     readonly onNodeCollapse = output<TreeSelectNodeCollapseEvent>();
+
     /**
      * Callback to invoke when the overlay is shown.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onShow = output<any>();
+
     /**
      * Callback to invoke when the overlay is hidden.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onHide = output<Event>();
+
     /**
      * Callback to invoke when input field is cleared.
      * @group Emits
      */
     readonly onClear = output<any>();
+
     /**
      * Callback to invoke when data is filtered.
      * @group Emits
      */
     readonly onFilter = output<TreeFilterEvent>();
+
     /**
      * Callback to invoke when treeselect gets focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onFocus = output<Event>();
+
     /**
      * Callback to invoke when treeselect loses focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onBlur = output<Event>();
+
     /**
      * Callback to invoke when a node is unselected.
      * @param {TreeNodeUnSelectEvent} event - node unselect event.
      * @group Emits
      */
     readonly onNodeUnselect = output<TreeNodeUnSelectEvent>();
+
     /**
      * Callback to invoke when a node is selected.
      * @param {TreeNodeSelectEvent} event - node select event.
      * @group Emits
      */
     readonly onNodeSelect = output<TreeNodeSelectEvent>();
-
-    $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
 
     readonly focusInput = viewChild.required<ElementRef>('focusInput');
 
@@ -543,19 +560,6 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     readonly lastHiddenFocusableElementOnOverlay = viewChild<Nullable<ElementRef>>('lastHiddenFocusableEl');
 
-    $variant = computed(() => this.variant() || this.config.inputStyle() || this.config.inputVariant());
-
-    pcFluid: Fluid | null = inject(Fluid, { optional: true, host: true, skipSelf: true });
-
-    get hasFluid() {
-        return this.fluid() ?? !!this.pcFluid;
-    }
-
-    public filteredNodes: TreeNode[] | undefined | null;
-
-    filterValue: Nullable<string> = null;
-
-    serializedValue: Nullable<any[]>;
     /**
      * Custom value template.
      * @param {TreeSelectValueTemplateContext} context - value context.
@@ -634,121 +638,174 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _valueTemplate: TemplateRef<TreeSelectValueTemplateContext> | undefined;
+    componentName = 'TreeSelect';
 
-    _headerTemplate: TemplateRef<TreeSelectHeaderTemplateContext> | undefined;
+    /**
+     * Reacts to `options` changes, replacing the legacy setter side effect. Runs on the first
+     * binding too — the legacy setter also ran before `onInit`, and `updateTreeState` is
+     * idempotent, so the extra initial run is harmless.
+     */
+    private readonly optionsEffect = effect(() => {
+        this.options();
+        untracked(() => this.updateTreeState());
+    });
 
-    _emptyTemplate: TemplateRef<void> | undefined;
+    $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
 
-    _footerTemplate: TemplateRef<TreeSelectHeaderTemplateContext> | undefined;
+    $variant = computed(() => this.variant() || this.config.inputStyle() || this.config.inputVariant());
 
-    _clearIconTemplate: TemplateRef<void> | undefined;
+    readonly hasFluid = computed(() => this.fluid() ?? !!this.pcFluid);
 
-    _triggerIconTemplate: TemplateRef<void> | undefined;
+    readonly filteredNodes = signal<TreeNode[] | undefined | null>(undefined);
 
-    _filterIconTemplate: TemplateRef<void> | undefined;
+    filterValue: Nullable<string> = null;
 
-    _closeIconTemplate: TemplateRef<void> | undefined;
+    readonly $valueTemplate = computed(
+        () =>
+            this.valueTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'value' || !item.name())
+                .at(-1)?.template
+    );
 
-    _itemTogglerIconTemplate: TemplateRef<TreeSelectItemTogglerIconTemplateContext> | undefined;
+    readonly $headerTemplate = computed(
+        () =>
+            this.headerTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'header')
+                .at(-1)?.template
+    );
 
-    _itemCheckboxIconTemplate: TemplateRef<TreeSelectItemCheckboxIconTemplateContext> | undefined;
+    readonly $emptyTemplate = computed(
+        () =>
+            this.emptyTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'empty')
+                .at(-1)?.template
+    );
 
-    _itemLoadingIconTemplate: TemplateRef<void> | undefined;
+    readonly $footerTemplate = computed(
+        () =>
+            this.footerTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'footer')
+                .at(-1)?.template
+    );
 
-    _dropdownIconTemplate: TemplateRef<void> | undefined;
+    readonly $clearIconTemplate = computed(
+        () =>
+            this.clearIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'clearicon')
+                .at(-1)?.template
+    );
 
-    focused: Nullable<boolean>;
+    readonly $triggerIconTemplate = computed(
+        () =>
+            this.triggerIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'triggericon')
+                .at(-1)?.template
+    );
 
-    overlayVisible: Nullable<boolean>;
+    readonly $filterIconTemplate = computed(
+        () =>
+            this.filterIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'filtericon')
+                .at(-1)?.template
+    );
 
-    value: any | undefined;
+    readonly $itemTogglerIconTemplate = computed(
+        () =>
+            this.itemTogglerIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'itemtogglericon')
+                .at(-1)?.template
+    );
+
+    readonly $itemCheckboxIconTemplate = computed(
+        () =>
+            this.itemCheckboxIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'itemcheckboxicon')
+                .at(-1)?.template
+    );
+
+    readonly $itemLoadingIconTemplate = computed(
+        () =>
+            this.itemLoadingIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'itemloadingicon')
+                .at(-1)?.template
+    );
+
+    readonly $dropdownIconTemplate = computed(
+        () =>
+            this.dropdownIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'dropdownicon')
+                .at(-1)?.template
+    );
+
+    /**
+     * Map of custom templates keyed by `pTemplate` name for node-type templates, forwarded to the
+     * inner tree. Only present when at least one `pTemplate` exists, matching legacy behavior.
+     * Note: `closeicon` pTemplates are recognized (excluded from this map) but were never rendered
+     * by this component, so they still render nothing.
+     */
+    readonly $templateMap = computed<any>(() => {
+        const templates = this.templates();
+        if (!templates.length) {
+            return undefined;
+        }
+
+        const knownTypes = ['value', 'header', 'empty', 'footer', 'clearicon', 'triggericon', 'filtericon', 'closeicon', 'itemtogglericon', 'itemcheckboxicon', 'dropdownicon', 'itemloadingicon'];
+        const templateMap = {};
+        templates.forEach((item) => {
+            if (item.name() && !knownTypes.includes(item.getType())) {
+                templateMap[item.name()!] = item.template;
+            }
+        });
+
+        return templateMap;
+    });
+
+    readonly focused = signal<Nullable<boolean>>(undefined);
+
+    readonly overlayVisible = signal<Nullable<boolean>>(undefined);
+
+    readonly value = signal<any>(undefined);
 
     expandedNodes: any[] = [];
 
-    _options: TreeNode[] | undefined;
+    listId: string = uuid('pn_id_') + '_list';
 
-    public templateMap: any;
+    readonly emptyValue = computed(() => {
+        const value = this.value();
+        return !value || Object.keys(value).length === 0;
+    });
 
-    listId: string = '';
+    readonly label = computed(() => {
+        let value = this.value() || [];
+        return value.length ? value.map((node: TreeNode) => node.label).join(', ') : this.selectionMode() === 'single' && this.value() ? value.label : this.placeholder();
+    });
 
-    @HostListener('mousedown', ['$event'])
-    onHostClick(event: MouseEvent) {
-        this.onClick(event);
-    }
-
-    onInit() {
-        this.listId = uuid('pn_id_') + '_list';
-        this.updateTreeState();
-    }
-
-    onAfterContentInit() {
-        if (this.templates().length) {
-            this.templateMap = {};
-        }
-
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'value':
-                    this._valueTemplate = item.template;
-                    break;
-
-                case 'header':
-                    this._headerTemplate = item.template;
-                    break;
-
-                case 'empty':
-                    this._emptyTemplate = item.template;
-                    break;
-
-                case 'footer':
-                    this._footerTemplate = item.template;
-                    break;
-
-                case 'clearicon':
-                    this._clearIconTemplate = item.template;
-                    break;
-
-                case 'triggericon':
-                    this._triggerIconTemplate = item.template;
-                    break;
-
-                case 'filtericon':
-                    this._filterIconTemplate = item.template;
-                    break;
-
-                case 'closeicon':
-                    this._closeIconTemplate = item.template;
-                    break;
-
-                case 'itemtogglericon':
-                    this._itemTogglerIconTemplate = item.template;
-                    break;
-
-                case 'itemcheckboxicon':
-                    this._itemCheckboxIconTemplate = item.template;
-                    break;
-
-                case 'dropdownicon':
-                    this._dropdownIconTemplate = item.template;
-                    break;
-
-                case 'itemloadingicon':
-                    this._itemLoadingIconTemplate = item.template;
-                    break;
-
-                default: //TODO: @deprecated Use "value" template instead
-                    if (item.name) this.templateMap[item.name] = item.template;
-                    else this._valueTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 
+    onInit() {
+        this.updateTreeState();
+    }
+
     onOverlayBeforeEnter() {
-        if (this.filter) {
+        if (this.filter()) {
             isNotEmpty(this.filterValue) && this.treeViewChild()?._filter(<any>this.filterValue);
-            this.filterInputAutoFocus && this.filterViewChild()?.nativeElement.focus();
+            this.filterInputAutoFocus() && this.filterViewChild()?.nativeElement.focus();
         } else {
             let focusableElements = <any>getFocusableElements(this.panelEl()?.nativeElement!);
 
@@ -757,7 +814,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
             }
         }
         const panelElement = this.panelEl()?.nativeElement;
-        if (this.virtualScroll && panelElement) {
+        if (this.virtualScroll() && panelElement) {
             let lastHeight = panelElement.offsetHeight;
             const virtualScrollResizeObserver = new ResizeObserver((entries) => {
                 const newHeight = entries[0].contentRect.height;
@@ -785,8 +842,8 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     onSelectionChange(event: any) {
-        this.value = event;
-        this.onModelChange(this.value);
+        this.value.set(event);
+        this.onModelChange(this.value());
         this.cd.markForCheck();
     }
 
@@ -796,7 +853,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         }
         const section = event.target?.getAttribute?.('data-pc-section');
         if (!this.overlayViewChild().el?.nativeElement?.contains(event.target) && section !== 'box' && section !== 'icon') {
-            if (this.overlayVisible) {
+            if (this.overlayVisible()) {
                 this.hide();
             } else {
                 this.show();
@@ -810,7 +867,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         switch (event.code) {
             //down
             case 'ArrowDown':
-                if (!this.overlayVisible) {
+                if (!this.overlayVisible()) {
                     this.show();
                     event.preventDefault();
                 }
@@ -821,7 +878,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
             //space
             case 'Space':
             case 'Enter':
-                if (!this.overlayVisible) {
+                if (!this.overlayVisible()) {
                     this.show();
                     event.preventDefault();
                 }
@@ -829,7 +886,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
             //escape
             case 'Escape':
-                if (this.overlayVisible) {
+                if (this.overlayVisible()) {
                     this.hide();
                     this.focusInput().nativeElement.focus();
                     event.preventDefault();
@@ -852,7 +909,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         treeViewChild?._filter(this.filterValue);
         this.onFilter.emit({
             filter: this.filterValue,
-            filteredValue: treeViewChild?.filteredNodes
+            filteredValue: treeViewChild?.$filteredNodes()
         });
         setTimeout(() => {
             this.overlayViewChild().alignOverlay();
@@ -861,7 +918,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     onArrowDown(event: KeyboardEvent) {
         const panelEl = this.panelEl();
-        if (this.overlayVisible && panelEl?.nativeElement) {
+        if (this.overlayVisible() && panelEl?.nativeElement) {
             let focusableElements = <any>getFocusableElements(panelEl.nativeElement, '[data-pc-section="node"]');
             if (focusableElements && focusableElements.length > 0) {
                 focusableElements[0].focus();
@@ -886,11 +943,11 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     show() {
-        this.overlayVisible = true;
+        this.overlayVisible.set(true);
     }
 
     hide(event?: any) {
-        this.overlayVisible = false;
+        this.overlayVisible.set(false);
         this.resetFilter();
 
         this.onHide.emit(event);
@@ -898,27 +955,27 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     clear(event: Event) {
-        this.value = null;
+        this.value.set(null);
         this.resetExpandedNodes();
         this.resetPartialSelected();
-        this.onModelChange(this.value);
+        this.onModelChange(this.value());
         this.onClear.emit(undefined);
 
         event.stopPropagation();
     }
 
     checkValue() {
-        return this.value !== null && isNotEmpty(this.value);
+        return this.value() !== null && isNotEmpty(this.value());
     }
 
     onTabKey(event, pressedInInputText = false) {
         if (!pressedInInputText) {
-            if (this.overlayVisible && this.hasFocusableElements()) {
+            if (this.overlayVisible() && this.hasFocusableElements()) {
                 focus(event.shiftKey ? this.lastHiddenFocusableElementOnOverlay()?.nativeElement : this.firstHiddenFocusableElementOnOverlay()?.nativeElement);
 
                 event.preventDefault();
             } else {
-                this.overlayVisible && this.hide(this.filter);
+                this.overlayVisible() && this.hide(this.filter());
             }
         }
     }
@@ -928,9 +985,9 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     resetFilter() {
-        if (this.filter && !this.resetFilterOnHide) {
+        if (this.filter() && !this.resetFilterOnHide()) {
             const treeViewChild = this.treeViewChild();
-            this.filteredNodes = treeViewChild?.filteredNodes;
+            this.filteredNodes.set(treeViewChild?.$filteredNodes());
             treeViewChild?.resetFilter();
         } else {
             this.filterValue = null;
@@ -938,11 +995,12 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     }
 
     updateTreeState() {
-        if (this.value) {
-            let selectedNodes = this.selectionMode === 'single' ? [this.value] : [...this.value];
+        const value = this.value();
+        if (value) {
+            let selectedNodes = this.selectionMode() === 'single' ? [value] : [...value];
             this.resetExpandedNodes();
             this.resetPartialSelected();
-            if (selectedNodes && this.options) {
+            if (selectedNodes && this.options()) {
                 this.updateTreeBranchState(null, null, selectedNodes);
             }
         }
@@ -961,7 +1019,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
                 }
             }
         } else {
-            for (let childNode of this.options as TreeNode[]) {
+            for (let childNode of this.options() as TreeNode[]) {
                 this.updateTreeBranchState(childNode, [], selectedNodes);
             }
         }
@@ -999,7 +1057,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         this.expandedNodes = [];
     }
 
-    resetPartialSelected(nodes = this.options): void {
+    resetPartialSelected(nodes = this.options()): void {
         if (!nodes) {
             return;
         }
@@ -1026,7 +1084,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
                 }
             }
         } else {
-            for (let childNode of this.options as TreeNode[]) {
+            for (let childNode of this.options() as TreeNode[]) {
                 this.findSelectedNodes(childNode, keys, selectedNodes);
             }
         }
@@ -1038,14 +1096,15 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     findIndexInSelection(node: TreeNode) {
         let index: number = -1;
+        const value = this.value();
 
-        if (this.value) {
-            if (this.selectionMode === 'single') {
-                let areNodesEqual = (this.value.key && this.value.key === node.key) || this.value == node;
+        if (value) {
+            if (this.selectionMode() === 'single') {
+                let areNodesEqual = (value.key && value.key === node.key) || value == node;
                 index = areNodesEqual ? 0 : -1;
             } else {
-                for (let i = 0; i < this.value.length; i++) {
-                    let selectedNode = this.value[i];
+                for (let i = 0; i < value.length; i++) {
+                    let selectedNode = value[i];
                     let areNodesEqual = (selectedNode.key && selectedNode.key === node.key) || selectedNode == node;
                     if (areNodesEqual) {
                         index = i;
@@ -1061,7 +1120,7 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     onSelect(event: TreeNodeSelectEvent) {
         this.onNodeSelect.emit(event);
 
-        if (this.selectionMode === 'single') {
+        if (this.selectionMode() === 'single') {
             this.hide();
             this.focusInput().nativeElement.focus();
         }
@@ -1077,12 +1136,12 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
             return;
         }
 
-        this.focused = true;
+        this.focused.set(true);
         this.onFocus.emit(event);
     }
 
     onInputBlur(event: Event) {
-        this.focused = false;
+        this.focused.set(false);
         this.onBlur.emit(event);
         this.onModelTouched();
     }
@@ -1094,22 +1153,9 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
      * Writes the value to the control.
      */
     writeControlValue(value: any): void {
-        this.value = value;
+        this.value.set(value);
         this.updateTreeState();
         this.cd.markForCheck();
-    }
-
-    get emptyValue() {
-        return !this.value || Object.keys(this.value).length === 0;
-    }
-
-    get emptyOptions() {
-        return !this.options || this.options.length === 0;
-    }
-
-    get label() {
-        let value = this.value || [];
-        return value.length ? value.map((node: TreeNode) => node.label).join(', ') : this.selectionMode === 'single' && this.value ? value.label : this.placeholder;
     }
 }
 

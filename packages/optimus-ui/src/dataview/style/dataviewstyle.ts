@@ -6,8 +6,8 @@ const classes = {
     root: ({ instance }) => [
         'p-dataview p-component',
         {
-            'p-dataview-list': instance.layout === 'list',
-            'p-dataview-grid': instance.layout === 'grid'
+            'p-dataview-list': instance.layout() === 'list',
+            'p-dataview-grid': instance.layout() === 'grid'
         }
     ],
     header: 'p-dataview-header',

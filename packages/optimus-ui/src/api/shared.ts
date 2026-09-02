@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Directive, Input, NgModule, TemplateRef, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Directive, NgModule, TemplateRef, inject, input } from '@angular/core';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -24,12 +24,10 @@ export class Footer {}
 export class PrimeTemplate {
     template = inject<TemplateRef<any>>(TemplateRef);
 
-    @Input() type: string | undefined;
-
-    @Input('pTemplate') name: string | undefined;
+    readonly name = input<string | undefined>(undefined, { alias: 'pTemplate' });
 
     getType(): string {
-        return this.name!;
+        return this.name()!;
     }
 }
 

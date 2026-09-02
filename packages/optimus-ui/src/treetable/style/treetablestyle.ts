@@ -511,30 +511,30 @@ const classes = {
     root: ({ instance }) => [
         'p-treetable p-component',
         {
-            'p-treetable-gridlines': instance.showGridlines,
-            'p-treetable-hoverable-rows': instance.rowHover || instance.selectionMode === 'single' || instance.selectionMode === 'multiple',
-            'p-treetable-auto-layout': instance.autoLayout,
-            'p-treetable-resizable': instance.resizableColumns,
-            'p-treetable-resizable-fit': instance.resizableColumns && instance.columnResizeMode === 'fit',
-            'p-treetable-flex-scrollable': instance.scrollable && instance.scrollHeight === 'flex'
+            'p-treetable-gridlines': instance.showGridlines(),
+            'p-treetable-hoverable-rows': instance.rowHover() || instance.selectionMode() === 'single' || instance.selectionMode() === 'multiple',
+            'p-treetable-auto-layout': instance.autoLayout(),
+            'p-treetable-resizable': instance.resizableColumns(),
+            'p-treetable-resizable-fit': instance.resizableColumns() && instance.columnResizeMode() === 'fit',
+            'p-treetable-flex-scrollable': instance.scrollable() && instance.scrollHeight() === 'flex'
         }
     ],
     loading: 'p-treetable-loading',
     mask: 'p-treetable-mask p-overlay-mask',
     loadingIcon: 'p-treetable-loading-icon',
     header: 'p-treetable-header',
-    pcPaginator: ({ instance }) => ['p-treetable-paginator-' + instance.paginatorPosition, instance.paginatorStyleClass],
+    pcPaginator: ({ instance }) => ['p-treetable-paginator-' + instance.paginatorPosition(), instance.paginatorStyleClass()],
     tableContainer: 'p-treetable-table-container',
     table: ({ instance }) => ({
         'p-treetable-table': true,
-        'p-treetable-scrollable-table': instance.scrollable,
-        'p-treetable-resizable-table': instance.resizableColumns,
-        'p-treetable-resizable-table-fit': instance.resizableColumns && instance.columnResizeMode === 'fit'
+        'p-treetable-scrollable-table': instance.scrollable(),
+        'p-treetable-resizable-table': instance.resizableColumns(),
+        'p-treetable-resizable-table-fit': instance.resizableColumns() && instance.columnResizeMode() === 'fit'
     }),
     thead: 'p-treetable-thead',
     sortableColumn: ({ instance }) => ({
         'p-sortable-column': instance.isEnabled(),
-        'p-treetable-column-sorted': instance.sorted
+        'p-treetable-column-sorted': instance.sorted()
     }),
     sortableColumnIcon: 'p-treetable-sort-icon',
     sortableColumnBadge: 'p-sortable-column-badge',
@@ -545,10 +545,10 @@ const classes = {
     pcSortBadge: 'p-treetable-sort-badge',
     tbody: 'p-treetable-tbody',
     row: ({ instance }) => ({
-        'p-treetable-row-selected': instance.selected
+        'p-treetable-row-selected': instance.selected()
     }),
     contextMenuRow: ({ instance }) => ({
-        'p-treetable-contextmenu-row-selected': instance.selected
+        'p-treetable-contextmenu-row-selected': instance.selected()
     }),
     toggler: 'p-treetable-toggler',
     nodeToggleButton: 'p-treetable-node-toggle-button',
@@ -556,6 +556,8 @@ const classes = {
     pcNodeCheckbox: 'p-treetable-node-checkbox',
     tfoot: 'p-treetable-tfoot',
     footerCell: ({ instance }) => ({
+        // NOTE: `columnProp` does not exist on any treetable class; this legacy expression has
+        // always evaluated to undefined (class never applied). Preserved as-is.
         'p-treetable-frozen-column': instance.columnProp('frozen')
     }),
     footer: 'p-treetable-footer',
