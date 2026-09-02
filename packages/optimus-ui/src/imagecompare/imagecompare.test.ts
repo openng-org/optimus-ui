@@ -143,10 +143,10 @@ describe('ImageCompare', () => {
         });
 
         it('should have default values', () => {
-            expect(component.tabindex).toBeUndefined();
-            expect(component.ariaLabel).toBeUndefined();
-            expect(component.ariaLabelledby).toBeUndefined();
-            expect(component.isRTL).toBe(false);
+            expect(component.tabindex()).toBeUndefined();
+            expect(component.ariaLabel()).toBeUndefined();
+            expect(component.ariaLabelledby()).toBeUndefined();
+            expect(component.isRTL()).toBe(false);
         });
 
         it('should accept custom input values', () => {
@@ -157,8 +157,8 @@ describe('ImageCompare', () => {
             const imageCompareElement = testFixture.debugElement.query(By.directive(ImageCompare));
             const imageCompareInstance = imageCompareElement.componentInstance;
 
-            expect(imageCompareInstance.tabindex).toBe(0);
-            expect(imageCompareInstance.ariaLabel).toBe('Image Compare');
+            expect(imageCompareInstance.tabindex()).toBe(0);
+            expect(imageCompareInstance.ariaLabel()).toBe('Image Compare');
         });
 
         it('should render slider input element', () => {
@@ -232,7 +232,7 @@ describe('ImageCompare', () => {
 
         it('should update clip path on slider change in LTR mode', () => {
             const imageCompareInstance = testFixture.debugElement.query(By.directive(ImageCompare)).componentInstance;
-            imageCompareInstance.isRTL = false;
+            imageCompareInstance.isRTL.set(false);
 
             const mockEvent = {
                 target: {
@@ -249,7 +249,7 @@ describe('ImageCompare', () => {
 
         it('should update clip path on slider change in RTL mode', () => {
             const imageCompareInstance = testFixture.debugElement.query(By.directive(ImageCompare)).componentInstance;
-            imageCompareInstance.isRTL = true;
+            imageCompareInstance.isRTL.set(true);
 
             const mockEvent = {
                 target: {
@@ -277,7 +277,7 @@ describe('ImageCompare', () => {
 
         it('should detect RTL direction from closest RTL container', () => {
             imageCompareInstance.updateDirection();
-            expect(imageCompareInstance.isRTL).toBe(true);
+            expect(imageCompareInstance.isRTL()).toBe(true);
         });
 
         it('should setup mutation observer for direction changes', () => {
@@ -369,7 +369,7 @@ describe('ImageCompare', () => {
             expect(imageCompareInstance.observeDirectionChanges).toHaveBeenCalled();
         });
 
-        it('should process templates on ngAfterContentInit', () => {
+        it('should resolve legacy pTemplate content through the effective template computeds', () => {
             // Mock templates
             const mockLeftTemplate = {} as any;
             const mockRightTemplate = {} as any;
@@ -382,19 +382,14 @@ describe('ImageCompare', () => {
                 template: mockRightTemplate
             };
 
-            // Mock templates QueryList
-            const mockTemplates = {
-                forEach: (callback: Function) => {
-                    callback(mockTemplate1);
-                    callback(mockTemplate2);
-                }
-            };
+            // use a fresh, not-yet-rendered instance so the computeds have not been evaluated
+            // (and cached against the real, empty contentChildren) yet
+            const freshFixture = TestBed.createComponent(ImageCompare);
+            const freshInstance = freshFixture.componentInstance;
+            (freshInstance as any).templates = () => [mockTemplate1, mockTemplate2] as any;
 
-            (imageCompareInstance as any).templates = () => mockTemplates as any;
-            imageCompareInstance.ngAfterContentInit();
-
-            expect(imageCompareInstance._leftTemplate).toBe(mockLeftTemplate);
-            expect(imageCompareInstance._rightTemplate).toBe(mockRightTemplate);
+            expect(freshInstance.$leftTemplate()).toBe(mockLeftTemplate);
+            expect(freshInstance.$rightTemplate()).toBe(mockRightTemplate);
         });
 
         it('should cleanup mutation observer on ngOnDestroy', () => {
@@ -437,12 +432,12 @@ describe('ImageCompare', () => {
             // Test LTR
             vi.spyOn(imageCompareInstance.el.nativeElement, 'closest').mockReturnValue(null);
             imageCompareInstance.updateDirection();
-            expect(imageCompareInstance.isRTL).toBe(false);
+            expect(imageCompareInstance.isRTL()).toBe(false);
 
             // Test RTL
             (imageCompareInstance.el.nativeElement.closest as Mock).mockReturnValue({ dir: 'rtl' });
             imageCompareInstance.updateDirection();
-            expect(imageCompareInstance.isRTL).toBe(true);
+            expect(imageCompareInstance.isRTL()).toBe(true);
         });
 
         it('should observeDirectionChanges method setup mutation observer correctly', () => {
@@ -632,7 +627,7 @@ describe('ImageCompare', () => {
                     root: ({ instance }) => {
                         // Instance parameter is available in PT functions
                         return {
-                            class: instance?.tabindex ? 'HAS_TAB_VALUE' : 'NO_TAB_VALUE'
+                            class: instance?.tabindex() ? 'HAS_TAB_VALUE' : 'NO_TAB_VALUE'
                         };
                     }
                 };
@@ -648,13 +643,13 @@ describe('ImageCompare', () => {
             it('should use instance isRTL in PT function', async () => {
                 testFixture.detectChanges();
                 const imageCompareInstance = testFixture.debugElement.query(By.directive(ImageCompare)).componentInstance;
-                imageCompareInstance.isRTL = true;
+                imageCompareInstance.isRTL.set(true);
 
                 testComponent.pt = {
                     slider: ({ instance }) => {
                         return {
                             style: {
-                                direction: instance?.isRTL ? 'rtl' : 'ltr'
+                                direction: instance?.isRTL() ? 'rtl' : 'ltr'
                             }
                         };
                     }
@@ -715,16 +710,19 @@ describe('ImageCompare', () => {
             });
 
             it('should access instance in onclick event', () => {
-                let instanceTabindex: number | undefined;
+                let received: ImageCompare | undefined;
+                let clicked = false;
+                // hoisted so the PT resolution stays referentially stable across renders (a fresh
+                // closure per resolution would defeat Bind.setAttrs' equality check and loop CD)
+                const onclick = () => {
+                    clicked = true;
+                };
 
                 testComponent.tabindex = 10;
                 testComponent.pt = {
                     root: ({ instance }) => {
-                        return {
-                            onclick: () => {
-                                instanceTabindex = instance?.tabindex;
-                            }
-                        };
+                        received = instance;
+                        return { onclick };
                     }
                 };
                 testFixture.detectChanges();
@@ -732,7 +730,8 @@ describe('ImageCompare', () => {
                 const rootElement = testFixture.debugElement.query(By.directive(ImageCompare));
                 rootElement.nativeElement.click();
 
-                expect(instanceTabindex).toBe(10);
+                expect(clicked).toBe(true);
+                expect(received?.tabindex()).toBe(10);
             });
         });
 
