@@ -55,7 +55,7 @@ class TestReactiveFormKnobComponent {
             [rangeColor]="rangeColor"
             [textColor]="textColor"
             [valueTemplate]="valueTemplate"
-            [styleClass]="styleClass"
+            [class]="styleClass"
             [ariaLabel]="ariaLabel"
             [tabindex]="tabindex"
             (onChange)="onKnobChange($event)"
@@ -134,14 +134,14 @@ describe('Knob', () => {
         });
 
         it('should initialize with default properties', () => {
-            expect(knobInstance.min).toBe(0);
-            expect(knobInstance.max).toBe(100);
-            expect(knobInstance.step).toBe(1);
-            expect(knobInstance.size).toBe(100);
-            expect(knobInstance.strokeWidth).toBe(14);
-            expect(knobInstance.showValue).toBe(true);
-            expect(knobInstance.readonly).toBe(false);
-            expect(knobInstance.valueTemplate).toBe('{value}');
+            expect(knobInstance.min()).toBe(0);
+            expect(knobInstance.max()).toBe(100);
+            expect(knobInstance.step()).toBe(1);
+            expect(knobInstance.size()).toBe(100);
+            expect(knobInstance.strokeWidth()).toBe(14);
+            expect(knobInstance.showValue()).toBe(true);
+            expect(knobInstance.readonly()).toBe(false);
+            expect(knobInstance.valueTemplate()).toBe('{value}');
         });
 
         it('should render SVG element with correct attributes', () => {
@@ -193,7 +193,7 @@ describe('Knob', () => {
             await fixture.whenStable();
 
             expect(knobInstance.value()).toBe(75);
-            expect(knobInstance._value).toBe(75);
+            expect(knobInstance._value()).toBe(75);
         });
 
         it('should update displayed value', async () => {
@@ -425,8 +425,8 @@ describe('Knob', () => {
             component.max = 90;
             fixture.detectChanges();
 
-            expect(knobInstance.min).toBe(10);
-            expect(knobInstance.max).toBe(90);
+            expect(knobInstance.min()).toBe(10);
+            expect(knobInstance.max()).toBe(90);
 
             const svgElement = fixture.debugElement.query(By.css('svg'));
             expect(svgElement.nativeElement.getAttribute('aria-valuemin')).toBe('10');
@@ -434,11 +434,11 @@ describe('Knob', () => {
         });
 
         it('should apply custom step value', () => {
-            expect(knobInstance.step).toBe(5);
+            expect(knobInstance.step()).toBe(5);
         });
 
         it('should apply custom size', () => {
-            expect(knobInstance.size).toBe(150);
+            expect(knobInstance.size()).toBe(150);
 
             const svgElement = fixture.debugElement.query(By.css('svg'));
             expect(svgElement.nativeElement.style.width).toBe('150px');
@@ -446,7 +446,7 @@ describe('Knob', () => {
         });
 
         it('should apply custom stroke width', () => {
-            expect(knobInstance.strokeWidth).toBe(20);
+            expect(knobInstance.strokeWidth()).toBe(20);
 
             const paths = fixture.debugElement.queryAll(By.css('path'));
             paths.forEach((path) => {
@@ -455,9 +455,9 @@ describe('Knob', () => {
         });
 
         it('should apply custom colors', () => {
-            expect(knobInstance.valueColor).toBe('#007ad9');
-            expect(knobInstance.rangeColor).toBe('#f1f1f1');
-            expect(knobInstance.textColor).toBe('#333');
+            expect(knobInstance.valueColor()).toBe('#007ad9');
+            expect(knobInstance.rangeColor()).toBe('#f1f1f1');
+            expect(knobInstance.textColor()).toBe('#333');
 
             const paths = fixture.debugElement.queryAll(By.css('path'));
             expect(paths[0].nativeElement.getAttribute('stroke')).toBe('#f1f1f1');
@@ -649,13 +649,13 @@ describe('Knob', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(knobInstance._value).toBe(0); // Should default to min value
+            expect(knobInstance._value()).toBe(0); // Should default to min value
 
             component.value = undefined as any;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(knobInstance._value).toBe(0);
+            expect(knobInstance._value()).toBe(0);
         });
 
         it('should clamp values to min/max bounds', () => {
@@ -678,7 +678,7 @@ describe('Knob', () => {
             expect(knobInstance.value()).toBe(48); // Direct value assignment
 
             // Test that step property is correctly set
-            expect(knobInstance.step).toBe(5);
+            expect(knobInstance.step()).toBe(5);
         });
 
         it('should prevent interaction when disabled', () => {
