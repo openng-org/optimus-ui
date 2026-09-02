@@ -3,12 +3,12 @@ import { style } from '@openng/optimus-ui-styles/colorpicker';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const classes = {
-    root: ({ instance }) => ['p-colorpicker p-component', { 'p-colorpicker-overlay': !instance.inline, 'p-colorpicker-dragging': instance.colorDragging || instance.hueDragging }],
+    root: ({ instance }) => ['p-colorpicker p-component', { 'p-colorpicker-overlay': !instance.inline(), 'p-colorpicker-dragging': instance.colorDragging || instance.hueDragging }],
     preview: ({ instance }) => ['p-colorpicker-preview', { 'p-disabled': instance.$disabled() }],
     panel: ({ instance }) => [
         'p-colorpicker-panel',
         {
-            'p-colorpicker-panel-inline': instance.inline,
+            'p-colorpicker-panel-inline': instance.inline(),
             'p-disabled': instance.$disabled()
         }
     ],
