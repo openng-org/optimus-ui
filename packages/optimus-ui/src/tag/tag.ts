@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, NgModule, TemplateRef, ViewEncapsulation, computed, contentChild, contentChildren, inject, input } from '@angular/core';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
 import type { BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import { TagPassThrough } from '@openng/optimus-ui/types/tag';
 import { TagStyle } from './style/tagstyle';
-
-const TAG_INSTANCE = new InjectionToken<Tag>('TAG_INSTANCE');
 
 /**
  * Tag component is used to categorize content.
@@ -19,63 +17,52 @@ const TAG_INSTANCE = new InjectionToken<Tag>('TAG_INSTANCE');
     imports: [CommonModule, SharedModule, Bind],
     template: `
         <ng-content></ng-content>
-        @if (!iconTemplate() && !_iconTemplate) {
-            @if (icon) {
-                <span [class]="cx('icon')" [ngClass]="icon" [pBind]="ptm('icon')"></span>
-            }
-        }
-        @if (iconTemplate() || _iconTemplate) {
+        @if ($iconTemplate(); as iconTemplate) {
             <span [class]="cx('icon')" [pBind]="ptm('icon')">
-                <ng-template *ngTemplateOutlet="iconTemplate() || _iconTemplate"></ng-template>
+                <ng-template *ngTemplateOutlet="iconTemplate"></ng-template>
             </span>
+        } @else if (icon()) {
+            <span [class]="cx('icon')" [ngClass]="icon()" [pBind]="ptm('icon')"></span>
         }
-        <span [class]="cx('label')" [pBind]="ptm('label')">{{ value }}</span>
+        <span [class]="cx('label')" [pBind]="ptm('label')">{{ value() }}</span>
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [TagStyle, { provide: TAG_INSTANCE, useExisting: Tag }, { provide: PARENT_INSTANCE, useExisting: Tag }],
+    providers: [TagStyle, { provide: PARENT_INSTANCE, useExisting: Tag }],
     host: {
-        '[class]': "cn(cx('root'), styleClass)",
-        '[attr.data-p]': 'dataP'
+        '[class]': "cx('root')",
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
-export class Tag extends BaseComponent<TagPassThrough> implements AfterContentInit {
-    componentName = 'Tag';
-    $pcTag: Tag | undefined = inject(TAG_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
+export class Tag extends BaseComponent<TagPassThrough> {
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(TagStyle);
 
-    /**
-     * Style class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
     /**
      * Severity type of the tag.
      * @group Props
      */
-    @Input() severity: BadgeSeverity | undefined | null;
+    readonly severity = input<BadgeSeverity | undefined | null>();
+
     /**
      * Value to display inside the tag.
      * @group Props
      */
-    @Input() value: string | undefined;
+    readonly value = input<string>();
+
     /**
      * Icon of the tag to display next to the value.
      * @group Props
      */
-    @Input() icon: string | undefined;
+    readonly icon = input<string>();
+
     /**
      * Whether the corners of the tag are rounded.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) rounded: boolean | undefined;
+    readonly rounded = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
 
     /**
      * Custom icon template.
@@ -85,24 +72,25 @@ export class Tag extends BaseComponent<TagPassThrough> implements AfterContentIn
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _iconTemplate: TemplateRef<void> | undefined;
+    componentName = 'Tag';
 
-    _componentStyle = inject(TagStyle);
+    /** Effective icon template: the \`#icon\` content child, or a legacy \`pTemplate="icon"\`. */
+    readonly $iconTemplate = computed(() => this.iconTemplate() ?? this.templates().find((item) => item.getType() === 'icon')?.template);
 
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'icon':
-                    this._iconTemplate = item.template;
-                    break;
-            }
-        });
-    }
+    readonly dataP = computed(() =>
+        this.cn({
+            rounded: this.rounded(),
+            [this.severity() as string]: this.severity()
+        })
+    );
 
-    get dataP() {
-        return this.cn({
-            rounded: this.rounded,
-            [this.severity as string]: this.severity
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 }
