@@ -12,18 +12,18 @@ const inlineStyles = {
         top: 0,
         display: 'flex',
         justifyContent:
-            instance.position === 'left' || instance.position === 'topleft' || instance.position === 'bottomleft'
+            instance.position() === 'left' || instance.position() === 'topleft' || instance.position() === 'bottomleft'
                 ? 'flex-start'
-                : instance.position === 'right' || instance.position === 'topright' || instance.position === 'bottomright'
+                : instance.position() === 'right' || instance.position() === 'topright' || instance.position() === 'bottomright'
                   ? 'flex-end'
                   : 'center',
         alignItems:
-            instance.position === 'top' || instance.position === 'topleft' || instance.position === 'topright'
+            instance.position() === 'top' || instance.position() === 'topleft' || instance.position() === 'topright'
                 ? 'flex-start'
-                : instance.position === 'bottom' || instance.position === 'bottomleft' || instance.position === 'bottomright'
+                : instance.position() === 'bottom' || instance.position() === 'bottomleft' || instance.position() === 'bottomright'
                   ? 'flex-end'
                   : 'center',
-        pointerEvents: instance.modal ? 'auto' : 'none'
+        pointerEvents: instance.modal() ? 'auto' : 'none'
     }),
     root: {
         display: 'flex',
@@ -35,14 +35,14 @@ const inlineStyles = {
 const classes = {
     mask: ({ instance }) => {
         const positions = ['left', 'right', 'top', 'topleft', 'topright', 'bottom', 'bottomleft', 'bottomright'];
-        const pos = positions.find((item) => item === instance.position);
+        const pos = positions.find((item) => item === instance.position());
 
-        return ['p-dialog-mask', { 'p-overlay-mask': instance.modal }, pos ? `p-dialog-${pos}` : ''];
+        return ['p-dialog-mask', { 'p-overlay-mask': instance.modal() }, pos ? `p-dialog-${pos}` : ''];
     },
     root: ({ instance }) => [
         'p-dialog p-component',
         {
-            'p-dialog-maximized': instance.maximizable && instance.maximized
+            'p-dialog-maximized': instance.maximizable() && instance.maximized
         }
     ],
     header: 'p-dialog-header',
