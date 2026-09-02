@@ -1,5 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, effect, inject, input, NgModule, NgZone, numberAttribute, output, signal, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
+import {
+    afterEveryRender,
+    booleanAttribute,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    effect,
+    inject,
+    input,
+    NgModule,
+    NgZone,
+    numberAttribute,
+    output,
+    signal,
+    TemplateRef,
+    ViewEncapsulation,
+    contentChild,
+    contentChildren
+} from '@angular/core';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
 import { isEmpty, setAttribute, uuid } from '@openng/optimus-ui-utils';
 import { MessageService, PrimeTemplate, SharedModule, ToastMessageOptions } from '@openng/optimus-ui/api';
@@ -102,8 +120,6 @@ import { ToastStyle } from './style/toaststyle';
 export class ToastItem extends BaseComponent<ToastPassThrough> {
     private zone = inject(NgZone);
 
-    _componentStyle = inject(ToastStyle);
-
     readonly message = input<ToastMessageOptions | null>();
 
     readonly index = input<number | null | undefined, unknown>(undefined, { transform: numberAttribute });
@@ -122,54 +138,6 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
 
     onAnimationEnd = output<HTMLElement>();
 
-    readonly onClose = output<ToastItemCloseEvent>();
-
-    timeout: any;
-
-    visible = signal<boolean | undefined>(undefined);
-
-    private isDestroyed = false;
-
-    private isClosing = false;
-
-    onCloseIconClick = (event: Event) => {
-        this.isClosing = true;
-        this.clearTimeout();
-        this.visible.set(false);
-        event.preventDefault();
-    };
-
-    get closeAriaLabel() {
-        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
-    }
-
-    readonly dataP = computed(() =>
-        this.cn({
-            [this.message()?.severity as string]: this.message()?.severity
-        })
-    );
-
-    constructor() {
-        super();
-
-        effect(() => {
-            if (this.clearAll()) {
-                this.visible.set(false);
-            }
-        });
-    }
-
-    onAfterViewInit() {
-        this.message()?.sticky && this.visible.set(true);
-        this.initTimeout();
-    }
-
-    onDestroy() {
-        this.isDestroyed = true;
-        this.clearTimeout();
-        this.visible.set(false);
-    }
-
     onBeforeEnter(event: MotionEvent) {
         this.onAnimationStart.emit(event.element as HTMLElement);
     }
@@ -185,6 +153,33 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
                 this.onAnimationEnd.emit(event.element as HTMLElement);
             }
         }
+    }
+
+    readonly onClose = output<ToastItemCloseEvent>();
+
+    _componentStyle = inject(ToastStyle);
+
+    timeout: any;
+
+    visible = signal<boolean | undefined>(undefined);
+
+    private isDestroyed = false;
+
+    private isClosing = false;
+
+    constructor() {
+        super();
+
+        effect(() => {
+            if (this.clearAll()) {
+                this.visible.set(false);
+            }
+        });
+    }
+
+    onAfterViewInit() {
+        this.message()?.sticky && this.visible.set(true);
+        this.initTimeout();
     }
 
     initTimeout() {
@@ -218,6 +213,29 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
             this.initTimeout();
         }
     }
+
+    onCloseIconClick = (event: Event) => {
+        this.isClosing = true;
+        this.clearTimeout();
+        this.visible.set(false);
+        event.preventDefault();
+    };
+
+    get closeAriaLabel() {
+        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
+    }
+
+    onDestroy() {
+        this.isDestroyed = true;
+        this.clearTimeout();
+        this.visible.set(false);
+    }
+
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.message()?.severity as string]: this.message()?.severity
+        })
+    );
 }
 
 /**
@@ -257,11 +275,19 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
     hostDirectives: [Bind]
 })
 export class Toast extends BaseComponent<ToastPassThrough> {
+    componentName = 'Toast';
+
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    messageService: MessageService = inject(MessageService);
-
-    _componentStyle = inject(ToastStyle);
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     /**
      * Key of the message in case message is targeted to a specific toast component.
@@ -339,6 +365,13 @@ export class Toast extends BaseComponent<ToastPassThrough> {
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
+
     /**
      * Object literal to define styles per screen size.
      * @group Props
@@ -368,17 +401,6 @@ export class Toast extends BaseComponent<ToastPassThrough> {
      */
     readonly headlessTemplate = contentChild<TemplateRef<ToastHeadlessTemplateContext>>('headless');
 
-    readonly templates = contentChildren(PrimeTemplate);
-
-    componentName = 'Toast';
-
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
-
     messageSubscription: Subscription | undefined;
 
     clearSubscription: Subscription | undefined;
@@ -387,42 +409,17 @@ export class Toast extends BaseComponent<ToastPassThrough> {
 
     messagesArchieve: ToastMessageOptions[] | undefined;
 
+    messageService: MessageService = inject(MessageService);
+
+    _componentStyle = inject(ToastStyle);
+
     styleElement: any;
 
     id: string = uuid('pn_id_');
 
+    readonly templates = contentChildren(PrimeTemplate);
+
     clearAllTrigger = signal<{} | null>(null);
-
-    /**
-     * Effective message template: the `#message` content child, a legacy `pTemplate="message"`,
-     * or (legacy behavior) the last `pTemplate` with an unrecognized type.
-     */
-    readonly $template = computed(() => {
-        const template = this.template();
-        if (template) {
-            return template;
-        }
-        return [...this.templates()].reverse().find((item) => item.getType() !== 'headless')?.template as TemplateRef<ToastMessageTemplateContext> | undefined;
-    });
-
-    /** Effective headless template: the `#headless` content child, or a legacy `pTemplate="headless"`. */
-    readonly $headlessTemplate = computed(() => this.headlessTemplate() ?? (this.templates().find((item) => item.getType() === 'headless')?.template as TemplateRef<ToastHeadlessTemplateContext> | undefined));
-
-    readonly dataP = computed(() =>
-        this.cn({
-            [this.position()]: this.position()
-        })
-    );
-
-    constructor() {
-        super();
-        // Re-apply the host/root pass-through sections after each render (replaces the former
-        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
-        // so unchanged PT resolutions are no-ops.
-        afterEveryRender(() => {
-            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-        });
-    }
 
     onInit() {
         this.messageSubscription = this.messageService.messageObserver.subscribe((messages) => {
@@ -449,31 +446,30 @@ export class Toast extends BaseComponent<ToastPassThrough> {
         });
     }
 
+    clearAll() {
+        // trigger signal to clear all messages
+        this.clearAllTrigger.set({});
+    }
+
+    /**
+     * Effective message template: the `#message` content child, a legacy `pTemplate="message"`,
+     * or (legacy behavior) the last `pTemplate` with an unrecognized type.
+     */
+    readonly $template = computed(() => {
+        const template = this.template();
+        if (template) {
+            return template;
+        }
+        return [...this.templates()].reverse().find((item) => item.getType() !== 'headless')?.template as TemplateRef<ToastMessageTemplateContext> | undefined;
+    });
+
+    /** Effective headless template: the `#headless` content child, or a legacy `pTemplate="headless"`. */
+    readonly $headlessTemplate = computed(() => this.headlessTemplate() ?? (this.templates().find((item) => item.getType() === 'headless')?.template as TemplateRef<ToastHeadlessTemplateContext> | undefined));
+
     onAfterViewInit() {
         if (this.breakpoints()) {
             this.createStyle();
         }
-    }
-
-    onDestroy() {
-        if (this.messageSubscription) {
-            this.messageSubscription.unsubscribe();
-        }
-
-        if (this.el && this.autoZIndex()) {
-            ZIndexUtils.clear(this.el.nativeElement);
-        }
-
-        if (this.clearSubscription) {
-            this.clearSubscription.unsubscribe();
-        }
-
-        this.destroyStyle();
-    }
-
-    clearAll() {
-        // trigger signal to clear all messages
-        this.clearAllTrigger.set({});
     }
 
     add(messages: ToastMessageOptions[]): void {
@@ -575,6 +571,28 @@ export class Toast extends BaseComponent<ToastPassThrough> {
             this.styleElement = null;
         }
     }
+
+    onDestroy() {
+        if (this.messageSubscription) {
+            this.messageSubscription.unsubscribe();
+        }
+
+        if (this.el && this.autoZIndex()) {
+            ZIndexUtils.clear(this.el.nativeElement);
+        }
+
+        if (this.clearSubscription) {
+            this.clearSubscription.unsubscribe();
+        }
+
+        this.destroyStyle();
+    }
+
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.position()]: this.position()
+        })
+    );
 }
 
 @NgModule({
