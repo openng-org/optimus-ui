@@ -1,5 +1,25 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, inject, InjectionToken, input, Input, NgModule, numberAttribute, TemplateRef, ViewEncapsulation, contentChild, contentChildren, output } from '@angular/core';
+import {
+    afterEveryRender,
+    booleanAttribute,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    effect,
+    ElementRef,
+    inject,
+    input,
+    model,
+    NgModule,
+    numberAttribute,
+    signal,
+    TemplateRef,
+    untracked,
+    ViewEncapsulation,
+    contentChild,
+    contentChildren,
+    output
+} from '@angular/core';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
 import { addClass, appendChild, removeClass, setAttribute } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
@@ -15,8 +35,6 @@ import { DrawerPassThrough } from '@openng/optimus-ui/types/drawer';
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { DrawerStyle } from './style/drawerstyle';
 
-const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
-
 /**
  * Sidebar is a panel component displayed as an overlay at the edges of the screen.
  * @group Components
@@ -25,52 +43,52 @@ const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
     selector: 'p-drawer',
     standalone: true,
     imports: [CommonModule, Button, TimesIcon, SharedModule, Bind, FocusTrapModule, MotionModule],
-    providers: [DrawerStyle, { provide: DRAWER_INSTANCE, useExisting: Drawer }, { provide: PARENT_INSTANCE, useExisting: Drawer }],
+    providers: [DrawerStyle, { provide: PARENT_INSTANCE, useExisting: Drawer }],
     hostDirectives: [Bind],
     template: `
-        @if (modalVisible) {
+        @if (modalVisible()) {
             <div
                 #container
                 [pBind]="ptm('root')"
-                [pMotion]="visible"
+                [pMotion]="visible()"
                 [pMotionAppear]="true"
                 [pMotionEnterActiveClass]="$enterAnimation()"
                 [pMotionLeaveActiveClass]="$leaveAnimation()"
                 [pMotionOptions]="computedMotionOptions()"
                 (pMotionOnBeforeEnter)="onBeforeEnter($event)"
                 (pMotionOnAfterLeave)="onAfterLeave($event)"
-                [class]="cn(cx('root'), styleClass)"
-                [style]="style"
+                [class]="cn(cx('root'), styleClass())"
+                [style]="style()"
                 role="complementary"
                 (keydown)="onKeyDown($event)"
                 pFocusTrap
-                [attr.data-p]="dataP"
-                [attr.data-p-open]="visible"
+                [attr.data-p]="dataP()"
+                [attr.data-p-open]="visible()"
             >
-                @if (headlessTemplate() || _headlessTemplate) {
-                    <ng-container *ngTemplateOutlet="headlessTemplate() || _headlessTemplate"></ng-container>
+                @if ($headlessTemplate()) {
+                    <ng-container *ngTemplateOutlet="$headlessTemplate()"></ng-container>
                 } @else {
                     <div [pBind]="ptm('header')" [ngClass]="cx('header')" [attr.data-pc-section]="'header'">
-                        <ng-container *ngTemplateOutlet="headerTemplate() || _headerTemplate"></ng-container>
-                        @if (header) {
-                            <div [pBind]="ptm('title')" [class]="cx('title')">{{ header }}</div>
+                        <ng-container *ngTemplateOutlet="$headerTemplate()"></ng-container>
+                        @if (header()) {
+                            <div [pBind]="ptm('title')" [class]="cx('title')">{{ header() }}</div>
                         }
-                        @if (showCloseIcon && closable) {
+                        @if (showCloseIcon() && closable()) {
                             <p-button
                                 [pt]="ptm('pcCloseButton')"
                                 [ngClass]="cx('pcCloseButton')"
                                 (onClick)="close($event)"
                                 (keydown.enter)="close($event)"
-                                [buttonProps]="closeButtonProps"
-                                [ariaLabel]="ariaCloseLabel"
+                                [buttonProps]="closeButtonProps()"
+                                [ariaLabel]="ariaCloseLabel()"
                                 [attr.data-pc-group-section]="'iconcontainer'"
                                 [unstyled]="unstyled()"
                             >
                                 <ng-template #icon>
-                                    @if (!closeIconTemplate() && !_closeIconTemplate) {
+                                    @if (!$closeIconTemplate()) {
                                         <svg data-p-icon="times" [attr.data-pc-section]="'closeicon'" />
                                     }
-                                    <ng-template *ngTemplateOutlet="closeIconTemplate() || _closeIconTemplate"></ng-template>
+                                    <ng-template *ngTemplateOutlet="$closeIconTemplate()"></ng-template>
                                 </ng-template>
                             </p-button>
                         }
@@ -78,12 +96,12 @@ const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
 
                     <div [pBind]="ptm('content')" [ngClass]="cx('content')" [attr.data-pc-section]="'content'">
                         <ng-content></ng-content>
-                        <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate"></ng-container>
+                        <ng-container *ngTemplateOutlet="$contentTemplate()"></ng-container>
                     </div>
 
-                    @if (footerTemplate() || _footerTemplate) {
+                    @if ($footerTemplate()) {
                         <div [pBind]="ptm('footer')" [ngClass]="cx('footer')" [attr.data-pc-section]="'footer'">
-                            <ng-container *ngTemplateOutlet="footerTemplate() || _footerTemplate"></ng-container>
+                            <ng-container *ngTemplateOutlet="$footerTemplate()"></ng-container>
                         </div>
                     }
                 }
@@ -94,110 +112,104 @@ const DRAWER_INSTANCE = new InjectionToken<Drawer>('DRAWER_INSTANCE');
     encapsulation: ViewEncapsulation.None
 })
 export class Drawer extends BaseComponent<DrawerPassThrough> {
-    componentName = 'Drawer';
-
-    $pcDrawer: Drawer | undefined = inject(DRAWER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm('host'));
-    }
+    _componentStyle = inject(DrawerStyle);
+
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
      */
     appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>(undefined);
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
      * Whether to block scrolling of the document when drawer is active.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) blockScroll: boolean = false;
+    readonly blockScroll = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Aria label of the close icon.
      * @group Props
      */
-    @Input() ariaCloseLabel: string | undefined;
+    readonly ariaCloseLabel = input<string>();
+
     /**
      * Whether to automatically manage layering.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
+    readonly autoZIndex = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Base zIndex value to use in layering.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
+    readonly baseZIndex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * Whether an overlay mask is displayed behind the drawer.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) modal: boolean = true;
+    readonly modal = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Used to pass all properties of the ButtonProps to the Button component.
      * @group Props
      */
-    @Input() closeButtonProps: ButtonProps = { severity: 'secondary', text: true, rounded: true };
+    readonly closeButtonProps = input<ButtonProps>({ severity: 'secondary', text: true, rounded: true });
+
     /**
      * Whether to dismiss drawer on click of the mask.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) dismissible: boolean = true;
+    readonly dismissible = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether to display the close icon.
      * @group Props
      * @deprecated use 'closable' instead.
      */
-    @Input({ transform: booleanAttribute }) showCloseIcon: boolean = true;
+    readonly showCloseIcon = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Specifies if pressing escape key should hide the drawer.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) closeOnEscape: boolean = true;
+    readonly closeOnEscape = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Transition options of the animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() transitionOptions: string = '150ms cubic-bezier(0, 0, 0.2, 1)';
+    readonly transitionOptions = input<string>('150ms cubic-bezier(0, 0, 0.2, 1)');
+
     /**
-     * The visible property is an input that determines the visibility of the component.
+     * The visible property determines the visibility of the component. Supports two-way binding
+     * via `[(visible)]`; the model emits `visibleChange` on every change.
      * @defaultValue false
      * @group Props
      */
-    @Input() get visible(): boolean {
-        return this._visible ?? false;
-    }
-    set visible(value: boolean) {
-        this._visible = value;
-
-        if (this._visible && !this.modalVisible) {
-            this.modalVisible = true;
-        }
-    }
+    readonly visible = model<boolean>(false);
 
     /**
      * Specifies the position of the drawer, valid values are "left", "right", "bottom" and "top".
@@ -205,6 +217,7 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
      * @group Props
      */
     position = input<'left' | 'right' | 'bottom' | 'top' | 'full'>('left');
+
     /**
      * Adds a close icon to the header to hide the dialog.
      * @defaultValue false
@@ -212,52 +225,90 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
      */
     fullScreen = input<boolean>(false);
 
-    $enterAnimation = computed(() => (this.fullScreen() ? 'p-drawer-enter-full' : `p-drawer-enter-${this.position()}`));
-
-    $leaveAnimation = computed(() => (this.fullScreen() ? 'p-drawer-leave-full' : `p-drawer-leave-${this.position()}`));
-
     /**
      * Title content of the dialog.
      * @group Props
      */
-    @Input() header: string | undefined;
+    readonly header = input<string>();
+
     /**
      * Style of the mask.
      * @group Props
      */
-    @Input() maskStyle: { [klass: string]: any } | null | undefined;
+    readonly maskStyle = input<{ [klass: string]: any } | null>();
+
     /**
      * Whether to display close button.
      * @group Props
      * @defaultValue true
      */
-    @Input({ transform: booleanAttribute }) closable: boolean = true;
+    readonly closable = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Callback to invoke when dialog is shown.
      * @group Emits
      */
     readonly onShow = output<any>();
+
     /**
      * Callback to invoke when dialog is hidden.
      * @group Emits
      */
     readonly onHide = output<any>();
+
     /**
-     * Callback to invoke when dialog visibility is changed.
-     * @param {boolean} value - Visible value.
-     * @group Emits
+     * Custom header template.
+     * @group Templates
      */
-    readonly visibleChange = output<boolean>();
+    readonly headerTemplate = contentChild<TemplateRef<void>>('header', { descendants: false });
 
-    initialized: boolean | undefined;
+    /**
+     * Custom footer template.
+     * @group Templates
+     */
+    readonly footerTemplate = contentChild<TemplateRef<void>>('footer', { descendants: false });
 
-    _visible: boolean | undefined;
+    /**
+     * Custom content template.
+     * @group Templates
+     */
+    readonly contentTemplate = contentChild<TemplateRef<void>>('content', { descendants: false });
 
-    _position: string = 'left';
+    /**
+     * Custom close icon template.
+     * @group Templates
+     */
+    readonly closeIconTemplate = contentChild<TemplateRef<void>>('closeicon', { descendants: false });
 
-    _fullScreen: boolean = false;
+    /**
+     * Custom headless template to replace the entire drawer content.
+     * @group Templates
+     */
+    readonly headlessTemplate = contentChild<TemplateRef<void>>('headless', { descendants: false });
 
-    modalVisible: boolean = false;
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'Drawer';
+
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
+
+    /** Renders the drawer container as soon as `visible` becomes true (it is removed again after the leave animation). */
+    private readonly syncModalVisibleEffect = effect(() => {
+        if (this.visible() && !untracked(this.modalVisible)) {
+            this.modalVisible.set(true);
+        }
+    });
+
+    $enterAnimation = computed(() => (this.fullScreen() ? 'p-drawer-enter-full' : `p-drawer-enter-${this.position()}`));
+
+    $leaveAnimation = computed(() => (this.fullScreen() ? 'p-drawer-leave-full' : `p-drawer-leave-${this.position()}`));
+
+    readonly modalVisible = signal<boolean>(false);
 
     container: Nullable<HTMLDivElement>;
 
@@ -269,75 +320,68 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
 
     animationEndListener: VoidListener;
 
-    _componentStyle = inject(DrawerStyle);
-
-    onAfterViewInit() {
-        this.initialized = true;
-    }
-    /**
-     * Custom header template.
-     * @group Templates
-     */
-    readonly headerTemplate = contentChild<TemplateRef<void>>('header', { descendants: false });
-    /**
-     * Custom footer template.
-     * @group Templates
-     */
-    readonly footerTemplate = contentChild<TemplateRef<void>>('footer', { descendants: false });
-    /**
-     * Custom content template.
-     * @group Templates
-     */
-    readonly contentTemplate = contentChild<TemplateRef<void>>('content', { descendants: false });
-    /**
-     * Custom close icon template.
-     * @group Templates
-     */
-    readonly closeIconTemplate = contentChild<TemplateRef<void>>('closeicon', { descendants: false });
-    /**
-     * Custom headless template to replace the entire drawer content.
-     * @group Templates
-     */
-    readonly headlessTemplate = contentChild<TemplateRef<void>>('headless', { descendants: false });
-
     $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
 
-    _headerTemplate: TemplateRef<void> | undefined;
+    /** Effective header template: the `#header` content child, or a legacy `pTemplate="header"`. */
+    readonly $headerTemplate = computed(() => this.headerTemplate() ?? this.templates().find((item) => item.getType() === 'header')?.template);
 
-    _footerTemplate: TemplateRef<void> | undefined;
+    /** Effective footer template: the `#footer` content child, or a legacy `pTemplate="footer"`. */
+    readonly $footerTemplate = computed(() => this.footerTemplate() ?? this.templates().find((item) => item.getType() === 'footer')?.template);
 
-    _contentTemplate: TemplateRef<void> | undefined;
+    /**
+     * Effective content template: the `#content` content child, a legacy `pTemplate="content"`,
+     * or (legacy behavior) the last `pTemplate` with an unrecognized type.
+     */
+    readonly $contentTemplate = computed(() => {
+        const contentTemplate = this.contentTemplate();
+        if (contentTemplate) {
+            return contentTemplate;
+        }
+        const known = ['header', 'footer', 'closeicon', 'headless'];
+        return [...this.templates()].reverse().find((item) => !known.includes(item.getType()))?.template;
+    });
 
-    _closeIconTemplate: TemplateRef<void> | undefined;
+    /** Effective close icon template: the `#closeicon` content child, or a legacy `pTemplate="closeicon"`. */
+    readonly $closeIconTemplate = computed(() => this.closeIconTemplate() ?? this.templates().find((item) => item.getType() === 'closeicon')?.template);
 
-    _headlessTemplate: TemplateRef<void> | undefined;
+    /** Effective headless template: the `#headless` content child, or a legacy `pTemplate="headless"`. */
+    readonly $headlessTemplate = computed(() => this.headlessTemplate() ?? this.templates().find((item) => item.getType() === 'headless')?.template);
 
-    readonly templates = contentChildren(PrimeTemplate);
+    readonly dataP = computed(() =>
+        this.cn({
+            'full-screen': this.position() === 'full',
+            [this.position()]: this.position(),
+            open: this.visible(),
+            modal: this.modal()
+        })
+    );
 
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-                case 'header':
-                    this._headerTemplate = item.template;
-                    break;
-                case 'footer':
-                    this._footerTemplate = item.template;
-                    break;
-                case 'closeicon':
-                    this._closeIconTemplate = item.template;
-                    break;
-                case 'headless':
-                    this._headlessTemplate = item.template;
-                    break;
-
-                default:
-                    this._contentTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        // Re-apply the host pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('host'));
         });
+    }
+
+    onDestroy() {
+        if (this.visible() && this.modal()) {
+            this.destroyModal();
+        }
+
+        if (this.$appendTo() && this.container) {
+            this.renderer.appendChild(this.el.nativeElement, this.container);
+        }
+
+        if (this.container && this.autoZIndex()) {
+            ZIndexUtils.clear(this.container);
+        }
+
+        this.container = null;
+        this.unbindGlobalListeners();
+        this.unbindAnimationEndListener();
     }
 
     onKeyDown(event: KeyboardEvent) {
@@ -349,16 +393,15 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
     show() {
         this.container?.setAttribute(this.$attrSelector, '');
 
-        if (this.autoZIndex) {
-            ZIndexUtils.set('modal', this.container, this.baseZIndex || this.config.zIndex.modal);
+        if (this.autoZIndex()) {
+            ZIndexUtils.set('modal', this.container, this.baseZIndex() || this.config.zIndex.modal);
         }
 
-        if (this.modal) {
+        if (this.modal()) {
             this.enableModality();
         }
 
         this.onShow.emit({});
-        this.visibleChange.emit(true);
     }
 
     hide(emit: boolean = true) {
@@ -366,14 +409,14 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             this.onHide.emit({});
         }
 
-        if (this.modal) {
+        if (this.modal()) {
             this.disableModality();
         }
     }
 
     close(event: Event) {
         this.hide();
-        this.visibleChange.emit(false);
+        this.visible.set(false);
         this.cd.markForCheck();
         event.preventDefault();
     }
@@ -389,28 +432,29 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             if (this.mask) {
                 const style = `z-index: ${zIndex};${this.getMaskStyle()}`;
                 setAttribute(this.mask, 'style', style);
-                setAttribute(this.mask, 'data-p', this.dataP);
+                setAttribute(this.mask, 'data-p', this.dataP());
                 addClass(this.mask, this.cx('mask'));
             }
 
-            if (this.dismissible) {
+            if (this.dismissible()) {
                 this.maskClickListener = this.renderer.listen(this.mask, 'click', (event: any) => {
-                    if (this.dismissible) {
+                    if (this.dismissible()) {
                         this.close(event);
                     }
                 });
             }
 
             this.renderer.appendChild(this.document.body, this.mask);
-            if (this.blockScroll) {
+            if (this.blockScroll()) {
                 blockBodyScroll();
             }
         }
     }
 
     getMaskStyle() {
-        return this.maskStyle
-            ? Object.entries(this.maskStyle)
+        const maskStyle = this.maskStyle();
+        return maskStyle
+            ? Object.entries(maskStyle)
                   .map(([key, value]) => `${key}: ${value}`)
                   .join('; ')
             : '';
@@ -431,7 +475,7 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             this.renderer.removeChild(this.document.body, this.mask);
         }
 
-        if (this.blockScroll) {
+        if (this.blockScroll()) {
             unblockBodyScroll();
         }
 
@@ -444,7 +488,7 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
         this.appendContainer();
         this.show();
 
-        if (this.closeOnEscape) {
+        if (this.closeOnEscape()) {
             this.bindDocumentEscapeListener();
         }
     }
@@ -453,7 +497,7 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
         this.hide(false);
         ZIndexUtils.clear(this.container);
         this.unbindGlobalListeners();
-        this.modalVisible = false;
+        this.modalVisible.set(false);
         this.container = null;
     }
 
@@ -503,35 +547,6 @@ export class Drawer extends BaseComponent<DrawerPassThrough> {
             this.animationEndListener();
             this.animationEndListener = null;
         }
-    }
-
-    onDestroy() {
-        this.initialized = false;
-
-        if (this.visible && this.modal) {
-            this.destroyModal();
-        }
-
-        if (this.$appendTo() && this.container) {
-            this.renderer.appendChild(this.el.nativeElement, this.container);
-        }
-
-        if (this.container && this.autoZIndex) {
-            ZIndexUtils.clear(this.container);
-        }
-
-        this.container = null;
-        this.unbindGlobalListeners();
-        this.unbindAnimationEndListener();
-    }
-
-    get dataP() {
-        return this.cn({
-            'full-screen': this.position() === 'full',
-            [this.position()]: this.position(),
-            open: this.visible,
-            modal: this.modal
-        });
     }
 }
 
