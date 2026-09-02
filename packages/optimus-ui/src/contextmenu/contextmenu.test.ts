@@ -288,14 +288,14 @@ describe('ContextMenu', () => {
 
             const freshContextMenu = freshFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
-            expect(freshContextMenu.model).toBeUndefined();
-            expect(freshContextMenu.target).toBeUndefined();
-            expect(freshContextMenu.global).toBeFalsy();
-            expect(freshContextMenu.triggerEvent).toBe('contextmenu');
-            expect(freshContextMenu.autoZIndex).toBe(true);
-            expect(freshContextMenu.baseZIndex).toBe(0);
-            expect(freshContextMenu.breakpoint).toBe('960px');
-            expect(freshContextMenu.pressDelay).toBe(500);
+            expect(freshContextMenu.model()).toBeUndefined();
+            expect(freshContextMenu.target()).toBeUndefined();
+            expect(freshContextMenu.global()).toBeFalsy();
+            expect(freshContextMenu.triggerEvent()).toBe('contextmenu');
+            expect(freshContextMenu.autoZIndex()).toBe(true);
+            expect(freshContextMenu.baseZIndex()).toBe(0);
+            expect(freshContextMenu.breakpoint()).toBe('960px');
+            expect(freshContextMenu.pressDelay()).toBe(500);
         });
 
         it('should accept custom values', async () => {
@@ -310,19 +310,19 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.model).toBe(testModel);
-            expect(contextMenuInstance.global).toBe(true);
-            expect(contextMenuInstance.triggerEvent).toBe('click');
-            expect(contextMenuInstance.autoZIndex).toBe(false);
-            expect(contextMenuInstance.baseZIndex).toBe(100);
-            expect(contextMenuInstance.styleClass).toBe('custom-contextmenu');
-            expect(contextMenuInstance.ariaLabel).toBe('Custom Context Menu');
+            expect(contextMenuInstance.model()).toBe(testModel);
+            expect(contextMenuInstance.global()).toBe(true);
+            expect(contextMenuInstance.triggerEvent()).toBe('click');
+            expect(contextMenuInstance.autoZIndex()).toBe(false);
+            expect(contextMenuInstance.baseZIndex()).toBe(100);
+            expect(contextMenuInstance.styleClass()).toBe('custom-contextmenu');
+            expect(contextMenuInstance.ariaLabel()).toBe('Custom Context Menu');
         });
 
         it('should initialize with generated id', () => {
-            expect(contextMenuInstance.id).toBeTruthy();
-            expect(typeof contextMenuInstance.id).toBe('string');
-            expect(contextMenuInstance.id).toMatch(/^pn_id_/);
+            expect(contextMenuInstance.$id()).toBeTruthy();
+            expect(typeof contextMenuInstance.$id()).toBe('string');
+            expect(contextMenuInstance.$id()).toMatch(/^pn_id_/);
         });
 
         it('should have onShow and onHide output emitters', () => {
@@ -345,8 +345,8 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.model).toBe(newModel);
-            expect(contextMenuInstance.processedItems).toBeTruthy();
+            expect(contextMenuInstance.model()).toBe(newModel);
+            expect(contextMenuInstance.processedItems()).toBeTruthy();
         });
 
         it('should update target input', async () => {
@@ -355,26 +355,26 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.target).toBe(targetElement);
+            expect(contextMenuInstance.target()).toBe(targetElement);
         });
 
         it('should update global input with booleanAttribute transform', async () => {
             component.global = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.global).toBe(true);
+            expect(contextMenuInstance.global()).toBe(true);
 
             component.global = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.global).toBe(false);
+            expect(contextMenuInstance.global()).toBe(false);
         });
 
         it('should update triggerEvent input', async () => {
             component.triggerEvent = 'click';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.triggerEvent).toBe('click');
+            expect(contextMenuInstance.triggerEvent()).toBe('click');
         });
 
         it('should update style and styleClass inputs', async () => {
@@ -384,29 +384,29 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.style).toBe(customStyle);
-            expect(contextMenuInstance.styleClass).toBe('test-class');
+            expect(contextMenuInstance.style()).toBe(customStyle);
+            expect(contextMenuInstance.styleClass()).toBe('test-class');
         });
 
         it('should update autoZIndex with booleanAttribute transform', async () => {
             component.autoZIndex = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.autoZIndex).toBe(false);
+            expect(contextMenuInstance.autoZIndex()).toBe(false);
         });
 
         it('should update baseZIndex with numberAttribute transform', async () => {
             component.baseZIndex = 1000;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.baseZIndex).toBe(1000);
+            expect(contextMenuInstance.baseZIndex()).toBe(1000);
         });
 
         it('should update breakpoint input', async () => {
             component.breakpoint = '768px';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.breakpoint).toBe('768px');
+            expect(contextMenuInstance.breakpoint()).toBe('768px');
         });
 
         it('should update ariaLabel and ariaLabelledBy inputs', async () => {
@@ -415,15 +415,15 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.ariaLabel).toBe('Test Menu');
-            expect(contextMenuInstance.ariaLabelledBy).toBe('menu-label');
+            expect(contextMenuInstance.ariaLabel()).toBe('Test Menu');
+            expect(contextMenuInstance.ariaLabelledBy()).toBe('menu-label');
         });
 
         it('should update pressDelay with numberAttribute transform', async () => {
             component.pressDelay = 1000;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(contextMenuInstance.pressDelay).toBe(1000);
+            expect(contextMenuInstance.pressDelay()).toBe(1000);
         });
     });
 
@@ -526,8 +526,8 @@ describe('ContextMenu', () => {
             await targetFixture.whenStable();
 
             // Test the properties
-            expect(targetContextMenu.target).toBe('targetDiv');
-            expect(targetContextMenu.global).toBeFalsy();
+            expect(targetContextMenu.target()).toBe('targetDiv');
+            expect(targetContextMenu.global()).toBeFalsy();
             expect(targetContextMenu.bindTriggerEventListener).toHaveBeenCalled();
         });
 
@@ -536,7 +536,7 @@ describe('ContextMenu', () => {
             await globalFixture.whenStable();
 
             const globalContextMenu = globalFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
-            expect(globalContextMenu.global).toBe(true);
+            expect(globalContextMenu.global()).toBe(true);
         });
 
         it('should bind trigger event listener on init', () => {
@@ -544,7 +544,7 @@ describe('ContextMenu', () => {
 
             // Set up a proper target before calling ngOnInit
             const mockTarget = document.createElement('div');
-            contextMenuInstance.target = mockTarget;
+            contextMenuInstance._target = mockTarget;
 
             contextMenuInstance.ngOnInit();
 
@@ -618,8 +618,8 @@ describe('ContextMenu', () => {
 
         it('should handle missing templates gracefully', () => {
             expect(() => contextMenuInstance.ngAfterContentInit()).not.toThrow();
-            expect(contextMenuInstance._itemTemplate).toBeUndefined();
-            expect(contextMenuInstance._submenuIconTemplate).toBeUndefined();
+            expect(contextMenuInstance.$itemTemplate()).toBeUndefined();
+            expect(contextMenuInstance.$submenuIconTemplate()).toBeUndefined();
         });
     });
 
@@ -637,10 +637,10 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.processedItems).toBeTruthy();
-            expect(contextMenuInstance.processedItems.length).toBe(2);
-            expect(contextMenuInstance.processedItems[1].items).toBeTruthy();
-            expect(contextMenuInstance.processedItems[1].items.length).toBe(2);
+            expect(contextMenuInstance.processedItems()).toBeTruthy();
+            expect(contextMenuInstance.processedItems().length).toBe(2);
+            expect(contextMenuInstance.processedItems()[1].items).toBeTruthy();
+            expect(contextMenuInstance.processedItems()[1].items.length).toBe(2);
         });
 
         it('should handle empty model', async () => {
@@ -648,7 +648,7 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.processedItems).toEqual([]);
+            expect(contextMenuInstance.processedItems()).toEqual([]);
         });
 
         it('should handle undefined model', async () => {
@@ -656,7 +656,7 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.model).toBeUndefined();
+            expect(contextMenuInstance.model()).toBeUndefined();
         });
 
         it('should handle items with separators', async () => {
@@ -666,7 +666,7 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.processedItems.length).toBe(3);
+            expect(contextMenuInstance.processedItems().length).toBe(3);
             expect(contextMenuInstance.isItemSeparator(modelWithSeparator[1])).toBe(true);
         });
 
@@ -675,7 +675,7 @@ describe('ContextMenu', () => {
             await disabledFixture.whenStable();
 
             const disabledContextMenu = disabledFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
-            const disabledItem = disabledContextMenu.model[1];
+            const disabledItem = disabledContextMenu.model()[1];
 
             expect(contextMenuInstance.isItemDisabled(disabledItem)).toBe(true);
         });
@@ -808,7 +808,7 @@ describe('ContextMenu', () => {
                 expect(containerElement.nativeElement.classList.contains('custom-contextmenu-class')).toBe(true);
             } else {
                 // If not visible in test, just check that property is set
-                expect(contextMenuInstance.styleClass).toBe('custom-contextmenu-class');
+                expect(contextMenuInstance.styleClass()).toBe('custom-contextmenu-class');
             }
         });
 
@@ -860,8 +860,8 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.ariaLabel).toBe('Context menu');
-            expect(contextMenuInstance.ariaLabelledBy).toBe('menu-title');
+            expect(contextMenuInstance.ariaLabel()).toBe('Context menu');
+            expect(contextMenuInstance.ariaLabelledBy()).toBe('menu-title');
         });
 
         it('should handle focus and blur events', () => {
@@ -957,7 +957,7 @@ describe('ContextMenu', () => {
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
             }).not.toThrow();
-            expect(contextMenuInstance.model).toBeUndefined();
+            expect(contextMenuInstance.model()).toBeUndefined();
         });
 
         it('should handle empty model array', async () => {
@@ -969,7 +969,7 @@ describe('ContextMenu', () => {
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
             }).not.toThrow();
-            expect(contextMenuInstance.model).toEqual([]);
+            expect(contextMenuInstance.model()).toEqual([]);
         });
 
         it('should handle items without labels', async () => {
@@ -981,7 +981,7 @@ describe('ContextMenu', () => {
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
             }).not.toThrow();
-            expect(contextMenuInstance.model?.[0]?.icon).toBe('pi pi-file');
+            expect(contextMenuInstance.model()?.[0]?.icon).toBe('pi pi-file');
         });
 
         it('should handle deeply nested menu items', async () => {
@@ -1006,8 +1006,8 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.processedItems.length).toBe(1);
-            expect(contextMenuInstance.processedItems[0].items[0].items[0].items.length).toBe(1);
+            expect(contextMenuInstance.processedItems().length).toBe(1);
+            expect(contextMenuInstance.processedItems()[0].items[0].items[0].items.length).toBe(1);
         });
 
         it('should handle rapid show/hide calls', () => {
@@ -1053,10 +1053,10 @@ describe('ContextMenu', () => {
             const instance1 = fixture1.debugElement.query(By.directive(ContextMenu)).componentInstance;
             const instance2 = fixture2.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
-            expect(instance1.model?.[0]?.label).toBe('Menu 1');
-            expect(instance1.styleClass).toBe('menu-1');
-            expect(instance2.model?.[0]?.label).toBe('Menu 2');
-            expect(instance2.styleClass).toBe('menu-2');
+            expect(instance1.model()?.[0]?.label).toBe('Menu 1');
+            expect(instance1.styleClass()).toBe('menu-1');
+            expect(instance2.model()?.[0]?.label).toBe('Menu 2');
+            expect(instance2.styleClass()).toBe('menu-2');
             expect(instance1).not.toBe(instance2);
         });
     });
@@ -1068,9 +1068,9 @@ describe('ContextMenu', () => {
 
             const routerContextMenu = routerFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
-            expect(routerContextMenu.model[0].routerLink).toBe('/');
-            expect(routerContextMenu.model[1].routerLink).toBe('/products');
-            expect(routerContextMenu.model[2].queryParams).toEqual({ tab: 'overview' });
+            expect(routerContextMenu.model()[0].routerLink).toBe('/');
+            expect(routerContextMenu.model()[1].routerLink).toBe('/products');
+            expect(routerContextMenu.model()[2].queryParams).toEqual({ tab: 'overview' });
         });
 
         it('should work with styled component', async () => {
@@ -1078,7 +1078,7 @@ describe('ContextMenu', () => {
             await styleFixture.whenStable();
 
             const styledContextMenu = styleFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
-            expect(styledContextMenu.styleClass).toBe('custom-contextmenu');
+            expect(styledContextMenu.styleClass()).toBe('custom-contextmenu');
         });
 
         it('should work with dynamic content changes', async () => {
@@ -1088,7 +1088,7 @@ describe('ContextMenu', () => {
 
             const dynamicContextMenu = dynamicFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
-            expect(dynamicContextMenu.model.length).toBe(0);
+            expect(dynamicContextMenu.model().length).toBe(0);
 
             // Add items dynamically
             dynamicComponent.addItem({ label: 'Dynamic 1', icon: 'pi pi-file' });
@@ -1096,15 +1096,15 @@ describe('ContextMenu', () => {
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
-            expect(dynamicContextMenu.model.length).toBe(2);
-            expect(dynamicContextMenu.model[0].label).toBe('Dynamic 1');
+            expect(dynamicContextMenu.model().length).toBe(2);
+            expect(dynamicContextMenu.model()[0].label).toBe('Dynamic 1');
 
             // Clear items
             dynamicComponent.clearItems();
             dynamicFixture.changeDetectorRef.markForCheck();
             await dynamicFixture.whenStable();
 
-            expect(dynamicContextMenu.model.length).toBe(0);
+            expect(dynamicContextMenu.model().length).toBe(0);
         });
 
         it('should handle complete workflow with templates', async () => {
@@ -1115,8 +1115,8 @@ describe('ContextMenu', () => {
             const templateContextMenu = templateFixture.debugElement.query(By.directive(ContextMenu)).componentInstance;
 
             expect(templateContextMenu.itemTemplate).toBeDefined();
-            expect(templateContextMenu.model).toBeTruthy();
-            expect(templateContextMenu.model.length).toBeGreaterThan(0);
+            expect(templateContextMenu.model()).toBeTruthy();
+            expect(templateContextMenu.model().length).toBeGreaterThan(0);
         });
 
         it('should maintain state across property changes', async () => {
@@ -1125,8 +1125,8 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.model?.[0]?.label).toBe('Initial');
-            expect(contextMenuInstance.styleClass).toBe('initial-class');
+            expect(contextMenuInstance.model()?.[0]?.label).toBe('Initial');
+            expect(contextMenuInstance.styleClass()).toBe('initial-class');
 
             component.model = [{ label: 'Updated' }];
             component.styleClass = 'updated-class';
@@ -1134,9 +1134,9 @@ describe('ContextMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(contextMenuInstance.model?.[0]?.label).toBe('Updated');
-            expect(contextMenuInstance.styleClass).toBe('updated-class');
-            expect(contextMenuInstance.autoZIndex).toBe(false);
+            expect(contextMenuInstance.model()?.[0]?.label).toBe('Updated');
+            expect(contextMenuInstance.styleClass()).toBe('updated-class');
+            expect(contextMenuInstance.autoZIndex()).toBe(false);
         });
     });
 
@@ -1662,7 +1662,7 @@ describe('ContextMenuSub', () => {
 
         fixture = TestBed.createComponent(ContextMenuSub);
         instance = fixture.componentInstance;
-        instance.visible = true;
+        fixture.componentRef.setInput('visible', true);
         fixture.changeDetectorRef.markForCheck();
         await fixture.whenStable();
     });
