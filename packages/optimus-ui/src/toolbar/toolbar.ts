@@ -1,12 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, computed, contentChild, contentChildren, inject, input, NgModule, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { BlockableUI, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { ToolbarStyle } from './style/toolbarstyle';
 import { ToolbarPassThrough } from '@openng/optimus-ui/types/toolbar';
-
-const TOOLBAR_INSTANCE = new InjectionToken<Toolbar>('TOOLBAR_INSTANCE');
 
 /**
  * Toolbar is a grouping component for buttons and other content.
@@ -18,59 +16,43 @@ const TOOLBAR_INSTANCE = new InjectionToken<Toolbar>('TOOLBAR_INSTANCE');
     imports: [CommonModule, SharedModule, BindModule],
     template: `
         <ng-content></ng-content>
-        @if (startTemplate() || _startTemplate) {
+        @if ($startTemplate(); as startTemplate) {
             <div [class]="cx('start')" [pBind]="ptm('start')">
-                <ng-container *ngTemplateOutlet="startTemplate() || _startTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="startTemplate"></ng-container>
             </div>
         }
-        @if (centerTemplate() || _centerTemplate) {
+        @if ($centerTemplate(); as centerTemplate) {
             <div [class]="cx('center')" [pBind]="ptm('center')">
-                <ng-container *ngTemplateOutlet="centerTemplate() || _centerTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="centerTemplate"></ng-container>
             </div>
         }
-        @if (endTemplate() || _endTemplate) {
+        @if ($endTemplate(); as endTemplate) {
             <div [class]="cx('end')" [pBind]="ptm('end')">
-                <ng-container *ngTemplateOutlet="endTemplate() || _endTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="endTemplate"></ng-container>
             </div>
         }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [ToolbarStyle, { provide: TOOLBAR_INSTANCE, useExisting: Toolbar }, { provide: PARENT_INSTANCE, useExisting: Toolbar }],
+    providers: [ToolbarStyle, { provide: PARENT_INSTANCE, useExisting: Toolbar }],
     host: {
-        '[class]': 'cn(cx("root"), styleClass)',
+        '[class]': 'cx("root")',
         role: 'toolbar',
-        '[attr.aria-labelledby]': 'ariaLabelledBy'
+        '[attr.aria-labelledby]': 'ariaLabelledBy()'
     },
     hostDirectives: [Bind]
 })
 export class Toolbar extends BaseComponent<ToolbarPassThrough> implements BlockableUI {
-    componentName = 'Toolbar';
-
-    $pcToolbar: Toolbar | undefined = inject(TOOLBAR_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-    /**
-     * Style class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    _componentStyle = inject(ToolbarStyle);
+
     /**
      * Defines a string value that labels an interactive element.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
 
-    _componentStyle = inject(ToolbarStyle);
-
-    getBlockableElement(): HTMLElement {
-        return this.el.nativeElement.children[0];
-    }
     /**
      * Custom start template.
      * @group Templates
@@ -91,30 +73,29 @@ export class Toolbar extends BaseComponent<ToolbarPassThrough> implements Blocka
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _startTemplate: TemplateRef<void> | undefined;
+    componentName = 'Toolbar';
 
-    _endTemplate: TemplateRef<void> | undefined;
+    /** Effective start template: the \`#start\` content child, or a legacy \`pTemplate="start"\`/\`"left"\`. */
+    readonly $startTemplate = computed(() => this.startTemplate() ?? this.templates().find((item) => ['start', 'left'].includes(item.getType()))?.template);
 
-    _centerTemplate: TemplateRef<void> | undefined;
+    /** Effective center template: the \`#center\` content child, or a legacy \`pTemplate="center"\`. */
+    readonly $centerTemplate = computed(() => this.centerTemplate() ?? this.templates().find((item) => item.getType() === 'center')?.template);
 
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'start':
-                case 'left':
-                    this._startTemplate = item.template;
-                    break;
+    /** Effective end template: the \`#end\` content child, or a legacy \`pTemplate="end"\`/\`"right"\`. */
+    readonly $endTemplate = computed(() => this.endTemplate() ?? this.templates().find((item) => ['end', 'right'].includes(item.getType()))?.template);
 
-                case 'end':
-                case 'right':
-                    this._endTemplate = item.template;
-                    break;
-
-                case 'center':
-                    this._centerTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
+    }
+
+    getBlockableElement(): HTMLElement {
+        return this.el.nativeElement.children[0];
     }
 }
 

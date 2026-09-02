@@ -586,11 +586,10 @@ describe('Toolbar', () => {
 
             const toolbarInstance = templateFixture.debugElement.query(By.directive(Toolbar)).componentInstance;
 
-            // ngAfterContentInit is already called during detectChanges
-            // Verify that templates are processed correctly
-            expect(toolbarInstance._startTemplate || toolbarInstance.startTemplate).toBeTruthy();
-            expect(toolbarInstance._centerTemplate || toolbarInstance.centerTemplate).toBeTruthy();
-            expect(toolbarInstance._endTemplate || toolbarInstance.endTemplate).toBeTruthy();
+            // Verify that the effective templates (content children or legacy pTemplate) resolve
+            expect(toolbarInstance.$startTemplate()).toBeTruthy();
+            expect(toolbarInstance.$centerTemplate()).toBeTruthy();
+            expect(toolbarInstance.$endTemplate()).toBeTruthy();
         });
 
         it('should handle pTemplate directives', () => {
@@ -644,9 +643,9 @@ describe('Toolbar', () => {
             const toolbarInstance = contentChildFixture.debugElement.query(By.directive(Toolbar)).componentInstance;
 
             // ContentChild templates should be available
-            expect(toolbarInstance.startTemplate).toBeDefined();
-            expect(toolbarInstance.centerTemplate).toBeDefined();
-            expect(toolbarInstance.endTemplate).toBeDefined();
+            expect(toolbarInstance.startTemplate()).toBeDefined();
+            expect(toolbarInstance.centerTemplate()).toBeDefined();
+            expect(toolbarInstance.endTemplate()).toBeDefined();
         });
 
         it('should have correct template references in component', () => {
@@ -790,8 +789,7 @@ describe('Toolbar', () => {
             ptComponent.pt = {
                 root: ({ instance }) => {
                     return {
-                        class: instance?.ariaLabelledBy ? 'HAS_ARIA' : 'NO_ARIA',
-                        'data-styleclass': instance?.styleClass
+                        class: instance?.ariaLabelledBy() ? 'HAS_ARIA' : 'NO_ARIA'
                     };
                 }
             };
