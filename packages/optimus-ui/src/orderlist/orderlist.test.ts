@@ -50,7 +50,7 @@ interface Product {
             [ariaLabel]="ariaLabel"
             [ariaLabelledBy]="ariaLabelledBy"
             [ariaFilterLabel]="ariaFilterLabel"
-            [styleClass]="styleClass"
+            [class]="styleClass"
             [buttonProps]="buttonProps"
             [moveUpButtonProps]="moveUpButtonProps"
             [moveTopButtonProps]="moveTopButtonProps"
@@ -412,16 +412,16 @@ describe('OrderList', () => {
         });
 
         it('should have default values', () => {
-            expect(orderList.controlsPosition).toBe('left');
-            expect(orderList.metaKeySelection).toBe(false);
-            expect(orderList.dragdrop).toBe(false);
-            expect(orderList.breakpoint).toBe('960px');
-            expect(orderList.filterMatchMode).toBe('contains');
-            expect(orderList.scrollHeight).toBe('14rem');
-            expect(orderList.autoOptionFocus).toBe(true);
-            expect(orderList.stripedRows).toBeFalsy();
-            expect(orderList.disabled).toBe(false);
-            expect(orderList.responsive).toBeFalsy();
+            expect(orderList.controlsPosition()).toBe('left');
+            expect(orderList.metaKeySelection()).toBe(false);
+            expect(orderList.dragdrop()).toBe(false);
+            expect(orderList.breakpoint()).toBe('960px');
+            expect(orderList.filterMatchMode()).toBe('contains');
+            expect(orderList.scrollHeight()).toBe('14rem');
+            expect(orderList.autoOptionFocus()).toBe(true);
+            expect(orderList.stripedRows()).toBeFalsy();
+            expect(orderList.disabled()).toBe(false);
+            expect(orderList.responsive()).toBeFalsy();
         });
 
         it('should accept custom values', async () => {
@@ -435,23 +435,23 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.header).toBe('Custom Header');
-            expect(orderList.responsive).toBe(true);
-            expect(orderList.stripedRows).toBe(true);
-            expect(orderList.metaKeySelection).toBe(true);
-            expect(orderList.dragdrop).toBe(true);
-            expect(orderList.controlsPosition).toBe('right');
-            expect(orderList.filterBy).toBe('name');
+            expect(orderList.header()).toBe('Custom Header');
+            expect(orderList.responsive()).toBe(true);
+            expect(orderList.stripedRows()).toBe(true);
+            expect(orderList.metaKeySelection()).toBe(true);
+            expect(orderList.dragdrop()).toBe(true);
+            expect(orderList.controlsPosition()).toBe('right');
+            expect(orderList.filterBy()).toBe('name');
         });
 
         it('should initialize with provided value', () => {
-            expect(orderList.value).toEqual(component.products);
-            expect(orderList.value?.length).toBe(5);
+            expect(orderList.value()).toEqual(component.products);
+            expect(orderList.value()?.length).toBe(5);
         });
 
         it('should initialize selection as empty array', () => {
-            expect(orderList.selection).toEqual([]);
-            expect(orderList.d_selection).toEqual([]);
+            expect(orderList.selection()).toEqual([]);
+            expect(orderList.d_selection()).toEqual([]);
         });
 
         it('should generate unique id', () => {
@@ -691,7 +691,7 @@ describe('OrderList', () => {
             await fixture.whenStable();
 
             expect(component.onSelectionChange).toHaveBeenCalledWith(newSelection);
-            expect(orderList.d_selection).toEqual(newSelection);
+            expect(orderList.d_selection()).toEqual(newSelection);
         });
 
         it('should emit onSelectionChange event with originalEvent', async () => {
@@ -794,7 +794,8 @@ describe('OrderList', () => {
             templateFixture.detectChanges();
 
             // After ngAfterContentInit, some templates should be set
-            const hasIconTemplates = templateOrderList._moveUpIconTemplate || templateOrderList._moveTopIconTemplate || templateOrderList._moveDownIconTemplate || templateOrderList._moveBottomIconTemplate || templateOrderList._filterIconTemplate;
+            const hasIconTemplates =
+                templateOrderList.$moveUpIconTemplate() || templateOrderList.$moveTopIconTemplate() || templateOrderList.$moveDownIconTemplate() || templateOrderList.$moveBottomIconTemplate() || templateOrderList.$filterIconTemplate();
             expect(hasIconTemplates).toBeTruthy();
         });
 
@@ -928,7 +929,7 @@ describe('OrderList', () => {
             component.dragdrop = true;
             fixture.detectChanges();
 
-            expect(orderList.dragdrop).toBe(true);
+            expect(orderList.dragdrop()).toBe(true);
         });
 
         it('should handle drop event', () => {
@@ -1204,13 +1205,13 @@ describe('OrderList', () => {
             expect(listbox).toBeTruthy();
 
             // Test selection through component
-            orderList.d_selection = [component.products[0]];
+            orderList.d_selection.set([component.products[0]]);
             expect(orderList.isSelected(component.products[0])).toBe(true);
             expect(orderList.isSelected(component.products[1])).toBe(false);
         });
 
         it('should handle multiple selection', () => {
-            orderList.d_selection = [component.products[0], component.products[2]];
+            orderList.d_selection.set([component.products[0], component.products[2]]);
 
             expect(orderList.isSelected(component.products[0])).toBe(true);
             expect(orderList.isSelected(component.products[1])).toBe(false);
@@ -1219,10 +1220,9 @@ describe('OrderList', () => {
 
         it('should update selection through setter', () => {
             const newSelection = [component.products[1], component.products[3]];
-            orderList.selection = newSelection;
+            orderList.d_selection.set(newSelection);
 
-            expect(orderList.d_selection).toEqual(newSelection);
-            expect(orderList.selection).toEqual(newSelection);
+            expect(orderList.d_selection()).toEqual(newSelection);
         });
 
         it('should handle meta key selection', async () => {
@@ -1230,7 +1230,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.metaKeySelection).toBe(true);
+            expect(orderList.metaKeySelection()).toBe(true);
         });
 
         it('should handle selection change events', async () => {
@@ -1247,7 +1247,7 @@ describe('OrderList', () => {
 
             expect(component.onSelectionChange).toHaveBeenCalledWith(changeEvent.value);
             expect(component.onSelectionChangeEvent).toHaveBeenCalledWith(changeEvent);
-            expect(orderList.d_selection).toEqual(changeEvent.value);
+            expect(orderList.d_selection()).toEqual(changeEvent.value);
         });
     });
 
@@ -1259,9 +1259,9 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.ariaLabel).toBe('Product order list');
-            expect(orderList.ariaLabelledBy).toBe('header-id');
-            expect(orderList.ariaFilterLabel).toBe('Filter products');
+            expect(orderList.ariaLabel()).toBe('Product order list');
+            expect(orderList.ariaLabelledBy()).toBe('header-id');
+            expect(orderList.ariaFilterLabel()).toBe('Filter products');
         });
 
         it('should have move button ARIA labels', () => {
@@ -1276,7 +1276,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.tabindex).toBe(5);
+            expect(orderList.tabindex()).toBe(5);
         });
 
         it('should handle autoOptionFocus', async () => {
@@ -1284,7 +1284,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.autoOptionFocus).toBe(false);
+            expect(orderList.autoOptionFocus()).toBe(false);
         });
 
         it('should handle focus and blur events', () => {
@@ -1357,7 +1357,7 @@ describe('OrderList', () => {
             const endTime = performance.now();
 
             expect(endTime - startTime).toBeLessThan(1000);
-            expect(orderList.value?.length).toBe(1000);
+            expect(orderList.value()?.length).toBe(1000);
         });
 
         it('should handle malformed data', () => {
@@ -1399,7 +1399,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.listStyle).toEqual({ height: '400px', border: '1px solid red' });
+            expect(orderList.listStyle()).toEqual({ height: '400px', border: '1px solid red' });
         });
 
         it('should handle responsive styling', async () => {
@@ -1408,8 +1408,8 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.responsive).toBe(true);
-            expect(orderList.breakpoint).toBe('768px');
+            expect(orderList.responsive()).toBe(true);
+            expect(orderList.breakpoint()).toBe('768px');
         });
 
         it('should apply striped rows', async () => {
@@ -1417,7 +1417,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.stripedRows).toBe(true);
+            expect(orderList.stripedRows()).toBe(true);
         });
 
         it('should handle controls position', async () => {
@@ -1425,7 +1425,7 @@ describe('OrderList', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(orderList.controlsPosition).toBe('right');
+            expect(orderList.controlsPosition()).toBe('right');
         });
 
         it('should apply button styles', async () => {
@@ -1473,15 +1473,15 @@ describe('OrderList', () => {
     describe('Lifecycle and Cleanup', () => {
         it('should initialize properly', () => {
             expect(orderList.id).toMatch(/^pn_id_/);
-            expect(orderList.d_selection).toEqual([]);
+            expect(orderList.d_selection()).toEqual([]);
             expect(orderList.filterService).toBeTruthy();
         });
 
         it('should handle ngOnInit correctly', () => {
             vi.spyOn(orderList, 'createStyle').mockImplementation(() => {});
 
-            orderList.responsive = true;
-            orderList.filterBy = 'name';
+            vi.spyOn(orderList, 'responsive').mockReturnValue(true);
+            vi.spyOn(orderList, 'filterBy').mockReturnValue('name');
             orderList.ngOnInit();
 
             expect(orderList.createStyle).toHaveBeenCalled();
@@ -1499,7 +1499,7 @@ describe('OrderList', () => {
         });
 
         it('should destroy style on destroy', () => {
-            orderList.responsive = true;
+            vi.spyOn(orderList, 'responsive').mockReturnValue(true);
             orderList.ngOnInit();
             orderList.createStyle();
 
@@ -1509,22 +1509,26 @@ describe('OrderList', () => {
             expect(orderList.destroyStyle).toHaveBeenCalled();
         });
 
-        it('should handle value changes', () => {
+        it('should handle value changes', async () => {
             const newProducts = [{ id: '10', code: 'P010', name: 'New Product', description: 'New Description', price: 1000, quantity: 1, inventoryStatus: 'INSTOCK', category: 'New Category' }];
 
-            orderList.value = newProducts;
+            component.products = newProducts;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
-            expect(orderList._value).toEqual(newProducts);
+            expect(orderList.value()).toEqual(newProducts);
         });
 
-        it('should handle value changes with filter', () => {
-            orderList.filterBy = 'name';
+        it('should handle value changes with filter', async () => {
+            vi.spyOn(orderList, 'filterBy').mockReturnValue('name');
             orderList.filterValue = 'test';
             vi.spyOn(orderList, 'filter').mockImplementation(() => {});
 
             const newProducts = [{ id: '10', code: 'P010', name: 'Test Product', description: 'Test Description', price: 1000, quantity: 1, inventoryStatus: 'INSTOCK', category: 'Test Category' }];
 
-            orderList.value = newProducts;
+            component.products = newProducts;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             expect(orderList.filter).toHaveBeenCalled();
         });
@@ -1533,7 +1537,7 @@ describe('OrderList', () => {
     describe('TrackBy Function', () => {
         it('should use default trackBy function', () => {
             const item = { id: '1', name: 'Test' };
-            const result = orderList.trackBy(0, item);
+            const result = orderList.trackBy()(0, item);
             expect(result).toBe(item.id);
         });
 
@@ -1543,7 +1547,7 @@ describe('OrderList', () => {
             fixture.detectChanges();
 
             const item = { id: '1', code: 'TEST', name: 'Test' };
-            const result = orderList.trackBy(0, item);
+            const result = orderList.trackBy()(0, item);
             expect(result).toBe('TEST');
         });
     });
@@ -1569,16 +1573,16 @@ describe('OrderList', () => {
             it('should process all pTemplate templates in ngAfterContentInit', async () => {
                 await comprehensiveFixture.whenStable();
 
-                expect(comprehensiveOrderList._itemTemplate).toBeDefined();
-                expect(comprehensiveOrderList._headerTemplate).toBeDefined();
-                expect(comprehensiveOrderList._emptyMessageTemplate).toBeDefined();
-                expect(comprehensiveOrderList._emptyFilterMessageTemplate).toBeDefined();
-                expect(comprehensiveOrderList._filterTemplate).toBeDefined();
-                expect(comprehensiveOrderList._moveUpIconTemplate).toBeDefined();
-                expect(comprehensiveOrderList._moveTopIconTemplate).toBeDefined();
-                expect(comprehensiveOrderList._moveDownIconTemplate).toBeDefined();
-                expect(comprehensiveOrderList._moveBottomIconTemplate).toBeDefined();
-                expect(comprehensiveOrderList._filterIconTemplate).toBeDefined();
+                expect(comprehensiveOrderList.$itemTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$headerTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$emptyMessageTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$emptyFilterMessageTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$filterTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$moveUpIconTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$moveTopIconTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$moveDownIconTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$moveBottomIconTemplate()).toBeDefined();
+                expect(comprehensiveOrderList.$filterIconTemplate()).toBeDefined();
             });
 
             it('should apply item template with context (product, selected, index)', async () => {
@@ -1595,7 +1599,7 @@ describe('OrderList', () => {
 
             it('should apply item template with selection context', async () => {
                 comprehensiveComponent.selection = [comprehensiveComponent.products[0]];
-                comprehensiveOrderList.selection = [comprehensiveComponent.products[0]];
+                comprehensiveOrderList.d_selection.set([comprehensiveComponent.products[0]]);
                 comprehensiveFixture.changeDetectorRef.markForCheck();
                 comprehensiveFixture.detectChanges();
                 await comprehensiveFixture.whenStable();
@@ -1617,7 +1621,7 @@ describe('OrderList', () => {
                     expect(headerElement.nativeElement.textContent).toBe('Custom OrderList Header with pTemplate');
                 } else {
                     // Fallback: verify template is configured
-                    expect(comprehensiveOrderList._headerTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$headerTemplate()).toBeDefined();
                 }
             });
 
@@ -1667,7 +1671,7 @@ describe('OrderList', () => {
                     expect(filterElement.nativeElement.placeholder).toBe('Search products...');
                 } else {
                     // Fallback: verify filter is configured
-                    expect(comprehensiveOrderList._filterTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$filterTemplate()).toBeDefined();
                 }
             });
 
@@ -1685,7 +1689,7 @@ describe('OrderList', () => {
                     }
                 } else {
                     // Fallback: verify template is configured
-                    expect(comprehensiveOrderList._moveUpIconTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$moveUpIconTemplate()).toBeDefined();
                 }
             });
 
@@ -1703,7 +1707,7 @@ describe('OrderList', () => {
                     }
                 } else {
                     // Fallback: verify template is configured
-                    expect(comprehensiveOrderList._moveTopIconTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$moveTopIconTemplate()).toBeDefined();
                 }
             });
 
@@ -1721,7 +1725,7 @@ describe('OrderList', () => {
                     }
                 } else {
                     // Fallback: verify template is configured
-                    expect(comprehensiveOrderList._moveDownIconTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$moveDownIconTemplate()).toBeDefined();
                 }
             });
 
@@ -1739,7 +1743,7 @@ describe('OrderList', () => {
                     }
                 } else {
                     // Fallback: verify template is configured
-                    expect(comprehensiveOrderList._moveBottomIconTemplate).toBeDefined();
+                    expect(comprehensiveOrderList.$moveBottomIconTemplate()).toBeDefined();
                 }
             });
         });
@@ -1856,7 +1860,7 @@ describe('OrderList', () => {
 
                 // Add selection - set both component and orderList selection
                 comprehensiveComponent.selection = [comprehensiveComponent.products[0]];
-                comprehensiveOrderList.selection = [comprehensiveComponent.products[0]];
+                comprehensiveOrderList.d_selection.set([comprehensiveComponent.products[0]]);
                 comprehensiveFixture.changeDetectorRef.markForCheck();
                 comprehensiveFixture.detectChanges();
                 await comprehensiveFixture.whenStable();
