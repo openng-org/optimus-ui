@@ -6,9 +6,9 @@ const classes = {
     root: ({ instance }) => [
         'p-panel p-component',
         {
-            'p-panel-toggleable': instance.toggleable,
-            'p-panel-expanded': !instance._collapsed && instance.toggleable,
-            'p-panel-collapsed': instance._collapsed && instance.toggleable
+            'p-panel-toggleable': instance.toggleable(),
+            'p-panel-expanded': !instance.collapsed() && instance.toggleable(),
+            'p-panel-collapsed': instance.collapsed() && instance.toggleable()
         }
     ],
     header: 'p-panel-header',
@@ -16,9 +16,9 @@ const classes = {
     headerActions: ({ instance }) => [
         'p-panel-header-actions',
         {
-            'p-panel-icons-start': instance.iconPos === 'start',
-            'p-panel-icons-end': instance.iconPos === 'end',
-            'p-panel-icons-center': instance.iconPos === 'center'
+            'p-panel-icons-start': instance.iconPos() === 'start',
+            'p-panel-icons-end': instance.iconPos() === 'end',
+            'p-panel-icons-center': instance.iconPos() === 'center'
         }
     ],
     pcToggleButton: 'p-panel-toggle-button',
