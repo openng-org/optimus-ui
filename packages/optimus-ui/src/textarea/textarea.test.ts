@@ -145,7 +145,7 @@ describe('Textarea', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.autoResize).toBe(true);
+            expect(textareaDirective.autoResize()).toBe(true);
 
             // Simulate text input that would require resize
             component.content = 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5';
@@ -164,14 +164,14 @@ describe('Textarea', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.pSize).toBe('large');
+            expect(textareaDirective.pSize()).toBe('large');
 
             component.size = 'small';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.pSize).toBe('small');
+            expect(textareaDirective.pSize()).toBe('small');
         });
 
         it('should apply variant styles', async () => {
@@ -470,12 +470,12 @@ describe('Textarea', () => {
                 let instanceAccessed = false;
                 component.pt = {
                     root: ({ instance }) => {
-                        if ((instance as any)?.autoResize) {
+                        if ((instance as any)?.autoResize()) {
                             instanceAccessed = true;
                         }
                         return {
                             class: {
-                                AUTO_RESIZE_ENABLED: (instance as any)?.autoResize
+                                AUTO_RESIZE_ENABLED: (instance as any)?.autoResize()
                             }
                         };
                     }
@@ -515,12 +515,13 @@ describe('Textarea', () => {
         describe('Case 5: Event binding', () => {
             it('should bind onclick event via PT', async () => {
                 let clicked = false;
+                // hoisted so the PT resolution stays referentially stable across renders (a fresh
+                // closure per resolution would defeat Bind.setAttrs' equality check and loop CD)
+                const onclick = () => {
+                    clicked = true;
+                };
                 component.pt = {
-                    root: () => ({
-                        onclick: () => {
-                            clicked = true;
-                        }
-                    })
+                    root: () => ({ onclick })
                 };
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
@@ -534,12 +535,11 @@ describe('Textarea', () => {
 
             it('should bind onfocus event via PT', async () => {
                 let focused = false;
+                const onfocus = () => {
+                    focused = true;
+                };
                 component.pt = {
-                    root: () => ({
-                        onfocus: () => {
-                            focused = true;
-                        }
-                    })
+                    root: () => ({ onfocus })
                 };
                 fixture.changeDetectorRef.markForCheck();
                 await fixture.whenStable();
