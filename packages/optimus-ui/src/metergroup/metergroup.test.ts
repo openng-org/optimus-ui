@@ -105,7 +105,7 @@ class TestMeterGroupEmptyComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-metergroup-dynamic',
-    template: ` <p-metergroup [value]="value" [min]="min" [max]="max" [styleClass]="styleClass"> </p-metergroup> `
+    template: ` <p-metergroup [value]="value" [min]="min" [max]="max" [class]="styleClass"> </p-metergroup> `
 })
 class TestMeterGroupDynamicComponent {
     value: MeterItem[] = [{ label: 'Dynamic 1', value: 10, color: '#ff6b6b' }];
@@ -147,17 +147,17 @@ describe('MeterGroup', () => {
             const newFixture = TestBed.createComponent(TestBasicMeterGroupComponent);
             const newMeterGroup = newFixture.debugElement.query(By.directive(MeterGroup)).componentInstance;
 
-            expect(newMeterGroup.min).toBe(0);
-            expect(newMeterGroup.max).toBe(100);
-            expect(newMeterGroup.orientation).toBe('horizontal');
-            expect(newMeterGroup.labelPosition).toBe('end');
-            expect(newMeterGroup.labelOrientation).toBe('horizontal');
+            expect(newMeterGroup.min()).toBe(0);
+            expect(newMeterGroup.max()).toBe(100);
+            expect(newMeterGroup.orientation()).toBe('horizontal');
+            expect(newMeterGroup.labelPosition()).toBe('end');
+            expect(newMeterGroup.labelOrientation()).toBe('horizontal');
         });
 
         it('should accept custom values', () => {
-            expect(meterGroup.value).toEqual(component.value);
-            expect(meterGroup.min).toBe(component.min);
-            expect(meterGroup.max).toBe(component.max);
+            expect(meterGroup.value()).toEqual(component.value);
+            expect(meterGroup.min()).toBe(component.min);
+            expect(meterGroup.max()).toBe(component.max);
         });
 
         it('should extend BaseComponent', () => {
@@ -197,8 +197,8 @@ describe('MeterGroup', () => {
             expect(percent).toBe(16);
 
             // Test with different min/max
-            meterGroup.min = 10;
-            meterGroup.max = 110;
+            vi.spyOn(meterGroup, 'min').mockReturnValue(10);
+            vi.spyOn(meterGroup, 'max').mockReturnValue(110);
             const percent2 = meterGroup.percent(60);
             expect(percent2).toBe(50);
         });
@@ -227,7 +227,7 @@ describe('MeterGroup', () => {
         });
 
         it('should apply meter styles correctly for vertical orientation', () => {
-            meterGroup.orientation = 'vertical';
+            vi.spyOn(meterGroup, 'orientation').mockReturnValue('vertical');
             const meterStyle = meterGroup.meterStyle({ value: 40, color: '#00ff00' });
             expect(meterStyle.backgroundColor).toBe('#00ff00');
             expect(meterStyle.height).toBe('40%');
@@ -281,8 +281,8 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.orientation).toBe('horizontal');
-            expect(meterGroup.vertical).toBe(false);
+            expect(meterGroup.orientation()).toBe('horizontal');
+            expect(meterGroup.vertical()).toBe(false);
         });
 
         it('should handle vertical orientation', async () => {
@@ -293,8 +293,8 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.orientation).toBe('vertical');
-            expect(meterGroup.vertical).toBe(true);
+            expect(meterGroup.orientation()).toBe('vertical');
+            expect(meterGroup.vertical()).toBe(true);
         });
 
         it('should handle label position start', async () => {
@@ -307,7 +307,7 @@ describe('MeterGroup', () => {
 
             const labelElement = fixture.debugElement.query(By.directive(MeterGroupLabel));
             expect(labelElement).toBeTruthy();
-            expect(meterGroup.labelPosition).toBe('start');
+            expect(meterGroup.labelPosition()).toBe('start');
         });
 
         it('should handle label position end', async () => {
@@ -320,7 +320,7 @@ describe('MeterGroup', () => {
 
             const labelElement = fixture.debugElement.query(By.directive(MeterGroupLabel));
             expect(labelElement).toBeTruthy();
-            expect(meterGroup.labelPosition).toBe('end');
+            expect(meterGroup.labelPosition()).toBe('end');
         });
 
         it('should handle horizontal label orientation', async () => {
@@ -331,7 +331,7 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.labelOrientation).toBe('horizontal');
+            expect(meterGroup.labelOrientation()).toBe('horizontal');
         });
 
         it('should handle vertical label orientation', async () => {
@@ -342,7 +342,7 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.labelOrientation).toBe('vertical');
+            expect(meterGroup.labelOrientation()).toBe('vertical');
         });
 
         it('should apply height for vertical orientation', async () => {
@@ -356,7 +356,7 @@ describe('MeterGroup', () => {
             await fixture.whenStable();
 
             // Height should be set on the element for vertical orientation
-            expect(meterGroup.vertical).toBe(true);
+            expect(meterGroup.vertical()).toBe(true);
         });
     });
 
@@ -403,7 +403,7 @@ describe('MeterGroup', () => {
             // Since we're using a custom label template, the icon template won't be used
             // (MeterGroupLabel is only rendered when there's no custom label template)
             // The icon template is stored but not rendered in this test case
-            expect(meterGroup._iconTemplate || meterGroup.iconTemplate()).toBeDefined();
+            expect(meterGroup.$iconTemplate()).toBeDefined();
         });
 
         it('should pass correct context to label template', () => {
@@ -419,11 +419,11 @@ describe('MeterGroup', () => {
 
         it('should handle template processing in ngAfterContentInit', () => {
             // Templates should already be processed during component initialization
-            expect(meterGroup._labelTemplate || meterGroup.labelTemplate()).toBeDefined();
-            expect(meterGroup._meterTemplate || meterGroup.meterTemplate()).toBeDefined();
-            expect(meterGroup._startTemplate || meterGroup.startTemplate()).toBeDefined();
-            expect(meterGroup._endTemplate || meterGroup.endTemplate()).toBeDefined();
-            expect(meterGroup._iconTemplate || meterGroup.iconTemplate()).toBeDefined();
+            expect(meterGroup.$labelTemplate()).toBeDefined();
+            expect(meterGroup.$meterTemplate()).toBeDefined();
+            expect(meterGroup.$startTemplate()).toBeDefined();
+            expect(meterGroup.$endTemplate()).toBeDefined();
+            expect(meterGroup.$iconTemplate()).toBeDefined();
 
             // Calling ngAfterContentInit again should not throw
             expect(() => meterGroup.ngAfterContentInit()).not.toThrow();
@@ -629,7 +629,7 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.value!.length).toBe(2);
+            expect(meterGroup.value()!.length).toBe(2);
             expect(meterGroup.totalPercent()).toBe(70);
         });
 
@@ -662,7 +662,7 @@ describe('MeterGroup', () => {
             expect(component.value.length).toBe(2);
 
             // The meterGroup should reflect the updated value
-            expect(meterGroup.value!.length).toBe(2);
+            expect(meterGroup.value()!.length).toBe(2);
 
             // Check DOM elements
             const labelTexts = element.querySelectorAll('.p-metergroup-label-text');
@@ -677,7 +677,7 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.value!.length).toBe(0);
+            expect(meterGroup.value()!.length).toBe(0);
             const meters = element.querySelectorAll('.p-metergroup-meter');
             expect(meters.length).toBe(0);
         });
@@ -700,17 +700,17 @@ describe('MeterGroup', () => {
         });
 
         it('should handle empty value array', () => {
-            expect(meterGroup.value).toEqual([]);
+            expect(meterGroup.value()).toEqual([]);
             expect(() => fixture.detectChanges()).not.toThrow();
         });
 
         it('should handle undefined value', () => {
-            meterGroup.value = undefined as any;
+            vi.spyOn(meterGroup, 'value').mockReturnValue(undefined as any);
             expect(meterGroup.totalPercent()).toBe(0);
         });
 
         it('should handle null value gracefully', () => {
-            meterGroup.value = null as any;
+            vi.spyOn(meterGroup, 'value').mockReturnValue(null as any);
             expect(meterGroup.percentages()).toEqual([]);
         });
 
@@ -740,19 +740,19 @@ describe('MeterGroup', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(meterGroup.value![0].value).toBe(30);
+            expect(meterGroup.value()![0].value).toBe(30);
         });
 
         it('should handle boundary values', () => {
             // Test with min = max
-            meterGroup.min = 50;
-            meterGroup.max = 50;
+            vi.spyOn(meterGroup, 'min').mockReturnValue(50);
+            vi.spyOn(meterGroup, 'max').mockReturnValue(50);
             const percent = meterGroup.percent(50);
             expect(percent).toBe(100); // When min = max, any value should be 100%
 
             // Reset to normal
-            meterGroup.min = 0;
-            meterGroup.max = 100;
+            vi.spyOn(meterGroup, 'min').mockReturnValue(0);
+            vi.spyOn(meterGroup, 'max').mockReturnValue(100);
 
             // Test with very large numbers
             const largePercent = meterGroup.percent(Number.MAX_SAFE_INTEGER);
@@ -819,7 +819,7 @@ describe('MeterGroup', () => {
             meterGroup.ngAfterContentInit();
 
             // After processing, internal template properties should be set
-            expect(meterGroup._labelTemplate || meterGroup.labelTemplate).toBeDefined();
+            expect(meterGroup.$labelTemplate() || meterGroup.labelTemplate).toBeDefined();
         });
     });
 
@@ -845,7 +845,7 @@ describe('MeterGroup', () => {
             }).not.toThrow();
 
             const meterGroup = fixture.debugElement.query(By.directive(MeterGroup)).componentInstance;
-            expect(meterGroup.value!.length).toBe(100);
+            expect(meterGroup.value()!.length).toBe(100);
         });
 
         it('should efficiently update percentages', () => {

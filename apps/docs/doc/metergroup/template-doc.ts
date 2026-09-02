@@ -19,7 +19,7 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                 <ng-template #label>
                     <div class="flex flex-wrap gap-4">
                         <ng-container *ngFor="let meterItem of value; let index = index">
-                            <p-card class="flex-1" styleClass="border border-surface shadow-none">
+                            <p-card class="flex-1 border border-surface shadow-none">
                                 <div class="flex justify-between gap-8">
                                     <div class="flex flex-col gap-1">
                                         <span class="text-surface-500 dark:text-surface-400 text-sm">{{ meterItem.label }}</span>
