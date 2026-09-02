@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, computed, inject, input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
 import { SkeletonPassThrough } from '@openng/optimus-ui/types/skeleton';
 import { SkeletonStyle } from './style/skeletonstyle';
-
-const SKELETON_INSTANCE = new InjectionToken<Skeleton>('SKELETON_INSTANCE');
 
 /**
  * Skeleton is a placeholder to display instead of the actual content.
@@ -18,78 +16,83 @@ const SKELETON_INSTANCE = new InjectionToken<Skeleton>('SKELETON_INSTANCE');
     template: ``,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [SkeletonStyle, { provide: SKELETON_INSTANCE, useExisting: Skeleton }, { provide: PARENT_INSTANCE, useExisting: Skeleton }],
+    providers: [SkeletonStyle, { provide: PARENT_INSTANCE, useExisting: Skeleton }],
     host: {
         '[attr.aria-hidden]': 'true',
-        '[class]': "cn(cx('root'), styleClass)",
-        '[style]': 'containerStyle',
-        '[attr.data-p]': 'dataP'
+        '[class]': "cx('root')",
+        '[style]': 'containerStyle()',
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
 export class Skeleton extends BaseComponent<SkeletonPassThrough> {
-    componentName = 'Skeleton';
-    $pcSkeleton: Skeleton | undefined = inject(SKELETON_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(SkeletonStyle);
 
-    /**
-     * Class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
     /**
      * Shape of the element.
      * @group Props
      */
-    @Input() shape: string = 'rectangle';
+    readonly shape = input<string>('rectangle');
+
     /**
      * Type of the animation.
-     * @gruop Props
+     * @group Props
      */
-    @Input() animation: string = 'wave';
+    readonly animation = input<string>('wave');
+
     /**
      * Border radius of the element, defaults to value from theme.
      * @group Props
      */
-    @Input() borderRadius: string | undefined;
+    readonly borderRadius = input<string>();
+
     /**
      * Size of the skeleton.
      * @group Props
      */
-    @Input() size: string | undefined;
+    readonly size = input<string>();
+
     /**
      * Width of the element.
      * @group Props
      */
-    @Input() width: string = '100%';
+    readonly width = input<string>('100%');
+
     /**
      * Height of the element.
      * @group Props
      */
-    @Input() height: string = '1rem';
+    readonly height = input<string>('1rem');
 
-    _componentStyle = inject(SkeletonStyle);
+    componentName = 'Skeleton';
 
-    get containerStyle() {
+    readonly containerStyle = computed(() => {
         const inlineStyles = this._componentStyle?.inlineStyles['root'];
         let style;
         if (!this.$unstyled()) {
-            if (this.size) style = { ...inlineStyles, width: this.size, height: this.size, borderRadius: this.borderRadius };
-            else style = { ...inlineStyles, width: this.width, height: this.height, borderRadius: this.borderRadius };
+            const size = this.size();
+            if (size) style = { ...inlineStyles, width: size, height: size, borderRadius: this.borderRadius() };
+            else style = { ...inlineStyles, width: this.width(), height: this.height(), borderRadius: this.borderRadius() };
         }
 
         return style;
-    }
+    });
 
-    get dataP() {
-        return this.cn({
-            [this.shape]: this.shape
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.shape()]: this.shape()
+        })
+    );
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 }
