@@ -65,7 +65,7 @@ const classes = {
     root: ({ instance }) => [
         'p-virtualscroller',
         {
-            'p-virtualscroller-inline': instance.inline,
+            'p-virtualscroller-inline': instance._inline,
             'p-virtualscroller-both p-both-scroll': instance.both,
             'p-virtualscroller-horizontal p-horizontal-scroll': instance.horizontal
         }

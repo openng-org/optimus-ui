@@ -1,5 +1,25 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, inject, InjectionToken, Input, NgModule, NgZone, SimpleChanges, TemplateRef, ViewEncapsulation, viewChild, contentChild, contentChildren, output } from '@angular/core';
+import {
+    afterEveryRender,
+    afterNextRender,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    effect,
+    ElementRef,
+    HostBinding,
+    inject,
+    input,
+    NgModule,
+    NgZone,
+    TemplateRef,
+    untracked,
+    ViewEncapsulation,
+    viewChild,
+    contentChild,
+    contentChildren,
+    output
+} from '@angular/core';
 import { findSingle, getHeight, getWidth, isTouchDevice, isVisible } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, ScrollerOptions, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -19,8 +39,6 @@ import {
 } from '@openng/optimus-ui/types/scroller';
 import { ScrollerStyle } from './style/scrollerstyle';
 
-const SCROLLER_INSTANCE = new InjectionToken<Scroller>('SCROLLER_INSTANCE');
-
 /**
  * Scroller is a performance-approach to handle huge data efficiently.
  * @group Components
@@ -31,26 +49,26 @@ const SCROLLER_INSTANCE = new InjectionToken<Scroller>('SCROLLER_INSTANCE');
     standalone: true,
     template: `
         @if (!_disabled) {
-            <div #element [attr.id]="_id" [attr.tabindex]="tabindex" [ngStyle]="_style" [class]="cn(cx('root'), styleClass)" (scroll)="onContainerScroll($event)" [pBind]="ptm('root')">
-                @if (contentTemplate() || _contentTemplate) {
-                    <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate; context: { $implicit: loadedItems, options: getContentOptions() }"></ng-container>
+            <div #element [attr.id]="_id" [attr.tabindex]="_tabindex" [ngStyle]="_style" [class]="cn(cx('root'), _styleClass)" (scroll)="onContainerScroll($event)" [pBind]="ptm('root')">
+                @if ($contentTemplate()) {
+                    <ng-container *ngTemplateOutlet="$contentTemplate(); context: { $implicit: loadedItems, options: getContentOptions() }"></ng-container>
                 } @else {
                     <div #content [class]="cn(cx('content'), contentStyleClass)" [style]="contentStyle" [pBind]="ptm('content')">
                         @for (item of loadedItems; track _trackBy ? _trackBy($index, item) : item; let index = $index) {
-                            <ng-container *ngTemplateOutlet="itemTemplate() || _itemTemplate; context: { $implicit: item, options: getOptions(index) }"></ng-container>
+                            <ng-container *ngTemplateOutlet="$itemTemplate(); context: { $implicit: item, options: getOptions(index) }"></ng-container>
                         }
                     </div>
                 }
                 @if (_showSpacer) {
                     <div [class]="cx('spacer')" [ngStyle]="spacerStyle" [pBind]="ptm('spacer')"></div>
                 }
-                @if (!loaderDisabled && _showLoader && d_loading) {
+                @if (!_loaderDisabled && _showLoader && d_loading) {
                     <div [class]="cx('loader')" [pBind]="ptm('loader')">
-                        @if (loaderTemplate() || _loaderTemplate) {
+                        @if ($loaderTemplate()) {
                             @for (item of loaderArr; track item; let index = $index) {
                                 <ng-container
                                     *ngTemplateOutlet="
-                                        loaderTemplate() || _loaderTemplate;
+                                        $loaderTemplate();
                                         context: {
                                             options: getLoaderOptions(index, both && { numCols: numItemsInViewport.cols })
                                         }
@@ -58,8 +76,8 @@ const SCROLLER_INSTANCE = new InjectionToken<Scroller>('SCROLLER_INSTANCE');
                                 ></ng-container>
                             }
                         } @else {
-                            @if (loaderIconTemplate() || _loaderIconTemplate) {
-                                <ng-container *ngTemplateOutlet="loaderIconTemplate() || _loaderIconTemplate; context: { options: { styleClass: 'p-virtualscroller-loading-icon' } }"></ng-container>
+                            @if ($loaderIconTemplate()) {
+                                <ng-container *ngTemplateOutlet="$loaderIconTemplate(); context: { options: { styleClass: 'p-virtualscroller-loading-icon' } }"></ng-container>
                             } @else {
                                 <svg data-p-icon="spinner" [class]="cx('loadingIcon')" [spin]="true" [pBind]="ptm('loadingIcon')" />
                             }
@@ -69,293 +87,189 @@ const SCROLLER_INSTANCE = new InjectionToken<Scroller>('SCROLLER_INSTANCE');
             </div>
         } @else {
             <ng-content></ng-content>
-            @if (contentTemplate() || _contentTemplate) {
-                <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate; context: { $implicit: items, options: { rows: _items, columns: loadedColumns } }"></ng-container>
+            @if ($contentTemplate()) {
+                <ng-container *ngTemplateOutlet="$contentTemplate(); context: { $implicit: _items, options: { rows: _items, columns: loadedColumns } }"></ng-container>
             }
         }
     `,
     changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
-    providers: [ScrollerStyle, { provide: SCROLLER_INSTANCE, useExisting: Scroller }, { provide: PARENT_INSTANCE, useExisting: Scroller }],
+    providers: [ScrollerStyle, { provide: PARENT_INSTANCE, useExisting: Scroller }],
     hostDirectives: [Bind]
 })
 export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
     private zone = inject(NgZone);
 
-    componentName = 'VirtualScroller';
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    $pcScroller: Scroller | undefined = inject(SCROLLER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    _componentStyle = inject(ScrollerStyle);
 
-    @Input() hostName = '';
+    readonly hostName = input<string>('');
+
     /**
      * Unique identifier of the element.
      * @group Props
      */
-    @Input() get id(): string | undefined {
-        return this._id;
-    }
-    set id(val: string | undefined) {
-        this._id = val;
-    }
+    readonly id = input<string>();
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() get style(): any {
-        return this._style;
-    }
-    set style(val: any) {
-        this._style = val;
-    }
+    readonly style = input<any>();
+
     /**
      * Style class of the element.
      * @group Props
      */
-    @Input() get styleClass(): string | undefined {
-        return this._styleClass;
-    }
-    set styleClass(val: string | undefined) {
-        this._styleClass = val;
-    }
+    readonly styleClass = input<string>();
+
     /**
      * Index of the element in tabbing order.
      * @group Props
      */
-    @Input() get tabindex() {
-        return this._tabindex;
-    }
-    set tabindex(val: number) {
-        this._tabindex = val;
-    }
+    readonly tabindex = input<number>(0);
+
     /**
      * An array of objects to display.
      * @group Props
      */
-    @Input() get items(): any[] | undefined | null {
-        return this._items;
-    }
-    set items(val: any[] | undefined | null) {
-        this._items = val;
-    }
+    readonly items = input<any[] | undefined | null>();
+
     /**
      * The height/width of item according to orientation.
      * @group Props
      */
-    @Input() get itemSize(): number[] | number {
-        return this._itemSize;
-    }
-    set itemSize(val: number[] | number) {
-        this._itemSize = val;
-    }
+    readonly itemSize = input<number[] | number>(0);
+
     /**
      * Height of the scroll viewport.
      * @group Props
      */
-    @Input() get scrollHeight(): string | undefined {
-        return this._scrollHeight;
-    }
-    set scrollHeight(val: string | undefined) {
-        this._scrollHeight = val;
-    }
+    readonly scrollHeight = input<string>();
+
     /**
      * Width of the scroll viewport.
      * @group Props
      */
-    @Input() get scrollWidth(): string | undefined {
-        return this._scrollWidth;
-    }
-    set scrollWidth(val: string | undefined) {
-        this._scrollWidth = val;
-    }
+    readonly scrollWidth = input<string>();
+
     /**
      * The orientation of scrollbar.
      * @group Props
      */
-    @Input() get orientation(): 'vertical' | 'horizontal' | 'both' {
-        return this._orientation;
-    }
-    set orientation(val: 'vertical' | 'horizontal' | 'both') {
-        this._orientation = val;
-    }
+    readonly orientation = input<'vertical' | 'horizontal' | 'both'>('vertical');
+
     /**
      * Used to specify how many items to load in each load method in lazy mode.
      * @group Props
      */
-    @Input() get step(): number {
-        return this._step;
-    }
-    set step(val: number) {
-        this._step = val;
-    }
+    readonly step = input<number>(0);
+
     /**
      * Delay in scroll before new data is loaded.
      * @group Props
      */
-    @Input() get delay() {
-        return this._delay;
-    }
-    set delay(val: number) {
-        this._delay = val;
-    }
+    readonly delay = input<number>(0);
+
     /**
      * Delay after window's resize finishes.
      * @group Props
      */
-    @Input() get resizeDelay() {
-        return this._resizeDelay;
-    }
-    set resizeDelay(val: number) {
-        this._resizeDelay = val;
-    }
+    readonly resizeDelay = input<number>(10);
+
     /**
      * Used to append each loaded item to top without removing any items from the DOM. Using very large data may cause the browser to crash.
      * @group Props
      */
-    @Input() get appendOnly(): boolean {
-        return this._appendOnly;
-    }
-    set appendOnly(val: boolean) {
-        this._appendOnly = val;
-    }
+    readonly appendOnly = input<boolean>(false);
+
     /**
      * Specifies whether the scroller should be displayed inline or not.
      * @group Props
      */
-    @Input() get inline() {
-        return this._inline;
-    }
-    set inline(val: boolean) {
-        this._inline = val;
-    }
+    readonly inline = input<boolean>(false);
+
     /**
      * Defines if data is loaded and interacted with in lazy manner.
      * @group Props
      */
-    @Input() get lazy() {
-        return this._lazy;
-    }
-    set lazy(val: boolean) {
-        this._lazy = val;
-    }
+    readonly lazy = input<boolean>(false);
+
     /**
      * If disabled, the scroller feature is eliminated and the content is displayed directly.
      * @group Props
      */
-    @Input() get disabled() {
-        return this._disabled;
-    }
-    set disabled(val: boolean) {
-        this._disabled = val;
-    }
+    readonly disabled = input<boolean>(false);
+
     /**
      * Used to implement a custom loader instead of using the loader feature in the scroller.
      * @group Props
      */
-    @Input() get loaderDisabled() {
-        return this._loaderDisabled;
-    }
-    set loaderDisabled(val: boolean) {
-        this._loaderDisabled = val;
-    }
+    readonly loaderDisabled = input<boolean>(false);
+
     /**
      * Columns to display.
      * @group Props
      */
-    @Input() get columns(): any[] | undefined | null {
-        return this._columns;
-    }
-    set columns(val: any[] | undefined | null) {
-        this._columns = val;
-    }
+    readonly columns = input<any[] | undefined | null>();
+
     /**
      * Used to implement a custom spacer instead of using the spacer feature in the scroller.
      * @group Props
      */
-    @Input() get showSpacer() {
-        return this._showSpacer;
-    }
-    set showSpacer(val: boolean) {
-        this._showSpacer = val;
-    }
+    readonly showSpacer = input<boolean>(true);
+
     /**
      * Defines whether to show loader.
      * @group Props
      */
-    @Input() get showLoader() {
-        return this._showLoader;
-    }
-    set showLoader(val: boolean) {
-        this._showLoader = val;
-    }
+    readonly showLoader = input<boolean>(false);
+
     /**
      * Determines how many additional elements to add to the DOM outside of the view. According to the scrolls made up and down, extra items are added in a certain algorithm in the form of multiples of this number. Default value is half the number of items shown in the view.
      * @group Props
      */
-    @Input() get numToleratedItems() {
-        return this._numToleratedItems;
-    }
-    set numToleratedItems(val: number) {
-        this._numToleratedItems = val;
-    }
+    readonly numToleratedItems = input<number>();
+
     /**
      * Defines whether the data is loaded.
      * @group Props
      */
-    @Input() get loading(): boolean | undefined {
-        return this._loading;
-    }
-    set loading(val: boolean | undefined) {
-        this._loading = val;
-    }
+    readonly loading = input<boolean | undefined>();
+
     /**
      * Defines whether to dynamically change the height or width of scrollable container.
      * @group Props
      */
-    @Input() get autoSize(): boolean {
-        return this._autoSize;
-    }
-    set autoSize(val: boolean) {
-        this._autoSize = val;
-    }
+    readonly autoSize = input<boolean>(false);
+
     /**
      * Function to optimize the dom operations by delegating to ngForTrackBy, default algoritm checks for object identity.
      * @group Props
      */
-    @Input() get trackBy(): Function {
-        return this._trackBy;
-    }
-    set trackBy(val: Function) {
-        this._trackBy = val;
-    }
+    readonly trackBy = input<Function>();
+
     /**
      * Defines whether to use the scroller feature. The properties of scroller component can be used like an object in it.
      * @group Props
      */
-    @Input() get options(): ScrollerOptions | undefined {
-        return this._options;
-    }
-    set options(val: ScrollerOptions | undefined) {
-        this._options = val;
+    readonly options = input<ScrollerOptions | undefined>();
 
-        if (val && typeof val === 'object') {
-            Object.entries(val).forEach(([k, v]) => this[`_${k}`] !== v && (this[`_${k}`] = v));
-            Object.entries(val).forEach(([k, v]) => this[`${k}`] !== v && (this[`${k}`] = v));
-        }
-    }
     /**
      * Callback to invoke in lazy mode to load new data.
      * @param {ScrollerLazyLoadEvent} event - Custom lazy load event.
      * @group Emits
      */
     readonly onLazyLoad = output<ScrollerLazyLoadEvent>();
+
     /**
      * Callback to invoke when scroll position changes.
      * @param {ScrollerScrollEvent} event - Custom scroll event.
      * @group Emits
      */
     readonly onScroll = output<ScrollerScrollEvent>();
+
     /**
      * Callback to invoke when scroll position and item's range in view changes.
      * @param {ScrollerScrollEvent} event - Custom scroll index change event.
@@ -366,6 +280,173 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
     readonly elementViewChild = viewChild<Nullable<ElementRef>>('element');
 
     readonly contentViewChild = viewChild<Nullable<ElementRef>>('content');
+
+    /**
+     * Content template of the component.
+     * @param {ScrollerContentTemplateContext} context - content context.
+     * @see {@link ScrollerContentTemplateContext}
+     * @group Templates
+     */
+    readonly contentTemplate = contentChild<Nullable<TemplateRef<ScrollerContentTemplateContext>>>('content', { descendants: false });
+
+    /**
+     * Item template of the component.
+     * @param {ScrollerItemTemplateContext} context - item context.
+     * @see {@link ScrollerItemTemplateContext}
+     * @group Templates
+     */
+    readonly itemTemplate = contentChild<Nullable<TemplateRef<ScrollerItemTemplateContext>>>('item', { descendants: false });
+
+    /**
+     * Loader template of the component.
+     * @param {ScrollerLoaderTemplateContext} context - loader context.
+     * @see {@link ScrollerLoaderTemplateContext}
+     * @group Templates
+     */
+    readonly loaderTemplate = contentChild<Nullable<TemplateRef<ScrollerLoaderTemplateContext>>>('loader', { descendants: false });
+
+    /**
+     * Loader icon template of the component.
+     * @param {ScrollerLoaderIconTemplateContext} context - loader icon context.
+     * @see {@link ScrollerLoaderIconTemplateContext}
+     * @group Templates
+     */
+    readonly loaderIconTemplate = contentChild<Nullable<TemplateRef<ScrollerLoaderIconTemplateContext>>>('loadericon', { descendants: false });
+
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'VirtualScroller';
+
+    private readonly idInputEffect = this.createStoreEffect(
+        () => this.id(),
+        (v) => (this._id = v)
+    );
+
+    private readonly styleInputEffect = this.createStoreEffect(
+        () => this.style(),
+        (v) => (this._style = v)
+    );
+
+    private readonly styleClassInputEffect = this.createStoreEffect(
+        () => this.styleClass(),
+        (v) => (this._styleClass = v)
+    );
+
+    private readonly tabindexInputEffect = this.createStoreEffect(
+        () => this.tabindex(),
+        (v) => (this._tabindex = v)
+    );
+
+    private readonly itemsInputEffect = this.createStoreEffect(
+        () => this.items(),
+        (v) => (this._items = v)
+    );
+
+    private readonly itemSizeInputEffect = this.createStoreEffect(
+        () => this.itemSize(),
+        (v) => (this._itemSize = v)
+    );
+
+    private readonly scrollHeightInputEffect = this.createStoreEffect(
+        () => this.scrollHeight(),
+        (v) => (this._scrollHeight = v)
+    );
+
+    private readonly scrollWidthInputEffect = this.createStoreEffect(
+        () => this.scrollWidth(),
+        (v) => (this._scrollWidth = v)
+    );
+
+    private readonly orientationInputEffect = this.createStoreEffect(
+        () => this.orientation(),
+        (v) => (this._orientation = v)
+    );
+
+    private readonly stepInputEffect = this.createStoreEffect(
+        () => this.step(),
+        (v) => (this._step = v)
+    );
+
+    private readonly delayInputEffect = this.createStoreEffect(
+        () => this.delay(),
+        (v) => (this._delay = v)
+    );
+
+    private readonly resizeDelayInputEffect = this.createStoreEffect(
+        () => this.resizeDelay(),
+        (v) => (this._resizeDelay = v)
+    );
+
+    private readonly appendOnlyInputEffect = this.createStoreEffect(
+        () => this.appendOnly(),
+        (v) => (this._appendOnly = v)
+    );
+
+    private readonly inlineInputEffect = this.createStoreEffect(
+        () => this.inline(),
+        (v) => (this._inline = v)
+    );
+
+    private readonly lazyInputEffect = this.createStoreEffect(
+        () => this.lazy(),
+        (v) => (this._lazy = v)
+    );
+
+    private readonly disabledInputEffect = this.createStoreEffect(
+        () => this.disabled(),
+        (v) => (this._disabled = v)
+    );
+
+    private readonly loaderDisabledInputEffect = this.createStoreEffect(
+        () => this.loaderDisabled(),
+        (v) => (this._loaderDisabled = v)
+    );
+
+    private readonly columnsInputEffect = this.createStoreEffect(
+        () => this.columns(),
+        (v) => (this._columns = v)
+    );
+
+    private readonly showSpacerInputEffect = this.createStoreEffect(
+        () => this.showSpacer(),
+        (v) => (this._showSpacer = v)
+    );
+
+    private readonly showLoaderInputEffect = this.createStoreEffect(
+        () => this.showLoader(),
+        (v) => (this._showLoader = v)
+    );
+
+    private readonly numToleratedItemsInputEffect = this.createStoreEffect(
+        () => this.numToleratedItems(),
+        (v) => (this._numToleratedItems = v)
+    );
+
+    private readonly loadingInputEffect = this.createStoreEffect(
+        () => this.loading(),
+        (v) => (this._loading = v)
+    );
+
+    private readonly autoSizeInputEffect = this.createStoreEffect(
+        () => this.autoSize(),
+        (v) => (this._autoSize = v)
+    );
+
+    private readonly trackByInputEffect = this.createStoreEffect(
+        () => this.trackBy(),
+        (v) => (this._trackBy = v)
+    );
+
+    /** Mirrors the legacy `options` setter: copies each option into its `_x` backing field. */
+    private readonly optionsInputEffect = effect(() => {
+        const v = this.options();
+        untracked(() => {
+            this._options = v;
+            if (v && typeof v === 'object') {
+                Object.entries(v).forEach(([k, val]) => (this as any)[`_${k}`] !== val && ((this as any)[`_${k}`] = val));
+            }
+        });
+    });
 
     @HostBinding('style.height') height: string;
 
@@ -424,47 +505,47 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
     d_numToleratedItems: any;
 
     contentEl: any;
-    /**
-     * Content template of the component.
-     * @param {ScrollerContentTemplateContext} context - content context.
-     * @see {@link ScrollerContentTemplateContext}
-     * @group Templates
-     */
-    readonly contentTemplate = contentChild<Nullable<TemplateRef<ScrollerContentTemplateContext>>>('content', { descendants: false });
 
     /**
-     * Item template of the component.
-     * @param {ScrollerItemTemplateContext} context - item context.
-     * @see {@link ScrollerItemTemplateContext}
-     * @group Templates
+     * Effective content template: the `#content` content child, or the `pTemplate="content"`.
      */
-    readonly itemTemplate = contentChild<Nullable<TemplateRef<ScrollerItemTemplateContext>>>('item', { descendants: false });
+    readonly $contentTemplate = computed(
+        () =>
+            this.contentTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() === 'content')
+                .at(-1)?.template as TemplateRef<ScrollerContentTemplateContext> | undefined)
+    );
 
     /**
-     * Loader template of the component.
-     * @param {ScrollerLoaderTemplateContext} context - loader context.
-     * @see {@link ScrollerLoaderTemplateContext}
-     * @group Templates
+     * Effective item template: the `#item` content child, or (legacy behavior) the last projected
+     * pTemplate that is neither `content`, `loader` nor `loadericon`.
      */
-    readonly loaderTemplate = contentChild<Nullable<TemplateRef<ScrollerLoaderTemplateContext>>>('loader', { descendants: false });
+    readonly $itemTemplate = computed(
+        () =>
+            this.itemTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() !== 'content' && item.getType() !== 'loader' && item.getType() !== 'loadericon')
+                .at(-1)?.template as TemplateRef<ScrollerItemTemplateContext> | undefined)
+    );
 
-    /**
-     * Loader icon template of the component.
-     * @param {ScrollerLoaderIconTemplateContext} context - loader icon context.
-     * @see {@link ScrollerLoaderIconTemplateContext}
-     * @group Templates
-     */
-    readonly loaderIconTemplate = contentChild<Nullable<TemplateRef<ScrollerLoaderIconTemplateContext>>>('loadericon', { descendants: false });
+    /** Effective loader template: the `#loader` content child, or the `pTemplate="loader"`. */
+    readonly $loaderTemplate = computed(
+        () =>
+            this.loaderTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() === 'loader')
+                .at(-1)?.template as TemplateRef<ScrollerLoaderTemplateContext> | undefined)
+    );
 
-    readonly templates = contentChildren(PrimeTemplate);
-
-    _contentTemplate: TemplateRef<ScrollerContentTemplateContext> | undefined;
-
-    _itemTemplate: TemplateRef<ScrollerItemTemplateContext> | undefined;
-
-    _loaderTemplate: TemplateRef<ScrollerLoaderTemplateContext> | undefined;
-
-    _loaderIconTemplate: TemplateRef<ScrollerLoaderIconTemplateContext> | undefined;
+    /** Effective loader icon template: the `#loadericon` content child, or the `pTemplate="loadericon"`. */
+    readonly $loaderIconTemplate = computed(
+        () =>
+            this.loaderIconTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() === 'loadericon')
+                .at(-1)?.template as TemplateRef<ScrollerLoaderIconTemplateContext> | undefined)
+    );
 
     first: any = 0;
 
@@ -555,97 +636,100 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
         return this._columns;
     }
 
-    _componentStyle = inject(ScrollerStyle);
+    private previousInputValues: { loading?: any; orientation?: any; numToleratedItems?: any; options?: ScrollerOptions; items?: any[] | null; itemSize?: any; scrollHeight?: any; scrollWidth?: any } = {};
+
+    /**
+     * Reacts to input changes exactly like the legacy ngOnChanges hook did, tracking previous
+     * values itself. Declared after the per-input store effects so the `_x` store is already
+     * patched when this runs.
+     */
+    private readonly inputChangesEffect = effect(() => {
+        const current = {
+            loading: this.loading(),
+            orientation: this.orientation(),
+            numToleratedItems: this.numToleratedItems(),
+            options: this.options(),
+            items: this.items(),
+            itemSize: this.itemSize(),
+            scrollHeight: this.scrollHeight(),
+            scrollWidth: this.scrollWidth()
+        };
+
+        untracked(() => {
+            const previous = this.previousInputValues;
+            const changed = (key: keyof typeof current) => current[key] !== previous[key];
+            let isLoadingChanged = false;
+
+            if (this._scrollHeight == '100%') {
+                this.height = '100%';
+            }
+
+            if (changed('loading')) {
+                if (this._lazy && current.loading !== this.d_loading) {
+                    this.d_loading = current.loading as boolean;
+                    isLoadingChanged = true;
+                }
+            }
+
+            if (changed('orientation')) {
+                this.lastScrollPos = this.both ? { top: 0, left: 0 } : 0;
+            }
+
+            if (changed('numToleratedItems')) {
+                if (current.numToleratedItems !== this.d_numToleratedItems) {
+                    this.d_numToleratedItems = current.numToleratedItems;
+                }
+            }
+
+            if (changed('options')) {
+                if (this._lazy && previous.options?.loading !== current.options?.loading && current.options?.loading !== this.d_loading) {
+                    this.d_loading = current.options?.loading as boolean;
+                    isLoadingChanged = true;
+                }
+
+                if (previous.options?.numToleratedItems !== current.options?.numToleratedItems && current.options?.numToleratedItems !== this.d_numToleratedItems) {
+                    this.d_numToleratedItems = current.options?.numToleratedItems;
+                }
+            }
+
+            if (this.initialized) {
+                const isChanged = !isLoadingChanged && ((changed('items') && previous.items?.length !== current.items?.length) || changed('itemSize') || changed('scrollHeight') || changed('scrollWidth'));
+
+                if (isChanged) {
+                    this.init();
+                }
+            }
+
+            this.previousInputValues = current;
+        });
+    });
+
+    constructor() {
+        super();
+        // Re-apply the host pass-through section after each render and retry the deferred view
+        // initialization until the element becomes visible (replaces the former ngAfterViewChecked
+        // hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('host'));
+            if (!this.initialized) {
+                this.viewInit();
+            }
+        });
+
+        // Kick off the initial view measurement after the first render (replaces the former
+        // ngAfterViewInit hook).
+        afterNextRender(() => {
+            Promise.resolve().then(() => {
+                this.viewInit();
+            });
+        });
+    }
 
     onInit() {
+        // The legacy input setters had already patched the `_x` store by the time ngOnInit ran;
+        // the store effects only flush after the first template pass, so sync eagerly here.
+        this.syncStoreFromInputs();
         this.setInitialState();
-    }
-
-    onChanges(simpleChanges: SimpleChanges) {
-        let isLoadingChanged = false;
-        if (this.scrollHeight == '100%') {
-            this.height = '100%';
-        }
-        if (simpleChanges.loading) {
-            const { previousValue, currentValue } = simpleChanges.loading;
-
-            if (this.lazy && previousValue !== currentValue && currentValue !== this.d_loading) {
-                this.d_loading = currentValue;
-                isLoadingChanged = true;
-            }
-        }
-
-        if (simpleChanges.orientation) {
-            this.lastScrollPos = this.both ? { top: 0, left: 0 } : 0;
-        }
-
-        if (simpleChanges.numToleratedItems) {
-            const { previousValue, currentValue } = simpleChanges.numToleratedItems;
-
-            if (previousValue !== currentValue && currentValue !== this.d_numToleratedItems) {
-                this.d_numToleratedItems = currentValue;
-            }
-        }
-
-        if (simpleChanges.options) {
-            const { previousValue, currentValue } = simpleChanges.options;
-
-            if (this.lazy && previousValue?.loading !== currentValue?.loading && currentValue?.loading !== this.d_loading) {
-                this.d_loading = currentValue.loading;
-                isLoadingChanged = true;
-            }
-
-            if (previousValue?.numToleratedItems !== currentValue?.numToleratedItems && currentValue?.numToleratedItems !== this.d_numToleratedItems) {
-                this.d_numToleratedItems = currentValue.numToleratedItems;
-            }
-        }
-
-        if (this.initialized) {
-            const isChanged = !isLoadingChanged && (simpleChanges.items?.previousValue?.length !== simpleChanges.items?.currentValue?.length || simpleChanges.itemSize || simpleChanges.scrollHeight || simpleChanges.scrollWidth);
-
-            if (isChanged) {
-                this.init();
-            }
-        }
-    }
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-
-                case 'item':
-                    this._itemTemplate = item.template;
-                    break;
-
-                case 'loader':
-                    this._loaderTemplate = item.template;
-                    break;
-
-                case 'loadericon':
-                    this._loaderIconTemplate = item.template;
-                    break;
-
-                default:
-                    this._itemTemplate = item.template;
-                    break;
-            }
-        });
-    }
-
-    onAfterViewInit() {
-        Promise.resolve().then(() => {
-            this.viewInit();
-        });
-    }
-
-    onAfterViewChecked() {
-        this.bindDirectiveInstance.setAttrs(this.ptm('host'));
-        if (!this.initialized) {
-            this.viewInit();
-        }
     }
 
     onDestroy() {
@@ -653,6 +737,68 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
         this.contentEl = null;
         this.initialized = false;
+    }
+
+    /**
+     * Per-input effects patching the `_x` backing store (replace the legacy getter/setter pairs).
+     * The first run skips undefined so options-patched values survive unbound inputs; later
+     * writes flow through verbatim (a bound input set back to undefined clears the store, exactly
+     * like the legacy setters). The `options` effect is declared LAST so a bound options object
+     * keeps winning over the individual inputs within the initial change, like the legacy setter
+     * ordering.
+     */
+    private createStoreEffect(read: () => any, write: (value: any) => void) {
+        let ran = false;
+        return effect(() => {
+            const value = read();
+            if (!ran) {
+                ran = true;
+                if (value === undefined) {
+                    return;
+                }
+            }
+            untracked(() => write(value));
+        });
+    }
+
+    /** Copies every bound input into its `_x` backing field (the options object last, like the legacy setter order). */
+    private syncStoreFromInputs() {
+        const assign = (value: any, write: (value: any) => void) => {
+            if (value !== undefined) {
+                write(value);
+            }
+        };
+
+        assign(this.id(), (v) => (this._id = v));
+        assign(this.style(), (v) => (this._style = v));
+        assign(this.styleClass(), (v) => (this._styleClass = v));
+        assign(this.tabindex(), (v) => (this._tabindex = v));
+        assign(this.items(), (v) => (this._items = v));
+        assign(this.itemSize(), (v) => (this._itemSize = v));
+        assign(this.scrollHeight(), (v) => (this._scrollHeight = v));
+        assign(this.scrollWidth(), (v) => (this._scrollWidth = v));
+        assign(this.orientation(), (v) => (this._orientation = v));
+        assign(this.step(), (v) => (this._step = v));
+        assign(this.delay(), (v) => (this._delay = v));
+        assign(this.resizeDelay(), (v) => (this._resizeDelay = v));
+        assign(this.appendOnly(), (v) => (this._appendOnly = v));
+        assign(this.inline(), (v) => (this._inline = v));
+        assign(this.lazy(), (v) => (this._lazy = v));
+        assign(this.disabled(), (v) => (this._disabled = v));
+        assign(this.loaderDisabled(), (v) => (this._loaderDisabled = v));
+        assign(this.columns(), (v) => (this._columns = v));
+        assign(this.showSpacer(), (v) => (this._showSpacer = v));
+        assign(this.showLoader(), (v) => (this._showLoader = v));
+        assign(this.numToleratedItems(), (v) => (this._numToleratedItems = v));
+        assign(this.loading(), (v) => (this._loading = v));
+        assign(this.autoSize(), (v) => (this._autoSize = v));
+        assign(this.trackBy(), (v) => (this._trackBy = v));
+
+        const options = this.options();
+        this._options = options;
+        if (options && typeof options === 'object') {
+            Object.entries(options).forEach(([k, val]) => (this as any)[`_${k}`] !== val && ((this as any)[`_${k}`] = val));
+        }
     }
 
     viewInit() {
@@ -690,6 +836,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
     setContentEl(el?: HTMLElement) {
         this.contentEl = el || this.contentViewChild()?.nativeElement || findSingle(this.elementViewChild()?.nativeElement, '.p-virtualscroller-content');
     }
+
     setInitialState() {
         this.first = this.both ? { rows: 0, cols: 0 } : 0;
         this.last = this.both ? { rows: 0, cols: 0 } : 0;
@@ -727,7 +874,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
             const { scrollTop = 0, scrollLeft = 0 } = this.elementViewChild()?.nativeElement;
             const { numToleratedItems } = this.calculateNumItems();
             const contentPos = this.getContentPosition();
-            const itemSize = this.itemSize;
+            const itemSize = this._itemSize;
             const calculateFirst = (_index = 0, _numT) => (_index <= _numT ? 0 : _index);
             const calculateCoord = (_first, _size, _cpos) => _first * _size + _cpos;
             const scrollTo = (left = 0, top = 0) => this.scrollTo({ left, top, behavior });
@@ -1177,7 +1324,7 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
 
     handleEvents(name: string, params: any) {
         //@ts-ignore
-        return this.options && (<any>this.options)[name] ? (<any>this.options)[name](params) : this[name].emit(params);
+        return this._options && (<any>this._options)[name] ? (<any>this._options)[name](params) : this[name].emit(params);
     }
 
     getContentOptions() {
