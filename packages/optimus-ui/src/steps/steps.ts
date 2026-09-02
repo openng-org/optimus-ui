@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, Input, NgModule, numberAttribute, OnDestroy, OnInit, ViewEncapsulation, viewChild, output } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, input, NgModule, numberAttribute, ViewEncapsulation, viewChild, output } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { find, findSingle } from '@openng/optimus-ui-utils';
 import { MenuItem, SharedModule } from '@openng/optimus-ui/api';
@@ -17,9 +17,9 @@ import { StepsStyle } from './style/stepsstyle';
     standalone: true,
     imports: [CommonModule, RouterModule, TooltipModule, SharedModule],
     template: `
-        <nav [class]="cn(cx('root'), styleClass)" [ngStyle]="style" [attr.data-pc-name]="'steps'">
+        <nav [class]="cn(cx('root'), styleClass())" [ngStyle]="style()" [attr.data-pc-name]="'steps'">
             <ul #list [attr.data-pc-section]="'menu'" [class]="cx('list')">
-                @for (item of model; track item.label; let i = $index) {
+                @for (item of model(); track item.label; let i = $index) {
                     @if (item.visible !== false) {
                         <li
                             [class]="cx('item', { item, index: i })"
@@ -43,15 +43,15 @@ import { StepsStyle } from './style/stepsstyle';
                                     (keydown)="onItemKeydown($event, item, i)"
                                     [target]="item.target"
                                     [attr.tabindex]="getItemTabIndex(item, i)"
-                                    [attr.aria-expanded]="i === activeIndex"
-                                    [attr.aria-disabled]="item.disabled || (readonly && i !== activeIndex)"
+                                    [attr.aria-expanded]="i === activeIndex()"
+                                    [attr.aria-disabled]="item.disabled || (readonly() && i !== activeIndex())"
                                     [fragment]="item.fragment"
                                     [queryParamsHandling]="item.queryParamsHandling"
                                     [preserveFragment]="item.preserveFragment"
                                     [skipLocationChange]="item.skipLocationChange"
                                     [replaceUrl]="item.replaceUrl"
                                     [state]="item.state"
-                                    [attr.ariaCurrentWhenActive]="exact ? 'step' : undefined"
+                                    [attr.ariaCurrentWhenActive]="exact() ? 'step' : undefined"
                                 >
                                     <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
                                     @if (item.escape !== false) {
@@ -69,9 +69,9 @@ import { StepsStyle } from './style/stepsstyle';
                                     (keydown)="onItemKeydown($event, item, i)"
                                     [target]="item.target"
                                     [attr.tabindex]="getItemTabIndex(item, i)"
-                                    [attr.aria-expanded]="i === activeIndex"
-                                    [attr.aria-disabled]="item.disabled || (readonly && i !== activeIndex)"
-                                    [attr.ariaCurrentWhenActive]="exact && (!item.disabled || readonly) ? 'step' : undefined"
+                                    [attr.aria-expanded]="i === activeIndex()"
+                                    [attr.aria-disabled]="item.disabled || (readonly() && i !== activeIndex())"
+                                    [attr.ariaCurrentWhenActive]="exact() && (!item.disabled || readonly()) ? 'step' : undefined"
                                 >
                                     <span [class]="cx('itemNumber')">{{ i + 1 }}</span>
                                     @if (item.escape !== false) {
@@ -92,37 +92,48 @@ import { StepsStyle } from './style/stepsstyle';
     providers: [StepsStyle]
 })
 export class Steps extends BaseComponent {
-    componentName = 'Steps';
+    router = inject(Router);
+
+    route = inject(ActivatedRoute);
+
+    _componentStyle = inject(StepsStyle);
+
     /**
      * Index of the active item.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) activeIndex: number = 0;
+    readonly activeIndex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * An array of menu items.
      * @group Props
      */
-    @Input() model: MenuItem[] | undefined;
+    readonly model = input<MenuItem[]>();
+
     /**
      * Whether the items are clickable or not.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) readonly: boolean = true;
+    readonly readonly = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Whether to apply 'router-link-active-exact' class if route exactly matches the item path.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) exact: boolean = true;
+    readonly exact = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Callback to invoke when the new step is selected.
      * @param {number} number - current index.
@@ -132,11 +143,7 @@ export class Steps extends BaseComponent {
 
     readonly listViewChild = viewChild.required<ElementRef>('list');
 
-    router = inject(Router);
-
-    route = inject(ActivatedRoute);
-
-    _componentStyle = inject(StepsStyle);
+    componentName = 'Steps';
 
     subscription: Subscription | undefined;
 
@@ -144,8 +151,14 @@ export class Steps extends BaseComponent {
         this.subscription = this.router.events.subscribe(() => this.cd.markForCheck());
     }
 
+    onDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     onItemClick(event: Event, item: MenuItem, i: number) {
-        if (this.readonly || item.disabled) {
+        if (this.readonly() || item.disabled) {
             event.preventDefault();
             return;
         }
@@ -192,10 +205,10 @@ export class Steps extends BaseComponent {
             }
 
             case 'Tab':
-                if (i !== (this.activeIndex ?? -1)) {
+                if (i !== (this.activeIndex() ?? -1)) {
                     const siblings = <any>find(this.listViewChild().nativeElement, '[data-pc-section="menuitem"]');
                     siblings[i].children[0].tabIndex = '-1';
-                    siblings[this.activeIndex ?? 0].children[0].tabIndex = '0';
+                    siblings[this.activeIndex() ?? 0].children[0].tabIndex = '0';
                 }
                 break;
 
@@ -266,11 +279,11 @@ export class Steps extends BaseComponent {
     }
 
     isClickableRouterLink(item: MenuItem) {
-        return item.routerLink && !this.readonly && !item.disabled;
+        return item.routerLink && !this.readonly() && !item.disabled;
     }
 
     isItemDisabled(item: MenuItem, index: number): boolean {
-        return item.disabled || (this.readonly && !this.isActive(item, index));
+        return item.disabled || (this.readonly() && !this.isActive(item, index));
     }
 
     isActive(item: MenuItem, index: number) {
@@ -280,7 +293,7 @@ export class Steps extends BaseComponent {
             return this.router.isActive(this.router.createUrlTree(routerLink, { relativeTo: this.route }).toString(), false);
         }
 
-        return index === this.activeIndex;
+        return index === this.activeIndex();
     }
 
     getItemTabIndex(item: MenuItem, index: number): string {
@@ -288,17 +301,11 @@ export class Steps extends BaseComponent {
             return '-1';
         }
 
-        if (!item.disabled && this.activeIndex === index) {
+        if (!item.disabled && this.activeIndex() === index) {
             return item.tabindex || '0';
         }
 
         return item.tabindex ?? '-1';
-    }
-
-    onDestroy() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
     }
 }
 

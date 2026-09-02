@@ -3,7 +3,7 @@ import { style } from '@openng/optimus-ui-styles/steps';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const classes = {
-    root: ({ instance }) => ['p-steps p-component', { 'p-readonly': instance.readonly }],
+    root: ({ instance }) => ['p-steps p-component', { 'p-readonly': instance.readonly() }],
     list: 'p-steps-list',
     item: ({ instance, item, index }) => [
         'p-steps-item',
