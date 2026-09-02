@@ -18,11 +18,11 @@ import { RippleStyle } from './style/ripplestyle';
     providers: [RippleStyle]
 })
 export class Ripple extends BaseComponent {
-    componentName = 'Ripple';
-
     zone: NgZone = inject(NgZone);
 
     _componentStyle = inject(RippleStyle);
+
+    componentName = 'Ripple';
 
     animationListener: VoidListener;
 
@@ -46,7 +46,11 @@ export class Ripple extends BaseComponent {
         });
     }
 
-    onAfterViewInit() {}
+    onDestroy() {
+        if (this.config && this.config.ripple()) {
+            this.remove();
+        }
+    }
 
     onMouseDown(event: MouseEvent) {
         let ink = this.getInk();
@@ -132,12 +136,6 @@ export class Ripple extends BaseComponent {
             this.animationListener = null;
 
             utils_remove(ink);
-        }
-    }
-
-    onDestroy() {
-        if (this.config && this.config.ripple()) {
-            this.remove();
         }
     }
 }
