@@ -1,13 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, computed, contentChild, contentChildren, inject, input, NgModule, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { BlockableUI, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import { TimelineItemTemplateContext, TimelinePassThrough } from '@openng/optimus-ui/types/timeline';
 import { TimelineStyle } from './style/timelinestyle';
-
-const TIMELINE_INSTANCE = new InjectionToken<Timeline>('TIMELINE_INSTANCE');
 
 /**
  * Timeline visualizes a series of chained events.
@@ -18,67 +16,59 @@ const TIMELINE_INSTANCE = new InjectionToken<Timeline>('TIMELINE_INSTANCE');
     standalone: true,
     imports: [CommonModule, SharedModule, Bind],
     template: `
-        @for (event of value; track event; let last = $last) {
-            <div [pBind]="ptm('event')" [class]="cx('event')" [attr.data-p]="dataP">
-                <div [pBind]="ptm('eventOpposite')" [class]="cx('eventOpposite')" [attr.data-p]="dataP">
-                    <ng-container *ngTemplateOutlet="oppositeTemplate() || _oppositeTemplate; context: { $implicit: event }"></ng-container>
+        @for (event of value(); track event; let last = $last) {
+            <div [pBind]="ptm('event')" [class]="cx('event')" [attr.data-p]="dataP()">
+                <div [pBind]="ptm('eventOpposite')" [class]="cx('eventOpposite')" [attr.data-p]="dataP()">
+                    <ng-container *ngTemplateOutlet="$oppositeTemplate(); context: { $implicit: event }"></ng-container>
                 </div>
-                <div [pBind]="ptm('eventSeparator')" [class]="cx('eventSeparator')" [attr.data-p]="dataP">
-                    @if (markerTemplate() || _markerTemplate) {
-                        <ng-container *ngTemplateOutlet="markerTemplate() || _markerTemplate; context: { $implicit: event }"></ng-container>
+                <div [pBind]="ptm('eventSeparator')" [class]="cx('eventSeparator')" [attr.data-p]="dataP()">
+                    @if ($markerTemplate(); as markerTemplate) {
+                        <ng-container *ngTemplateOutlet="markerTemplate; context: { $implicit: event }"></ng-container>
                     } @else {
-                        <div [pBind]="ptm('eventMarker')" [class]="cx('eventMarker')" [attr.data-p]="dataP"></div>
+                        <div [pBind]="ptm('eventMarker')" [class]="cx('eventMarker')" [attr.data-p]="dataP()"></div>
                     }
                     @if (!last) {
-                        <div [pBind]="ptm('eventConnector')" [class]="cx('eventConnector')" [attr.data-p]="dataP"></div>
+                        <div [pBind]="ptm('eventConnector')" [class]="cx('eventConnector')" [attr.data-p]="dataP()"></div>
                     }
                 </div>
-                <div [pBind]="ptm('eventContent')" [class]="cx('eventContent')" [attr.data-p]="dataP">
-                    <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate; context: { $implicit: event }"></ng-container>
+                <div [pBind]="ptm('eventContent')" [class]="cx('eventContent')" [attr.data-p]="dataP()">
+                    <ng-container *ngTemplateOutlet="$contentTemplate(); context: { $implicit: event }"></ng-container>
                 </div>
             </div>
         }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [TimelineStyle, { provide: TIMELINE_INSTANCE, useExisting: Timeline }, { provide: PARENT_INSTANCE, useExisting: Timeline }],
+    providers: [TimelineStyle, { provide: PARENT_INSTANCE, useExisting: Timeline }],
     host: {
-        '[class]': "cn(cx('root'), styleClass)",
-        '[attr.data-p]': 'dataP'
+        '[class]': "cx('root')",
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
 export class Timeline extends BaseComponent<TimelinePassThrough> implements BlockableUI {
-    componentName = 'Timeline';
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    $pcTimeline: Timeline | undefined = inject(TIMELINE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    _componentStyle = inject(TimelineStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
     /**
      * An array of events to display.
      * @group Props
      */
-    @Input() value: any[] | undefined;
-    /**
-     * Style class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    readonly value = input<any[]>();
+
     /**
      * Position of the timeline bar relative to the content. Valid values are "left", "right" for vertical layout and "top", "bottom" for horizontal layout.
      * @group Props
      */
-    @Input() align: string = 'left';
+    readonly align = input<string>('left');
+
     /**
      * Orientation of the timeline.
      * @group Props
      */
-    @Input() layout: 'vertical' | 'horizontal' = 'vertical';
+    readonly layout = input<'vertical' | 'horizontal'>('vertical');
+
     /**
      * Custom content template.
      * @param {TimelineItemTemplateContext} context - item context.
@@ -105,41 +95,36 @@ export class Timeline extends BaseComponent<TimelinePassThrough> implements Bloc
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _contentTemplate: TemplateRef<TimelineItemTemplateContext> | undefined;
+    componentName = 'Timeline';
 
-    _oppositeTemplate: TemplateRef<TimelineItemTemplateContext> | undefined;
+    /** Effective content template: the \`#content\` content child, or a legacy \`pTemplate="content"\`. */
+    readonly $contentTemplate = computed(() => this.contentTemplate() ?? this.templates().find((item) => item.getType() === 'content')?.template);
 
-    _markerTemplate: TemplateRef<TimelineItemTemplateContext> | undefined;
+    /** Effective opposite template: the \`#opposite\` content child, or a legacy \`pTemplate="opposite"\`. */
+    readonly $oppositeTemplate = computed(() => this.oppositeTemplate() ?? this.templates().find((item) => item.getType() === 'opposite')?.template);
 
-    _componentStyle = inject(TimelineStyle);
+    /** Effective marker template: the \`#marker\` content child, or a legacy \`pTemplate="marker"\`. */
+    readonly $markerTemplate = computed(() => this.markerTemplate() ?? this.templates().find((item) => item.getType() === 'marker')?.template);
+
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.layout()]: this.layout(),
+            [this.align()]: this.align()
+        })
+    );
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     getBlockableElement(): HTMLElement {
         return this.el.nativeElement.children[0];
-    }
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-
-                case 'opposite':
-                    this._oppositeTemplate = item.template;
-                    break;
-
-                case 'marker':
-                    this._markerTemplate = item.template;
-                    break;
-            }
-        });
-    }
-
-    get dataP() {
-        return this.cn({
-            [this.layout]: this.layout,
-            [this.align]: this.align
-        });
     }
 }
 
