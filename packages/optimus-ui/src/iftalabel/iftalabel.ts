@@ -1,13 +1,9 @@
-import { CommonModule } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, Component, inject, InjectionToken, NgModule, ViewEncapsulation } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { afterEveryRender, ChangeDetectionStrategy, Component, inject, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { IftaLabelPassThrough } from '@openng/optimus-ui/types/iftalabel';
 import { IftaLabelStyle } from './style/iftalabelstyle';
-
-const IFTALABEL_INSTANCE = new InjectionToken<IftaLabel>('IFTALABEL_INSTANCE');
 
 /**
  * IftaLabel is used to create infield top aligned labels.
@@ -20,28 +16,32 @@ const IFTALABEL_INSTANCE = new InjectionToken<IftaLabel>('IFTALABEL_INSTANCE');
     template: ` <ng-content></ng-content> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [IftaLabelStyle, { provide: IFTALABEL_INSTANCE, useExisting: IftaLabel }, { provide: PARENT_INSTANCE, useExisting: IftaLabel }],
+    providers: [IftaLabelStyle, { provide: PARENT_INSTANCE, useExisting: IftaLabel }],
     hostDirectives: [Bind],
     host: {
         '[class]': "cx('root')"
     }
 })
-export class IftaLabel extends BaseComponent<IftaLabelPassThrough> implements AfterViewChecked {
-    componentName = 'IftaLabel';
-
+export class IftaLabel extends BaseComponent<IftaLabelPassThrough> {
     _componentStyle = inject(IftaLabelStyle);
-
-    $pcIftaLabel: IftaLabel | undefined = inject(IFTALABEL_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    componentName = 'IftaLabel';
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 }
 
 @NgModule({
-    imports: [IftaLabel, CommonModule, SharedModule, RouterModule],
+    imports: [IftaLabel, SharedModule],
     exports: [IftaLabel, SharedModule]
 })
 export class IftaLabelModule {}
