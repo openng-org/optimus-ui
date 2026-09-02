@@ -1,5 +1,5 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, Directive, inject, Input, NgModule, PLATFORM_ID, SimpleChanges } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { booleanAttribute, Directive, effect, input, NgModule, untracked } from '@angular/core';
 import { createElement, focus, getFirstFocusableElement, getLastFocusableElement } from '@openng/optimus-ui-utils';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 
@@ -16,29 +16,44 @@ export class FocusTrap extends BaseComponent {
      * When set as true, focus wouldn't be managed.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) pFocusTrapDisabled: boolean = false;
-
-    platformId = inject(PLATFORM_ID);
-
-    document: Document = inject(DOCUMENT);
+    readonly pFocusTrapDisabled = input<boolean, unknown>(false, { transform: booleanAttribute });
 
     firstHiddenFocusableElement!: HTMLElement;
 
     lastHiddenFocusableElement!: HTMLElement;
 
-    onInit() {
-        if (isPlatformBrowser(this.platformId) && !this.pFocusTrapDisabled) {
-            !this.firstHiddenFocusableElement && !this.lastHiddenFocusableElement && this.createHiddenFocusableElements();
-        }
-    }
+    private disabledEffectRan = false;
 
-    onChanges(changes: SimpleChanges) {
-        if (changes.pFocusTrapDisabled && isPlatformBrowser(this.platformId)) {
-            if (changes.pFocusTrapDisabled.currentValue) {
+    /**
+     * Reacts to later `pFocusTrapDisabled` changes (replaces the former ngOnChanges hook): removes
+     * the hidden focusable sentinels while disabled and recreates them when re-enabled. The first
+     * run only registers the dependency — the initial creation happens synchronously in `onInit`,
+     * exactly like the legacy lifecycle.
+     */
+    private readonly disabledEffect = effect(() => {
+        const disabled = this.pFocusTrapDisabled();
+
+        if (!this.disabledEffectRan) {
+            this.disabledEffectRan = true;
+            return;
+        }
+
+        if (!isPlatformBrowser(this.platformId)) {
+            return;
+        }
+
+        untracked(() => {
+            if (disabled) {
                 this.removeHiddenFocusableElements();
             } else {
                 this.createHiddenFocusableElements();
             }
+        });
+    });
+
+    onInit() {
+        if (isPlatformBrowser(this.platformId) && !this.pFocusTrapDisabled()) {
+            !this.firstHiddenFocusableElement && !this.lastHiddenFocusableElement && this.createHiddenFocusableElements();
         }
     }
 
