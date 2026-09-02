@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, inject, InjectionToken, input, Input, NgModule, signal, TemplateRef, ViewEncapsulation, contentChild, contentChildren, output } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, inject, input, NgModule, numberAttribute, signal, TemplateRef, ViewEncapsulation, contentChild, contentChildren, output } from '@angular/core';
 import { MotionOptions } from '@openng/optimus-ui-motion';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -10,8 +10,6 @@ import { Ripple } from '@openng/optimus-ui/ripple';
 import { MessageContainerTemplateContext, MessagePassThrough, MessageSeverity } from '@openng/optimus-ui/types/message';
 import { MessageStyle } from './style/messagestyle';
 
-const MESSAGE_INSTANCE = new InjectionToken<Message>('MESSAGE_INSTANCE');
-
 /**
  * Message groups a collection of contents in tabs.
  * @group Components
@@ -21,44 +19,44 @@ const MESSAGE_INSTANCE = new InjectionToken<Message>('MESSAGE_INSTANCE');
     standalone: true,
     imports: [CommonModule, TimesIcon, Ripple, SharedModule, Bind, MotionModule],
     template: `
-        <div [pBind]="ptm('contentWrapper')" [class]="cx('contentWrapper')" [attr.data-p]="dataP">
-            <div [pBind]="ptm('content')" [class]="cx('content')" [attr.data-p]="dataP">
-                @if (iconTemplate() || _iconTemplate) {
-                    <ng-container *ngTemplateOutlet="iconTemplate() || _iconTemplate"></ng-container>
+        <div [pBind]="ptm('contentWrapper')" [class]="cx('contentWrapper')" [attr.data-p]="dataP()">
+            <div [pBind]="ptm('content')" [class]="cx('content')" [attr.data-p]="dataP()">
+                @if ($iconTemplate()) {
+                    <ng-container *ngTemplateOutlet="$iconTemplate()"></ng-container>
                 }
-                @if (icon) {
-                    <i [pBind]="ptm('icon')" [class]="cn(cx('icon'), icon)" [attr.data-p]="dataP"></i>
+                @if (icon()) {
+                    <i [pBind]="ptm('icon')" [class]="cn(cx('icon'), icon())" [attr.data-p]="dataP()"></i>
                 }
 
-                @if (containerTemplate() || _containerTemplate) {
-                    <ng-container *ngTemplateOutlet="containerTemplate() || _containerTemplate; context: { closeCallback: closeCallback }"></ng-container>
+                @if ($containerTemplate()) {
+                    <ng-container *ngTemplateOutlet="$containerTemplate(); context: { closeCallback: closeCallback }"></ng-container>
                 } @else {
-                    @if (!escape) {
+                    @if (!escape()) {
                         <div>
-                            @if (!escape) {
-                                <span [pBind]="ptm('text')" [ngClass]="cx('text')" [innerHTML]="text" [attr.data-p]="dataP"></span>
+                            @if (!escape()) {
+                                <span [pBind]="ptm('text')" [ngClass]="cx('text')" [innerHTML]="text()" [attr.data-p]="dataP()"></span>
                             }
                         </div>
                     } @else {
-                        @if (escape && text) {
-                            <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP">{{ text }}</span>
+                        @if (escape() && text()) {
+                            <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP()">{{ text() }}</span>
                         }
                     }
 
-                    <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP">
+                    <span [pBind]="ptm('text')" [ngClass]="cx('text')" [attr.data-p]="dataP()">
                         <ng-content></ng-content>
                     </span>
                 }
-                @if (closable) {
-                    <button [pBind]="ptm('closeButton')" pRipple type="button" [class]="cx('closeButton')" (click)="close($event)" [attr.aria-label]="closeAriaLabel" [attr.data-p]="dataP">
-                        @if (closeIcon) {
-                            <i [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), closeIcon)" [ngClass]="closeIcon" [attr.data-p]="dataP"></i>
+                @if (closable()) {
+                    <button [pBind]="ptm('closeButton')" pRipple type="button" [class]="cx('closeButton')" (click)="close($event)" [attr.aria-label]="closeAriaLabel" [attr.data-p]="dataP()">
+                        @if (closeIcon()) {
+                            <i [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), closeIcon())" [ngClass]="closeIcon()" [attr.data-p]="dataP()"></i>
                         }
-                        @if (closeIconTemplate() || _closeIconTemplate) {
-                            <ng-container *ngTemplateOutlet="closeIconTemplate() || _closeIconTemplate"></ng-container>
+                        @if ($closeIconTemplate()) {
+                            <ng-container *ngTemplateOutlet="$closeIconTemplate()"></ng-container>
                         }
-                        @if (!closeIconTemplate() && !_closeIconTemplate && !closeIcon) {
-                            <svg [pBind]="ptm('closeIcon')" data-p-icon="times" [class]="cx('closeIcon')" [attr.data-p]="dataP" />
+                        @if (!$closeIconTemplate() && !closeIcon()) {
+                            <svg [pBind]="ptm('closeIcon')" data-p-icon="times" [class]="cx('closeIcon')" [attr.data-p]="dataP()" />
                         }
                     </button>
                 }
@@ -67,118 +65,111 @@ const MESSAGE_INSTANCE = new InjectionToken<Message>('MESSAGE_INSTANCE');
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [MessageStyle, { provide: MESSAGE_INSTANCE, useExisting: Message }, { provide: PARENT_INSTANCE, useExisting: Message }],
+    providers: [MessageStyle, { provide: PARENT_INSTANCE, useExisting: Message }],
     hostDirectives: [Bind],
     host: {
-        '[attr.data-p]': 'dataP',
+        '[attr.data-p]': 'dataP()',
         role: 'alert',
         'aria-live': 'polite',
-        '[class]': 'cn(cx("root"), styleClass)',
+        '[class]': 'cn(cx("root"), styleClass())',
         '[animate.enter]': '"p-message-enter-active"',
         '[animate.leave]': '"p-message-leave-active"',
         '[class.p-message-leave-active]': '!visible()'
     }
 })
 export class Message extends BaseComponent<MessagePassThrough> {
-    componentName = 'Message';
-
     _componentStyle = inject(MessageStyle);
 
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    $pcMessage: Message | undefined = inject(MESSAGE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
 
     /**
      * Severity level of the message.
      * @defaultValue 'info'
      * @group Props
      */
-    @Input() severity: MessageSeverity | undefined | null = 'info';
+    readonly severity = input<MessageSeverity | undefined | null>('info');
+
     /**
      * Text content.
      * @deprecated since v20.0.0. Use content projection instead '<p-message>Content</p-message>'.
      * @group Props
      */
-    @Input() text: string | undefined;
+    readonly text = input<string>();
+
     /**
      * Whether displaying messages would be escaped or not.
      * @deprecated since v20.0.0. Use content projection instead '<p-message>Content</p-message>'.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) escape: boolean = true;
-    /**
-     * Inline style of the component.
-     * @group Props
-     */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly escape = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Whether the message can be closed manually using the close icon.
      * @group Props
      * @defaultValue false
      */
-    @Input({ transform: booleanAttribute }) closable: boolean = false;
+    readonly closable = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Icon to display in the message.
      * @group Props
      * @defaultValue undefined
      */
-    @Input() icon: string | undefined;
+    readonly icon = input<string>();
+
     /**
      * Icon to display in the message close button.
      * @group Props
      * @defaultValue undefined
      */
-    @Input() closeIcon: string | undefined;
+    readonly closeIcon = input<string>();
+
     /**
      * Delay in milliseconds to close the message automatically.
      * @defaultValue undefined
      */
-    @Input() life: number | undefined;
+    readonly life = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Transition options of the show animation.
      * @defaultValue '300ms ease-out'
      * @group Props
      * @deprecated since v21.0.0, use `motionOptions` instead.
      */
-    @Input() showTransitionOptions: string = '300ms ease-out';
+    readonly showTransitionOptions = input<string>('300ms ease-out');
+
     /**
      * Transition options of the hide animation.
      * @defaultValue '200ms cubic-bezier(0.86, 0, 0.07, 1)'
      * @group Props
      * @deprecated since v21.0.0, use `motionOptions` instead.
      */
-    @Input() hideTransitionOptions: string = '200ms cubic-bezier(0.86, 0, 0.07, 1)';
+    readonly hideTransitionOptions = input<string>('200ms cubic-bezier(0.86, 0, 0.07, 1)');
+
     /**
      * Defines the size of the component.
      * @group Props
      */
-    @Input() size: 'large' | 'small' | undefined;
+    readonly size = input<'large' | 'small'>();
+
     /**
      * Specifies the input variant of the component.
      * @group Props
      */
-    @Input() variant: 'outlined' | 'text' | 'simple' | undefined;
+    readonly variant = input<'outlined' | 'text' | 'simple'>();
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
      * Emits when the message is closed.
      * @param {{ originalEvent: Event }} event - The event object containing the original event.
@@ -187,12 +178,6 @@ export class Message extends BaseComponent<MessagePassThrough> {
     readonly onClose = output<{
         originalEvent: Event;
     }>();
-
-    get closeAriaLabel() {
-        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
-    }
-
-    visible = signal<boolean>(true);
 
     /**
      * Custom template of the message container.
@@ -216,40 +201,59 @@ export class Message extends BaseComponent<MessagePassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _containerTemplate: TemplateRef<MessageContainerTemplateContext> | undefined;
+    componentName = 'Message';
 
-    _iconTemplate: TemplateRef<void> | undefined;
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
 
-    _closeIconTemplate: TemplateRef<void> | undefined;
+    get closeAriaLabel() {
+        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
+    }
+
+    visible = signal<boolean>(true);
+
+    /** Effective container template: the \`#container\` content child, or a legacy \`pTemplate="container"\`. */
+    readonly $containerTemplate = computed(() => this.containerTemplate() ?? (this.templates().find((item) => item.getType() === 'container')?.template as TemplateRef<MessageContainerTemplateContext> | undefined));
+
+    /** Effective icon template: the \`#icon\` content child, or a legacy \`pTemplate="icon"\`. */
+    readonly $iconTemplate = computed(() => this.iconTemplate() ?? this.templates().find((item) => item.getType() === 'icon')?.template);
+
+    /** Effective close icon template: the \`#closeicon\` content child, or a legacy \`pTemplate="closeicon"\`. */
+    readonly $closeIconTemplate = computed(() => this.closeIconTemplate() ?? this.templates().find((item) => item.getType() === 'closeicon')?.template);
 
     closeCallback = (event: Event) => {
         this.close(event);
     };
 
-    onInit() {
-        if (this.life) {
-            setTimeout(() => {
-                this.visible.set(false);
-            }, this.life);
-        }
+    readonly dataP = computed(() =>
+        this.cn({
+            outlined: this.variant() === 'outlined',
+            simple: this.variant() === 'simple',
+            [this.severity() as string]: this.severity(),
+            [this.size() as string]: this.size()
+        })
+    );
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'container':
-                    this._containerTemplate = item.template;
-                    break;
-
-                case 'icon':
-                    this._iconTemplate = item.template;
-                    break;
-
-                case 'closeicon':
-                    this._closeIconTemplate = item.template;
-                    break;
-            }
-        });
+    onInit() {
+        if (this.life()) {
+            setTimeout(() => {
+                this.visible.set(false);
+            }, this.life());
+        }
     }
 
     /**
@@ -260,15 +264,6 @@ export class Message extends BaseComponent<MessagePassThrough> {
     public close(event: Event) {
         this.visible.set(false);
         this.onClose.emit({ originalEvent: event });
-    }
-
-    get dataP() {
-        return this.cn({
-            outlined: this.variant === 'outlined',
-            simple: this.variant === 'simple',
-            [this.severity as string]: this.severity,
-            [this.size as string]: this.size
-        });
     }
 }
 

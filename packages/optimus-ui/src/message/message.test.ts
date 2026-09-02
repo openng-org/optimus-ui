@@ -148,11 +148,11 @@ describe('Message', () => {
 
         it('should have default values', () => {
             const messageInstance = messageEl.componentInstance as Message;
-            expect(messageInstance.severity).toBe('info');
-            expect(messageInstance.escape).toBe(true);
-            expect(messageInstance.closable).toBe(false);
-            expect(messageInstance.showTransitionOptions).toBe('300ms ease-out');
-            expect(messageInstance.hideTransitionOptions).toBe('200ms cubic-bezier(0.86, 0, 0.07, 1)');
+            expect(messageInstance.severity()).toBe('info');
+            expect(messageInstance.escape()).toBe(true);
+            expect(messageInstance.closable()).toBe(false);
+            expect(messageInstance.showTransitionOptions()).toBe('300ms ease-out');
+            expect(messageInstance.hideTransitionOptions()).toBe('200ms cubic-bezier(0.86, 0, 0.07, 1)');
             expect(messageInstance.visible()).toBe(true);
         });
 
@@ -170,14 +170,14 @@ describe('Message', () => {
             fixture.detectChanges();
 
             const messageInstance = messageEl.componentInstance as Message;
-            expect(messageInstance.severity).toBe('error');
-            expect(messageInstance.text).toBe('Error message');
-            expect(messageInstance.escape).toBe(false);
-            expect(messageInstance.closable).toBe(true);
-            expect(messageInstance.icon).toBe('pi pi-exclamation-triangle');
-            expect(messageInstance.closeIcon).toBe('pi pi-times');
-            expect(messageInstance.size).toBe('large');
-            expect(messageInstance.variant).toBe('outlined');
+            expect(messageInstance.severity()).toBe('error');
+            expect(messageInstance.text()).toBe('Error message');
+            expect(messageInstance.escape()).toBe(false);
+            expect(messageInstance.closable()).toBe(true);
+            expect(messageInstance.icon()).toBe('pi pi-exclamation-triangle');
+            expect(messageInstance.closeIcon()).toBe('pi pi-times');
+            expect(messageInstance.size()).toBe('large');
+            expect(messageInstance.variant()).toBe('outlined');
         });
 
         it('should render with correct ARIA attributes', () => {
@@ -360,7 +360,7 @@ describe('Message', () => {
 
                 const messageEl = fixture.debugElement.query(By.css('p-message'));
                 const messageInstance = messageEl.componentInstance as Message;
-                expect(messageInstance.severity).toBe(severity);
+                expect(messageInstance.severity()).toBe(severity);
             }
         });
 
@@ -575,7 +575,7 @@ describe('Message', () => {
             const messageInstance = messageEl.componentInstance as Message;
 
             messageInstance.ngAfterContentInit();
-            expect(messageInstance._containerTemplate).toBeTruthy();
+            expect(messageInstance.$containerTemplate()).toBeTruthy();
         });
 
         it('should process pTemplate icon in ngAfterContentInit', () => {
@@ -583,7 +583,7 @@ describe('Message', () => {
             const messageInstance = messageEl.componentInstance as Message;
 
             messageInstance.ngAfterContentInit();
-            expect(messageInstance._iconTemplate).toBeTruthy();
+            expect(messageInstance.$iconTemplate()).toBeTruthy();
         });
 
         it('should process pTemplate closeicon in ngAfterContentInit', () => {
@@ -591,7 +591,7 @@ describe('Message', () => {
             const messageInstance = messageEl.componentInstance as Message;
 
             messageInstance.ngAfterContentInit();
-            expect(messageInstance._closeIconTemplate).toBeTruthy();
+            expect(messageInstance.$closeIconTemplate()).toBeTruthy();
         });
 
         it('should render pTemplate content correctly', async () => {
@@ -664,15 +664,10 @@ describe('Message', () => {
             component.style = { border: '2px solid red', padding: '10px' };
             fixture.detectChanges();
 
+            // `style` is no longer an input — the [style] binding is a native style binding now
             const messageEl = fixture.debugElement.query(By.css('p-message'));
-            const messageInstance = messageEl.componentInstance as Message;
-
-            expect(messageInstance.style).toEqual({ border: '2px solid red', padding: '10px' });
-
-            // Verify component received the style input
-            expect(messageInstance.style).toBeTruthy();
-            expect(Object.keys(messageInstance.style!)).toContain('border');
-            expect(Object.keys(messageInstance.style!)).toContain('padding');
+            expect(messageEl.nativeElement.style.padding).toBe('10px');
+            expect(messageEl.nativeElement.style.border).toBe('2px solid red');
         });
 
         it('should apply size classes', async () => {
@@ -683,13 +678,13 @@ describe('Message', () => {
 
             const messageEl = fixture.debugElement.query(By.css('p-message'));
             const messageInstance = messageEl.componentInstance as Message;
-            expect(messageInstance.size).toBe('large');
+            expect(messageInstance.size()).toBe('large');
 
             component.size = 'small';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
-            expect(messageInstance.size).toBe('small');
+            expect(messageInstance.size()).toBe('small');
         });
 
         it('should apply variant classes', async () => {
@@ -703,7 +698,7 @@ describe('Message', () => {
 
                 const messageEl = fixture.debugElement.query(By.css('p-message'));
                 const messageInstance = messageEl.componentInstance as Message;
-                expect(messageInstance.variant).toBe(variant);
+                expect(messageInstance.variant()).toBe(variant);
             }
         });
     });
@@ -825,8 +820,8 @@ describe('Message', () => {
             const message1 = fixture.debugElement.query(By.css('p-message')).componentInstance as Message;
             const message2 = fixture2.debugElement.query(By.css('p-message')).componentInstance as Message;
 
-            expect(message1.severity).toBe('error');
-            expect(message2.severity).toBe('success');
+            expect(message1.severity()).toBe('error');
+            expect(message2.severity()).toBe('success');
         });
 
         it('should handle life property with zero value', async () => {
@@ -1211,8 +1206,8 @@ describe('Message', () => {
                 root: ({ instance }: any) => {
                     return {
                         class: {
-                            SEVERITY_ERROR: instance?.severity === 'error',
-                            SEVERITY_SUCCESS: instance?.severity === 'success'
+                            SEVERITY_ERROR: instance?.severity() === 'error',
+                            SEVERITY_SUCCESS: instance?.severity() === 'success'
                         }
                     };
                 }
@@ -1232,7 +1227,7 @@ describe('Message', () => {
                 content: ({ instance }: any) => {
                     return {
                         style: {
-                            'background-color': instance?.closable ? 'yellow' : 'gray'
+                            'background-color': instance?.closable() ? 'yellow' : 'gray'
                         }
                     };
                 }
@@ -1249,7 +1244,7 @@ describe('Message', () => {
             fixture.componentRef.setInput('pt', {
                 text: ({ instance }: any) => {
                     return {
-                        class: instance?.escape ? 'ESCAPED_TEXT' : 'UNESCAPED_TEXT'
+                        class: instance?.escape() ? 'ESCAPED_TEXT' : 'UNESCAPED_TEXT'
                     };
                 }
             });
@@ -1265,8 +1260,8 @@ describe('Message', () => {
             fixture.componentRef.setInput('pt', {
                 closeButton: ({ instance }: any) => {
                     return {
-                        'data-closable': instance?.closable,
-                        'data-severity': instance?.severity
+                        'data-closable': instance?.closable(),
+                        'data-severity': instance?.severity()
                     };
                 }
             });
@@ -1285,7 +1280,7 @@ describe('Message', () => {
                 icon: ({ instance }: any) => {
                     return {
                         style: {
-                            'font-size': instance?.size === 'large' ? '24px' : '16px'
+                            'font-size': instance?.size() === 'large' ? '24px' : '16px'
                         }
                     };
                 }
@@ -1339,14 +1334,17 @@ describe('Message', () => {
 
         it('should bind onclick event to root element via pt', async () => {
             let clickedInstance: any = null;
+            let received: any = null;
+            // hoisted so the PT resolution stays referentially stable across renders (a fresh
+            // closure per resolution would defeat Bind.setAttrs' equality check and loop CD)
+            const onclick = () => {
+                clickedInstance = received;
+            };
 
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => {
-                    return {
-                        onclick: () => {
-                            clickedInstance = instance;
-                        }
-                    };
+                    received = instance;
+                    return { onclick };
                 }
             });
             fixture.componentRef.setInput('text', 'Test');
@@ -1392,17 +1390,17 @@ describe('Message', () => {
         it('should bind onmouseenter and onmouseleave events via pt', async () => {
             let mouseEntered = false;
             let mouseLeft = false;
+            // hoisted so the PT resolution stays referentially stable across renders
+            const onmouseenter = () => {
+                mouseEntered = true;
+            };
+            const onmouseleave = () => {
+                mouseLeft = true;
+            };
 
             fixture.componentRef.setInput('pt', {
                 root: () => {
-                    return {
-                        onmouseenter: () => {
-                            mouseEntered = true;
-                        },
-                        onmouseleave: () => {
-                            mouseLeft = true;
-                        }
-                    };
+                    return { onmouseenter, onmouseleave };
                 }
             });
             fixture.componentRef.setInput('text', 'Test');
