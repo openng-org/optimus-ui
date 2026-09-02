@@ -240,7 +240,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                                 <div class="overflow-y-auto flex-1 bg-surface-0 dark:bg-surface-900 mt-2 flex flex-col rounded-lg overflow-hidden divide-y divide-surface-200 dark:divide-surface-800">
                                     <div *ngFor="let data of callLogs" class="flex items-center gap-3 p-2">
                                         <p-overlayBadge severity="success" styleClass="w-fit">
-                                            <p-avatar [image]="data.image" size="normal" styleClass="rounded-md w-10 h-10 overflow-hidden flex" />
+                                            <p-avatar [image]="data.image" size="normal" class="rounded-md w-10 h-10 overflow-hidden flex" />
                                         </p-overlayBadge>
 
                                         <div class="flex-1">
@@ -259,7 +259,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                                 <div class="overflow-y-auto flex-1 bg-surface-0 dark:bg-surface-900 mt-2 flex flex-col rounded-lg overflow-hidden divide-y divide-surface-200 dark:divide-surface-800">
                                     <div *ngFor="let data of emailRecords" class="flex items-center gap-3 p-2">
                                         <p-overlayBadge severity="danger" styleClass="w-fit">
-                                            <p-avatar [image]="data.image" size="normal" styleClass="rounded-md overflow-hidden w-10 h-10 flex" />
+                                            <p-avatar [image]="data.image" size="normal" class="rounded-md overflow-hidden w-10 h-10 flex" />
                                         </p-overlayBadge>
 
                                         <div class="w-1/5 text-sm leading-5 font-medium text-color">{{ data.name }}</div>
@@ -340,7 +340,7 @@ import { OverviewApp } from './samples/overviewapp.component';
                                         <div class="font-medium text-color p-2">Customer Satisfaction Score</div>
                                     </div>
                                     <div class="flex-1 py-4 mt-2 flex items-center justify-center rounded-lg bg-surface-0 dark:bg-surface-900 shadow-sm">
-                                        <p-knob [(ngModel)]="customerSatisfaction" [size]="150" [strokeWidth]="8" valueTemplate="{value}%" styleClass="pointer-events-none" />
+                                        <p-knob [(ngModel)]="customerSatisfaction" [size]="150" [strokeWidth]="8" valueTemplate="{value}%" class="pointer-events-none" />
                                     </div>
                                 </div>
                                 <div class="w-full h-full flex flex-col p-3 rounded-xl bg-emphasis">

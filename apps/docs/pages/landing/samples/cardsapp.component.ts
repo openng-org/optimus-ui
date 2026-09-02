@@ -266,7 +266,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     </div>
                     <div>
                         <label class="text-color font-medium leading-6">Tag (Optional)</label>
-                        <p-autocomplete [(ngModel)]="filesTag" styleClass="w-full mt-2" inputId="multiple-ac-2" multiple (completeMethod)="search($event)" [typeahead]="false" />
+                        <p-autocomplete [(ngModel)]="filesTag" class="w-full mt-2" inputId="multiple-ac-2" multiple (completeMethod)="search($event)" [typeahead]="false" />
                     </div>
                     <div class="flex items-center gap-2">
                         <label
@@ -313,7 +313,7 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     <div>
                         <div class="text-muted-color leading-6">Email</div>
                         <div class="flex items-start gap-3 mt-2">
-                            <p-autocomplete [(ngModel)]="emailChips" inputId="multiple-ac-2" styleClass="w-full" class="flex-1" multiple (onSelect)="search($event)" [typeahead]="false" />
+                            <p-autocomplete [(ngModel)]="emailChips" inputId="multiple-ac-2" class="w-full flex-1" multiple (onSelect)="search($event)" [typeahead]="false" />
                             <p-button label="Invite" />
                         </div>
                     </div>
@@ -417,11 +417,11 @@ import { TooltipModule } from '@openng/optimus-ui/tooltip';
                     <div class="mt-4 flex gap-2">
                         <div class="flex-1">
                             <label for="price-min-val" class="leading-6 text-color">Min Value</label>
-                            <p-inputnumber [(ngModel)]="priceRange[0]" [min]="0" inputId="price-min-val" mode="currency" currency="USD" locale="en-US" styleClass="w-full" />
+                            <p-inputnumber [(ngModel)]="priceRange[0]" [min]="0" inputId="price-min-val" mode="currency" currency="USD" locale="en-US" class="w-full" />
                         </div>
                         <div class="flex-1">
                             <label for="price-max-val" class="leading-6 text-color">Max Value</label>
-                            <p-inputnumber [(ngModel)]="priceRange[1]" inputId="price-max-val" mode="currency" currency="USD" locale="en-US" styleClass="w-full" />
+                            <p-inputnumber [(ngModel)]="priceRange[1]" inputId="price-max-val" mode="currency" currency="USD" locale="en-US" class="w-full" />
                         </div>
                     </div>
                     <div class="mt-4">
