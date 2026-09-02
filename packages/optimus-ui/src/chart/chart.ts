@@ -1,13 +1,11 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, InjectionToken, Input, NgModule, NgZone, ViewEncapsulation, output } from '@angular/core';
+import { afterEveryRender, afterNextRender, booleanAttribute, ChangeDetectionStrategy, Component, effect, inject, input, NgModule, NgZone, untracked, ViewEncapsulation, output } from '@angular/core';
 import Chart from 'chart.js/auto';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 import { ChartStyle } from './style/chartstyle';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import type { ChartPassThrough } from '@openng/optimus-ui/types/chart';
-
-const CHART_INSTANCE = new InjectionToken<UIChart>('CHART_INSTANCE');
 
 /**
  * Chart groups a collection of contents in tabs.
@@ -20,10 +18,10 @@ const CHART_INSTANCE = new InjectionToken<UIChart>('CHART_INSTANCE');
     template: `
         <canvas
             role="img"
-            [attr.aria-label]="ariaLabel"
-            [attr.aria-labelledby]="ariaLabelledBy"
-            [attr.width]="responsive && !width ? null : width"
-            [attr.height]="responsive && !height ? null : height"
+            [attr.aria-label]="ariaLabel()"
+            [attr.aria-labelledby]="ariaLabelledBy()"
+            [attr.width]="responsive() && !width() ? null : width()"
+            [attr.height]="responsive() && !height() ? null : height()"
             (click)="onCanvasClick($event)"
             [pBind]="ptm('canvas')"
         ></canvas>
@@ -34,101 +32,113 @@ const CHART_INSTANCE = new InjectionToken<UIChart>('CHART_INSTANCE');
         '[class]': "cx('root')",
         '[style]': "sx('root')"
     },
-    providers: [ChartStyle, { provide: CHART_INSTANCE, useExisting: UIChart }],
+    providers: [ChartStyle],
     hostDirectives: [Bind]
 })
 export class UIChart extends BaseComponent<ChartPassThrough> {
-    el = inject(ElementRef);
     private zone = inject(NgZone);
-
-    componentName = 'Chart';
-
-    $pcChart: UIChart | undefined = inject(CHART_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(ChartStyle);
 
     /**
      * Type of the chart.
      * @group Props
      */
-    @Input() type: 'bar' | 'line' | 'scatter' | 'bubble' | 'pie' | 'doughnut' | 'polarArea' | 'radar' | undefined;
+    readonly type = input<'bar' | 'line' | 'scatter' | 'bubble' | 'pie' | 'doughnut' | 'polarArea' | 'radar'>();
+
     /**
      * Array of per-chart plugins to customize the chart behaviour.
      * @group Props
      */
-    @Input() plugins: any[] = [];
+    readonly plugins = input<any[]>([]);
+
     /**
      * Width of the chart.
      * @group Props
      */
-    @Input() width: string | undefined;
+    readonly width = input<string>();
+
     /**
      * Height of the chart.
      * @group Props
      */
-    @Input() height: string | undefined;
+    readonly height = input<string>();
+
     /**
      * Whether the chart is redrawn on screen size change.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) responsive: boolean = true;
+    readonly responsive = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Used to define a string that autocomplete attribute the current element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Data to display.
      * @group Props
      */
-    @Input() get data(): any {
-        return this._data;
-    }
-    set data(val: any) {
-        this._data = val;
-        this.reinit();
-    }
+    readonly data = input<any>();
+
     /**
      * Options to customize the chart.
      * @group Props
      */
-    @Input() get options(): any {
-        return this._options;
-    }
-    set options(val: any) {
-        this._options = val;
-        this.reinit();
-    }
+    readonly options = input<any>({});
+
     /**
      * Callback to execute when an element on chart is clicked.
      * @group Emits
      */
     readonly onDataSelect = output<any>();
 
-    isBrowser: boolean = false;
+    componentName = 'Chart';
 
     initialized: boolean | undefined;
 
-    _data: any;
-
-    _options: any = {};
-
     chart: any;
 
-    _componentStyle = inject(ChartStyle);
+    constructor() {
+        super();
+        // Recreate the chart when data or options change (replaces the former setter-based
+        // @Inputs). The body runs untracked so initChart's other input reads don't become
+        // dependencies of this effect.
+        effect(() => {
+            this.data();
+            this.options();
+            untracked(() => this.reinit());
+        });
 
-    onAfterViewInit() {
-        this.initChart();
-        this.initialized = true;
+        // Initial chart creation once the canvas is rendered (replaces the former ngAfterViewInit hook).
+        afterNextRender(() => {
+            this.initChart();
+            this.initialized = true;
+        });
+
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
+
+    onDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.initialized = false;
+            this.chart = null;
+        }
     }
 
     onCanvasClick(event: Event) {
@@ -144,20 +154,20 @@ export class UIChart extends BaseComponent<ChartPassThrough> {
 
     initChart() {
         if (isPlatformBrowser(this.platformId)) {
-            let opts = this.options || {};
-            opts.responsive = this.responsive;
+            let opts = this.options() || {};
+            opts.responsive = this.responsive();
 
             // allows chart to resize in responsive mode
-            if (opts.responsive && (this.height || this.width)) {
+            if (opts.responsive && (this.height() || this.width())) {
                 opts.maintainAspectRatio = false;
             }
 
             this.zone.runOutsideAngular(() => {
                 this.chart = new Chart(this.el.nativeElement.children[0], {
-                    type: this.type,
-                    data: this.data,
-                    options: this.options,
-                    plugins: this.plugins
+                    type: this.type(),
+                    data: this.data(),
+                    options: this.options(),
+                    plugins: this.plugins()
                 });
             });
         }
@@ -187,14 +197,6 @@ export class UIChart extends BaseComponent<ChartPassThrough> {
         if (this.chart) {
             this.chart.destroy();
             this.initChart();
-        }
-    }
-
-    onDestroy() {
-        if (this.chart) {
-            this.chart.destroy();
-            this.initialized = false;
-            this.chart = null;
         }
     }
 }
