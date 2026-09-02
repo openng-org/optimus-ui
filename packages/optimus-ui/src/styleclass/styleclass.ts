@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, ElementRef, HostListener, Input, NgModule, NgZone, OnDestroy, Renderer2, inject } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, HostListener, input, NgModule, NgZone, OnDestroy, Renderer2, inject } from '@angular/core';
 import { addClass, getTargetElement, hasClass, isElement, removeClass } from '@openng/optimus-ui-utils';
 import { VoidListener } from '@openng/optimus-ui/ts-helpers';
 
@@ -12,69 +12,82 @@ import { VoidListener } from '@openng/optimus-ui/ts-helpers';
 })
 export class StyleClass implements OnDestroy {
     el = inject(ElementRef);
+
     renderer = inject(Renderer2);
+
     private zone = inject(NgZone);
 
     /**
      * Selector to define the target element. Available selectors are '@next', '@prev', '@parent' and '@grandparent'.
      * @group Props
      */
-    @Input('pStyleClass') selector: string | undefined;
+    readonly selector = input<string | undefined>(undefined, { alias: 'pStyleClass' });
+
     /**
      * Style class to add when item begins to get displayed.
      * @group Props
      */
-    @Input() enterFromClass: string | undefined;
+    readonly enterFromClass = input<string>();
+
     /**
      * Style class to add during enter animation.
      * @group Props
      */
-    @Input() enterActiveClass: string | undefined;
+    readonly enterActiveClass = input<string>();
+
     /**
      * Style class to add when item begins to get displayed.
      * @group Props
      */
-    @Input() enterToClass: string | undefined;
+    readonly enterToClass = input<string>();
+
     /**
      * Style class to add when item begins to get hidden.
      * @group Props
      */
-    @Input() leaveFromClass: string | undefined;
+    readonly leaveFromClass = input<string>();
+
     /**
      * Style class to add during leave animation.
      * @group Props
      */
-    @Input() leaveActiveClass: string | undefined;
+    readonly leaveActiveClass = input<string>();
+
     /**
      * Style class to add when leave animation is completed.
      * @group Props
      */
-    @Input() leaveToClass: string | undefined;
+    readonly leaveToClass = input<string>();
+
     /**
      * Whether to trigger leave animation when outside of the element is clicked.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) hideOnOutsideClick: boolean | undefined;
+    readonly hideOnOutsideClick = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Adds or removes a class when no enter-leave animation is required.
      * @group Props
      */
-    @Input() toggleClass: string | undefined;
+    readonly toggleClass = input<string>();
+
     /**
      * Whether to trigger leave animation when escape key pressed.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) hideOnEscape: boolean | undefined;
+    readonly hideOnEscape = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Whether to trigger leave animation when the target element resized.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) hideOnResize: boolean | undefined;
+    readonly hideOnResize = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Target element to listen resize. Valid values are "window", "document" or target element selector.
      * @group Props
      */
-    @Input() resizeSelector: string | undefined;
+    readonly resizeSelector = input<string>();
 
     eventListener: VoidListener;
 
@@ -94,17 +107,25 @@ export class StyleClass implements OnDestroy {
 
     animating: boolean | undefined;
 
-    _enterClass: string | undefined;
-
-    _leaveClass: string | undefined;
-
     _resizeTarget: any;
+
+    ngOnDestroy() {
+        this.target = null;
+        this._resizeTarget = null;
+
+        if (this.eventListener) {
+            this.eventListener();
+        }
+        this.unbindDocumentClickListener();
+        this.unbindDocumentKeydownListener();
+        this.unbindResizeListener();
+    }
 
     @HostListener('click')
     clickListener() {
-        this.target ||= getTargetElement(this.selector, this.el.nativeElement) as HTMLElement;
+        this.target ||= getTargetElement(this.selector(), this.el.nativeElement) as HTMLElement;
 
-        if (this.toggleClass) {
+        if (this.toggleClass()) {
             this.toggle();
         } else {
             if ((this.target as HTMLElement)?.offsetParent === null) this.enter();
@@ -113,101 +134,101 @@ export class StyleClass implements OnDestroy {
     }
 
     toggle() {
-        if (hasClass(this.target!, this.toggleClass as string)) removeClass(this.target!, this.toggleClass as string);
-        else addClass(this.target!, this.toggleClass as string);
+        if (hasClass(this.target!, this.toggleClass() as string)) removeClass(this.target!, this.toggleClass() as string);
+        else addClass(this.target!, this.toggleClass() as string);
     }
 
     enter() {
-        if (this.enterActiveClass) {
+        if (this.enterActiveClass()) {
             if (!this.animating) {
                 this.animating = true;
 
-                if (this.enterActiveClass.includes('slidedown')) {
+                if (this.enterActiveClass()!.includes('slidedown')) {
                     (this.target as HTMLElement).style.height = '0px';
-                    removeClass(this.target!, this.enterFromClass || 'hidden');
+                    removeClass(this.target!, this.enterFromClass() || 'hidden');
                     (this.target as HTMLElement).style.maxHeight = (this.target as HTMLElement).scrollHeight + 'px';
-                    addClass(this.target!, this.enterFromClass || 'hidden');
+                    addClass(this.target!, this.enterFromClass() || 'hidden');
                     (this.target as HTMLElement).style.height = '';
                 }
 
-                addClass(this.target!, this.enterActiveClass);
-                if (this.enterFromClass) {
-                    removeClass(this.target!, this.enterFromClass);
+                addClass(this.target!, this.enterActiveClass()!);
+                if (this.enterFromClass()) {
+                    removeClass(this.target!, this.enterFromClass());
                 }
 
                 this.enterListener = this.renderer.listen(this.target!, 'animationend', () => {
-                    removeClass(this.target!, this.enterActiveClass as string);
-                    if (this.enterToClass) {
-                        addClass(this.target!, this.enterToClass);
+                    removeClass(this.target!, this.enterActiveClass() as string);
+                    if (this.enterToClass()) {
+                        addClass(this.target!, this.enterToClass());
                     }
                     this.enterListener && this.enterListener();
 
-                    if (this.enterActiveClass?.includes('slidedown')) {
+                    if (this.enterActiveClass()?.includes('slidedown')) {
                         (this.target as HTMLElement).style.maxHeight = '';
                     }
                     this.animating = false;
                 });
             }
         } else {
-            if (this.enterFromClass) {
-                removeClass(this.target!, this.enterFromClass);
+            if (this.enterFromClass()) {
+                removeClass(this.target!, this.enterFromClass());
             }
 
-            if (this.enterToClass) {
-                addClass(this.target!, this.enterToClass);
+            if (this.enterToClass()) {
+                addClass(this.target!, this.enterToClass());
             }
         }
 
-        if (this.hideOnOutsideClick) {
+        if (this.hideOnOutsideClick()) {
             this.bindDocumentClickListener();
         }
 
-        if (this.hideOnEscape) {
+        if (this.hideOnEscape()) {
             this.bindDocumentKeydownListener();
         }
 
-        if (this.hideOnResize) {
+        if (this.hideOnResize()) {
             this.bindResizeListener();
         }
     }
 
     leave() {
-        if (this.leaveActiveClass) {
+        if (this.leaveActiveClass()) {
             if (!this.animating) {
                 this.animating = true;
-                addClass(this.target!, this.leaveActiveClass);
-                if (this.leaveFromClass) {
-                    removeClass(this.target!, this.leaveFromClass);
+                addClass(this.target!, this.leaveActiveClass()!);
+                if (this.leaveFromClass()) {
+                    removeClass(this.target!, this.leaveFromClass());
                 }
 
                 this.leaveListener = this.renderer.listen(this.target!, 'animationend', () => {
-                    removeClass(this.target!, this.leaveActiveClass as string);
-                    if (this.leaveToClass) {
-                        addClass(this.target!, this.leaveToClass);
+                    removeClass(this.target!, this.leaveActiveClass() as string);
+                    if (this.leaveToClass()) {
+                        addClass(this.target!, this.leaveToClass());
                     }
                     this.leaveListener && this.leaveListener();
                     this.animating = false;
                 });
             }
         } else {
-            if (this.leaveFromClass) {
-                removeClass(this.target!, this.leaveFromClass);
+            if (this.leaveFromClass()) {
+                removeClass(this.target!, this.leaveFromClass());
             }
 
-            if (this.leaveToClass) {
-                addClass(this.target!, this.leaveToClass);
+            if (this.leaveToClass()) {
+                addClass(this.target!, this.leaveToClass());
             }
         }
 
-        if (this.hideOnOutsideClick) {
+        if (this.hideOnOutsideClick()) {
             this.unbindDocumentClickListener();
         }
 
-        if (this.hideOnEscape) {
+        if (this.hideOnEscape()) {
             this.unbindDocumentKeydownListener();
         }
 
-        if (this.hideOnResize) {
+        if (this.hideOnResize()) {
             this.unbindResizeListener();
         }
     }
@@ -256,7 +277,7 @@ export class StyleClass implements OnDestroy {
     }
 
     bindResizeListener() {
-        this._resizeTarget = getTargetElement(this.resizeSelector);
+        this._resizeTarget = getTargetElement(this.resizeSelector());
         if (isElement(this._resizeTarget)) {
             this.bindElementResizeListener();
         } else {
@@ -312,18 +333,6 @@ export class StyleClass implements OnDestroy {
             this.resizeObserver.disconnect();
             this.resizeObserver = undefined;
         }
-    }
-
-    ngOnDestroy() {
-        this.target = null;
-        this._resizeTarget = null;
-
-        if (this.eventListener) {
-            this.eventListener();
-        }
-        this.unbindDocumentClickListener();
-        this.unbindDocumentKeydownListener();
-        this.unbindResizeListener();
     }
 }
 

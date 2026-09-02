@@ -138,17 +138,17 @@ describe('StyleClass', () => {
         });
 
         it('should initialize with undefined values', () => {
-            expect(styleClassInstance.selector).toBe('@next');
-            expect(styleClassInstance.enterFromClass).toBeUndefined();
-            expect(styleClassInstance.enterActiveClass).toBeUndefined();
-            expect(styleClassInstance.enterToClass).toBeUndefined();
-            expect(styleClassInstance.leaveFromClass).toBeUndefined();
-            expect(styleClassInstance.leaveActiveClass).toBeUndefined();
-            expect(styleClassInstance.leaveToClass).toBeUndefined();
-            expect(styleClassInstance.hideOnOutsideClick).toBeFalsy();
-            expect(styleClassInstance.hideOnEscape).toBeFalsy();
-            expect(styleClassInstance.hideOnResize).toBeFalsy();
-            expect(styleClassInstance.toggleClass).toBeUndefined();
+            expect(styleClassInstance.selector()).toBe('@next');
+            expect(styleClassInstance.enterFromClass()).toBeUndefined();
+            expect(styleClassInstance.enterActiveClass()).toBeUndefined();
+            expect(styleClassInstance.enterToClass()).toBeUndefined();
+            expect(styleClassInstance.leaveFromClass()).toBeUndefined();
+            expect(styleClassInstance.leaveActiveClass()).toBeUndefined();
+            expect(styleClassInstance.leaveToClass()).toBeUndefined();
+            expect(styleClassInstance.hideOnOutsideClick()).toBeFalsy();
+            expect(styleClassInstance.hideOnEscape()).toBeFalsy();
+            expect(styleClassInstance.hideOnResize()).toBeFalsy();
+            expect(styleClassInstance.toggleClass()).toBeUndefined();
         });
 
         it('should initialize listeners as undefined', () => {
@@ -162,99 +162,99 @@ describe('StyleClass', () => {
 
     describe('Input Properties', () => {
         it('should update selector input', () => {
-            expect(styleClassInstance.selector).toBe('@next');
+            expect(styleClassInstance.selector()).toBe('@next');
         });
 
         it('should update enterFromClass input', async () => {
             component.enterFromClass = 'hidden';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.enterFromClass).toBe('hidden');
+            expect(styleClassInstance.enterFromClass()).toBe('hidden');
         });
 
         it('should update enterActiveClass input', async () => {
             component.enterActiveClass = 'fade-in';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.enterActiveClass).toBe('fade-in');
+            expect(styleClassInstance.enterActiveClass()).toBe('fade-in');
         });
 
         it('should update enterToClass input', async () => {
             component.enterToClass = 'visible';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.enterToClass).toBe('visible');
+            expect(styleClassInstance.enterToClass()).toBe('visible');
         });
 
         it('should update leaveFromClass input', async () => {
             component.leaveFromClass = 'visible';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.leaveFromClass).toBe('visible');
+            expect(styleClassInstance.leaveFromClass()).toBe('visible');
         });
 
         it('should update leaveActiveClass input', async () => {
             component.leaveActiveClass = 'fade-out';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.leaveActiveClass).toBe('fade-out');
+            expect(styleClassInstance.leaveActiveClass()).toBe('fade-out');
         });
 
         it('should update leaveToClass input', async () => {
             component.leaveToClass = 'hidden';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.leaveToClass).toBe('hidden');
+            expect(styleClassInstance.leaveToClass()).toBe('hidden');
         });
 
         it('should update hideOnOutsideClick with booleanAttribute transform', async () => {
             component.hideOnOutsideClick = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnOutsideClick).toBe(true);
+            expect(styleClassInstance.hideOnOutsideClick()).toBe(true);
 
             component.hideOnOutsideClick = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnOutsideClick).toBe(false);
+            expect(styleClassInstance.hideOnOutsideClick()).toBe(false);
         });
 
         it('should update hideOnEscape with booleanAttribute transform', async () => {
             component.hideOnEscape = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnEscape).toBe(true);
+            expect(styleClassInstance.hideOnEscape()).toBe(true);
 
             component.hideOnEscape = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnEscape).toBe(false);
+            expect(styleClassInstance.hideOnEscape()).toBe(false);
         });
 
         it('should update hideOnResize with booleanAttribute transform', async () => {
             component.hideOnResize = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnResize).toBe(true);
+            expect(styleClassInstance.hideOnResize()).toBe(true);
 
             component.hideOnResize = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.hideOnResize).toBe(false);
+            expect(styleClassInstance.hideOnResize()).toBe(false);
         });
 
         it('should update toggleClass input', async () => {
             component.toggleClass = 'active';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.toggleClass).toBe('active');
+            expect(styleClassInstance.toggleClass()).toBe('active');
         });
 
         it('should update resizeSelector input', async () => {
             component.resizeSelector = '#resize-target';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(styleClassInstance.resizeSelector).toBe('#resize-target');
+            expect(styleClassInstance.resizeSelector()).toBe('#resize-target');
         });
     });
 
@@ -612,7 +612,7 @@ describe('StyleClass', () => {
             await fixture.whenStable();
 
             // Change selector to CSS selector
-            styleClassInstance.selector = '.target-element';
+            vi.spyOn(styleClassInstance, 'selector').mockReturnValue('.target-element');
 
             buttonElement.nativeElement.click();
 
@@ -764,7 +764,7 @@ describe('StyleClass', () => {
             vi.spyOn(resizeInstance, 'bindElementResizeListener').mockImplementation(() => {});
             vi.spyOn(resizeInstance, 'bindWindowResizeListener').mockImplementation(() => {});
 
-            resizeInstance.resizeSelector = '#resize-target';
+            vi.spyOn(resizeInstance, 'resizeSelector').mockReturnValue('#resize-target');
             resizeInstance.bindResizeListener();
 
             expect(resizeInstance.bindElementResizeListener).toHaveBeenCalled();
@@ -877,7 +877,7 @@ describe('StyleClass', () => {
 
     describe('Edge Cases', () => {
         it('should handle null/undefined selector', () => {
-            styleClassInstance.selector = undefined as any;
+            vi.spyOn(styleClassInstance, 'selector').mockReturnValue(undefined as any);
 
             expect(() => buttonElement.nativeElement.click()).not.toThrow();
         });
@@ -961,8 +961,8 @@ describe('StyleClass', () => {
             animationButton.nativeElement.click();
 
             expect(animationInstance.target).toBeTruthy();
-            expect(animationInstance.hideOnOutsideClick).toBe(true);
-            expect(animationInstance.hideOnEscape).toBe(true);
+            expect(animationInstance.hideOnOutsideClick()).toBe(true);
+            expect(animationInstance.hideOnEscape()).toBe(true);
         });
 
         it('should work with slidedown component', async () => {
@@ -976,7 +976,7 @@ describe('StyleClass', () => {
             slidedownButton.nativeElement.click();
 
             expect(slidedownInstance.target).toBeTruthy();
-            expect(slidedownInstance.enterActiveClass).toBe('slidedown');
+            expect(slidedownInstance.enterActiveClass()).toBe('slidedown');
         });
 
         it('should maintain state across multiple interactions', async () => {
