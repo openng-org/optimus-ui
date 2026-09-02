@@ -21,7 +21,7 @@ class TestBasicInputGroupAddonComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true,
     imports: [InputGroupAddon, FormsModule],
-    template: ` <p-inputgroup-addon [style]="addonStyle" [styleClass]="addonClass"> $ </p-inputgroup-addon> `
+    template: ` <p-inputgroup-addon [style]="addonStyle" [class]="addonClass"> $ </p-inputgroup-addon> `
 })
 class TestStyledInputGroupAddonComponent {
     addonStyle: { [key: string]: any } = { 'background-color': '#f0f0f0' };
@@ -79,19 +79,16 @@ describe('InputGroupAddon', () => {
         });
 
         it('should apply inline style to addon', () => {
-            const addonInstance = fixture.debugElement.query(By.directive(InputGroupAddon)).componentInstance;
             const addonElement = fixture.debugElement.query(By.directive(InputGroupAddon));
 
-            expect(addonInstance.style).toEqual({ 'background-color': '#f0f0f0' });
             expect(addonElement.nativeElement.style.backgroundColor).toBe('rgb(240, 240, 240)');
         });
 
-        it('should apply styleClass to addon', () => {
-            const addonInstance = fixture.debugElement.query(By.directive(InputGroupAddon)).componentInstance;
+        it('should apply a custom class to addon alongside the base class', () => {
             const addonElement = fixture.debugElement.query(By.directive(InputGroupAddon));
 
-            expect(addonInstance.styleClass).toBe('custom-addon');
             expect(addonElement.nativeElement.classList.contains('custom-addon')).toBe(true);
+            expect(addonElement.nativeElement.classList.contains('p-inputgroupaddon')).toBe(true);
         });
 
         it('should update addon styles dynamically', async () => {
@@ -100,11 +97,8 @@ describe('InputGroupAddon', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            const addonInstance = fixture.debugElement.query(By.directive(InputGroupAddon)).componentInstance;
             const addonElement = fixture.debugElement.query(By.directive(InputGroupAddon));
 
-            expect(addonInstance.style).toEqual({ color: 'red' });
-            expect(addonInstance.styleClass).toBe('updated-addon');
             expect(addonElement.nativeElement.style.color).toBe('red');
             expect(addonElement.nativeElement.classList.contains('updated-addon')).toBe(true);
         });
@@ -198,30 +192,15 @@ describe('InputGroupAddon PassThrough Tests', () => {
             expect(hostElement.classList.contains('HAS_INSTANCE')).toBe(true);
         });
 
-        it('should use styleClass from instance in PT function', () => {
-            fixture.componentRef.setInput('styleClass', 'custom-class');
+        it('should read instance state in PT function', () => {
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.styleClass ? 'WITH_STYLE' : 'NO_STYLE'
+                    class: instance?.componentName === 'InputGroupAddon' ? 'WITH_NAME' : 'NO_NAME'
                 })
             });
             fixture.detectChanges();
 
-            expect(hostElement.classList.contains('WITH_STYLE')).toBe(true);
-        });
-
-        it('should use style from instance in PT function', () => {
-            fixture.componentRef.setInput('style', { color: 'green' });
-            fixture.componentRef.setInput('pt', {
-                root: ({ instance }: any) => ({
-                    style: {
-                        'background-color': instance?.style?.color === 'green' ? 'yellow' : 'red'
-                    }
-                })
-            });
-            fixture.detectChanges();
-
-            expect(hostElement.style.backgroundColor).toBe('yellow');
+            expect(hostElement.classList.contains('WITH_NAME')).toBe(true);
         });
     });
 
