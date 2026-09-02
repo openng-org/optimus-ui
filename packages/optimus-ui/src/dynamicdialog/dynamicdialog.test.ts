@@ -182,7 +182,7 @@ describe('DynamicDialog', () => {
         });
 
         it('should have default values', () => {
-            expect(component.visible).toBe(true);
+            expect(component.visible()).toBe(true);
             expect(component.maximized).toBeUndefined();
             expect(component.dragging).toBeUndefined();
             expect(component.resizing).toBeUndefined();
@@ -201,10 +201,10 @@ describe('DynamicDialog', () => {
 
         it('should create aria-labelledby when header is present', async () => {
             mockConfig.showHeader = true;
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
 
             expect(component.ariaLabelledBy).toBeTruthy();
             expect(component.ariaLabelledBy).toContain('_header');
@@ -213,29 +213,29 @@ describe('DynamicDialog', () => {
         it('should not create aria-labelledby when header is null', async () => {
             mockConfig.header = null as any;
             mockConfig.showHeader = false;
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
             expect(component.ariaLabelledBy).toBeNull();
         });
 
         it('should not create aria-labelledby when showHeader is false', async () => {
             mockConfig.showHeader = false;
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
             expect(component.ariaLabelledBy).toBeNull();
         });
 
         it('should use ariaLabelledBy from config when provided', async () => {
             mockConfig.showHeader = true;
             mockConfig.ariaLabelledBy = 'custom-label-id';
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
 
             expect(component.ariaLabelledBy).toBe('custom-label-id');
         });
@@ -244,10 +244,10 @@ describe('DynamicDialog', () => {
             mockConfig.header = null as any;
             mockConfig.showHeader = false;
             mockConfig.ariaLabelledBy = 'custom-label-id';
-            component.visible = true;
+            component.visible.set(true);
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
 
             expect(component.ariaLabelledBy).toBe('custom-label-id');
         });
@@ -265,13 +265,13 @@ describe('DynamicDialog', () => {
             fixture = TestBed.createComponent(DynamicDialog);
             component = fixture.componentInstance;
             component.childComponentType = TestDialogContentComponent;
-            component.visible = true; // Make dialog visible so template renders
+            component.visible.set(true); // Make dialog visible so template renders
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
 
         it('should be visible by default', () => {
-            expect(component.visible).toBe(true);
+            expect(component.visible()).toBe(true);
         });
 
         it('should hide dialog when close is called', () => {
@@ -281,7 +281,7 @@ describe('DynamicDialog', () => {
 
         it('should close dialog when close method is called', () => {
             component.close();
-            expect(component.visible).toBe(false);
+            expect(component.visible()).toBe(false);
         });
 
         it('should handle close button click', async () => {
@@ -296,17 +296,17 @@ describe('DynamicDialog', () => {
         });
 
         it('should call close on dialogRef on close icon click', async () => {
-            component.visible = true;
+            component.visible.set(true);
             const closeButton = fixture.debugElement.query(By.css('.p-dialog-close-button'));
             closeButton.nativeElement.click();
             expect(mockDialogRef.close).toHaveBeenCalled();
-            expect(component.visible).toBe(false);
+            expect(component.visible()).toBe(false);
         });
 
         it('should call close on dialogRef on Escape key press', async () => {
             mockConfig.closeOnEscape = true;
             component.container = document.createElement('div');
-            component.visible = true;
+            component.visible.set(true);
 
             const escapeEvent = new KeyboardEvent('keydown', { key: 'Escape', code: 'Escape', keyCode: 27 });
             component.bindDocumentEscapeListener();
@@ -336,7 +336,7 @@ describe('DynamicDialog', () => {
             parentElement.appendChild(containerElement);
             document.body.appendChild(parentElement); // Add to DOM so parentElement is accessible
             component.container = containerElement;
-            component.visible = true;
+            component.visible.set(true);
 
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
@@ -573,7 +573,7 @@ describe('DynamicDialog', () => {
             fixture = TestBed.createComponent(DynamicDialog);
             component = fixture.componentInstance;
             component.childComponentType = MaximizableDialogComponent;
-            component.visible = true; // Make dialog visible so template renders
+            component.visible.set(true); // Make dialog visible so template renders
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
         });
@@ -639,7 +639,7 @@ describe('DynamicDialog', () => {
         });
 
         it('should have correct ARIA attributes', async () => {
-            component.ngAfterViewInit();
+            component.ariaLabelledBy = component.getAriaLabelledBy();
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -774,7 +774,7 @@ describe('DynamicDialog', () => {
             fixture = TestBed.createComponent(DynamicDialog);
             component = fixture.componentInstance;
             component.childComponentType = TestDialogContentComponent;
-            component.visible = true; // Make dialog visible
+            component.visible.set(true); // Make dialog visible
         });
 
         it('should load child component correctly', () => {

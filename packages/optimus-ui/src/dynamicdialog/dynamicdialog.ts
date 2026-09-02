@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ComponentRef, inject, InjectionToken, NgModule, Type, ViewEncapsulation, viewChild } from '@angular/core';
+import { afterEveryRender, afterNextRender, ChangeDetectionStrategy, Component, ComponentRef, inject, NgModule, signal, Type, ViewEncapsulation, viewChild } from '@angular/core';
 import { uuid } from '@openng/optimus-ui-utils';
 import { SharedModule, TranslationKeys } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -10,8 +10,6 @@ import { DynamicDialogConfig } from './dynamicdialog-config';
 import { DynamicDialogRef } from './dynamicdialog-ref';
 import { DynamicDialogContent } from './dynamicdialogcontent';
 import { DynamicDialogStyle } from './style/dynamicdialogstyle';
-
-const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALOG_INSTANCE');
 
 @Component({
     selector: 'p-dynamicDialog, p-dynamicdialog, p-dynamic-dialog',
@@ -102,32 +100,28 @@ const DYNAMIC_DIALOG_INSTANCE = new InjectionToken<DynamicDialog>('DYNAMIC_DIALO
     `,
     changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
-    providers: [DynamicDialogStyle, { provide: DYNAMIC_DIALOG_INSTANCE, useExisting: DynamicDialog }, { provide: PARENT_INSTANCE, useExisting: DynamicDialog }],
+    providers: [DynamicDialogStyle, { provide: PARENT_INSTANCE, useExisting: DynamicDialog }],
     hostDirectives: [Bind]
 })
 export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     ddconfig = inject(DynamicDialogConfig);
-    private dialogRef = inject(DynamicDialogRef);
 
-    componentName = 'Dialog';
+    private dialogRef = inject(DynamicDialogRef);
 
     _componentStyle = inject(DynamicDialogStyle);
 
-    $pcDynamicDialog: DynamicDialog | undefined = inject(DYNAMIC_DIALOG_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    readonly insertionPoint = viewChild(DynamicDialogContent);
 
-    visible: boolean = true;
+    componentName = 'Dialog';
+
+    /** Whether the dialog is visible. */
+    readonly visible = signal<boolean>(true);
 
     componentRef: Nullable<ComponentRef<any>>;
 
     id: string = uuid('pn_id_');
-
-    readonly insertionPoint = viewChild(DynamicDialogContent);
 
     childComponentType: Nullable<Type<any>>;
 
@@ -257,16 +251,54 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
 
     documentEscapeListener: any;
 
+    get _parent() {
+        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
+        if (domElements.length > 1) {
+            return domElements.pop();
+        }
+    }
+
+    get parentContent() {
+        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
+        if (domElements.length > 0) {
+            const contentElements = domElements[domElements.length - 1].querySelector('.p-dialog-content');
+            if (contentElements) return Array.isArray(contentElements) ? contentElements[0] : contentElements;
+        }
+    }
+
+    container: any;
+
+    wrapper: any;
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+
+        // Load the dynamically opened child component after the first render (replaces the
+        // former ngAfterViewInit hook).
+        afterNextRender(() => {
+            this.loadChildComponent(this.childComponentType!);
+            this.ariaLabelledBy = this.getAriaLabelledBy();
+            this.cd.detectChanges();
+        });
+    }
+
+    onDestroy() {
+        this.onContainerDestroy();
+        if (this.componentRef && typeof this.componentRef.destroy === 'function') {
+            this.componentRef.destroy();
+        }
+        this.destroyStyle();
+    }
+
     onVisibleChange(visible: boolean) {
         if (!visible) {
             this.dialogRef.close();
         }
-    }
-
-    onAfterViewInit() {
-        this.loadChildComponent(this.childComponentType!);
-        this.ariaLabelledBy = this.getAriaLabelledBy();
-        this.cd.detectChanges();
     }
 
     getAriaLabelledBy() {
@@ -322,7 +354,7 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
     }
 
     close() {
-        this.visible = false;
+        this.visible.set(false);
         this.cd.markForCheck();
     }
 
@@ -331,25 +363,6 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
             this.dialogRef.close();
         }
     }
-
-    get _parent() {
-        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
-        if (domElements.length > 1) {
-            return domElements.pop();
-        }
-    }
-
-    get parentContent() {
-        const domElements = Array.from(this.document.getElementsByClassName('p-dialog'));
-        if (domElements.length > 0) {
-            const contentElements = domElements[domElements.length - 1].querySelector('.p-dialog-content');
-            if (contentElements) return Array.isArray(contentElements) ? contentElements[0] : contentElements;
-        }
-    }
-
-    container: any;
-
-    wrapper: any;
 
     unbindGlobalListeners() {
         this.unbindDocumentEscapeListener();
@@ -575,14 +588,6 @@ export class DynamicDialog extends BaseComponent<DialogPassThrough> {
             this.renderer.removeChild(this.document.head, this.styleElement);
             this.styleElement = null;
         }
-    }
-
-    onDestroy() {
-        this.onContainerDestroy();
-        if (this.componentRef && typeof this.componentRef.destroy === 'function') {
-            this.componentRef.destroy();
-        }
-        this.destroyStyle();
     }
 }
 
