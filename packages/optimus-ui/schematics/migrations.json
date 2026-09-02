@@ -5,6 +5,21 @@
             "version": "3.0.0",
             "factory": "./migrations/remove-dead-outputs/migration",
             "description": "Remove usages of outputs removed in this version that had already stopped firing: Overlay's onAnimationStart/onAnimationDone (and OverlayOptions config callbacks), and MenubarSub's menuFocus/menuBlur/menuKeydown."
+        },
+        "styleclass-to-class": {
+            "version": "3.0.0",
+            "factory": "./migrations/styleclass-to-class/migration",
+            "description": "Rewrite the removed styleClass input to the plain class attribute on components migrated to signals in 3.0.0 (p-tag, avatar-group, input-group(-addon), input-icon, icon-field, progress-spinner, divider, skeleton, ...)."
+        },
+        "renamed-inputs": {
+            "version": "3.0.0",
+            "factory": "./migrations/renamed-inputs/migration",
+            "description": "Rewrite usages of inputs renamed in 3.0.0 (deprecated aliases removed with the signal migration), e.g. OverlayBadge's size \u2192 badgeSize."
+        },
+        "remove-dead-inputs": {
+            "version": "3.0.0",
+            "factory": "./migrations/remove-dead-inputs/migration",
+            "description": "Remove template bindings for inputs removed in 3.0.0 that had already stopped doing anything, e.g. CascadeSelect's never-read inputLabel."
         }
     }
 }
