@@ -1,5 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+    afterEveryRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
@@ -7,12 +8,11 @@ import {
     ElementRef,
     HostListener,
     inject,
-    InjectionToken,
     input,
-    Input,
     NgModule,
     NgZone,
     numberAttribute,
+    signal,
     TemplateRef,
     ViewEncapsulation,
     ViewRef,
@@ -34,8 +34,6 @@ import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { Subscription } from 'rxjs';
 import { PopoverStyle } from './style/popoverstyle';
 
-const POPOVER_INSTANCE = new InjectionToken<Popover>('POPOVER_INSTANCE');
-
 /**
  * Popover is a container component that can overlay other components on page.
  * @group Components
@@ -44,21 +42,21 @@ const POPOVER_INSTANCE = new InjectionToken<Popover>('POPOVER_INSTANCE');
     selector: 'p-popover',
     standalone: true,
     imports: [CommonModule, SharedModule, Bind, MotionModule],
-    providers: [PopoverStyle, { provide: POPOVER_INSTANCE, useExisting: Popover }, { provide: PARENT_INSTANCE, useExisting: Popover }],
+    providers: [PopoverStyle, { provide: PARENT_INSTANCE, useExisting: Popover }],
     hostDirectives: [Bind],
     template: `
-        @if (render) {
+        @if (render()) {
             <div
                 [pBind]="ptm('root')"
-                [class]="cn(cx('root'), styleClass)"
+                [class]="cn(cx('root'), styleClass())"
                 [style]="sx('root')"
-                [ngStyle]="style"
+                [ngStyle]="style()"
                 (click)="onOverlayClick($event)"
                 role="dialog"
-                [attr.aria-modal]="overlayVisible"
-                [attr.aria-label]="ariaLabel"
-                [attr.aria-labelledBy]="ariaLabelledBy"
-                [pMotion]="overlayVisible"
+                [attr.aria-modal]="overlayVisible()"
+                [attr.aria-label]="ariaLabel()"
+                [attr.aria-labelledBy]="ariaLabelledBy()"
+                [pMotion]="overlayVisible()"
                 pMotionName="p-anchored-overlay"
                 [pMotionAppear]="true"
                 (pMotionOnEnter)="onAnimationStart($event)"
@@ -67,7 +65,7 @@ const POPOVER_INSTANCE = new InjectionToken<Popover>('POPOVER_INSTANCE');
             >
                 <div [pBind]="ptm('content')" [class]="cx('content')" (click)="onContentClick($event)" (mousedown)="onContentClick($event)">
                     <ng-content></ng-content>
-                    <ng-template *ngTemplateOutlet="contentTemplate() || _contentTemplate; context: { closeCallback: onCloseClick.bind(this) }"></ng-template>
+                    <ng-template *ngTemplateOutlet="$contentTemplate(); context: { closeCallback: onCloseClick.bind(this) }"></ng-template>
                 </div>
             </div>
         }
@@ -76,121 +74,106 @@ const POPOVER_INSTANCE = new InjectionToken<Popover>('POPOVER_INSTANCE');
     encapsulation: ViewEncapsulation.None
 })
 export class Popover extends BaseComponent<PopoverPassThrough> {
-    componentName = 'Popover';
-
-    $pcPopover: Popover | undefined = inject(POPOVER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm('host'));
-    }
+    _componentStyle = inject(PopoverStyle);
+
+    zone = inject(NgZone);
+
+    overlayService = inject(OverlayService);
 
     /**
      * Defines a string that labels the input for accessibility.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Enables to hide the overlay when outside is clicked.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) dismissable: boolean = true;
+    readonly dismissable = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
      */
     appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>('body');
+
     /**
      * Whether to automatically manage layering.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
+    readonly autoZIndex = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Aria label of the close icon.
      * @group Props
      */
-    @Input() ariaCloseLabel: string | undefined;
+    readonly ariaCloseLabel = input<string>();
+
     /**
      * Base zIndex value to use in layering.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
+    readonly baseZIndex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * When enabled, first button receives focus on show.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) focusOnShow: boolean = true;
+    readonly focusOnShow = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Transition options of the show animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() showTransitionOptions: string = '.12s cubic-bezier(0, 0, 0.2, 1)';
+    readonly showTransitionOptions = input<string>('.12s cubic-bezier(0, 0, 0.2, 1)');
+
     /**
      * Transition options of the hide animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() hideTransitionOptions: string = '.1s linear';
+    readonly hideTransitionOptions = input<string>('.1s linear');
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
      * Callback to invoke when an overlay becomes visible.
      * @group Emits
      */
     readonly onShow = output<any>();
+
     /**
      * Callback to invoke when an overlay gets hidden.
      * @group Emits
      */
     readonly onHide = output<any>();
-
-    $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
-
-    container: Nullable<HTMLDivElement>;
-
-    overlayVisible: boolean = false;
-
-    render: boolean = false;
-
-    selfClick: boolean = false;
-
-    documentClickListener: VoidListener;
-
-    target: any;
-
-    willHide: Nullable<boolean>;
-
-    scrollHandler: Nullable<ConnectedOverlayScrollHandler>;
-
-    documentResizeListener: VoidListener;
 
     /**
      * Custom content template.
@@ -202,7 +185,35 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    _contentTemplate: TemplateRef<PopoverContentTemplateContext> | undefined;
+    componentName = 'Popover';
+
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
+
+    $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
+
+    container: Nullable<HTMLDivElement>;
+
+    readonly overlayVisible = signal<boolean>(false);
+
+    readonly render = signal<boolean>(false);
+
+    selfClick: boolean = false;
+
+    documentClickListener: VoidListener;
+
+    target: any;
+
+    scrollHandler: Nullable<ConnectedOverlayScrollHandler>;
+
+    documentResizeListener: VoidListener;
+
+    /** Effective content template: the `#content` content child, or a legacy `pTemplate="content"`. */
+    readonly $contentTemplate = computed(() => this.contentTemplate() ?? (this.templates().find((item) => item.getType() === 'content')?.template as TemplateRef<PopoverContentTemplateContext> | undefined));
 
     destroyCallback: Nullable<Function>;
 
@@ -210,20 +221,39 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
 
     overlaySubscription: Subscription | undefined;
 
-    _componentStyle = inject(PopoverStyle);
-
-    zone = inject(NgZone);
-
-    overlayService = inject(OverlayService);
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        // Re-apply the host pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('host'));
         });
+    }
+
+    onDestroy() {
+        if (this.scrollHandler) {
+            this.scrollHandler.destroy();
+            this.scrollHandler = null;
+        }
+
+        if (this.container && this.autoZIndex()) {
+            ZIndexUtils.clear(this.container);
+        }
+
+        if (!(this.cd as ViewRef).destroyed) {
+            this.target = null;
+        }
+
+        this.destroyCallback = null;
+        if (this.container) {
+            this.restoreAppend();
+            this.onContainerDestroy();
+        }
+
+        if (this.overlaySubscription) {
+            this.overlaySubscription.unsubscribe();
+        }
     }
 
     bindDocumentClickListener() {
@@ -233,7 +263,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
                 const documentTarget: any = this.el ? this.el.nativeElement.ownerDocument : this.document;
 
                 this.documentClickListener = this.renderer.listen(documentTarget, documentEvent, (event) => {
-                    if (!this.dismissable) {
+                    if (!this.dismissable()) {
                         return;
                     }
 
@@ -263,7 +293,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
      * @group Method
      */
     toggle(event: any, target?: any) {
-        if (this.overlayVisible) {
+        if (this.overlayVisible()) {
             if (this.hasTargetChanged(event, target)) {
                 this.destroyCallback = () => {
                     this.show(null, target || event.currentTarget || event.target);
@@ -275,6 +305,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
             this.show(event, target);
         }
     }
+
     /**
      * Displays the panel.
      * @param {Event} event - Browser event
@@ -285,13 +316,13 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
         target && event && event.stopPropagation();
 
         // Clear container if it exists from previous show
-        if (this.container && !this.overlayVisible) {
+        if (this.container && !this.overlayVisible()) {
             this.container = null;
         }
 
         this.target = target || event.currentTarget || event.target;
-        this.overlayVisible = true;
-        this.render = true;
+        this.overlayVisible.set(true);
+        this.render.set(true);
         this.cd.markForCheck();
     }
 
@@ -330,8 +361,8 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
     }
 
     setZIndex() {
-        if (this.autoZIndex) {
-            ZIndexUtils.set('overlay', this.container, this.baseZIndex + this.config.zIndex.overlay);
+        if (this.autoZIndex()) {
+            ZIndexUtils.set('overlay', this.container, this.baseZIndex() + this.config.zIndex.overlay);
         }
     }
 
@@ -366,7 +397,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
         this.bindDocumentResizeListener();
         this.bindScrollListener();
 
-        if (this.focusOnShow) {
+        if (this.focusOnShow()) {
             this.focus();
         }
 
@@ -381,7 +412,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
     }
 
     onAnimationEnd() {
-        if (!this.overlayVisible) {
+        if (!this.overlayVisible()) {
             if (this.destroyCallback) {
                 this.destroyCallback();
                 this.destroyCallback = null;
@@ -391,13 +422,13 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
                 this.overlaySubscription.unsubscribe();
             }
 
-            if (this.autoZIndex) {
+            if (this.autoZIndex()) {
                 ZIndexUtils.clear(this.container);
             }
 
             this.onContainerDestroy();
             this.onHide.emit({});
-            this.render = false;
+            this.render.set(false);
             this.container = null;
         }
     }
@@ -410,12 +441,13 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
             });
         }
     }
+
     /**
      * Hides the panel.
      * @group Method
      */
     hide() {
-        this.overlayVisible = false;
+        this.overlayVisible.set(false);
         this.cd.markForCheck();
     }
 
@@ -430,7 +462,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
     }
 
     onWindowResize() {
-        if (this.overlayVisible && !isTouchDevice()) {
+        if (this.overlayVisible() && !isTouchDevice()) {
             this.hide();
         }
     }
@@ -455,7 +487,7 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.scrollHandler) {
                 this.scrollHandler = new ConnectedOverlayScrollHandler(this.target, () => {
-                    if (this.overlayVisible) {
+                    if (this.overlayVisible()) {
                         this.hide();
                     }
                 });
@@ -479,31 +511,6 @@ export class Popover extends BaseComponent<PopoverPassThrough> {
         this.unbindDocumentClickListener();
         this.unbindDocumentResizeListener();
         this.unbindScrollListener();
-    }
-
-    onDestroy() {
-        if (this.scrollHandler) {
-            this.scrollHandler.destroy();
-            this.scrollHandler = null;
-        }
-
-        if (this.container && this.autoZIndex) {
-            ZIndexUtils.clear(this.container);
-        }
-
-        if (!(this.cd as ViewRef).destroyed) {
-            this.target = null;
-        }
-
-        this.destroyCallback = null;
-        if (this.container) {
-            this.restoreAppend();
-            this.onContainerDestroy();
-        }
-
-        if (this.overlaySubscription) {
-            this.overlaySubscription.unsubscribe();
-        }
     }
 }
 
