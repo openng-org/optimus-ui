@@ -5,32 +5,32 @@ import { BaseStyle } from '@openng/optimus-ui/base';
 /* Direction */
 const inlineStyles = {
     root: ({ instance }) => ({
-        alignItems: instance.direction === 'up' || instance.direction === 'down' ? 'center' : null,
-        justifyContent: instance.direction === 'left' || instance.direction === 'right' ? 'center' : null,
-        flexDirection: instance.direction === 'up' ? 'column-reverse' : instance.direction === 'down' ? 'column' : instance.direction === 'left' ? 'row-reverse' : instance.direction === 'right' ? 'row' : null
+        alignItems: instance.direction() === 'up' || instance.direction() === 'down' ? 'center' : null,
+        justifyContent: instance.direction() === 'left' || instance.direction() === 'right' ? 'center' : null,
+        flexDirection: instance.direction() === 'up' ? 'column-reverse' : instance.direction() === 'down' ? 'column' : instance.direction() === 'left' ? 'row-reverse' : instance.direction() === 'right' ? 'row' : null
     }),
     list: ({ instance }) => ({
-        flexDirection: instance.direction === 'up' ? 'column-reverse' : instance.direction === 'down' ? 'column' : instance.direction === 'left' ? 'row-reverse' : instance.direction === 'right' ? 'row' : null
+        flexDirection: instance.direction() === 'up' ? 'column-reverse' : instance.direction() === 'down' ? 'column' : instance.direction() === 'left' ? 'row-reverse' : instance.direction() === 'right' ? 'row' : null
     })
 };
 
 const classes = {
     root: ({ instance }) => [
-        `p-speeddial p-component p-speeddial-${instance.type}`,
+        `p-speeddial p-component p-speeddial-${instance.type()}`,
         {
-            [`p-speeddial-direction-${instance.direction}`]: instance.type !== 'circle',
-            'p-speeddial-open': instance.visible,
-            'p-disabled': instance.disabled
+            [`p-speeddial-direction-${instance.direction()}`]: instance.type() !== 'circle',
+            'p-speeddial-open': instance.visible(),
+            'p-disabled': instance.disabled()
         }
     ],
     pcButton: ({ instance }) => [
         'p-button-icon-only p-speeddial-button p-button-rounded',
         {
-            'p-speeddial-rotate': instance.rotateAnimation && !instance.hideIcon
+            'p-speeddial-rotate': instance.rotateAnimation() && !instance.hideIcon()
         }
     ],
     list: 'p-speeddial-list',
-    item: ({ instance, item, i }) => ['p-speeddial-item', { 'p-hidden': item.visible === false, 'p-focus': instance.focusedOptionId == instance.id + '_' + i }],
+    item: ({ instance, item, i }) => ['p-speeddial-item', { 'p-hidden': item.visible === false, 'p-focus': instance.focusedOptionId() == instance.$id() + '_' + i }],
     pcAction: 'p-speeddial-action',
     actionIcon: 'p-speeddial-action-icon',
     mask: 'p-speeddial-mask p-overlay-mask'
