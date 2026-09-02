@@ -120,7 +120,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
             [pInputTextUnstyled]="unstyled()"
         />
         <ng-container *ngIf="$filled() && !$disabled() && showClear && !loading">
-            <svg data-p-icon="times" *ngIf="!clearIconTemplate && !_clearIconTemplate" [pBind]="ptm('clearIcon')" [class]="cx('clearIcon')" (click)="clear()" [attr.aria-hidden]="true" />
+            <svg data-p-icon="times" *ngIf="!clearIconTemplate && !_clearIconTemplate" [pBind]="ptm('clearIcon')" [class]="cx('clearIcon')" (click)="clear()" [attr.aria-hidden]="true"></svg>
             <span *ngIf="clearIconTemplate || _clearIconTemplate" [pBind]="ptm('clearIcon')" [class]="cx('clearIcon')" (click)="clear()" [attr.aria-hidden]="true">
                 <ng-template *ngTemplateOutlet="clearIconTemplate || _clearIconTemplate"></ng-template>
             </span>
@@ -164,7 +164,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
                     <ng-container *ngTemplateOutlet="selectedItemTemplate || _selectedItemTemplate; context: { $implicit: option }"></ng-container>
                     <ng-template #removeicon>
                         <span *ngIf="!removeIconTemplate && !_removeIconTemplate" [pBind]="ptm('chipIcon')" [class]="cx('chipIcon')" (click)="!readonly && !$disabled() ? removeOption($event, i) : ''">
-                            <svg data-p-icon="times-circle" [class]="cx('chipIcon')" [attr.aria-hidden]="true" />
+                            <svg data-p-icon="times-circle" [class]="cx('chipIcon')" [attr.aria-hidden]="true"></svg>
                         </span>
                         <span *ngIf="removeIconTemplate || _removeIconTemplate" [pBind]="ptm('chipIcon')" [attr.aria-hidden]="true">
                             <ng-template *ngTemplateOutlet="removeIconTemplate || _removeIconTemplate; context: { removeCallback: removeOption.bind(this), index: i, class: cx('chipIcon') }"></ng-template>
@@ -214,7 +214,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
             </li>
         </ul>
         <ng-container *ngIf="loading">
-            <svg data-p-icon="spinner" *ngIf="!loadingIconTemplate && !_loadingIconTemplate" [pBind]="ptm('loader')" [class]="cx('loader')" [spin]="true" [attr.aria-hidden]="true" />
+            <svg data-p-icon="spinner" *ngIf="!loadingIconTemplate && !_loadingIconTemplate" [pBind]="ptm('loader')" [class]="cx('loader')" [spin]="true" [attr.aria-hidden]="true"></svg>
             <span *ngIf="loadingIconTemplate || _loadingIconTemplate" [pBind]="ptm('loader')" [class]="cx('loader')" [attr.aria-hidden]="true">
                 <ng-template *ngTemplateOutlet="loadingIconTemplate || _loadingIconTemplate"></ng-template>
             </span>
@@ -222,7 +222,7 @@ export const AUTOCOMPLETE_VALUE_ACCESSOR: any = {
         <button #ddBtn type="button" [pBind]="ptm('dropdown')" [attr.aria-label]="dropdownAriaLabel" [class]="cx('dropdown')" [disabled]="$disabled()" pRipple (click)="handleDropdownClick($event)" *ngIf="dropdown" [attr.tabindex]="tabindex">
             <span *ngIf="dropdownIcon" [ngClass]="dropdownIcon" [attr.aria-hidden]="true"></span>
             <ng-container *ngIf="!dropdownIcon">
-                <svg data-p-icon="chevron-down" [pBind]="ptm('dropdown')" *ngIf="!dropdownIconTemplate && !_dropdownIconTemplate" />
+                <svg data-p-icon="chevron-down" [pBind]="ptm('dropdown')" *ngIf="!dropdownIconTemplate && !_dropdownIconTemplate"></svg>
                 <ng-template *ngTemplateOutlet="dropdownIconTemplate || _dropdownIconTemplate"></ng-template>
             </ng-container>
         </button>
@@ -657,6 +657,12 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
      * @group Props
      */
     @Input() separator: string | RegExp | undefined;
+    /**
+     * Whether to allow duplicates when typeahead is false and multiple mode is enabled.
+     * @defaultValue false
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) allowDuplicates: boolean = false;
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
@@ -1433,17 +1439,19 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     handleSeparatorKey(event) {
         if (this.separator && this.multiple && !this.typeahead) {
             if (this.separator === event.key || (typeof this.separator === 'string' && event.key === this.separator) || (this.separator instanceof RegExp && event.key.match(this.separator))) {
-                const inputValue = (this.multiInputEl?.nativeElement?.value || event.target.value || '').trim();
-                if (inputValue && !this.isSelected(inputValue)) {
+                const inputValue: string = (this.multiInputEl?.nativeElement?.value || event.target.value || '').trim();
+
+                if (inputValue && (this.allowDuplicates || !this.isSelected(inputValue))) {
                     this.updateModel([...(this.modelValue() || []), inputValue]);
                     this.onAdd.emit({ originalEvent: event, value: inputValue });
-                    if (this.multiInputEl?.nativeElement) {
-                        this.multiInputEl.nativeElement.value = '';
-                    } else {
-                        event.target.value = '';
-                    }
-                    event.preventDefault();
                 }
+
+                if (this.multiInputEl?.nativeElement) {
+                    this.multiInputEl.nativeElement.value = '';
+                } else {
+                    event.target.value = '';
+                }
+                event.preventDefault();
             }
         }
     }
