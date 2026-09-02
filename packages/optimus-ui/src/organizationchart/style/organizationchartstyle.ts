@@ -3,11 +3,11 @@ import { style } from '@openng/optimus-ui-styles/organizationchart';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const classes = {
-    root: ({ instance }) => ['p-organizationchart p-component', { 'p-organizationchart-preservespace': instance.preserveSpace }],
+    root: ({ instance }) => ['p-organizationchart p-component', { 'p-organizationchart-preservespace': instance.preserveSpace() }],
     table: 'p-organizationchart-table',
     node: ({ instance }) => [
         'p-organizationchart-node',
-        { 'p-organizationchart-node': true, 'p-organizationchart-node-selectable': instance.chart.selectionMode && instance.node.selectable !== false, 'p-organizationchart-node-selected': instance.isSelected() }
+        { 'p-organizationchart-node': true, 'p-organizationchart-node-selectable': instance.chart.selectionMode() && instance.node()?.selectable !== false, 'p-organizationchart-node-selected': instance.isSelected() }
     ],
     nodeToggleButton: 'p-organizationchart-node-toggle-button',
     nodeToggleButtonIcon: 'p-organizationchart-node-toggle-button-icon',
