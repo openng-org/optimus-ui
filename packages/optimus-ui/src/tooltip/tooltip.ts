@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, computed, Directive, effect, ElementRef, inject, InjectionToken, input, Input, NgModule, NgZone, numberAttribute, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { afterNextRender, booleanAttribute, computed, Directive, effect, ElementRef, inject, input, NgModule, NgZone, numberAttribute, TemplateRef, untracked, ViewContainerRef } from '@angular/core';
 import { appendChild, createElement, fadeIn, findSingle, getOuterHeight, getOuterWidth, getViewport, getWindowScrollLeft, getWindowScrollTop, hasClass, removeChild, uuid } from '@openng/optimus-ui-utils';
 import { TooltipOptions } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -11,8 +11,6 @@ import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { TooltipStyle } from './style/tooltipstyle';
 import type { TooltipPassThrough } from '@openng/optimus-ui/types/tooltip';
 
-const TOOLTIP_INSTANCE = new InjectionToken<Tooltip>('TOOLTIP_INSTANCE');
-
 /**
  * Tooltip directive provides advisory information for a component.
  * @group Components
@@ -20,113 +18,124 @@ const TOOLTIP_INSTANCE = new InjectionToken<Tooltip>('TOOLTIP_INSTANCE');
 @Directive({
     selector: '[pTooltip]',
     standalone: true,
-    providers: [TooltipStyle, { provide: TOOLTIP_INSTANCE, useExisting: Tooltip }, { provide: PARENT_INSTANCE, useExisting: Tooltip }]
+    providers: [TooltipStyle, { provide: PARENT_INSTANCE, useExisting: Tooltip }]
 })
 export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
     zone = inject(NgZone);
+
     private viewContainer = inject(ViewContainerRef);
 
-    componentName = 'Tooltip';
-
-    $pcTooltip: Tooltip | undefined = inject(TOOLTIP_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    _componentStyle = inject(TooltipStyle);
 
     /**
      * Position of the tooltip.
      * @group Props
      */
-    @Input() tooltipPosition: 'right' | 'left' | 'top' | 'bottom' | string | undefined;
+    readonly tooltipPosition = input<'right' | 'left' | 'top' | 'bottom' | string>();
+
     /**
      * Event to show the tooltip.
      * @group Props
      */
-    @Input() tooltipEvent: 'hover' | 'focus' | 'both' = 'hover';
+    readonly tooltipEvent = input<'hover' | 'focus' | 'both'>('hover');
+
     /**
      * Type of CSS position.
      * @group Props
      */
-    @Input() positionStyle: string | undefined;
+    readonly positionStyle = input<string>();
+
     /**
      * Style class of the tooltip.
      * @group Props
      */
-    @Input() tooltipStyleClass: string | undefined;
+    readonly tooltipStyleClass = input<string>();
+
     /**
      * Whether the z-index should be managed automatically to always go on top or have a fixed value.
      * @group Props
      */
-    @Input() tooltipZIndex: string | undefined;
+    readonly tooltipZIndex = input<string>();
+
     /**
      * By default the tooltip contents are rendered as text. Set to false to support html tags in the content.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) escape: boolean = true;
+    readonly escape = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Delay to show the tooltip in milliseconds.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) showDelay: number | undefined;
+    readonly showDelay = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Delay to hide the tooltip in milliseconds.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) hideDelay: number | undefined;
+    readonly hideDelay = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Time to wait in milliseconds to hide the tooltip even it is active.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) life: number | undefined;
+    readonly life = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Specifies the additional vertical offset of the tooltip from its default position.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) positionTop: number | undefined;
+    readonly positionTop = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Specifies the additional horizontal offset of the tooltip from its default position.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) positionLeft: number | undefined;
+    readonly positionLeft = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+
     /**
      * Whether to hide tooltip when hovering over tooltip content.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoHide: boolean = true;
+    readonly autoHide = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Automatically adjusts the element position when there is not enough space on the selected position.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) fitContent: boolean = true;
+    readonly fitContent = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether to hide tooltip on escape key press.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) hideOnEscape: boolean = true;
+    readonly hideOnEscape = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Whether to show the tooltip only when the target text overflows (e.g., ellipsis is active).
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) showOnEllipsis: boolean = false;
+    readonly showOnEllipsis = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Content of the tooltip.
      * @group Props
      */
-    @Input('pTooltip') content: string | TemplateRef<HTMLElement> | undefined;
+    readonly content = input<string | TemplateRef<HTMLElement> | undefined>(undefined, { alias: 'pTooltip' });
+
     /**
      * When present, it specifies that the component should be disabled.
      * @defaultValue false
      * @group Props
      */
-    @Input('tooltipDisabled') get disabled(): boolean {
-        return this._disabled as boolean;
-    }
-    set disabled(val: boolean) {
-        this._disabled = val;
-        this.deactivate();
-    }
+    readonly disabled = input<boolean | undefined>(undefined, { alias: 'tooltipDisabled' });
+
     /**
      * Specifies the tooltip configuration options for the component.
      * @group Props
      */
-    @Input() tooltipOptions: TooltipOptions | undefined;
+    readonly tooltipOptions = input<TooltipOptions>();
+
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
@@ -134,9 +143,33 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
      */
     appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>(undefined);
 
+    /**
+     * Used to pass attributes to DOM elements inside the Tooltip component.
+     * @defaultValue undefined
+     * @deprecated use pTooltipPT instead.
+     * @group Props
+     */
+    ptTooltip = input<TooltipPassThrough | undefined>();
+
+    /**
+     * Used to pass attributes to DOM elements inside the Tooltip component.
+     * @defaultValue undefined
+     * @group Props
+     */
+    pTooltipPT = input<TooltipPassThrough | undefined>();
+
+    /**
+     * Indicates whether the component should be rendered without styles.
+     * @defaultValue undefined
+     * @group Props
+     */
+    pTooltipUnstyled = input<boolean | undefined>();
+
+    componentName = 'Tooltip';
+
     $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
 
-    _tooltipOptions = {
+    _tooltipOptions: Record<string, any> = {
         tooltipLabel: null,
         tooltipPosition: 'right',
         tooltipEvent: 'hover',
@@ -157,15 +190,9 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         id: uuid('pn_id_') + '_tooltip'
     };
 
-    _disabled: boolean | undefined;
-
     container: any;
 
-    styleClass: string | undefined;
-
     tooltipText: any;
-
-    rootPTClasses: string = '';
 
     showTimeout: any;
 
@@ -197,31 +224,148 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
     resizeListener: any;
 
-    _componentStyle = inject(TooltipStyle);
-
     interactionInProgress = false;
 
     pointerInside = false;
 
     /**
-     * Used to pass attributes to DOM elements inside the Tooltip component.
-     * @defaultValue undefined
-     * @deprecated use pTooltipPT instead.
-     * @group Props
+     * Per-input effects patching the merged `_tooltipOptions` store (replace the former
+     * ngOnChanges hook). Each effect skips while its input is unbound/undefined so the store
+     * defaults survive, and the `tooltipOptions` effect is declared LAST so a bound options
+     * object keeps winning over the individual inputs within the same change, exactly like the
+     * legacy ngOnChanges ordering.
      */
-    ptTooltip = input<TooltipPassThrough | undefined>();
-    /**
-     * Used to pass attributes to DOM elements inside the Tooltip component.
-     * @defaultValue undefined
-     * @group Props
-     */
-    pTooltipPT = input<TooltipPassThrough | undefined>();
-    /**
-     * Indicates whether the component should be rendered without styles.
-     * @defaultValue undefined
-     * @group Props
-     */
-    pTooltipUnstyled = input<boolean | undefined>();
+    private readonly tooltipPositionEffect = effect(() => {
+        const value = this.tooltipPosition();
+        if (value !== undefined) untracked(() => this.setOption({ tooltipPosition: value }));
+    });
+
+    private readonly tooltipEventEffect = effect(() => {
+        const value = this.tooltipEvent();
+        if (value !== undefined) untracked(() => this.setOption({ tooltipEvent: value }));
+    });
+
+    private readonly appendToEffect = effect(() => {
+        const value = this.appendTo();
+        if (value !== undefined) untracked(() => this.setOption({ appendTo: value }));
+    });
+
+    private readonly positionStyleEffect = effect(() => {
+        const value = this.positionStyle();
+        if (value !== undefined) untracked(() => this.setOption({ positionStyle: value }));
+    });
+
+    private readonly tooltipStyleClassEffect = effect(() => {
+        const value = this.tooltipStyleClass();
+        if (value !== undefined) untracked(() => this.setOption({ tooltipStyleClass: value }));
+    });
+
+    private readonly tooltipZIndexEffect = effect(() => {
+        const value = this.tooltipZIndex();
+        if (value !== undefined) untracked(() => this.setOption({ tooltipZIndex: value }));
+    });
+
+    private readonly escapeEffect = effect(() => {
+        const value = this.escape();
+        if (value !== undefined) untracked(() => this.setOption({ escape: value }));
+    });
+
+    private readonly showDelayEffect = effect(() => {
+        const value = this.showDelay();
+        if (value !== undefined) untracked(() => this.setOption({ showDelay: value }));
+    });
+
+    private readonly hideDelayEffect = effect(() => {
+        const value = this.hideDelay();
+        if (value !== undefined) untracked(() => this.setOption({ hideDelay: value }));
+    });
+
+    private readonly lifeEffect = effect(() => {
+        const value = this.life();
+        if (value !== undefined) untracked(() => this.setOption({ life: value }));
+    });
+
+    private readonly positionTopEffect = effect(() => {
+        const value = this.positionTop();
+        if (value !== undefined) untracked(() => this.setOption({ positionTop: value }));
+    });
+
+    private readonly positionLeftEffect = effect(() => {
+        const value = this.positionLeft();
+        if (value !== undefined) untracked(() => this.setOption({ positionLeft: value }));
+    });
+
+    private readonly hideOnEscapeEffect = effect(() => {
+        const value = this.hideOnEscape();
+        if (value !== undefined) untracked(() => this.setOption({ hideOnEscape: value }));
+    });
+
+    private readonly disabledEffect = effect(() => {
+        const value = this.disabled();
+        if (value === undefined) return;
+        untracked(() => {
+            this.setOption({ disabled: value });
+            // The legacy `tooltipDisabled` setter deactivated the tooltip on every write.
+            this.deactivate();
+        });
+    });
+
+    private readonly contentEffect = effect(() => {
+        const content = this.content();
+        if (content === undefined) return;
+        untracked(() => {
+            this.setOption({ tooltipLabel: content });
+
+            if (this.active) {
+                if (content) {
+                    if (this.container && this.container.offsetParent) {
+                        this.updateText();
+                        this.align();
+                    } else {
+                        this.show();
+                    }
+                } else {
+                    this.hide();
+                }
+            }
+        });
+    });
+
+    private readonly autoHideEffect = effect(() => {
+        const value = this.autoHide();
+        if (value !== undefined) untracked(() => this.setOption({ autoHide: value }));
+    });
+
+    private readonly showOnEllipsisEffect = effect(() => {
+        const value = this.showOnEllipsis();
+        if (value !== undefined) untracked(() => this.setOption({ showOnEllipsis: value }));
+    });
+
+    private readonly tooltipOptionsEffect = effect(() => {
+        const options = this.tooltipOptions();
+        if (options === undefined) return;
+        untracked(() => {
+            this._tooltipOptions = { ...this._tooltipOptions, ...options };
+            this.deactivate();
+
+            if (this.active) {
+                if (this.getOption('tooltipLabel')) {
+                    if (this.container && this.container.offsetParent) {
+                        this.updateText();
+                        this.align();
+                    } else {
+                        this.show();
+                    }
+                } else {
+                    this.hide();
+                }
+            }
+        });
+    });
+
+    private get activeElement(): HTMLElement {
+        return this.el.nativeElement.nodeName.startsWith('P-') ? (findSingle(this.el.nativeElement, '.p-component') as HTMLElement) : this.el.nativeElement;
+    }
 
     constructor() {
         super();
@@ -233,9 +377,35 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         effect(() => {
             this.pTooltipUnstyled() && this.directiveUnstyled.set(this.pTooltipUnstyled());
         });
+
+        // Bind the trigger listeners once after the first render (replaces the former
+        // ngAfterViewInit hook). The option effects above/below have already patched
+        // _tooltipOptions by the time this runs.
+        afterNextRender(() => {
+            this.bindTriggerEvents();
+        });
     }
 
-    onAfterViewInit() {
+    onDestroy() {
+        this.unbindEvents();
+
+        if (this.container) {
+            ZIndexUtils.clear(this.container);
+        }
+
+        this.remove();
+
+        if (this.scrollHandler) {
+            this.scrollHandler.destroy();
+            this.scrollHandler = null;
+        }
+
+        if (this.documentEscapeListener) {
+            this.documentEscapeListener();
+        }
+    }
+
+    bindTriggerEvents() {
         if (isPlatformBrowser(this.platformId)) {
             this.zone.runOutsideAngular(() => {
                 const tooltipEvent = this.getOption('tooltipEvent');
@@ -268,107 +438,6 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
                     target.addEventListener('blur', this.blurListener);
                 }
             });
-        }
-    }
-
-    onChanges(simpleChange: SimpleChanges) {
-        if (simpleChange.tooltipPosition) {
-            this.setOption({ tooltipPosition: simpleChange.tooltipPosition.currentValue });
-        }
-
-        if (simpleChange.tooltipEvent) {
-            this.setOption({ tooltipEvent: simpleChange.tooltipEvent.currentValue });
-        }
-
-        if (simpleChange.appendTo) {
-            this.setOption({ appendTo: simpleChange.appendTo.currentValue });
-        }
-
-        if (simpleChange.positionStyle) {
-            this.setOption({ positionStyle: simpleChange.positionStyle.currentValue });
-        }
-
-        if (simpleChange.tooltipStyleClass) {
-            this.setOption({ tooltipStyleClass: simpleChange.tooltipStyleClass.currentValue });
-        }
-
-        if (simpleChange.tooltipZIndex) {
-            this.setOption({ tooltipZIndex: simpleChange.tooltipZIndex.currentValue });
-        }
-
-        if (simpleChange.escape) {
-            this.setOption({ escape: simpleChange.escape.currentValue });
-        }
-
-        if (simpleChange.showDelay) {
-            this.setOption({ showDelay: simpleChange.showDelay.currentValue });
-        }
-
-        if (simpleChange.hideDelay) {
-            this.setOption({ hideDelay: simpleChange.hideDelay.currentValue });
-        }
-
-        if (simpleChange.life) {
-            this.setOption({ life: simpleChange.life.currentValue });
-        }
-
-        if (simpleChange.positionTop) {
-            this.setOption({ positionTop: simpleChange.positionTop.currentValue });
-        }
-
-        if (simpleChange.positionLeft) {
-            this.setOption({ positionLeft: simpleChange.positionLeft.currentValue });
-        }
-
-        if (simpleChange.disabled) {
-            this.setOption({ disabled: simpleChange.disabled.currentValue });
-        }
-
-        if (simpleChange.content) {
-            this.setOption({ tooltipLabel: simpleChange.content.currentValue });
-
-            if (this.active) {
-                if (simpleChange.content.currentValue) {
-                    if (this.container && this.container.offsetParent) {
-                        this.updateText();
-                        this.align();
-                    } else {
-                        this.show();
-                    }
-                } else {
-                    this.hide();
-                }
-            }
-        }
-
-        if (simpleChange.autoHide) {
-            this.setOption({ autoHide: simpleChange.autoHide.currentValue });
-        }
-
-        if (simpleChange.showOnEllipsis) {
-            this.setOption({ showOnEllipsis: simpleChange.showOnEllipsis.currentValue });
-        }
-
-        if (simpleChange.id) {
-            this.setOption({ id: simpleChange.id.currentValue });
-        }
-
-        if (simpleChange.tooltipOptions) {
-            this._tooltipOptions = { ...this._tooltipOptions, ...simpleChange.tooltipOptions.currentValue };
-            this.deactivate();
-
-            if (this.active) {
-                if (this.getOption('tooltipLabel')) {
-                    if (this.container && this.container.offsetParent) {
-                        this.updateText();
-                        this.align();
-                    } else {
-                        this.show();
-                    }
-                } else {
-                    this.hide();
-                }
-            }
         }
     }
 
@@ -530,7 +599,7 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
         this.container.style.display = 'none';
 
-        if (this.fitContent) {
+        if (this.fitContent()) {
             this.container.style.width = 'fit-content';
         }
 
@@ -639,10 +708,6 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         }
     }
 
-    private get activeElement(): HTMLElement {
-        return this.el.nativeElement.nodeName.startsWith('P-') ? (findSingle(this.el.nativeElement, '.p-component') as HTMLElement) : this.el.nativeElement;
-    }
-
     alignRight() {
         this.preAlign('right');
         const el = this.activeElement;
@@ -720,8 +785,8 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         this._tooltipOptions = { ...this._tooltipOptions, ...option };
     }
 
-    getOption(option: string) {
-        return this._tooltipOptions[option as keyof typeof this.tooltipOptions];
+    getOption(option: string): any {
+        return (this._tooltipOptions as any)[option];
     }
 
     getTarget(el: Element) {
@@ -842,25 +907,6 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
     clearTimeouts() {
         this.clearShowTimeout();
         this.clearHideTimeout();
-    }
-
-    onDestroy() {
-        this.unbindEvents();
-
-        if (this.container) {
-            ZIndexUtils.clear(this.container);
-        }
-
-        this.remove();
-
-        if (this.scrollHandler) {
-            this.scrollHandler.destroy();
-            this.scrollHandler = null;
-        }
-
-        if (this.documentEscapeListener) {
-            this.documentEscapeListener();
-        }
     }
 }
 

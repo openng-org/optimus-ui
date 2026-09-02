@@ -121,14 +121,14 @@ describe('Tooltip', () => {
         });
 
         it('should have default values', () => {
-            expect(tooltipDirective.tooltipPosition).toBe('right');
-            expect(tooltipDirective.tooltipEvent).toBe('hover');
-            expect(tooltipDirective.escape).toBe(true);
-            expect(tooltipDirective.autoHide).toBe(true);
-            expect(tooltipDirective.fitContent).toBe(true);
-            expect(tooltipDirective.hideOnEscape).toBe(true);
-            expect(tooltipDirective.content).toBe('Default tooltip text');
-            expect(tooltipDirective.disabled).toBeFalsy();
+            expect(tooltipDirective.tooltipPosition()).toBe('right');
+            expect(tooltipDirective.tooltipEvent()).toBe('hover');
+            expect(tooltipDirective.escape()).toBe(true);
+            expect(tooltipDirective.autoHide()).toBe(true);
+            expect(tooltipDirective.fitContent()).toBe(true);
+            expect(tooltipDirective.hideOnEscape()).toBe(true);
+            expect(tooltipDirective.content()).toBe('Default tooltip text');
+            expect(tooltipDirective.disabled()).toBeFalsy();
         });
 
         it('should accept custom values', async () => {
@@ -144,14 +144,14 @@ describe('Tooltip', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tooltipDirective.tooltipPosition).toBe('top');
-            expect(tooltipDirective.tooltipEvent).toBe('focus');
-            expect(tooltipDirective.escape).toBe(false);
-            expect(tooltipDirective.showDelay).toBe(500);
-            expect(tooltipDirective.hideDelay).toBe(300);
-            expect(tooltipDirective.life).toBe(2000);
-            expect(tooltipDirective.autoHide).toBe(false);
-            expect(tooltipDirective.tooltipStyleClass).toBe('custom-tooltip');
+            expect(tooltipDirective.tooltipPosition()).toBe('top');
+            expect(tooltipDirective.tooltipEvent()).toBe('focus');
+            expect(tooltipDirective.escape()).toBe(false);
+            expect(tooltipDirective.showDelay()).toBe(500);
+            expect(tooltipDirective.hideDelay()).toBe(300);
+            expect(tooltipDirective.life()).toBe(2000);
+            expect(tooltipDirective.autoHide()).toBe(false);
+            expect(tooltipDirective.tooltipStyleClass()).toBe('custom-tooltip');
         });
 
         it('should disable tooltip when disabled is true', async () => {
@@ -160,7 +160,7 @@ describe('Tooltip', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tooltipDirective.disabled).toBe(true);
+            expect(tooltipDirective.disabled()).toBe(true);
         });
     });
 
@@ -400,7 +400,7 @@ describe('Tooltip', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(tooltipDirective.tooltipPosition).toBe('left');
+            expect(tooltipDirective.tooltipPosition()).toBe('left');
         });
 
         it('should handle out of bounds check', () => {
@@ -630,7 +630,7 @@ describe('Tooltip', () => {
         });
 
         it('should handle template content', () => {
-            expect(tooltipDirective.content).toEqual(component.tooltipTemplate());
+            expect(tooltipDirective.content()).toEqual(component.tooltipTemplate());
         });
     });
 
