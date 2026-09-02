@@ -169,7 +169,7 @@ describe('Overlay', () => {
 
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => ({
-                        class: instance?.visible ? 'VISIBLE_CLASS' : 'HIDDEN_CLASS'
+                        class: instance?.$visible() ? 'VISIBLE_CLASS' : 'HIDDEN_CLASS'
                     })
                 });
                 fixture.changeDetectorRef.markForCheck();
