@@ -28,7 +28,7 @@ class TestBasicInputIconComponent {
     imports: [IconField, InputIcon, InputText, FormsModule],
     template: `
         <p-iconfield>
-            <p-inputicon [styleClass]="customClass" class="pi pi-user" />
+            <p-inputicon [class]="customClass" class="pi pi-user" />
             <input type="text" pInputText [(ngModel)]="username" />
         </p-iconfield>
     `
@@ -87,22 +87,21 @@ describe('InputIcon', () => {
             fixture.detectChanges();
         });
 
-        it('should apply custom styleClass', () => {
-            expect(inputIconInstance.styleClass).toBe('custom-icon');
-
+        it('should apply a custom class alongside static and base classes', () => {
             const iconElement = fixture.debugElement.query(By.directive(InputIcon));
             expect(iconElement.nativeElement.classList.contains('custom-icon')).toBe(true);
+            expect(iconElement.nativeElement.classList.contains('pi-user')).toBe(true);
+            expect(iconElement.nativeElement.classList.contains('p-inputicon')).toBe(true);
         });
 
-        it('should update styleClass dynamically', async () => {
+        it('should update the custom class dynamically', async () => {
             component.customClass = 'new-icon-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(inputIconInstance.styleClass).toBe('new-icon-class');
-
             const iconElement = fixture.debugElement.query(By.directive(InputIcon));
             expect(iconElement.nativeElement.classList.contains('new-icon-class')).toBe(true);
+            expect(iconElement.nativeElement.classList.contains('custom-icon')).toBe(false);
         });
     });
 });
@@ -158,15 +157,14 @@ describe('InputIcon PassThrough Tests', () => {
 
     describe('PT Case 3: Instance variables', () => {
         it('should access instance variables in PT function', () => {
-            component.styleClass = 'custom-icon';
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.styleClass ? 'HAS_STYLE' : ''
+                    class: instance?.componentName === 'InputIcon' ? 'HAS_NAME' : ''
                 })
             });
             fixture.detectChanges();
 
-            expect(hostElement.classList.contains('HAS_STYLE')).toBe(true);
+            expect(hostElement.classList.contains('HAS_NAME')).toBe(true);
         });
     });
 
