@@ -1,24 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-    booleanAttribute,
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    effect,
-    inject,
-    InjectionToken,
-    input,
-    Input,
-    NgModule,
-    NgZone,
-    numberAttribute,
-    output,
-    signal,
-    TemplateRef,
-    ViewEncapsulation,
-    contentChild,
-    contentChildren
-} from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, effect, inject, input, NgModule, NgZone, numberAttribute, output, signal, TemplateRef, ViewEncapsulation, contentChild, contentChildren } from '@angular/core';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
 import { isEmpty, setAttribute, uuid } from '@openng/optimus-ui-utils';
 import { MessageService, PrimeTemplate, SharedModule, ToastMessageOptions } from '@openng/optimus-ui/api';
@@ -30,8 +11,6 @@ import { ToastCloseEvent, ToastHeadlessTemplateContext, ToastItemCloseEvent, Toa
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { Subscription } from 'rxjs';
 import { ToastStyle } from './style/toaststyle';
-
-const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
 
 @Component({
     selector: 'p-toastItem',
@@ -46,25 +25,25 @@ const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
             [pMotionOptions]="motionOptions()"
             (pMotionOnBeforeEnter)="onBeforeEnter($event)"
             (pMotionOnAfterLeave)="onAfterLeave($event)"
-            [attr.id]="message?.id"
+            [attr.id]="message()?.id"
             [pBind]="ptm('message')"
-            [class]="cn(cx('message'), message?.styleClass)"
+            [class]="cn(cx('message'), message()?.styleClass)"
             (mouseenter)="onMouseEnter()"
             (mouseleave)="onMouseLeave()"
             role="alert"
             aria-live="assertive"
             aria-atomic="true"
-            [attr.data-p]="dataP"
+            [attr.data-p]="dataP()"
         >
-            @if (headlessTemplate) {
-                <ng-container *ngTemplateOutlet="headlessTemplate; context: { $implicit: message, closeFn: onCloseIconClick }"></ng-container>
+            @if (headlessTemplate()) {
+                <ng-container *ngTemplateOutlet="headlessTemplate(); context: { $implicit: message(), closeFn: onCloseIconClick }"></ng-container>
             } @else {
-                <div [pBind]="ptm('messageContent')" [class]="cn(cx('messageContent'), message?.contentStyleClass)">
-                    @if (!template) {
-                        @if (message.icon) {
-                            <span [pBind]="ptm('messageIcon')" [class]="cn(cx('messageIcon'), message?.icon)"></span>
+                <div [pBind]="ptm('messageContent')" [class]="cn(cx('messageContent'), message()?.contentStyleClass)">
+                    @if (!template()) {
+                        @if (message()?.icon) {
+                            <span [pBind]="ptm('messageIcon')" [class]="cn(cx('messageIcon'), message()?.icon)"></span>
                         } @else {
-                            @switch (message.severity) {
+                            @switch (message()?.severity) {
                                 @case ('success') {
                                     <svg [pBind]="ptm('messageIcon')" data-p-icon="check" [class]="cx('messageIcon')" [attr.aria-hidden]="true" />
                                 }
@@ -82,15 +61,15 @@ const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
                                 }
                             }
                         }
-                        <div [pBind]="ptm('messageText')" [ngClass]="cx('messageText')" [attr.data-p]="dataP">
-                            <div [pBind]="ptm('summary')" [ngClass]="cx('summary')" [attr.data-p]="dataP">
-                                {{ message.summary }}
+                        <div [pBind]="ptm('messageText')" [ngClass]="cx('messageText')" [attr.data-p]="dataP()">
+                            <div [pBind]="ptm('summary')" [ngClass]="cx('summary')" [attr.data-p]="dataP()">
+                                {{ message()?.summary }}
                             </div>
-                            <div [pBind]="ptm('detail')" [ngClass]="cx('detail')" [attr.data-p]="dataP">{{ message.detail }}</div>
+                            <div [pBind]="ptm('detail')" [ngClass]="cx('detail')" [attr.data-p]="dataP()">{{ message()?.detail }}</div>
                         </div>
                     }
-                    <ng-container *ngTemplateOutlet="template; context: { $implicit: message }"></ng-container>
-                    @if (message?.closable !== false) {
+                    <ng-container *ngTemplateOutlet="template(); context: { $implicit: message() }"></ng-container>
+                    @if (message()?.closable !== false) {
                         <div>
                             <button
                                 [pBind]="ptm('closeButton')"
@@ -100,11 +79,11 @@ const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
                                 (keydown.enter)="onCloseIconClick($event)"
                                 [attr.aria-label]="closeAriaLabel"
                                 autofocus
-                                [attr.data-p]="dataP"
+                                [attr.data-p]="dataP()"
                             >
-                                @if (message.closeIcon) {
-                                    @if (message.closeIcon) {
-                                        <span [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), message?.closeIcon)"></span>
+                                @if (message()?.closeIcon) {
+                                    @if (message()?.closeIcon) {
+                                        <span [pBind]="ptm('closeIcon')" [class]="cn(cx('closeIcon'), message()?.closeIcon)"></span>
                                     }
                                 } @else {
                                     <svg [pBind]="ptm('closeIcon')" data-p-icon="times" [class]="cx('closeIcon')" [attr.aria-hidden]="true" />
@@ -123,23 +102,17 @@ const TOAST_INSTANCE = new InjectionToken<Toast>('TOAST_INSTANCE');
 export class ToastItem extends BaseComponent<ToastPassThrough> {
     private zone = inject(NgZone);
 
-    @Input() message: ToastMessageOptions | null | undefined;
+    _componentStyle = inject(ToastStyle);
 
-    @Input({ transform: numberAttribute }) index: number | null | undefined;
+    readonly message = input<ToastMessageOptions | null>();
 
-    @Input({ transform: numberAttribute }) life: number;
+    readonly index = input<number | null | undefined, unknown>(undefined, { transform: numberAttribute });
 
-    @Input() template: TemplateRef<ToastMessageTemplateContext> | undefined;
+    readonly life = input<number, unknown>(undefined, { transform: numberAttribute });
 
-    @Input() headlessTemplate: TemplateRef<ToastHeadlessTemplateContext> | undefined;
+    readonly template = input<TemplateRef<ToastMessageTemplateContext>>();
 
-    @Input() showTransformOptions: string | undefined;
-
-    @Input() hideTransformOptions: string | undefined;
-
-    @Input() showTransitionOptions: string | undefined;
-
-    @Input() hideTransitionOptions: string | undefined;
+    readonly headlessTemplate = input<TemplateRef<ToastHeadlessTemplateContext>>();
 
     motionOptions = input<MotionOptions>();
 
@@ -149,26 +122,7 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
 
     onAnimationEnd = output<HTMLElement>();
 
-    onBeforeEnter(event: MotionEvent) {
-        this.onAnimationStart.emit(event.element as HTMLElement);
-    }
-
-    onAfterLeave(event: MotionEvent) {
-        if (!this.visible() && !this.isDestroyed) {
-            this.onClose.emit({
-                index: <number>this.index,
-                message: <ToastMessageOptions>this.message
-            });
-
-            if (!this.isDestroyed) {
-                this.onAnimationEnd.emit(event.element as HTMLElement);
-            }
-        }
-    }
-
     readonly onClose = output<ToastItemCloseEvent>();
-
-    _componentStyle = inject(ToastStyle);
 
     timeout: any;
 
@@ -177,6 +131,23 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
     private isDestroyed = false;
 
     private isClosing = false;
+
+    onCloseIconClick = (event: Event) => {
+        this.isClosing = true;
+        this.clearTimeout();
+        this.visible.set(false);
+        event.preventDefault();
+    };
+
+    get closeAriaLabel() {
+        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
+    }
+
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.message()?.severity as string]: this.message()?.severity
+        })
+    );
 
     constructor() {
         super();
@@ -189,12 +160,35 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
     }
 
     onAfterViewInit() {
-        this.message?.sticky && this.visible.set(true);
+        this.message()?.sticky && this.visible.set(true);
         this.initTimeout();
     }
 
+    onDestroy() {
+        this.isDestroyed = true;
+        this.clearTimeout();
+        this.visible.set(false);
+    }
+
+    onBeforeEnter(event: MotionEvent) {
+        this.onAnimationStart.emit(event.element as HTMLElement);
+    }
+
+    onAfterLeave(event: MotionEvent) {
+        if (!this.visible() && !this.isDestroyed) {
+            this.onClose.emit({
+                index: <number>this.index(),
+                message: <ToastMessageOptions>this.message()
+            });
+
+            if (!this.isDestroyed) {
+                this.onAnimationEnd.emit(event.element as HTMLElement);
+            }
+        }
+    }
+
     initTimeout() {
-        if (!this.message?.sticky) {
+        if (!this.message()?.sticky) {
             this.clearTimeout();
             this.zone.runOutsideAngular(() => {
                 this.visible.set(true);
@@ -202,7 +196,7 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
                     () => {
                         this.visible.set(false);
                     },
-                    this.message?.life || this.life || 3000
+                    this.message()?.life || this.life() || 3000
                 );
             });
         }
@@ -224,29 +218,6 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
             this.initTimeout();
         }
     }
-
-    onCloseIconClick = (event: Event) => {
-        this.isClosing = true;
-        this.clearTimeout();
-        this.visible.set(false);
-        event.preventDefault();
-    };
-
-    get closeAriaLabel() {
-        return this.config.translation.aria ? this.config.translation.aria.close : undefined;
-    }
-
-    onDestroy() {
-        this.isDestroyed = true;
-        this.clearTimeout();
-        this.visible.set(false);
-    }
-
-    get dataP() {
-        return this.cn({
-            [this.message?.severity as string]: this.message?.severity
-        });
-    }
 }
 
 /**
@@ -258,18 +229,18 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
     standalone: true,
     imports: [CommonModule, ToastItem, SharedModule],
     template: `
-        @for (msg of messages; track msg; let i = $index) {
+        @for (msg of messages(); track msg; let i = $index) {
             <p-toastItem
                 [message]="msg"
                 [index]="i"
-                [life]="life"
+                [life]="life()"
                 [clearAll]="clearAllTrigger()"
                 (onClose)="onMessageClose($event)"
                 (onAnimationEnd)="onAnimationEnd()"
                 (onAnimationStart)="onAnimationStart()"
-                [template]="template() || _template"
-                [headlessTemplate]="headlessTemplate() || _headlessTemplate"
-                [pt]="pt"
+                [template]="$template()"
+                [headlessTemplate]="$headlessTemplate()"
+                [pt]="pt()"
                 [unstyled]="unstyled()"
                 [motionOptions]="computedMotionOptions()"
             ></p-toastItem>
@@ -277,120 +248,110 @@ export class ToastItem extends BaseComponent<ToastPassThrough> {
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [ToastStyle, { provide: TOAST_INSTANCE, useExisting: Toast }, { provide: PARENT_INSTANCE, useExisting: Toast }],
+    providers: [ToastStyle, { provide: PARENT_INSTANCE, useExisting: Toast }],
     host: {
-        '[class]': "cn(cx('root'), styleClass)",
+        '[class]': "cx('root')",
         '[style]': "sx('root')",
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
 export class Toast extends BaseComponent<ToastPassThrough> {
-    componentName = 'Toast';
-
-    $pcToast: Toast | undefined = inject(TOAST_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    messageService: MessageService = inject(MessageService);
+
+    _componentStyle = inject(ToastStyle);
+
     /**
      * Key of the message in case message is targeted to a specific toast component.
      * @group Props
      */
-    @Input() key: string | undefined;
+    readonly key = input<string>();
+
     /**
      * Whether to automatically manage layering.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
+    readonly autoZIndex = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Base zIndex value to use in layering.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
+    readonly baseZIndex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * The default time to display messages for in milliseconds.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) life: number = 3000;
-    /**
-     * Inline class of the component.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    readonly life = input<number, unknown>(3000, { transform: numberAttribute });
+
     /**
      * Position of the toast in viewport.
      * @group Props
      */
-    @Input() get position(): ToastPositionType {
-        return this._position;
-    }
-
-    set position(value: ToastPositionType) {
-        this._position = value;
-        this.cd.markForCheck();
-    }
+    readonly position = input<ToastPositionType>('top-right');
 
     /**
      * It does not add the new message if there is already a toast displayed with the same content
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) preventOpenDuplicates: boolean = false;
+    readonly preventOpenDuplicates = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Displays only once a message with the same content.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) preventDuplicates: boolean = false;
+    readonly preventDuplicates = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Transform options of the show animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() showTransformOptions: string = 'translateY(100%)';
+    readonly showTransformOptions = input<string>('translateY(100%)');
+
     /**
      * Transform options of the hide animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() hideTransformOptions: string = 'translateY(-100%)';
+    readonly hideTransformOptions = input<string>('translateY(-100%)');
+
     /**
      * Transition options of the show animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() showTransitionOptions: string = '300ms ease-out';
+    readonly showTransitionOptions = input<string>('300ms ease-out');
+
     /**
      * Transition options of the hide animation.
      * @group Props
      * @deprecated since v21.0.0. Use `motionOptions` instead.
      */
-    @Input() hideTransitionOptions: string = '250ms ease-in';
+    readonly hideTransitionOptions = input<string>('250ms ease-in');
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
      * Object literal to define styles per screen size.
      * @group Props
      */
-    @Input() breakpoints: { [key: string]: any } | undefined;
+    readonly breakpoints = input<{ [key: string]: any }>();
+
     /**
      * Callback to invoke when a message is closed.
      * @param {ToastCloseEvent} event - custom close event.
      * @group Emits
      */
     readonly onClose = output<ToastCloseEvent>();
+
     /**
      * Custom message template.
      * @param {ToastMessageTemplateContext} context - message context.
@@ -398,6 +359,7 @@ export class Toast extends BaseComponent<ToastPassThrough> {
      * @group Templates
      */
     readonly template = contentChild<TemplateRef<ToastMessageTemplateContext>>('message');
+
     /**
      * Custom headless template.
      * @param {ToastHeadlessTemplateContext} context - headless context.
@@ -406,27 +368,61 @@ export class Toast extends BaseComponent<ToastPassThrough> {
      */
     readonly headlessTemplate = contentChild<TemplateRef<ToastHeadlessTemplateContext>>('headless');
 
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'Toast';
+
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
+
     messageSubscription: Subscription | undefined;
 
     clearSubscription: Subscription | undefined;
 
-    messages: ToastMessageOptions[] | null | undefined;
+    readonly messages = signal<ToastMessageOptions[] | null | undefined>(undefined);
 
     messagesArchieve: ToastMessageOptions[] | undefined;
-
-    _position: ToastPositionType = 'top-right';
-
-    messageService: MessageService = inject(MessageService);
-
-    _componentStyle = inject(ToastStyle);
 
     styleElement: any;
 
     id: string = uuid('pn_id_');
 
-    readonly templates = contentChildren(PrimeTemplate);
-
     clearAllTrigger = signal<{} | null>(null);
+
+    /**
+     * Effective message template: the `#message` content child, a legacy `pTemplate="message"`,
+     * or (legacy behavior) the last `pTemplate` with an unrecognized type.
+     */
+    readonly $template = computed(() => {
+        const template = this.template();
+        if (template) {
+            return template;
+        }
+        return [...this.templates()].reverse().find((item) => item.getType() !== 'headless')?.template as TemplateRef<ToastMessageTemplateContext> | undefined;
+    });
+
+    /** Effective headless template: the `#headless` content child, or a legacy `pTemplate="headless"`. */
+    readonly $headlessTemplate = computed(() => this.headlessTemplate() ?? (this.templates().find((item) => item.getType() === 'headless')?.template as TemplateRef<ToastHeadlessTemplateContext> | undefined));
+
+    readonly dataP = computed(() =>
+        this.cn({
+            [this.position()]: this.position()
+        })
+    );
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     onInit() {
         this.messageSubscription = this.messageService.messageObserver.subscribe((messages) => {
@@ -442,7 +438,7 @@ export class Toast extends BaseComponent<ToastPassThrough> {
 
         this.clearSubscription = this.messageService.clearObserver.subscribe((key) => {
             if (key) {
-                if (this.key === key) {
+                if (this.key() === key) {
                     this.clearAll();
                 }
             } else {
@@ -453,42 +449,37 @@ export class Toast extends BaseComponent<ToastPassThrough> {
         });
     }
 
+    onAfterViewInit() {
+        if (this.breakpoints()) {
+            this.createStyle();
+        }
+    }
+
+    onDestroy() {
+        if (this.messageSubscription) {
+            this.messageSubscription.unsubscribe();
+        }
+
+        if (this.el && this.autoZIndex()) {
+            ZIndexUtils.clear(this.el.nativeElement);
+        }
+
+        if (this.clearSubscription) {
+            this.clearSubscription.unsubscribe();
+        }
+
+        this.destroyStyle();
+    }
+
     clearAll() {
         // trigger signal to clear all messages
         this.clearAllTrigger.set({});
     }
 
-    _template: TemplateRef<ToastMessageTemplateContext> | undefined;
-
-    _headlessTemplate: TemplateRef<ToastHeadlessTemplateContext> | undefined;
-
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'message':
-                    this._template = item.template;
-                    break;
-                case 'headless':
-                    this._headlessTemplate = item.template;
-                    break;
-
-                default:
-                    this._template = item.template;
-                    break;
-            }
-        });
-    }
-
-    onAfterViewInit() {
-        if (this.breakpoints) {
-            this.createStyle();
-        }
-    }
-
     add(messages: ToastMessageOptions[]): void {
-        this.messages = this.messages ? [...this.messages, ...messages] : [...messages];
+        this.messages.update((current) => (current ? [...current, ...messages] : [...messages]));
 
-        if (this.preventDuplicates) {
+        if (this.preventDuplicates()) {
             this.messagesArchieve = this.messagesArchieve ? [...this.messagesArchieve, ...messages] : [...messages];
         }
 
@@ -496,13 +487,13 @@ export class Toast extends BaseComponent<ToastPassThrough> {
     }
 
     canAdd(message: ToastMessageOptions): boolean {
-        let allow = this.key === message.key;
+        let allow = this.key() === message.key;
 
-        if (allow && this.preventOpenDuplicates) {
-            allow = !this.containsMessage(this.messages!, message);
+        if (allow && this.preventOpenDuplicates()) {
+            allow = !this.containsMessage(this.messages()!, message);
         }
 
-        if (allow && this.preventDuplicates) {
+        if (allow && this.preventDuplicates()) {
             allow = !this.containsMessage(this.messagesArchieve!, message);
         }
 
@@ -522,7 +513,14 @@ export class Toast extends BaseComponent<ToastPassThrough> {
     }
 
     onMessageClose(event: ToastItemCloseEvent) {
-        this.messages?.splice(event.index, 1);
+        this.messages.update((messages) => {
+            if (!messages) {
+                return messages;
+            }
+            const next = [...messages];
+            next.splice(event.index, 1);
+            return next;
+        });
 
         this.onClose.emit({
             message: event.message
@@ -533,13 +531,13 @@ export class Toast extends BaseComponent<ToastPassThrough> {
 
     onAnimationStart() {
         this.renderer.setAttribute(this.el?.nativeElement, this.id, '');
-        if (this.autoZIndex && this.el?.nativeElement.style.zIndex === '') {
-            ZIndexUtils.set('modal', this.el?.nativeElement, this.baseZIndex || this.config.zIndex.modal);
+        if (this.autoZIndex() && this.el?.nativeElement.style.zIndex === '') {
+            ZIndexUtils.set('modal', this.el?.nativeElement, this.baseZIndex() || this.config.zIndex.modal);
         }
     }
 
     onAnimationEnd() {
-        if (this.autoZIndex && isEmpty(this.messages)) {
+        if (this.autoZIndex() && isEmpty(this.messages())) {
             ZIndexUtils.clear(this.el?.nativeElement);
         }
     }
@@ -551,10 +549,11 @@ export class Toast extends BaseComponent<ToastPassThrough> {
             setAttribute(this.styleElement, 'nonce', this.config?.csp()?.nonce);
             this.renderer.appendChild(this.document.head, this.styleElement);
             let innerHTML = '';
-            for (let breakpoint in this.breakpoints) {
+            const breakpoints = this.breakpoints();
+            for (let breakpoint in breakpoints) {
                 let breakpointStyle = '';
-                for (let styleProp in this.breakpoints[breakpoint]) {
-                    breakpointStyle += styleProp + ':' + this.breakpoints[breakpoint][styleProp] + ' !important;';
+                for (let styleProp in breakpoints[breakpoint]) {
+                    breakpointStyle += styleProp + ':' + breakpoints[breakpoint][styleProp] + ' !important;';
                 }
                 innerHTML += `
                     @media screen and (max-width: ${breakpoint}) {
@@ -575,28 +574,6 @@ export class Toast extends BaseComponent<ToastPassThrough> {
             this.renderer.removeChild(this.document.head, this.styleElement);
             this.styleElement = null;
         }
-    }
-
-    onDestroy() {
-        if (this.messageSubscription) {
-            this.messageSubscription.unsubscribe();
-        }
-
-        if (this.el && this.autoZIndex) {
-            ZIndexUtils.clear(this.el.nativeElement);
-        }
-
-        if (this.clearSubscription) {
-            this.clearSubscription.unsubscribe();
-        }
-
-        this.destroyStyle();
-    }
-
-    get dataP() {
-        return this.cn({
-            [this.position]: this.position
-        });
     }
 }
 
