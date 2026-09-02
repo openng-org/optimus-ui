@@ -56,7 +56,7 @@ class TestDisabledBadgeComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-badge',
-    template: `<p-badge [styleClass]="styleClass" value="1"></p-badge>`
+    template: `<p-badge [class]="styleClass" value="1"></p-badge>`
 })
 class TestStyleClassBadgeComponent {
     styleClass = 'custom-badge';
@@ -133,7 +133,7 @@ class TestDeprecatedSizeBadgeComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-badge',
-    template: ` <p-badge [value]="value" [badgeSize]="badgeSize" [severity]="severity" [badgeDisabled]="disabled" [styleClass]="styleClass"> </p-badge> `
+    template: ` <p-badge [value]="value" [badgeSize]="badgeSize" [severity]="severity" [badgeDisabled]="disabled" [class]="styleClass"> </p-badge> `
 })
 class TestDynamicBadgeComponent {
     value: string | number | null = '1';
@@ -191,7 +191,6 @@ describe('Badge', () => {
                 expect(component.size()).toBeUndefined();
                 expect(component.severity()).toBeUndefined();
                 expect(component.badgeDisabled()).toBe(false);
-                expect(component.styleClass()).toBeUndefined();
             });
 
             it('should apply base CSS classes', () => {

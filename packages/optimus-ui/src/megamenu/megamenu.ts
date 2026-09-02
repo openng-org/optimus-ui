@@ -1,14 +1,15 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+    afterEveryRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
+    computed,
     effect,
     ElementRef,
     forwardRef,
     inject,
-    InjectionToken,
-    Input,
+    input,
     NgModule,
     numberAttribute,
     signal,
@@ -33,21 +34,18 @@ import { MegaMenuItemTemplateContext, MegaMenuPassThrough } from '@openng/optimu
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { MegaMenuStyle } from './style/megamenustyle';
 
-const MEGAMENU_INSTANCE = new InjectionToken<MegaMenu>('MEGAMENU_INSTANCE');
-const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INSTANCE');
-
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-megaMenuSub, p-megamenu-sub, ul[pMegaMenuSub]',
     standalone: true,
     imports: [CommonModule, RouterModule, Ripple, TooltipModule, AngleDownIcon, AngleRightIcon, BadgeModule, SharedModule, Bind],
     template: `
-        @if (submenu) {
-            <li [class]="cn(cx('submenuLabel'), getItemProp(submenu, 'class'))" [style]="getItemProp(submenu, 'style')" role="presentation" [pBind]="ptm('submenuLabel')">
-                {{ getItemLabel(submenu) }}
+        @if (submenu()) {
+            <li [class]="cn(cx('submenuLabel'), getItemProp(submenu(), 'class'))" [style]="getItemProp(submenu(), 'style')" role="presentation" [pBind]="ptm('submenuLabel')">
+                {{ getItemLabel(submenu()) }}
             </li>
         }
-        @for (processedItem of items; track processedItem; let index = $index) {
+        @for (processedItem of items(); track processedItem; let index = $index) {
             @if (isItemVisible(processedItem) && getItemProp(processedItem, 'separator')) {
                 <li [attr.id]="getItemId(processedItem)" [style]="getItemProp(processedItem, 'style')" [class]="cn(cx('separator'), this.getItemProp(processedItem, 'class'))" role="separator" [pBind]="ptm('separator')"></li>
             }
@@ -63,7 +61,7 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
                     [attr.aria-disabled]="isItemDisabled(processedItem) || undefined"
                     [attr.aria-haspopup]="isItemGroup(processedItem) && !getItemProp(processedItem, 'to') ? 'menu' : undefined"
                     [attr.aria-expanded]="isItemGroup(processedItem) ? isItemActive(processedItem) : undefined"
-                    [attr.aria-level]="level + 1"
+                    [attr.aria-level]="level() + 1"
                     [attr.aria-setsize]="getAriaSetSize()"
                     [attr.aria-posinset]="getAriaPosInset(index)"
                     [ngStyle]="getItemProp(processedItem, 'style')"
@@ -74,7 +72,7 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
                     [pTooltipUnstyled]="unstyled()"
                 >
                     <div [class]="cx('itemContent')" [pBind]="getPTOptions(processedItem, index, 'itemContent')" (click)="onItemClick($event, processedItem)" (mouseenter)="onItemMouseEnter({ $event, processedItem })">
-                        @if (!itemTemplate) {
+                        @if (!itemTemplate()) {
                             @if (!getItemProp(processedItem, 'routerLink')) {
                                 <a
                                     [attr.href]="getItemProp(processedItem, 'url')"
@@ -112,16 +110,16 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
                                         <p-badge [class]="getItemProp(processedItem, 'badgeStyleClass')" [value]="getItemProp(processedItem, 'badge')" [unstyled]="unstyled()" />
                                     }
                                     @if (isItemGroup(processedItem)) {
-                                        @if (!megaMenu.submenuIconTemplate() && !megaMenu._submenuIconTemplate) {
-                                            @if (orientation === 'horizontal' || mobileActive) {
+                                        @if (!megaMenu.$submenuIconTemplate()) {
+                                            @if (orientation() === 'horizontal' || mobileActive()) {
                                                 <svg data-p-icon="angle-down" [class]="cx('submenuIcon')" [pBind]="getPTOptions(processedItem, index, 'submenuIcon')" [attr.aria-hidden]="true" />
                                             } @else {
-                                                @if (orientation === 'vertical') {
+                                                @if (orientation() === 'vertical') {
                                                     <svg data-p-icon="angle-right" [class]="cx('submenuIcon')" [pBind]="getPTOptions(processedItem, index, 'submenuIcon')" [attr.aria-hidden]="true" />
                                                 }
                                             }
                                         }
-                                        <ng-template *ngTemplateOutlet="megaMenu.submenuIconTemplate() || megaMenu._submenuIconTemplate" [attr.aria-hidden]="true"></ng-template>
+                                        <ng-template *ngTemplateOutlet="megaMenu.$submenuIconTemplate()" [attr.aria-hidden]="true"></ng-template>
                                     }
                                 </a>
                             }
@@ -167,24 +165,24 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
                                         ></span>
                                     }
                                     @if (getItemProp(processedItem, 'badge')) {
-                                        <p-badge [styleClass]="getItemProp(processedItem, 'badgeStyleClass')" [value]="getItemProp(processedItem, 'badge')" [unstyled]="unstyled()" />
+                                        <p-badge [class]="getItemProp(processedItem, 'badgeStyleClass')" [value]="getItemProp(processedItem, 'badge')" [unstyled]="unstyled()" />
                                     }
                                     @if (isItemGroup(processedItem)) {
-                                        @if (!megaMenu.submenuIconTemplate() && !megaMenu._submenuIconTemplate) {
-                                            @if (orientation === 'horizontal') {
+                                        @if (!megaMenu.$submenuIconTemplate()) {
+                                            @if (orientation() === 'horizontal') {
                                                 <svg data-p-icon="angle-down" [class]="cx('submenuIcon')" [pBind]="getPTOptions(processedItem, index, 'submenuIcon')" [attr.aria-hidden]="true" />
                                             }
-                                            @if (orientation === 'vertical') {
+                                            @if (orientation() === 'vertical') {
                                                 <svg data-p-icon="angle-right" [class]="cx('submenuIcon')" [pBind]="getPTOptions(processedItem, index, 'submenuIcon')" [attr.aria-hidden]="true" />
                                             }
                                         }
-                                        <ng-template *ngTemplateOutlet="megaMenu.submenuIconTemplate() || megaMenu._submenuIconTemplate" [attr.aria-hidden]="true"></ng-template>
+                                        <ng-template *ngTemplateOutlet="megaMenu.$submenuIconTemplate()" [attr.aria-hidden]="true"></ng-template>
                                     }
                                 </a>
                             }
                         }
-                        @if (itemTemplate) {
-                            <ng-template *ngTemplateOutlet="itemTemplate; context: { $implicit: processedItem.item }"></ng-template>
+                        @if (itemTemplate()) {
+                            <ng-template *ngTemplateOutlet="itemTemplate(); context: { $implicit: processedItem.item }"></ng-template>
                         }
                     </div>
                     @if (isItemVisible(processedItem) && isItemGroup(processedItem)) {
@@ -198,11 +196,11 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
                                                 [id]="getSubListId(submenu)"
                                                 [submenu]="submenu"
                                                 [items]="submenu.items"
-                                                [itemTemplate]="itemTemplate"
-                                                [mobileActive]="mobileActive"
-                                                [menuId]="menuId"
-                                                [focusedItemId]="focusedItemId"
-                                                [level]="level + 1"
+                                                [itemTemplate]="itemTemplate()"
+                                                [mobileActive]="mobileActive()"
+                                                [menuId]="menuId()"
+                                                [focusedItemId]="focusedItemId()"
+                                                [level]="level() + 1"
                                                 [root]="false"
                                                 (itemClick)="itemClick.emit($event)"
                                                 (itemMouseEnter)="onItemMouseEnter($event)"
@@ -220,20 +218,17 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
         }
     `,
     encapsulation: ViewEncapsulation.None,
-    providers: [
-        { provide: MEGAMENU_SUB_INSTANCE, useExisting: MegaMenuSub },
-        { provide: PARENT_INSTANCE, useExisting: MegaMenuSub }
-    ],
+    providers: [{ provide: PARENT_INSTANCE, useExisting: MegaMenuSub }],
     host: {
-        '[class]': 'root ? cx("rootList") : cx("submenu")',
+        '[class]': 'root() ? cx("rootList") : cx("submenu")',
         '[style]': 'sx("rootList")',
-        '[style.display]': 'isSubmenuVisible(submenu) ? null : "none"',
-        '[attr.role]': 'root ? "menubar" : "menu"',
-        '[attr.id]': 'id',
-        '[attr.aria-orientation]': 'orientation',
-        '[tabindex]': 'tabindex',
-        '[attr.aria-activedescendant]': 'focusedItemId',
-        '[attr.data-pc-section]': 'root ? "rootlist" : "submenu"',
+        '[style.display]': 'isSubmenuVisible(submenu()) ? null : "none"',
+        '[attr.role]': 'root() ? "menubar" : "menu"',
+        '[attr.id]': 'id()',
+        '[attr.aria-orientation]': 'orientation()',
+        '[tabindex]': 'tabindex()',
+        '[attr.aria-activedescendant]': 'focusedItemId()',
+        '[attr.data-pc-section]': 'root() ? "rootlist" : "submenu"',
         '(keydown)': 'menuKeydown.emit($event)',
         '(focus)': 'menuFocus.emit($event)',
         '(blur)': 'menuBlur.emit($event)',
@@ -244,43 +239,43 @@ const MEGAMENU_SUB_INSTANCE = new InjectionToken<MegaMenuSub>('MEGAMENU_SUB_INST
 export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    $pcMegaMenu: MegaMenu | undefined = inject(MEGAMENU_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    megaMenu: MegaMenu = inject(forwardRef(() => MegaMenu));
 
-    $pcMegaMenuSub: MegaMenuSub | undefined = inject(MEGAMENU_SUB_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    _componentStyle = inject(MegaMenuStyle);
 
-    @Input() id: string | undefined;
+    readonly id = input<string>();
 
-    @Input() items: any[] | undefined;
+    readonly items = input<any[]>();
 
-    @Input() itemTemplate: TemplateRef<MegaMenuItemTemplateContext> | undefined;
+    readonly itemTemplate = input<TemplateRef<MegaMenuItemTemplateContext>>();
 
-    @Input() menuId: string | undefined;
+    readonly menuId = input<string>();
 
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
 
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
 
-    @Input({ transform: numberAttribute }) level: number = 0;
+    readonly level = input<number, unknown>(0, { transform: numberAttribute });
 
-    @Input() focusedItemId: string | undefined;
+    readonly focusedItemId = input<string>();
 
-    @Input({ transform: booleanAttribute }) disabled: boolean = false;
+    readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
 
-    @Input() orientation: string | undefined;
+    readonly orientation = input<string>();
 
-    @Input() activeItem: any;
+    readonly activeItem = input<any>();
 
-    @Input() submenu: any;
+    readonly submenu = input<any>();
 
-    @Input({ transform: booleanAttribute }) queryMatches: boolean = false;
+    readonly queryMatches = input<boolean, unknown>(false, { transform: booleanAttribute });
 
-    @Input({ transform: booleanAttribute }) mobileActive: boolean = false;
+    readonly mobileActive = input<boolean, unknown>(false, { transform: booleanAttribute });
 
-    @Input() scrollHeight: string;
+    readonly scrollHeight = input<string>();
 
-    @Input({ transform: numberAttribute }) tabindex: number = 0;
+    readonly tabindex = input<number, unknown>(0, { transform: numberAttribute });
 
-    @Input({ transform: booleanAttribute }) root: boolean = false;
+    readonly root = input<boolean, unknown>(false, { transform: booleanAttribute });
 
     readonly itemClick = output<any>();
 
@@ -294,12 +289,13 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
 
     readonly menuMouseDown = output<any>();
 
-    megaMenu: MegaMenu = inject(forwardRef(() => MegaMenu));
-
-    _componentStyle = inject(MegaMenuStyle);
-
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm(this.root ? 'rootList' : 'submenu'));
+    constructor() {
+        super();
+        // Re-apply the list pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm(this.root() ? 'rootList' : 'submenu'));
+        });
     }
 
     onItemClick(event: any, processedItem: any) {
@@ -312,7 +308,7 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     }
 
     getItemId(processedItem: any): string {
-        return processedItem.item && processedItem.item?.id ? processedItem.item.id : `${this.menuId}_${processedItem.key}`;
+        return processedItem.item && processedItem.item?.id ? processedItem.item.id : `${this.menuId()}_${processedItem.key}`;
     }
 
     getSubListId(processedItem) {
@@ -324,7 +320,7 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     }
 
     isSubmenuVisible(submenu: any) {
-        if (this.submenu && !this.root) {
+        if (this.submenu() && !this.root()) {
             return this.isItemVisible(submenu);
         } else {
             return true;
@@ -336,7 +332,7 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     }
 
     isItemActive(processedItem) {
-        return isNotEmpty(this.activeItem) ? this.activeItem.key === processedItem.key : false;
+        return isNotEmpty(this.activeItem()) ? this.activeItem().key === processedItem.key : false;
     }
 
     isItemDisabled(processedItem: any): boolean {
@@ -344,7 +340,7 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     }
 
     isItemFocused(processedItem: any): boolean {
-        return this.focusedItemId === this.getItemId(processedItem);
+        return this.focusedItemId() === this.getItemId(processedItem);
     }
 
     isItemGroup(processedItem: any): boolean {
@@ -352,11 +348,17 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     }
 
     getAriaSetSize() {
-        return this.items?.filter((processedItem) => this.isItemVisible(processedItem) && !this.getItemProp(processedItem, 'separator')).length;
+        return this.items()?.filter((processedItem) => this.isItemVisible(processedItem) && !this.getItemProp(processedItem, 'separator')).length;
     }
 
     getAriaPosInset(index: number) {
-        return index - (this.items?.slice(0, index).filter((processedItem) => this.isItemVisible(processedItem) && this.getItemProp(processedItem, 'separator')).length || 0) + 1;
+        return (
+            index -
+            (this.items()
+                ?.slice(0, index)
+                .filter((processedItem) => this.isItemVisible(processedItem) && this.getItemProp(processedItem, 'separator')).length || 0) +
+            1
+        );
     }
 
     onItemMouseEnter(param: any) {
@@ -387,49 +389,49 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
     standalone: true,
     imports: [CommonModule, RouterModule, MegaMenuSub, TooltipModule, BarsIcon, BadgeModule, SharedModule, Bind],
     template: `
-        @if (startTemplate() || _startTemplate) {
+        @if ($startTemplate()) {
             <div [class]="cx('start')" [pBind]="ptm('start')">
-                <ng-container *ngTemplateOutlet="startTemplate() || _startTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="$startTemplate()"></ng-container>
             </div>
         }
-        @if (!buttonTemplate() && !_buttonTemplate) {
-            @if (model && model.length > 0) {
+        @if (!$buttonTemplate()) {
+            @if (model() && model()!.length > 0) {
                 <a
                     #menubutton
                     role="button"
                     tabindex="0"
                     [class]="cx('button')"
-                    [attr.aria-haspopup]="model.length && model.length > 0 ? true : false"
+                    [attr.aria-haspopup]="model()!.length && model()!.length > 0 ? true : false"
                     [attr.aria-expanded]="mobileActive"
-                    [attr.aria-controls]="id"
+                    [attr.aria-controls]="$id()"
                     [attr.aria-label]="config.translation.aria.navigation"
                     [pBind]="ptm('button')"
                     (click)="menuButtonClick($event)"
                     (keydown)="menuButtonKeydown($event)"
                 >
-                    @if (!buttonIconTemplate() && !_buttonIconTemplate) {
+                    @if (!$buttonIconTemplate()) {
                         <svg data-p-icon="bars" [pBind]="ptm('buttonIcon')" />
                     }
-                    <ng-template *ngTemplateOutlet="buttonIconTemplate() || _buttonIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$buttonIconTemplate()"></ng-template>
                 </a>
             }
         }
-        <ng-container *ngTemplateOutlet="buttonTemplate() || _buttonTemplate"></ng-container>
+        <ng-container *ngTemplateOutlet="$buttonTemplate()"></ng-container>
         <ul
             pMegaMenuSub
             #rootmenu
-            [itemTemplate]="itemTemplate() || _itemTemplate"
-            [items]="processedItems"
-            [attr.id]="id + '_list'"
-            [menuId]="id"
+            [itemTemplate]="$itemTemplate()"
+            [items]="processedItems()"
+            [attr.id]="$id() + '_list'"
+            [menuId]="$id()"
             [root]="true"
-            [orientation]="orientation"
-            [ariaLabel]="ariaLabel"
-            [disabled]="disabled"
-            [tabindex]="!disabled ? tabindex : -1"
+            [orientation]="orientation()"
+            [ariaLabel]="ariaLabel()"
+            [disabled]="disabled()"
+            [tabindex]="!disabled() ? tabindex() : -1"
             [activeItem]="activeItem()"
             [level]="0"
-            [ariaLabelledBy]="ariaLabelledBy"
+            [ariaLabelledBy]="ariaLabelledBy()"
             [focusedItemId]="focused ? focusedItemId : undefined"
             [mobileActive]="mobileActive"
             (itemClick)="onItemClick($event)"
@@ -439,101 +441,106 @@ export class MegaMenuSub extends BaseComponent<MegaMenuPassThrough> {
             (menuMouseDown)="onMenuMouseDown($event)"
             (itemMouseEnter)="onItemMouseEnter($event)"
             [queryMatches]="queryMatches()"
-            [scrollHeight]="scrollHeight"
+            [scrollHeight]="scrollHeight()"
             [pt]="pt()"
             [unstyled]="unstyled()"
         ></ul>
-        @if (endTemplate() || _endTemplate) {
+        @if ($endTemplate()) {
             <div [class]="cx('end')" [pBind]="ptm('end')">
-                <ng-container *ngTemplateOutlet="endTemplate() || _endTemplate"></ng-container>
+                <ng-container *ngTemplateOutlet="$endTemplate()"></ng-container>
             </div>
         }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [MegaMenuStyle, { provide: MEGAMENU_INSTANCE, useExisting: MegaMenu }, { provide: PARENT_INSTANCE, useExisting: MegaMenu }],
+    providers: [MegaMenuStyle, { provide: PARENT_INSTANCE, useExisting: MegaMenu }],
     host: {
-        '[class]': 'cn(cx("root"), styleClass)',
-        '[id]': 'id'
+        '[class]': 'cx("root")',
+        '[id]': '$id()'
     },
     hostDirectives: [Bind]
 })
 export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
-    componentName = 'MegaMenu';
-
     bindDirectiveInstance = inject(Bind, { self: true });
+
+    _componentStyle = inject(MegaMenuStyle);
+
     /**
      * An array of menuitems.
      * @group Props
      */
-    @Input() set model(value: MegaMenuItem[] | undefined) {
-        this._model = value;
-        this._processedItems = this.createProcessedItems(this._model || []);
-    }
-    get model(): MegaMenuItem[] | undefined {
-        return this._model;
-    }
-    /**
-     * Class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    readonly model = input<MegaMenuItem[]>();
+
     /**
      * Defines the orientation.
      * @group Props
      */
-    @Input() orientation: 'horizontal' | 'vertical' | string = 'horizontal';
+    readonly orientation = input<'horizontal' | 'vertical' | string>('horizontal');
+
     /**
      * Current id state as a string.
      * @group Props
      */
-    @Input() id: string | undefined;
+    readonly id = input<string>();
+
     /**
      * Defines a string value that labels an interactive element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Identifier of the underlying input element.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * The breakpoint to define the maximum width boundary.
      * @group Props
      */
-    @Input() breakpoint: string = '960px';
+    readonly breakpoint = input<string>('960px');
+
     /**
      * Height of the viewport, a scrollbar is defined if height of list exceeds this value.
      * @group Props
      */
-    @Input() scrollHeight: string = '20rem';
+    readonly scrollHeight = input<string>('20rem');
+
     /**
      * When present, it specifies that the component should be disabled.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) disabled: boolean = false;
+    readonly disabled = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Index of the element in tabbing order.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) tabindex: number = 0;
+    readonly tabindex = input<number, unknown>(0, { transform: numberAttribute });
+
+    readonly menubuttonViewChild = viewChild<ElementRef>('menubutton');
+
+    readonly rootmenu = viewChild.required<MegaMenuSub>('rootmenu');
+
     /**
      * Defines template option for start.
      * @group Templates
      */
     readonly startTemplate = contentChild<TemplateRef<void>>('start', { descendants: false });
+
     /**
      * Defines template option for end.
      * @group Templates
      */
     readonly endTemplate = contentChild<TemplateRef<void>>('end', { descendants: false });
+
     /**
      * Defines template option for submenu icon.
      * @group Templates
      */
     readonly submenuIconTemplate = contentChild<TemplateRef<void>>('submenuicon', { descendants: false });
+
     /**
      * Custom item template.
      * @param {MegaMenuItemTemplateContext} context - item context.
@@ -541,11 +548,13 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
      * @group Templates
      */
     readonly itemTemplate = contentChild<TemplateRef<MegaMenuItemTemplateContext>>('item', { descendants: false });
+
     /**
      * Custom menu button template on responsive mode.
      * @group Templates
      */
     readonly buttonTemplate = contentChild<TemplateRef<void>>('button', { descendants: false });
+
     /**
      * Custom menu button icon template on responsive mode.
      * @group Templates
@@ -554,23 +563,71 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    readonly menubuttonViewChild = viewChild<ElementRef>('menubutton');
+    componentName = 'MegaMenu';
 
-    readonly rootmenu = viewChild.required<MegaMenuSub>('rootmenu');
+    /** Stable generated fallback used when no `id` is provided. */
+    private readonly generatedId = uuid('pn_id_');
 
-    _startTemplate: TemplateRef<void> | undefined;
+    /** Effective id: the `id` input or a generated unique id. */
+    readonly $id = computed(() => this.id() || this.generatedId);
 
-    _endTemplate: TemplateRef<void> | undefined;
+    /** Effective start template: the `#start` content child or the `pTemplate="start"`. */
+    readonly $startTemplate = computed(
+        () =>
+            this.startTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'start')
+                .at(-1)?.template
+    );
 
-    _menuIconTemplate: TemplateRef<void> | undefined;
+    /** Effective end template: the `#end` content child or the `pTemplate="end"`. */
+    readonly $endTemplate = computed(
+        () =>
+            this.endTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'end')
+                .at(-1)?.template
+    );
 
-    _submenuIconTemplate: TemplateRef<void> | undefined;
+    /** Effective submenu icon template: the `#submenuicon` content child or the `pTemplate="submenuicon"`. */
+    readonly $submenuIconTemplate = computed(
+        () =>
+            this.submenuIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'submenuicon')
+                .at(-1)?.template
+    );
 
-    _itemTemplate: TemplateRef<MegaMenuItemTemplateContext> | undefined;
+    /** Effective button template: the `#button` content child or the `pTemplate="button"`. */
+    readonly $buttonTemplate = computed(
+        () =>
+            this.buttonTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'button')
+                .at(-1)?.template
+    );
 
-    _buttonTemplate: TemplateRef<void> | undefined;
+    /** Effective button icon template: the `#buttonicon` content child or the `pTemplate="buttonicon"`. */
+    readonly $buttonIconTemplate = computed(
+        () =>
+            this.buttonIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'buttonicon')
+                .at(-1)?.template
+    );
 
-    _buttonIconTemplate: TemplateRef<void> | undefined;
+    /**
+     * Effective item template: the `#item` content child or (legacy behavior) the last projected
+     * pTemplate of type `item` or of an unknown type. The legacy `menuicon` pTemplate was assigned
+     * but never rendered, so it is excluded here as well.
+     */
+    readonly $itemTemplate = computed(
+        () =>
+            this.itemTemplate() ??
+            (this.templates()
+                .filter((item) => !['start', 'end', 'menuicon', 'submenuicon', 'button', 'buttonicon'].includes(item.getType()))
+                .at(-1)?.template as TemplateRef<MegaMenuItemTemplateContext> | undefined)
+    );
 
     outsideClickListener: VoidListener;
 
@@ -587,12 +644,6 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
     searchValue: string = '';
 
     searchTimeout: any;
-
-    _processedItems: any[];
-
-    _model: MegaMenuItem[] | undefined;
-
-    _componentStyle = inject(MegaMenuStyle);
 
     private matchMediaListener: () => void;
 
@@ -615,23 +666,25 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
 
                   return items;
               }, [])
-            : this.processedItems;
+            : this.processedItems();
     }
 
-    get processedItems() {
-        if (!this._processedItems || !this._processedItems.length) {
-            this._processedItems = this.createProcessedItems(this.model || []);
-        }
-        return this._processedItems;
-    }
+    /** Processed model tree, recomputed whenever the `model` input changes (replaces the legacy setter). */
+    readonly processedItems = computed(() => this.createProcessedItems(this.model() || []));
 
     get focusedItemId() {
         const focusedItem = this.focusedItemInfo();
-        return focusedItem?.item && focusedItem.item?.id ? focusedItem.item.id : isNotEmpty(focusedItem.key) ? `${this.id}_${focusedItem.key}` : null;
+        return focusedItem?.item && focusedItem.item?.id ? focusedItem.item.id : isNotEmpty(focusedItem.key) ? `${this.$id()}_${focusedItem.key}` : null;
     }
 
     constructor() {
         super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+
         effect(() => {
             const activeItem = this.activeItem();
             if (isNotEmpty(activeItem)) {
@@ -646,55 +699,18 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
 
     onInit(): void {
         this.bindMatchMediaListener();
-        this.id = this.id || uuid('pn_id_');
     }
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'start':
-                    this._startTemplate = item.template;
-                    break;
-
-                case 'end':
-                    this._endTemplate = item.template;
-                    break;
-
-                case 'menuicon':
-                    this._menuIconTemplate = item.template;
-                    break;
-
-                case 'submenuicon':
-                    this._submenuIconTemplate = item.template;
-                    break;
-
-                case 'item':
-                    this._itemTemplate = item.template;
-                    break;
-
-                case 'button':
-                    this._buttonTemplate = item.template;
-                    break;
-
-                case 'buttonicon':
-                    this._buttonIconTemplate = item.template;
-                    break;
-
-                default:
-                    this._itemTemplate = item.template;
-                    break;
-            }
-        });
+    onDestroy() {
+        this.unbindOutsideClickListener();
+        this.unbindResizeListener();
+        this.unbindMatchMediaListener();
     }
 
     bindMatchMediaListener() {
         if (isPlatformBrowser(this.platformId)) {
             if (!this.matchMediaListener) {
-                const query = window.matchMedia(`(max-width: ${this.breakpoint})`);
+                const query = window.matchMedia(`(max-width: ${this.breakpoint()})`);
 
                 this.query = query;
                 this.queryMatches.set(query.matches);
@@ -810,7 +826,7 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
     }
 
     scrollInView(index: number = -1) {
-        const id = index !== -1 ? `${this.id}_${index}` : this.focusedItemId;
+        const id = index !== -1 ? `${this.$id()}_${index}` : this.focusedItemId;
 
         let element;
 
@@ -1058,7 +1074,7 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
     }
 
     onArrowDownKey(event: KeyboardEvent) {
-        if (this.orientation === 'horizontal') {
+        if (this.orientation() === 'horizontal') {
             if (isNotEmpty(this.activeItem()) && this.activeItem().key === this.focusedItemInfo().key) {
                 const { key, item } = this.activeItem();
                 this.focusedItemInfo.set({ index: -1, key: '', parentKey: key, item });
@@ -1085,7 +1101,7 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
         const grouped = this.isProccessedItemGroup(processedItem);
 
         if (grouped) {
-            if (this.orientation === 'vertical') {
+            if (this.orientation() === 'vertical') {
                 if (isNotEmpty(this.activeItem()) && this.activeItem().key === processedItem.key) {
                     this.focusedItemInfo.set({ index: -1, key: '', parentKey: this.activeItem().key, item: processedItem.item });
                 } else {
@@ -1119,7 +1135,7 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
     }
 
     onArrowUpKey(event: KeyboardEvent) {
-        if (event.altKey && this.orientation === 'horizontal') {
+        if (event.altKey && this.orientation() === 'horizontal') {
             if (this.focusedItemInfo().index !== -1) {
                 const processedItem = this.findVisibleItem(this.focusedItemInfo().index);
                 const grouped = this.isProccessedItemGroup(processedItem);
@@ -1153,13 +1169,13 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
         const grouped = this.isProccessedItemGroup(processedItem);
 
         if (grouped) {
-            if (this.orientation === 'horizontal') {
+            if (this.orientation() === 'horizontal') {
                 const itemIndex = this.focusedItemInfo().index !== -1 ? this.findPrevItemIndex(this.focusedItemInfo().index) : this.findLastFocusedItemIndex();
 
                 this.changeFocusedItemInfo(event, itemIndex);
             }
         } else {
-            if (this.orientation === 'vertical' && isNotEmpty(this.activeItem())) {
+            if (this.orientation() === 'vertical' && isNotEmpty(this.activeItem())) {
                 if (processedItem.columnIndex === 0) {
                     this.focusedItemInfo.set({
                         index: this.activeItem().index,
@@ -1295,12 +1311,6 @@ export class MegaMenu extends BaseComponent<MegaMenuPassThrough> {
             window.removeEventListener('resize', this.resizeListener);
             this.resizeListener = null!;
         }
-    }
-
-    onDestroy() {
-        this.unbindOutsideClickListener();
-        this.unbindResizeListener();
-        this.unbindMatchMediaListener();
     }
 }
 

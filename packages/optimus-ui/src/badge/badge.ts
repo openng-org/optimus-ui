@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, Directive, effect, inject, InjectionToken, Input, input, NgModule, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, afterNextRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, Directive, effect, inject, input, NgModule, untracked, ViewEncapsulation } from '@angular/core';
 import { addClass, createElement, hasClass, isNotEmpty, removeClass, uuid } from '@openng/optimus-ui-utils';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -6,21 +6,17 @@ import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import type { BadgePassThrough, BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import { BadgeStyle } from './style/badgestyle';
 
-const BADGE_INSTANCE = new InjectionToken<Badge>('BADGE_INSTANCE');
-
-const BADGE_DIRECTIVE_INSTANCE = new InjectionToken<BadgeDirective>('BADGE_DIRECTIVE_INSTANCE');
-
 /**
  * Badge Directive is directive usage of badge component.
  * @group Components
  */
 @Directive({
     selector: '[pBadge]',
-    providers: [BadgeStyle, { provide: BADGE_DIRECTIVE_INSTANCE, useExisting: BadgeDirective }, { provide: PARENT_INSTANCE, useExisting: BadgeDirective }],
+    providers: [BadgeStyle, { provide: PARENT_INSTANCE, useExisting: BadgeDirective }],
     standalone: true
 })
 export class BadgeDirective extends BaseComponent {
-    $pcBadgeDirective: BadgeDirective | undefined = inject(BADGE_DIRECTIVE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    _componentStyle = inject(BadgeStyle);
 
     /**
      * Used to pass attributes to DOM elements inside the Badge component.
@@ -29,74 +25,74 @@ export class BadgeDirective extends BaseComponent {
      * @group Props
      */
     ptBadgeDirective = input<BadgePassThrough | undefined>();
+
     /**
      * Used to pass attributes to DOM elements inside the Badge component.
      * @defaultValue undefined
      * @group Props
      */
     pBadgePT = input<BadgePassThrough | undefined>();
+
     /**
      * Indicates whether the component should be rendered without styles.
      * @defaultValue undefined
      * @group Props
      */
     pBadgeUnstyled = input<boolean | undefined>();
+
     /**
      * When specified, disables the component.
      * @group Props
      */
-    @Input('badgeDisabled') public disabled: boolean;
+    readonly disabled = input<boolean>(false, { alias: 'badgeDisabled' });
+
     /**
      * Size of the badge, valid options are "large" and "xlarge".
      * @group Props
      */
-    @Input() public badgeSize: 'large' | 'xlarge' | 'small' | null | undefined;
+    readonly badgeSize = input<'large' | 'xlarge' | 'small' | null>();
+
     /**
      * Size of the badge, valid options are "large" and "xlarge".
      * @group Props
      * @deprecated use badgeSize instead.
      */
-    @Input() public set size(value: 'large' | 'xlarge' | 'small' | null | undefined) {
-        this._size = value;
-        console.log('size property is deprecated and will removed in v18, use badgeSize instead.');
-    }
-    get size() {
-        return this._size;
-    }
-    _size: 'large' | 'xlarge' | 'small' | null | undefined;
+    readonly size = input<'large' | 'xlarge' | 'small' | null>();
+
     /**
      * Severity type of the badge.
      * @group Props
      */
-    @Input() severity: BadgeSeverity | null | undefined;
+    readonly severity = input<BadgeSeverity | null>();
+
     /**
      * Value to display inside the badge.
      * @group Props
      */
-    @Input() public value: string | number;
+    readonly value = input<string | number>();
+
     /**
      * Inline style of the element.
      * @group Props
      */
-    @Input() badgeStyle: { [klass: string]: any } | null | undefined;
+    readonly badgeStyle = input<{ [klass: string]: any } | null>();
+
     /**
      * Class of the element.
      * @group Props
      */
-    @Input() badgeStyleClass: string;
+    readonly badgeStyleClass = input<string>();
 
     private id!: string;
 
     badgeEl: HTMLElement;
-
-    _componentStyle = inject(BadgeStyle);
 
     private get activeElement(): HTMLElement {
         return this.el.nativeElement.nodeName.indexOf('-') != -1 ? this.el.nativeElement.firstChild : this.el.nativeElement;
     }
 
     private get canUpdateBadge(): boolean {
-        return isNotEmpty(this.id) && !this.disabled;
+        return isNotEmpty(this.id) && !this.disabled();
     }
 
     constructor() {
@@ -109,39 +105,60 @@ export class BadgeDirective extends BaseComponent {
         effect(() => {
             this.pBadgeUnstyled() && this.directiveUnstyled.set(this.pBadgeUnstyled());
         });
-    }
 
-    onChanges(changes: SimpleChanges): void {
-        const { value, size, severity, disabled, badgeStyle, badgeStyleClass } = changes;
+        // React to input changes on the rendered badge element (replaces the former ngOnChanges).
+        // Before the badge element exists (id unset) every branch is a guarded no-op, matching the
+        // original behavior where updates only applied after the initial render.
+        effect(() => {
+            this.disabled();
+            untracked(() => this.toggleDisableState());
+        });
 
-        if (disabled) {
-            this.toggleDisableState();
-        }
+        let previousSeverity: BadgeSeverity | null | undefined;
+        effect(() => {
+            const severity = this.severity();
+            untracked(() => {
+                if (this.canUpdateBadge) {
+                    this.setSeverity(previousSeverity);
+                }
+                previousSeverity = severity;
+            });
+        });
 
-        if (!this.canUpdateBadge) {
-            return;
-        }
+        effect(() => {
+            this.size();
+            this.badgeSize();
+            untracked(() => {
+                if (this.canUpdateBadge) {
+                    this.setSizeClasses();
+                }
+            });
+        });
 
-        if (severity) {
-            this.setSeverity(severity.previousValue);
-        }
+        effect(() => {
+            this.value();
+            untracked(() => {
+                if (this.canUpdateBadge) {
+                    this.setValue();
+                }
+            });
+        });
 
-        if (size) {
-            this.setSizeClasses();
-        }
+        effect(() => {
+            this.badgeStyle();
+            this.badgeStyleClass();
+            untracked(() => {
+                if (this.canUpdateBadge) {
+                    this.applyStyles();
+                }
+            });
+        });
 
-        if (value) {
-            this.setValue();
-        }
-
-        if (badgeStyle || badgeStyleClass) {
-            this.applyStyles();
-        }
-    }
-
-    onAfterViewInit(): void {
-        this.id = uuid('pn_id_') + '_badge';
-        this.renderBadgeContent();
+        // Initial badge rendering (replaces the former ngAfterViewInit hook).
+        afterNextRender(() => {
+            this.id = uuid('pn_id_') + '_badge';
+            this.renderBadgeContent();
+        });
     }
 
     private setValue(element?: HTMLElement): void {
@@ -151,12 +168,12 @@ export class BadgeDirective extends BaseComponent {
             return;
         }
 
-        if (this.value != null) {
+        if (this.value() != null) {
             if (hasClass(badge, 'p-badge-dot')) {
                 removeClass(badge, 'p-badge-dot');
             }
 
-            if (this.value && String(this.value).length === 1) {
+            if (this.value() != null && String(this.value()).length === 1) {
                 addClass(badge, 'p-badge-circle');
             } else {
                 removeClass(badge, 'p-badge-circle');
@@ -170,7 +187,7 @@ export class BadgeDirective extends BaseComponent {
         }
 
         badge.textContent = '';
-        const badgeValue = this.value != null ? String(this.value) : '';
+        const badgeValue = this.value() != null ? String(this.value()) : '';
         this.renderer.appendChild(badge, this.document.createTextNode(badgeValue));
     }
 
@@ -181,23 +198,23 @@ export class BadgeDirective extends BaseComponent {
             return;
         }
 
-        if (this.badgeSize) {
-            if (this.badgeSize === 'large') {
+        if (this.badgeSize()) {
+            if (this.badgeSize() === 'large') {
                 addClass(badge, 'p-badge-lg');
                 removeClass(badge, 'p-badge-xl');
             }
 
-            if (this.badgeSize === 'xlarge') {
+            if (this.badgeSize() === 'xlarge') {
                 addClass(badge, 'p-badge-xl');
                 removeClass(badge, 'p-badge-lg');
             }
-        } else if (this.size && !this.badgeSize) {
-            if (this.size === 'large') {
+        } else if (this.size() && !this.badgeSize()) {
+            if (this.size() === 'large') {
                 addClass(badge, 'p-badge-lg');
                 removeClass(badge, 'p-badge-xl');
             }
 
-            if (this.size === 'xlarge') {
+            if (this.size() === 'xlarge') {
                 addClass(badge, 'p-badge-xl');
                 removeClass(badge, 'p-badge-lg');
             }
@@ -208,7 +225,7 @@ export class BadgeDirective extends BaseComponent {
     }
 
     private renderBadgeContent(): void {
-        if (this.disabled) {
+        if (this.disabled()) {
             return;
         }
 
@@ -224,13 +241,13 @@ export class BadgeDirective extends BaseComponent {
     }
 
     private applyStyles(): void {
-        if (this.badgeEl && this.badgeStyle && typeof this.badgeStyle === 'object') {
-            for (const [key, value] of Object.entries(this.badgeStyle)) {
+        if (this.badgeEl && this.badgeStyle() && typeof this.badgeStyle() === 'object') {
+            for (const [key, value] of Object.entries(this.badgeStyle()!)) {
                 this.renderer.setStyle(this.badgeEl, key, value);
             }
         }
-        if (this.badgeEl && this.badgeStyleClass) {
-            this.badgeEl.classList.add(...this.badgeStyleClass.split(' '));
+        if (this.badgeEl && this.badgeStyleClass()) {
+            this.badgeEl.classList.add(...this.badgeStyleClass()!.split(' '));
         }
     }
 
@@ -241,8 +258,8 @@ export class BadgeDirective extends BaseComponent {
             return;
         }
 
-        if (this.severity) {
-            addClass(badge, `p-badge-${this.severity}`);
+        if (this.severity()) {
+            addClass(badge, `p-badge-${this.severity()}`);
         }
 
         if (oldSeverity) {
@@ -255,7 +272,7 @@ export class BadgeDirective extends BaseComponent {
             return;
         }
 
-        if (this.disabled) {
+        if (this.disabled()) {
             const badge = this.activeElement?.querySelector(`#${this.id}`);
 
             if (badge) {
@@ -277,65 +294,68 @@ export class BadgeDirective extends BaseComponent {
     imports: [SharedModule, BindModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [BadgeStyle, { provide: BADGE_INSTANCE, useExisting: Badge }, { provide: PARENT_INSTANCE, useExisting: Badge }],
+    providers: [BadgeStyle, { provide: PARENT_INSTANCE, useExisting: Badge }],
     host: {
-        '[class]': "cn(cx('root'), styleClass())",
+        '[class]': "cx('root')",
         '[style.display]': 'badgeDisabled() ? "none" : null',
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
 export class Badge extends BaseComponent<BadgePassThrough> {
-    componentName = 'Badge';
-
-    $pcBadge: Badge | undefined = inject(BADGE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-    /**
-     * Class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    styleClass = input<string>();
+    _componentStyle = inject(BadgeStyle);
+
     /**
      * Size of the badge, valid options are "large" and "xlarge".
      * @group Props
      */
     badgeSize = input<'small' | 'large' | 'xlarge' | null>();
+
     /**
      * Size of the badge, valid options are "large" and "xlarge".
      * @group Props
      */
     size = input<'small' | 'large' | 'xlarge' | null>();
+
     /**
      * Severity type of the badge.
      * @group Props
      */
     severity = input<BadgeSeverity | null>();
+
     /**
      * Value to display inside the badge.
      * @group Props
      */
     value = input<string | number | null>();
+
     /**
      * When specified, disables the component.
      * @group Props
      */
     badgeDisabled = input<boolean, boolean>(false, { transform: booleanAttribute });
 
-    _componentStyle = inject(BadgeStyle);
+    componentName = 'Badge';
 
-    get dataP() {
-        return this.cn({
+    readonly dataP = computed(() =>
+        this.cn({
             circle: this.value() != null && String(this.value()).length === 1,
             empty: this.value() == null,
             disabled: this.badgeDisabled(),
             [this.severity() as string]: this.severity(),
             [this.size() as string]: this.size()
+        })
+    );
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 }

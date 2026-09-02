@@ -1,14 +1,13 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+    afterEveryRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
     computed,
     ElementRef,
     inject,
-    InjectionToken,
     input,
-    Input,
     NgModule,
     numberAttribute,
     Pipe,
@@ -40,8 +39,6 @@ import { MenuItemTemplateContext, MenuPassThrough, MenuSubmenuHeaderTemplateCont
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { MenuStyle } from './style/menustyle';
 
-const MENU_INSTANCE = new InjectionToken<Menu>('MENU_INSTANCE');
-
 @Pipe({
     name: 'safeHtml',
     standalone: true
@@ -64,64 +61,64 @@ export class SafeHtmlPipe implements PipeTransform {
     selector: '[pMenuItemContent]',
     standalone: true,
     imports: [CommonModule, RouterModule, Ripple, TooltipModule, BadgeModule, SharedModule, SafeHtmlPipe, BindModule],
-    template: ` <div [class]="cx('itemContent')" (click)="onItemClick($event, item)" [attr.data-pc-section]="'content'" [pBind]="getPTOptions('itemContent')">
-        @if (!itemTemplate) {
-            @if (!item?.routerLink) {
+    template: ` <div [class]="cx('itemContent')" (click)="onItemClick($event, item())" [attr.data-pc-section]="'content'" [pBind]="getPTOptions('itemContent')">
+        @if (!itemTemplate()) {
+            @if (!item()?.routerLink) {
                 <a
-                    [attr.title]="item.title"
-                    [attr.href]="item.url || null"
-                    [attr.data-automationid]="item.automationId"
+                    [attr.title]="item()!.title"
+                    [attr.href]="item()!.url || null"
+                    [attr.data-automationid]="item()!.automationId"
                     [attr.tabindex]="-1"
-                    [class]="cn(cx('itemLink'), item?.linkClass)"
-                    [ngStyle]="item?.linkStyle"
-                    [target]="item.target"
+                    [class]="cn(cx('itemLink'), item()?.linkClass)"
+                    [ngStyle]="item()?.linkStyle"
+                    [target]="item()!.target"
                     [pBind]="getPTOptions('itemLink')"
                     pRipple
                 >
-                    <ng-container *ngTemplateOutlet="itemContent; context: { $implicit: item }"></ng-container>
+                    <ng-container *ngTemplateOutlet="itemContent; context: { $implicit: item() }"></ng-container>
                 </a>
             }
-            @if (item?.routerLink) {
+            @if (item()?.routerLink) {
                 <a
-                    [routerLink]="item.routerLink"
-                    [attr.data-automationid]="item.automationId"
+                    [routerLink]="item()!.routerLink"
+                    [attr.data-automationid]="item()!.automationId"
                     [attr.tabindex]="-1"
-                    [attr.title]="item.title"
-                    [queryParams]="item.queryParams"
+                    [attr.title]="item()!.title"
+                    [queryParams]="item()!.queryParams"
                     routerLinkActive="p-menu-item-link-active"
-                    [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
-                    [class]="cn(cx('itemLink'), item?.linkClass)"
-                    [ngStyle]="item?.linkStyle"
-                    [target]="item.target"
-                    [fragment]="item.fragment"
-                    [queryParamsHandling]="item.queryParamsHandling"
-                    [preserveFragment]="item.preserveFragment"
-                    [skipLocationChange]="item.skipLocationChange"
-                    [replaceUrl]="item.replaceUrl"
-                    [state]="item.state"
+                    [routerLinkActiveOptions]="item()!.routerLinkActiveOptions || { exact: false }"
+                    [class]="cn(cx('itemLink'), item()?.linkClass)"
+                    [ngStyle]="item()?.linkStyle"
+                    [target]="item()!.target"
+                    [fragment]="item()!.fragment"
+                    [queryParamsHandling]="item()!.queryParamsHandling"
+                    [preserveFragment]="item()!.preserveFragment"
+                    [skipLocationChange]="item()!.skipLocationChange"
+                    [replaceUrl]="item()!.replaceUrl"
+                    [state]="item()!.state"
                     [pBind]="getPTOptions('itemLink')"
                     pRipple
                 >
-                    <ng-container *ngTemplateOutlet="itemContent; context: { $implicit: item }"></ng-container>
+                    <ng-container *ngTemplateOutlet="itemContent; context: { $implicit: item() }"></ng-container>
                 </a>
             }
         }
 
-        @if (itemTemplate) {
-            <ng-template *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"></ng-template>
+        @if (itemTemplate()) {
+            <ng-template *ngTemplateOutlet="itemTemplate(); context: { $implicit: item() }"></ng-template>
         }
 
         <ng-template #itemContent>
-            @if (item.icon) {
-                <span [class]="cn(cx('itemIcon', { item }), item.iconClass)" [pBind]="getPTOptions('itemIcon')" [ngStyle]="item.iconStyle" [attr.data-pc-section]="'itemicon'"></span>
+            @if (item()!.icon) {
+                <span [class]="cn(cx('itemIcon', { item }), item()!.iconClass)" [pBind]="getPTOptions('itemIcon')" [ngStyle]="item()!.iconStyle" [attr.data-pc-section]="'itemicon'"></span>
             }
-            @if (item.escape !== false) {
-                <span [class]="cn(cx('itemLabel'), item.labelClass)" [ngStyle]="item.labelStyle" [pBind]="getPTOptions('itemLabel')" [attr.data-pc-section]="'itemlabel'">{{ item.label }}</span>
+            @if (item()!.escape !== false) {
+                <span [class]="cn(cx('itemLabel'), item()!.labelClass)" [ngStyle]="item()!.labelStyle" [pBind]="getPTOptions('itemLabel')" [attr.data-pc-section]="'itemlabel'">{{ item()!.label }}</span>
             } @else {
-                <span [class]="cn(cx('itemLabel'), item.labelClass)" [ngStyle]="item.labelStyle" [attr.data-pc-section]="'itemlabel'" [innerHTML]="item.label | safeHtml" [pBind]="getPTOptions('itemLabel')"></span>
+                <span [class]="cn(cx('itemLabel'), item()!.labelClass)" [ngStyle]="item()!.labelStyle" [attr.data-pc-section]="'itemlabel'" [innerHTML]="item()!.label | safeHtml" [pBind]="getPTOptions('itemLabel')"></span>
             }
-            @if (item.badge) {
-                <p-badge [styleClass]="item.badgeStyleClass" [value]="item.badge" [pt]="getPTOptions('pcBadge')" [unstyled]="unstyled()" />
+            @if (item()!.badge) {
+                <p-badge [class]="item()!.badgeStyleClass" [value]="item()!.badge" [pt]="getPTOptions('pcBadge')" [unstyled]="unstyled()" />
             }
         </ng-template>
     </div>`,
@@ -129,9 +126,11 @@ export class SafeHtmlPipe implements PipeTransform {
     providers: [MenuStyle]
 })
 export class MenuItemContent extends BaseComponent {
-    @Input('pMenuItemContent') item: MenuItem | undefined;
+    _componentStyle = inject(MenuStyle);
 
-    @Input() itemTemplate: any | undefined;
+    readonly item = input<MenuItem | undefined>(undefined, { alias: 'pMenuItemContent' });
+
+    readonly itemTemplate = input<any | undefined>();
 
     menuitemId = input<string>('');
 
@@ -140,8 +139,6 @@ export class MenuItemContent extends BaseComponent {
     readonly onMenuItemClick = output<any>();
 
     menu: Menu;
-
-    _componentStyle = inject(MenuStyle);
 
     hostName = 'Menu';
 
@@ -157,7 +154,7 @@ export class MenuItemContent extends BaseComponent {
     }
 
     getPTOptions(key: string) {
-        return this.menu.getPTOptions(key, this.item, this.idx(), this.menuitemId());
+        return this.menu.getPTOptions(key, this.item(), this.idx(), this.menuitemId());
     }
 }
 /**
@@ -169,27 +166,27 @@ export class MenuItemContent extends BaseComponent {
     standalone: true,
     imports: [CommonModule, RouterModule, MenuItemContent, TooltipModule, BadgeModule, SharedModule, SafeHtmlPipe, BindModule, MotionModule],
     template: `
-        @if (!popup || overlayVisible) {
+        @if (!popup() || overlayVisible()) {
             <div
                 #container
-                [class]="cn(cx('root'), styleClass)"
+                [class]="cn(cx('root'), styleClass())"
                 [style]="sx('root')"
-                [ngStyle]="style"
+                [ngStyle]="style()"
                 (click)="onOverlayClick($event)"
-                [attr.id]="id"
+                [attr.id]="$id()"
                 [pBind]="ptm('root')"
                 [attr.data-p]="dataP"
-                [pMotion]="visible || !popup"
+                [pMotion]="visible() || !popup()"
                 [pMotionName]="'p-anchored-overlay'"
-                [pMotionAppear]="!!popup"
-                [pMotionDisabled]="!popup"
+                [pMotionAppear]="!!popup()"
+                [pMotionDisabled]="!popup()"
                 [pMotionOptions]="computedMotionOptions()"
                 (pMotionOnBeforeEnter)="onOverlayBeforeEnter($event)"
                 (pMotionOnAfterLeave)="onOverlayAfterLeave()"
             >
-                @if (startTemplate() ?? _startTemplate) {
+                @if ($startTemplate()) {
                     <div [class]="cx('start')" [pBind]="ptm('start')" [attr.data-pc-section]="'start'">
-                        <ng-container *ngTemplateOutlet="startTemplate() ?? _startTemplate"></ng-container>
+                        <ng-container *ngTemplateOutlet="$startTemplate()"></ng-container>
                     </div>
                 }
                 <ul
@@ -197,18 +194,18 @@ export class MenuItemContent extends BaseComponent {
                     [class]="cx('list')"
                     [pBind]="ptm('list')"
                     role="menu"
-                    [attr.id]="id + '_list'"
+                    [attr.id]="$id() + '_list'"
                     [attr.tabindex]="getTabIndexValue()"
                     [attr.data-pc-section]="'menu'"
                     [attr.aria-activedescendant]="activedescendant()"
-                    [attr.aria-label]="ariaLabel"
-                    [attr.aria-labelledBy]="ariaLabelledBy"
+                    [attr.aria-label]="ariaLabel()"
+                    [attr.aria-labelledBy]="ariaLabelledBy()"
                     (focus)="onListFocus($event)"
                     (blur)="onListBlur($event)"
                     (keydown)="onListKeyDown($event)"
                 >
                     @if (hasSubMenu()) {
-                        @for (submenu of model; track submenu; let i = $index) {
+                        @for (submenu of model(); track submenu; let i = $index) {
                             @if (submenu.visible !== false) {
                                 @if (submenu.separator) {
                                     <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
@@ -221,10 +218,10 @@ export class MenuItemContent extends BaseComponent {
                                         [tooltipOptions]="submenu.tooltipOptions"
                                         [pTooltipUnstyled]="unstyled()"
                                         role="none"
-                                        [attr.id]="menuitemId(submenu, id, i)"
+                                        [attr.id]="menuitemId(submenu, $id(), i)"
                                         [attr.data-pc-section]="'submenulabel'"
                                     >
-                                        @let submenuHeader = submenuHeaderTemplate() ?? _submenuHeaderTemplate;
+                                        @let submenuHeader = $submenuHeaderTemplate();
                                         @if (submenuHeader) {
                                             <ng-container *ngTemplateOutlet="submenuHeader; context: { $implicit: submenu }"></ng-container>
                                         } @else {
@@ -243,62 +240,62 @@ export class MenuItemContent extends BaseComponent {
                                 }
                                 @if (!item.separator && item.visible !== false && (item.visible !== undefined || submenu.visible !== false)) {
                                     <li
-                                        [class]="cn(cx('item', { item, id: menuitemId(item, id, i, j) }), item?.styleClass)"
+                                        [class]="cn(cx('item', { item, id: menuitemId(item, $id(), i, j) }), item?.styleClass)"
                                         [pBind]="ptm('item')"
                                         [pMenuItemContent]="item"
-                                        [itemTemplate]="itemTemplate() ?? _itemTemplate"
+                                        [itemTemplate]="$itemTemplate()"
                                         [idx]="j"
-                                        [menuitemId]="menuitemId(item, id, i, j)"
+                                        [menuitemId]="menuitemId(item, $id(), i, j)"
                                         [style]="item.style"
-                                        (onMenuItemClick)="itemClick($event, menuitemId(item, id, i, j))"
+                                        (onMenuItemClick)="itemClick($event, menuitemId(item, $id(), i, j))"
                                         pTooltip
                                         [tooltipOptions]="item.tooltipOptions"
                                         [pTooltipUnstyled]="unstyled()"
                                         [unstyled]="unstyled()"
                                         role="menuitem"
                                         [attr.aria-label]="label(item.label)"
-                                        [attr.data-p-focused]="isItemFocused(menuitemId(item, id, i, j))"
+                                        [attr.data-p-focused]="isItemFocused(menuitemId(item, $id(), i, j))"
                                         [attr.data-p-disabled]="disabled(item.disabled)"
                                         [attr.aria-disabled]="disabled(item.disabled)"
-                                        [attr.id]="menuitemId(item, id, i, j)"
+                                        [attr.id]="menuitemId(item, $id(), i, j)"
                                     ></li>
                                 }
                             }
                         }
                     }
                     @if (!hasSubMenu()) {
-                        @for (item of model; track item; let i = $index) {
+                        @for (item of model(); track item; let i = $index) {
                             @if (item.separator && item.visible !== false) {
                                 <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
                             }
                             @if (!item.separator && item.visible !== false) {
                                 <li
-                                    [class]="cn(cx('item', { item, id: menuitemId(item, id, i) }), item?.styleClass)"
+                                    [class]="cn(cx('item', { item, id: menuitemId(item, $id(), i) }), item?.styleClass)"
                                     [pBind]="ptm('item')"
                                     [pMenuItemContent]="item"
-                                    [itemTemplate]="itemTemplate() ?? _itemTemplate"
+                                    [itemTemplate]="$itemTemplate()"
                                     [idx]="i"
-                                    [menuitemId]="menuitemId(item, id, i)"
+                                    [menuitemId]="menuitemId(item, $id(), i)"
                                     [ngStyle]="item.style"
-                                    (onMenuItemClick)="itemClick($event, menuitemId(item, id, i))"
+                                    (onMenuItemClick)="itemClick($event, menuitemId(item, $id(), i))"
                                     pTooltip
                                     [tooltipOptions]="item.tooltipOptions"
                                     [unstyled]="unstyled()"
                                     [pTooltipUnstyled]="unstyled()"
                                     role="menuitem"
                                     [attr.aria-label]="label(item.label)"
-                                    [attr.data-p-focused]="isItemFocused(menuitemId(item, id, i))"
+                                    [attr.data-p-focused]="isItemFocused(menuitemId(item, $id(), i))"
                                     [attr.data-p-disabled]="disabled(item.disabled)"
                                     [attr.aria-disabled]="disabled(item.disabled)"
-                                    [attr.id]="menuitemId(item, id, i)"
+                                    [attr.id]="menuitemId(item, $id(), i)"
                                 ></li>
                             }
                         }
                     }
                 </ul>
-                @if (endTemplate() ?? _endTemplate) {
+                @if ($endTemplate()) {
                     <div [class]="cx('end')" [pBind]="ptm('end')" [attr.data-pc-section]="'end'">
-                        <ng-container *ngTemplateOutlet="endTemplate() ?? _endTemplate"></ng-container>
+                        <ng-container *ngTemplateOutlet="$endTemplate()"></ng-container>
                     </div>
                 }
             </div>
@@ -307,111 +304,122 @@ export class MenuItemContent extends BaseComponent {
 
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [MenuStyle, { provide: MENU_INSTANCE, useExisting: Menu }, { provide: PARENT_INSTANCE, useExisting: Menu }],
+    providers: [MenuStyle, { provide: PARENT_INSTANCE, useExisting: Menu }],
     hostDirectives: [Bind]
 })
 export class Menu extends BaseComponent<MenuPassThrough> {
     overlayService = inject(OverlayService);
 
-    componentName = 'Menu';
+    _componentStyle = inject(MenuStyle);
+
+    bindDirectiveInstance = inject(Bind, { self: true });
 
     /**
      * An array of menuitems.
      * @group Props
      */
-    @Input() model: MenuItem[] | undefined;
+    readonly model = input<MenuItem[]>();
+
     /**
      * Defines if menu would displayed as a popup.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) popup: boolean | undefined;
+    readonly popup = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null | undefined>(null);
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Whether to automatically manage layering.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoZIndex: boolean = true;
+    readonly autoZIndex = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * Base zIndex value to use in layering.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) baseZIndex: number = 0;
+    readonly baseZIndex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * Transition options of the show animation.
      * @deprecated since v21.0.0, use `motionOptions` instead.
      * @group Props
      */
-    @Input() showTransitionOptions: string = '.12s cubic-bezier(0, 0, 0.2, 1)';
+    readonly showTransitionOptions = input<string>('.12s cubic-bezier(0, 0, 0.2, 1)');
+
     /**
      * Transition options of the hide animation.
      * @deprecated since v21.0.0, use `motionOptions` instead.
      * @group Props
      */
-    @Input() hideTransitionOptions: string = '.1s linear';
+    readonly hideTransitionOptions = input<string>('.1s linear');
 
     /**
      * Defines a string value that labels an interactive element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Identifier of the underlying input element.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Current id state as a string.
      * @group Props
      */
-    @Input() id: string | undefined;
+    readonly id = input<string>();
+
     /**
      * Index of the element in tabbing order.
      * @group Props
      */
-    @Input({ transform: numberAttribute }) tabindex: number = 0;
+    readonly tabindex = input<number, unknown>(0, { transform: numberAttribute });
+
     /**
      * Target element to attach the overlay, valid values are "body" or a local ng-template variable of another element (note: use binding with brackets for template variables, e.g. [appendTo]="mydiv" for a div element having #mydiv as variable name).
      * @defaultValue 'self'
      * @group Props
      */
     appendTo = input<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>(undefined);
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
      * Callback to invoke when overlay menu is shown.
      * @group Emits
      */
     readonly onShow = output<any>();
+
     /**
      * Callback to invoke when overlay menu is hidden.
      * @group Emits
      */
     readonly onHide = output<any>();
+
     /**
      * Callback to invoke when the list loses focus.
      * @param {Event} event - blur event.
      * @group Emits
      */
     readonly onBlur = output<Event>();
+
     /**
      * Callback to invoke when the list receives focus.
      * @param {Event} event - focus event.
@@ -422,6 +430,45 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     listViewChild = viewChild<ElementRef>('list');
 
     containerViewChild = viewChild<ElementRef>('container');
+
+    /**
+     * Defines template option for start.
+     * @group Templates
+     */
+    readonly startTemplate = contentChild<TemplateRef<void>>('start', { descendants: false });
+
+    /**
+     * Defines template option for end.
+     * @group Templates
+     */
+    readonly endTemplate = contentChild<TemplateRef<void>>('end', { descendants: false });
+
+    /**
+     * Custom item template.
+     * @param {MenuItemTemplateContext} context - item context.
+     * @see {@link MenuItemTemplateContext}
+     * @group Templates
+     */
+    readonly itemTemplate = contentChild<TemplateRef<MenuItemTemplateContext>>('item', { descendants: false });
+
+    /**
+     * Custom submenu header template.
+     * @param {MenuSubmenuHeaderTemplateContext} context - submenu header context.
+     * @see {@link MenuSubmenuHeaderTemplateContext}
+     * @group Templates
+     */
+    readonly submenuHeaderTemplate = contentChild<TemplateRef<MenuSubmenuHeaderTemplateContext>>('submenuheader', { descendants: false });
+
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'Menu';
+
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
 
     $appendTo = computed(() => this.appendTo() || this.config.overlayAppendTo());
 
@@ -437,7 +484,13 @@ export class Menu extends BaseComponent<MenuPassThrough> {
 
     target: any;
 
-    visible: boolean | undefined;
+    private readonly generatedId = uuid('pn_id_');
+
+    /** Effective id: the `id` input, or a generated unique id. */
+    readonly $id = computed(() => this.id() || this.generatedId);
+
+    /** Whether the popup menu is visible (drives the enter/leave animation). */
+    readonly visible = signal<boolean | undefined>(undefined);
 
     focusedOptionId = computed(() => {
         return this.focusedOptionIndex() !== -1 ? this.focusedOptionIndex() : null;
@@ -447,23 +500,92 @@ export class Menu extends BaseComponent<MenuPassThrough> {
 
     public selectedOptionIndex: any = signal<any>(-1);
 
-    public focused: boolean | undefined = false;
+    readonly focused = signal<boolean>(false);
 
-    public overlayVisible: boolean | undefined = false;
+    /** Whether the popup overlay element is rendered; stays on until the leave animation finishes. */
+    readonly overlayVisible = signal<boolean>(false);
 
-    $pcMenu: Menu | undefined = inject(MENU_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
+    /** Effective start template: the `#start` content child, or the `pTemplate="start"`. */
+    readonly $startTemplate = computed(
+        () =>
+            this.startTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'start')
+                .at(-1)?.template
+    );
 
-    _componentStyle = inject(MenuStyle);
+    /** Effective end template: the `#end` content child, or the `pTemplate="end"`. */
+    readonly $endTemplate = computed(
+        () =>
+            this.endTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'end')
+                .at(-1)?.template
+    );
 
-    bindDirectiveInstance = inject(Bind, { self: true });
+    /**
+     * Effective item template: the `#item` content child, or (legacy behavior) the last projected
+     * pTemplate that is neither `start`, `end` nor `submenuheader`.
+     */
+    readonly $itemTemplate = computed(
+        () =>
+            this.itemTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() !== 'start' && item.getType() !== 'end' && item.getType() !== 'submenuheader')
+                .at(-1)?.template as TemplateRef<MenuItemTemplateContext> | undefined)
+    );
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm('host'));
+    /** Effective submenu header template: the `#submenuheader` content child, or the `pTemplate="submenuheader"`. */
+    readonly $submenuHeaderTemplate = computed(
+        () =>
+            this.submenuHeaderTemplate() ??
+            (this.templates()
+                .filter((item) => item.getType() === 'submenuheader')
+                .at(-1)?.template as TemplateRef<MenuSubmenuHeaderTemplateContext> | undefined)
+    );
+
+    get dataP() {
+        return this.cn({
+            popup: this.popup()
+        });
     }
 
     constructor() {
         super();
-        this.id = this.id || uuid('pn_id_');
+        // Re-apply the host pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('host'));
+        });
+    }
+
+    onInit() {
+        if (!this.popup()) {
+            this.bindDocumentClickListener();
+        }
+    }
+
+    onDestroy() {
+        if (this.popup()) {
+            if (this.scrollHandler) {
+                this.scrollHandler.destroy();
+                this.scrollHandler = null;
+            }
+
+            if (this.container) {
+                if (this.autoZIndex()) {
+                    ZIndexUtils.clear(this.container);
+                }
+                this.container = undefined;
+            }
+
+            this.restoreOverlayAppend();
+            this.onOverlayHide();
+        }
+
+        if (!this.popup()) {
+            this.unbindDocumentClickListener();
+        }
     }
 
     getPTOptions(key: string, item: any, index: number, id: string) {
@@ -476,17 +598,19 @@ export class Menu extends BaseComponent<MenuPassThrough> {
             }
         });
     }
+
     /**
      * Toggles the visibility of the popup menu.
      * @param {Event} event - Browser event.
      * @group Method
      */
     public toggle(event: Event) {
-        if (this.visible) this.hide();
+        if (this.visible()) this.hide();
         else this.show(event);
 
         this.preventDocumentDefault = true;
     }
+
     /**
      * Displays the popup menu.
      * @param {Event} event - Browser event.
@@ -494,85 +618,19 @@ export class Menu extends BaseComponent<MenuPassThrough> {
      */
     public show(event: any) {
         // Clear container if exists but overlay is not currently visible (fast toggle case)
-        if (this.container && !this.overlayVisible) {
+        if (this.container && !this.overlayVisible()) {
             this.container = undefined;
         }
 
         this.target = event.currentTarget;
-        this.visible = true;
+        this.visible.set(true);
         this.preventDocumentDefault = true;
-        this.overlayVisible = true;
+        this.overlayVisible.set(true);
         this.cd.markForCheck();
     }
 
-    onInit() {
-        if (!this.popup) {
-            this.bindDocumentClickListener();
-        }
-    }
-
-    /**
-     * Defines template option for start.
-     * @group Templates
-     */
-    readonly startTemplate = contentChild<TemplateRef<void>>('start', { descendants: false });
-    _startTemplate: TemplateRef<void> | undefined;
-
-    /**
-     * Defines template option for end.
-     * @group Templates
-     */
-    readonly endTemplate = contentChild<TemplateRef<void>>('end', { descendants: false });
-    _endTemplate: TemplateRef<void> | undefined;
-
-    /**
-     * Custom item template.
-     * @param {MenuItemTemplateContext} context - item context.
-     * @see {@link MenuItemTemplateContext}
-     * @group Templates
-     */
-    readonly itemTemplate = contentChild<TemplateRef<MenuItemTemplateContext>>('item', { descendants: false });
-    _itemTemplate: TemplateRef<MenuItemTemplateContext> | undefined;
-
-    /**
-     * Custom submenu header template.
-     * @param {MenuSubmenuHeaderTemplateContext} context - submenu header context.
-     * @see {@link MenuSubmenuHeaderTemplateContext}
-     * @group Templates
-     */
-    readonly submenuHeaderTemplate = contentChild<TemplateRef<MenuSubmenuHeaderTemplateContext>>('submenuheader', { descendants: false });
-    _submenuHeaderTemplate: TemplateRef<MenuSubmenuHeaderTemplateContext> | undefined;
-
-    readonly templates = contentChildren(PrimeTemplate);
-
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'start':
-                    this._startTemplate = item.template;
-                    break;
-
-                case 'end':
-                    this._endTemplate = item.template;
-                    break;
-
-                case 'item':
-                    this._itemTemplate = item.template;
-                    break;
-
-                case 'submenuheader':
-                    this._submenuHeaderTemplate = item.template;
-                    break;
-
-                default:
-                    this._itemTemplate = item.template;
-                    break;
-            }
-        });
-    }
-
     getTabIndexValue(): string | null {
-        return this.tabindex !== undefined ? this.tabindex.toString() : null;
+        return this.tabindex() !== undefined ? this.tabindex().toString() : null;
     }
 
     onOverlayBeforeEnter(event: MotionEvent) {
@@ -596,7 +654,7 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     onOverlayAfterLeave() {
         this.restoreOverlayAppend();
         this.onOverlayHide();
-        this.overlayVisible = false;
+        this.overlayVisible.set(false);
         this.onHide.emit({});
     }
 
@@ -617,22 +675,23 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     }
 
     moveOnTop() {
-        if (this.autoZIndex) {
-            ZIndexUtils.set('menu', this.container, this.baseZIndex + this.config.zIndex.menu);
+        if (this.autoZIndex()) {
+            ZIndexUtils.set('menu', this.container, this.baseZIndex() + this.config.zIndex.menu);
         }
     }
+
     /**
      * Hides the popup menu.
      * @group Method
      */
     public hide() {
-        this.visible = false;
+        this.visible.set(false);
 
         this.cd.markForCheck();
     }
 
     onWindowResize() {
-        if (this.visible && !isTouchDevice()) {
+        if (this.visible() && !isTouchDevice()) {
             this.hide();
         }
     }
@@ -654,20 +713,20 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     }
 
     activedescendant() {
-        return this.focused ? this.focusedOptionId() : undefined;
+        return this.focused() ? this.focusedOptionId() : undefined;
     }
 
     onListFocus(event: Event) {
-        if (!this.focused) {
-            this.focused = true;
-            !this.popup && this.changeFocusedOptionIndex(0);
+        if (!this.focused()) {
+            this.focused.set(true);
+            !this.popup() && this.changeFocusedOptionIndex(0);
             this.onFocus.emit(event);
         }
     }
 
     onListBlur(event: FocusEvent | MouseEvent) {
-        if (this.focused) {
-            this.focused = false;
+        if (this.focused()) {
+            this.focused.set(false);
             this.changeFocusedOptionIndex(-1);
             this.selectedOptionIndex.set(-1);
             this.focusedOptionIndex.set(-1);
@@ -707,11 +766,11 @@ export class Menu extends BaseComponent<MenuPassThrough> {
 
             case 'Escape':
             case 'Tab':
-                if (this.popup) {
+                if (this.popup()) {
                     focus(this.target);
                     this.hide();
                 }
-                this.overlayVisible && this.hide();
+                this.overlayVisible() && this.hide();
                 break;
 
             default:
@@ -726,7 +785,7 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     }
 
     onArrowUpKey(event) {
-        if (event.altKey && this.popup) {
+        if (event.altKey && this.popup()) {
             focus(this.target);
             this.hide();
             event.preventDefault();
@@ -752,7 +811,7 @@ export class Menu extends BaseComponent<MenuPassThrough> {
         const element = <any>findSingle(this.containerViewChild()?.nativeElement, `li[id="${`${this.focusedOptionIndex()}`}"]`);
         const anchorElement = element && (<any>findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button'));
 
-        this.popup && focus(this.target);
+        this.popup() && focus(this.target);
         anchorElement ? anchorElement.click() : element && element.click();
 
         event.preventDefault();
@@ -787,8 +846,8 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     itemClick(event: any, id: string) {
         const { originalEvent, item } = event;
 
-        if (!this.focused) {
-            this.focused = true;
+        if (!this.focused()) {
+            this.focused.set(true);
             this.onFocus.emit(originalEvent);
         }
 
@@ -808,17 +867,17 @@ export class Menu extends BaseComponent<MenuPassThrough> {
             });
         }
 
-        if (this.popup) {
+        if (this.popup()) {
             this.hide();
         }
 
-        if (!this.popup && this.focusedOptionIndex() !== id) {
+        if (!this.popup() && this.focusedOptionIndex() !== id) {
             this.focusedOptionIndex.set(id);
         }
     }
 
     onOverlayClick(event: Event) {
-        if (this.popup) {
+        if (this.popup()) {
             this.overlayService.add({
                 originalEvent: event,
                 target: this.el.nativeElement
@@ -835,10 +894,10 @@ export class Menu extends BaseComponent<MenuPassThrough> {
             this.documentClickListener = this.renderer.listen(documentTarget, 'click', (event) => {
                 const isOutsideContainer = this.containerViewChild()?.nativeElement && !this.containerViewChild()?.nativeElement.contains(event.target);
                 const isOutsideTarget = !(this.target && (this.target === event.target || this.target.contains(event.target)));
-                if (!this.popup && isOutsideContainer && isOutsideTarget) {
+                if (!this.popup() && isOutsideContainer && isOutsideTarget) {
                     this.onListBlur(event);
                 }
-                if (this.preventDocumentDefault && this.overlayVisible && isOutsideContainer && isOutsideTarget) {
+                if (this.preventDocumentDefault && this.overlayVisible() && isOutsideContainer && isOutsideTarget) {
                     this.hide();
                     this.preventDocumentDefault = false;
                 }
@@ -870,7 +929,7 @@ export class Menu extends BaseComponent<MenuPassThrough> {
     bindScrollListener() {
         if (!this.scrollHandler && isPlatformBrowser(this.platformId)) {
             this.scrollHandler = new ConnectedOverlayScrollHandler(this.target, () => {
-                if (this.visible) {
+                if (this.visible()) {
                     this.hide();
                 }
             });
@@ -896,38 +955,15 @@ export class Menu extends BaseComponent<MenuPassThrough> {
             this.target = null;
         }
         if (this.container) {
-            if (this.autoZIndex) {
+            if (this.autoZIndex()) {
                 ZIndexUtils.clear(this.container);
             }
             this.container = undefined;
         }
     }
 
-    onDestroy() {
-        if (this.popup) {
-            if (this.scrollHandler) {
-                this.scrollHandler.destroy();
-                this.scrollHandler = null;
-            }
-
-            if (this.container) {
-                if (this.autoZIndex) {
-                    ZIndexUtils.clear(this.container);
-                }
-                this.container = undefined;
-            }
-
-            this.restoreOverlayAppend();
-            this.onOverlayHide();
-        }
-
-        if (!this.popup) {
-            this.unbindDocumentClickListener();
-        }
-    }
-
     hasSubMenu(): boolean {
-        return this.model?.some((item) => item.items) ?? false;
+        return this.model()?.some((item) => item.items) ?? false;
     }
 
     isItemHidden(item: any): boolean {
@@ -935,12 +971,6 @@ export class Menu extends BaseComponent<MenuPassThrough> {
             return item.visible === false || (item.items && item.items.some((subitem) => subitem.visible !== false));
         }
         return item.visible === false;
-    }
-
-    get dataP() {
-        return this.cn({
-            popup: this.popup
-        });
     }
 }
 
