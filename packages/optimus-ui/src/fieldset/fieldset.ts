@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, inject, InjectionToken, input, Input, NgModule, TemplateRef, ViewEncapsulation, viewChild, contentChild, contentChildren, output } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, model, NgModule, TemplateRef, ViewEncapsulation, viewChild, contentChild, contentChildren, output } from '@angular/core';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
 import { uuid } from '@openng/optimus-ui-utils';
 import { BlockableUI, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
@@ -10,8 +10,6 @@ import { MotionModule } from '@openng/optimus-ui/motion';
 import type { FieldsetAfterToggleEvent, FieldsetBeforeToggleEvent, FieldsetPassThrough } from '@openng/optimus-ui/types/fieldset';
 import { FieldsetStyle } from './style/fieldsetstyle';
 
-const FIELDSET_INSTANCE = new InjectionToken<Fieldset>('FIELDSET_INSTANCE');
-
 /**
  * Fieldset is a grouping component with the optional content toggle feature.
  * @group Components
@@ -21,72 +19,72 @@ const FIELDSET_INSTANCE = new InjectionToken<Fieldset>('FIELDSET_INSTANCE');
     standalone: true,
     imports: [CommonModule, MinusIcon, PlusIcon, SharedModule, BindModule, MotionModule],
     template: `
-        <fieldset [attr.id]="id" [ngStyle]="style" [class]="cn(cx('root'), styleClass)" [pBind]="ptm('root')" [attr.data-p]="dataP">
-            <legend [class]="cx('legend')" [pBind]="ptm('legend')" [attr.data-p]="dataP">
-                @if (toggleable) {
+        <fieldset [attr.id]="id" [ngStyle]="style()" [class]="cn(cx('root'), styleClass())" [pBind]="ptm('root')" [attr.data-p]="dataP()">
+            <legend [class]="cx('legend')" [pBind]="ptm('legend')" [attr.data-p]="dataP()">
+                @if (toggleable()) {
                     <button
                         [attr.id]="id + '_header'"
                         tabindex="0"
                         role="button"
                         [attr.aria-controls]="id + '_content'"
-                        [attr.aria-expanded]="!collapsed"
+                        [attr.aria-expanded]="!collapsed()"
                         [attr.aria-label]="buttonAriaLabel"
                         (click)="toggle($event)"
                         (keydown)="onKeyDown($event)"
                         [class]="cx('toggleButton')"
                         [pBind]="ptm('toggleButton')"
                     >
-                        @if (collapsed) {
-                            @if (!expandIconTemplate() && !_expandIconTemplate) {
+                        @if (collapsed()) {
+                            @if (!$expandIconTemplate()) {
                                 <svg data-p-icon="plus" [class]="cx('toggleIcon')" [pBind]="ptm('toggleIcon')" />
                             }
-                            @if (expandIconTemplate() || _expandIconTemplate) {
+                            @if ($expandIconTemplate()) {
                                 <span [class]="cx('toggleIcon')" [pBind]="ptm('toggleIcon')">
-                                    <ng-container *ngTemplateOutlet="expandIconTemplate() || _expandIconTemplate"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$expandIconTemplate()"></ng-container>
                                 </span>
                             }
                         }
-                        @if (!collapsed) {
-                            @if (!collapseIconTemplate() && !_collapseIconTemplate) {
+                        @if (!collapsed()) {
+                            @if (!$collapseIconTemplate()) {
                                 <svg data-p-icon="minus" [class]="cx('toggleIcon')" [attr.aria-hidden]="true" [pBind]="ptm('toggleIcon')" />
                             }
-                            @if (collapseIconTemplate() || _collapseIconTemplate) {
+                            @if ($collapseIconTemplate()) {
                                 <span [class]="cx('toggleIcon')" [pBind]="ptm('toggleIcon')">
-                                    <ng-container *ngTemplateOutlet="collapseIconTemplate() || _collapseIconTemplate"></ng-container>
+                                    <ng-container *ngTemplateOutlet="$collapseIconTemplate()"></ng-container>
                                 </span>
                             }
                         }
                         <ng-container *ngTemplateOutlet="legendContent"></ng-container>
                     </button>
                 } @else {
-                    <span [class]="cx('legendLabel')" [pBind]="ptm('legendLabel')">{{ legend }}</span>
+                    <span [class]="cx('legendLabel')" [pBind]="ptm('legendLabel')">{{ legend() }}</span>
                     <ng-content select="p-header"></ng-content>
-                    <ng-container *ngTemplateOutlet="headerTemplate() || _headerTemplate"></ng-container>
+                    <ng-container *ngTemplateOutlet="$headerTemplate()"></ng-container>
                 }
                 <ng-template #legendContent>
-                    <span [class]="cx('legendLabel')" [pBind]="ptm('legendLabel')">{{ legend }}</span>
+                    <span [class]="cx('legendLabel')" [pBind]="ptm('legendLabel')">{{ legend() }}</span>
                     <ng-content select="p-header"></ng-content>
-                    <ng-container *ngTemplateOutlet="headerTemplate() || _headerTemplate"></ng-container>
+                    <ng-container *ngTemplateOutlet="$headerTemplate()"></ng-container>
                 </ng-template>
             </legend>
             <div
                 [pBind]="ptm('contentContainer')"
-                [pMotion]="!toggleable || (toggleable && !collapsed)"
+                [pMotion]="!toggleable() || (toggleable() && !collapsed())"
                 pMotionName="p-collapsible"
                 [pMotionOptions]="computedMotionOptions()"
                 [class]="cx('contentContainer')"
                 [id]="id + '_content'"
                 role="region"
                 [attr.aria-labelledby]="id + '_header'"
-                [attr.aria-hidden]="collapsed"
-                [attr.tabindex]="collapsed ? '-1' : undefined"
+                [attr.aria-hidden]="collapsed()"
+                [attr.tabindex]="collapsed() ? '-1' : undefined"
                 (pMotionOnAfterEnter)="onToggleDone($event)"
                 (pMotionOnAfterLeave)="onToggleDone($event)"
             >
                 <div [pBind]="ptm('contentWrapper')" [class]="cx('contentWrapper')">
                     <div [class]="cx('content')" [pBind]="ptm('content')" #contentWrapper>
                         <ng-content></ng-content>
-                        <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate"></ng-container>
+                        <ng-container *ngTemplateOutlet="$contentTemplate()"></ng-container>
                     </div>
                 </div>
             </div>
@@ -94,79 +92,65 @@ const FIELDSET_INSTANCE = new InjectionToken<Fieldset>('FIELDSET_INSTANCE');
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [FieldsetStyle, { provide: FIELDSET_INSTANCE, useExisting: Fieldset }, { provide: PARENT_INSTANCE, useExisting: Fieldset }],
+    providers: [FieldsetStyle, { provide: PARENT_INSTANCE, useExisting: Fieldset }],
     hostDirectives: [Bind]
 })
 export class Fieldset extends BaseComponent<FieldsetPassThrough> implements BlockableUI {
-    componentName = 'Fieldset';
-
-    $pcFieldset: Fieldset | undefined = inject(FIELDSET_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     _componentStyle = inject(FieldsetStyle);
 
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm('host'));
-    }
-
-    get dataP() {
-        return this.cn({
-            toggleable: this.toggleable
-        });
-    }
 
     /**
      * Header text of the fieldset.
      * @group Props
      */
-    @Input() legend: string | undefined;
+    readonly legend = input<string>();
+
     /**
      * When specified, content can toggled by clicking the legend.
      * @group Props
      * @defaultValue false
      */
-    @Input({ transform: booleanAttribute }) toggleable: boolean | undefined;
+    readonly toggleable = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Inline style of the component.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null>();
+
     /**
      * Style class of the component.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Transition options of the panel animation.
      * @group Props
      * @deprecated since v21.0.0, use `motionOptions` instead.
      */
-    @Input() transitionOptions: string = '400ms cubic-bezier(0.86, 0, 0.07, 1)';
+    readonly transitionOptions = input<string>('400ms cubic-bezier(0.86, 0, 0.07, 1)');
+
     /**
      * The motion options.
      * @group Props
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
-    computedMotionOptions = computed<MotionOptions>(() => {
-        return {
-            ...this.ptm('motion'),
-            ...this.motionOptions()
-        };
-    });
     /**
-     * Emits when the collapsed state changes.
-     * @param {boolean} value - New value.
-     * @group Emits
+     * Defines the initial state of content, supports one or two-way binding as well.
+     * @group Props
      */
-    readonly collapsedChange = output<boolean>();
+    readonly collapsed = model<boolean | undefined>();
+
     /**
      * Callback to invoke before panel toggle.
      * @param {PanelBeforeToggleEvent} event - Custom toggle event
      * @group Emits
      */
     readonly onBeforeToggle = output<FieldsetBeforeToggleEvent>();
+
     /**
      * Callback to invoke after panel toggle.
      * @param {PanelAfterToggleEvent} event - Custom toggle event
@@ -175,33 +159,6 @@ export class Fieldset extends BaseComponent<FieldsetPassThrough> implements Bloc
     readonly onAfterToggle = output<FieldsetAfterToggleEvent>();
 
     readonly contentWrapperViewChild = viewChild.required<ElementRef>('contentWrapper');
-
-    private _id: string = uuid('pn_id_');
-
-    get id() {
-        return this._id;
-    }
-
-    get buttonAriaLabel() {
-        return this.legend;
-    }
-
-    /**
-     * Internal collapsed state
-     */
-    _collapsed: boolean | undefined;
-
-    /**
-     * Defines the initial state of content, supports one or two-way binding as well.
-     * @group Props
-     */
-    @Input({ transform: booleanAttribute })
-    get collapsed(): boolean | undefined {
-        return this._collapsed;
-    }
-    set collapsed(value: boolean | undefined) {
-        this._collapsed = value;
-    }
 
     /**
      * Custom header template.
@@ -227,10 +184,59 @@ export class Fieldset extends BaseComponent<FieldsetPassThrough> implements Bloc
      */
     readonly contentTemplate = contentChild<TemplateRef<void>>('content', { descendants: false });
 
-    toggle(event: MouseEvent) {
-        this.onBeforeToggle.emit({ originalEvent: event, collapsed: this.collapsed });
+    readonly templates = contentChildren(PrimeTemplate);
 
-        if (this.collapsed) this.expand();
+    componentName = 'Fieldset';
+
+    readonly dataP = computed(() =>
+        this.cn({
+            toggleable: this.toggleable()
+        })
+    );
+
+    computedMotionOptions = computed<MotionOptions>(() => {
+        return {
+            ...this.ptm('motion'),
+            ...this.motionOptions()
+        };
+    });
+
+    private _id: string = uuid('pn_id_');
+
+    get id() {
+        return this._id;
+    }
+
+    get buttonAriaLabel() {
+        return this.legend();
+    }
+
+    /** Effective header template: the \`#header\` content child, or a legacy \`pTemplate="header"\`. */
+    readonly $headerTemplate = computed(() => this.headerTemplate() ?? this.templates().find((item) => item.getType() === 'header')?.template);
+
+    /** Effective expand icon template: the \`#expandicon\` content child, or a legacy \`pTemplate="expandicon"\`. */
+    readonly $expandIconTemplate = computed(() => this.expandIconTemplate() ?? this.templates().find((item) => item.getType() === 'expandicon')?.template);
+
+    /** Effective collapse icon template: the \`#collapseicon\` content child, or a legacy \`pTemplate="collapseicon"\`. */
+    readonly $collapseIconTemplate = computed(() => this.collapseIconTemplate() ?? this.templates().find((item) => item.getType() === 'collapseicon')?.template);
+
+    /** Effective content template: the \`#content\` content child, or a legacy \`pTemplate="content"\`. */
+    readonly $contentTemplate = computed(() => this.contentTemplate() ?? this.templates().find((item) => item.getType() === 'content')?.template);
+
+    constructor() {
+        super();
+        // Re-apply the host pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('host'));
+        });
+    }
+
+    toggle(event: MouseEvent) {
+        this.onBeforeToggle.emit({ originalEvent: event, collapsed: this.collapsed() });
+
+        if (this.collapsed()) this.expand();
         else this.collapse();
 
         event.preventDefault();
@@ -244,14 +250,12 @@ export class Fieldset extends BaseComponent<FieldsetPassThrough> implements Bloc
     }
 
     expand() {
-        this._collapsed = false;
-        this.collapsedChange.emit(false);
+        this.collapsed.set(false);
         this.updateTabIndex();
     }
 
     collapse() {
-        this._collapsed = true;
-        this.collapsedChange.emit(true);
+        this.collapsed.set(true);
         this.updateTabIndex();
     }
 
@@ -262,7 +266,7 @@ export class Fieldset extends BaseComponent<FieldsetPassThrough> implements Bloc
     updateTabIndex() {
         const focusableElements = this.contentWrapperViewChild().nativeElement.querySelectorAll('input, button, select, a, textarea, [tabindex]');
         focusableElements.forEach((element: HTMLElement) => {
-            if (this.collapsed) {
+            if (this.collapsed()) {
                 element.setAttribute('tabindex', '-1');
             } else {
                 element.removeAttribute('tabindex');
@@ -271,39 +275,7 @@ export class Fieldset extends BaseComponent<FieldsetPassThrough> implements Bloc
     }
 
     onToggleDone(event: MotionEvent) {
-        this.onAfterToggle.emit({ originalEvent: event as any, collapsed: this.collapsed });
-    }
-
-    _headerTemplate: TemplateRef<void> | undefined;
-
-    _expandIconTemplate: TemplateRef<void> | undefined;
-
-    _collapseIconTemplate: TemplateRef<void> | undefined;
-
-    _contentTemplate: TemplateRef<void> | undefined;
-
-    readonly templates = contentChildren(PrimeTemplate);
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'header':
-                    this._headerTemplate = item.template;
-                    break;
-
-                case 'expandicon':
-                    this._expandIconTemplate = item.template;
-                    break;
-
-                case 'collapseicon':
-                    this._collapseIconTemplate = item.template;
-                    break;
-
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-            }
-        });
+        this.onAfterToggle.emit({ originalEvent: event as any, collapsed: this.collapsed() });
     }
 }
 

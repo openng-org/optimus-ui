@@ -119,12 +119,12 @@ describe('Fieldset', () => {
             const directFieldset = TestBed.createComponent(Fieldset);
             const instance = directFieldset.componentInstance;
 
-            expect(instance.legend).toBeUndefined();
-            expect(instance.toggleable).toBeUndefined();
-            expect(instance.collapsed).toBeFalsy(); // In zoneless, default value might be undefined which is falsy
-            expect(instance.style).toBeUndefined();
-            expect(instance.styleClass).toBeUndefined();
-            expect(instance.transitionOptions).toBe('400ms cubic-bezier(0.86, 0, 0.07, 1)');
+            expect(instance.legend()).toBeUndefined();
+            expect(instance.toggleable()).toBeUndefined();
+            expect(instance.collapsed()).toBeFalsy(); // In zoneless, default value might be undefined which is falsy
+            expect(instance.style()).toBeUndefined();
+            expect(instance.styleClass()).toBeUndefined();
+            expect(instance.transitionOptions()).toBe('400ms cubic-bezier(0.86, 0, 0.07, 1)');
         });
 
         it('should accept custom values', async () => {
@@ -137,12 +137,12 @@ describe('Fieldset', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(fieldset.legend).toBe('Custom Legend');
-            expect(fieldset.toggleable).toBe(true);
-            expect(fieldset.collapsed).toBe(true);
-            expect(fieldset.style).toEqual({ backgroundColor: 'red' });
-            expect(fieldset.styleClass).toBe('custom-fieldset');
-            expect(fieldset.transitionOptions).toBe('200ms ease-in');
+            expect(fieldset.legend()).toBe('Custom Legend');
+            expect(fieldset.toggleable()).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
+            expect(fieldset.style()).toEqual({ backgroundColor: 'red' });
+            expect(fieldset.styleClass()).toBe('custom-fieldset');
+            expect(fieldset.transitionOptions()).toBe('200ms ease-in');
         });
 
         it('should generate unique ID', () => {
@@ -190,16 +190,16 @@ describe('Fieldset', () => {
             const fieldsetElement = fixture.debugElement.query(By.css('fieldset'));
 
             // Check that fieldset component received the style input
-            expect(fieldset.style).toEqual({ border: '2px solid red', padding: '10px' });
+            expect(fieldset.style()).toEqual({ border: '2px solid red', padding: '10px' });
 
             // Manually apply styles to test the style binding works as expected
             // This simulates what ngStyle directive would do in a real browser
             const element = fieldsetElement.nativeElement;
 
             // In testing environment, we simulate the ngStyle behavior
-            if (fieldset.style) {
-                Object.keys(fieldset.style).forEach((key) => {
-                    element.style[key] = fieldset.style![key];
+            if (fieldset.style()) {
+                Object.keys(fieldset.style()!).forEach((key) => {
+                    element.style[key] = fieldset.style()![key];
                 });
             }
 
@@ -208,9 +208,9 @@ describe('Fieldset', () => {
             expect(element.style.padding).toBe('10px');
 
             // Also verify the template binding
-            expect(fieldset.style).toBeTruthy();
-            expect(Object.keys(fieldset.style!)).toContain('border');
-            expect(Object.keys(fieldset.style!)).toContain('padding');
+            expect(fieldset.style()).toBeTruthy();
+            expect(Object.keys(fieldset.style()!)).toContain('border');
+            expect(Object.keys(fieldset.style()!)).toContain('padding');
         });
 
         it('should apply custom CSS classes', async () => {
@@ -246,7 +246,7 @@ describe('Fieldset', () => {
             toggleButton.nativeElement.click();
             await fixture.whenStable();
 
-            expect(fieldset.collapsed).toBe(false);
+            expect(fieldset.collapsed()).toBe(false);
         });
 
         it('should collapse fieldset when clicked again', async () => {
@@ -258,7 +258,7 @@ describe('Fieldset', () => {
             toggleButton.nativeElement.click();
             await fixture.whenStable();
 
-            expect(fieldset.collapsed).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
         });
 
         it('should show correct icon when collapsed', async () => {
@@ -322,31 +322,31 @@ describe('Fieldset', () => {
         });
 
         it('should expand programmatically', async () => {
-            fieldset.collapsed = true;
+            fieldset.collapsed.set(true);
 
             fieldset.expand();
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
 
-            expect(fieldset.collapsed).toBe(false);
+            expect(fieldset.collapsed()).toBe(false);
             expect(component.collapsedChangeEvent).toBe(false);
         });
 
         it('should collapse programmatically', async () => {
-            fieldset.collapsed = false;
+            fieldset.collapsed.set(false);
 
             fieldset.collapse();
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
 
-            expect(fieldset.collapsed).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
             expect(component.collapsedChangeEvent).toBe(true);
         });
 
         it('should toggle programmatically', async () => {
-            fieldset.collapsed = false;
+            fieldset.collapsed.set(false);
             const event = new MouseEvent('click');
 
             fieldset.toggle(event);
@@ -354,7 +354,7 @@ describe('Fieldset', () => {
             await fixture.whenStable();
 
             // Verify toggle state changed
-            expect(fieldset.collapsed).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
             expect(component.beforeToggleEvent).toBeTruthy();
             // Note: onAfterToggle is triggered by p-motion directive's pMotionOnAfterEnter event
             // which requires actual animation to complete. Testing the collapsed state and beforeToggle is sufficient.
@@ -495,7 +495,7 @@ describe('Fieldset', () => {
             // Check if toggle button exists and fieldset is toggleable
             const toggleButton = templateFixture.debugElement.query(By.css('button[role="button"]'));
             expect(toggleButton).toBeTruthy();
-            expect(fieldsetInstance.toggleable).toBe(true);
+            expect(fieldsetInstance.toggleable()).toBe(true);
         });
 
         it('should render custom collapse icon template', () => {
@@ -646,7 +646,7 @@ describe('Fieldset', () => {
             await fixture.whenStable();
 
             // Check that component received the style object
-            expect(fieldset.style).toEqual({
+            expect(fieldset.style()).toEqual({
                 backgroundColor: 'blue',
                 border: '1px solid red',
                 padding: '20px',
@@ -656,14 +656,15 @@ describe('Fieldset', () => {
         });
 
         it('should handle boolean attribute transforms', async () => {
-            // Test with string 'true'
+            // Test with string 'true' — `collapsed` is a model() now and no longer coerces
+            // attribute strings, so it is exercised with a real boolean.
             component.toggleable = 'true' as any;
-            component.collapsed = 'false' as any;
+            component.collapsed = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(fieldset.toggleable).toBe(true);
-            expect(fieldset.collapsed).toBe(false);
+            expect(fieldset.toggleable()).toBe(true);
+            expect(fieldset.collapsed()).toBe(false);
         });
 
         it('should handle 0ms transition options', async () => {
@@ -675,7 +676,7 @@ describe('Fieldset', () => {
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
             toggleButton.nativeElement.click();
 
-            expect(fieldset.collapsed).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
         });
 
         it('should prevent event default in toggle', async () => {
@@ -706,13 +707,13 @@ describe('Fieldset', () => {
             await fixture.whenStable();
 
             // Check that animation parameters are passed correctly
-            expect(fieldset.transitionOptions).toBe('500ms ease-in-out');
+            expect(fieldset.transitionOptions()).toBe('500ms ease-in-out');
 
             const toggleButton = fixture.debugElement.query(By.css('button[role="button"]'));
             toggleButton.nativeElement.click();
             await fixture.whenStable();
 
-            expect(fieldset.collapsed).toBe(true);
+            expect(fieldset.collapsed()).toBe(true);
         });
     });
 
@@ -913,7 +914,7 @@ describe('Fieldset', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.toggleable ? 'TOGGLEABLE_CLASS' : ''
+                            class: instance.toggleable() ? 'TOGGLEABLE_CLASS' : ''
                         };
                     }
                 });
@@ -930,7 +931,7 @@ describe('Fieldset', () => {
                     content: ({ instance }) => {
                         return {
                             style: {
-                                'border-color': instance.collapsed ? 'yellow' : 'red'
+                                'border-color': instance.collapsed() ? 'yellow' : 'red'
                             }
                         };
                     }
@@ -947,7 +948,7 @@ describe('Fieldset', () => {
                 ptFixture.componentRef.setInput('pt', {
                     legendLabel: ({ instance }) => {
                         return {
-                            class: instance.legend ? 'HAS_LEGEND' : ''
+                            class: instance.legend() ? 'HAS_LEGEND' : ''
                         };
                     }
                 });
@@ -964,7 +965,7 @@ describe('Fieldset', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.toggleable && !instance.collapsed ? 'EXPANDED_TOGGLEABLE' : ''
+                            class: instance.toggleable() && !instance.collapsed() ? 'EXPANDED_TOGGLEABLE' : ''
                         };
                     }
                 });
@@ -1018,7 +1019,7 @@ describe('Fieldset', () => {
                     root: ({ instance }) => {
                         return {
                             onclick: () => {
-                                instanceLegend = instance.legend || '';
+                                instanceLegend = instance.legend() || '';
                             }
                         };
                     }
