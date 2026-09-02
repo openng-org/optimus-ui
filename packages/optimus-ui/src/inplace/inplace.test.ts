@@ -137,7 +137,7 @@ class TestInplaceActiveStateComponent {
     standalone: false,
     selector: 'test-inplace-style-class',
     template: `
-        <p-inplace [styleClass]="styleClass">
+        <p-inplace [class]="styleClass">
             <p-inplacedisplay>
                 <span class="style-display">Style class test</span>
             </p-inplacedisplay>
@@ -318,13 +318,12 @@ describe('Inplace', () => {
         });
 
         it('should have default values', () => {
-            expect(component.active).toBe(false);
-            expect(component.closable).toBe(false);
-            expect(component.disabled).toBe(false);
-            expect(component.preventClick).toBeUndefined();
-            expect(component.styleClass).toBeUndefined();
-            expect(component.closeIcon).toBeUndefined();
-            expect(component.closeAriaLabel).toBeUndefined();
+            expect(component.active()).toBe(false);
+            expect(component.closable()).toBe(false);
+            expect(component.disabled()).toBe(false);
+            expect(component.preventClick()).toBeUndefined();
+            expect(component.closeIcon()).toBeUndefined();
+            expect(component.closeAriaLabel()).toBeUndefined();
         });
 
         it('should extend BaseComponent', () => {
@@ -391,7 +390,7 @@ describe('Inplace', () => {
 
             const editInput = element.querySelector('.edit-input');
 
-            expect(component.active).toBe(true);
+            expect(component.active()).toBe(true);
             expect(editInput).toBeTruthy();
         });
     });
@@ -419,7 +418,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
             expect(component.activateEvent).toBeTruthy();
         });
 
@@ -439,7 +438,7 @@ describe('Inplace', () => {
             inplaceComponent.activate(mockEvent);
             fixture.detectChanges();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
             expect(component.activateEvent).toBe(mockEvent);
         });
 
@@ -449,7 +448,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Then deactivate
             const mockEvent = new MouseEvent('click');
@@ -457,7 +456,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
             expect(component.deactivateEvent).toBe(mockEvent);
         });
 
@@ -504,7 +503,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should apply disabled class when disabled', async () => {
@@ -539,7 +538,7 @@ describe('Inplace', () => {
             inplaceComponent.activate();
             fixture.detectChanges();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should not deactivate programmatically when disabled', async () => {
@@ -548,7 +547,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Then disable and try to deactivate
             component.disabled = true;
@@ -560,7 +559,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             // Should remain active because disabled
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
     });
 
@@ -613,7 +612,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Click close button
             const closeButton = element.querySelector('p-button') as HTMLElement;
@@ -621,7 +620,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should display custom close icon', async () => {
@@ -681,7 +680,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should activate normally when preventClick is false', async () => {
@@ -694,7 +693,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
 
         it('should allow programmatic activation even when preventClick is true', async () => {
@@ -705,7 +704,7 @@ describe('Inplace', () => {
             inplaceComponent.activate();
             fixture.detectChanges();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
     });
 
@@ -726,9 +725,9 @@ describe('Inplace', () => {
         });
 
         it('should start in inactive state by default', () => {
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
             expect(element.querySelector('div[role="button"]')).toBeTruthy();
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should start in active state when active=true', async () => {
@@ -736,15 +735,15 @@ describe('Inplace', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
             expect(element.querySelector('div[role="button"]')).toBeFalsy();
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
 
         it('should toggle state dynamically', async () => {
             // Initially inactive
             expect(element.querySelector('div[role="button"]')).toBeTruthy();
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
 
             // Activate
             component.active = true;
@@ -752,7 +751,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             expect(element.querySelector('div[role="button"]')).toBeFalsy();
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Deactivate
             component.active = false;
@@ -760,7 +759,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             expect(element.querySelector('div[role="button"]')).toBeTruthy();
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
     });
 
@@ -836,7 +835,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Click template close button
             const templateCloseBtn = element.querySelector('.template-close-btn') as HTMLElement;
@@ -844,7 +843,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should render custom close icon template', async () => {
@@ -875,9 +874,9 @@ describe('Inplace', () => {
         });
 
         it('should process pTemplate directives in ngAfterContentInit', () => {
-            expect(inplaceComponent._displayTemplate).toBeDefined();
-            expect(inplaceComponent._contentTemplate).toBeDefined();
-            expect(inplaceComponent._closeIconTemplate).toBeDefined();
+            expect(inplaceComponent.$displayTemplate()).toBeDefined();
+            expect(inplaceComponent.$contentTemplate()).toBeDefined();
+            expect(inplaceComponent.$closeIconTemplate()).toBeDefined();
         });
 
         it('should render pTemplate display', () => {
@@ -900,10 +899,10 @@ describe('Inplace', () => {
         });
 
         it('should handle both template types (# and pTemplate)', () => {
-            // Component should have both contentTemplate and _contentTemplate defined
-            expect(inplaceComponent.contentTemplate() || inplaceComponent._contentTemplate).toBeTruthy();
-            expect(inplaceComponent.displayTemplate() || inplaceComponent._displayTemplate).toBeTruthy();
-            expect(inplaceComponent.closeIconTemplate() || inplaceComponent._closeIconTemplate).toBeTruthy();
+            // The effective template computeds should resolve
+            expect(inplaceComponent.$contentTemplate()).toBeTruthy();
+            expect(inplaceComponent.$displayTemplate()).toBeTruthy();
+            expect(inplaceComponent.$closeIconTemplate()).toBeTruthy();
         });
     });
 
@@ -930,7 +929,7 @@ describe('Inplace', () => {
                 fixture.detectChanges();
                 await fixture.whenStable();
 
-                expect(inplaceComponent.active).toBe(true);
+                expect(inplaceComponent.active()).toBe(true);
             }
         });
 
@@ -943,7 +942,7 @@ describe('Inplace', () => {
                 fixture.detectChanges();
                 await fixture.whenStable();
 
-                expect(inplaceComponent.active).toBe(false);
+                expect(inplaceComponent.active()).toBe(false);
             }
         });
 
@@ -960,21 +959,22 @@ describe('Inplace', () => {
         });
 
         it('should handle keyboard events when disabled', async () => {
-            const inplaceComponent = fixture.debugElement.query(By.directive(Inplace)).componentInstance;
-            inplaceComponent.disabled = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+            const disabledFixture = TestBed.createComponent(Inplace);
+            disabledFixture.componentRef.setInput('disabled', true);
+            disabledFixture.detectChanges();
+            await disabledFixture.whenStable();
+            const disabledInstance = disabledFixture.componentInstance;
 
-            const displayDiv = element.querySelector('div[role="button"]') as HTMLElement;
+            const displayDiv = (disabledFixture.nativeElement as HTMLElement).querySelector('div[role="button"]') as HTMLElement;
             if (displayDiv) {
                 const enterEvent = new KeyboardEvent('keydown', { code: 'Enter' });
 
                 displayDiv.dispatchEvent(enterEvent);
-                fixture.detectChanges();
-                await fixture.whenStable();
-
-                expect(inplaceComponent.active).toBe(false);
+                disabledFixture.detectChanges();
+                await disabledFixture.whenStable();
             }
+
+            expect(disabledInstance.active()).toBe(false);
         });
     });
 
@@ -1073,15 +1073,15 @@ describe('Inplace', () => {
         });
 
         it('should handle dynamic active state', async () => {
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
             expect(element.querySelector('div[role="button"]')).toBeTruthy();
 
             component.dynamicActive = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
 
         it('should handle dynamic disabled state', async () => {
@@ -1091,7 +1091,7 @@ describe('Inplace', () => {
             displayDiv.click();
             fixture.detectChanges();
             await fixture.whenStable();
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Reset
             inplaceComponent.deactivate();
@@ -1107,7 +1107,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
 
         it('should handle dynamic closable state', async () => {
@@ -1168,7 +1168,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             // Should end up in active state
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
     });
 
@@ -1196,7 +1196,7 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
 
         it('should handle activation while already active', async () => {
@@ -1204,37 +1204,24 @@ describe('Inplace', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
 
             // Activate again
             inplaceComponent.activate();
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
 
         it('should handle deactivation while inactive', async () => {
-            expect(inplaceComponent.active).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
 
             inplaceComponent.deactivate();
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(inplaceComponent.active).toBe(false);
-        });
-
-        it('should reset hover state on deactivation', async () => {
-            inplaceComponent.hover = true;
-            inplaceComponent.activate();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            inplaceComponent.deactivate();
-            fixture.detectChanges();
-            await fixture.whenStable();
-
-            expect(inplaceComponent.hover).toBe(false);
+            expect(inplaceComponent.active()).toBe(false);
         });
     });
 
@@ -1267,7 +1254,7 @@ describe('Inplace', () => {
             await fixture.whenStable();
 
             const inplaceComponent = fixture.debugElement.query(By.directive(Inplace)).componentInstance;
-            expect(inplaceComponent.active).toBe(true);
+            expect(inplaceComponent.active()).toBe(true);
         });
     });
 
