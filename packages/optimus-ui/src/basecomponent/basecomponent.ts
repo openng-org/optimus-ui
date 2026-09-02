@@ -28,11 +28,41 @@ export class BaseComponent<PT = any> implements Lifecycle {
 
     public config: Optimus = inject(Optimus);
 
-    public $parentInstance: BaseComponent | undefined = inject(PARENT_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     public baseComponentStyle: BaseComponentStyle = inject(BaseComponentStyle);
 
     public baseStyle: BaseStyle = inject(BaseStyle);
+
+    /******************** Inputs ********************/
+
+    /**
+     * Defines scoped design tokens of the component.
+     * @defaultValue undefined
+     * @group Props
+     */
+    dt = input<Object | undefined>();
+
+    /**
+     * Indicates whether the component should be rendered without styles.
+     * @defaultValue undefined
+     * @group Props
+     */
+    unstyled = input<boolean | undefined>();
+
+    /**
+     * Used to pass attributes to DOM elements inside the component.
+     * @defaultValue undefined
+     * @group Props
+     */
+    pt = input<PT | undefined>();
+
+    /**
+     * Used to configure passthrough(pt) options of the component.
+     * @group Props
+     * @defaultValue undefined
+     */
+    ptOptions = input<PassThroughOptions | undefined>();
+
+    public $parentInstance: BaseComponent | undefined = inject(PARENT_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     public scopedStyleEl: any;
 
@@ -44,33 +74,6 @@ export class BaseComponent<PT = any> implements Lifecycle {
 
     private themeChangeListenerMap: Map<string, any> = new Map();
 
-    /******************** Inputs ********************/
-
-    /**
-     * Defines scoped design tokens of the component.
-     * @defaultValue undefined
-     * @group Props
-     */
-    dt = input<Object | undefined>();
-    /**
-     * Indicates whether the component should be rendered without styles.
-     * @defaultValue undefined
-     * @group Props
-     */
-    unstyled = input<boolean | undefined>();
-    /**
-     * Used to pass attributes to DOM elements inside the component.
-     * @defaultValue undefined
-     * @group Props
-     */
-    pt = input<PT | undefined>();
-    /**
-     * Used to configure passthrough(pt) options of the component.
-     * @group Props
-     * @defaultValue undefined
-     */
-    ptOptions = input<PassThroughOptions | undefined>();
-
     /******************** Computed ********************/
 
     $attrSelector = uuid('pc');
@@ -80,7 +83,10 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private get $hostName() {
-        return this['hostName'];
+        const hostName = this['hostName'];
+        // `hostName` is a signal input on migrated components and a plain string on legacy ones —
+        // unwrap both shapes (interim shim until every component is signal-based).
+        return typeof hostName === 'function' ? hostName() : hostName;
     }
 
     get $el() {
@@ -126,40 +132,6 @@ export class BaseComponent<PT = any> implements Lifecycle {
         };
     }
 
-    /******************** Lifecycle Hooks ********************/
-
-    onInit() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onChanges(changes: SimpleChanges) {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onDoCheck() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onAfterContentInit() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onAfterContentChecked() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onAfterViewInit() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onAfterViewChecked() {
-        // NOOP - to be implemented by subclasses
-    }
-
-    onDestroy() {
-        // NOOP - to be implemented by subclasses
-    }
-
     /******************** Angular Lifecycle Hooks ********************/
 
     constructor() {
@@ -195,6 +167,40 @@ export class BaseComponent<PT = any> implements Lifecycle {
         });
 
         this._hook('onBeforeInit');
+    }
+
+    /******************** Lifecycle Hooks ********************/
+
+    onInit() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onChanges(changes: SimpleChanges) {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onDoCheck() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onAfterContentInit() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onAfterContentChecked() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onAfterViewInit() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onAfterViewChecked() {
+        // NOOP - to be implemented by subclasses
+    }
+
+    onDestroy() {
+        // NOOP - to be implemented by subclasses
     }
 
     /**

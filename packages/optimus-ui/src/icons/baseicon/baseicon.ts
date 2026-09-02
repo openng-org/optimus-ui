@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, inject, Input, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, inject, input, ViewEncapsulation } from '@angular/core';
 import { cn } from '@openng/optimus-ui-utils';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 import { BaseIconStyle } from './style/baseiconstyle';
@@ -19,13 +19,13 @@ import { BaseIconStyle } from './style/baseiconstyle';
     }
 })
 export class BaseIcon extends BaseComponent {
-    @Input({ transform: booleanAttribute }) spin: boolean = false;
-
     _componentStyle = inject(BaseIconStyle);
+
+    readonly spin = input<boolean, unknown>(false, { transform: booleanAttribute });
 
     getClassNames() {
         return cn('p-icon', {
-            'p-icon-spin': this.spin
+            'p-icon-spin': this.spin()
         });
     }
 }
