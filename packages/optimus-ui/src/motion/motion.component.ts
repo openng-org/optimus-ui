@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, afterRenderEffect, Component, computed, effect, inject, InjectionToken, input, output, signal, untracked } from '@angular/core';
+import { afterEveryRender, afterRenderEffect, ChangeDetectionStrategy, Component, computed, effect, inject, InjectionToken, input, output, signal, untracked } from '@angular/core';
 import { type ClassNameOptions, createMotion, resolveDuration, type MotionEvent, type MotionInstance, type MotionOptions, type MotionPhase } from '@openng/optimus-ui-motion';
 import { nextFrame } from '@openng/optimus-ui-utils';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -30,15 +30,7 @@ const MOTION_INSTANCE = new InjectionToken<Motion>('MOTION_INSTANCE');
     hostDirectives: [Bind]
 })
 export class Motion extends BaseComponent<MotionPassThrough> {
-    $pcMotion: Motion | undefined = inject(MOTION_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    onAfterViewChecked(): void {
-        const options = this.options() as any;
-        const optionsAttrs = options?.root || {};
-        this.bindDirectiveInstance.setAttrs({ ...this.ptms(['host', 'root']), ...optionsAttrs });
-    }
 
     _componentStyle = inject(MotionStyle);
 
@@ -49,16 +41,19 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Props
      */
     visible = input<boolean>(false);
+
     /**
      * Whether to mount the element on enter.
      * @group Props
      */
     mountOnEnter = input<boolean>(true);
+
     /**
      * Whether to unmount the element on leave.
      * @group Props
      */
     unmountOnLeave = input<boolean>(true);
+
     /**
      * The name of the motion. It can be a predefined motion name or a custom one.
      * phases:
@@ -71,71 +66,85 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Props
      */
     name = input<MotionOptions['name']>(undefined);
+
     /**
      * The type of the motion, valid values 'transition' and 'animation'.
      * @group Props
      */
     type = input<MotionOptions['type']>(undefined);
+
     /**
      * Whether the motion is safe.
      * @group Props
      */
     safe = input<MotionOptions['safe']>(undefined);
+
     /**
      * Whether the motion is disabled.
      * @group Props
      */
     disabled = input<MotionOptions['disabled']>(false);
+
     /**
      * Whether the motion should appear.
      * @group Props
      */
     appear = input<MotionOptions['appear']>(false);
+
     /**
      * Whether the motion should enter.
      * @group Props
      */
     enter = input<MotionOptions['enter']>(true);
+
     /**
      * Whether the motion should leave.
      * @group Props
      */
     leave = input<MotionOptions['leave']>(true);
+
     /**
      * The duration of the motion.
      * @group Props
      */
     duration = input<MotionOptions['duration']>(undefined);
+
     /**
      * The hide strategy of the motion, valid values 'display' and 'visibility'.
      * @group Props
      */
     hideStrategy = input<'display' | 'visibility'>('display');
+
     /**
      * The enter from class of the motion.
      * @group Props
      */
     enterFromClass = input<ClassNameOptions['from']>(undefined);
+
     /**
      * The enter to class of the motion.
      * @group Props
      */
     enterToClass = input<ClassNameOptions['to']>(undefined);
+
     /**
      * The enter active class of the motion.
      * @group Props
      */
     enterActiveClass = input<ClassNameOptions['active']>(undefined);
+
     /**
      * The leave from class of the motion.
      * @group Props
      */
     leaveFromClass = input<ClassNameOptions['from']>(undefined);
+
     /**
      * The leave to class of the motion.
      * @group Props
      */
     leaveToClass = input<ClassNameOptions['to']>(undefined);
+
     /**
      * The leave active class of the motion.
      * @group Props
@@ -159,6 +168,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onBeforeEnter = output<MotionEvent | undefined>();
+
     /**
      * Callback fired when the enter transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -166,6 +176,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onEnter = output<MotionEvent | undefined>();
+
     /**
      * Callback fired after the enter transition/animation ends.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -173,6 +184,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onAfterEnter = output<MotionEvent | undefined>();
+
     /**
      * Callback fired when the enter transition/animation is cancelled.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -180,6 +192,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onEnterCancelled = output<MotionEvent | undefined>();
+
     /**
      * Callback fired before the leave transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -187,6 +200,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onBeforeLeave = output<MotionEvent | undefined>();
+
     /**
      * Callback fired when the leave transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -194,6 +208,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onLeave = output<MotionEvent | undefined>();
+
     /**
      * Callback fired after the leave transition/animation ends.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -201,6 +216,7 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onAfterLeave = output<MotionEvent | undefined>();
+
     /**
      * Callback fired when the leave transition/animation is cancelled.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -208,6 +224,8 @@ export class Motion extends BaseComponent<MotionPassThrough> {
      * @group Emits
      */
     onLeaveCancelled = output<MotionEvent | undefined>();
+
+    $pcMotion: Motion | undefined = inject(MOTION_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     /******************** Computed ********************/
 
@@ -245,19 +263,29 @@ export class Motion extends BaseComponent<MotionPassThrough> {
     });
 
     private motion: MotionInstance | undefined;
+
     private isInitialMount = true;
+
     private cancelled = false;
+
     private destroyed = false;
 
     rendered = signal(false);
 
     private readonly handleBeforeEnter = (event?: MotionEvent) => !this.destroyed && this.onBeforeEnter.emit(event);
+
     private readonly handleEnter = (event?: MotionEvent) => !this.destroyed && this.onEnter.emit(event);
+
     private readonly handleAfterEnter = (event?: MotionEvent) => !this.destroyed && this.onAfterEnter.emit(event);
+
     private readonly handleEnterCancelled = (event?: MotionEvent) => !this.destroyed && this.onEnterCancelled.emit(event);
+
     private readonly handleBeforeLeave = (event?: MotionEvent) => !this.destroyed && this.onBeforeLeave.emit(event);
+
     private readonly handleLeave = (event?: MotionEvent) => !this.destroyed && this.onLeave.emit(event);
+
     private readonly handleAfterLeave = (event?: MotionEvent) => !this.destroyed && this.onAfterLeave.emit(event);
+
     private readonly handleLeaveCancelled = (event?: MotionEvent) => !this.destroyed && this.onLeaveCancelled.emit(event);
 
     constructor() {
@@ -317,6 +345,25 @@ export class Motion extends BaseComponent<MotionPassThrough> {
 
             this.isInitialMount = false;
         });
+        afterEveryRender(() => {
+            const options = this.options() as any;
+            const optionsAttrs = options?.root || {};
+            this.bindDirectiveInstance.setAttrs({ ...this.ptms(['host', 'root']), ...optionsAttrs });
+        });
+    }
+
+    onDestroy(): void {
+        this.destroyed = true;
+        this.cancelled = true;
+
+        this.motion?.cancel();
+        this.motion = undefined;
+
+        resetStyles(this.$el, this.hideStrategy());
+
+        this.$el?.remove();
+
+        this.isInitialMount = true;
     }
 
     private applyMotionDuration(phase: MotionPhase): void {
@@ -333,19 +380,5 @@ export class Motion extends BaseComponent<MotionPassThrough> {
         } else {
             el.style.animationDuration = durationValue;
         }
-    }
-
-    onDestroy(): void {
-        this.destroyed = true;
-        this.cancelled = true;
-
-        this.motion?.cancel();
-        this.motion = undefined;
-
-        resetStyles(this.$el, this.hideStrategy());
-
-        this.$el?.remove();
-
-        this.isInitialMount = true;
     }
 }

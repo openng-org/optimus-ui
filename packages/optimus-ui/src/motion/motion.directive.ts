@@ -16,8 +16,6 @@ const MOTION_DIRECTIVE_INSTANCE = new InjectionToken<MotionDirective>('MOTION_DI
     providers: [MotionStyle, { provide: MOTION_DIRECTIVE_INSTANCE, useExisting: MotionDirective }, { provide: PARENT_INSTANCE, useExisting: MotionDirective }]
 })
 export class MotionDirective extends BaseComponent {
-    $pcMotionDirective: MotionDirective | undefined = inject(MOTION_DIRECTIVE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     /******************** Inputs ********************/
 
     /**
@@ -25,6 +23,7 @@ export class MotionDirective extends BaseComponent {
      * @group Props
      */
     visible = input<boolean>(false, { alias: 'pMotion' });
+
     /**
      * The name of the motion. It can be a predefined motion name or a custom one.
      * phases:
@@ -37,71 +36,85 @@ export class MotionDirective extends BaseComponent {
      * @group Props
      */
     name = input<MotionOptions['name']>(undefined, { alias: 'pMotionName' });
+
     /**
      * The type of the motion, valid values 'transition' and 'animation'.
      * @group Props
      */
     type = input<MotionOptions['type']>(undefined, { alias: 'pMotionType' });
+
     /**
      * Whether the motion is safe.
      * @group Props
      */
     safe = input<MotionOptions['safe']>(undefined, { alias: 'pMotionSafe' });
+
     /**
      * Whether the motion is disabled.
      * @group Props
      */
     disabled = input<MotionOptions['disabled']>(false, { alias: 'pMotionDisabled' });
+
     /**
      * Whether the motion should appear.
      * @group Props
      */
     appear = input<MotionOptions['appear']>(false, { alias: 'pMotionAppear' });
+
     /**
      * Whether the motion should enter.
      * @group Props
      */
     enter = input<MotionOptions['enter']>(true, { alias: 'pMotionEnter' });
+
     /**
      * Whether the motion should leave.
      * @group Props
      */
     leave = input<MotionOptions['leave']>(true, { alias: 'pMotionLeave' });
+
     /**
      * The duration of the motion.
      * @group Props
      */
     duration = input<MotionOptions['duration']>(undefined, { alias: 'pMotionDuration' });
+
     /**
      * The hide strategy of the motion, valid values 'display' and 'visibility'.
      * @group Props
      */
     hideStrategy = input<'display' | 'visibility'>('display', { alias: 'pMotionHideStrategy' });
+
     /**
      * The enter from class of the motion.
      * @group Props
      */
     enterFromClass = input<ClassNameOptions['from']>(undefined, { alias: 'pMotionEnterFromClass' });
+
     /**
      * The enter to class of the motion.
      * @group Props
      */
     enterToClass = input<ClassNameOptions['to']>(undefined, { alias: 'pMotionEnterToClass' });
+
     /**
      * The enter active class of the motion.
      * @group Props
      */
     enterActiveClass = input<ClassNameOptions['active']>(undefined, { alias: 'pMotionEnterActiveClass' });
+
     /**
      * The leave from class of the motion.
      * @group Props
      */
     leaveFromClass = input<ClassNameOptions['from']>(undefined, { alias: 'pMotionLeaveFromClass' });
+
     /**
      * The leave to class of the motion.
      * @group Props
      */
     leaveToClass = input<ClassNameOptions['to']>(undefined, { alias: 'pMotionLeaveToClass' });
+
     /**
      * The leave active class of the motion.
      * @group Props
@@ -125,6 +138,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onBeforeEnter = output<MotionEvent | undefined>({ alias: 'pMotionOnBeforeEnter' });
+
     /**
      * Callback fired when the enter transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -132,6 +146,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onEnter = output<MotionEvent | undefined>({ alias: 'pMotionOnEnter' });
+
     /**
      * Callback fired after the enter transition/animation ends.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -139,6 +154,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onAfterEnter = output<MotionEvent | undefined>({ alias: 'pMotionOnAfterEnter' });
+
     /**
      * Callback fired when the enter transition/animation is cancelled.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -146,6 +162,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onEnterCancelled = output<MotionEvent | undefined>({ alias: 'pMotionOnEnterCancelled' });
+
     /**
      * Callback fired before the leave transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -153,6 +170,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onBeforeLeave = output<MotionEvent | undefined>({ alias: 'pMotionOnBeforeLeave' });
+
     /**
      * Callback fired when the leave transition/animation starts.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -160,6 +178,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onLeave = output<MotionEvent | undefined>({ alias: 'pMotionOnLeave' });
+
     /**
      * Callback fired after the leave transition/animation ends.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -167,6 +186,7 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onAfterLeave = output<MotionEvent | undefined>({ alias: 'pMotionOnAfterLeave' });
+
     /**
      * Callback fired when the leave transition/animation is cancelled.
      * @param {MotionEvent} [event] - The event object containing details about the motion.
@@ -174,6 +194,8 @@ export class MotionDirective extends BaseComponent {
      * @group Emits
      */
     onLeaveCancelled = output<MotionEvent | undefined>({ alias: 'pMotionOnLeaveCancelled' });
+
+    $pcMotionDirective: MotionDirective | undefined = inject(MOTION_DIRECTIVE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     /******************** Computed ********************/
 
@@ -211,17 +233,27 @@ export class MotionDirective extends BaseComponent {
     });
 
     private motion: MotionInstance | undefined;
+
     private isInitialMount = true;
+
     private cancelled = false;
+
     private destroyed = false;
 
     private readonly handleBeforeEnter = (event?: MotionEvent) => !this.destroyed && this.onBeforeEnter.emit(event);
+
     private readonly handleEnter = (event?: MotionEvent) => !this.destroyed && this.onEnter.emit(event);
+
     private readonly handleAfterEnter = (event?: MotionEvent) => !this.destroyed && this.onAfterEnter.emit(event);
+
     private readonly handleEnterCancelled = (event?: MotionEvent) => !this.destroyed && this.onEnterCancelled.emit(event);
+
     private readonly handleBeforeLeave = (event?: MotionEvent) => !this.destroyed && this.onBeforeLeave.emit(event);
+
     private readonly handleLeave = (event?: MotionEvent) => !this.destroyed && this.onLeave.emit(event);
+
     private readonly handleAfterLeave = (event?: MotionEvent) => !this.destroyed && this.onAfterLeave.emit(event);
+
     private readonly handleLeaveCancelled = (event?: MotionEvent) => !this.destroyed && this.onLeaveCancelled.emit(event);
 
     constructor() {
@@ -264,6 +296,20 @@ export class MotionDirective extends BaseComponent {
         });
     }
 
+    onDestroy(): void {
+        this.destroyed = true;
+        this.cancelled = true;
+
+        this.motion?.cancel();
+        this.motion = undefined;
+
+        resetStyles(this.$el, this.hideStrategy());
+
+        this.$el?.remove();
+
+        this.isInitialMount = true;
+    }
+
     private applyMotionDuration(phase: MotionPhase): void {
         const options = untracked(this.motionOptions);
         const ms = resolveDuration(options.duration, phase);
@@ -278,19 +324,5 @@ export class MotionDirective extends BaseComponent {
         } else {
             el.style.animationDuration = durationValue;
         }
-    }
-
-    onDestroy(): void {
-        this.destroyed = true;
-        this.cancelled = true;
-
-        this.motion?.cancel();
-        this.motion = undefined;
-
-        resetStyles(this.$el, this.hideStrategy());
-
-        this.$el?.remove();
-
-        this.isInitialMount = true;
     }
 }
