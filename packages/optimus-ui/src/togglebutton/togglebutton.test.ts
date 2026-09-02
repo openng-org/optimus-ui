@@ -30,7 +30,7 @@ import { PrimeTemplate } from '@openng/optimus-ui/api';
             [ariaLabel]="ariaLabel"
             [ariaLabelledBy]="ariaLabelledBy"
             [inputId]="inputId"
-            [styleClass]="styleClass"
+            [class]="styleClass"
             (onChange)="onToggleChange($event)"
         >
         </p-togglebutton>
@@ -202,12 +202,12 @@ describe('ToggleButton', () => {
         });
 
         it('should have default values', () => {
-            expect(toggleButtonInstance.checked).toBeFalsy();
-            expect(toggleButtonInstance.onLabel).toBe('Yes');
-            expect(toggleButtonInstance.offLabel).toBe('No');
-            expect(toggleButtonInstance.iconPos).toBe('left');
-            expect(toggleButtonInstance.tabindex).toBe(0);
-            expect(toggleButtonInstance.autofocus).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
+            expect(toggleButtonInstance.onLabel()).toBe('Yes');
+            expect(toggleButtonInstance.offLabel()).toBe('No');
+            expect(toggleButtonInstance.iconPos()).toBe('left');
+            expect(toggleButtonInstance.tabindex()).toBe(0);
+            expect(toggleButtonInstance.autofocus()).toBeFalsy();
         });
 
         it('should accept custom input values', async () => {
@@ -220,15 +220,15 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.onLabel).toBe('Custom Yes');
-            expect(toggleButtonInstance.offLabel).toBe('Custom No');
-            expect(toggleButtonInstance.iconPos).toBe('right');
-            expect(toggleButtonInstance.tabindex).toBe(5);
-            expect(toggleButtonInstance.ariaLabel).toBe('Custom Toggle');
+            expect(toggleButtonInstance.onLabel()).toBe('Custom Yes');
+            expect(toggleButtonInstance.offLabel()).toBe('Custom No');
+            expect(toggleButtonInstance.iconPos()).toBe('right');
+            expect(toggleButtonInstance.tabindex()).toBe(5);
+            expect(toggleButtonInstance.ariaLabel()).toBe('Custom Toggle');
         });
 
         it('should initialize with false checked state', () => {
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
             expect(component.checked).toBeFalsy();
         });
 
@@ -255,12 +255,12 @@ describe('ToggleButton', () => {
         });
 
         it('should toggle state on click', () => {
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
 
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(component.checked).toBe(true);
         });
 
@@ -302,15 +302,15 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
             expect(component.checked).toBeFalsy();
         });
 
         it('should have correct active state getter', () => {
-            expect(toggleButtonInstance.active).toBeFalsy();
+            expect(toggleButtonInstance.active()).toBeFalsy();
 
-            toggleButtonInstance.checked = true;
-            expect(toggleButtonInstance.active).toBe(true);
+            toggleButtonInstance.checked.set(true);
+            expect(toggleButtonInstance.active()).toBe(true);
         });
     });
 
@@ -347,7 +347,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
         });
 
         it('should handle tabindex property', async () => {
@@ -370,7 +370,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBeFalsy(); // Should remain falsy when disabled
+            expect(toggleButtonInstance.checked()).toBeFalsy(); // Should remain falsy when disabled
         });
 
         it('should handle allowEmpty property', async () => {
@@ -383,7 +383,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
         });
 
         it('should handle size property', async () => {
@@ -392,7 +392,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.size).toBe('large');
+            expect(toggleButtonInstance.size()).toBe('large');
         });
     });
 
@@ -431,7 +431,7 @@ describe('ToggleButton', () => {
             testFixture.detectChanges();
 
             const toggleButtonInstance = formToggleButton.componentInstance;
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
         });
 
         it('should handle form reset', () => {
@@ -444,7 +444,7 @@ describe('ToggleButton', () => {
             testFixture.detectChanges();
 
             const toggleButtonInstance = formToggleButton.componentInstance;
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
         });
 
         it('should emit onChange event in reactive forms', () => {
@@ -468,7 +468,7 @@ describe('ToggleButton', () => {
 
             const toggleButton = testFixture.debugElement.query(By.directive(ToggleButton));
             expect(toggleButton).toBeTruthy();
-            expect(toggleButton.componentInstance.checked).toBeFalsy();
+            expect(toggleButton.componentInstance.checked()).toBeFalsy();
         });
 
         it('should support custom icon template', () => {
@@ -480,7 +480,7 @@ describe('ToggleButton', () => {
 
             const toggleButton = testFixture.debugElement.query(By.directive(ToggleButton));
             expect(toggleButton).toBeTruthy();
-            expect(toggleButton.componentInstance.checked).toBeFalsy();
+            expect(toggleButton.componentInstance.checked()).toBeFalsy();
         });
     });
 
@@ -542,7 +542,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.dispatchEvent(enterEvent);
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(enterEvent.preventDefault).toHaveBeenCalled();
         });
 
@@ -553,7 +553,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.dispatchEvent(spaceEvent);
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(spaceEvent.preventDefault).toHaveBeenCalled();
         });
 
@@ -563,7 +563,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.dispatchEvent(tabEvent);
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
         });
 
         it('should not toggle with keyboard when disabled', async () => {
@@ -576,7 +576,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.dispatchEvent(enterEvent);
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBeFalsy();
+            expect(toggleButtonInstance.checked()).toBeFalsy();
         });
     });
 
@@ -631,11 +631,11 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            const initialChecked = toggleButtonInstance.checked;
+            const initialChecked = toggleButtonInstance.checked();
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(initialChecked); // Should not change when disabled
+            expect(toggleButtonInstance.checked()).toBe(initialChecked); // Should not change when disabled
         });
     });
 
@@ -696,7 +696,7 @@ describe('ToggleButton', () => {
             toggleButtonElement.nativeElement.click();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
         });
 
         it('should handle programmatic state changes', async () => {
@@ -708,30 +708,30 @@ describe('ToggleButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(component.checked).toBe(true);
         });
 
         it('should handle hasOnLabel getter correctly', async () => {
-            expect(toggleButtonInstance.hasOnLabel).toBe(true);
+            expect(toggleButtonInstance.hasOnLabel()).toBe(true);
 
             component.onLabel = '';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.hasOnLabel).toBeFalsy();
+            expect(toggleButtonInstance.hasOnLabel()).toBeFalsy();
         });
 
         it('should handle hasOffLabel getter correctly', async () => {
-            expect(toggleButtonInstance.hasOffLabel).toBe(true);
+            expect(toggleButtonInstance.hasOffLabel()).toBe(true);
 
             component.offLabel = '';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(toggleButtonInstance.hasOffLabel).toBeFalsy();
+            expect(toggleButtonInstance.hasOffLabel()).toBeFalsy();
         });
     });
 
@@ -747,7 +747,7 @@ describe('ToggleButton', () => {
             expect(multipleFixtures.length).toBe(10);
             multipleFixtures.forEach((f) => {
                 const toggleButton = f.debugElement.query(By.directive(ToggleButton));
-                expect(toggleButton.componentInstance.checked).toBeFalsy();
+                expect(toggleButton.componentInstance.checked()).toBeFalsy();
             });
 
             multipleFixtures.forEach((f) => f.destroy());
@@ -797,7 +797,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component is working with the value
-            expect(toggleButtonInstance.checked).toBe(false);
+            expect(toggleButtonInstance.checked()).toBe(false);
             expect(component.checked).toBe(false);
         });
 
@@ -819,7 +819,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component is working with the value
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(component.checked).toBe(true);
         });
 
@@ -832,7 +832,7 @@ describe('ToggleButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(toggleButtonInstance.checked).toBe(false);
+            expect(toggleButtonInstance.checked()).toBe(false);
 
             // Change to checked
             component.checked = true;
@@ -842,7 +842,7 @@ describe('ToggleButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
         });
 
         it('should apply context to templates correctly', async () => {
@@ -854,8 +854,8 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component works correctly
-            expect(toggleButtonInstance.checked).toBe(true);
-            expect(toggleButtonInstance.active).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
+            expect(toggleButtonInstance.active()).toBe(true);
         });
 
         it('should process pTemplates after content init', async () => {
@@ -866,7 +866,7 @@ describe('ToggleButton', () => {
                 await fixture.whenStable();
 
                 // Verify that ngAfterContentInit is called correctly
-                expect(toggleButtonInstance.checked).toBeDefined();
+                expect(toggleButtonInstance.checked()).toBeDefined();
                 expect(component.checked).toBeDefined();
             }
         });
@@ -906,7 +906,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component is working with the value
-            expect(toggleButtonInstance.checked).toBe(false);
+            expect(toggleButtonInstance.checked()).toBe(false);
             expect(component.checked).toBe(false);
         });
 
@@ -928,7 +928,7 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component is working with the value
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
             expect(component.checked).toBe(true);
         });
 
@@ -941,7 +941,7 @@ describe('ToggleButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(toggleButtonInstance.checked).toBe(false);
+            expect(toggleButtonInstance.checked()).toBe(false);
 
             // Change to checked
             component.checked = true;
@@ -951,7 +951,7 @@ describe('ToggleButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(toggleButtonInstance.checked).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
         });
 
         it('should apply context to templates correctly', async () => {
@@ -963,8 +963,8 @@ describe('ToggleButton', () => {
             await fixture.whenStable();
 
             // Verify that the toggle button component works correctly
-            expect(toggleButtonInstance.checked).toBe(true);
-            expect(toggleButtonInstance.active).toBe(true);
+            expect(toggleButtonInstance.checked()).toBe(true);
+            expect(toggleButtonInstance.active()).toBe(true);
         });
 
         it('should process #templates after content init', async () => {
@@ -975,7 +975,7 @@ describe('ToggleButton', () => {
                 await fixture.whenStable();
 
                 // Verify that ngAfterContentInit is called correctly
-                expect(toggleButtonInstance.checked).toBeDefined();
+                expect(toggleButtonInstance.checked()).toBeDefined();
                 expect(component.checked).toBeDefined();
             }
         });
@@ -1152,7 +1152,7 @@ describe('ToggleButton', () => {
                 pt = {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.checked ? 'CHECKED_CLASS' : 'UNCHECKED_CLASS'
+                            class: instance?.checked() ? 'CHECKED_CLASS' : 'UNCHECKED_CLASS'
                         };
                     },
                     content: ({ instance }: any) => {
