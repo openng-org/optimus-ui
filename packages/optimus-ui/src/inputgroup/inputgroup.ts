@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, inject, NgModule } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { InputGroupPassThrough } from '@openng/optimus-ui/types/inputgroup';
 import { InputGroupStyle } from './style/inputgroupstyle';
-
-const INPUTGROUP_INSTANCE = new InjectionToken<InputGroup>('INPUTGROUP_INSTANCE');
 
 /**
  * InputGroup displays text, icon, buttons and other content can be grouped next to an input.
@@ -17,31 +15,28 @@ const INPUTGROUP_INSTANCE = new InjectionToken<InputGroup>('INPUTGROUP_INSTANCE'
     standalone: true,
     imports: [BindModule],
     template: ` <ng-content></ng-content> `,
-    providers: [InputGroupStyle, { provide: INPUTGROUP_INSTANCE, useExisting: InputGroup }, { provide: PARENT_INSTANCE, useExisting: InputGroup }],
+    providers: [InputGroupStyle, { provide: PARENT_INSTANCE, useExisting: InputGroup }],
     hostDirectives: [Bind],
     host: {
-        '[class]': "cn(cx('root'), styleClass)"
+        '[class]': "cx('root')"
     }
 })
 export class InputGroup extends BaseComponent<InputGroupPassThrough> {
-    componentName = 'InputGroup';
-
     _componentStyle = inject(InputGroupStyle);
-
-    $pcInputGroup: InputGroup | undefined = inject(INPUTGROUP_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    componentName = 'InputGroup';
 
-    /**
-     * Class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 }
 
 @NgModule({
