@@ -27,6 +27,8 @@
 */
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+    afterEveryRender,
+    afterNextRender,
     booleanAttribute,
     ChangeDetectionStrategy,
     Component,
@@ -36,12 +38,12 @@ import {
     ElementRef,
     forwardRef,
     inject,
-    InjectionToken,
     input,
-    Input,
     NgModule,
     output,
+    signal,
     TemplateRef,
+    untracked,
     ViewEncapsulation,
     contentChild,
     contentChildren,
@@ -61,10 +63,6 @@ import type { Caret } from '@openng/optimus-ui/types/inputmask';
 import { InputMaskPassThrough } from '@openng/optimus-ui/types/inputmask';
 import { InputMaskStyle } from './style/inputmaskstyle';
 
-const INPUTMASK_INSTANCE = new InjectionToken<InputMask>('INPUTMASK_INSTANCE');
-
-const INPUTMASK_DIRECTIVE_INSTANCE = new InjectionToken<InputMaskDirective>('INPUTMASK_DIRECTIVE_INSTANCE');
-
 /**
  * InputMask directive is applied directly to input elements to enable masked input.
  * @group Components
@@ -72,14 +70,12 @@ const INPUTMASK_DIRECTIVE_INSTANCE = new InjectionToken<InputMaskDirective>('INP
 @Directive({
     selector: '[pInputMask]',
     standalone: true,
-    providers: [InputMaskStyle, { provide: INPUTMASK_DIRECTIVE_INSTANCE, useExisting: InputMaskDirective }, { provide: PARENT_INSTANCE, useExisting: InputMaskDirective }],
+    providers: [InputMaskStyle, { provide: PARENT_INSTANCE, useExisting: InputMaskDirective }],
     host: {
         '[class.p-inputmask]': '!$unstyled()'
     }
 })
 export class InputMaskDirective extends BaseComponent<InputMaskPassThrough> {
-    $pcInputMaskDirective: InputMaskDirective | undefined = inject(INPUTMASK_DIRECTIVE_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     _componentStyle = inject(InputMaskStyle);
 
     /**
@@ -139,26 +135,32 @@ export class InputMaskDirective extends BaseComponent<InputMaskPassThrough> {
     onUnmaskedChange = output<string>();
 
     defs: Nullable<{ [klass: string]: any }>;
+
     tests: RegExp[] | any;
+
     partialPosition: Nullable<number>;
+
     firstNonMaskPos: Nullable<number>;
+
     lastRequiredNonMaskPos: Nullable<number>;
+
     len: Nullable<number>;
+
     oldVal: Nullable<string>;
+
     buffer: string[] | any;
+
     defaultBuffer: Nullable<string>;
+
     focusText: Nullable<string>;
+
     caretTimeoutId: any;
+
     androidChrome: boolean = true;
-    focused: Nullable<boolean>;
 
     private _inputElement: HTMLInputElement | null = null;
-    private _listeners: (() => void)[] = [];
 
-    private isInputVisible(input: HTMLInputElement): boolean {
-        const style = getComputedStyle(input);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-    }
+    private _listeners: (() => void)[] = [];
 
     private get inputElement(): HTMLInputElement {
         if (!this._inputElement) {
@@ -191,28 +193,34 @@ export class InputMaskDirective extends BaseComponent<InputMaskPassThrough> {
             const ua = navigator.userAgent;
             this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
         }
-    }
 
-    onAfterViewInit() {
-        if (isPlatformBrowser(this.platformId) && this.inputElement) {
-            const events: [string, (e: Event) => void][] = [
-                ['focus', (e) => this.onInputFocus(e)],
-                ['blur', (e) => this.onInputBlur(e)],
-                ['keydown', (e) => this.onInputKeydown(e as KeyboardEvent)],
-                ['keypress', (e) => this.onKeyPress(e as KeyboardEvent)],
-                ['input', (e) => this.onInputChange(e)],
-                ['paste', (e) => this.onPaste(e)]
-            ];
+        // Attach native listeners once the view is ready (replaces the former ngAfterViewInit hook).
+        afterNextRender(() => {
+            if (isPlatformBrowser(this.platformId) && this.inputElement) {
+                const events: [string, (e: Event) => void][] = [
+                    ['focus', (e) => this.onInputFocus(e)],
+                    ['blur', (e) => this.onInputBlur(e)],
+                    ['keydown', (e) => this.onInputKeydown(e as KeyboardEvent)],
+                    ['keypress', (e) => this.onKeyPress(e as KeyboardEvent)],
+                    ['input', (e) => this.onInputChange(e)],
+                    ['paste', (e) => this.onPaste(e)]
+                ];
 
-            events.forEach(([event, handler]) => {
-                this.inputElement.addEventListener(event, handler);
-                this._listeners.push(() => this.inputElement.removeEventListener(event, handler));
-            });
-        }
+                events.forEach(([event, handler]) => {
+                    this.inputElement.addEventListener(event, handler);
+                    this._listeners.push(() => this.inputElement.removeEventListener(event, handler));
+                });
+            }
+        });
     }
 
     onDestroy() {
         this._listeners.forEach((unlisten) => unlisten());
+    }
+
+    private isInputVisible(input: HTMLInputElement): boolean {
+        const style = getComputedStyle(input);
+        return style.display !== 'none' && style.visibility !== 'hidden';
     }
 
     initMask() {
@@ -266,7 +274,6 @@ export class InputMaskDirective extends BaseComponent<InputMaskPassThrough> {
             return;
         }
 
-        this.focused = true;
         this.focusText = this.inputElement.value;
 
         clearTimeout(this.caretTimeoutId);
@@ -289,8 +296,6 @@ export class InputMaskDirective extends BaseComponent<InputMaskPassThrough> {
         if (!this.pInputMask()) {
             return;
         }
-
-        this.focused = false;
 
         // Validate/finalize value on blur (clear incomplete if autoClear)
         if (!this.keepBuffer()) {
@@ -696,48 +701,48 @@ export const INPUTMASK_VALUE_ACCESSOR: any = {
             pInputText
             [pt]="ptm('pcInputText', ptmParams())"
             [unstyled]="unstyled()"
-            [attr.id]="inputId"
-            [attr.type]="type"
+            [attr.id]="inputId()"
+            [attr.type]="type()"
             [attr.name]="name()"
             [invalid]="invalid()"
-            [class]="styleClass"
-            [ngStyle]="style"
-            [attr.placeholder]="placeholder"
-            [attr.title]="title"
+            [class]="styleClass()"
+            [ngStyle]="style()"
+            [attr.placeholder]="placeholder()"
+            [attr.title]="title()"
             [pSize]="size()"
             [attr.size]="inputSize()"
             [attr.autocomplete]="autocomplete"
             [attr.maxlength]="maxlength()"
             [attr.minlength]="minlength()"
-            [attr.tabindex]="tabindex"
-            [attr.aria-label]="ariaLabel"
-            [attr.aria-labelledBy]="ariaLabelledBy"
-            [attr.aria-required]="ariaRequired"
+            [attr.tabindex]="tabindex()"
+            [attr.aria-label]="ariaLabel()"
+            [attr.aria-labelledBy]="ariaLabelledBy()"
+            [attr.aria-required]="ariaRequired()"
             [attr.required]="required() ? '' : undefined"
-            [attr.readonly]="readonly ? '' : undefined"
+            [attr.readonly]="readonly() ? '' : undefined"
             [attr.disabled]="$disabled() ? '' : undefined"
             (focus)="onInputFocus($event)"
             (blur)="onInputBlur($event)"
             (keydown)="onInputKeydown($event)"
             (keypress)="onKeyPress($event)"
             [variant]="$variant()"
-            [pAutoFocus]="autofocus"
+            [pAutoFocus]="autofocus()"
             (input)="onInputChange($event)"
             (paste)="handleInputChange($event)"
             [fluid]="hasFluid"
         />
-        @if (value != null && $filled() && showClear && !$disabled()) {
-            @if (!clearIconTemplate() && !_clearIconTemplate) {
+        @if (value() != null && $filled() && showClear() && !$disabled()) {
+            @if (!$clearIconTemplate()) {
                 <svg data-p-icon="times" [class]="cx('clearIcon')" [pBind]="ptm('clearIcon')" (click)="clear()" />
             }
-            @if (clearIconTemplate() || _clearIconTemplate) {
+            @if ($clearIconTemplate()) {
                 <span [class]="cx('clearIcon')" [pBind]="ptm('clearIcon')" (click)="clear()">
-                    <ng-template *ngTemplateOutlet="clearIconTemplate() || _clearIconTemplate"></ng-template>
+                    <ng-template *ngTemplateOutlet="$clearIconTemplate()"></ng-template>
                 </span>
             }
         }
     `,
-    providers: [INPUTMASK_VALUE_ACCESSOR, InputMaskStyle, { provide: INPUTMASK_INSTANCE, useExisting: InputMask }, { provide: PARENT_INSTANCE, useExisting: InputMask }],
+    providers: [INPUTMASK_VALUE_ACCESSOR, InputMaskStyle, { provide: PARENT_INSTANCE, useExisting: InputMask }],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     hostDirectives: [Bind],
@@ -746,163 +751,172 @@ export const INPUTMASK_VALUE_ACCESSOR: any = {
     }
 })
 export class InputMask extends BaseInput<InputMaskPassThrough> {
-    componentName = 'InputMask';
-
     _componentStyle = inject(InputMaskStyle);
 
-    $pcInputMask: InputMask | undefined = inject(INPUTMASK_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['root', 'host']));
-    }
-
-    ptmParams = computed(() => ({ context: { filled: this.$variant() === 'filled' } }));
 
     /**
      * HTML5 input type.
      * @group Props
      */
-    @Input() type: string = 'text';
+    readonly type = input<string>('text');
+
     /**
      * Placeholder character in mask, default is underscore.
      * @group Props
      */
-    @Input() slotChar: string = '_';
+    readonly slotChar = input<string>('_');
+
     /**
      * Clears the incomplete value on blur.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoClear: boolean = true;
+    readonly autoClear = input<boolean, unknown>(true, { transform: booleanAttribute });
+
     /**
      * When enabled, a clear icon is displayed to clear the value.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) showClear: boolean = false;
+    readonly showClear = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Inline style of the input field.
      * @group Props
      */
-    @Input() style: { [klass: string]: any } | null | undefined;
+    readonly style = input<{ [klass: string]: any } | null | undefined>();
+
     /**
      * Identifier of the focus input to match a label defined for the component.
      * @group Props
      */
-    @Input() inputId: string | undefined;
+    readonly inputId = input<string>();
+
     /**
      * Style class of the input field.
      * @group Props
      */
-    @Input() styleClass: string | undefined;
+    readonly styleClass = input<string>();
+
     /**
      * Advisory information to display on input.
      * @group Props
      */
-    @Input() placeholder: string | undefined;
+    readonly placeholder = input<string>();
+
     /**
      * Specifies tab order of the element.
      * @group Props
      */
-    @Input() tabindex: string | undefined;
+    readonly tabindex = input<string>();
+
     /**
      * Title text of the input text.
      * @group Props
      */
-    @Input() title: string | undefined;
+    readonly title = input<string>();
+
     /**
      * Used to define a string that labels the input element.
      * @group Props
      */
-    @Input() ariaLabel: string | undefined;
+    readonly ariaLabel = input<string>();
+
     /**
      * Establishes relationships between the component and label(s) where its value should be one or more element IDs.
      * @group Props
      */
-    @Input() ariaLabelledBy: string | undefined;
+    readonly ariaLabelledBy = input<string>();
+
     /**
      * Used to indicate that user input is required on an element before a form can be submitted.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) ariaRequired: boolean | undefined;
+    readonly ariaRequired = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * When present, it specifies that an input field is read-only.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) readonly: boolean | undefined;
+    readonly readonly = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Defines if ngModel sets the raw unmasked value to bound value or the formatted mask value.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) unmask: boolean | undefined;
+    readonly unmask = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Regex pattern for alpha characters
      * @group Props
      */
-    @Input() characterPattern: string = '[A-Za-z]';
+    readonly characterPattern = input<string>('[A-Za-z]');
+
     /**
      * When present, the input gets a focus automatically on load.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autofocus: boolean | undefined;
+    readonly autofocus = input<boolean | undefined, unknown>(undefined, { transform: booleanAttribute });
+
     /**
      * Used to define a string that autocomplete attribute the current element.
      * @group Props
      */
-    @Input() autocomplete: string | undefined;
+    readonly autocomplete = input<string>();
+
     /**
      * When present, it specifies that whether to clean buffer value from model.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) keepBuffer: boolean = false;
+    readonly keepBuffer = input<boolean, unknown>(false, { transform: booleanAttribute });
+
     /**
      * Mask pattern.
      * @group Props
      */
-    @Input() get mask(): string | undefined | null {
-        return this._mask;
-    }
-    set mask(val: string | undefined | null) {
-        this._mask = val;
+    readonly mask = input<string | undefined | null>();
 
-        this.initMask();
-        this.writeValue('');
-        this.onModelChange(this.value);
-    }
     /**
      * Callback to invoke when the mask is completed.
      * @group Emits
      */
     readonly onComplete = output<void>();
+
     /**
      * Callback to invoke when the component receives focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onFocus = output<Event>();
+
     /**
      * Callback to invoke when the component loses focus.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onBlur = output<Event>();
+
     /**
      * Callback to invoke on input.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onInput = output<Event>();
+
     /**
      * Callback to invoke on input key press.
      * @param {Event} event - Browser event.
      * @group Emits
      */
     readonly onKeydown = output<Event>();
+
     /**
      * Callback to invoke when input field is cleared.
      * @group Emits
      */
     readonly onClear = output<void>();
+
+    readonly inputViewChild = viewChild<Nullable<ElementRef>>('input');
+
     /**
      * Custom clear icon template.
      * @group Templates
@@ -911,13 +925,42 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    readonly inputViewChild = viewChild<Nullable<ElementRef>>('input');
+    componentName = 'InputMask';
 
-    value: Nullable<string>;
+    ptmParams = computed(() => ({ context: { filled: this.$variant() === 'filled' } }));
 
-    _mask: Nullable<string>;
+    private maskEffectFirstRun = true;
 
-    input: Nullable<HTMLInputElement>;
+    /**
+     * Replays the legacy `mask` setter side effect on every change after the first binding:
+     * rebuild the mask state and reset the written value. The first run is covered by the
+     * eager `initMask()` call in `onInit` (effects only flush after the first template pass).
+     */
+    private readonly maskEffect = effect(() => {
+        this.mask();
+
+        if (this.maskEffectFirstRun) {
+            this.maskEffectFirstRun = false;
+            return;
+        }
+
+        untracked(() => {
+            this.initMask();
+            this.writeValue('');
+            this.onModelChange(this.value());
+        });
+    });
+
+    /** Effective clear icon template: the `#clearicon` content child or the `pTemplate="clearicon"`. */
+    readonly $clearIconTemplate = computed(
+        () =>
+            this.clearIconTemplate() ??
+            this.templates()
+                .filter((item) => item.getType() === 'clearicon')
+                .at(-1)?.template
+    );
+
+    value = signal<Nullable<string>>(undefined);
 
     defs: Nullable<{ [klass: string]: any }>;
 
@@ -943,7 +986,14 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
 
     androidChrome: boolean = true;
 
-    focused: Nullable<boolean>;
+    constructor() {
+        super();
+        // Re-apply the root/host pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook).
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['root', 'host']));
+        });
+    }
 
     onInit() {
         if (isPlatformBrowser(this.platformId)) {
@@ -953,34 +1003,23 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
         this.initMask();
     }
 
-    _clearIconTemplate: TemplateRef<void> | undefined;
-
-    onAfterContentInit() {
-        this.templates().forEach((item) => {
-            switch (item.getType()) {
-                case 'clearicon':
-                    this._clearIconTemplate = item.template;
-                    break;
-            }
-        });
-    }
-
     initMask() {
-        if (!this.mask) {
+        const mask = this.mask();
+        if (!mask) {
             return;
         }
 
         this.tests = [];
-        this.partialPosition = (this.mask as string).length;
-        this.len = (this.mask as string).length;
+        this.partialPosition = mask.length;
+        this.len = mask.length;
         this.firstNonMaskPos = null;
         this.defs = {
             '9': '[0-9]',
-            a: this.characterPattern,
-            '*': `${this.characterPattern}|[0-9]`
+            a: this.characterPattern(),
+            '*': `${this.characterPattern()}|[0-9]`
         };
 
-        let maskTokens = (this.mask as string).split('');
+        let maskTokens = mask.split('');
         for (let i = 0; i < maskTokens.length; i++) {
             let c = maskTokens[i];
             if (c == '?') {
@@ -1045,7 +1084,6 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     isCompleted(): boolean {
-        let completed: boolean;
         for (let i = this.firstNonMaskPos as number; i <= (this.lastRequiredNonMaskPos as number); i++) {
             if (this.tests[i] && (this.buffer as string[])[i] === this.getPlaceholder(i)) {
                 return false;
@@ -1056,10 +1094,11 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     getPlaceholder(i: number) {
-        if (i < this.slotChar.length) {
-            return this.slotChar.charAt(i);
+        const slotChar = this.slotChar();
+        if (i < slotChar.length) {
+            return slotChar.charAt(i);
         }
-        return this.slotChar.charAt(0);
+        return slotChar.charAt(0);
     }
 
     seekNext(pos: number) {
@@ -1145,14 +1184,13 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     onInputBlur(e: Event) {
-        this.focused = false;
         this.onModelTouched();
-        if (!this.keepBuffer) {
+        if (!this.keepBuffer()) {
             this.checkVal();
         }
         this.onBlur.emit(e);
 
-        if (this.modelValue() != this.focusText || this.modelValue() != this.value) {
+        if (this.modelValue() != this.focusText || this.modelValue() != this.value()) {
             this.updateModel(e);
             let event = this.document.createEvent('HTMLEvents');
             event.initEvent('change', true, false);
@@ -1161,7 +1199,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     onInputKeydown(e: KeyboardEvent) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -1190,7 +1228,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
             }
 
             this.clearBuffer(begin, end);
-            if (this.keepBuffer) {
+            if (this.keepBuffer()) {
                 this.shiftL(begin, end - 2);
             } else {
                 this.shiftL(begin, end - 1);
@@ -1214,7 +1252,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     onKeyPress(e: KeyboardEvent) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -1272,7 +1310,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     clearBuffer(start: number, end: number) {
-        if (!this.keepBuffer) {
+        if (!this.keepBuffer()) {
             let i;
             for (i = start; i < end && i < (this.len as number); i++) {
                 if (this.tests[i]) {
@@ -1304,7 +1342,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
                 while (pos++ < test.length) {
                     c = test.charAt(pos - 1);
                     if (this.tests[i].test(c)) {
-                        if (!this.keepBuffer) {
+                        if (!this.keepBuffer()) {
                             this.buffer[i] = c;
                         }
                         lastMatch = i;
@@ -1327,7 +1365,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
         if (allow) {
             this.writeBuffer();
         } else if (lastMatch + 1 < (this.partialPosition as number)) {
-            if (this.autoClear || this.buffer.join('') === this.defaultBuffer) {
+            if (this.autoClear() || this.buffer.join('') === this.defaultBuffer) {
                 // Invalid value. Remove it and replace it with the
                 // mask, which is the default behavior.
                 if (inputViewChild?.nativeElement.value) inputViewChild.nativeElement.value = '';
@@ -1345,11 +1383,9 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     onInputFocus(event: Event) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
-
-        this.focused = true;
 
         clearTimeout(this.caretTimeoutId);
         let pos: number;
@@ -1357,7 +1393,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
         const inputViewChild = this.inputViewChild();
         this.focusText = inputViewChild?.nativeElement.value;
 
-        pos = this.keepBuffer ? inputViewChild?.nativeElement.value.length : this.checkVal();
+        pos = this.keepBuffer() ? inputViewChild?.nativeElement.value.length : this.checkVal();
 
         this.caretTimeoutId = setTimeout(() => {
             const inputViewChildValue = this.inputViewChild();
@@ -1365,7 +1401,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
                 return;
             }
             this.writeBuffer();
-            if (pos == this.mask?.replace('?', '').length) {
+            if (pos == this.mask()?.replace('?', '').length) {
                 this.caret(0, pos);
             } else {
                 this.caret(pos);
@@ -1383,7 +1419,7 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
     }
 
     handleInputChange(event: Event) {
-        if (this.readonly) {
+        if (this.readonly()) {
             return;
         }
 
@@ -1415,11 +1451,11 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
             return;
         }
 
-        const updatedValue = this.unmask ? this.getUnmaskedValue() : target.value;
+        const updatedValue = this.unmask() ? this.getUnmaskedValue() : target.value;
         if (updatedValue !== null && updatedValue !== undefined) {
-            this.value = updatedValue;
-            this.writeModelValue(this.value);
-            this.onModelChange(this.value);
+            this.value.set(updatedValue);
+            this.writeModelValue(this.value());
+            this.onModelChange(this.value());
         }
     }
 
@@ -1429,8 +1465,8 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
 
     clear() {
         (this.inputViewChild() as ElementRef).nativeElement.value = '';
-        this.value = null;
-        this.onModelChange(this.value);
+        this.value.set(null);
+        this.onModelChange(this.value());
         this.onClear.emit();
     }
 
@@ -1441,13 +1477,13 @@ export class InputMask extends BaseInput<InputMaskPassThrough> {
      * Writes the value to the control.
      */
     writeControlValue(value: any, setModelValue: (value: any) => void): void {
-        this.value = value;
-        setModelValue(this.value);
+        this.value.set(value);
+        setModelValue(this.value());
 
         const inputViewChild = this.inputViewChild();
         if (inputViewChild && inputViewChild.nativeElement) {
-            if (this.value == undefined || this.value == null) inputViewChild.nativeElement.value = '';
-            else inputViewChild.nativeElement.value = this.value;
+            if (this.value() == undefined || this.value() == null) inputViewChild.nativeElement.value = '';
+            else inputViewChild.nativeElement.value = this.value();
 
             this.checkVal();
             this.focusText = inputViewChild.nativeElement.value;

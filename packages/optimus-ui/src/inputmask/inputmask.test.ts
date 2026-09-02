@@ -156,46 +156,46 @@ describe('InputMask', () => {
         });
 
         it('should have default values', () => {
-            expect(component.type).toBe('text');
-            expect(component.slotChar).toBe('_');
-            expect(component.autoClear).toBe(true);
-            expect(component.showClear).toBe(false);
-            expect(component.characterPattern).toBe('[A-Za-z]');
-            expect(component.keepBuffer).toBe(false);
+            expect(component.type()).toBe('text');
+            expect(component.slotChar()).toBe('_');
+            expect(component.autoClear()).toBe(true);
+            expect(component.showClear()).toBe(false);
+            expect(component.characterPattern()).toBe('[A-Za-z]');
+            expect(component.keepBuffer()).toBe(false);
             expect(component.androidChrome).toBe(true);
         });
 
         it('should initialize mask when mask property is set', () => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
-            expect(component._mask).toBe('999-99-9999');
+            expect(component.mask()).toBe('999-99-9999');
             expect(component.tests).toBeDefined();
             expect(component.buffer).toBeDefined();
             expect(component.len).toBe(11);
         });
 
         it('should set input properties correctly', () => {
-            component.mask = '999-99-9999'; // Set mask first to avoid initialization errors
-            component.type = 'tel';
-            component.slotChar = '*';
-            component.placeholder = 'Enter phone';
-            component.styleClass = 'custom-mask';
-            component.inputId = 'phone-input';
+            fixture.componentRef.setInput('mask', '999-99-9999'); // Set mask first to avoid initialization errors
+            fixture.componentRef.setInput('type', 'tel');
+            fixture.componentRef.setInput('slotChar', '*');
+            fixture.componentRef.setInput('placeholder', 'Enter phone');
+            fixture.componentRef.setInput('styleClass', 'custom-mask');
+            fixture.componentRef.setInput('inputId', 'phone-input');
 
             fixture.detectChanges();
 
-            expect(component.type).toBe('tel');
-            expect(component.slotChar).toBe('*');
-            expect(component.placeholder).toBe('Enter phone');
-            expect(component.styleClass).toBe('custom-mask');
-            expect(component.inputId).toBe('phone-input');
+            expect(component.type()).toBe('tel');
+            expect(component.slotChar()).toBe('*');
+            expect(component.placeholder()).toBe('Enter phone');
+            expect(component.styleClass()).toBe('custom-mask');
+            expect(component.inputId()).toBe('phone-input');
         });
     });
 
     describe('Mask Pattern Processing', () => {
         it('should process numeric mask pattern correctly', () => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
             expect(component.len).toBe(11);
@@ -205,7 +205,7 @@ describe('InputMask', () => {
         });
 
         it('should process alpha mask pattern correctly', () => {
-            component.mask = 'aaa-aaa';
+            fixture.componentRef.setInput('mask', 'aaa-aaa');
             fixture.detectChanges();
 
             expect(component.len).toBe(7);
@@ -214,7 +214,7 @@ describe('InputMask', () => {
         });
 
         it('should process mixed mask pattern correctly', () => {
-            component.mask = '***-999';
+            fixture.componentRef.setInput('mask', '***-999');
             fixture.detectChanges();
 
             expect(component.len).toBe(7);
@@ -222,7 +222,7 @@ describe('InputMask', () => {
         });
 
         it('should handle optional characters with ? correctly', () => {
-            component.mask = '999-99-9999?';
+            fixture.componentRef.setInput('mask', '999-99-9999?');
             fixture.detectChanges();
 
             expect(component.len).toBe(11); // Original length before '?' processing
@@ -230,18 +230,18 @@ describe('InputMask', () => {
         });
 
         it('should handle custom character pattern', () => {
-            component.characterPattern = '[0-9A-Fa-f]';
-            component.mask = 'aaa';
+            fixture.componentRef.setInput('characterPattern', '[0-9A-Fa-f]');
+            fixture.componentRef.setInput('mask', 'aaa');
             fixture.detectChanges();
 
-            expect(component.characterPattern).toBe('[0-9A-Fa-f]');
+            expect(component.characterPattern()).toBe('[0-9A-Fa-f]');
             expect(component.defs!['a']).toBe('[0-9A-Fa-f]');
         });
     });
 
     describe('Public Methods', () => {
         beforeEach(() => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             const mockInputElement = {
                 nativeElement: {
                     value: '',
@@ -260,7 +260,7 @@ describe('InputMask', () => {
         it('should get placeholder character correctly', () => {
             expect(component.getPlaceholder(0)).toBe('_');
 
-            component.slotChar = '***';
+            fixture.componentRef.setInput('slotChar', '***');
             expect(component.getPlaceholder(0)).toBe('*');
             expect(component.getPlaceholder(1)).toBe('*');
             expect(component.getPlaceholder(2)).toBe('*');
@@ -285,7 +285,7 @@ describe('InputMask', () => {
 
         it('should check if mask is completed', () => {
             // Ensure mask is initialized properly first
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
             component.buffer = ['1', '2', '3', '-', '4', '5', '-', '6', '7', '8', '9'];
@@ -297,7 +297,7 @@ describe('InputMask', () => {
 
         it('should get unmasked value correctly', () => {
             // Ensure mask is initialized properly first
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
             component.buffer = ['1', '2', '3', '-', '4', '5', '-', '6', '7', '8', '9'];
@@ -317,7 +317,7 @@ describe('InputMask', () => {
             component.clear();
 
             expect(component.inputViewChild()?.nativeElement.value).toBe('' as any);
-            expect(component.value).toBeNull();
+            expect(component.value()).toBeNull();
             expect(component.onModelChange).toHaveBeenCalledWith(null);
             expect(component.onClear.emit).toHaveBeenCalled();
         });
@@ -360,7 +360,7 @@ describe('InputMask', () => {
         it('should emit onKeydown via the real onInputKeydown handler', () => {
             // Drive the real onInputKeydown() handler (which is what actually emits onKeydown)
             // instead of calling emit() directly, so the test exercises real component logic.
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             (component as any).inputViewChild = () =>
                 ({
                     nativeElement: {
@@ -400,7 +400,7 @@ describe('InputMask', () => {
             // A single-character mask completes after exactly one accepted keypress, letting the
             // real onKeyPress() handler (which is what actually emits onComplete) drive the test,
             // instead of calling emit() directly.
-            component.mask = '9';
+            fixture.componentRef.setInput('mask', '9');
             (component as any).inputViewChild = () =>
                 ({
                     nativeElement: {
@@ -445,7 +445,7 @@ describe('InputMask', () => {
 
     describe('Keyboard Input Processing', () => {
         beforeEach(() => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             const mockInputElement = {
                 nativeElement: {
                     value: '',
@@ -544,7 +544,7 @@ describe('InputMask', () => {
         });
 
         it('should not process input when readonly', () => {
-            component.readonly = true;
+            fixture.componentRef.setInput('readonly', true);
             vi.spyOn(component, 'updateModel').mockImplementation(() => {});
 
             const keyEvent = new KeyboardEvent('keypress', { keyCode: 49 });
@@ -656,23 +656,23 @@ describe('InputMask', () => {
     describe('Edge Cases and Error Handling', () => {
         it('should handle null/undefined mask gracefully', () => {
             // Initially set a valid mask, then set to null
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
-            component.mask = null as any;
+            fixture.componentRef.setInput('mask', null as any);
             expect(() => component.initMask()).not.toThrow(); // Now gracefully handled
 
-            component.mask = undefined as any;
+            fixture.componentRef.setInput('mask', undefined as any);
             expect(() => component.initMask()).not.toThrow(); // Now gracefully handled
         });
 
         it('should handle empty mask string', () => {
-            component.mask = '';
+            fixture.componentRef.setInput('mask', '');
             expect(() => component.initMask()).not.toThrow(); // Empty string is handled gracefully
         });
 
         it('should handle invalid mask patterns', () => {
-            component.mask = 'invalid-pattern-with-no-valid-chars';
+            fixture.componentRef.setInput('mask', 'invalid-pattern-with-no-valid-chars');
             fixture.detectChanges();
 
             // With no valid mask chars, firstNonMaskPos might be set to a position
@@ -719,7 +719,7 @@ describe('InputMask', () => {
         });
 
         it('should handle shift operations correctly', () => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             fixture.detectChanges();
 
             component.buffer = ['1', '2', '3', '-', '_', '_', '-', '_', '_', '_', '_'];
@@ -735,8 +735,8 @@ describe('InputMask', () => {
         });
 
         it('should handle keepBuffer option correctly', () => {
-            component.mask = '999-99-9999';
-            component.keepBuffer = true;
+            fixture.componentRef.setInput('mask', '999-99-9999');
+            fixture.componentRef.setInput('keepBuffer', true);
             fixture.detectChanges();
 
             component.buffer = ['1', '2', '3', '-', '4', '5', '-', '6', '7', '8', '9'];
@@ -749,8 +749,8 @@ describe('InputMask', () => {
         });
 
         it('should handle autoClear behavior on blur', () => {
-            component.mask = '999-99-9999';
-            component.autoClear = true;
+            fixture.componentRef.setInput('mask', '999-99-9999');
+            fixture.componentRef.setInput('autoClear', true);
             const mockInputElement3 = {
                 nativeElement: {
                     value: '12_-__-____'
@@ -768,7 +768,7 @@ describe('InputMask', () => {
         });
 
         it('should handle writeControlValue correctly', () => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             const mockInputElement4 = {
                 nativeElement: {
                     value: ''
@@ -782,13 +782,13 @@ describe('InputMask', () => {
 
             component.writeControlValue('123456789', mockSetValue);
 
-            expect(component.value).toBe('123456789');
+            expect(component.value()).toBe('123456789');
             expect(mockSetValue).toHaveBeenCalledWith('123456789');
             expect(component.checkVal).toHaveBeenCalled();
         });
 
         it('should handle null value in writeControlValue', () => {
-            component.mask = '999-99-9999';
+            fixture.componentRef.setInput('mask', '999-99-9999');
             const mockInputElement5 = {
                 nativeElement: {
                     value: 'test'
@@ -801,7 +801,7 @@ describe('InputMask', () => {
             component.writeControlValue(null, mockSetValue);
 
             expect(component.inputViewChild()!.nativeElement.value).toBe('' as any);
-            expect(component.value).toBeNull();
+            expect(component.value()).toBeNull();
         });
     });
 
@@ -870,7 +870,7 @@ describe('InputMask', () => {
 
     describe('Complex Mask Patterns', () => {
         it('should handle phone number mask correctly', async () => {
-            component.mask = '(999) 999-9999';
+            fixture.componentRef.setInput('mask', '(999) 999-9999');
             const mockInputElement6 = {
                 nativeElement: {
                     value: '',
@@ -890,7 +890,7 @@ describe('InputMask', () => {
         });
 
         it('should handle date mask correctly', () => {
-            component.mask = '99/99/9999';
+            fixture.componentRef.setInput('mask', '99/99/9999');
             fixture.detectChanges();
 
             expect(component.defaultBuffer).toBe('__/__/____');
@@ -898,7 +898,7 @@ describe('InputMask', () => {
         });
 
         it('should handle credit card mask correctly', () => {
-            component.mask = '9999-9999-9999-9999';
+            fixture.componentRef.setInput('mask', '9999-9999-9999-9999');
             fixture.detectChanges();
 
             expect(component.defaultBuffer).toBe('____-____-____-____');
@@ -906,7 +906,7 @@ describe('InputMask', () => {
         });
 
         it('should handle custom alphanumeric mask correctly', () => {
-            component.mask = '***-***-999';
+            fixture.componentRef.setInput('mask', '***-***-999');
             fixture.detectChanges();
 
             expect(component.defaultBuffer).toBe('___-___-___');
@@ -1264,8 +1264,8 @@ describe('InputMask', () => {
                         return {
                             root: {
                                 class: {
-                                    PT_DISABLED: instance?.disabled,
-                                    PT_READONLY: instance?.readonly
+                                    PT_DISABLED: instance?.disabled(),
+                                    PT_READONLY: instance?.readonly()
                                 }
                             }
                         };
@@ -1288,7 +1288,7 @@ describe('InputMask', () => {
                     clearIcon: ({ instance }: any) => {
                         return {
                             style: {
-                                color: instance?.showClear ? 'green' : 'red'
+                                color: instance?.showClear() ? 'green' : 'red'
                             }
                         };
                     }
@@ -1316,7 +1316,7 @@ describe('InputMask', () => {
                         return {
                             root: {
                                 onclick: () => {
-                                    clickedValue = instance.value || 'clicked';
+                                    clickedValue = instance.value() || 'clicked';
                                 }
                             }
                         };
@@ -1565,8 +1565,8 @@ describe('InputMask', () => {
                     host: ({ instance }: any) => {
                         capturedInstance = instance;
                         return {
-                            'data-has-disabled': instance?.disabled !== undefined ? 'true' : 'false',
-                            'data-has-readonly': instance?.readonly !== undefined ? 'true' : 'false'
+                            'data-has-disabled': instance?.disabled() !== undefined ? 'true' : 'false',
+                            'data-has-readonly': instance?.readonly() !== undefined ? 'true' : 'false'
                         };
                     }
                 };
