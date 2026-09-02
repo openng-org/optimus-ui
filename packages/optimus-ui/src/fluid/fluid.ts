@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, NgModule, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, inject, NgModule, ViewEncapsulation } from '@angular/core';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
 import { FluidPassThrough } from '@openng/optimus-ui/types/fluid';
 import { FluidStyle } from './style/fluidstyle';
-
-const FLUID_INSTANCE = new InjectionToken<Fluid>('FLUID_INSTANCE');
 
 /**
  * Fluid is a layout component to make descendant components span full width of their container.
@@ -17,24 +15,28 @@ const FLUID_INSTANCE = new InjectionToken<Fluid>('FLUID_INSTANCE');
     imports: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [FluidStyle, { provide: FLUID_INSTANCE, useExisting: Fluid }, { provide: PARENT_INSTANCE, useExisting: Fluid }],
+    providers: [FluidStyle, { provide: PARENT_INSTANCE, useExisting: Fluid }],
     host: {
         '[class]': "cx('root')"
     },
     hostDirectives: [Bind]
 })
 export class Fluid extends BaseComponent<FluidPassThrough> {
-    componentName = 'Fluid';
-
-    $pcFluid: Fluid | undefined = inject(FLUID_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-
     _componentStyle = inject(FluidStyle);
+
+    componentName = 'Fluid';
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 }
 
 @NgModule({
