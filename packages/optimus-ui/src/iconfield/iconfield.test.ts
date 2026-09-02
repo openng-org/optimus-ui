@@ -42,7 +42,7 @@ class TestPositionIconFieldComponent {
     standalone: true,
     imports: [IconField, InputIcon, FormsModule],
     template: `
-        <p-iconfield [styleClass]="customClass">
+        <p-iconfield [class]="customClass">
             <input type="email" [(ngModel)]="email" />
             <p-inputicon class="pi pi-envelope" />
         </p-iconfield>
@@ -107,7 +107,7 @@ describe('IconField', () => {
         });
 
         it('should have default iconPosition "left"', () => {
-            expect(iconFieldInstance.iconPosition).toBe('left');
+            expect(iconFieldInstance.iconPosition()).toBe('left');
         });
 
         it('should apply iconPosition "right"', async () => {
@@ -115,7 +115,7 @@ describe('IconField', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(iconFieldInstance.iconPosition).toBe('right');
+            expect(iconFieldInstance.iconPosition()).toBe('right');
         });
 
         it('should have correct position classes', async () => {
@@ -152,22 +152,20 @@ describe('IconField', () => {
             fixture.detectChanges();
         });
 
-        it('should apply custom styleClass', () => {
-            expect(iconFieldInstance.styleClass).toBe('custom-icon-field');
-
+        it('should apply a custom class alongside the base class', () => {
             const iconFieldElement = fixture.debugElement.query(By.directive(IconField));
             expect(iconFieldElement.nativeElement.classList.contains('custom-icon-field')).toBe(true);
+            expect(iconFieldElement.nativeElement.classList.contains('p-iconfield')).toBe(true);
         });
 
-        it('should update styleClass dynamically', async () => {
+        it('should update the custom class dynamically', async () => {
             component.customClass = 'new-custom-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(iconFieldInstance.styleClass).toBe('new-custom-class');
-
             const iconFieldElement = fixture.debugElement.query(By.directive(IconField));
             expect(iconFieldElement.nativeElement.classList.contains('new-custom-class')).toBe(true);
+            expect(iconFieldElement.nativeElement.classList.contains('custom-icon-field')).toBe(false);
         });
     });
 
@@ -262,10 +260,10 @@ describe('IconField PassThrough Tests', () => {
 
     describe('PT Case 3: Instance variables', () => {
         it('should access instance variables in PT function', async () => {
-            component.iconPosition = 'right';
+            fixture.componentRef.setInput('iconPosition', 'right');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.iconPosition === 'right' ? 'ICON_RIGHT' : ''
+                    class: instance?.iconPosition() === 'right' ? 'ICON_RIGHT' : ''
                 })
             });
             fixture.changeDetectorRef.markForCheck();
