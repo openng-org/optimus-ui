@@ -11,7 +11,7 @@ import { PanelMenuList } from './panelmenu';
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: ` <p-panelmenu [id]="id" [model]="model" [multiple]="multiple" [transitionOptions]="transitionOptions" [styleClass]="styleClass" [tabindex]="tabindex"> </p-panelmenu> `
+    template: ` <p-panelmenu [id]="id" [model]="model" [multiple]="multiple" [transitionOptions]="transitionOptions" [class]="styleClass" [tabindex]="tabindex"> </p-panelmenu> `
 })
 class TestBasicPanelMenuComponent {
     id: string | undefined;
@@ -180,7 +180,7 @@ class TestDisabledPanelMenuComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-styled-panelmenu',
-    template: ` <p-panelmenu [model]="model" styleClass="custom-panel" [transitionOptions]="transitionOptions"> </p-panelmenu> `
+    template: ` <p-panelmenu [model]="model" class="custom-panel" [transitionOptions]="transitionOptions"> </p-panelmenu> `
 })
 class TestStyledPanelMenuComponent {
     model: MenuItem[] = [
@@ -300,19 +300,19 @@ describe('PanelMenu', () => {
         });
 
         it('should have correct default values', () => {
-            expect(panelMenuInstance.multiple).toBe(false);
+            expect(panelMenuInstance.multiple()).toBe(false);
 
             // Note: In test environment, @Input properties with default values may not be initialized
             // unless explicitly set. This tests the actual default behavior when no input is provided.
-            expect(panelMenuInstance.transitionOptions || '400ms cubic-bezier(0.86, 0, 0.07, 1)').toBe('400ms cubic-bezier(0.86, 0, 0.07, 1)');
+            expect(panelMenuInstance.transitionOptions() || '400ms cubic-bezier(0.86, 0, 0.07, 1)').toBe('400ms cubic-bezier(0.86, 0, 0.07, 1)');
 
             // tabindex can be undefined, 0, or NaN in test environment
-            expect(panelMenuInstance.tabindex === undefined || panelMenuInstance.tabindex === 0 || isNaN(panelMenuInstance.tabindex)).toBe(true);
+            expect(panelMenuInstance.tabindex() === undefined || panelMenuInstance.tabindex() === 0 || isNaN(panelMenuInstance.tabindex()!)).toBe(true);
         });
 
         it('should generate unique id if not provided', () => {
-            expect(panelMenuInstance.id).toBeTruthy();
-            expect(panelMenuInstance.id).toMatch(/^pn_id_/);
+            expect(panelMenuInstance.$id()).toBeTruthy();
+            expect(panelMenuInstance.$id()).toMatch(/^pn_id_/);
         });
 
         it('should use custom id when provided', async () => {
@@ -320,12 +320,12 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.id).toBe('custom_panel_menu');
+            expect(panelMenuInstance.$id()).toBe('custom_panel_menu');
         });
 
         it('should initialize with provided model', () => {
-            expect(panelMenuInstance.model).toEqual(component.model);
-            expect(panelMenuInstance.model!.length).toBe(2);
+            expect(panelMenuInstance.model()).toEqual(component.model);
+            expect(panelMenuInstance.model()!.length).toBe(2);
         });
 
         it('should have proper component structure', () => {
@@ -343,7 +343,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.model).toEqual(newModel);
+            expect(panelMenuInstance.model()).toEqual(newModel);
         });
 
         it('should update multiple property', async () => {
@@ -351,7 +351,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.multiple).toBe(true);
+            expect(panelMenuInstance.multiple()).toBe(true);
         });
 
         it('should update transitionOptions property', async () => {
@@ -359,7 +359,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.transitionOptions).toBe('300ms ease-in');
+            expect(panelMenuInstance.transitionOptions()).toBe('300ms ease-in');
         });
 
         it('should update styleClass property', async () => {
@@ -367,7 +367,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.styleClass).toBe('custom-class');
+            expect(panelMenuElement.classList.contains('custom-class')).toBe(true);
         });
 
         it('should update tabindex property', async () => {
@@ -375,7 +375,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.tabindex).toBe(1);
+            expect(panelMenuInstance.tabindex()).toBe(1);
         });
 
         it('should handle undefined model', async () => {
@@ -383,7 +383,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.model).toBeUndefined();
+            expect(panelMenuInstance.model()).toBeUndefined();
         });
 
         it('should handle empty model', async () => {
@@ -391,7 +391,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.model).toEqual([]);
+            expect(panelMenuInstance.model()).toEqual([]);
         });
     });
 
@@ -983,14 +983,14 @@ describe('PanelMenu', () => {
             const dynamicComponent = dynamicFixture.componentInstance;
             const dynamicPanelMenu = dynamicFixture.debugElement.query(By.directive(PanelMenu)).componentInstance;
 
-            expect(dynamicPanelMenu.model || []).toEqual([]);
+            expect(dynamicPanelMenu.model() || []).toEqual([]);
 
             dynamicComponent.updateModel();
             dynamicFixture.detectChanges();
             await dynamicFixture.whenStable();
 
-            expect(dynamicPanelMenu.model.length).toBe(1);
-            expect(dynamicPanelMenu.model[0].label).toBe('Dynamic Panel');
+            expect(dynamicPanelMenu.model()!.length).toBe(1);
+            expect(dynamicPanelMenu.model()![0].label).toBe('Dynamic Panel');
         });
 
         it('should handle model changes with expanded state', async () => {
@@ -1006,7 +1006,7 @@ describe('PanelMenu', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(panelMenuInstance.model).toEqual(newModel);
+            expect(panelMenuInstance.model()).toEqual(newModel);
 
             const panelContent = fixture.debugElement.query(By.css('.p-panelmenu-content'));
             expect(panelContent).toBeTruthy();
@@ -1032,7 +1032,7 @@ describe('PanelMenu', () => {
             emptyFixture.detectChanges();
 
             const emptyPanelMenu = emptyFixture.debugElement.query(By.directive(PanelMenu)).componentInstance;
-            expect(emptyPanelMenu.model).toEqual([]);
+            expect(emptyPanelMenu.model()).toEqual([]);
 
             const panels = emptyFixture.debugElement.queryAll(By.css('[data-pc-section="panel"]'));
             expect(panels.length).toBe(0);
@@ -1044,7 +1044,7 @@ describe('PanelMenu', () => {
             await fixture.whenStable();
 
             // Should not throw error
-            expect(panelMenuInstance.model).toEqual([]);
+            expect(panelMenuInstance.model()).toEqual([]);
         });
 
         it('should handle items without labels', async () => {
@@ -1193,7 +1193,7 @@ describe('PanelMenu', () => {
         beforeEach(() => {
             fixture = TestBed.createComponent(PanelMenu);
             panelMenu = fixture.componentInstance;
-            panelMenu.model = [
+            fixture.componentRef.setInput('model', [
                 {
                     label: 'Documents',
                     icon: 'pi pi-file',
@@ -1202,7 +1202,7 @@ describe('PanelMenu', () => {
                         { label: 'Personal', icon: 'pi pi-user' }
                     ]
                 }
-            ];
+            ]);
         });
 
         describe('Case 1: Simple string classes', () => {
@@ -1304,11 +1304,11 @@ describe('PanelMenu', () => {
 
         describe('Case 4: Instance variables', () => {
             it('should use instance variables in PT', async () => {
-                panelMenu.multiple = true;
+                fixture.componentRef.setInput('multiple', true);
 
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => ({
-                        'data-multiple': instance?.multiple ? 'true' : 'false'
+                        'data-multiple': instance?.multiple() ? 'true' : 'false'
                     })
                 });
 
@@ -1350,7 +1350,7 @@ describe('PanelMenu', () => {
                 const testFixture = TestBed.createComponent(PanelMenu);
                 const testComponent = testFixture.componentInstance;
 
-                testComponent.model = [{ label: 'Test', items: [{ label: 'Item' }] }];
+                testFixture.componentRef.setInput('model', [{ label: 'Test', items: [{ label: 'Item' }] }]);
                 testFixture.componentRef.setInput('pt', { root: 'INLINE_TEST_CLASS' });
 
                 testFixture.detectChanges();
@@ -1365,7 +1365,7 @@ describe('PanelMenu', () => {
                 const testFixture = TestBed.createComponent(PanelMenu);
                 const testComponent = testFixture.componentInstance;
 
-                testComponent.model = [{ label: 'Test', items: [{ label: 'Item' }] }];
+                testFixture.componentRef.setInput('model', [{ label: 'Test', items: [{ label: 'Item' }] }]);
                 testFixture.componentRef.setInput('pt', {
                     root: { class: 'INLINE_OBJECT_CLASS' }
                 });
