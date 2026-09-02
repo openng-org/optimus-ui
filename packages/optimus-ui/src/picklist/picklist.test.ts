@@ -175,7 +175,7 @@ describe('PickList', () => {
         it('should have CDK drag drop enabled when dragdrop is true', () => {
             // Check that dragdrop is enabled on component
             expect(component.dragdrop).toBe(true);
-            expect(picklistComponent.dragdrop).toBe(true);
+            expect(picklistComponent.dragdrop()).toBe(true);
         });
 
         it('should have cdkDrag directive on items when dragdrop is enabled', () => {
@@ -466,7 +466,7 @@ describe('PickList', () => {
             fixture.detectChanges();
 
             expect(component.dragdrop).toBe(false);
-            expect(picklistComponent.dragdrop).toBe(false);
+            expect(picklistComponent.dragdrop()).toBe(false);
         });
 
         it('should handle multiple items drag drop simulation', async () => {
@@ -562,7 +562,7 @@ describe('PickList', () => {
             fixture.detectChanges();
 
             expect(component.disabled).toBe(true);
-            expect(picklistComponent.disabled).toBe(true);
+            expect(picklistComponent.disabled()).toBe(true);
         });
     });
 
@@ -605,7 +605,7 @@ describe('PickList', () => {
             component.dataKey = 'id';
             fixture.detectChanges();
 
-            expect(picklistComponent.dataKey).toBe('id');
+            expect(picklistComponent.dataKey()).toBe('id');
         });
 
         it('should pass dataKey to both listbox components', () => {
@@ -616,8 +616,8 @@ describe('PickList', () => {
             expect(listboxes.length).toBe(2);
 
             // Check that both listboxes use the dataKey as optionLabel
-            expect(listboxes[0].componentInstance.optionLabel).toBe('id');
-            expect(listboxes[1].componentInstance.optionLabel).toBe('id');
+            expect(listboxes[0].componentInstance.optionLabel()).toBe('id');
+            expect(listboxes[1].componentInstance.optionLabel()).toBe('id');
         });
     });
 
@@ -626,14 +626,14 @@ describe('PickList', () => {
             component.dataKey = 'id';
             fixture.detectChanges();
 
-            expect(picklistComponent.dataKey).toBe('id');
+            expect(picklistComponent.dataKey()).toBe('id');
 
             const listboxes = fixture.debugElement.queryAll(By.css('p-listbox'));
             expect(listboxes.length).toBe(2);
 
             // When dataKey is provided, it's used as optionLabel in listboxes
-            expect(listboxes[0].componentInstance.optionLabel).toBe('id');
-            expect(listboxes[1].componentInstance.optionLabel).toBe('id');
+            expect(listboxes[0].componentInstance.optionLabel()).toBe('id');
+            expect(listboxes[1].componentInstance.optionLabel()).toBe('id');
         });
 
         it('should use default name field when dataKey is not provided', () => {
@@ -644,8 +644,8 @@ describe('PickList', () => {
             expect(listboxes.length).toBe(2);
 
             // Should fallback to 'name'
-            expect(listboxes[0].componentInstance.optionLabel).toBe('name');
-            expect(listboxes[1].componentInstance.optionLabel).toBe('name');
+            expect(listboxes[0].componentInstance.optionLabel()).toBe('name');
+            expect(listboxes[1].componentInstance.optionLabel()).toBe('name');
         });
     });
 
@@ -1065,7 +1065,7 @@ describe('PickList', () => {
 
         it('should work with keepSelection option when dragging multiple items', async () => {
             // Enable keepSelection
-            picklistComponent.keepSelection = true;
+            vi.spyOn(picklistComponent, 'keepSelection').mockReturnValue(true);
 
             // Select multiple items
             const selectedItems = [picklistComponent.source()[0], picklistComponent.source()[1]];
@@ -1443,7 +1443,7 @@ describe('PickList', () => {
 
         describe('Case 7: Test with different configurations', () => {
             it('should apply PT when showSourceControls is true', () => {
-                ptPicklist.showSourceControls = true;
+                ptFixture.componentRef.setInput('showSourceControls', true);
                 ptFixture.componentRef.setInput('pt', { sourceControls: 'SOURCE_VISIBLE_CLASS' });
                 ptFixture.detectChanges();
 
@@ -1454,7 +1454,7 @@ describe('PickList', () => {
             });
 
             it('should apply PT when showTargetControls is true', () => {
-                ptPicklist.showTargetControls = true;
+                ptFixture.componentRef.setInput('showTargetControls', true);
                 ptFixture.componentRef.setInput('pt', { targetControls: 'TARGET_VISIBLE_CLASS' });
                 ptFixture.detectChanges();
 
@@ -1467,7 +1467,7 @@ describe('PickList', () => {
 
         describe('Case 8: Multiple button PT variations', () => {
             it('should apply PT to all source control buttons', async () => {
-                ptPicklist.showSourceControls = true;
+                ptFixture.componentRef.setInput('showSourceControls', true);
                 ptFixture.componentRef.setInput('pt', {
                     pcSourceMoveUpButton: { root: { class: 'MOVE_UP_CLASS' } },
                     pcSourceMoveTopButton: { root: { class: 'MOVE_TOP_CLASS' } },
@@ -1498,7 +1498,7 @@ describe('PickList', () => {
             });
 
             it('should apply PT to target control buttons', async () => {
-                ptPicklist.showTargetControls = true;
+                ptFixture.componentRef.setInput('showTargetControls', true);
                 ptFixture.componentRef.setInput('pt', {
                     pcTargetMoveUpButton: { root: { class: 'TARGET_UP_CLASS' } },
                     pcTargetMoveTopButton: { root: { class: 'TARGET_TOP_CLASS' } },
@@ -1516,12 +1516,12 @@ describe('PickList', () => {
 
         describe('Case 9: Instance-based PT tests with callbacks', () => {
             it('should access instance.disabled property in PT callback', async () => {
-                ptPicklist.disabled = true;
+                ptFixture.componentRef.setInput('disabled', true);
                 ptFixture.componentRef.setInput('pt', {
                     sourceControls: ({ instance }) => {
                         return {
                             class: {
-                                DISABLED_STATE: instance?.disabled
+                                DISABLED_STATE: instance?.disabled()
                             }
                         };
                     }
@@ -1537,7 +1537,7 @@ describe('PickList', () => {
             });
 
             it('should access instance.showSourceControls property in PT callback', async () => {
-                ptPicklist.showSourceControls = true;
+                ptFixture.componentRef.setInput('showSourceControls', true);
                 ptFixture.componentRef.setInput('pt', {
                     host: ({ instance }) => {
                         return {
@@ -1557,7 +1557,7 @@ describe('PickList', () => {
             });
 
             it('should access instance.showTargetControls property in PT callback', async () => {
-                ptPicklist.showTargetControls = true;
+                ptFixture.componentRef.setInput('showTargetControls', true);
                 ptFixture.componentRef.setInput('pt', {
                     host: ({ instance }) => {
                         return {
@@ -1616,12 +1616,12 @@ describe('PickList', () => {
             });
 
             it('should apply conditional styling based on instance.disabled in transferControls', async () => {
-                ptPicklist.disabled = false;
+                ptFixture.componentRef.setInput('disabled', false);
                 ptFixture.componentRef.setInput('pt', {
                     transferControls: ({ instance }) => {
                         return {
                             style: {
-                                'background-color': instance?.disabled ? 'gray' : 'blue'
+                                'background-color': instance?.disabled() ? 'gray' : 'blue'
                             }
                         };
                     }
@@ -1670,21 +1670,22 @@ describe('PickList', () => {
                 await new Promise((resolve) => setTimeout(resolve, 100));
                 await ptFixture.whenStable();
 
-                // In standalone picklist, $pcPickList should be undefined
-                expect(ptPicklist.$pcPickList).toBeUndefined();
+                // The parent-instance accessor was removed with the signal migration — the PT
+                // callback sees no parent either way.
+                expect((ptPicklist as any).$pcPickList).toBeUndefined();
                 // host is the component's root element
                 const hostEl = ptFixture.debugElement.nativeElement;
                 expect(hostEl.getAttribute('data-has-parent')).toBe('false');
             });
 
             it('should use instance properties for complex conditional PT', async () => {
-                ptPicklist.disabled = false;
-                ptPicklist.showSourceControls = true;
+                ptFixture.componentRef.setInput('disabled', false);
+                ptFixture.componentRef.setInput('showSourceControls', true);
                 ptFixture.componentRef.setInput('pt', {
                     sourceControls: ({ instance }) => {
                         return {
                             class: {
-                                ENABLED_AND_VISIBLE: !instance?.disabled && instance?.showSourceControls
+                                ENABLED_AND_VISIBLE: !instance?.disabled() && instance?.showSourceControls()
                             },
                             'data-test-state': 'active'
                         };
@@ -1763,7 +1764,7 @@ describe('PickList', () => {
             });
 
             it('should pass PT to listbox filter input when filterBy is enabled', async () => {
-                ptPicklist.filterBy = 'label';
+                ptFixture.componentRef.setInput('filterBy', 'label');
                 ptFixture.componentRef.setInput('pt', {
                     pcListbox: {
                         pcFilter: {
@@ -1785,13 +1786,13 @@ describe('PickList', () => {
                         return {
                             root: {
                                 class: {
-                                    LISTBOX_DISABLED: instance?.disabled
+                                    LISTBOX_DISABLED: instance?.disabled()
                                 }
                             }
                         };
                     }
                 });
-                ptPicklist.disabled = true;
+                ptFixture.componentRef.setInput('disabled', true);
                 ptFixture.detectChanges();
                 await new Promise((resolve) => setTimeout(resolve, 100));
                 await ptFixture.whenStable();
