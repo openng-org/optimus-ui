@@ -3,7 +3,7 @@ import { style } from '@openng/optimus-ui-styles/scrolltop';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const classes = {
-    root: ({ instance }) => ['p-scrolltop', { 'p-scrolltop-sticky': instance.target !== 'window' }],
+    root: ({ instance }) => ['p-scrolltop', { 'p-scrolltop-sticky': instance.target() !== 'window' }],
     icon: 'p-scrolltop-icon'
 };
 
