@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+    afterEveryRender,
     ChangeDetectionStrategy,
     Component,
     computed,
@@ -8,7 +9,6 @@ import {
     effect,
     forwardRef,
     inject,
-    InjectionToken,
     input,
     InputSignal,
     InputSignalWithTransform,
@@ -34,14 +34,6 @@ import { StepPanelsStyle } from './style/steppanelsstyle';
 import { StepPanelStyle } from './style/steppanelstyle';
 import { StepperStyle } from './style/stepperstyle';
 import { StepStyle } from './style/stepstyle';
-
-const STEPPER_INSTANCE = new InjectionToken<Stepper>('STEPPER_INSTANCE');
-const STEPLIST_INSTANCE = new InjectionToken<StepList>('STEPLIST_INSTANCE');
-const STEPITEM_INSTANCE = new InjectionToken<StepItem>('STEPITEM_INSTANCE');
-const STEP_INSTANCE = new InjectionToken<Step>('STEP_INSTANCE');
-const STEPPANEL_INSTANCE = new InjectionToken<StepPanel>('STEPPANEL_INSTANCE');
-const STEPPANELS_INSTANCE = new InjectionToken<StepPanels>('STEPPANELS_INSTANCE');
-const STEPPERSEPARATOR_INSTANCE = new InjectionToken<StepperSeparator>('STEPPERSEPARATOR_INSTANCE');
 
 /**
  * Context interface for the StepPanel content template.
@@ -79,22 +71,26 @@ export interface StepPanelContentTemplateContext {
     host: {
         '[class]': 'cx("root")'
     },
-    providers: [StepListStyle, { provide: STEPLIST_INSTANCE, useExisting: StepList }, { provide: PARENT_INSTANCE, useExisting: StepList }],
+    providers: [StepListStyle, { provide: PARENT_INSTANCE, useExisting: StepList }],
     hostDirectives: [Bind]
 })
 export class StepList extends BaseComponent<StepListPassThrough> {
-    $pcStepList: StepList | undefined = inject(STEPLIST_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    componentName = 'StepList';
-
-    steps = contentChildren(forwardRef(() => Step));
 
     _componentStyle = inject(StepListStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    steps = contentChildren(forwardRef(() => Step));
+
+    componentName = 'StepList';
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 }
 /**
@@ -111,21 +107,25 @@ export class StepList extends BaseComponent<StepListPassThrough> {
     host: {
         '[class]': 'cx("separator")'
     },
-    providers: [StepperStyle, { provide: STEPPERSEPARATOR_INSTANCE, useExisting: StepperSeparator }, { provide: PARENT_INSTANCE, useExisting: StepperSeparator }],
+    providers: [StepperStyle, { provide: PARENT_INSTANCE, useExisting: StepperSeparator }],
     hostDirectives: [Bind]
 })
 export class StepperSeparator extends BaseComponent<StepperSeparatorPassThrough> {
-    $pcStepperSeparator: StepperSeparator | undefined = inject(STEPPERSEPARATOR_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
+
+    _componentStyle = inject(StepperStyle);
 
     componentName = 'StepperSeparator';
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
-
-    _componentStyle = inject(StepperStyle);
 }
 
 /**
@@ -143,23 +143,16 @@ export class StepperSeparator extends BaseComponent<StepperSeparatorPassThrough>
         '[class]': 'cx("root")',
         '[attr.data-p-active]': 'isActive()'
     },
-    providers: [StepItemStyle, { provide: STEPITEM_INSTANCE, useExisting: StepItem }, { provide: PARENT_INSTANCE, useExisting: StepItem }],
+    providers: [StepItemStyle, { provide: PARENT_INSTANCE, useExisting: StepItem }],
     hostDirectives: [Bind]
 })
 export class StepItem extends BaseComponent<StepItemPassThrough> {
-    $pcStepItem: StepItem | undefined = inject(STEPITEM_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    componentName = 'StepItem';
 
     _componentStyle = inject(StepItemStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
-
     pcStepper = inject(forwardRef(() => Stepper));
+
     /**
      * Value of step.
      * @type {<number | undefined>}
@@ -168,11 +161,13 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
      */
     value: ModelSignal<number | undefined> = model<number | undefined>();
 
-    isActive = computed(() => this.pcStepper.value() === this.value());
-
     step = contentChild(forwardRef(() => Step));
 
     stepPanel = contentChild(forwardRef(() => StepPanel));
+
+    componentName = 'StepItem';
+
+    isActive = computed(() => this.pcStepper.value() === this.value());
 
     constructor() {
         super();
@@ -182,6 +177,13 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
 
         effect(() => {
             this.stepPanel().value.set(this.value());
+        });
+
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 }
@@ -195,7 +197,7 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
     standalone: true,
     imports: [CommonModule, StepperSeparator, SharedModule, BindModule],
     template: `
-        @if (!content() && !_contentTemplate) {
+        @if (!$contentTemplate()) {
             <button
                 [attr.id]="id()"
                 [class]="cx('header')"
@@ -216,7 +218,7 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
                 <p-stepper-separator />
             }
         } @else {
-            <ng-container *ngTemplateOutlet="content() || _contentTemplate; context: { activateCallback: onStepClick.bind(this), value: value(), active: active() }"></ng-container>
+            <ng-container *ngTemplateOutlet="$contentTemplate(); context: { activateCallback: onStepClick.bind(this), value: value(), active: active() }"></ng-container>
             @if (isSeparatorVisible()) {
                 <p-stepper-separator />
             }
@@ -231,21 +233,15 @@ export class StepItem extends BaseComponent<StepItemPassThrough> {
         '[attr.data-p-active]': 'active()',
         '[attr.data-p-disabled]': 'isStepDisabled()'
     },
-    providers: [StepStyle, { provide: STEP_INSTANCE, useExisting: Step }, { provide: PARENT_INSTANCE, useExisting: Step }],
+    providers: [StepStyle, { provide: PARENT_INSTANCE, useExisting: Step }],
     hostDirectives: [Bind]
 })
 export class Step extends BaseComponent<StepPassThrough> {
-    $pcStep: Step | undefined = inject(STEP_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    componentName = 'Step';
 
     pcStepper = inject(forwardRef(() => Stepper));
 
-    onAfterViewChecked() {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(StepStyle);
 
     /**
      * Active value of stepper.
@@ -254,6 +250,7 @@ export class Step extends BaseComponent<StepPassThrough> {
      * @group Props
      */
     value: ModelSignal<number | undefined> = model<number | undefined>();
+
     /**
      * Whether the step is disabled.
      * @type {boolean}
@@ -263,6 +260,17 @@ export class Step extends BaseComponent<StepPassThrough> {
     disabled: InputSignalWithTransform<any, boolean> = input(false, {
         transform: (v: any | boolean) => transformToBoolean(v)
     });
+
+    /**
+     * Content template.
+     * @type {TemplateRef<StepContentTemplateContext>}
+     * @group Templates
+     */
+    readonly content = contentChild<TemplateRef<StepContentTemplateContext>>('content', { descendants: false });
+
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'Step';
 
     active = computed(() => this.pcStepper.isStepActive(this.value()));
 
@@ -282,26 +290,17 @@ export class Step extends BaseComponent<StepPassThrough> {
             return false;
         }
     });
-    /**
-     * Content template.
-     * @type {TemplateRef<StepContentTemplateContext>}
-     * @group Templates
-     */
-    readonly content = contentChild<TemplateRef<StepContentTemplateContext>>('content', { descendants: false });
 
-    readonly templates = contentChildren(PrimeTemplate);
+    /** Effective content template: the `#content` content child, or a legacy `pTemplate="content"`. */
+    readonly $contentTemplate = computed(() => this.content() ?? this.templates().find((item) => item.getType() === 'content')?.template);
 
-    _contentTemplate: TemplateRef<any> | undefined;
-
-    _componentStyle = inject(StepStyle);
-
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 
@@ -325,7 +324,7 @@ export class Step extends BaseComponent<StepPassThrough> {
                     <p-stepper-separator />
                 }
                 <div [class]="cx('content')" [pBind]="ptm('content')">
-                    <ng-container *ngTemplateOutlet="contentTemplate() || _contentTemplate; context: { activateCallback: updateValue.bind(this), value: value(), active: active() }"></ng-container>
+                    <ng-container *ngTemplateOutlet="$contentTemplate(); context: { activateCallback: updateValue.bind(this), value: value(), active: active() }"></ng-container>
                 </div>
             </div>
         </p-motion>
@@ -340,21 +339,15 @@ export class Step extends BaseComponent<StepPassThrough> {
         '[attr.data-p-active]': 'active()',
         '[attr.data-pc-name]': '"steppanel"'
     },
-    providers: [StepPanelStyle, { provide: STEPPANEL_INSTANCE, useExisting: StepPanel }, { provide: PARENT_INSTANCE, useExisting: StepPanel }],
+    providers: [StepPanelStyle, { provide: PARENT_INSTANCE, useExisting: StepPanel }],
     hostDirectives: [Bind]
 })
 export class StepPanel extends BaseComponent<StepPanelPassThrough> {
-    $pcStepPanel: StepPanel | undefined = inject(STEPPANEL_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    componentName = 'StepPanel';
 
     pcStepper = inject(forwardRef(() => Stepper));
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(StepPanelStyle);
 
     /**
      * Active value of stepper.
@@ -363,6 +356,18 @@ export class StepPanel extends BaseComponent<StepPanelPassThrough> {
      * @group Props
      */
     value: ModelSignal<number | undefined> = model<number | undefined>(undefined);
+
+    /**
+     * Content template.
+     * @param {StepPanelContentTemplateContext} context - Context of the template
+     * @see {@link StepPanelContentTemplateContext}
+     * @group Templates
+     */
+    readonly contentTemplate = contentChild<TemplateRef<StepPanelContentTemplateContext>>('content');
+
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'StepPanel';
 
     active = computed(() => this.pcStepper.value() === this.value());
 
@@ -389,27 +394,16 @@ export class StepPanel extends BaseComponent<StepPanelPassThrough> {
         };
     });
 
-    /**
-     * Content template.
-     * @param {StepPanelContentTemplateContext} context - Context of the template
-     * @see {@link StepPanelContentTemplateContext}
-     * @group Templates
-     */
-    readonly contentTemplate = contentChild<TemplateRef<StepPanelContentTemplateContext>>('content');
+    /** Effective content template: the `#content` content child, or a legacy `pTemplate="content"`. */
+    readonly $contentTemplate = computed(() => this.contentTemplate() ?? this.templates().find((item) => item.getType() === 'content')?.template);
 
-    readonly templates = contentChildren(PrimeTemplate);
-
-    _contentTemplate: TemplateRef<any> | undefined;
-
-    _componentStyle = inject(StepPanelStyle);
-
-    onAfterContentInit() {
-        this.templates()?.forEach((item) => {
-            switch (item.getType()) {
-                case 'content':
-                    this._contentTemplate = item.template;
-                    break;
-            }
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 
@@ -428,20 +422,24 @@ export class StepPanel extends BaseComponent<StepPanelPassThrough> {
     host: {
         '[class]': 'cx("root")'
     },
-    providers: [StepPanelsStyle, { provide: STEPPANELS_INSTANCE, useExisting: StepPanels }, { provide: PARENT_INSTANCE, useExisting: StepPanels }],
+    providers: [StepPanelsStyle, { provide: PARENT_INSTANCE, useExisting: StepPanels }],
     hostDirectives: [Bind]
 })
 export class StepPanels extends BaseComponent<StepPanelsPassThrough> {
-    $pcStepPanels: StepPanels | undefined = inject(STEPPANELS_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    componentName = 'StepPanels';
 
     _componentStyle = inject(StepPanelsStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    componentName = 'StepPanels';
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 }
 
@@ -456,7 +454,7 @@ export class StepPanels extends BaseComponent<StepPanelsPassThrough> {
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [StepperStyle, { provide: STEPPER_INSTANCE, useExisting: Stepper }, { provide: PARENT_INSTANCE, useExisting: Stepper }],
+    providers: [StepperStyle, { provide: PARENT_INSTANCE, useExisting: Stepper }],
     host: {
         '[class]': 'cx("root")',
         '[attr.role]': '"tablist"',
@@ -465,17 +463,10 @@ export class StepPanels extends BaseComponent<StepPanelsPassThrough> {
     hostDirectives: [Bind]
 })
 export class Stepper extends BaseComponent<StepperPassThrough> {
-    componentName = 'Stepper';
-
-    $pcStepper: Stepper | undefined = inject(STEPPER_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
     _componentStyle = inject(StepperStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
     /**
      * A model that can hold a numeric value or be undefined.
      * @defaultValue undefined
@@ -483,6 +474,7 @@ export class Stepper extends BaseComponent<StepperPassThrough> {
      * @group Props
      */
     value: ModelSignal<number | undefined> = model<number | undefined>(undefined);
+
     /**
      * A boolean variable that captures user input.
      * @defaultValue false
@@ -492,6 +484,7 @@ export class Stepper extends BaseComponent<StepperPassThrough> {
     linear: InputSignalWithTransform<any, boolean> = input(false, {
         transform: (v: any | boolean) => transformToBoolean(v)
     });
+
     /**
      * Transition options of the animation.
      * @defaultValue 400ms cubic-bezier(0.86, 0, 0.07, 1)
@@ -507,6 +500,14 @@ export class Stepper extends BaseComponent<StepperPassThrough> {
      */
     motionOptions = input<MotionOptions | undefined>(undefined);
 
+    stepList = contentChild(StepList);
+
+    stepItems = contentChildren(StepItem);
+
+    steps = contentChildren(Step);
+
+    componentName = 'Stepper';
+
     computedMotionOptions = computed<MotionOptions>(() => {
         return {
             ...this.ptm('motion'),
@@ -516,11 +517,15 @@ export class Stepper extends BaseComponent<StepperPassThrough> {
 
     id = signal<string>(uuid('pn_id_'));
 
-    stepItems = contentChildren(StepItem);
-
-    steps = contentChildren(Step);
-
-    stepList = contentChild(StepList);
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     updateValue(value: number) {
         this.value.set(value);
