@@ -1,10 +1,8 @@
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { TabPanelsStyle } from './style/tabpanelsstyle';
 import { TabPanelsPassThrough } from '@openng/optimus-ui/types/tabs';
-
-const TABPANELS_INSTANCE = new InjectionToken<TabPanels>('TABPANELS_INSTANCE');
 
 /**
  * TabPanels is a helper component for Tabs component.
@@ -21,19 +19,23 @@ const TABPANELS_INSTANCE = new InjectionToken<TabPanels>('TABPANELS_INSTANCE');
         '[class]': 'cx("root")',
         '[attr.role]': '"presentation"'
     },
-    providers: [TabPanelsStyle, { provide: TABPANELS_INSTANCE, useExisting: TabPanels }, { provide: PARENT_INSTANCE, useExisting: TabPanels }],
+    providers: [TabPanelsStyle, { provide: PARENT_INSTANCE, useExisting: TabPanels }],
     hostDirectives: [Bind]
 })
 export class TabPanels extends BaseComponent<TabPanelsPassThrough> {
-    componentName = 'TabPanels';
-
-    $pcTabPanels: TabPanels | undefined = inject(TABPANELS_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
     _componentStyle = inject(TabPanelsStyle);
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    componentName = 'TabPanels';
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
     }
 }

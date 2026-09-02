@@ -1,13 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, forwardRef, inject, InjectionToken, input, model, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, contentChild, forwardRef, inject, input, model, ViewEncapsulation } from '@angular/core';
 import { equals } from '@openng/optimus-ui-utils';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { TabPanelStyle } from './style/tabpanelstyle';
 import { Tabs } from './tabs';
 import { TabPanelPassThrough } from '@openng/optimus-ui/types/tabs';
-
-const TABPANEL_INSTANCE = new InjectionToken<TabPanel>('TABPANEL_INSTANCE');
 
 /**
  * TabPanel is a helper component for Tabs component.
@@ -28,7 +26,7 @@ const TABPANEL_INSTANCE = new InjectionToken<TabPanel>('TABPANEL_INSTANCE');
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [TabPanelStyle, { provide: TABPANEL_INSTANCE, useExisting: TabPanel }, { provide: PARENT_INSTANCE, useExisting: TabPanel }],
+    providers: [TabPanelStyle, { provide: PARENT_INSTANCE, useExisting: TabPanel }],
     host: {
         '[class]': 'cx("root")',
         '[attr.id]': 'id()',
@@ -40,17 +38,11 @@ const TABPANEL_INSTANCE = new InjectionToken<TabPanel>('TABPANEL_INSTANCE');
     hostDirectives: [Bind]
 })
 export class TabPanel extends BaseComponent<TabPanelPassThrough> {
-    componentName = 'TabPanel';
-
-    $pcTabPanel: TabPanel | undefined = inject(TABPANEL_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
     pcTabs = inject<Tabs>(forwardRef(() => Tabs));
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(TabPanelStyle);
 
     /**
      * When enabled, tab is not rendered until activation.
@@ -59,17 +51,21 @@ export class TabPanel extends BaseComponent<TabPanelPassThrough> {
      * @group Props
      */
     lazy = input(false, { transform: booleanAttribute });
+
     /**
      * Value of the active tab.
      * @defaultValue undefined
      * @group Props
      */
     value = model<string | number | undefined>(undefined);
+
     /**
      * Template for initializing complex content when lazy is enabled.
      * @group Templates
      */
     content = contentChild('content');
+
+    componentName = 'TabPanel';
 
     id = computed(() => `${this.pcTabs.id()}_tabpanel_${this.value()}`);
 
@@ -94,5 +90,13 @@ export class TabPanel extends BaseComponent<TabPanelPassThrough> {
         return false;
     });
 
-    _componentStyle = inject(TabPanelStyle);
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 }

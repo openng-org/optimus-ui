@@ -1,5 +1,5 @@
 import { isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, HostListener, inject, InjectionToken, input, model, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, afterNextRender, booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, HostListener, inject, input, model, ViewEncapsulation } from '@angular/core';
 import { equals, focus, getAttribute } from '@openng/optimus-ui-utils';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -9,8 +9,6 @@ import { TabPassThrough } from '@openng/optimus-ui/types/tabs';
 import { TabStyle } from './style/tabstyle';
 import { TabList } from './tablist';
 import { Tabs } from './tabs';
-
-const TAB_INSTANCE = new InjectionToken<Tab>('TAB_INSTANCE');
 
 /**
  * Defines valid properties in Tab component.
@@ -35,18 +33,16 @@ const TAB_INSTANCE = new InjectionToken<Tab>('TAB_INSTANCE');
         '[attr.tabindex]': 'tabindex()'
     },
     hostDirectives: [Ripple, Bind],
-    providers: [TabStyle, { provide: TAB_INSTANCE, useExisting: Tab }, { provide: PARENT_INSTANCE, useExisting: Tab }]
+    providers: [TabStyle, { provide: PARENT_INSTANCE, useExisting: Tab }]
 })
 export class Tab extends BaseComponent<TabPassThrough> {
-    componentName = 'Tab';
-
-    $pcTab: Tab | undefined = inject(TAB_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    pcTabs = inject(forwardRef(() => Tabs));
+
+    pcTabList = inject(forwardRef(() => TabList));
+
+    _componentStyle = inject(TabStyle);
 
     /**
      * Value of tab.
@@ -54,6 +50,7 @@ export class Tab extends BaseComponent<TabPassThrough> {
      * @group Props
      */
     value = model<number | string | undefined>();
+
     /**
      * Whether the tab is disabled.
      * @defaultValue false
@@ -61,13 +58,7 @@ export class Tab extends BaseComponent<TabPassThrough> {
      */
     disabled = input(false, { transform: booleanAttribute });
 
-    pcTabs = inject(forwardRef(() => Tabs));
-
-    pcTabList = inject(forwardRef(() => TabList));
-
-    el = inject(ElementRef);
-
-    _componentStyle = inject(TabStyle);
+    componentName = 'Tab';
 
     ripple = computed(() => this.config.ripple());
 
@@ -80,6 +71,25 @@ export class Tab extends BaseComponent<TabPassThrough> {
     tabindex = computed(() => (this.disabled() ? -1 : this.active() ? this.pcTabs.tabindex() : -1));
 
     mutationObserver: MutationObserver | undefined;
+
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+        afterNextRender(() => {
+            this.bindMutationObserver();
+        });
+    }
+
+    onDestroy() {
+        if (this.mutationObserver) {
+            this.unbindMutationObserver();
+        }
+    }
 
     @HostListener('focus', ['$event']) onFocus(event: FocusEvent) {
         if (!this.disabled()) {
@@ -130,10 +140,6 @@ export class Tab extends BaseComponent<TabPassThrough> {
         }
 
         event.stopPropagation();
-    }
-
-    onAfterViewInit(): void {
-        this.bindMutationObserver();
     }
 
     onArrowRightKey(event) {
@@ -228,11 +234,5 @@ export class Tab extends BaseComponent<TabPassThrough> {
 
     unbindMutationObserver() {
         this.mutationObserver?.disconnect();
-    }
-
-    onDestroy() {
-        if (this.mutationObserver) {
-            this.unbindMutationObserver();
-        }
     }
 }

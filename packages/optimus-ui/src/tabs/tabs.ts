@@ -1,11 +1,9 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, input, model, numberAttribute, signal, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, inject, input, model, numberAttribute, signal, ViewEncapsulation } from '@angular/core';
 import { uuid } from '@openng/optimus-ui-utils';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { TabsPassThrough } from '@openng/optimus-ui/types/tabs';
 import { TabsStyle } from './style/tabsstyle';
-
-const TABS_INSTANCE = new InjectionToken<Tabs>('TABS_INSTANCE');
 
 /**
  * Tabs facilitates seamless switching between different views.
@@ -18,7 +16,7 @@ const TABS_INSTANCE = new InjectionToken<Tabs>('TABS_INSTANCE');
     template: ` <ng-content></ng-content>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [TabsStyle, { provide: TABS_INSTANCE, useExisting: Tabs }, { provide: PARENT_INSTANCE, useExisting: Tabs }],
+    providers: [TabsStyle, { provide: PARENT_INSTANCE, useExisting: Tabs }],
     host: {
         '[class]': 'cx("root")',
         '[attr.id]': 'id()'
@@ -26,15 +24,9 @@ const TABS_INSTANCE = new InjectionToken<Tabs>('TABS_INSTANCE');
     hostDirectives: [Bind]
 })
 export class Tabs extends BaseComponent<TabsPassThrough> {
-    componentName = 'Tabs';
-
-    $pcTabs: Tabs | undefined = inject(TABS_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
+    _componentStyle = inject(TabsStyle);
 
     /**
      * Value of the active tab.
@@ -42,6 +34,7 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      * @group Props
      */
     value = model<string | number | undefined>(undefined);
+
     /**
      * When specified, enables horizontal and/or vertical scrolling.
      * @type boolean
@@ -49,6 +42,7 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      * @group Props
      */
     scrollable = input(false, { transform: booleanAttribute });
+
     /**
      * When enabled, tabs are not rendered until activation.
      * @type boolean
@@ -56,6 +50,7 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      * @group Props
      */
     lazy = input(false, { transform: booleanAttribute });
+
     /**
      * When enabled, the focused tab is activated.
      * @type boolean
@@ -63,6 +58,7 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      * @group Props
      */
     selectOnFocus = input(false, { transform: booleanAttribute });
+
     /**
      * Whether to display navigation buttons in container when scrollable is enabled.
      * @type boolean
@@ -70,6 +66,7 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      * @group Props
      */
     showNavigators = input(true, { transform: booleanAttribute });
+
     /**
      * Tabindex of the tab buttons.
      * @type number
@@ -78,9 +75,19 @@ export class Tabs extends BaseComponent<TabsPassThrough> {
      */
     tabindex = input(0, { transform: numberAttribute });
 
+    componentName = 'Tabs';
+
     id = signal<string>(uuid('pn_id_'));
 
-    _componentStyle = inject(TabsStyle);
+    constructor() {
+        super();
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+    }
 
     updateValue(newValue) {
         this.value.update(() => newValue);

@@ -688,8 +688,8 @@ describe('Tabs', () => {
                 // Check if component processes the template
                 expect(tabListComponent).toBeTruthy();
 
-                // Templates should be processed without errors
-                expect(() => tabListComponent.ngAfterContentInit()).not.toThrow();
+                // The effective template computed resolves without errors
+                expect(() => tabListComponent.$prevIconTemplate()).not.toThrow();
             });
 
             it('should process pTemplate="nexticon" correctly', () => {
@@ -1041,7 +1041,10 @@ describe('Tabs', () => {
             const tabListComponent = scrollableFixture.debugElement.query(By.directive(TabList)).componentInstance;
 
             // Test that component handles templates without errors
-            expect(() => tabListComponent.ngAfterContentInit()).not.toThrow();
+            expect(() => {
+                tabListComponent.$prevIconTemplate();
+                tabListComponent.$nextIconTemplate();
+            }).not.toThrow();
         });
 
         it('should process templates without errors', () => {

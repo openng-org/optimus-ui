@@ -1,5 +1,5 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, forwardRef, inject, InjectionToken, signal, TemplateRef, ViewEncapsulation, contentChild, contentChildren, viewChild } from '@angular/core';
+import { afterEveryRender, afterNextRender, ChangeDetectionStrategy, Component, computed, contentChild, contentChildren, effect, ElementRef, forwardRef, inject, signal, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { findSingle, getOffset, getOuterWidth, getWidth, isRTL } from '@openng/optimus-ui-utils';
 import { PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -9,8 +9,6 @@ import { RippleModule } from '@openng/optimus-ui/ripple';
 import { TabListStyle } from './style/tabliststyle';
 import { Tabs } from './tabs';
 import { TabListPassThrough } from '@openng/optimus-ui/types/tabs';
-
-const TABLIST_INSTANCE = new InjectionToken<TabList>('TABLIST_INSTANCE');
 
 /**
  * TabList is a helper component for Tabs component.
@@ -33,8 +31,8 @@ const TABLIST_INSTANCE = new InjectionToken<TabList>('TABLIST_INSTANCE');
                 [attr.data-pc-group-section]="'navigator'"
                 (click)="onPrevButtonClick()"
             >
-                @if (prevIconTemplate() || _prevIconTemplate) {
-                    <ng-container *ngTemplateOutlet="prevIconTemplate() || _prevIconTemplate" />
+                @if ($prevIconTemplate()) {
+                    <ng-container *ngTemplateOutlet="$prevIconTemplate()" />
                 } @else {
                     <svg data-p-icon="chevron-left" />
                 }
@@ -58,8 +56,8 @@ const TABLIST_INSTANCE = new InjectionToken<TabList>('TABLIST_INSTANCE');
                 [attr.data-pc-group-section]="'navigator'"
                 (click)="onNextButtonClick()"
             >
-                @if (nextIconTemplate() || _nextIconTemplate) {
-                    <ng-container *ngTemplateOutlet="nextIconTemplate() || _nextIconTemplate" />
+                @if ($nextIconTemplate()) {
+                    <ng-container *ngTemplateOutlet="$nextIconTemplate()" />
                 } @else {
                     <svg data-p-icon="chevron-right" />
                 }
@@ -71,33 +69,15 @@ const TABLIST_INSTANCE = new InjectionToken<TabList>('TABLIST_INSTANCE');
     host: {
         '[class]': 'cx("root")'
     },
-    providers: [TabListStyle, { provide: TABLIST_INSTANCE, useExisting: TabList }, { provide: PARENT_INSTANCE, useExisting: TabList }],
+    providers: [TabListStyle, { provide: PARENT_INSTANCE, useExisting: TabList }],
     hostDirectives: [Bind]
 })
 export class TabList extends BaseComponent<TabListPassThrough> {
-    componentName = 'TabList';
-
-    $pcTabList: TabList | undefined = inject(TABLIST_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-    }
 
-    /**
-     * A template reference variable that represents the previous icon in a UI component.
-     * @type {TemplateRef<any> | undefined}
-     * @group Templates
-     */
-    readonly prevIconTemplate = contentChild<TemplateRef<any>>('previcon', { descendants: false });
-    /**
-     * A template reference variable that represents the next icon in a UI component.
-     * @type {TemplateRef<any> | undefined}
-     * @group Templates
-     */
-    readonly nextIconTemplate = contentChild<TemplateRef<any>>('nexticon', { descendants: false });
+    pcTabs = inject(forwardRef(() => Tabs));
 
-    readonly templates = contentChildren(PrimeTemplate);
+    _componentStyle = inject(TabListStyle);
 
     readonly content = viewChild.required<ElementRef<HTMLDivElement>>('content');
 
@@ -109,7 +89,23 @@ export class TabList extends BaseComponent<TabListPassThrough> {
 
     readonly tabs = viewChild.required<ElementRef<HTMLDivElement>>('tabs');
 
-    pcTabs = inject(forwardRef(() => Tabs));
+    /**
+     * A template reference variable that represents the previous icon in a UI component.
+     * @type {TemplateRef<any> | undefined}
+     * @group Templates
+     */
+    readonly prevIconTemplate = contentChild<TemplateRef<any>>('previcon', { descendants: false });
+
+    /**
+     * A template reference variable that represents the next icon in a UI component.
+     * @type {TemplateRef<any> | undefined}
+     * @group Templates
+     */
+    readonly nextIconTemplate = contentChild<TemplateRef<any>>('nexticon', { descendants: false });
+
+    readonly templates = contentChildren(PrimeTemplate);
+
+    componentName = 'TabList';
 
     isPrevButtonEnabled = signal<boolean>(false);
 
@@ -123,7 +119,19 @@ export class TabList extends BaseComponent<TabListPassThrough> {
 
     scrollable = computed(() => this.pcTabs.scrollable());
 
-    _componentStyle = inject(TabListStyle);
+    get prevButtonAriaLabel() {
+        return this.config?.translation?.aria?.previous;
+    }
+
+    get nextButtonAriaLabel() {
+        return this.config?.translation?.aria?.next;
+    }
+
+    /** Effective previous icon template: the `#previcon` content child, or a legacy `pTemplate="previcon"`. */
+    readonly $prevIconTemplate = computed(() => this.prevIconTemplate() ?? this.templates().find((t) => t.getType() === 'previcon')?.template);
+
+    /** Effective next icon template: the `#nexticon` content child, or a legacy `pTemplate="nexticon"`. */
+    readonly $nextIconTemplate = computed(() => this.nextIconTemplate() ?? this.templates().find((t) => t.getType() === 'nexticon')?.template);
 
     constructor() {
         super();
@@ -135,36 +143,17 @@ export class TabList extends BaseComponent<TabListPassThrough> {
                 });
             }
         });
-    }
 
-    get prevButtonAriaLabel() {
-        return this.config?.translation?.aria?.previous;
-    }
-
-    get nextButtonAriaLabel() {
-        return this.config?.translation?.aria?.next;
-    }
-
-    onAfterViewInit() {
-        if (this.showNavigators() && isPlatformBrowser(this.platformId)) {
-            this.updateButtonState();
-            this.bindResizeObserver();
-        }
-    }
-
-    _prevIconTemplate: TemplateRef<any> | undefined;
-
-    _nextIconTemplate: TemplateRef<any> | undefined;
-
-    onAfterContentInit() {
-        this.templates()?.forEach((t) => {
-            switch (t.getType()) {
-                case 'previcon':
-                    this._prevIconTemplate = t.template;
-                    break;
-                case 'nexticon':
-                    this._nextIconTemplate = t.template;
-                    break;
+        // Re-apply the host/root pass-through sections after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+        });
+        afterNextRender(() => {
+            if (this.showNavigators() && isPlatformBrowser(this.platformId)) {
+                this.updateButtonState();
+                this.bindResizeObserver();
             }
         });
     }
