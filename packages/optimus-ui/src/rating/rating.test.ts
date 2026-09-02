@@ -195,16 +195,16 @@ describe('Rating', () => {
         });
 
         it('should initialize with default properties', () => {
-            expect(ratingInstance.stars).toBe(5 as any);
-            expect(ratingInstance.readonly).toBeFalsy();
-            expect(ratingInstance.value).toBeNull();
-            expect(ratingInstance.autofocus).toBeFalsy();
+            expect(ratingInstance.stars()).toBe(5 as any);
+            expect(ratingInstance.readonly()).toBeFalsy();
+            expect(ratingInstance.value()).toBeNull();
+            expect(ratingInstance.autofocus()).toBeFalsy();
         });
 
         it('should create stars array', () => {
-            expect(ratingInstance.starsArray).toBeDefined();
-            expect(ratingInstance.starsArray?.length).toBe(5 as any);
-            expect(ratingInstance.starsArray).toEqual([0, 1, 2, 3, 4]);
+            expect(ratingInstance.starsArray()).toBeDefined();
+            expect(ratingInstance.starsArray()?.length).toBe(5 as any);
+            expect(ratingInstance.starsArray()).toEqual([0, 1, 2, 3, 4]);
         });
 
         it('should render correct number of star options', () => {
@@ -258,7 +258,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             expect(component.value).toBe(3 as any);
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
         });
 
         it('should emit onRate event', async () => {
@@ -317,7 +317,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Check that the Rating component has the correct value
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
 
             // Check that we have the correct number of total icons (on + off = 5)
             const allSvgs = fixture.debugElement.queryAll(By.css('svg'));
@@ -356,8 +356,8 @@ describe('Rating', () => {
         });
 
         it('should support custom number of stars', () => {
-            expect(ratingInstance.stars).toBe(10);
-            expect(ratingInstance.starsArray?.length).toBe(10);
+            expect(ratingInstance.stars()).toBe(10);
+            expect(ratingInstance.starsArray()?.length).toBe(10);
 
             // Find divs that are direct children of ng-template and contain input elements
             const starOptions = fixture.debugElement.queryAll(By.css('div')).filter((el) => {
@@ -518,7 +518,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             expect(component.ratingForm.get('rating')?.value).toBeNull();
-            expect(ratingInstance.value).toBeNull();
+            expect(ratingInstance.value()).toBeNull();
         });
     });
 
@@ -700,7 +700,7 @@ describe('Rating', () => {
 
             const inputs = fixture.debugElement.queryAll(By.css('input[type="radio"]'));
             // Check that the pAutoFocus directive is applied - look for the attribute it adds
-            expect(ratingInstance.autofocus).toBe(true);
+            expect(ratingInstance.autofocus()).toBe(true);
         });
     });
 
@@ -727,7 +727,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBeNull();
+            expect(ratingInstance.value()).toBeNull();
 
             const onIcons = fixture.debugElement.queryAll(By.css('[data-pc-section="onIcon"]'));
             expect(onIcons.length).toBe(0 as any);
@@ -739,7 +739,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(10);
+            expect(ratingInstance.value()).toBe(10);
 
             // Should show all icons
             const allIcons = fixture.debugElement.queryAll(By.css('svg'));
@@ -752,7 +752,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(-1);
+            expect(ratingInstance.value()).toBe(-1);
 
             const onIcons = fixture.debugElement.queryAll(By.css('[data-pc-section="onIcon"]'));
             expect(onIcons.length).toBe(0 as any);
@@ -902,7 +902,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -914,7 +914,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(2 as any);
+            expect(ratingInstance.value()).toBe(2 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -925,7 +925,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
 
             // Change to 1 star filled
             component.value = 1;
@@ -933,7 +933,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(1 as any);
+            expect(ratingInstance.value()).toBe(1 as any);
         });
 
         it('should process pTemplates after content init', async () => {
@@ -965,8 +965,8 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component works correctly
-            expect(ratingInstance.value).toBe(3 as any);
-            expect(ratingInstance.stars).toBe(5 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
+            expect(ratingInstance.stars()).toBe(5 as any);
         });
     });
 
@@ -1007,7 +1007,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -1019,7 +1019,7 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component is working with the value
-            expect(ratingInstance.value).toBe(2 as any);
+            expect(ratingInstance.value()).toBe(2 as any);
             expect(component.stars).toBe(5 as any);
         });
 
@@ -1030,7 +1030,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(3 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
 
             // Change to 1 heart filled
             component.value = 1;
@@ -1038,7 +1038,7 @@ describe('Rating', () => {
             fixture.detectChanges();
             await fixture.whenStable();
 
-            expect(ratingInstance.value).toBe(1 as any);
+            expect(ratingInstance.value()).toBe(1 as any);
         });
 
         it('should process #templates after content init', async () => {
@@ -1070,8 +1070,8 @@ describe('Rating', () => {
             await fixture.whenStable();
 
             // Verify that the rating component works correctly
-            expect(ratingInstance.value).toBe(3 as any);
-            expect(ratingInstance.stars).toBe(5 as any);
+            expect(ratingInstance.value()).toBe(3 as any);
+            expect(ratingInstance.stars()).toBe(5 as any);
         });
     });
 
