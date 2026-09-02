@@ -3,7 +3,7 @@ import { style } from '@openng/optimus-ui-styles/fileupload';
 import { BaseStyle } from '@openng/optimus-ui/base';
 
 const classes = {
-    root: ({ instance }) => `p-fileupload p-fileupload-${instance.mode} p-component`,
+    root: ({ instance }) => `p-fileupload p-fileupload-${instance.mode()} p-component`,
     header: 'p-fileupload-header',
     pcChooseButton: 'p-fileupload-choose-button',
     pcUploadButton: 'p-fileupload-upload-button',
