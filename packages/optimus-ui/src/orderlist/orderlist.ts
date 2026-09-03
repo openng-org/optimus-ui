@@ -670,15 +670,6 @@ export class OrderList extends BaseComponent<OrderListPassThrough> {
     }
 
     moveUp() {
-        console.log(
-            'value:',
-            this.value?.map((v) => v)
-        );
-        console.log('selection:', this.selection);
-        console.log(
-            'selection indices:',
-            this.selection?.map((s) => findIndexInList(s, this.value || []))
-        );
         const value = this.value;
         if (this.selection && value instanceof Array) {
             // Sort selection by their current index to process them from top to bottom
