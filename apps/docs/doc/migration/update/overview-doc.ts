@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
-import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'update-overview-doc',
     standalone: true,
-    imports: [AppDocSectionText, RouterModule],
+    imports: [AppDocSectionText],
     template: `
         <app-docsectiontext>
             <p>
@@ -13,7 +12,10 @@ import { RouterModule } from '@angular/router';
                 new version. Optimus UI supports <i>ng update</i>, the Angular CLI's own update mechanism, which bumps every installed Optimus UI package in one step and runs any automated code migrations shipped with the new version.
             </p>
             <p>Major versions follow Angular's: when a new Angular major ships, a matching Optimus UI major is released for it. Minor and patch releases stay within the same Angular major and are drop-in updates.</p>
-            <p>This page is about updating a project that already uses Optimus UI. To move an existing PrimeNG workspace across, see the <a [routerLink]="'/migration/primeng'" class="doc-link">migration guide</a> instead.</p>
+            <p>
+                This page is about updating a project that already uses Optimus UI. To move an existing PrimeNG workspace across, see the
+                <a href="https://v1.optimus.openng.org/migration/primeng" target="_blank" rel="noopener noreferrer" class="doc-link">migration guide</a> instead.
+            </p>
         </app-docsectiontext>
     `
 })

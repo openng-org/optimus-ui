@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, InjectionToken, NgModule, ViewEncapsulation } from '@angular/core';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
@@ -15,7 +14,7 @@ const FLUID_INSTANCE = new InjectionToken<Fluid>('FLUID_INSTANCE');
     selector: 'p-fluid',
     template: ` <ng-content></ng-content> `,
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     providers: [FluidStyle, { provide: FLUID_INSTANCE, useExisting: Fluid }, { provide: PARENT_INSTANCE, useExisting: Fluid }],

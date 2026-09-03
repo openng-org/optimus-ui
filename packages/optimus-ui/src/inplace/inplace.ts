@@ -15,7 +15,7 @@ const INPLACE_INSTANCE = new InjectionToken<Inplace>('INPLACE_INSTANCE');
     changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-inplacedisplay, p-inplaceDisplay',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     template: '<ng-content></ng-content>'
 })
 export class InplaceDisplay extends BaseComponent {}
@@ -24,7 +24,7 @@ export class InplaceDisplay extends BaseComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     selector: 'p-inplacecontent, p-inplaceContent',
     standalone: true,
-    imports: [CommonModule],
+    imports: [],
     template: '<ng-content></ng-content>'
 })
 export class InplaceContent extends BaseComponent {}
@@ -37,24 +37,33 @@ export class InplaceContent extends BaseComponent {}
     standalone: true,
     imports: [CommonModule, ButtonModule, TimesIcon, SharedModule, Ripple, Bind],
     template: `
-        <div [class]="cx('display')" [pBind]="ptm('display')" (click)="onActivateClick($event)" tabindex="0" role="button" (keydown)="onKeydown($event)" [attr.data-p-disabled]="disabled" *ngIf="!active">
-            <ng-content select="[pInplaceDisplay]"></ng-content>
-            <ng-container *ngTemplateOutlet="displayTemplate || _displayTemplate"></ng-container>
-        </div>
-        <div [class]="cx('content')" [pBind]="ptm('content')" *ngIf="active">
-            <ng-content select="[pInplaceContent]"></ng-content>
-            <ng-container *ngTemplateOutlet="contentTemplate || _contentTemplate; context: { closeCallback: onDeactivateClick.bind(this) }"></ng-container>
-
-            <ng-container *ngIf="closable">
-                <p-button *ngIf="closeIcon" [pt]="ptm('pcButton')" type="button" [icon]="closeIcon" pRipple (click)="onDeactivateClick($event)" [attr.aria-label]="closeAriaLabel"></p-button>
-                <p-button *ngIf="!closeIcon" [pt]="ptm('pcButton')" type="button" pRipple (click)="onDeactivateClick($event)" [attr.aria-label]="closeAriaLabel">
-                    <ng-template #icon>
-                        <svg data-p-icon="times" *ngIf="!closeIconTemplate && !_closeIconTemplate" />
-                    </ng-template>
-                    <ng-template *ngTemplateOutlet="closeIconTemplate || _closeIconTemplate"></ng-template>
-                </p-button>
-            </ng-container>
-        </div>
+        @if (!active) {
+            <div [class]="cx('display')" [pBind]="ptm('display')" (click)="onActivateClick($event)" tabindex="0" role="button" (keydown)="onKeydown($event)" [attr.data-p-disabled]="disabled">
+                <ng-content select="[pInplaceDisplay]"></ng-content>
+                <ng-container *ngTemplateOutlet="displayTemplate || _displayTemplate"></ng-container>
+            </div>
+        }
+        @if (active) {
+            <div [class]="cx('content')" [pBind]="ptm('content')">
+                <ng-content select="[pInplaceContent]"></ng-content>
+                <ng-container *ngTemplateOutlet="contentTemplate || _contentTemplate; context: { closeCallback: onDeactivateClick.bind(this) }"></ng-container>
+                @if (closable) {
+                    @if (closeIcon) {
+                        <p-button [pt]="ptm('pcButton')" type="button" [icon]="closeIcon" pRipple (click)="onDeactivateClick($event)" [attr.aria-label]="closeAriaLabel"></p-button>
+                    }
+                    @if (!closeIcon) {
+                        <p-button [pt]="ptm('pcButton')" type="button" pRipple (click)="onDeactivateClick($event)" [attr.aria-label]="closeAriaLabel">
+                            <ng-template #icon>
+                                @if (!closeIconTemplate && !_closeIconTemplate) {
+                                    <svg data-p-icon="times" />
+                                }
+                            </ng-template>
+                            <ng-template *ngTemplateOutlet="closeIconTemplate || _closeIconTemplate"></ng-template>
+                        </p-button>
+                    }
+                }
+            </div>
+        }
     `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,

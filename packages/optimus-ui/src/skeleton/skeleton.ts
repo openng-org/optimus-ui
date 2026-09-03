@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -15,7 +14,7 @@ const SKELETON_INSTANCE = new InjectionToken<Skeleton>('SKELETON_INSTANCE');
 @Component({
     selector: 'p-skeleton',
     standalone: true,
-    imports: [CommonModule, SharedModule],
+    imports: [SharedModule],
     template: ``,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,

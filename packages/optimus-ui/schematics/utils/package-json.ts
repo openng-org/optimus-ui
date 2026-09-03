@@ -1,7 +1,8 @@
 import { Tree } from '@angular-devkit/schematics';
 import { MODULE_MAP, VERSIONS } from './mappings';
+import { visitWorkspaceFiles } from './workspace-files';
 
-export const SKIP_DIRS = /(^|\/)(node_modules|dist|\.angular|\.git|out-tsc)\//;
+export const SKIP_DIRS = /(^|\/)(node_modules|dist|\.angular|\.git|out-tsc)(\/|$)/;
 
 // Sections where a package can be declared as a direct dependency of some kind.
 const DIRECT_DEPENDENCY_SECTIONS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'] as const;
@@ -198,20 +199,24 @@ export function hasPrimeflex(tree: Tree): boolean {
  * invoking `visitor` with each successfully-parsed package.json contents.
  */
 function visitWorkspacePackageJsons(tree: Tree, visitor: (pkg: Record<string, any>) => void): void {
-    tree.visit((path) => {
-        if (SKIP_DIRS.test(path) || !path.endsWith('/package.json')) {
-            return;
+    visitWorkspaceFiles(
+        tree,
+        (path, read) => {
+            const content = read();
+            if (content === undefined) {
+                return;
+            }
+            let pkg: Record<string, any>;
+            try {
+                pkg = JSON.parse(content);
+            } catch {
+                return;
+            }
+            visitor(pkg);
+        },
+        {
+            shouldDescend: (path) => !SKIP_DIRS.test(path),
+            shouldVisitFile: (path) => !SKIP_DIRS.test(path) && path.endsWith('/package.json')
         }
-        const buffer = tree.read(path);
-        if (!buffer) {
-            return;
-        }
-        let pkg: Record<string, any>;
-        try {
-            pkg = JSON.parse(buffer.toString());
-        } catch {
-            return;
-        }
-        visitor(pkg);
-    });
+    );
 }

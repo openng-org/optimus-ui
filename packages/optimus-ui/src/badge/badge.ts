@@ -1,10 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { booleanAttribute, ChangeDetectionStrategy, Component, Directive, effect, inject, InjectionToken, Input, input, NgModule, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { addClass, createElement, hasClass, isNotEmpty, removeClass, uuid } from '@openng/optimus-ui-utils';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
-import type { BadgePassThrough } from '@openng/optimus-ui/types/badge';
+import type { BadgePassThrough, BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import { BadgeStyle } from './style/badgestyle';
 
 const BADGE_INSTANCE = new InjectionToken<Badge>('BADGE_INSTANCE');
@@ -69,7 +68,7 @@ export class BadgeDirective extends BaseComponent {
      * Severity type of the badge.
      * @group Props
      */
-    @Input() severity: 'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null | undefined;
+    @Input() severity: BadgeSeverity | null | undefined;
     /**
      * Value to display inside the badge.
      * @group Props
@@ -235,7 +234,7 @@ export class BadgeDirective extends BaseComponent {
         }
     }
 
-    private setSeverity(oldSeverity?: 'success' | 'info' | 'warn' | 'danger' | null, element?: HTMLElement): void {
+    private setSeverity(oldSeverity?: BadgeSeverity | null, element?: HTMLElement): void {
         const badge = element ?? this.document.getElementById(this.id);
 
         if (!badge) {
@@ -275,7 +274,7 @@ export class BadgeDirective extends BaseComponent {
     selector: 'p-badge',
     template: `{{ value() }}`,
     standalone: true,
-    imports: [CommonModule, SharedModule, BindModule],
+    imports: [SharedModule, BindModule],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     providers: [BadgeStyle, { provide: BADGE_INSTANCE, useExisting: Badge }, { provide: PARENT_INSTANCE, useExisting: Badge }],
@@ -316,7 +315,7 @@ export class Badge extends BaseComponent<BadgePassThrough> {
      * Severity type of the badge.
      * @group Props
      */
-    severity = input<'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null>();
+    severity = input<BadgeSeverity | null>();
     /**
      * Value to display inside the badge.
      * @group Props

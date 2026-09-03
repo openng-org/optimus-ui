@@ -3134,20 +3134,28 @@ class TestBasicTreeTableComponent {
             <ng-template #caption>Custom TreeTable Caption</ng-template>
             <ng-template #header let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">{{ col.header }}</th>
+                    @for (col of columns; track col) {
+                        <th>{{ col.header }}</th>
+                    }
                 </tr>
             </ng-template>
             <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
                 <tr [ttRow]="rowNode">
-                    <td *ngFor="let col of columns; let i = index" [ttEditableColumn]="rowData" [ttEditableColumnField]="col.field">
-                        <p-treeTableToggler [rowNode]="rowNode" *ngIf="i == 0"></p-treeTableToggler>
-                        {{ rowData[col.field] }}
-                    </td>
+                    @for (col of columns; track col; let i = $index) {
+                        <td [ttEditableColumn]="rowData" [ttEditableColumnField]="col.field">
+                            @if (i == 0) {
+                                <p-treeTableToggler [rowNode]="rowNode"></p-treeTableToggler>
+                            }
+                            {{ rowData[col.field] }}
+                        </td>
+                    }
                 </tr>
             </ng-template>
             <ng-template #footer let-columns>
                 <tr>
-                    <td *ngFor="let col of columns">Footer for {{ col.header }}</td>
+                    @for (col of columns; track col) {
+                        <td>Footer for {{ col.header }}</td>
+                    }
                 </tr>
             </ng-template>
             <ng-template #summary>Custom TreeTable Summary</ng-template>

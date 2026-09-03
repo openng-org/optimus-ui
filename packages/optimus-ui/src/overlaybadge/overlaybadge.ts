@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common';
 import { booleanAttribute, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BadgeModule } from '@openng/optimus-ui/badge';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
+import type { BadgeSeverity } from '@openng/optimus-ui/types/badge';
 import { OverlayBadgePassThrough } from '@openng/optimus-ui/types/overlaybadge';
 import { OverlayBadgeStyle } from './style/overlaybadgestyle';
 
@@ -16,7 +16,7 @@ const OVERLAYBADGE_INSTANCE = new InjectionToken<OverlayBadge>('OVERLAYBADGE_INS
 @Component({
     selector: 'p-overlayBadge, p-overlay-badge, p-overlaybadge',
     standalone: true,
-    imports: [CommonModule, BadgeModule, SharedModule, Bind],
+    imports: [BadgeModule, SharedModule, Bind],
     template: `
         <div [class]="cx('root')" [pBind]="ptm('root')">
             <ng-content></ng-content>
@@ -54,7 +54,7 @@ export class OverlayBadge extends BaseComponent<OverlayBadgePassThrough> {
      * Severity type of the badge.
      * @group Props
      */
-    @Input() severity: 'secondary' | 'info' | 'success' | 'warn' | 'danger' | 'contrast' | null | undefined;
+    @Input() severity: BadgeSeverity | null | undefined;
     /**
      * Value to display inside the badge.
      * @group Props

@@ -33,8 +33,9 @@ jobs:
               run: |
                   pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
 
-    # Formatting, the dependency audit and the schematics suite are all short and need no
-    # browser, so they share a job rather than each paying the setup cost.
+    # Formatting, the dependency audit, the schematics suite and the optimus-ui-styled unit
+    # tests are all short and need no browser, so they share a job rather than each paying
+    # the setup cost.
     checks:
         runs-on: ubuntu-latest
 
@@ -54,23 +55,9 @@ jobs:
               run: |
                   pnpm --filter @openng/optimus-ui test:schematics
 
-    # The jasmine and vitest suites run as separate jobs so that each always runs, whatever
-    # the other one does.
-    test-karma:
-        runs-on: ubuntu-latest
-
-        steps:
-            - uses: actions/checkout@v7
-            - uses: ./.github/actions/setup
-
-            # No Playwright here: karma-chrome-launcher uses the runner image's Chrome.
-            # This job publishes no report: the karma builder never loads karma.conf.js
-            # because the test target sets no karmaConfig, so its junit reporter has never
-            # been active and no jasmine.xml is produced. The job passes or fails on the
-            # suite's exit code alone.
-            - name: Unit Test (jasmine)
+            - name: Styled Utils Tests
               run: |
-                  pnpm run test:unit
+                  pnpm run test:styled
 
     test-vitest:
         permissions:
@@ -96,7 +83,7 @@ jobs:
 
             - name: Unit Test (vitest)
               run: |
-                  pnpm run test:vitest
+                  pnpm run test:unit
 
             # A pull_request from a fork gets a read-only GITHUB_TOKEN whatever the
             # permissions block asks for, so creating the check run fails there. The report

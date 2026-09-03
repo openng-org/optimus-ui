@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
     booleanAttribute,
     ChangeDetectionStrategy,
@@ -79,7 +78,7 @@ export class RadioControlRegistry {
 @Component({
     selector: 'p-radioButton, p-radiobutton, p-radio-button',
     standalone: true,
-    imports: [CommonModule, AutoFocus, SharedModule, BindModule],
+    imports: [AutoFocus, SharedModule, BindModule],
     template: `
         <input
             #input

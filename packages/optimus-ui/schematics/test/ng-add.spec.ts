@@ -95,21 +95,40 @@ describe('ng-add', () => {
         expect(result.readContent('/src/app/app.config.ts')).not.toContain('provideOptimus');
     });
 
-    it('primeng project: warns, points to migrate-from-primeng, and makes no changes', async () => {
+    it('primeng project: rejects with SchematicsException, points to migrate-from-primeng, and makes no changes (#1447)', async () => {
         const runner = createRunner();
         const appConfig = `import { providePrimeNG } from 'primeng/config';\nexport const appConfig = { providers: [providePrimeNG()] };\n`;
-        const tree = createAppTree({ '/src/app/app.config.ts': appConfig }, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
-        const logs: string[] = [];
-        runner.logger.subscribe((entry) => logs.push(entry.message));
+        const pkgRaw = JSON.stringify({ ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } }, null, 2) + '\n';
+        const tree = createAppTree({ '/src/app/app.config.ts': appConfig, '/package.json': pkgRaw });
 
-        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
+        await expect(runner.runSchematic('ng-add', { skipInstall: true }, tree)).rejects.toThrow(SchematicsException);
 
-        expect(logs.join('\n')).toContain('primeng detected');
-        expect(logs.join('\n')).toContain('ng generate @openng/optimus-ui:migrate-from-primeng');
-        const pkg = JSON.parse(result.readContent('/package.json'));
-        expect(pkg.dependencies.primeng).toBe('^21.0.2');
-        expect(pkg.dependencies['@openng/optimus-ui-themes']).toBeUndefined();
-        expect(result.readContent('/src/app/app.config.ts')).toBe(appConfig);
+        // A failed schematic never commits its tree, so the workspace is left exactly as it was.
+        expect(tree.readContent('/package.json')).toBe(pkgRaw);
+        expect(tree.readContent('/src/app/app.config.ts')).toBe(appConfig);
+    });
+
+    it('primeng project: the failure explains the state the CLI left behind (#1447)', async () => {
+        const runner = createRunner();
+        const tree = createAppTree({}, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
+
+        const error = await runner.runSchematic('ng-add', { skipInstall: true }, tree).then(
+            () => null,
+            (err: Error) => err
+        );
+
+        expect(error).toBeInstanceOf(SchematicsException);
+        expect(error!.message).toContain('primeng detected');
+        expect(error!.message).toContain('no changes were made');
+        expect(error!.message).toContain('ng generate @openng/optimus-ui@1:migrate-from-primeng');
+        expect(error!.message).toContain('already added @openng/optimus-ui to your dependencies');
+    });
+
+    it('primeng project with a nonexistent --project: reports the bad project name, not the primeng bail (#1447)', async () => {
+        const runner = createRunner();
+        const tree = createAppTree({}, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
+
+        await expect(runner.runSchematic('ng-add', { skipInstall: true, project: 'does-not-exist' }, tree)).rejects.toThrow('Project "does-not-exist" was not found in the workspace.');
     });
 
     it('schedules an install task unless skipInstall is set', async () => {
@@ -121,37 +140,32 @@ describe('ng-add', () => {
     it('primeng project: schedules no install task', async () => {
         const runner = createRunner();
         const tree = createAppTree({}, { ...DEFAULT_PKG, dependencies: { '@angular/core': '^21.0.0', primeng: '^21.0.2' } });
-        await runner.runSchematic('ng-add', {}, tree);
+        await expect(runner.runSchematic('ng-add', {}, tree)).rejects.toThrow(SchematicsException);
         expect(runner.tasks.some((t) => t.name === 'node-package')).toBe(false);
     });
 
-    it('primeng only in a workspace sub-package: still warns and makes no changes', async () => {
+    it('primeng only in a workspace sub-package: still rejects and makes no changes', async () => {
         const runner = createRunner();
         const libPkgRaw = JSON.stringify({ name: 'app-lib', dependencies: { primeng: '^21.0.2' } }, null, 2) + '\n';
         const tree = createAppTree({ '/libs/app/package.json': libPkgRaw });
-        const logs: string[] = [];
-        runner.logger.subscribe((entry) => logs.push(entry.message));
 
-        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
-        expect(logs.join('\n')).toContain('primeng detected');
-        expect(result.readContent('/libs/app/package.json')).toBe(libPkgRaw);
-        expect(JSON.parse(result.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
+        await expect(runner.runSchematic('ng-add', { skipInstall: true }, tree)).rejects.toThrow('primeng detected');
+
+        expect(tree.readContent('/libs/app/package.json')).toBe(libPkgRaw);
+        expect(JSON.parse(tree.readContent('/package.json')).dependencies?.['@openng/optimus-ui-themes']).toBeUndefined();
     });
 
-    it('primeng declared only in peerDependencies: still warns and makes no changes (#1448)', async () => {
+    it('primeng declared only in peerDependencies: still rejects and makes no changes (#1448)', async () => {
         const runner = createRunner();
         const appConfig = `import { providePrimeNG } from 'primeng/config';\nexport const appConfig = { providers: [providePrimeNG()] };\n`;
         const tree = createAppTree({ '/src/app/app.config.ts': appConfig }, { ...DEFAULT_PKG, peerDependencies: { primeng: '^21.0.0' } });
-        const logs: string[] = [];
-        runner.logger.subscribe((entry) => logs.push(entry.message));
 
-        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
+        await expect(runner.runSchematic('ng-add', { skipInstall: true }, tree)).rejects.toThrow('primeng detected');
 
-        expect(logs.join('\n')).toContain('primeng detected');
-        const pkg = JSON.parse(result.readContent('/package.json'));
+        const pkg = JSON.parse(tree.readContent('/package.json'));
         expect(pkg.peerDependencies.primeng).toBe('^21.0.0');
         expect(pkg.dependencies['@openng/optimus-ui-themes']).toBeUndefined();
-        expect(result.readContent('/src/app/app.config.ts')).toBe(appConfig);
+        expect(tree.readContent('/src/app/app.config.ts')).toBe(appConfig);
     });
 
     it.each([
@@ -159,15 +173,13 @@ describe('ng-add', () => {
         ['resolutions', { resolutions: { '**/primeng': '21.0.2' } }],
         ['overrides', { overrides: { primeng: '21.0.2' } }],
         ['pnpm.overrides', { pnpm: { overrides: { primeng: '21.0.2' } } }]
-    ] as const)('primeng declared only in %s: still warns and makes no changes (#1448)', async (_section, extra) => {
+    ] as const)('primeng declared only in %s: still rejects and makes no changes (#1448)', async (_section, extra) => {
         const runner = createRunner();
         const tree = createAppTree({}, { ...DEFAULT_PKG, ...extra });
-        const logs: string[] = [];
-        runner.logger.subscribe((entry) => logs.push(entry.message));
 
-        const result = await runner.runSchematic('ng-add', { skipInstall: true }, tree);
-        expect(logs.join('\n')).toContain('primeng detected');
-        expect(JSON.parse(result.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
+        await expect(runner.runSchematic('ng-add', { skipInstall: true }, tree)).rejects.toThrow('primeng detected');
+
+        expect(JSON.parse(tree.readContent('/package.json')).dependencies['@openng/optimus-ui-themes']).toBeUndefined();
     });
 
     it('pre-existing Aura binding (real CLI tree): imports the preset under an alias and retargets the provider call (#1448)', async () => {
@@ -223,7 +235,7 @@ describe('ng-add', () => {
         expect(result.readContent('/src/app/app.config.ts')).toBe(primengConfig);
         const log = logs.join('\n');
         expect(log).toContain('Found a providePrimeNG call in /src/app/app.config.ts');
-        expect(log).toContain('ng generate @openng/optimus-ui:migrate-from-primeng');
+        expect(log).toContain('ng generate @openng/optimus-ui@1:migrate-from-primeng');
         expect(log).toContain('provideOptimus({ theme: { preset: Aura } })');
         expect(log).not.toContain('Added provideOptimus');
     });
