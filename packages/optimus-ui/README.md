@@ -42,7 +42,7 @@ migration schematic:
 
 ```bash
 npm install @openng/optimus-ui@1
-ng generate @openng/optimus-ui@1:migrate-from-primeng          # options: --skip-install, --force
+ng generate @openng/optimus-ui:migrate-from-primeng          # options: --skip-install, --force
 ```
 
 The `@1` pin matters: this repo's `latest` npm tag points at the current major, not this one.

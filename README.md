@@ -46,7 +46,7 @@ Full setup, including the manual path and icons, is in the [getting started guid
 
 ```bash
 npm install @openng/optimus-ui@1
-ng generate @openng/optimus-ui@1:migrate-from-primeng
+ng generate @openng/optimus-ui:migrate-from-primeng
 ```
 
 The `@1` pin matters: this repo's `latest` npm tag points at the current major, not this one. Once migrated, `ng update` moves you to a newer major when you're ready — see the [update guide](https://optimus.openng.org/migration/update).

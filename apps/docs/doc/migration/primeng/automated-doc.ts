@@ -31,11 +31,11 @@ import { AppCode } from '@/components/doc/app.code';
 export class AutomatedDoc {
     migrateCode: Code = {
         command: `npm install @openng/optimus-ui@1
-ng generate @openng/optimus-ui@1:migrate-from-primeng`
+ng generate @openng/optimus-ui:migrate-from-primeng`
     };
 
     flagsCode: Code = {
-        command: `ng generate @openng/optimus-ui@1:migrate-from-primeng --skip-install
-ng generate @openng/optimus-ui@1:migrate-from-primeng --force`
+        command: `ng generate @openng/optimus-ui:migrate-from-primeng --skip-install
+ng generate @openng/optimus-ui:migrate-from-primeng --force`
     };
 }
