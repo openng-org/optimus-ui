@@ -9,7 +9,7 @@ import { Schema, Theme } from './schema';
 
 const THEMES_PACKAGE = '@openng/optimus-ui-themes';
 const DEFAULT_THEME: Theme = 'Aura';
-const MIGRATE_COMMAND = 'ng generate @openng/optimus-ui@1:migrate-from-primeng';
+const MIGRATE_COMMAND = 'ng generate @openng/optimus-ui:migrate-from-primeng';
 
 function projectNotFound(name: string): string {
     return `Project "${name}" was not found in the workspace.`;
@@ -47,7 +47,7 @@ function manualInstructions(theme: Theme): string {
 /**
  * Sets up Optimus UI in a fresh (non-PrimeNG) project. Migrating an existing PrimeNG workspace is
  * a separate concern handled by the `migrate-from-primeng` schematic
- * (`ng generate @openng/optimus-ui@1:migrate-from-primeng`) — when primeng is detected, ng-add
+ * (`ng generate @openng/optimus-ui:migrate-from-primeng`) — when primeng is detected, ng-add
  * makes no changes and throws, so the CLI reports the refusal as a failure (#1447). A warning was
  * not enough: the command exited 0 after asking for a theme preset it then discarded, which reads
  * as a successful setup, and the freshly-installed dependency in package.json reinforces that.

@@ -48,7 +48,7 @@ Full setup, including the manual path and icons, is in the [getting started guid
 
 ```bash
 npm install @openng/optimus-ui@1
-ng generate @openng/optimus-ui@1:migrate-from-primeng
+ng generate @openng/optimus-ui:migrate-from-primeng
 ```
 
 See the [migration guide](https://v1.optimus.openng.org/migration/primeng) for prerequisites and the manual cases. If you are on PrimeNG v20 or older, upgrade to v21 first.

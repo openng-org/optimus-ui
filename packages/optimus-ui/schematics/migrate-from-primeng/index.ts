@@ -31,7 +31,7 @@ const LOCKFILE_NAMES = new Set(['package-lock.json', 'npm-shrinkwrap.json', 'yar
  *
  * @deprecated This schematic is only maintained on the `release/1.x` line (the `@openng/optimus-ui@1`
  * package, published to v1.optimus.openng.org). It is not actively maintained on `main` going forward.
- * Run it via `ng generate @openng/optimus-ui@1:migrate-from-primeng` rather than an unpinned install.
+ * Install `@openng/optimus-ui@1`, then run `ng generate @openng/optimus-ui:migrate-from-primeng`.
  */
 export function migrateFromPrimeng(options: Schema): Rule {
     return (tree: Tree, context: SchematicContext) => {
@@ -100,7 +100,7 @@ function warnDeprecated(context: SchematicContext): void {
         'migrate-from-primeng is deprecated on this line of @openng/optimus-ui and is only maintained on release/1.x. ' +
             'Run it via the pinned v1 package instead:\n' +
             '  npm install @openng/optimus-ui@1\n' +
-            '  ng generate @openng/optimus-ui@1:migrate-from-primeng'
+            '  ng generate @openng/optimus-ui:migrate-from-primeng'
     );
 }
 

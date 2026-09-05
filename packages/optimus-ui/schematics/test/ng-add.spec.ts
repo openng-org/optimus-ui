@@ -120,7 +120,7 @@ describe('ng-add', () => {
         expect(error).toBeInstanceOf(SchematicsException);
         expect(error!.message).toContain('primeng detected');
         expect(error!.message).toContain('no changes were made');
-        expect(error!.message).toContain('ng generate @openng/optimus-ui@1:migrate-from-primeng');
+        expect(error!.message).toContain('ng generate @openng/optimus-ui:migrate-from-primeng');
         expect(error!.message).toContain('already added @openng/optimus-ui to your dependencies');
     });
 
@@ -235,7 +235,7 @@ describe('ng-add', () => {
         expect(result.readContent('/src/app/app.config.ts')).toBe(primengConfig);
         const log = logs.join('\n');
         expect(log).toContain('Found a providePrimeNG call in /src/app/app.config.ts');
-        expect(log).toContain('ng generate @openng/optimus-ui@1:migrate-from-primeng');
+        expect(log).toContain('ng generate @openng/optimus-ui:migrate-from-primeng');
         expect(log).toContain('provideOptimus({ theme: { preset: Aura } })');
         expect(log).not.toContain('Added provideOptimus');
     });
