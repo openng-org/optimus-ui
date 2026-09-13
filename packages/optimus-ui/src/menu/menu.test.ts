@@ -588,6 +588,70 @@ describe('Menu', () => {
             const separators = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="separator"]'));
             expect(separators.length).toBe(0);
         });
+
+        it('should not render items of a hidden submenu even when item.visible is true', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Hidden Group',
+                    visible: false,
+                    items: [{ label: 'Forced Visible Item', visible: true }, { label: 'Normally Hidden Item' }]
+                },
+                {
+                    label: 'Visible Group',
+                    items: [{ label: 'Shown Item' }]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const items = submenuFixture.debugElement.queryAll(By.css('li[role="menuitem"]'));
+            expect(items.length).toBe(1);
+            expect(items[0].nativeElement.getAttribute('aria-label')).toBe('Shown Item');
+
+            const submenuHeaders = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="submenulabel"]'));
+            expect(submenuHeaders.length).toBe(1);
+            expect(submenuHeaders[0].nativeElement.textContent.trim()).toBe('Visible Group');
+        });
+
+        it('should not render separators of a hidden submenu', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Hidden Group',
+                    visible: false,
+                    items: [{ label: 'First' }, { separator: true }, { label: 'Second' }]
+                },
+                {
+                    label: 'Visible Group',
+                    items: [{ label: 'Shown Item' }]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const separators = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="separator"]'));
+            expect(separators.length).toBe(0);
+        });
+
+        it('should render a force-shown item when its submenu is visible', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Visible Group',
+                    items: [
+                        { label: 'Explicitly Visible Item', visible: true },
+                        { label: 'Hidden Item', visible: false }
+                    ]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const items = submenuFixture.debugElement.queryAll(By.css('li[role="menuitem"]'));
+            expect(items.length).toBe(1);
+            expect(items[0].nativeElement.getAttribute('aria-label')).toBe('Explicitly Visible Item');
+        });
     });
 
     describe('Item Interaction Tests', () => {
