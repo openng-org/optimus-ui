@@ -101,7 +101,7 @@ function matches(files: IgnoreFile[], candidate: string, isDirectory: boolean): 
     return ignored;
 }
 
-export function parseGitignore(content: string): IgnoreRule[] {
+function parseGitignore(content: string): IgnoreRule[] {
     const rules: IgnoreRule[] = [];
     for (const rawLine of content.split('\n')) {
         let pattern = stripTrailingWhitespace(rawLine.replace(/\r$/, ''));

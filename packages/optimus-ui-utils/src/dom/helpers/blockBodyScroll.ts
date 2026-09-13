@@ -1,7 +1,7 @@
 import addClass from '../methods/addClass';
 import calculateBodyScrollbarWidth from '../methods/calculateBodyScrollbarWidth';
 
-export interface BlockBodyScrollOptions {
+interface BlockBodyScrollOptions {
     className?: string;
     variableName?: string;
 }

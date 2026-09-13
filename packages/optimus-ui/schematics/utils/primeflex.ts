@@ -17,7 +17,7 @@ const TRANSLATIONS: Readonly<Record<string, string>> = translations;
  * interpolations like `{{ x }}`, arbitrary text) are left untouched. Inter-token whitespace is
  * preserved so diffs stay minimal.
  */
-export function translateClassList(value: string): { value: string; changed: boolean } {
+function translateClassList(value: string): { value: string; changed: boolean } {
     let changed = false;
     // Split keeping the whitespace runs so the original spacing is preserved on rebuild.
     const parts = value.split(/(\s+)/);

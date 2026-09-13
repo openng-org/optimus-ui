@@ -25,7 +25,7 @@
     },
     "include": ["../../packages/optimus-ui/src/**/*.d.ts"],
     "exclude": ["node_modules", "**/node_modules", "**/dist", "**/*.spec.ts", "**/*.test.ts"],
-    "files": ["app/main.ts", "server/main.server.ts", "server/server.ts", "app/polyfills.ts"],
+    "files": ["app/main.ts", "server/main.server.ts", "server/server.ts"],
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
         "strictInjectionParameters": false,

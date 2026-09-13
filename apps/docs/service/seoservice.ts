@@ -4,7 +4,7 @@ import { Meta, Title } from '@angular/platform-browser';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
 
-export const SITE_URL = 'https://optimus.openng.org';
+const SITE_URL = 'https://optimus.openng.org';
 
 /**
  * Keeps the canonical link and the URL/title-derived Open Graph tags in sync

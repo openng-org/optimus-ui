@@ -29,7 +29,6 @@ catalogs:
     "@angular/core": ^22.1.4
     "@angular/forms": ^22.1.4
     "@angular/platform-browser": ^22.1.4
-    "@angular/platform-browser-dynamic": ^22.1.4
     "@angular/platform-server": ^22.1.4
     "@angular/router": ^22.1.4
     "@angular/ssr": ^22.1.6
@@ -50,7 +49,6 @@ minimumReleaseAgeExclude:
   - '@angular/compiler@22.1.4'
   - '@angular/core@22.1.4'
   - '@angular/forms@22.1.4'
-  - '@angular/platform-browser-dynamic@22.1.4'
   - '@angular/platform-browser@22.1.4'
   - '@angular/platform-server@22.1.4'
   - '@angular/router@22.1.4'

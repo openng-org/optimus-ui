@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { TreeTableModule } from '@openng/optimus-ui/treetable';
 import { InputTextModule } from '@openng/optimus-ui/inputtext';
-import { AppCodeComponent } from '@/components/doc/app.code.component';
-import { AppDocSectionTextComponent } from '@/components/doc/app.docsectiontext.component';
+import { AppCode } from '@/components/doc/app.code';
+import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { NodeService } from '@/service/nodeservice';
 import { TreeNode } from '@openng/optimus-ui/api';
@@ -17,7 +17,7 @@ interface Column {
 @Component({
     selector: 'edit-doc',
     standalone: true,
-    imports: [CommonModule, FormsModule, TreeTableModule, InputTextModule, AppCodeComponent, AppDocSectionTextComponent, DeferredDemo],
+    imports: [CommonModule, FormsModule, TreeTableModule, InputTextModule, AppCode, AppDocSectionText, DeferredDemo],
     template: `
         <app-docsectiontext>
             <p>Incell editing is enabled by defining input elements with <i>treeTableCellEditor</i>.</p>

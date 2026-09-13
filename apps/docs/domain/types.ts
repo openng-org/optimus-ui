@@ -1,7 +1,7 @@
 import { ExtFile, RouteFile } from './code';
 
 // Domain type definitions for StackBlitz/CodeSandbox
-export const DOMAIN_TYPE_DEFINITIONS: Record<string, { path: string; content: string }> = {
+const DOMAIN_TYPE_DEFINITIONS: Record<string, { path: string; content: string }> = {
     Customer: {
         path: 'src/domain/customer.ts',
         content: `export interface Country {
@@ -134,12 +134,12 @@ export function resolveDomainTypes(types: string[]): ExtFile[] {
 }
 
 // Extended RouteFile with services dependency
-export interface RouteFileDefinition extends RouteFile {
+interface RouteFileDefinition extends RouteFile {
     services?: string[];
 }
 
 // Route file definitions for StackBlitz/CodeSandbox (component files used in demos)
-export const ROUTE_FILE_DEFINITIONS: Record<string, RouteFileDefinition> = {
+const ROUTE_FILE_DEFINITIONS: Record<string, RouteFileDefinition> = {
     ProductListDemo: {
         path: 'src/app/demo/productlistdemo.ts',
         name: 'ProductListDemo',

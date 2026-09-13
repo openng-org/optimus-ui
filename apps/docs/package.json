@@ -16,6 +16,7 @@
         "build:sitemap": "node scripts/build-sitemap.mjs",
         "build:llm-docs": "node scripts/build-llm-docs.mjs",
         "build:democode": "node scripts/build-demo-code.mjs",
+        "fetch:demo-assets": "node scripts/fetch-demo-assets.mjs",
         "build:docs": "npm run build:apidoc && npm run build:democode && npm run build:llm-docs && npm run build:routes && npm run build:sitemap && npm run test:democode && npm run test:stackblitz",
         "test:democode": "node scripts/test-demo-code.mjs",
         "test:stackblitz": "node scripts/test-stackblitz-e2e.mjs --all"
@@ -40,13 +41,10 @@
         "prismjs": "^1.29.0",
         "quill": "2.0.3",
         "rxjs": "~7.8.2",
-        "tslib": "^2.8.1",
         "typedoc": "0.28.20"
     },
     "dependencies": {
         "@openng/optimus-ui-tailwindcss": "workspace:*",
-        "autoprefixer": "^10.5.4",
-        "postcss": "^8.5.26",
         "tailwindcss": "^3.4.10"
     }
 }

@@ -5,7 +5,7 @@
  * @param value - CSS value string
  * @returns True if supported, false otherwise
  */
-export function isCssSupported(property: keyof CSSStyleDeclaration | string, value: string): boolean;
+export default function isCssSupported(property: keyof CSSStyleDeclaration | string, value: string): boolean;
 
 /**
  * Checks if a given CSS condition is supported by the browser.
@@ -13,7 +13,7 @@ export function isCssSupported(property: keyof CSSStyleDeclaration | string, val
  * @param condition - CSS condition string
  * @returns True if supported, false otherwise
  */
-export function isCssSupported(condition: string): boolean;
+export default function isCssSupported(condition: string): boolean;
 
 /**
  * Checks if a given CSS property-value pair or condition is supported by the browser.
