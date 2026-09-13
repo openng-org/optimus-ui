@@ -80,7 +80,7 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private get $hostName() {
-        return this['hostName'];
+        return typeof this['hostName'] === 'function' ? this['hostName']() : this['hostName'];
     }
 
     get $el() {
