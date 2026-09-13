@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, TemplateRef, ViewChild,
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { nextFrame } from '@openng/optimus-ui-utils';
 import { TooltipOptions } from '@openng/optimus-ui/api';
 import { Tooltip } from './tooltip';
 
@@ -91,11 +92,25 @@ class TestTooltipOptionsComponent {
     };
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <div #motionHost style="position: absolute; top: 200px; left: 200px">
+            <button #buttonElement pTooltip="Motion tooltip" type="button">Hover me</button>
+        </div>
+    `
+})
+class TestMotionTooltipComponent {
+    @ViewChild('motionHost', { read: ElementRef }) motionHost!: ElementRef;
+    @ViewChild('buttonElement', { read: ElementRef }) buttonElement!: ElementRef;
+}
+
 describe('Tooltip', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [Tooltip],
-            declarations: [TestBasicTooltipComponent, TestTemplateTooltipComponent, TestTooltipOptionsComponent],
+            declarations: [TestBasicTooltipComponent, TestTemplateTooltipComponent, TestTooltipOptionsComponent, TestMotionTooltipComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
     });
@@ -759,6 +774,117 @@ describe('Tooltip', () => {
 
             expect(tooltipDirective.getOption('tooltipLabel')).toBe('New label');
             expect(tooltipDirective._tooltipOptions).not.toEqual(initialOptions);
+        });
+    });
+
+    describe('Animating Ancestors', () => {
+        let fixture: ComponentFixture<TestMotionTooltipComponent>;
+        let component: TestMotionTooltipComponent;
+        let tooltipDirective: Tooltip;
+        let motionHost: HTMLElement;
+
+        const wait = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
+        const animateHost = () => motionHost.animate([{ transform: 'translateY(0px)' }, { transform: 'translateY(120px)' }], { duration: 400, fill: 'forwards' });
+
+        const getContainerTop = () => parseFloat((tooltipDirective.container as HTMLElement).style.top);
+
+        const getSide = () => ['top', 'bottom', 'left', 'right'].find((side) => (tooltipDirective.container as HTMLElement).classList.contains(`p-tooltip-${side}`));
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(TestMotionTooltipComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
+            const debugElement = fixture.debugElement.query(By.directive(Tooltip));
+            tooltipDirective = debugElement.injector.get(Tooltip);
+            motionHost = component.motionHost.nativeElement;
+        });
+
+        afterEach(() => {
+            motionHost.getAnimations().forEach((animation) => animation.cancel());
+            tooltipDirective.container && tooltipDirective.hide();
+        });
+
+        it('should show the tooltip without waiting when it sits inside a dialog', () => {
+            const dialog = document.createElement('p-dialog');
+
+            motionHost.parentElement!.insertBefore(dialog, motionHost);
+            dialog.appendChild(motionHost);
+
+            tooltipDirective.activate();
+
+            expect((tooltipDirective.container as HTMLElement).style.display).toBe('inline-block');
+        });
+
+        it('should keep the tooltip aligned while an ancestor animates', async () => {
+            const animation = animateHost();
+
+            tooltipDirective.activate();
+            const initialTop = getContainerTop();
+
+            animation.finish();
+            await nextFrame();
+
+            expect(getContainerTop()).toBeCloseTo(initialTop + 120, 0);
+        });
+
+        it('should follow a dialog moved by a class driven CSS animation', async () => {
+            const dialog = document.createElement('p-dialog');
+
+            // Unknown elements are inline, and transforms do not apply to those.
+            dialog.style.display = 'block';
+            motionHost.parentElement!.insertBefore(dialog, motionHost);
+            dialog.appendChild(motionHost);
+
+            const style = document.createElement('style');
+
+            style.textContent = `
+                @keyframes tooltip-dialog-enter { from { transform: translateY(0px); } to { transform: translateY(150px); } }
+                .tooltip-dialog-entering { animation: tooltip-dialog-enter 400ms linear forwards; }
+            `;
+            document.head.appendChild(style);
+            dialog.classList.add('tooltip-dialog-entering');
+
+            tooltipDirective.activate();
+            const initialTop = getContainerTop();
+
+            await wait(600);
+            const settledTop = getContainerTop();
+            style.remove();
+
+            expect(settledTop).toBeCloseTo(initialTop + 150, 0);
+        });
+
+        it('should keep the resolved side while the target moves', async () => {
+            // Far enough that every side is out of bounds, so a re-resolve mid flight would be visible.
+            const animation = motionHost.animate([{ transform: 'translateX(0px)' }, { transform: 'translateX(4000px)' }], { duration: 600, easing: 'linear', fill: 'forwards' });
+
+            tooltipDirective.activate();
+            const initialSide = getSide();
+
+            await wait(250);
+            const sideWhileMoving = getSide();
+
+            animation.finish();
+            await nextFrame();
+
+            expect(initialSide).toBe('right');
+            expect(sideWhileMoving).toBe(initialSide);
+            expect(getSide()).not.toBe(initialSide);
+        });
+
+        it('should stop realigning once the tooltip is hidden', async () => {
+            const animation = animateHost();
+
+            tooltipDirective.activate();
+            tooltipDirective.hide();
+
+            const alignSpy = vi.spyOn(tooltipDirective, 'align');
+            animation.finish();
+            await nextFrame();
+
+            expect(alignSpy).not.toHaveBeenCalled();
         });
     });
 
