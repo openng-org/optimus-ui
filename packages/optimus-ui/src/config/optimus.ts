@@ -158,6 +158,7 @@ export class Optimus extends ThemeProvider {
             rotateRight: 'Rotate Right',
             rotateLeft: 'Rotate Left',
             listLabel: 'Option List',
+            selectedItems: 'Selected Items',
             selectColor: 'Select a color',
             removeLabel: 'Remove',
             browseFiles: 'Browse Files',
