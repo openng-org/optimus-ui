@@ -116,6 +116,42 @@ class TestPTStepperComponent {
     @Input() pt: any;
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-stepper linear [value]="1">
+            <p-step-list>
+                <p-step [value]="1">Step 1</p-step>
+                <p-step [value]="2" disabled>Step 2</p-step>
+            </p-step-list>
+            <p-step-panels>
+                <p-step-panel [value]="1">Content 1</p-step-panel>
+                <p-step-panel [value]="2">Content 2</p-step-panel>
+            </p-step-panels>
+        </p-stepper>
+    `
+})
+class TestStaticAttributeStepperComponent {}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-stepper linear="false" [value]="1">
+            <p-step-list>
+                <p-step [value]="1">Step 1</p-step>
+                <p-step [value]="2" disabled="false">Step 2</p-step>
+            </p-step-list>
+            <p-step-panels>
+                <p-step-panel [value]="1">Content 1</p-step-panel>
+                <p-step-panel [value]="2">Content 2</p-step-panel>
+            </p-step-panels>
+        </p-stepper>
+    `
+})
+class TestFalseStringAttributeStepperComponent {}
+
 describe('Stepper', () => {
     let fixture: ComponentFixture<TestStepperComponent>;
     let component: TestStepperComponent;
@@ -125,7 +161,7 @@ describe('Stepper', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [Stepper, StepList, StepPanels, StepPanel, StepItem, Step],
-            declarations: [TestStepperComponent, TestVerticalStepperComponent, TestTemplateStepperComponent, TestPTStepperComponent],
+            declarations: [TestStepperComponent, TestVerticalStepperComponent, TestTemplateStepperComponent, TestPTStepperComponent, TestStaticAttributeStepperComponent, TestFalseStringAttributeStepperComponent],
             providers: [provideZonelessChangeDetection()]
         });
 
@@ -786,6 +822,29 @@ describe('Stepper', () => {
             const stepperEl = ptFixture.debugElement.query(By.css('p-stepper'));
 
             expect(stepperEl.nativeElement.className).toContain('SETINPUT_ROOT_CLASS');
+        });
+    });
+    describe('Boolean Attribute Coercion', () => {
+        it('should treat a valueless attribute as true', () => {
+            const staticFixture = TestBed.createComponent(TestStaticAttributeStepperComponent);
+            staticFixture.detectChanges();
+
+            const staticStepper: Stepper = staticFixture.debugElement.query(By.directive(Stepper)).componentInstance;
+            const steps = staticFixture.debugElement.queryAll(By.directive(Step));
+
+            expect(staticStepper.linear()).toBe(true);
+            expect((steps[1].componentInstance as Step).disabled()).toBe(true);
+        });
+
+        it('should treat the string "false" as false', () => {
+            const falseFixture = TestBed.createComponent(TestFalseStringAttributeStepperComponent);
+            falseFixture.detectChanges();
+
+            const falseStepper: Stepper = falseFixture.debugElement.query(By.directive(Stepper)).componentInstance;
+            const steps = falseFixture.debugElement.queryAll(By.directive(Step));
+
+            expect(falseStepper.linear()).toBe(false);
+            expect((steps[1].componentInstance as Step).disabled()).toBe(false);
         });
     });
 });
