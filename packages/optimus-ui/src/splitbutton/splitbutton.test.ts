@@ -812,6 +812,37 @@ describe('SplitButton', () => {
 
             expect(splitButtonInstance.severity).toBe('contrast');
         });
+
+        it('should clear severity styling for null and undefined', async () => {
+            component.severity = 'primary';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(splitButtonElement.getAttribute('data-p-severity')).toBe('primary');
+            expect(defaultButton.classList.contains('p-button-primary')).toBe(true);
+            expect(dropdownButton.classList.contains('p-button-primary')).toBe(true);
+
+            component.severity = null;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(splitButtonInstance.severity).toBeNull();
+            expect(splitButtonElement.hasAttribute('data-p-severity')).toBe(false);
+            expect(defaultButton.classList.contains('p-button-primary')).toBe(false);
+            expect(dropdownButton.classList.contains('p-button-primary')).toBe(false);
+
+            component.severity = undefined;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(splitButtonInstance.severity).toBeUndefined();
+            expect(splitButtonElement.hasAttribute('data-p-severity')).toBe(false);
+            expect(defaultButton.classList.contains('p-button-primary')).toBe(false);
+            expect(dropdownButton.classList.contains('p-button-primary')).toBe(false);
+        });
     });
 
     describe('Icon Functionality', () => {

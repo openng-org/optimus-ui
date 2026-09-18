@@ -603,6 +603,31 @@ describe('Button', () => {
             expect(buttonInstance.severity).toBe('danger');
             expect(buttonElement.classList.contains('p-button-danger')).toBe(true);
         });
+
+        it('should clear severity styling for null and undefined', async () => {
+            component.severity = 'primary';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(buttonElement.classList.contains('p-button-primary')).toBe(true);
+
+            component.severity = null;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(buttonInstance.severity).toBeNull();
+            expect(buttonElement.classList.contains('p-button-primary')).toBe(false);
+
+            component.severity = undefined;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(buttonInstance.severity).toBeUndefined();
+            expect(buttonElement.classList.contains('p-button-primary')).toBe(false);
+        });
     });
 
     describe('Icon Functionality', () => {

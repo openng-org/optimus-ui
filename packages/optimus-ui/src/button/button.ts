@@ -293,7 +293,7 @@ export class ButtonDirective extends BaseComponent {
 
     public _loading: boolean = false;
 
-    private _severity: ButtonSeverity;
+    private _severity: ButtonSeverity | null | undefined;
 
     _buttonProps!: ButtonProps;
 
@@ -386,11 +386,11 @@ export class ButtonDirective extends BaseComponent {
      * @group Props
      */
     @Input()
-    get severity(): ButtonSeverity {
+    get severity(): ButtonSeverity | null | undefined {
         return this._severity;
     }
 
-    set severity(value: ButtonSeverity) {
+    set severity(value: ButtonSeverity | null | undefined) {
         this._severity = value;
 
         if (this.initialized) {
@@ -790,7 +790,7 @@ export class Button extends BaseComponent<ButtonPassThrough> {
      * Defines the style of the button.
      * @group Props
      */
-    @Input() severity: ButtonSeverity;
+    @Input() severity: ButtonSeverity | null | undefined;
 
     /**
      * Used to pass all properties of the ButtonProps to the Button component.
