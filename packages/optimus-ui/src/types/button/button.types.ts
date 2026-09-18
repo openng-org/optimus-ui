@@ -110,7 +110,7 @@ export interface ButtonProps {
     rounded?: boolean;
     text?: boolean;
     plain?: boolean;
-    severity?: ButtonSeverity;
+    severity?: ButtonSeverity | null | undefined;
     outlined?: boolean;
     link?: boolean;
     tabindex?: number | undefined;

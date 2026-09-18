@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import type { ButtonProps } from '@openng/optimus-ui/types/button';
 
 import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from './button';
 
@@ -564,6 +565,12 @@ describe('Button', () => {
     });
 
     describe('Button Severities', () => {
+        it('should allow null severity in buttonProps', () => {
+            const buttonProps: ButtonProps = { severity: null };
+
+            expect(buttonProps.severity).toBeNull();
+        });
+
         it('should apply primary severity', async () => {
             component.severity = 'primary';
             fixture.changeDetectorRef.markForCheck();
