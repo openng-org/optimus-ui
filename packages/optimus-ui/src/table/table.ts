@@ -6624,8 +6624,24 @@ export class ColumnFilterFormElement extends BaseComponent<ColumnFilterPassThrou
     onModelChange(value: any) {
         (<any>this.filterConstraint).value = value;
 
-        if (this.type === 'date' || this.type === 'boolean' || ((this.type === 'text' || this.type === 'numeric') && this.filterOn === 'input') || !value) {
+        if (this.type === 'date' || this.type === 'boolean' || !value) {
             this.dataTable._filter();
+            return;
+        }
+
+        if ((this.type === 'text' || this.type === 'numeric') && this.filterOn === 'input') {
+            if (!this.dataTable.filterDelay) {
+                this.dataTable._filter();
+                return;
+            }
+            // respect filterDelay as it used to be i older versions of primeng before we had p-columnFilter
+            if (this.dataTable.filterTimeout) {
+                clearTimeout(this.dataTable.filterTimeout);
+            }
+            this.dataTable.filterTimeout = setTimeout(() => {
+                this.dataTable._filter();
+                this.dataTable.filterTimeout = null;
+            }, this.dataTable.filterDelay);
         }
     }
 
