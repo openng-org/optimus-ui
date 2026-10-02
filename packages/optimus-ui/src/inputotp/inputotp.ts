@@ -349,6 +349,9 @@ export class InputOtp extends BaseEditableHolder<InputOtpPassThrough> implements
                 break;
 
             default:
+                if (event.key.length !== 1 && !/^[\s\S]$/u.test(event.key)) {
+                    break;
+                }
                 const target = event.target;
                 const hasSelection = target.selectionStart !== target.selectionEnd;
                 const isAtMaxLength = this.tokens.join('').length >= this.length;
