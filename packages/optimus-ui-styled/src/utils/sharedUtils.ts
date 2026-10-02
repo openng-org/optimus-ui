@@ -1,4 +1,4 @@
-import { getKeyValue, isArray, isNotEmpty, isNumber, isObject, isString, matchRegex, toKebabCase } from '@openng/optimus-ui-utils/object';
+import { getKeyValue, isArray, isNotEmpty, isNumber, isObject, isString, matchRegex, omit, toKebabCase } from '@openng/optimus-ui-utils/object';
 
 export const EXPR_REGEX = /{([^}]*)}/g; // Exp: '{a}', '{a.b}', '{a.b.c}' etc.
 export const CALC_REGEX = /(\d+\s+[\+\-\*\/]\s+\d+)/g;
@@ -187,4 +187,62 @@ export function evaluateDtExpressions(input: string, fn: (...args: any[]) => str
     }
 
     return input;
+}
+
+function toTokenVariableKey(path: string[], excludedKeyRegex?: RegExp): string {
+    return toNormalizePrefix(
+        path
+            .filter((key) => !matchRegex(key, excludedKeyRegex))
+            .map((key) => toKebabCase(key))
+            .join('-')
+    );
+}
+
+function getTokenVariableKeys(tokens: any, excludedKeyRegex?: RegExp, path: string[] = []): string[] {
+    return Object.entries(tokens || {}).flatMap(([key, value]) => (isObject(toValue(value)) ? getTokenVariableKeys(value, excludedKeyRegex, [...path, key]) : [toTokenVariableKey([...path, key], excludedKeyRegex)]));
+}
+
+function omitTokenVariableKeys(tokens: any, keys: Set<string>, excludedKeyRegex?: RegExp, path: string[] = []): any {
+    return Object.entries(tokens).reduce((acc: any, [key, value]) => {
+        if (isObject(toValue(value))) {
+            acc[key] = omitTokenVariableKeys(value, keys, excludedKeyRegex, [...path, key]);
+        } else if (!keys.has(toTokenVariableKey([...path, key], excludedKeyRegex))) {
+            acc[key] = value;
+        }
+
+        return acc;
+    }, {});
+}
+
+function mergePreset(target: any = {}, source: any = {}, excludedKeyRegex?: RegExp): any {
+    const merged = { ...target };
+    const light = target.colorScheme?.light;
+
+    // Top-level tokens of the later preset override the same tokens of the earlier `colorScheme.light`,
+    // otherwise the earlier light-scheme value would still win in the generated light-mode css.
+    if (isObject(light)) {
+        const overrides = new Set(getTokenVariableKeys(omit(source, 'colorScheme', 'extend', 'css'), excludedKeyRegex));
+
+        if (overrides.size) {
+            merged.colorScheme = { ...target.colorScheme, light: omitTokenVariableKeys(light, overrides, excludedKeyRegex) };
+        }
+    }
+
+    Object.keys(source).forEach((key) => {
+        merged[key] = isObject(source[key]) && isObject(merged[key]) ? mergePreset(merged[key], source[key], excludedKeyRegex) : source[key];
+    });
+
+    return merged;
+}
+
+/**
+ * Deep merges presets, where later presets take precedence over earlier ones.
+ * Within a single preset a `colorScheme.light`/`colorScheme.dark` token is more specific than the same token at the top level,
+ * but a top-level token of a later preset still replaces the light-scheme token of an earlier one.
+ * @param presets - Presets to merge.
+ * @param excludedKeyRegex - Keys that are skipped when building css variable names.
+ * @returns Merged preset.
+ */
+export function mergePresets(presets: any[], excludedKeyRegex?: RegExp): any {
+    return presets.reduce((acc, preset, i) => (i === 0 ? preset : mergePreset(acc, preset, excludedKeyRegex)), {});
 }
