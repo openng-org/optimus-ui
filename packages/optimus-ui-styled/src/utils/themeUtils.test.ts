@@ -106,14 +106,15 @@ describe('ThemeUtils.getCommon', () => {
 
         expect(result.semantic.css).toContain('--p-primary-color:var(--p-blue-500)');
         expect(result.semantic.css).toContain('--p-surface-0:#ffffff');
-        expect(result.semantic.css.indexOf('--p-surface-0:#ffffff')).toBeLessThan(result.semantic.css.indexOf('--p-primary-color:var(--p-blue-500)'));
+        // colorScheme.light is emitted after the top-level tokens so it wins for the same variable (#1754)
+        expect(result.semantic.css.indexOf('--p-primary-color:var(--p-blue-500)')).toBeLessThan(result.semantic.css.indexOf('--p-surface-0:#ffffff'));
         expect(result.semantic.css).toContain('@media (prefers-color-scheme: dark)');
         expect(result.semantic.css).toContain('--p-surface-0:#000000');
         expect(result.semantic.tokens).toEqual(expect.arrayContaining(['primary.color', 'surface.0']));
 
         expect(result.global.css).toContain('--p-somekey:val');
         expect(result.global.css).toContain('--p-extra:e1');
-        expect(result.global.css.indexOf('--p-extra:e1')).toBeLessThan(result.global.css.indexOf('--p-somekey:val'));
+        expect(result.global.css.indexOf('--p-somekey:val')).toBeLessThan(result.global.css.indexOf('--p-extra:e1'));
         expect(result.global.css).toContain('color-scheme:light');
         expect(result.global.css).toContain('--p-extra:e2');
         expect(result.global.css).toContain('color-scheme:dark');
@@ -177,7 +178,7 @@ describe('ThemeUtils.getPreset', () => {
 
         expect(result.css).toContain('--p-button-foo:bar');
         expect(result.css).toContain('--p-button-x:1');
-        expect(result.css.indexOf('--p-button-x:1')).toBeLessThan(result.css.indexOf('--p-button-foo:bar'));
+        expect(result.css.indexOf('--p-button-foo:bar')).toBeLessThan(result.css.indexOf('--p-button-x:1'));
         expect(result.css).toContain('@media (prefers-color-scheme: dark)');
         expect(result.css).toContain('--p-button-bg:2');
         expect(result.css).toContain('--p-button-x:2');
