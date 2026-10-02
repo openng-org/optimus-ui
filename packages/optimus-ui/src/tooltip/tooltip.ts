@@ -4,7 +4,7 @@ import { appendChild, createElement, fadeIn, findSingle, getOuterHeight, getOute
 import { TooltipOptions } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { BindModule } from '@openng/optimus-ui/bind';
-import { ConnectedOverlayScrollHandler } from '@openng/optimus-ui/dom';
+import { ConnectedOverlayMotionHandler, ConnectedOverlayScrollHandler } from '@openng/optimus-ui/dom';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import { TooltipPassThroughOptions } from '@openng/optimus-ui/types/tooltip';
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
@@ -12,6 +12,12 @@ import { TooltipStyle } from './style/tooltipstyle';
 import type { TooltipPassThrough } from '@openng/optimus-ui/types/tooltip';
 
 const TOOLTIP_INSTANCE = new InjectionToken<Tooltip>('TOOLTIP_INSTANCE');
+
+/**
+ * Side of the target the tooltip is placed on.
+ * @group Types
+ */
+export type TooltipPosition = 'top' | 'bottom' | 'left' | 'right';
 
 /**
  * Tooltip directive provides advisory information for a component.
@@ -191,6 +197,10 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
     documentEscapeListener: Nullable<Function>;
 
     scrollHandler: any;
+
+    motionHandler: any;
+
+    alignedPosition: TooltipPosition | undefined;
 
     resizeListener: any;
 
@@ -566,26 +576,18 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
         this.create();
 
-        const nativeElement = this.el.nativeElement;
-        const pDialogWrapper = nativeElement.closest('p-dialog');
-
-        if (pDialogWrapper) {
-            setTimeout(() => {
-                this.container && (this.container.style.display = 'inline-block');
-                this.container && this.align();
-            }, 100);
-        } else {
-            this.container.style.display = 'inline-block';
-            this.align();
-        }
+        this.container.style.display = 'inline-block';
+        this.align();
 
         fadeIn(this.container, 250);
 
-        if (this.getOption('tooltipZIndex') === 'auto') ZIndexUtils.set('tooltip', this.container, this.config.zIndex.tooltip);
-        else this.container.style.zIndex = this.getOption('tooltipZIndex');
+        if (this.getOption('tooltipZIndex') === 'auto') {
+            ZIndexUtils.set('tooltip', this.container, this.config.zIndex.tooltip);
+        } else this.container.style.zIndex = this.getOption('tooltipZIndex');
 
         this.bindDocumentResizeListener();
         this.bindScrollListener();
+        this.bindMotionListener();
     }
 
     hide() {
@@ -625,6 +627,22 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
             else if (this.isOutOfBounds()) alignmentFn.call(this);
             else break;
         }
+    }
+
+    /**
+     * Re-runs the alignment that align() settled on, without resolving the side again. Used while
+     * the target is moving: re-resolving every frame flips the tooltip around whenever the target
+     * passes a viewport edge mid flight.
+     */
+    realign() {
+        const alignFns: Record<TooltipPosition, () => void> = {
+            top: this.alignTop,
+            bottom: this.alignBottom,
+            left: this.alignLeft,
+            right: this.alignRight
+        };
+
+        this.alignedPosition ? alignFns[this.alignedPosition].call(this) : this.align();
     }
 
     getHostOffset() {
@@ -728,7 +746,8 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         return hasClass(el, 'p-inputwrapper') ? findSingle(el, 'input') : el;
     }
 
-    preAlign(position: string) {
+    preAlign(position: TooltipPosition) {
+        this.alignedPosition = position;
         this.container.style.left = -999 + 'px';
         this.container.style.top = -999 + 'px';
         this.container.className = this.cn(this.cx('root'), this.ptm('root')?.class, 'p-tooltip-' + position, this.getOption('tooltipStyleClass'));
@@ -781,6 +800,20 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         }
     }
 
+    bindMotionListener() {
+        this.zone.runOutsideAngular(() => {
+            if (!this.motionHandler) {
+                this.motionHandler = new ConnectedOverlayMotionHandler(this.el.nativeElement, (settled: boolean) => {
+                    if (this.container) {
+                        settled ? this.align() : this.realign();
+                    }
+                });
+            }
+
+            this.motionHandler.bindMotionListener();
+        });
+    }
+
     unbindEvents() {
         const tooltipEvent = this.getOption('tooltipEvent');
 
@@ -818,11 +851,20 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
         this.unbindDocumentResizeListener();
         this.unbindScrollListener();
+        this.destroyMotionHandler();
         this.unbindContainerMouseleaveListener();
         this.unbindDocumentTouchListener();
         this.clearTimeouts();
         this.container = null;
         this.scrollHandler = null;
+    }
+
+    destroyMotionHandler() {
+        if (this.motionHandler) {
+            // Destroy, not unbind: its pending settle reaction keeps this directive reachable.
+            this.motionHandler.destroy();
+            this.motionHandler = null;
+        }
     }
 
     clearShowTimeout() {
