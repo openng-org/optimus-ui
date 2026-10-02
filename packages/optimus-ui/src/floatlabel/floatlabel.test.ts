@@ -1,9 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
+import { Optimus, provideOptimus } from '@openng/optimus-ui/config';
 import { FloatLabel } from './floatlabel';
-import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -33,7 +33,7 @@ class TestBasicFloatLabelComponent {
 })
 class TestVariantFloatLabelComponent {
     value: string = '';
-    variant: 'in' | 'over' | 'on' = 'over';
+    variant: 'in' | 'over' | 'on' | undefined = 'over';
 }
 
 describe('FloatLabel', () => {
@@ -92,7 +92,7 @@ describe('FloatLabel', () => {
         });
 
         it('should have default variant "over"', () => {
-            expect(floatLabelInstance.variant).toBe('over');
+            expect(floatLabelInstance.variant()).toBe('over');
         });
 
         it('should apply variant "in"', async () => {
@@ -100,7 +100,7 @@ describe('FloatLabel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(floatLabelInstance.variant).toBe('in');
+            expect(floatLabelInstance.variant()).toBe('in');
         });
 
         it('should apply variant "on"', async () => {
@@ -108,7 +108,7 @@ describe('FloatLabel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(floatLabelInstance.variant).toBe('on');
+            expect(floatLabelInstance.variant()).toBe('on');
         });
 
         it('should have correct variant classes', async () => {
@@ -131,6 +131,30 @@ describe('FloatLabel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-over')).toBe(true);
+        });
+
+        it('should respect Optimus config if variant input undefined', async () => {
+            fixture.componentRef.injector.get(Optimus).setConfig({ floatVariant: 'in' });
+            component.variant = undefined;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(floatLabelInstance.variant()).toBe(undefined);
+            expect(floatLabelInstance.$variant()).toBe('in');
+            const floatLabelElement = fixture.debugElement.query(By.directive(FloatLabel));
+            expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-in')).toBe(true);
+        });
+
+        it('should respect own specified variant even if Optimus config specifies default variant', async () => {
+            fixture.componentRef.injector.get(Optimus).setConfig({ floatVariant: 'on' });
+            component.variant = 'in';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(floatLabelInstance.variant()).toBe('in');
+            expect(floatLabelInstance.$variant()).toBe('in');
+            const floatLabelElement = fixture.debugElement.query(By.directive(FloatLabel));
+            expect(floatLabelElement.nativeElement.classList.contains('p-floatlabel-in')).toBe(true);
         });
     });
 
@@ -291,10 +315,10 @@ describe('FloatLabel PassThrough Tests', () => {
 
     describe('PT Case 4: Use variables from instance', () => {
         it('should access instance variables in PT function', () => {
-            component.variant = 'in';
+            fixture.componentRef.setInput('variant', 'in');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.variant === 'in' ? 'VARIANT_IN' : ''
+                    class: instance?.$variant() === 'in' ? 'VARIANT_IN' : ''
                 })
             });
             fixture.detectChanges();
@@ -303,11 +327,11 @@ describe('FloatLabel PassThrough Tests', () => {
         });
 
         it('should conditionally apply styles based on instance state', () => {
-            component.variant = 'over';
+            fixture.componentRef.setInput('variant', 'over');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
                     style: {
-                        'background-color': instance?.variant === 'over' ? 'yellow' : 'red'
+                        'background-color': instance?.$variant() === 'over' ? 'yellow' : 'red'
                     }
                 })
             });
@@ -335,20 +359,6 @@ describe('FloatLabel PassThrough Tests', () => {
             });
 
             expect(clicked).toBe(true);
-        });
-
-        it('should modify instance through PT event', () => {
-            fixture.componentRef.setInput('pt', {
-                root: ({ instance }: any) => ({
-                    onclick: () => {
-                        instance.variant = 'on';
-                    }
-                })
-            });
-            fixture.detectChanges();
-
-            hostElement.click();
-            expect(component.variant).toBe('on');
         });
     });
 

@@ -16,6 +16,8 @@ export class Optimus extends ThemeProvider {
 
     inputVariant = signal<'outlined' | 'filled' | null>(null);
 
+    floatVariant = signal<'in' | 'over' | 'on' | null>(null);
+
     overlayAppendTo = signal<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>('self');
 
     overlayOptions: OverlayOptions = {};
@@ -187,13 +189,14 @@ export class Optimus extends ThemeProvider {
     }
 
     setConfig(config: OptimusConfigType): void {
-        const { csp, ripple, inputStyle, inputVariant, theme, overlayOptions, translation, filterMatchModeOptions, overlayAppendTo, zIndex, ptOptions, pt, unstyled } = config || {};
+        const { csp, ripple, inputStyle, inputVariant, floatVariant, theme, overlayOptions, translation, filterMatchModeOptions, overlayAppendTo, zIndex, ptOptions, pt, unstyled } = config || {};
 
         if (csp) this.csp.set(csp);
         if (overlayAppendTo) this.overlayAppendTo.set(overlayAppendTo);
         if (ripple) this.ripple.set(ripple);
         if (inputStyle) this.inputStyle.set(inputStyle);
         if (inputVariant) this.inputVariant.set(inputVariant);
+        if (floatVariant) this.floatVariant.set(floatVariant);
         if (overlayOptions) this.overlayOptions = overlayOptions;
         if (translation) this.setTranslation(translation);
         if (filterMatchModeOptions) this.filterMatchModeOptions = filterMatchModeOptions;
