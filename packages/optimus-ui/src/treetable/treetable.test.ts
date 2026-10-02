@@ -3860,3 +3860,58 @@ describe('TreeTable Inline PT', () => {
         expect(host?.classList.contains('INLINE_HOST_CLASS')).toBe(true);
     });
 });
+
+describe('TreeTableCellEditor kebab-case selector', () => {
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [TreeTableModule],
+        template: `
+            <p-treetable [value]="nodes">
+                <ng-template #body let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode">
+                        <td ttEditableColumn>
+                            <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
+                            <p-treetable-cell-editor>
+                                <ng-template pTemplate="input"><input class="editor-input" type="text" [value]="rowData.name" /></ng-template>
+                                <ng-template pTemplate="output"
+                                    ><span class="editor-output">{{ rowData.name }}</span></ng-template
+                                >
+                            </p-treetable-cell-editor>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treetable>
+        `
+    })
+    class KebabCaseCellEditorComponent {
+        nodes: TreeNode[] = [{ data: { name: 'Root 1' }, children: [{ data: { name: 'Child 1' } }] }];
+    }
+
+    let fixture: ComponentFixture<KebabCaseCellEditorComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [KebabCaseCellEditorComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(KebabCaseCellEditorComponent);
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    });
+
+    it('should resolve p-treetable-cell-editor and p-treetable-toggler', async () => {
+        expect(fixture.nativeElement.querySelector('.p-treetable-toggler')).toBeTruthy();
+        expect(fixture.nativeElement.querySelector('.editor-output')?.textContent.trim()).toBe('Root 1');
+
+        fixture.nativeElement.querySelector('td').click();
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(fixture.nativeElement.querySelector('.editor-input')).toBeTruthy();
+        expect(fixture.nativeElement.querySelector('.editor-output')).toBeNull();
+    });
+});
