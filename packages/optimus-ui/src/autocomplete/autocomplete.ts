@@ -6,8 +6,8 @@ import {
     computed,
     ContentChild,
     ContentChildren,
-    EmbeddedViewRef,
     ElementRef,
+    EmbeddedViewRef,
     EventEmitter,
     forwardRef,
     HostListener,
@@ -1154,11 +1154,17 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     /**
-     * Whether an option corresponds to a model value, regardless of whether the model holds
-     * the option object itself or the value resolved through `optionValue`.
+     * Whether an option corresponds to a model value.
+     * If this.dataKey defined, true if and only if: option[dataKey] deep equals value[dataKey] or option[dataKey] deep equals value.
+     * Otherwise, true if and only if: option deep equals value or this.getOptionValue(option) deep equals value.
      */
     private isOptionEqualToValue(option: any, value: any): boolean {
-        return equals(value, option, this.equalityKey()) || (this.isResolvedOptionValue(value) && equals(this.getOptionValue(option), value));
+        const dataKey = this.dataKey;
+        if (dataKey) {
+            return equals(option, value, dataKey) || equals(option[dataKey], value);
+        } else {
+            return equals(option, value) || equals(this.getOptionValue(option), value);
+        }
     }
 
     isOptionMatched(option, value) {
@@ -1171,10 +1177,6 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
 
     isDropdownClicked(event) {
         return this.dropdownButton?.nativeElement ? event.target === this.dropdownButton.nativeElement || this.dropdownButton.nativeElement.contains(event.target) : false;
-    }
-
-    equalityKey() {
-        return this.optionValue ? undefined : this.dataKey;
     }
 
     onContainerClick(event) {
@@ -1846,7 +1848,7 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     getOptionValue(option) {
-        return this.optionValue ? resolveFieldData(option, this.optionValue) : option;
+        return this.optionValue ? resolveFieldData(option, this.optionValue) : !this.optionLabel && option && option.value !== undefined ? option.value : option;
     }
 
     getOptionIndex(index, scrollerOptions) {
