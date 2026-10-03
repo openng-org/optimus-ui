@@ -3,9 +3,8 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Product } from '@/domain/product';
 import { ProductService } from '@/service/productservice';
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
-import { SortEvent } from '@openng/optimus-ui/api';
-import { Table, TableModule } from '@openng/optimus-ui/table';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TableModule } from '@openng/optimus-ui/table';
 
 @Component({
     selector: 'removablesort-doc',
@@ -13,11 +12,11 @@ import { Table, TableModule } from '@openng/optimus-ui/table';
     imports: [TableModule, AppDocSectionText, AppCode, DeferredDemo],
     template: `
         <app-docsectiontext>
-            <p>The removable sort can be implemented using the <i>customSort</i> property.</p>
+            <p>A third sort state that clears the sorting and restores the original data order is enabled by setting <i>removableSort</i> to true.</p>
         </app-docsectiontext>
         <p-deferred-demo (load)="loadDemoData()">
             <div class="card">
-                <p-table #dt [value]="products" (sortFunction)="customSort($event)" [customSort]="true">
+                <p-table [value]="products" [removableSort]="true">
                     <ng-template #header>
                         <tr>
                             <th pSortableColumn="code">
@@ -62,49 +61,13 @@ import { Table, TableModule } from '@openng/optimus-ui/table';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RemovableSortDoc {
-    @ViewChild('dt') dt: Table;
-
     products: Product[];
-
-    initialValue: Product[];
-
-    isSorted: boolean = null;
 
     constructor(private productService: ProductService) {}
 
     loadDemoData() {
         this.productService.getProductsMini().then((data) => {
             this.products = data;
-            this.initialValue = [...data];
-        });
-    }
-
-    customSort(event: SortEvent) {
-        if (this.isSorted == null || this.isSorted === undefined) {
-            this.isSorted = true;
-            this.sortTableData(event);
-        } else if (this.isSorted == true) {
-            this.isSorted = false;
-            this.sortTableData(event);
-        } else if (this.isSorted == false) {
-            this.isSorted = null;
-            this.products = [...this.initialValue];
-            this.dt.reset();
-        }
-    }
-
-    sortTableData(event) {
-        event.data.sort((data1, data2) => {
-            let value1 = data1[event.field];
-            let value2 = data2[event.field];
-            let result = null;
-            if (value1 == null && value2 != null) result = -1;
-            else if (value1 != null && value2 == null) result = 1;
-            else if (value1 == null && value2 == null) result = 0;
-            else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-            else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-            return event.order * result;
         });
     }
 }

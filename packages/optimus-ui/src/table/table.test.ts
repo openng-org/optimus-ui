@@ -124,6 +124,52 @@ describe('Table', () => {
         changeDetection: ChangeDetectionStrategy.Eager,
         standalone: false,
         template: `
+            <p-table [value]="products" [sortMode]="sortMode" [removableSort]="removableSort" [lazy]="lazy" (onSort)="onSort($event)" (onLazyLoad)="onLazyLoad($event)">
+                <ng-template #header>
+                    <tr>
+                        <th pSortableColumn="name">Name <p-sortIcon field="name"></p-sortIcon></th>
+                        <th pSortableColumn="price">Price <p-sortIcon field="price"></p-sortIcon></th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-product>
+                    <tr>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestRemovableSortTableComponent {
+        products = [
+            { id: '1002', name: 'Banana', price: 29.99 },
+            { id: '1001', name: 'Apple', price: 1299.99 },
+            { id: '1003', name: 'Cherry', price: 149.99 }
+        ];
+
+        sortMode: 'single' | 'multiple' = 'single';
+
+        removableSort = true;
+
+        lazy = false;
+
+        sortEvents: any[] = [];
+
+        lazyEvents: any[] = [];
+
+        onSort(event: any) {
+            this.sortEvents.push(event);
+        }
+
+        onLazyLoad(event: any) {
+            this.lazyEvents.push(event);
+        }
+    }
+
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
             <p-table [value]="products" [sortMode]="'multiple'" [multiSortMeta]="multiSortMeta" [groupRowsBy]="'category'">
                 <ng-template #body let-product>
                     <tr>
@@ -385,6 +431,7 @@ describe('Table', () => {
                 TestSelectionTableComponent,
                 TestSortingTableComponent,
                 TestGroupedSortingTableComponent,
+                TestRemovableSortTableComponent,
                 TestFilteringTableComponent,
                 TestVirtualScrollTableComponent,
                 TestVirtualScrollPercentHeightTableComponent,
@@ -526,6 +573,159 @@ describe('Table', () => {
                 const tableInstance: Table = groupedFixture.debugElement.query(By.css('p-table')).componentInstance;
 
                 expect(tableInstance.multiSortMeta).toEqual([{ field: 'category', order: 1 }]);
+            });
+        });
+
+        describe('Removable Sort', () => {
+            let removableComponent: TestRemovableSortTableComponent;
+            let removableFixture: ComponentFixture<TestRemovableSortTableComponent>;
+            let removableTable: Table;
+
+            const originalOrder = ['Banana', 'Apple', 'Cherry'];
+
+            const createRemovableFixture = async (setup?: (instance: TestRemovableSortTableComponent) => void) => {
+                removableFixture = TestBed.createComponent(TestRemovableSortTableComponent);
+                removableComponent = removableFixture.componentInstance;
+                setup?.(removableComponent);
+                await removableFixture.whenStable();
+                removableFixture.detectChanges();
+                removableTable = removableFixture.debugElement.query(By.css('p-table')).componentInstance;
+            };
+
+            const sortBy = async (field: string, metaKey = false) => {
+                removableTable.sort({ originalEvent: { metaKey, ctrlKey: false }, field });
+                removableFixture.detectChanges();
+                await removableFixture.whenStable();
+            };
+
+            const names = () => removableTable.value.map((product: any) => product.name);
+
+            it('should cycle ascending, descending then back to the original order', async () => {
+                await createRemovableFixture();
+
+                await sortBy('name');
+                expect(removableTable.sortField).toBe('name');
+                expect(removableTable.sortOrder).toBe(1);
+                expect(names()).toEqual(['Apple', 'Banana', 'Cherry']);
+
+                await sortBy('name');
+                expect(removableTable.sortOrder).toBe(-1);
+                expect(names()).toEqual(['Cherry', 'Banana', 'Apple']);
+
+                await sortBy('name');
+                expect(removableTable.sortField).toBeNull();
+                expect(removableTable.sortOrder).toBe(removableTable.defaultSortOrder);
+                expect(names()).toEqual(originalOrder);
+            });
+
+            it('should restart the cycle on the fourth click', async () => {
+                await createRemovableFixture();
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(removableTable.sortField).toBe('name');
+                expect(removableTable.sortOrder).toBe(1);
+                expect(names()).toEqual(['Apple', 'Banana', 'Cherry']);
+            });
+
+            it('should keep the two state toggle when removableSort is disabled', async () => {
+                await createRemovableFixture((instance) => (instance.removableSort = false));
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(removableTable.sortField).toBe('name');
+                expect(removableTable.sortOrder).toBe(1);
+                expect(names()).toEqual(['Apple', 'Banana', 'Cherry']);
+            });
+
+            it('should emit an empty sort meta and notify the table service when the sort is removed', async () => {
+                await createRemovableFixture();
+                const serviceSpy = vi.spyOn(removableTable.tableService, 'onSort');
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(removableComponent.sortEvents.at(-1)).toEqual({ field: null, order: null });
+                expect(serviceSpy).toHaveBeenLastCalledWith(null);
+            });
+
+            it('should reset the header aria-sort and the sort icon when the sort is removed', async () => {
+                await createRemovableFixture();
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                const header = removableFixture.debugElement.query(By.css('th[pSortableColumn="name"]'));
+
+                expect(header.nativeElement.getAttribute('aria-sort')).toBe('none');
+                expect(header.query(By.css('svg[data-p-icon="sort-alt"]'))).toBeTruthy();
+            });
+
+            it('should restore the original order in multiple sort mode', async () => {
+                await createRemovableFixture((instance) => (instance.sortMode = 'multiple'));
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(removableTable.multiSortMeta).toEqual([]);
+                expect(names()).toEqual(originalOrder);
+                expect(removableComponent.sortEvents.at(-1)).toEqual({ multisortmeta: [] });
+            });
+
+            it('should only remove the clicked column when the meta key is pressed', async () => {
+                await createRemovableFixture((instance) => (instance.sortMode = 'multiple'));
+
+                await sortBy('name', true);
+                await sortBy('price', true);
+                await sortBy('price', true);
+                await sortBy('price', true);
+
+                expect(removableTable.multiSortMeta).toEqual([{ field: 'name', order: 1 }]);
+                expect(names()).toEqual(['Apple', 'Banana', 'Cherry']);
+            });
+
+            it('should request an unsorted lazy load without touching the value', async () => {
+                await createRemovableFixture((instance) => (instance.lazy = true));
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(removableComponent.lazyEvents.at(-1).sortField).toBeNull();
+                expect(names()).toEqual(originalOrder);
+            });
+
+            it('should keep the filter applied and restore the original relative order', async () => {
+                await createRemovableFixture();
+
+                removableTable.filter('a', 'name', 'contains');
+                removableFixture.detectChanges();
+                await removableFixture.whenStable();
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect((removableTable.filteredValue ?? []).map((product: any) => product.name)).toEqual(['Banana', 'Apple']);
+            });
+
+            it('should restore the original order on clear', async () => {
+                await createRemovableFixture();
+
+                await sortBy('name');
+                removableTable.clear();
+                removableFixture.detectChanges();
+                await removableFixture.whenStable();
+
+                expect(names()).toEqual(originalOrder);
             });
         });
     });
