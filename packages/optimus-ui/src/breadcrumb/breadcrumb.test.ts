@@ -289,6 +289,17 @@ describe('Breadcrumb', () => {
             expect(breadcrumbInstance.model).toBe(newModel);
         });
 
+        it('should reuse item elements when the model is replaced with equal items', async () => {
+            const itemsBefore = fixture.debugElement.queryAll(By.css('li')).map((li) => li.nativeElement);
+            component.model = component.model!.map((item) => ({ ...item }));
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+            const itemsAfter = fixture.debugElement.queryAll(By.css('li')).map((li) => li.nativeElement);
+            expect(itemsAfter.length).toBe(itemsBefore.length);
+            itemsAfter.forEach((element, index) => expect(element).toBe(itemsBefore[index]));
+        });
+
         it('should update home input', async () => {
             const newHome: MenuItem = { label: 'Custom Home', icon: 'pi pi-star' };
             component.home = newHome;
