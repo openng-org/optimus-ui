@@ -106,7 +106,7 @@ export class AccordionPanel extends BaseComponent<AccordionPanelPassThrough> {
      * @defaultValue undefined
      * @group Props
      */
-    value = model<undefined | null | string | number | string[] | number[]>(undefined);
+    value = model<undefined | null | string | number | string[] | number[]>(uuid('pn_id_'));
     /**
      * Disables the tab when enabled.
      * @defaultValue false

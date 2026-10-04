@@ -1018,4 +1018,38 @@ describe('Accordion', () => {
             expect(accordionEl.nativeElement.className).toContain('SETINPUT_ROOT_CLASS');
         });
     });
+
+    describe('AccordionPanel default value (#959)', () => {
+        @Component({
+            standalone: true,
+            imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+            template: `
+                <p-accordion>
+                    <p-accordion-panel>
+                        <p-accordion-header>Header 1</p-accordion-header>
+                        <p-accordion-content>Content 1</p-accordion-content>
+                    </p-accordion-panel>
+                    <p-accordion-panel>
+                        <p-accordion-header>Header 2</p-accordion-header>
+                        <p-accordion-content>Content 2</p-accordion-content>
+                    </p-accordion-panel>
+                </p-accordion>
+            `
+        })
+        class TestAccordionNoValueComponent {}
+
+        it('should not expand tabs by default when value is omitted on panels', async () => {
+            TestBed.configureTestingModule({
+                imports: [TestAccordionNoValueComponent],
+                providers: [provideZonelessChangeDetection()]
+            });
+            const fixture = TestBed.createComponent(TestAccordionNoValueComponent);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const panels = fixture.debugElement.queryAll(By.css('p-accordion-panel'));
+            expect(panels[0].nativeElement.getAttribute('data-p-active')).toBe('false');
+            expect(panels[1].nativeElement.getAttribute('data-p-active')).toBe('false');
+        });
+    });
 });
