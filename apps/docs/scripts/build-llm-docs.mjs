@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import ComponentTokens from '@openng/optimus-ui-themes/tokens';
+import { generateAgentSkill } from './build-llm-skill.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -11,6 +12,7 @@ const PAGES_DIR = path.resolve(__dirname, '../pages');
 const API_DOC_PATH = path.resolve(__dirname, '../doc/apidoc/index.json');
 const DEMOS_JSON_PATH = path.resolve(__dirname, '../public/demos.json');
 const OUTPUT_DIR = path.resolve(__dirname, '../public/llms');
+const OPTIMUS_PACKAGE_JSON = path.resolve(__dirname, '../../../packages/optimus-ui/package.json');
 
 // Global demos data loaded from demos.json
 let demosData = null;
@@ -1285,6 +1287,7 @@ function main() {
     generateLlmsTxt(components, pages);
     generateIndividualMarkdownFiles(components, apiDocs);
     generatePageMarkdownFiles(pages);
+    generateAgentSkill({ outputDir: OUTPUT_DIR, components, pages, version: JSON.parse(fs.readFileSync(OPTIMUS_PACKAGE_JSON, 'utf-8')).version });
 
     console.log('\n✅ LLM documentation generation complete!');
     console.log(`\nOutput directory: ${OUTPUT_DIR}`);
@@ -1293,6 +1296,7 @@ function main() {
     console.log('   - llms.txt (index file)');
     console.log('   - components/*.md (individual component files with complete API)');
     console.log('   - pages/*.md (guide/documentation page files)');
+    console.log('   - optimus-ui-skill.zip (Agent Skill bundling the markdown files)');
 }
 
 main();

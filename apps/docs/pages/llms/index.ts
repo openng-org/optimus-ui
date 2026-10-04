@@ -1,6 +1,7 @@
 import { LlmsTxtDoc } from '@/doc/llms/llmstxt-doc';
 import { LlmsFullTxtDoc } from '@/doc/llms/llmsfulltxt-doc';
 import { MarkdownExtensionDoc } from '@/doc/llms/markdownextension-doc';
+import { AgentSkillDoc } from '@/doc/llms/agentskill-doc';
 import { Component } from '@angular/core';
 import { AppDoc } from '@/components/doc/app.doc';
 
@@ -26,6 +27,11 @@ export class LLMsDemo {
             id: 'markdown',
             label: '.md extension',
             component: MarkdownExtensionDoc
+        },
+        {
+            id: 'agentskill',
+            label: 'Agent Skill',
+            component: AgentSkillDoc
         }
     ];
 }
