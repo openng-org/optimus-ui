@@ -60,7 +60,7 @@ function oneLine(text) {
 }
 
 function renderSkillMd({ version, pageEntries, componentEntries }) {
-    const indexLine = (e) => `- \`${e.file.replace('references/', '')}\` — **${e.title}**: ${oneLine(e.description)}`;
+    const indexLine = (e) => `- \`${e.file}\` — **${e.title}**: ${oneLine(e.description)}`;
 
     return `---
 name: ${SKILL_NAME}
