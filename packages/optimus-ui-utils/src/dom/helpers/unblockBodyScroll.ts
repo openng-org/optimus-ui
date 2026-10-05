@@ -1,6 +1,6 @@
 import removeClass from '../methods/removeClass';
 
-export interface UnblockBodyScrollOptions {
+interface UnblockBodyScrollOptions {
     className?: string;
     variableName?: string;
 }

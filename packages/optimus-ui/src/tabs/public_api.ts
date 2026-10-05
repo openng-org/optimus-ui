@@ -5,3 +5,7 @@ export * from './tab';
 export * from './tabpanel';
 export * from './tabpanels';
 export * from './style/tabsstyle';
+export * from './style/tabliststyle';
+export * from './style/tabstyle';
+export * from './style/tabpanelstyle';
+export * from './style/tabpanelsstyle';

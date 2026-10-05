@@ -2,11 +2,6 @@ import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-export const AUTO_FILE_COMMENT = `/**
- * @file
- * THIS FILE IS AUTO-GENERATED. PLEASE DO NOT MODIFY.
- */`;
-
 export function resolvePath(metaUrl) {
     const __dirname = path.dirname(fileURLToPath(metaUrl || import.meta.url));
     const __root = path.resolve(path.dirname(fileURLToPath(metaUrl || import.meta.url)), '../');
@@ -105,7 +100,7 @@ export function copyDependencies(inFolder, outFolder, subFolder) {
     });
 }
 
-export async function renameDTSFile(dir, newName, resolver) {
+async function renameDTSFile(dir, newName, resolver) {
     const entries = await fs.readdir(dir, { withFileTypes: true });
 
     for (const entry of entries) {

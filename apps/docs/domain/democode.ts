@@ -1,6 +1,6 @@
 import { Code, ExtFile, RouteFile } from './code';
 
-export interface DemoMetadata {
+interface DemoMetadata {
     services: string[];
     extFiles: ExtFile[];
     routeFiles?: RouteFile[];

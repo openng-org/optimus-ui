@@ -1,4 +1,4 @@
-export var lastId = 0;
+var lastId = 0;
 
 export function UniqueComponentId(prefix = 'pn_id_') {
     lastId++;
