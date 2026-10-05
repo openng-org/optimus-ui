@@ -14,7 +14,10 @@ import { Component } from '@angular/core';
                 <i>aria-autocomplete</i>, <i>aria-haspopup</i> and <i>aria-expanded</i> attributes. The relation between the input and the popup is created with <i>aria-controls</i> and <i>aria-activedescendant</i> attribute is used to instruct
                 screen reader which option to read during keyboard navigation within the popup list.
             </p>
-            <p>In multiple mode, chip list uses <i>listbox</i> role whereas each chip has the <i>option</i> role with <i>aria-label</i> set to the label of the chip.</p>
+            <p>
+                In multiple mode, chip list uses <i>listbox</i> role whereas each chip has the <i>option</i> role with <i>aria-label</i> set to the label of the chip. The chip list itself is labelled with the <i>aria.selectedItems</i> property of the
+                locale API so it is announced with a name of its own.
+            </p>
             <p>
                 The popup list has an id that refers to the <i>aria-controls</i> attribute of the input element and uses <i>listbox</i> as the role. Each list item has <i>option</i> role and an id to match the <i>aria-activedescendant</i> of the
                 input element.
