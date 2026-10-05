@@ -79,7 +79,7 @@ const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
         </button>
         @if (showPageLinks) {
             <span [pBind]="ptm('pages')" [class]="cx('pages')">
-                @for (pageLink of pageLinks; track trackByPageLink(pageLink)) {
+                @for (pageLink of pageLinks; track $index) {
                     <button
                         [pBind]="ptm('page')"
                         type="button"
@@ -475,10 +475,6 @@ export class Paginator extends BaseComponent<PaginatorPassThrough> {
         if (simpleChange.pageLinkSize) {
             this.updatePageLinks();
         }
-    }
-
-    trackByPageLink(pageLink: number): number {
-        return pageLink;
     }
 
     updateRowsPerPageOptions(): void {
