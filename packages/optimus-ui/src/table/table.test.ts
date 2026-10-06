@@ -394,7 +394,15 @@ describe('Table', () => {
                 >
                 <ng-template #expandedrow let-product
                     ><tr class="p-datatable-row-expansion">
-                        <td>Details for {{ product.name }}</td>
+                        <td>
+                            <p-table [value]="orders" styleClass="nested-table">
+                                <ng-template #body let-order
+                                    ><tr>
+                                        <td>{{ order.id }}</td>
+                                    </tr></ng-template
+                                >
+                            </p-table>
+                        </td>
                     </tr></ng-template
                 >
                 <ng-template #footer
@@ -408,6 +416,7 @@ describe('Table', () => {
     class TestExpandedRowFooterTableComponent {
         products = [{ id: '1', name: 'Product' }];
         expandedRowKeys = { '1': true };
+        orders = [{ id: 7000 }, { id: 7001 }];
     }
 
     beforeEach(async () => {
@@ -714,16 +723,28 @@ describe('Table', () => {
     });
 
     describe('Row Expansion and Gridlines', () => {
-        it('should keep the bottom border on the last expanded row before the footer', async () => {
+        it('should keep the bottom border of a table nested in the last expanded row', async () => {
+            const testFixture = TestBed.createComponent(TestExpandedRowFooterTableComponent);
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const nestedLastCell = testFixture.nativeElement.querySelector('.nested-table .p-datatable-tbody > tr:last-child > td');
+
+            expect(nestedLastCell).toBeTruthy();
+            expect(getComputedStyle(nestedLastCell).borderBottomWidth).toBe('1px');
+        });
+
+        it('should draw a single border between the last expanded row and the footer', async () => {
             const testFixture = TestBed.createComponent(TestExpandedRowFooterTableComponent);
             testFixture.detectChanges();
             await testFixture.whenStable();
             testFixture.detectChanges();
 
             const expansionCell = testFixture.nativeElement.querySelector('.p-datatable-row-expansion > td');
+            const footerCell = testFixture.nativeElement.querySelector('.p-datatable-tfoot > tr > td');
 
-            expect(expansionCell).toBeTruthy();
-            expect(getComputedStyle(expansionCell).borderBottomWidth).toBe('1px');
+            expect(parseFloat(getComputedStyle(expansionCell).borderBottomWidth) + parseFloat(getComputedStyle(footerCell).borderTopWidth)).toBe(1);
         });
     });
 
