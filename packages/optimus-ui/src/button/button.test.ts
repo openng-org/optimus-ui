@@ -213,6 +213,20 @@ class TestButtonWithPositionedIconTemplateComponent {
     iconPos: 'left' | 'right' | 'top' | 'bottom' = 'right';
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <button pButton [iconPos]="iconPos">
+            <span pButtonIcon class="custom-icon" style="display: inline-block; width: 1rem; height: 1rem"></span>
+            <span pButtonLabel>Save</span>
+        </button>
+    `
+})
+class TestButtonDirectiveVerticalIconComponent {
+    iconPos: 'left' | 'right' | 'top' | 'bottom' = 'top';
+}
+
 // Loading Button Test
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -1544,7 +1558,7 @@ describe('ButtonDirective', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent, TestButtonWithPositionedIconDirectiveComponent],
+            declarations: [TestButtonDirectiveComponent, TestButtonWithIconLabelDirectiveComponent, TestButtonWithPositionedIconDirectiveComponent, TestButtonDirectiveVerticalIconComponent],
             imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -1618,6 +1632,35 @@ describe('ButtonDirective', () => {
 
             expect(iconNativeElement.classList.contains('p-button-icon')).toBe(true);
             expect(labelNativeElement.classList.contains('p-button-label')).toBe(true);
+        });
+
+        it('should stack custom icons above or below the label for top and bottom positions', async () => {
+            const verticalFixture = TestBed.createComponent(TestButtonDirectiveVerticalIconComponent);
+            const verticalComponent = verticalFixture.componentInstance;
+            verticalFixture.detectChanges();
+            await verticalFixture.whenStable();
+
+            const button = verticalFixture.nativeElement.querySelector('button') as HTMLElement;
+            const icon = () => (verticalFixture.nativeElement.querySelector('.custom-icon') as HTMLElement).getBoundingClientRect();
+            const label = () => (verticalFixture.nativeElement.querySelector('[pButtonLabel]') as HTMLElement).getBoundingClientRect();
+
+            expect(button.classList.contains('p-button-vertical')).toBe(true);
+            expect(icon().bottom).toBeLessThanOrEqual(label().top);
+
+            verticalComponent.iconPos = 'bottom';
+            verticalFixture.changeDetectorRef.markForCheck();
+            await verticalFixture.whenStable();
+            verticalFixture.detectChanges();
+
+            expect(icon().top).toBeGreaterThanOrEqual(label().bottom);
+
+            verticalComponent.iconPos = 'right';
+            verticalFixture.changeDetectorRef.markForCheck();
+            await verticalFixture.whenStable();
+            verticalFixture.detectChanges();
+
+            expect(button.classList.contains('p-button-vertical')).toBe(false);
+            expect(icon().left).toBeGreaterThanOrEqual(label().right);
         });
 
         it('should apply icon position classes to custom icons', async () => {
