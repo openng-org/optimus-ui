@@ -17,6 +17,10 @@ import { Component } from '@angular/core';
                 Each entry point lists its import path, NgModule, services and exported types. Each component or directive lists its selector, inputs with type, allowed values, default, transform and two-way binding, outputs with payload type,
                 templates with their context type, methods, forms support and pass-through keys.
             </p>
+            <p>
+                The <i>theme</i> section lists every design token of the four presets with its CSS variable, type and value per preset, with separate light and dark values where the color scheme changes them. The
+                <a href="/theming/styled#designtools" class="doc-link">Penpot token files</a> are generated from it.
+            </p>
             <app-code [code]="code" [hideToggleCode]="true"></app-code>
         </app-docsectiontext>
     `
@@ -44,7 +48,13 @@ export class ManifestDoc {
         }
       ]
     }
-  ]
+  ],
+  "theme": {
+    "presets": ["aura", "lara", "material", "nora"],
+    "tokens": [
+      { "name": "button.primary.background", "variable": "--p-button-primary-background", "type": "color", "values": { "aura": { "light": "{primary.color}", "dark": "{primary.color}" } } }
+    ]
+  }
 }`
     };
 }

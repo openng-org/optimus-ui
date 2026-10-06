@@ -6,6 +6,7 @@ import { ColorSchemeDoc } from '@/doc/theming/styled/colorscheme-doc';
 import { ComponentDoc } from '@/doc/theming/styled/component-doc';
 import { DarkModeDoc } from '@/doc/theming/styled/darkmode-doc';
 import { DefinePresetDoc } from '@/doc/theming/styled/definepreset-doc';
+import { DesignToolsDoc } from '@/doc/theming/styled/designtools-doc';
 import { DtDoc } from '@/doc/theming/styled/dt-doc';
 import { ExtendDoc } from '@/doc/theming/styled/extend-doc';
 import { FocusRingDoc } from '@/doc/theming/styled/focusring-doc';
@@ -193,6 +194,11 @@ export class ThemingStyledDemo {
             id: 'scale',
             label: 'Scale',
             component: ScaleDoc
+        },
+        {
+            id: 'designtools',
+            label: 'Design Tools',
+            component: DesignToolsDoc
         }
     ];
 }
