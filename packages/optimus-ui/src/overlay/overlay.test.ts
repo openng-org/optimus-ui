@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -6,6 +6,7 @@ import { Overlay } from './overlay';
 
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { SharedModule } from '@openng/optimus-ui/api';
+import { Optimus } from '@openng/optimus-ui/config';
 describe('Overlay', () => {
     describe('PassThrough API', () => {
         @Component({
@@ -169,7 +170,7 @@ describe('Overlay', () => {
 
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => ({
-                        class: instance?.visible ? 'VISIBLE_CLASS' : 'HIDDEN_CLASS'
+                        class: instance?.visible() ? 'VISIBLE_CLASS' : 'HIDDEN_CLASS'
                     })
                 });
                 fixture.changeDetectorRef.markForCheck();
@@ -267,11 +268,11 @@ describe('Overlay', () => {
                 expect(emitterAccessed).toBe(true);
             });
 
-            it('should access visibleChange emitter through instance in pt', async () => {
+            it('should access visible model emitter through instance in pt', async () => {
                 let emitterAccessed = false;
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
-                        if (instance.visibleChange) {
+                        if (instance.visible.subscribe) {
                             emitterAccessed = true;
                         }
                         return {};
@@ -393,6 +394,79 @@ describe('Overlay', () => {
     });
 });
 
+describe('Overlay visibility', () => {
+    @Component({
+        imports: [Overlay],
+        template: `<p-overlay [(visible)]="visible">Content</p-overlay>`
+    })
+    class TestVisibleOverlayComponent {
+        visible = signal(false);
+    }
+
+    let fixture: ComponentFixture<TestVisibleOverlayComponent>;
+    let overlay: Overlay;
+
+    beforeEach(async () => {
+        TestBed.resetTestingModule();
+        await TestBed.configureTestingModule({
+            imports: [TestVisibleOverlayComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestVisibleOverlayComponent);
+        fixture.detectChanges();
+        await fixture.whenStable();
+        overlay = fixture.debugElement.query(By.directive(Overlay)).componentInstance;
+    });
+
+    it('should keep modalVisible true after visible turns false until the leave motion completes', async () => {
+        expect(overlay.modalVisible()).toBe(false);
+
+        fixture.componentInstance.visible.set(true);
+        await fixture.whenStable();
+        expect(overlay.visible()).toBe(true);
+        expect(overlay.modalVisible()).toBe(true);
+        expect(fixture.nativeElement.querySelector('[data-pc-section="root"]')).toBeTruthy();
+
+        fixture.componentInstance.visible.set(false);
+        await fixture.whenStable();
+        expect(overlay.visible()).toBe(false);
+        expect(overlay.modalVisible()).toBe(true);
+
+        overlay.onOverlayAfterLeave({} as any);
+        await fixture.whenStable();
+        expect(overlay.modalVisible()).toBe(false);
+        expect(fixture.nativeElement.querySelector('[data-pc-section="root"]')).toBeFalsy();
+    });
+
+    it('should propagate hide() back to the two-way bound host property', async () => {
+        fixture.componentInstance.visible.set(true);
+        await fixture.whenStable();
+
+        overlay.hide();
+        await fixture.whenStable();
+        expect(overlay.visible()).toBe(false);
+        expect(fixture.componentInstance.visible()).toBe(false);
+    });
+
+    it('should react to global config overlayOptions changes', async () => {
+        const config = TestBed.inject(Optimus);
+        expect(overlay.$target()).toBe('@prev');
+        expect(overlay.overlayResponsiveDirection()).toBe('center');
+
+        config.overlayOptions.set({ target: '@parent', responsive: { direction: 'bottom' } });
+        expect(overlay.$target()).toBe('@parent');
+        expect(overlay.overlayResponsiveDirection()).toBe('bottom');
+
+        config.overlayOptions.set({});
+        expect(overlay.$target()).toBe('@prev');
+    });
+
+    it('should leave _contentTemplate undefined without any pTemplate', async () => {
+        expect(overlay._contentTemplate()).toBeUndefined();
+    });
+});
+
 // ---------------------------------------------------------------------------
 // Signal query API
 // ---------------------------------------------------------------------------
@@ -404,6 +478,7 @@ describe('Overlay', () => {
         <p-overlay>
             <ng-template #content>C</ng-template>
             <ng-template pTemplate="content">c2</ng-template>
+            <ng-template pTemplate="other">c3</ng-template>
         </p-overlay>
     `
 })
@@ -422,6 +497,7 @@ describe('Overlay Signal Query API', () => {
 
         const instance = fixture.debugElement.query(By.directive(Overlay)).componentInstance;
         expect(instance.contentTemplate()).toBeDefined();
+        expect(instance._contentTemplate()).toBe(instance.templates().find((t: any) => t.getType() === 'other').template);
         expect(instance.templates().some((t: any) => t.getType() === 'content')).toBe(true);
         expect(instance.overlayViewChild()).toBeUndefined();
         expect(instance.contentViewChild()).toBeUndefined();

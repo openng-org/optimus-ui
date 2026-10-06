@@ -14,7 +14,12 @@
         "remove-dead-inputs": {
             "version": "3.0.0",
             "factory": "./migrations/remove-dead-inputs/migration",
-            "description": "Remove usages of inputs removed in this version that had already stopped doing anything: p-toast/p-toastItem's showTransformOptions, hideTransformOptions, showTransitionOptions and hideTransitionOptions; and p-message's showTransitionOptions and hideTransitionOptions."
+            "description": "Remove usages of inputs removed in this version that had already stopped doing anything: p-toast/p-toastItem's showTransformOptions, hideTransformOptions, showTransitionOptions and hideTransitionOptions; p-message's showTransitionOptions and hideTransitionOptions; and p-overlay's showTransitionOptions and hideTransitionOptions."
+        },
+        "config-overlay-options-signal": {
+            "version": "3.0.0",
+            "factory": "./migrations/config-overlay-options-signal/migration",
+            "description": "Rewrite programmatic access to Optimus.overlayOptions, which is a signal in this version: assignments become .set(value) and reads become () calls."
         }
     }
 }

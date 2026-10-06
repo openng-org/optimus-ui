@@ -10,11 +10,14 @@ import { removeDeadInputsInHtml, removeDeadInputsInTypeScript, SelectorInputRemo
  * directive, which does not take transform/transition options through the toast API.
  * `showTransitionOptions`/`hideTransitionOptions` on Message were dead for the same reason: the
  * show/hide animation is driven by `motionOptions`, which has no transition-options equivalent.
+ * `showTransitionOptions`/`hideTransitionOptions` on Overlay were stored but never read: its
+ * show/hide animation is driven by `motionOptions` too.
  */
 const REMOVED_INPUT_GROUPS: readonly SelectorInputRemoval[] = [
     { selector: 'p-toast', names: ['showTransformOptions', 'hideTransformOptions', 'showTransitionOptions', 'hideTransitionOptions'] },
     { selector: 'p-toastItem', names: ['showTransformOptions', 'hideTransformOptions', 'showTransitionOptions', 'hideTransitionOptions'] },
-    { selector: 'p-message', names: ['showTransitionOptions', 'hideTransitionOptions'] }
+    { selector: 'p-message', names: ['showTransitionOptions', 'hideTransitionOptions'] },
+    { selector: 'p-overlay', names: ['showTransitionOptions', 'hideTransitionOptions'] }
 ];
 
 /**
@@ -22,9 +25,10 @@ const REMOVED_INPUT_GROUPS: readonly SelectorInputRemoval[] = [
  * @openng/optimus-ui in this version: Toast/ToastItem's showTransformOptions, hideTransformOptions,
  * showTransitionOptions and hideTransitionOptions, dead since the show/hide animation moved to the
  * shared Motion directive (which has no equivalent transform/transition-options input); and
- * Message's showTransitionOptions/hideTransitionOptions, dead for the same reason.
+ * Message's showTransitionOptions/hideTransitionOptions, dead for the same reason; and Overlay's
+ * showTransitionOptions/hideTransitionOptions, stored but never read.
  *
- * `name="..."`/`[name]="..."` template bindings on `p-toast`/`p-toastItem`/`p-message` are removed
+ * `name="..."`/`[name]="..."` template bindings on `p-toast`/`p-toastItem`/`p-message`/`p-overlay` are removed
  * automatically — safe to delete outright, since the values they passed were already unused.
  * Programmatic reads/writes of the same property name elsewhere (e.g. on a `@ViewChild`-queried
  * instance) are reported for manual review instead of being rewritten automatically.
