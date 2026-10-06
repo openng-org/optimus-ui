@@ -462,6 +462,21 @@ describe('Overlay visibility', () => {
         expect(overlay.$target()).toBe('@prev');
     });
 
+    it('should honour explicit false/0 z-index inputs over config overlayOptions', async () => {
+        const config = TestBed.inject(Optimus);
+        config.overlayOptions.set({ autoZIndex: true, baseZIndex: 500 });
+        const direct = TestBed.createComponent(Overlay);
+        expect(direct.componentInstance.$autoZIndex()).toBe(true);
+        expect(direct.componentInstance.$baseZIndex()).toBe(500);
+
+        direct.componentRef.setInput('autoZIndex', false);
+        direct.componentRef.setInput('baseZIndex', 0);
+        expect(direct.componentInstance.$autoZIndex()).toBe(false);
+        expect(direct.componentInstance.$baseZIndex()).toBe(0);
+        config.overlayOptions.set({});
+        direct.destroy();
+    });
+
     it('should leave _contentTemplate undefined without any pTemplate', async () => {
         expect(overlay._contentTemplate()).toBeUndefined();
     });

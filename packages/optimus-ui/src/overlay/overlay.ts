@@ -281,12 +281,12 @@ export class Overlay extends BaseComponent {
     });
 
     readonly $autoZIndex = computed<boolean>(() => {
-        const value = this.autoZIndex() || this.overlayOptions()?.autoZIndex;
+        const value = this.autoZIndex() ?? this.overlayOptions()?.autoZIndex;
         return value === undefined ? true : value;
     });
 
     readonly $baseZIndex = computed<number>(() => {
-        const value = this.baseZIndex() || this.overlayOptions()?.baseZIndex;
+        const value = this.baseZIndex() ?? this.overlayOptions()?.baseZIndex;
         return value === undefined ? 0 : value;
     });
 
