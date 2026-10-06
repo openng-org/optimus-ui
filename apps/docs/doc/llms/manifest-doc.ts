@@ -10,13 +10,17 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                <a href="/llms/manifest.json" target="_blank" class="doc-link">/llms/manifest.json</a> describes every component, directive, NgModule, service and exported type as structured data, for tools that need exact facts rather than prose:
-                MCP servers, code generators, linters and design tool integrations. It is generated from the Angular metadata in the compiled library, so selectors and inputs match what the compiler accepts.
+                <a href="/llms/manifest.json" target="_blank" class="doc-link">/llms/manifest.json</a> is the single source the files above and the Agent Skill are generated from. Use it for tools that need exact facts rather than prose, such as code
+                generators, linters and design tool integrations.
             </p>
-            <p>
-                Each entry point lists its import path, NgModule, services and exported types. Each component or directive lists its selector, inputs with type, allowed values, default, transform and two-way binding, outputs with payload type,
-                templates with their context type, methods, forms support and pass-through keys.
-            </p>
+            <p>It joins two sources, each read from where it is defined:</p>
+            <ul>
+                <li>
+                    <i>entryPoints</i>: the API, read from the Angular metadata in the compiled library, so selectors and inputs match what the compiler accepts. Each entry point lists its import path, NgModule, services, exported types, and per
+                    component or directive its selector, inputs (type, allowed values, default, transform, two-way binding), outputs, templates, methods, forms support and pass-through keys.
+                </li>
+                <li><i>components</i> and <i>guides</i>: the documentation pages with their sections and example code, linked to the entry points they document, and the design tokens of each component.</li>
+            </ul>
             <app-code [code]="code" [hideToggleCode]="true"></app-code>
         </app-docsectiontext>
     `
@@ -25,6 +29,7 @@ export class ManifestDoc {
     code: Code = {
         typescript: `{
   "schemaVersion": 1,
+  "components": [{ "name": "button", "title": "Button", "entryPoints": ["button"], "sections": [...], "tokens": [{ "name": "button.primary.background", "variable": "--p-button-primary-background" }] }],
   "entryPoints": [
     {
       "name": "button",
