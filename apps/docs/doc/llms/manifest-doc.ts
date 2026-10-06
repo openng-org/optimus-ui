@@ -10,8 +10,8 @@ import { Component } from '@angular/core';
     template: `
         <app-docsectiontext>
             <p>
-                <a href="/llms/manifest.json" target="_blank" class="doc-link">/llms/manifest.json</a> is the single source the files above and the Agent Skill are generated from. Use it for tools that need exact facts rather than prose, such as code
-                generators, linters and design tool integrations.
+                <a href="/llms/manifest.json" target="_blank" class="doc-link">/llms/manifest.json</a> is the single source the files above, the Agent Skill and the MCP server are generated from. Use it for tools that need exact facts rather than
+                prose, such as code generators, linters and design tool integrations.
             </p>
             <p>It joins two sources, each read from where it is defined:</p>
             <ul>
