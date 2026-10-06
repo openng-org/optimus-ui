@@ -66,8 +66,7 @@ const COMPONENT_NAME_MAP = {
 // Components whose documentation directory name differs from their public route.
 // Keep in sync with router/app.routes.ts.
 const COMPONENT_ROUTE_MAP = {
-    scroller: 'virtualscroller',
-    Image: 'image'
+    scroller: 'virtualscroller'
 };
 
 // Guide/documentation pages configuration
@@ -550,7 +549,8 @@ function getAllComponents() {
 
         if (!stat.isDirectory() || excludeDirs.includes(entry)) continue;
 
-        const component = processComponent(entry, componentDir);
+        // Doc folders are not always lowercase (doc/Image); page folders and routes are
+        const component = processComponent(entry.toLowerCase(), componentDir);
         if (component && component.sections.length > 0) {
             components.push(component);
         }
