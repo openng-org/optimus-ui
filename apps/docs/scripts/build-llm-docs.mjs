@@ -1287,7 +1287,7 @@ function main() {
     generateLlmsTxt(components, pages);
     generateIndividualMarkdownFiles(components, apiDocs);
     generatePageMarkdownFiles(pages);
-    generateAgentSkill({ outputDir: OUTPUT_DIR, components, pages, version: JSON.parse(fs.readFileSync(OPTIMUS_PACKAGE_JSON, 'utf-8')).version });
+    generateAgentSkill({ outputDir: OUTPUT_DIR, wellKnownDir: path.resolve(__dirname, '../public/.well-known'), components, pages, version: JSON.parse(fs.readFileSync(OPTIMUS_PACKAGE_JSON, 'utf-8')).version });
 
     console.log('\n✅ LLM documentation generation complete!');
     console.log(`\nOutput directory: ${OUTPUT_DIR}`);
@@ -1297,6 +1297,7 @@ function main() {
     console.log('   - components/*.md (individual component files with complete API)');
     console.log('   - pages/*.md (guide/documentation page files)');
     console.log('   - optimus-ui-skill.zip (Agent Skill bundling the markdown files)');
+    console.log('   - ../.well-known/agent-skills/index.json (skills discovery index for `npx skills add`)');
 }
 
 main();

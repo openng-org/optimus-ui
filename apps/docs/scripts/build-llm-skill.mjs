@@ -1,12 +1,12 @@
+import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
 import zlib from 'zlib';
 
 const SKILL_NAME = 'optimus-ui';
 const ZIP_NAME = 'optimus-ui-skill.zip';
 const SITE_URL = 'https://optimus.openng.org';
-const INSTALL_SCRIPT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), 'install-skill.sh');
+const DISCOVERY_SCHEMA = 'https://schemas.agentskills.io/discovery/0.2.0/schema.json';
 
 const SKILL_DESCRIPTION =
     'Local, offline copy of the official Optimus UI (@openng/optimus-ui) documentation — usage examples, full API (props, events, templates), pass-through options, CSS classes and design tokens for all 80+ Angular components, plus the installation, configuration, theming (styled/unstyled), icons, Tailwind, pass-through, accessibility and PrimeNG-migration guides. ' +
@@ -16,10 +16,11 @@ const SKILL_DESCRIPTION =
  * Build an Agent Skill (https://agentskills.io: SKILL.md + references/) from the generated LLM markdown files
  * and publish it as a single zip next to llms.txt.
  *
- * The zip contains one top-level `optimus-ui/` folder, so it can be extracted straight into
- * any skills directory (`~/.agents/skills/`, `~/.claude/skills/`, a project's `.agents/skills/`, ...).
+ * The zip has SKILL.md at its root, as the well-known discovery index requires. The index at
+ * `/.well-known/agent-skills/index.json` lets `npx skills add https://optimus.openng.org` install the skill,
+ * and its sha256 digest lets `npx skills update` detect new versions.
  */
-export function generateAgentSkill({ outputDir, components, pages, version }) {
+export function generateAgentSkill({ outputDir, wellKnownDir, components, pages, version }) {
     const files = [];
 
     // Some guide pages (e.g. llms) are also picked up as components; keep them under guides only.
@@ -45,10 +46,27 @@ export function generateAgentSkill({ outputDir, components, pages, version }) {
     files.unshift({ name: 'SKILL.md', data: Buffer.from(renderSkillMd({ version, pageEntries, componentEntries }), 'utf-8') });
     files.push({ name: 'references/llms.txt', data: fs.readFileSync(path.join(outputDir, 'llms.txt')) });
 
+    const zip = createZip(files);
     const zipPath = path.join(outputDir, ZIP_NAME);
-    fs.writeFileSync(zipPath, createZip(files.map((f) => ({ ...f, name: `${SKILL_NAME}/${f.name}` }))));
-    fs.copyFileSync(INSTALL_SCRIPT, path.join(outputDir, 'install-skill.sh'));
+    fs.writeFileSync(zipPath, zip);
     console.log(`✓ Generated Agent Skill (${files.length} files): ${zipPath}`);
+
+    const index = {
+        $schema: DISCOVERY_SCHEMA,
+        skills: [
+            {
+                name: SKILL_NAME,
+                type: 'archive',
+                description: SKILL_DESCRIPTION,
+                url: `/${path.basename(outputDir)}/${ZIP_NAME}`,
+                digest: `sha256:${crypto.createHash('sha256').update(zip).digest('hex')}`
+            }
+        ]
+    };
+    const indexPath = path.join(wellKnownDir, 'agent-skills', 'index.json');
+    fs.mkdirSync(path.dirname(indexPath), { recursive: true });
+    fs.writeFileSync(indexPath, JSON.stringify(index, null, 4) + '\n');
+    console.log(`✓ Generated skills discovery index: ${indexPath}`);
 }
 
 function shortTitle(title) {
@@ -101,7 +119,7 @@ Check the guides when in doubt; these are here so simple tasks don't need a look
 
 ## Keeping the docs up to date
 
-These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`curl -fsSL ${SITE_URL}/llms/install-skill.sh | bash\` (add \`-s -- --project\` if the skill was installed in the project). Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`.
+These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`npx skills update ${SKILL_NAME}\`, or \`npx skills add ${SITE_URL}\` (add \`-g\` for a user-level install) if it was installed another way. Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`.
 
 ## Index
 
