@@ -118,7 +118,7 @@ Check the guides when in doubt; these are here so simple tasks don't need a look
 
 ## Keeping the docs up to date
 
-These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`npx skills update ${SKILL_NAME}\`, or \`npx skills add ${SITE_URL}\` (add \`-g\` for a user-level install) if it was installed another way. Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`, and the whole API as JSON from \`${SITE_URL}/llms/manifest.json\`.
+These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`npx skills update ${SKILL_NAME}\`, or \`npx skills add ${SITE_URL}\` (add \`-g\` for a user-level install) if it was installed another way. Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`, and the whole API as JSON from \`${SITE_URL}/llms/manifest.json\`. For live lookups inside the agent, the \`@openng/optimus-ui-mcp\` MCP server serves the same data.
 
 ## Index
 
