@@ -1041,7 +1041,7 @@ function generateMarkdownOutput(components, apiDocs, guidePages = []) {
 function generateLlmsTxt(components, pages = []) {
     let content = '# Optimus UI\n\n';
     content += '> A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.\n\n';
-    content += 'Machine-readable API (selectors, inputs, outputs, templates, types): https://optimus.openng.org/llms/manifest.json\n\n';
+    content += 'Machine-readable API and design tokens: https://optimus.openng.org/llms/manifest.json\n\n';
 
     // Add Guides section
     if (pages.length > 0) {
