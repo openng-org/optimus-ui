@@ -27,7 +27,7 @@ const TOKEN_COMPONENT_MAP = {
 };
 
 /**
- * Build `public/llms/manifest.json`, the single source the LLM docs and the Agent Skill are generated from:
+ * Build `public/llms/manifest.json`, the single source the LLM docs, the Agent Skill and the MCP server are generated from:
  *
  * - `entryPoints`: the API, read from the compiled typings (manifest/api.mjs)
  * - `components` and `guides`: the prose and code examples of the documentation pages (manifest/docs.mjs),
