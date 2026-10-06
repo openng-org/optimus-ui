@@ -198,6 +198,21 @@ class TestButtonWithPositionedIconDirectiveComponent {
     iconPos: 'left' | 'right' | 'top' | 'bottom' = 'right';
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-button label="Custom icon" [iconPos]="iconPos">
+            <ng-template #icon>
+                <i class="pi pi-check custom-template-icon" style="display: inline-block; width: 1rem; height: 1rem"></i>
+            </ng-template>
+        </p-button>
+    `
+})
+class TestButtonWithPositionedIconTemplateComponent {
+    iconPos: 'left' | 'right' | 'top' | 'bottom' = 'right';
+}
+
 // Loading Button Test
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -296,6 +311,7 @@ describe('Button', () => {
                 TestButtonDirectiveComponent,
                 TestButtonWithIconLabelDirectiveComponent,
                 TestButtonWithPositionedIconDirectiveComponent,
+                TestButtonWithPositionedIconTemplateComponent,
                 TestLoadingButtonComponent,
                 TestSeverityButtonComponent,
                 TestButtonVariantsComponent,
@@ -873,6 +889,32 @@ describe('Button', () => {
 
                 // loadingIconTemplate should be undefined when not provided
                 expect(buttonInstance.loadingIconTemplate).toBeUndefined();
+            });
+
+            it('should position an #icon template that does not bind the class context by iconPos', async () => {
+                const positionedFixture = TestBed.createComponent(TestButtonWithPositionedIconTemplateComponent);
+                const positionedComponent = positionedFixture.componentInstance;
+                positionedFixture.detectChanges();
+                await positionedFixture.whenStable();
+
+                const icon = () => (positionedFixture.nativeElement.querySelector('.custom-template-icon') as HTMLElement).getBoundingClientRect();
+                const label = () => (positionedFixture.nativeElement.querySelector('.p-button-label') as HTMLElement).getBoundingClientRect();
+
+                expect(icon().left).toBeGreaterThan(label().left);
+
+                positionedComponent.iconPos = 'bottom';
+                positionedFixture.changeDetectorRef.markForCheck();
+                await positionedFixture.whenStable();
+                positionedFixture.detectChanges();
+
+                expect(icon().top).toBeGreaterThan(label().top);
+
+                positionedComponent.iconPos = 'left';
+                positionedFixture.changeDetectorRef.markForCheck();
+                await positionedFixture.whenStable();
+                positionedFixture.detectChanges();
+
+                expect(icon().left).toBeLessThan(label().left);
             });
 
             it("should process iconTemplate from @ContentChild('icon')", async () => {
