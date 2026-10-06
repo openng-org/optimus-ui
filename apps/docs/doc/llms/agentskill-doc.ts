@@ -12,14 +12,13 @@ import { ButtonModule } from '@openng/optimus-ui/button';
         <app-docsectiontext>
             <p>
                 The markdown files above are also bundled as an <a href="https://agentskills.io" target="_blank" rel="noopener noreferrer" class="doc-link">Agent Skill</a>, the <i>SKILL.md</i> format supported by coding agents such as Claude Code,
-                Codex and OpenCode. Once installed, the agent reads the component docs, API tables and guides from disk whenever it works on Optimus UI code, instead of fetching them from this site each time.
+                Codex, Cursor and OpenCode. Once installed, the agent reads the component docs, API tables and guides from disk whenever it works on Optimus UI code, instead of fetching them from this site each time.
             </p>
-            <p>Install it for your user with a single command. Run the same command again to update.</p>
+            <p>Install it with the <a href="https://skills.sh/docs/cli" target="_blank" rel="noopener noreferrer" class="doc-link">skills CLI</a>, which asks which agents to set it up for.</p>
             <app-code [code]="code" [hideToggleCode]="true"></app-code>
             <p>
-                The script installs the skill into <i>~/.agents/skills/</i>, which Codex and OpenCode read, and into <i>~/.claude/skills/</i> when Claude Code is installed. Pass <i>--project</i> to install it into the current project's
-                <i>.agents/skills/</i> and <i>.claude/skills/</i> instead, so your team gets it too, or <i>--dir</i> to choose the folder yourself. You can also download the zip and extract its <i>optimus-ui</i> folder into your agent's skills
-                directory.
+                By default the skill is installed into the current project, so your team gets it too. Add <i>-g</i> to install it for your user instead. You can also download the zip and extract it into a folder named <i>optimus-ui</i> in your
+                agent's skills directory.
             </p>
             <a href="/llms/optimus-ui-skill.zip" download>
                 <p-button label="Download optimus-ui-skill.zip" />
@@ -29,9 +28,9 @@ import { ButtonModule } from '@openng/optimus-ui/button';
 })
 export class AgentSkillDoc {
     code: Code = {
-        command: `curl -fsSL https://optimus.openng.org/llms/install-skill.sh | bash
+        command: `npx skills add https://optimus.openng.org
 
-# or, for the current project only
-curl -fsSL https://optimus.openng.org/llms/install-skill.sh | bash -s -- --project`
+# update to the latest docs
+npx skills update optimus-ui`
     };
 }

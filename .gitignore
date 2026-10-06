@@ -77,4 +77,5 @@ apps/docs/api-generator/typedoc.json
 apps/docs/router/routes.txt
 apps/docs/public/sitemap.xml
 apps/docs/public/llms
+apps/docs/public/.well-known
 apps/docs/public/demos.json
