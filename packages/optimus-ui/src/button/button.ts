@@ -49,7 +49,8 @@ const INTERNAL_BUTTON_CLASSES = {
     iconOnly: 'p-button-icon-only',
     disabled: 'p-disabled',
     loading: 'p-button-loading',
-    labelOnly: 'p-button-loading-label-only'
+    labelOnly: 'p-button-loading-label-only',
+    vertical: 'p-button-vertical'
 } as const;
 
 @Directive({
@@ -274,7 +275,20 @@ export class ButtonDirective extends BaseComponent {
      * Position of the icon.
      * @group Props
      */
-    @Input() iconPos: ButtonIconPosition = 'left';
+    @Input()
+    get iconPos(): ButtonIconPosition {
+        return this._iconPos;
+    }
+
+    set iconPos(value: ButtonIconPosition) {
+        this._iconPos = value;
+
+        if (this.initialized) {
+            this.setStyleClass();
+        }
+    }
+
+    _iconPos: ButtonIconPosition = 'left';
 
     /**
      * Icon to display in loading state.
@@ -447,6 +461,10 @@ export class ButtonDirective extends BaseComponent {
             if (this.icon && !this.label && !isEmpty(this.htmlElement.textContent)) {
                 styleClass.push(INTERNAL_BUTTON_CLASSES.iconOnly);
             }
+        }
+
+        if ((this.iconPos === 'top' || this.iconPos === 'bottom') && (this.label || this.labelSignal())) {
+            styleClass.push(INTERNAL_BUTTON_CLASSES.vertical);
         }
 
         if (this.text) {
