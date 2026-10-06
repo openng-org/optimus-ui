@@ -35,7 +35,7 @@ export const row: TreeTableTokenSections.Row = {
     hoverBackground: '{content.hover.background}',
     selectedBackground: '{highlight.background}',
     color: '{content.color}',
-    hoverColor: '{sr.hover.color}',
+    hoverColor: '{content.hover.color}',
     selectedColor: '{highlight.color}',
     focusRing: {
         width: '{focus.ring.width}',
