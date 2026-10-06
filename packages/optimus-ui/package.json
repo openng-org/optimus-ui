@@ -38,6 +38,7 @@
         "packageGroup": [
             "@openng/optimus-ui",
             "@openng/optimus-ui-locale",
+            "@openng/optimus-ui-mcp",
             "@openng/optimus-ui-motion",
             "@openng/optimus-ui-styled",
             "@openng/optimus-ui-styles",

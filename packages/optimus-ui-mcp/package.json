@@ -1,0 +1,49 @@
+{
+    "name": "@openng/optimus-ui-mcp",
+    "version": "2.0.2",
+    "author": "OpenNG",
+    "description": "MCP server that gives coding agents the Optimus UI component API, examples, guides and design tokens.",
+    "keywords": [
+        "mcp",
+        "model-context-protocol",
+        "optimus-ui",
+        "angular",
+        "ai"
+    ],
+    "license": "MIT",
+    "homepage": "https://optimus.openng.org/llms",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/openng-org/optimus-ui.git",
+        "directory": "packages/optimus-ui-mcp"
+    },
+    "bugs": {
+        "url": "https://github.com/openng-org/optimus-ui/issues"
+    },
+    "type": "module",
+    "bin": {
+        "optimus-ui-mcp": "./dist/index.mjs"
+    },
+    "files": [
+        "dist",
+        "data",
+        "README.md",
+        "LICENSE"
+    ],
+    "scripts": {
+        "build": "cross-env NODE_ENV=production pnpm run build:package",
+        "build:package": "node ./scripts/copy-manifest.mjs && tsc --noEmit && tsdown",
+        "test": "vitest run",
+        "dev:link": "pnpm link --global && npm link"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "engines": {
+        "node": ">=20"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "^1.32.0",
+        "zod": "^4.4.3"
+    }
+}
