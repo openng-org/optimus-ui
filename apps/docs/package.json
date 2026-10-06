@@ -41,12 +41,12 @@
         "quill": "2.0.3",
         "rxjs": "~7.8.2",
         "tslib": "^2.8.1",
-        "typedoc": "0.28.20"
-    },
-    "dependencies": {
-        "@openng/optimus-ui-tailwindcss": "workspace:*",
+        "typedoc": "0.28.20",
         "autoprefixer": "^10.5.4",
         "postcss": "^8.5.26",
         "tailwindcss": "^3.4.10"
+    },
+    "dependencies": {
+        "@openng/optimus-ui-tailwindcss": "workspace:*"
     }
 }
