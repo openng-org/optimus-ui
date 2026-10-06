@@ -30,8 +30,8 @@ const responsiveOptions: ResponsiveOverlayOptions = {
     // hideOnEscape?: boolean;                          // Hides overlay when escape key pressed.
 }
 
-this.config.overlayOptions: OverlayOptions = {
+this.config.overlayOptions.set({
     responsive: responsiveOptions
-};`
+});`
     };
 }

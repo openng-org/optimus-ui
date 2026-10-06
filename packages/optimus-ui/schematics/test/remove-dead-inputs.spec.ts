@@ -34,6 +34,17 @@ describe('remove-dead-inputs', () => {
         expect(html).toBe(`<p-message [severity]="'info'"></p-message>\n`);
     });
 
+    it('removes showTransitionOptions/hideTransitionOptions from p-overlay', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-overlay [(visible)]="visible" showTransitionOptions=".12s ease" [hideTransitionOptions]="hideTf"></p-overlay>\n`
+        });
+        const result = await runner.runSchematic('remove-dead-inputs', {}, tree);
+        const html = result.readContent('/src/app/app.html');
+        expect(html).not.toContain('TransitionOptions');
+        expect(html).toBe(`<p-overlay [(visible)]="visible"></p-overlay>\n`);
+    });
+
     it('does not remove a similarly-named attribute on an unrelated selector', async () => {
         const runner = createMigrationRunner();
         const content = `<p-other showTransformOptions="x"></p-other>\n`;

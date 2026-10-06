@@ -18,7 +18,7 @@ export class Optimus extends ThemeProvider {
 
     overlayAppendTo = signal<HTMLElement | ElementRef | TemplateRef<any> | 'self' | 'body' | null | undefined | any>('self');
 
-    overlayOptions: OverlayOptions = {};
+    overlayOptions = signal<OverlayOptions>({});
 
     csp = signal<{ nonce: string | undefined }>({ nonce: undefined });
 
@@ -194,7 +194,7 @@ export class Optimus extends ThemeProvider {
         if (ripple) this.ripple.set(ripple);
         if (inputStyle) this.inputStyle.set(inputStyle);
         if (inputVariant) this.inputVariant.set(inputVariant);
-        if (overlayOptions) this.overlayOptions = overlayOptions;
+        if (overlayOptions) this.overlayOptions.set(overlayOptions);
         if (translation) this.setTranslation(translation);
         if (filterMatchModeOptions) this.filterMatchModeOptions = filterMatchModeOptions;
         if (zIndex) this.zIndex = zIndex;
