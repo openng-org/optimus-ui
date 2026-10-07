@@ -2152,9 +2152,16 @@ describe('Menu popup positioning', () => {
         fixture.componentInstance.containerPosition = containerPosition;
         fixture.detectChanges();
         await fixture.whenStable();
-        window.scrollTo(0, scrollY);
+
+        // Scroll relative to the fixture, not the document: earlier test files can leave elements in the body above it.
+        // Otherwise the trigger can end up below the viewport and the overlay flips above it.
+        const fixtureTop = (fixture.nativeElement as HTMLElement).getBoundingClientRect().top + window.scrollY;
+
+        window.scrollTo(0, fixtureTop + scrollY);
 
         const button = fixture.nativeElement.querySelector('.toggle-button') as HTMLButtonElement;
+
+        expect(button.getBoundingClientRect().top).toBeCloseTo(250, 0);
 
         button.click();
         fixture.detectChanges();
