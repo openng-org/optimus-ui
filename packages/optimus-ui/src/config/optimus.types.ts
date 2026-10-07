@@ -195,6 +195,7 @@ export type OptimusConfigType = {
      */
     inputStyle?: 'outlined' | 'filled';
     inputVariant?: 'outlined' | 'filled';
+    floatVariant?: 'in' | 'over' | 'on';
     overlayOptions?: OverlayOptions;
     translation?: Translation;
     /**
