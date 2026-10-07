@@ -142,6 +142,37 @@ class TestItemTemplateMenubarComponent {
     standalone: false,
     template: `
         <p-menubar [model]="model">
+            <ng-template #item let-item>
+                @if (anchor) {
+                    <a class="custom-command-item">{{ item.label }}</a>
+                } @else {
+                    <div class="custom-command-item">
+                        <span>{{ item.label }}</span>
+                    </div>
+                }
+            </ng-template>
+        </p-menubar>
+    `
+})
+class TestItemTemplateCommandMenubarComponent {
+    anchor = false;
+    executed: string[] = [];
+
+    model: MenuItem[] = [
+        { label: 'First', command: () => this.executed.push('First') },
+        {
+            label: 'Second',
+            command: () => this.executed.push('Second'),
+            items: [{ label: 'Nested', command: () => this.executed.push('Nested') }]
+        }
+    ];
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-menubar [model]="model">
             <ng-template pTemplate="item" let-item>
                 <span class="p-template-item">{{ item.label }}</span>
             </ng-template>
@@ -290,6 +321,7 @@ describe('Menubar', () => {
                 TestRouterMenubarComponent,
                 TestTemplateMenubarComponent,
                 TestItemTemplateMenubarComponent,
+                TestItemTemplateCommandMenubarComponent,
                 TestPTemplateMenubarComponent,
                 TestSubmenuIconTemplateComponent,
                 TestMenuIconTemplateComponent,
@@ -619,6 +651,71 @@ describe('Menubar', () => {
             expect(menubarInstance._itemTemplate).toBeUndefined();
             expect(menubarInstance._startTemplate).toBeUndefined();
             expect(menubarInstance._endTemplate).toBeUndefined();
+        });
+    });
+
+    describe('Keyboard Activation', () => {
+        const setup = async <T>(type: new (...args: any[]) => T, configure?: (host: T) => void) => {
+            const hostFixture = TestBed.createComponent(type);
+            configure?.(hostFixture.componentInstance);
+            hostFixture.detectChanges();
+            await hostFixture.whenStable();
+
+            const menu = hostFixture.nativeElement.querySelector('ul[role="menubar"]') as HTMLElement;
+            // The headless browser window has no OS focus, so focus() alone does not fire a focus event.
+            menu.dispatchEvent(new FocusEvent('focus'));
+            hostFixture.detectChanges();
+            await hostFixture.whenStable();
+
+            const press = async (code: string) => {
+                menu.dispatchEvent(new KeyboardEvent('keydown', { code, key: code === 'Space' ? ' ' : code, bubbles: true, cancelable: true }));
+                hostFixture.detectChanges();
+                await hostFixture.whenStable();
+            };
+
+            return { host: hostFixture.componentInstance, press };
+        };
+
+        it('should run the command of a templated item without a link on Enter', async () => {
+            const { host, press } = await setup(TestItemTemplateCommandMenubarComponent);
+
+            await press('Enter');
+
+            expect(host.executed).toEqual(['First']);
+        });
+
+        it('should run the command of a templated item without a link on Space', async () => {
+            const { host, press } = await setup(TestItemTemplateCommandMenubarComponent);
+
+            await press('Space');
+
+            expect(host.executed).toEqual(['First']);
+        });
+
+        it('should run the command of a templated submenu item without a link on Enter', async () => {
+            const { host, press } = await setup(TestItemTemplateCommandMenubarComponent);
+
+            await press('ArrowRight');
+            await press('ArrowDown');
+            await press('Enter');
+
+            expect(host.executed).toEqual(['Nested']);
+        });
+
+        it('should run the command of a templated item that renders a link on Enter', async () => {
+            const { host, press } = await setup(TestItemTemplateCommandMenubarComponent, (h) => (h.anchor = true));
+
+            await press('Enter');
+
+            expect(host.executed).toEqual(['First']);
+        });
+
+        it('should run the command of a default item on Enter', async () => {
+            const { host, press } = await setup(TestCommandMenubarComponent);
+
+            await press('Enter');
+
+            expect(host.commandExecuted).toBeTruthy();
         });
     });
 
