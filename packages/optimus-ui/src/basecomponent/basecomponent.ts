@@ -34,7 +34,9 @@ export class BaseComponent<PT = any> implements Lifecycle {
 
     public baseStyle: BaseStyle = inject(BaseStyle);
 
-    public scopedStyleEl: any;
+    public scopedStyleVarEl: any;
+
+    public scopedStyleCssEl: any;
 
     public parent = this.$params.parent;
 
@@ -382,14 +384,18 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private _loadScopedThemeStyles(preset) {
-        const { css } = this.$style?.getPresetTheme?.(preset, `[${this.$attrSelector}]`) || {};
-        const scopedStyle = this.$style?.load(css, { name: `${this.$attrSelector}-${this.$style?.name}`, ...this.$styleOptions });
-
-        this.scopedStyleEl = scopedStyle?.el;
+        const { css: scopedPresetVariables, style: scopedPresetCss } = this.$style?.getPresetTheme?.(preset, `[${this.$attrSelector}]`) || {};
+        //load scoped css variables
+        const scopedStyleVar = this.$style?.load(scopedPresetVariables, { name: `${this.$attrSelector}-${this.$style?.name}`, ...this.$styleOptions });
+        //load styles defined in dt.css
+        const scopedStyleCss = this.$style?.loadStyle({ name: `${this.$attrSelector}-${this.$style?.name}-style`, ...this.$styleOptions }, scopedPresetCss);
+        this.scopedStyleVarEl = scopedStyleVar?.el;
+        this.scopedStyleCssEl = scopedStyleCss?.el;
     }
 
     private _unloadScopedThemeStyles() {
-        this.scopedStyleEl?.remove();
+        this.scopedStyleVarEl?.remove();
+        this.scopedStyleCssEl?.remove();
     }
 
     private _themeChangeListener(id: string, callback = () => {}) {
