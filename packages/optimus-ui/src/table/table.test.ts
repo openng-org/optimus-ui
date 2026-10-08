@@ -377,6 +377,48 @@ describe('Table', () => {
         ];
     }
 
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products" [dataKey]="'id'" [showGridlines]="true" [expandedRowKeys]="expandedRowKeys">
+                <ng-template #header
+                    ><tr>
+                        <th>Name</th>
+                    </tr></ng-template
+                >
+                <ng-template #body let-product
+                    ><tr>
+                        <td>{{ product.name }}</td>
+                    </tr></ng-template
+                >
+                <ng-template #expandedrow let-product
+                    ><tr class="p-datatable-row-expansion">
+                        <td>
+                            <p-table [value]="orders" styleClass="nested-table">
+                                <ng-template #body let-order
+                                    ><tr>
+                                        <td>{{ order.id }}</td>
+                                    </tr></ng-template
+                                >
+                            </p-table>
+                        </td>
+                    </tr></ng-template
+                >
+                <ng-template #footer
+                    ><tr>
+                        <td>Footer</td>
+                    </tr></ng-template
+                >
+            </p-table>
+        `
+    })
+    class TestExpandedRowFooterTableComponent {
+        products = [{ id: '1', name: 'Product' }];
+        expandedRowKeys = { '1': true };
+        orders = [{ id: 7000 }, { id: 7001 }];
+    }
+
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [
@@ -391,7 +433,8 @@ describe('Table', () => {
                 TestScrollableNonVirtualTableComponent,
                 TestVirtualScrollFlexHeightTableComponent,
                 TestLazyLoadTableComponent,
-                TestTemplatesTableComponent
+                TestTemplatesTableComponent,
+                TestExpandedRowFooterTableComponent
             ],
             imports: [CommonModule, FormsModule, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
@@ -676,6 +719,32 @@ describe('Table', () => {
         it('should display correct product count in summary', () => {
             const summaryText = testFixture.nativeElement.textContent;
             expect(summaryText).toContain('Total Products: 2');
+        });
+    });
+
+    describe('Row Expansion and Gridlines', () => {
+        it('should keep the bottom border of a table nested in the last expanded row', async () => {
+            const testFixture = TestBed.createComponent(TestExpandedRowFooterTableComponent);
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const nestedLastCell = testFixture.nativeElement.querySelector('.nested-table .p-datatable-tbody > tr:last-child > td');
+
+            expect(nestedLastCell).toBeTruthy();
+            expect(getComputedStyle(nestedLastCell).borderBottomWidth).toBe('1px');
+        });
+
+        it('should draw a single border between the last expanded row and the footer', async () => {
+            const testFixture = TestBed.createComponent(TestExpandedRowFooterTableComponent);
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const expansionCell = testFixture.nativeElement.querySelector('.p-datatable-row-expansion > td');
+            const footerCell = testFixture.nativeElement.querySelector('.p-datatable-tfoot > tr > td');
+
+            expect(parseFloat(getComputedStyle(expansionCell).borderBottomWidth) + parseFloat(getComputedStyle(footerCell).borderTopWidth)).toBe(1);
         });
     });
 

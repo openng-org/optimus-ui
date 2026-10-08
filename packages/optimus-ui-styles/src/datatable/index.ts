@@ -501,11 +501,14 @@ export const style = /*css*/ `
         border-width: 0 1px 1px 1px;
     }
 
-    .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr:last-child > td {
+    /* Optimus: scope the footer rules to the table's own rows so tables nested in a body row keep their bottom border (#951). */
+    .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot:not(.p-datatable-tbody .p-datatable-tfoot)) .p-datatable-tbody > tr:last-child > td:not(.p-datatable-tbody .p-datatable-tbody td),
+    .p-datatable-tbody .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr:last-child > td {
         border-width: 0 0 0 1px;
     }
 
-    .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr:last-child > td:last-child {
+    .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot:not(.p-datatable-tbody .p-datatable-tfoot)) .p-datatable-tbody > tr:last-child > td:last-child:not(.p-datatable-tbody .p-datatable-tbody td),
+    .p-datatable-tbody .p-datatable.p-datatable-gridlines:has(.p-datatable-tbody):has(.p-datatable-tfoot) .p-datatable-tbody > tr:last-child > td:last-child {
         border-width: 0 1px 0 1px;
     }
 
