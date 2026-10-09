@@ -37,7 +37,7 @@ catalogs:
     "@angular-eslint/eslint-plugin-template": ^22.1.0
     "@angular-eslint/schematics": ^22.1.0
     "@angular-eslint/template-parser": ^22.1.0
-    "ng-packagr": ^22.1.1
+    "ng-packagr": ^22.2.4
     "typescript": ^6.0.0
 
 minimumReleaseAgeExclude:
