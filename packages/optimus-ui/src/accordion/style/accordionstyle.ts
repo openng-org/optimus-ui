@@ -24,6 +24,12 @@ ${accordion_style}
     display: grid;
     grid-template-rows: 1fr;
 }
+
+.p-accordionpanel:not(.p-accordionpanel-active) > .p-accordioncontent .p-motion:not(.p-collapsible-leave-active) {
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+}
 `;
 
 const classes = {
