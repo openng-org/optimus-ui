@@ -139,6 +139,36 @@ class TestPTAccordionComponent {
     @Input() pt: any;
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    template: `
+        <p-accordion multiple selectOnFocus>
+            <p-accordion-panel value="tab1" disabled>
+                <p-accordion-header>Tab 1 Header</p-accordion-header>
+                <p-accordion-content>Tab 1 Content</p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    `
+})
+class TestStaticAttributeAccordionComponent {}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [Accordion, AccordionPanel, AccordionHeader, AccordionContent],
+    template: `
+        <p-accordion multiple="false" selectOnFocus="false">
+            <p-accordion-panel value="tab1" disabled="false">
+                <p-accordion-header>Tab 1 Header</p-accordion-header>
+                <p-accordion-content>Tab 1 Content</p-accordion-content>
+            </p-accordion-panel>
+        </p-accordion>
+    `
+})
+class TestFalseStringAttributeAccordionComponent {}
+
 describe('Accordion', () => {
     let fixture: ComponentFixture<TestAccordionComponent>;
     let component: TestAccordionComponent;
@@ -147,7 +177,7 @@ describe('Accordion', () => {
 
     beforeEach(async () => {
         TestBed.configureTestingModule({
-            imports: [TestAccordionComponent, TestDynamicAccordionComponent, TestCustomIconAccordionComponent, TestPTAccordionComponent],
+            imports: [TestAccordionComponent, TestDynamicAccordionComponent, TestCustomIconAccordionComponent, TestPTAccordionComponent, TestStaticAttributeAccordionComponent, TestFalseStringAttributeAccordionComponent],
             providers: [provideZonelessChangeDetection()]
         });
 
@@ -1016,6 +1046,31 @@ describe('Accordion', () => {
             const accordionEl = ptFixture.debugElement.query(By.css('p-accordion'));
 
             expect(accordionEl.nativeElement.className).toContain('SETINPUT_ROOT_CLASS');
+        });
+    });
+    describe('Boolean Attribute Coercion', () => {
+        it('should treat a valueless attribute as true', async () => {
+            const staticFixture = TestBed.createComponent(TestStaticAttributeAccordionComponent);
+            await staticFixture.whenStable();
+
+            const staticAccordion: Accordion = staticFixture.debugElement.query(By.directive(Accordion)).componentInstance;
+            const staticPanel: AccordionPanel = staticFixture.debugElement.query(By.directive(AccordionPanel)).componentInstance;
+
+            expect(staticAccordion.multiple()).toBe(true);
+            expect(staticAccordion.selectOnFocus()).toBe(true);
+            expect(staticPanel.disabled()).toBe(true);
+        });
+
+        it('should treat the string "false" as false', async () => {
+            const falseFixture = TestBed.createComponent(TestFalseStringAttributeAccordionComponent);
+            await falseFixture.whenStable();
+
+            const falseAccordion: Accordion = falseFixture.debugElement.query(By.directive(Accordion)).componentInstance;
+            const falsePanel: AccordionPanel = falseFixture.debugElement.query(By.directive(AccordionPanel)).componentInstance;
+
+            expect(falseAccordion.multiple()).toBe(false);
+            expect(falseAccordion.selectOnFocus()).toBe(false);
+            expect(falsePanel.disabled()).toBe(false);
         });
     });
 });
