@@ -947,6 +947,10 @@ export class Password extends BaseInput<PasswordPassThrough> {
     clear() {
         this.value = null;
         this.onModelChange(this.value);
+        // The clear icon is not part of the input, so no blur follows this interaction.
+        // Under updateOn: 'blur' onModelChange only stages the value, so mark the control
+        // as touched to commit it - otherwise the control keeps the previous password.
+        this.onModelTouched();
         this.writeValue(this.value);
         this.onClear.emit();
     }
