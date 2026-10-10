@@ -11,6 +11,7 @@ import { ColumnSelectionDoc } from '@/doc/table/columnselection-doc';
 import { ColumnToggleDoc } from '@/doc/table/columntoggle-doc';
 import { ContextMenuDoc } from '@/doc/table/contextmenu-doc';
 import { CustomersDoc } from '@/doc/table/customers-doc';
+import { CustomSortDoc } from '@/doc/table/customsort-doc';
 import { DynamicDoc } from '@/doc/table/dynamic-doc';
 import { ExpandableRowGroupDoc } from '@/doc/table/expandablerowgroup-doc';
 import { ExportDoc } from '@/doc/table/export-doc';
@@ -154,6 +155,11 @@ export class TableDemo {
                     id: 'removable-sort',
                     label: 'Removable',
                     component: RemovableSortDoc
+                },
+                {
+                    id: 'custom-sort',
+                    label: 'Custom',
+                    component: CustomSortDoc
                 }
             ]
         },
