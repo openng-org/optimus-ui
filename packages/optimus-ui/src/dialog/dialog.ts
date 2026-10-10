@@ -89,8 +89,8 @@ const DIALOG_INSTANCE = new InjectionToken<Dialog>('DIALOG_INSTANCE');
                         [attr.aria-modal]="true"
                         [attr.data-p]="dataP"
                     >
-                        <ng-container *ngIf="_headlessTemplate || headlessTemplate || headlessT; else notHeadless">
-                            <ng-container *ngTemplateOutlet="_headlessTemplate || headlessTemplate || headlessT"></ng-container>
+                        <ng-container *ngIf="$headlessTemplate(); else notHeadless">
+                            <ng-container *ngTemplateOutlet="$headlessTemplate()"></ng-container>
                         </ng-container>
 
                         <ng-template #notHeadless>
@@ -565,7 +565,17 @@ export class Dialog extends BaseComponent<DialogPassThrough> implements OnInit, 
 
     headerId = computed<string | null>(() => (this.header() !== null ? this.id + '_header' : null));
 
-    computedAriaLabelledBy = computed<string | null>(() => this.ariaLabelledBy() ?? this.headerId());
+    /**
+     * Resolved headless template of any of the supported sources, kept in sync in `onAfterContentChecked`.
+     */
+    $headlessTemplate = signal<TemplateRef<void> | undefined>(undefined);
+
+    /**
+     * Mirror of the `showHeader` input, kept in sync in `onAfterContentChecked`.
+     */
+    $showHeader = signal<boolean>(true);
+
+    computedAriaLabelledBy = computed<string | null>(() => this.ariaLabelledBy() ?? (this.$headlessTemplate() || !this.$showHeader() ? null : this.headerId()));
 
     documentDragListener: VoidListener;
 
@@ -695,6 +705,12 @@ export class Dialog extends BaseComponent<DialogPassThrough> implements OnInit, 
                     break;
             }
         });
+    }
+
+    onAfterContentChecked() {
+        // the template sources are plain fields, so they are mirrored into signals to keep `computedAriaLabelledBy` in sync
+        this.$headlessTemplate.set(this._headlessTemplate || this.headlessTemplate || this.headlessT);
+        this.$showHeader.set(this.showHeader);
     }
 
     parseDurationToMilliseconds(durationString: string): number | undefined {
