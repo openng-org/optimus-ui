@@ -2984,4 +2984,50 @@ describe('Listbox select all with disabled options', () => {
 
         expect(component.changes).toEqual([['NY', 'RM', 'LDN', 'PRS']]);
     });
+
+    it('should keep the model value of a selected disabled option matched by dataKey', async () => {
+        @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
+            standalone: true,
+            imports: [Listbox, FormsModule],
+            template: `<p-listbox [(ngModel)]="selected" [options]="options" optionLabel="label" dataKey="id" optionDisabled="disabled" [multiple]="true" [checkbox]="true" />`
+        })
+        class DataKeyListboxComponent {
+            options = [
+                { id: 1, label: 'New York' },
+                { id: 2, label: 'Rome', disabled: true }
+            ];
+
+            selected: any[] = [{ id: 2, label: 'Rome', persisted: true }];
+        }
+
+        await TestBed.configureTestingModule({
+            imports: [DataKeyListboxComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
+        }).compileComponents();
+
+        const dataKeyFixture = TestBed.createComponent(DataKeyListboxComponent);
+        const persisted = dataKeyFixture.componentInstance.selected[0];
+        dataKeyFixture.changeDetectorRef.markForCheck();
+        await dataKeyFixture.whenStable();
+        dataKeyFixture.detectChanges();
+
+        const headerCheckbox: HTMLInputElement = dataKeyFixture.nativeElement.querySelector('.p-listbox-header p-checkbox input');
+
+        headerCheckbox.click();
+        dataKeyFixture.changeDetectorRef.markForCheck();
+        await dataKeyFixture.whenStable();
+        dataKeyFixture.detectChanges();
+
+        expect(dataKeyFixture.componentInstance.selected).toEqual([dataKeyFixture.componentInstance.options[0], persisted]);
+        expect(dataKeyFixture.componentInstance.selected[1]).toBe(persisted);
+
+        headerCheckbox.click();
+        dataKeyFixture.changeDetectorRef.markForCheck();
+        await dataKeyFixture.whenStable();
+        dataKeyFixture.detectChanges();
+
+        expect(dataKeyFixture.componentInstance.selected).toEqual([persisted]);
+        expect(dataKeyFixture.componentInstance.selected[0]).toBe(persisted);
+    });
 });
