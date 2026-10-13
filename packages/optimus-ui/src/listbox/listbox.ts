@@ -1116,15 +1116,18 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
                 checked: !this.allSelected()
             });
         } else {
-            const value = this.allSelected()
-                ? []
-                : this.visibleOptions()
-                      .filter((option) => this.isValidOption(option))
-                      .map((option) => this.getOptionValue(option));
-
-            this.updateModel(value, event);
-            this.onChange.emit({ originalEvent: event, value: this.value });
+            this.updateModel(this.getToggleAllValue(!this.allSelected()), event);
         }
+    }
+
+    getToggleAllValue(checked: boolean) {
+        const options = this.group ? this.flatOptions(this._options()) : this._options() || [];
+        const visibleOptions = new Set(this.visibleOptions());
+
+        // The user can't toggle a disabled option, so selecting or unselecting all keeps a selected one selected.
+        return options
+            .filter((option) => !this.isOptionGroup(option) && ((this.isOptionDisabled(option) && this.isSelected(option)) || (checked && visibleOptions.has(option) && this.isValidOption(option))))
+            .map((option) => this.getOptionValue(option));
     }
 
     allSelected() {
@@ -1294,11 +1297,7 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
 
             default:
                 if (this.multiple && event.code === 'KeyA' && metaKey) {
-                    const value = this.visibleOptions()
-                        .filter((option) => this.isValidOption(option))
-                        .map((option) => this.getOptionValue(option));
-
-                    this.updateModel(value, event);
+                    this.updateModel(this.getToggleAllValue(true), event);
 
                     event.preventDefault();
                     break;
