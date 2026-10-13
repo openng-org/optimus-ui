@@ -1123,11 +1123,21 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
     getToggleAllValue(checked: boolean) {
         const options = this.group ? this.flatOptions(this._options()) : this._options() || [];
         const visibleOptions = new Set(this.visibleOptions());
+        const modelValue = this.modelValue() || [];
 
-        // The user can't toggle a disabled option, so selecting or unselecting all keeps a selected one selected.
-        return options
-            .filter((option) => !this.isOptionGroup(option) && ((this.isOptionDisabled(option) && this.isSelected(option)) || (checked && visibleOptions.has(option) && this.isValidOption(option))))
-            .map((option) => this.getOptionValue(option));
+        return options.flatMap((option) => {
+            if (this.isOptionGroup(option)) {
+                return [];
+            }
+
+            // The user can't toggle a disabled option, so a selected one keeps its current model value.
+            if (this.isOptionDisabled(option)) {
+                const optionValue = this.getOptionValue(option);
+                return modelValue.filter((value) => this.isEquals(value, optionValue));
+            }
+
+            return checked && visibleOptions.has(option) ? [this.getOptionValue(option)] : [];
+        });
     }
 
     allSelected() {
