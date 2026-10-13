@@ -1675,3 +1675,65 @@ describe('Table', () => {
         });
     });
 });
+
+describe('Table global filter match modes', () => {
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [TableModule],
+        template: `
+            <p-table [value]="customers" [globalFilterFields]="['name', 'country.name', 'representative.name']" [filterDelay]="0">
+                <ng-template #body let-customer>
+                    <tr>
+                        <td class="customer-name">{{ customer.name }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class GlobalFilterTableComponent {
+        customers = [
+            { name: 'James Butt', country: { name: 'Algeria' }, representative: { name: 'Ioni Bowcher' } },
+            { name: 'Josephine Darakjy', country: { name: 'Egypt' }, representative: { name: 'Amy Elsner' } },
+            { name: 'Art Venere', country: { name: 'Panama' }, representative: { name: 'James Smith' } },
+            { name: 'Lenna Paprocki', country: null, representative: { name: 'Xuxue Feng' } }
+        ];
+    }
+
+    let fixture: ComponentFixture<GlobalFilterTableComponent>;
+    let table: Table;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [GlobalFilterTableComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(GlobalFilterTableComponent);
+        await fixture.whenStable();
+        fixture.detectChanges();
+        table = fixture.debugElement.query(By.directive(Table)).componentInstance;
+    });
+
+    async function filterGlobal(value: string, matchMode: string): Promise<string[]> {
+        table.filterGlobal(value, matchMode);
+        await new Promise((resolve) => setTimeout(resolve));
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        return Array.from<HTMLElement>(fixture.nativeElement.querySelectorAll('.customer-name')).map((cell) => cell.textContent!.trim());
+    }
+
+    it('should keep the rows where any field contains the value with contains', async () => {
+        expect(await filterGlobal('James', 'contains')).toEqual(['James Butt', 'Art Venere']);
+    });
+
+    it('should drop the rows where any field contains the value with notContains', async () => {
+        expect(await filterGlobal('James', 'notContains')).toEqual(['Josephine Darakjy', 'Lenna Paprocki']);
+    });
+
+    it('should drop the rows where any field equals the value with notEquals', async () => {
+        expect(await filterGlobal('Egypt', 'notEquals')).toEqual(['James Butt', 'Art Venere', 'Lenna Paprocki']);
+    });
+});
