@@ -3926,9 +3926,12 @@ export class TTRow extends BaseComponent {
 
     onArrowRightKey(event: KeyboardEvent) {
         const currentTarget = <HTMLElement>event.currentTarget;
-        const isHiddenIcon = (findSingle(currentTarget, 'button') as any).style.visibility === 'hidden';
+        const node = this.rowNode?.node;
+        // Mirror the toggler's visibility rule on the node itself: with frozen columns, the rows
+        // of the scrollable view usually render no toggler to look up.
+        const isExpandable = node?.leaf === false || isNotEmpty(node?.children);
 
-        if (!isHiddenIcon && !this.expanded && this.rowNode.node['children']) {
+        if (isExpandable && !this.expanded && node['children']) {
             this.expand(event);
 
             currentTarget.tabIndex = -1;
