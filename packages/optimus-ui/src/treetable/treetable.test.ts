@@ -3961,3 +3961,107 @@ describe('TreeTableCellEditor templates', () => {
         expect(fixture.nativeElement.querySelector('.editor-output')).toBeNull();
     });
 });
+
+describe('TTRow keyboard navigation with frozen columns', () => {
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [TreeTableModule],
+        template: `
+            <p-treetable [value]="nodes" [columns]="scrollableCols" [frozenColumns]="frozenCols" [scrollable]="true" scrollHeight="250px" frozenWidth="200px" (onNodeExpand)="expanded.push($event.node)">
+                <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
+                    <tr [ttRow]="rowNode">
+                        @for (col of columns; track col.field) {
+                            <td>{{ rowData[col.field] }}</td>
+                        }
+                    </tr>
+                </ng-template>
+                <ng-template #frozenbody let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode">
+                        <td>
+                            <p-treetable-toggler [rowNode]="rowNode" />
+                            {{ rowData.name }}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treetable>
+        `
+    })
+    class FrozenColumnsTreeTableComponent {
+        nodes: TreeNode[] = [
+            {
+                data: { name: 'Root 1', size: '100KB', type: 'Folder' },
+                children: [{ data: { name: 'Child 1.1', size: '50KB', type: 'File' } }]
+            },
+            { data: { name: 'Root 2', size: '200KB', type: 'File' } }
+        ];
+
+        frozenCols = [{ field: 'name', header: 'Name' }];
+
+        scrollableCols = [
+            { field: 'size', header: 'Size' },
+            { field: 'type', header: 'Type' }
+        ];
+
+        expanded: TreeNode[] = [];
+    }
+
+    let fixture: ComponentFixture<FrozenColumnsTreeTableComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [FrozenColumnsTreeTableComponent],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(FrozenColumnsTreeTableComponent);
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    });
+
+    function scrollableRows(): HTMLTableRowElement[] {
+        return Array.from(fixture.nativeElement.querySelectorAll('.p-treetable-scrollable-view:not(.p-treetable-frozen-view) .p-treetable-tbody > tr'));
+    }
+
+    function pressArrowRight(row: HTMLElement) {
+        const event = new KeyboardEvent('keydown', { code: 'ArrowRight', key: 'ArrowRight', bubbles: true, cancelable: true });
+        row.dispatchEvent(event);
+        return event;
+    }
+
+    it('should render the scrollable rows without a toggler', () => {
+        const rows = scrollableRows();
+
+        expect(rows.length).toBe(2);
+        expect(rows[0].querySelector('button')).toBeNull();
+    });
+
+    it('should expand a parent node on ArrowRight from a row of the scrollable view', async () => {
+        const component = fixture.componentInstance;
+
+        const event = pressArrowRight(scrollableRows()[0]);
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(component.nodes[0].expanded).toBe(true);
+        expect(component.expanded).toEqual([component.nodes[0]]);
+        expect(scrollableRows().length).toBe(3);
+    });
+
+    it('should not expand a leaf node on ArrowRight from a row of the scrollable view', async () => {
+        const component = fixture.componentInstance;
+
+        const event = pressArrowRight(scrollableRows()[1]);
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(event.defaultPrevented).toBe(true);
+        expect(component.nodes[1].expanded).toBeFalsy();
+        expect(component.expanded).toEqual([]);
+        expect(scrollableRows().length).toBe(2);
+    });
+});
