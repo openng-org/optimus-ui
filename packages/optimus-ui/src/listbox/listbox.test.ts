@@ -2861,3 +2861,127 @@ class TestFormIsolationListboxComponent {
     form = new FormGroup({ value: new FormControl<string[]>([]) });
     options = ['A', 'B'];
 }
+
+describe('Listbox select all with disabled options', () => {
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [Listbox, FormsModule],
+        template: `
+            <p-listbox [(ngModel)]="selected" [options]="options" optionLabel="label" optionValue="value" optionDisabled="disabled" [group]="group" [multiple]="true" [checkbox]="true" [filter]="true" (onChange)="changes.push($event.value)" />
+        `
+    })
+    class DisabledOptionsListboxComponent {
+        options: any[] = [
+            { label: 'New York', value: 'NY' },
+            { label: 'Rome', value: 'RM', disabled: true },
+            { label: 'London', value: 'LDN' },
+            { label: 'Istanbul', value: 'IST', disabled: true },
+            { label: 'Paris', value: 'PRS' }
+        ];
+
+        group = false;
+
+        selected: string[] = ['RM'];
+
+        changes: string[][] = [];
+    }
+
+    let fixture: ComponentFixture<DisabledOptionsListboxComponent>;
+    let component: DisabledOptionsListboxComponent;
+
+    async function render(setup?: (component: DisabledOptionsListboxComponent) => void) {
+        await TestBed.configureTestingModule({
+            imports: [DisabledOptionsListboxComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(DisabledOptionsListboxComponent);
+        component = fixture.componentInstance;
+        setup?.(component);
+        await settle();
+    }
+
+    async function settle() {
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    }
+
+    async function clickHeaderCheckbox() {
+        fixture.nativeElement.querySelector('.p-listbox-header p-checkbox input').click();
+        await settle();
+    }
+
+    async function filter(value: string) {
+        const input: HTMLInputElement = fixture.nativeElement.querySelector('.p-listbox-filter');
+        input.value = value;
+        input.dispatchEvent(new Event('input'));
+        await settle();
+    }
+
+    it('should keep a selected disabled option when selecting all', async () => {
+        await render();
+
+        await clickHeaderCheckbox();
+
+        expect(component.selected).toEqual(['NY', 'RM', 'LDN', 'PRS']);
+    });
+
+    it('should keep a selected disabled option when unselecting all', async () => {
+        await render((c) => (c.selected = ['NY', 'RM', 'LDN', 'PRS']));
+
+        await clickHeaderCheckbox();
+
+        expect(component.selected).toEqual(['RM']);
+    });
+
+    it('should keep a selected disabled option that the filter hides', async () => {
+        await render();
+        await filter('n');
+
+        expect(fixture.nativeElement.textContent).not.toContain('Rome');
+
+        await clickHeaderCheckbox();
+
+        expect(component.selected).toEqual(['NY', 'RM', 'LDN']);
+    });
+
+    it('should keep a selected disabled option of a group', async () => {
+        await render((c) => {
+            c.group = true;
+            c.options = [
+                { label: 'USA', items: [{ label: 'New York', value: 'NY' }] },
+                {
+                    label: 'Italy',
+                    items: [
+                        { label: 'Rome', value: 'RM', disabled: true },
+                        { label: 'Milan', value: 'MIL' }
+                    ]
+                }
+            ];
+        });
+
+        await clickHeaderCheckbox();
+
+        expect(component.selected).toEqual(['NY', 'RM', 'MIL']);
+    });
+
+    it('should keep a selected disabled option on Ctrl+A', async () => {
+        await render();
+
+        const list: HTMLElement = fixture.nativeElement.querySelector('[role="listbox"]');
+        list.dispatchEvent(new KeyboardEvent('keydown', { code: 'KeyA', key: 'a', ctrlKey: true, bubbles: true, cancelable: true }));
+        await settle();
+
+        expect(component.selected).toEqual(['NY', 'RM', 'LDN', 'PRS']);
+    });
+
+    it('should emit onChange once per toggle', async () => {
+        await render();
+
+        await clickHeaderCheckbox();
+
+        expect(component.changes).toEqual([['NY', 'RM', 'LDN', 'PRS']]);
+    });
+});
