@@ -249,7 +249,7 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                     </ng-template>
                                 </p-button>
                             </div>
-                            <table [class]="cx('dayView')" role="presentation" *ngIf="currentView === 'date'" [pBind]="ptm('table')">
+                            <table [class]="cx('dayView')" role="grid" *ngIf="currentView === 'date'" [pBind]="ptm('table')">
                                 <thead [pBind]="ptm('tableHeader')">
                                     <tr [pBind]="ptm('tableHeaderRow')" role="row">
                                         <th *ngIf="showWeek" [class]="cx('weekHeader')" [pBind]="ptm('weekHeader')">
@@ -262,12 +262,20 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                 </thead>
                                 <tbody [pBind]="ptm('tableBody')">
                                     <tr *ngFor="let week of month.dates; let j = index" [pBind]="ptm('tableBodyRow')" role="row">
-                                        <td *ngIf="showWeek" [class]="cx('weekNumber')" [pBind]="ptm('weekNumber')">
-                                            <span [class]="cx('weekLabelContainer')" role="gridcell" [pBind]="ptm('weekLabelContainer')">
+                                        <td *ngIf="showWeek" [class]="cx('weekNumber')" role="gridcell" [pBind]="ptm('weekNumber')">
+                                            <span [class]="cx('weekLabelContainer')" [pBind]="ptm('weekLabelContainer')">
                                                 {{ month.weekNumbers[j] }}
                                             </span>
                                         </td>
-                                        <td *ngFor="let date of week" [class]="cx('dayCell', { date })" [pBind]="ptm('dayCell')">
+                                        <td
+                                            *ngFor="let date of week"
+                                            [class]="cx('dayCell', { date })"
+                                            [attr.aria-selected]="date.selectable ? isSelected(date) : null"
+                                            [attr.aria-disabled]="!date.selectable ? true : null"
+                                            [attr.aria-current]="date.today ? 'date' : null"
+                                            role="gridcell"
+                                            [pBind]="ptm('dayCell')"
+                                        >
                                             <ng-container *ngIf="date.otherMonth ? showOtherMonths : true">
                                                 <span
                                                     [ngClass]="dayClass(date)"
@@ -277,10 +285,6 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                                     (keydown)="onDateCellKeydown($event, date, i)"
                                                     [attr.tabindex]="isDateFocusable(date) ? 0 : -1"
                                                     [attr.aria-label]="getDateAriaLabel(date)"
-                                                    [attr.aria-selected]="date.selectable ? isSelected(date) : null"
-                                                    [attr.aria-disabled]="!date.selectable ? true : null"
-                                                    [attr.aria-current]="date.today ? 'date' : null"
-                                                    role="gridcell"
                                                     pRipple
                                                     [pBind]="ptm('day')"
                                                 >

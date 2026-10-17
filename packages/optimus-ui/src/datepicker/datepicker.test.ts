@@ -433,6 +433,24 @@ describe('DatePicker', () => {
             expect(inputElement.nativeElement.getAttribute('placeholder')).toBe('Select a date');
         });
 
+        it('should expose date cells as grid cells with their selection states', async () => {
+            testComponent.inline = true;
+            testComponent.selectedDate = new Date(2023, 5, 15);
+            testComponent.disabledDates = [new Date(2023, 5, 16)];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const table = testFixture.nativeElement.querySelector('.p-datepicker-day-view');
+            const selectedCell = table.querySelector('tbody tr td[role="gridcell"][aria-selected="true"]');
+            const disabledCell = table.querySelector('tbody tr td[role="gridcell"][aria-disabled="true"]');
+
+            expect(table.getAttribute('role')).toBe('grid');
+            expect(selectedCell).toBeTruthy();
+            expect(disabledCell).toBeTruthy();
+            expect(selectedCell.parentElement.getAttribute('role')).toBe('row');
+            expect(disabledCell.parentElement.getAttribute('role')).toBe('row');
+        });
+
         it('should render popup calendar cells only after the overlay is opened', async () => {
             const dayClassSpy = vi.spyOn(DatePicker.prototype, 'dayClass');
             const lazyFixture = TestBed.createComponent(TestDatePickerComponent);
