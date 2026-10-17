@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, DebugElement, Input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { provideOptimus } from '@openng/optimus-ui/config';
+import { Tooltip } from '@openng/optimus-ui/tooltip';
 import { TabList } from './tablist';
 import { Tabs } from './tabs';
 import { TabsModule } from './tabs.module';
@@ -13,7 +15,7 @@ import { TabsModule } from './tabs.module';
             <p-tablist>
                 <p-tab [value]="1">Tab 1</p-tab>
                 <p-tab [value]="2">Tab 2</p-tab>
-                <p-tab [value]="3" [disabled]="tab3Disabled">Tab 3</p-tab>
+                <p-tab [value]="3" [disabled]="tab3Disabled" pTooltip="Unavailable tab">Tab 3</p-tab>
             </p-tablist>
             <p-tabpanels>
                 <p-tabpanel [value]="1">
@@ -191,9 +193,9 @@ describe('Tabs', () => {
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [TabsModule],
+            imports: [TabsModule, Tooltip],
             declarations: [TestTabsComponent, TestScrollableTabsComponent, TestLazyTabsComponent, TestContentChildIconsTabsComponent, TestPTTabsComponent],
-            providers: [provideZonelessChangeDetection()]
+            providers: [provideZonelessChangeDetection(), provideOptimus({ theme: { preset: {} } })]
         });
 
         fixture = TestBed.createComponent(TestTabsComponent);
@@ -376,6 +378,37 @@ describe('Tabs', () => {
     });
 
     describe('Disabled Tabs', () => {
+        it('should show tooltips on mouse enter for disabled tabs', async () => {
+            component.tab3Disabled = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const tab3 = fixture.debugElement.queryAll(By.css('p-tab'))[2];
+            expect(getComputedStyle(tab3.nativeElement).pointerEvents).toBe('auto');
+
+            tab3.nativeElement.dispatchEvent(new MouseEvent('mouseenter'));
+            await fixture.whenStable();
+
+            const tooltip = tab3.injector.get(Tooltip);
+            expect(tooltip.container).toBeTruthy();
+            expect(tooltip.container.textContent).toContain('Unavailable tab');
+            expect(tooltip.container.style.display).toBe('inline-block');
+        });
+
+        it('should cancel mousedown on disabled tabs', async () => {
+            component.tab3Disabled = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const tab3 = fixture.debugElement.queryAll(By.css('p-tab'))[2];
+            const mouseDownEvent = new MouseEvent('mousedown', { cancelable: true });
+            tab3.nativeElement.dispatchEvent(mouseDownEvent);
+
+            expect(mouseDownEvent.defaultPrevented).toBe(true);
+        });
+
         it('should disable specific tabs', async () => {
             component.tab3Disabled = true;
             fixture.changeDetectorRef.markForCheck();

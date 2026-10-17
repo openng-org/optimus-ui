@@ -3860,3 +3860,104 @@ describe('TreeTable Inline PT', () => {
         expect(host?.classList.contains('INLINE_HOST_CLASS')).toBe(true);
     });
 });
+
+describe('TreeTableCellEditor templates', () => {
+    const editorNodes: TreeNode[] = [{ data: { name: 'Root 1' } }];
+
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [TreeTableModule],
+        template: `
+            <p-treetable [value]="nodes">
+                <ng-template #body let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode">
+                        <td ttEditableColumn [ttEditableColumnField]="'name'">
+                            <p-treeTableCellEditor>
+                                <ng-template #input><input class="editor-input" type="text" [value]="rowData.name" /></ng-template>
+                                <ng-template #output
+                                    ><span class="editor-output">{{ rowData.name }}</span></ng-template
+                                >
+                            </p-treeTableCellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treetable>
+        `
+    })
+    class NamedTemplatesCellEditorComponent {
+        nodes = editorNodes;
+    }
+
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: true,
+        imports: [TreeTableModule],
+        template: `
+            <p-treetable [value]="nodes">
+                <ng-template pTemplate="body" let-rowNode let-rowData="rowData">
+                    <tr [ttRow]="rowNode">
+                        <td ttEditableColumn [ttEditableColumnField]="'name'">
+                            <p-treeTableCellEditor>
+                                <ng-template pTemplate="input"><input class="editor-input" type="text" [value]="rowData.name" /></ng-template>
+                                <ng-template pTemplate="output"
+                                    ><span class="editor-output">{{ rowData.name }}</span></ng-template
+                                >
+                            </p-treeTableCellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-treetable>
+        `
+    })
+    class PTemplateCellEditorComponent {
+        nodes = editorNodes;
+    }
+
+    async function render<T>(component: new (...args: any[]) => T): Promise<ComponentFixture<T>> {
+        await TestBed.configureTestingModule({
+            imports: [component],
+            providers: [provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        const fixture = TestBed.createComponent(component);
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+        return fixture;
+    }
+
+    async function openCell(fixture: ComponentFixture<unknown>) {
+        const cell: HTMLElement = fixture.nativeElement.querySelector('td');
+        cell.click();
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    }
+
+    it('should render #output and #input named templates', async () => {
+        const fixture = await render(NamedTemplatesCellEditorComponent);
+
+        const output = fixture.nativeElement.querySelector('.editor-output');
+        expect(output).toBeTruthy();
+        expect(output.textContent.trim()).toBe('Root 1');
+        expect(fixture.nativeElement.querySelector('.editor-input')).toBeNull();
+
+        await openCell(fixture);
+
+        expect(fixture.nativeElement.querySelector('.editor-input')).toBeTruthy();
+        expect(fixture.nativeElement.querySelector('.editor-output')).toBeNull();
+    });
+
+    it('should still render legacy pTemplate="output" and pTemplate="input" templates', async () => {
+        const fixture = await render(PTemplateCellEditorComponent);
+
+        expect(fixture.nativeElement.querySelector('.editor-output')?.textContent.trim()).toBe('Root 1');
+        expect(fixture.nativeElement.querySelector('.editor-input')).toBeNull();
+
+        await openCell(fixture);
+
+        expect(fixture.nativeElement.querySelector('.editor-input')).toBeTruthy();
+        expect(fixture.nativeElement.querySelector('.editor-output')).toBeNull();
+    });
+});

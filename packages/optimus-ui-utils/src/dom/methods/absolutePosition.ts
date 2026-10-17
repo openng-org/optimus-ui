@@ -34,6 +34,17 @@ export default function absolutePosition(element: HTMLElement, target: HTMLEleme
         if (targetOffset.left + elementOuterWidth > viewport.width) left = Math.max(0, targetOffset.left + windowScrollLeft + targetOuterWidth - elementOuterWidth);
         else left = targetOffset.left + windowScrollLeft;
 
+        // top and left are page coordinates. When the element is not attached to the body, its containing block is a
+        // positioned ancestor (e.g. a fixed header), so convert them to coordinates relative to that ancestor.
+        const offsetParent = element.offsetParent as HTMLElement | null;
+
+        if (offsetParent && offsetParent !== element.ownerDocument.body) {
+            const offsetParentRect = offsetParent.getBoundingClientRect();
+
+            top -= offsetParentRect.top + windowScrollTop + offsetParent.clientTop - offsetParent.scrollTop;
+            left -= offsetParentRect.left + windowScrollLeft + offsetParent.clientLeft - offsetParent.scrollLeft;
+        }
+
         if (isRTL(element)) {
             element.style.insetInlineEnd = left + 'px';
         } else {

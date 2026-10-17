@@ -107,6 +107,15 @@ export const style = /*css*/ `
         outline-color: transparent;
     }
 
+    .p-tab.p-disabled {
+        cursor: default;
+        pointer-events: auto;
+    }
+
+    .p-tab.p-disabled .p-ink {
+        display: none;
+    }
+
     .p-tab:not(.p-disabled):focus-visible {
         z-index: 1;
         box-shadow: dt('tabs.tab.focus.ring.shadow');

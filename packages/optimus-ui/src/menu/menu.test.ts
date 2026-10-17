@@ -2112,3 +2112,75 @@ describe('Menu', () => {
         });
     });
 });
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [Menu],
+    template: `
+        <div style="height: 3000px"></div>
+        <div [style.position]="containerPosition" style="top: 40px; left: 30px; margin-top: 200px; padding: 10px">
+            <button class="toggle-button" (click)="menu.toggle($event)">Show Menu</button>
+            <p-menu #menu [model]="items" [popup]="true" />
+        </div>
+        <div style="height: 3000px"></div>
+    `
+})
+class TestPositionedContainerMenuComponent {
+    containerPosition = 'fixed';
+
+    items: MenuItem[] = [{ label: 'New' }, { label: 'Open' }];
+}
+
+describe('Menu popup positioning', () => {
+    let fixture: ComponentFixture<TestPositionedContainerMenuComponent>;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [TestPositionedContainerMenuComponent],
+            providers: [provideZonelessChangeDetection(), provideNoopAnimations()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestPositionedContainerMenuComponent);
+    });
+
+    afterEach(() => {
+        window.scrollTo(0, 0);
+    });
+
+    async function openMenu(containerPosition: string, scrollY: number) {
+        fixture.componentInstance.containerPosition = containerPosition;
+        fixture.detectChanges();
+        await fixture.whenStable();
+        window.scrollTo(0, scrollY);
+
+        const button = fixture.nativeElement.querySelector('.toggle-button') as HTMLButtonElement;
+
+        button.click();
+        fixture.detectChanges();
+        await fixture.whenStable();
+
+        const overlay = fixture.nativeElement.querySelector('.p-menu-overlay') as HTMLElement;
+
+        // Finish the enter transition so its scale transform doesn't affect the measured rect.
+        overlay.getAnimations({ subtree: true }).forEach((animation) => animation.finish());
+
+        return { buttonRect: button.getBoundingClientRect(), overlayRect: overlay.getBoundingClientRect(), overlay };
+    }
+
+    it('should open below the trigger inside a fixed container after the page is scrolled', async () => {
+        const { buttonRect, overlayRect, overlay } = await openMenu('fixed', 500);
+        const gutter = parseFloat(getComputedStyle(overlay).marginTop) || 0;
+
+        expect(Math.abs(overlayRect.top - gutter - buttonRect.bottom)).toBeLessThan(1);
+        expect(Math.abs(overlayRect.left - buttonRect.left)).toBeLessThan(1);
+    });
+
+    it('should open below the trigger inside a relatively positioned container', async () => {
+        const { buttonRect, overlayRect, overlay } = await openMenu('relative', 3000);
+        const gutter = parseFloat(getComputedStyle(overlay).marginTop) || 0;
+
+        expect(Math.abs(overlayRect.top - gutter - buttonRect.bottom)).toBeLessThan(1);
+        expect(Math.abs(overlayRect.left - buttonRect.left)).toBeLessThan(1);
+    });
+});

@@ -77,6 +77,7 @@
         "@angular/forms": "catalog:angular22",
         "@angular/platform-browser": "catalog:angular22",
         "@angular/router": "catalog:angular22",
+        "chart.js": "^4.0.0",
         "rxjs": "^6.0.0 || ^7.8.1"
     },
     "dependencies": {
@@ -84,5 +85,10 @@
         "@openng/optimus-ui-styled": "workspace:*",
         "@openng/optimus-ui-styles": "workspace:*",
         "@openng/optimus-ui-utils": "workspace:*"
+    },
+    "peerDependenciesMeta": {
+        "chart.js": {
+            "optional": true
+        }
     }
 }

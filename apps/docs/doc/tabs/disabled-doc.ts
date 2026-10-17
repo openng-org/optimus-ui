@@ -9,7 +9,7 @@ import { TabsModule } from '@openng/optimus-ui/tabs';
     imports: [AppDocSectionText, AppCode, TabsModule],
     template: `
         <app-docsectiontext>
-            <p>Enabling <i>disabled</i> property of a Tab prevents user interaction.</p>
+            <p>Setting the <i>disabled</i> property prevents tab activation or selection, while pointer-based interactions such as <i>pTooltip</i> hover remain available.</p>
         </app-docsectiontext>
         <div class="card">
             <p-tabs value="0">
