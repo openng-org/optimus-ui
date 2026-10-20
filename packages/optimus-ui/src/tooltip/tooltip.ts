@@ -767,7 +767,10 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         if (!this.scrollHandler) {
             this.scrollHandler = new ConnectedOverlayScrollHandler(this.el.nativeElement, () => {
                 if (this.container) {
-                    this.hide();
+                    // A scroll ends the interaction: reset the pointer state too, otherwise the
+                    // re-entrant mouseenter guard discards every enter until a mouseleave happens.
+                    this.pointerInside = false;
+                    this.deactivate();
                 }
             });
         }
