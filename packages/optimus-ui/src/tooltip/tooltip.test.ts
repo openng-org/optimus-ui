@@ -362,6 +362,41 @@ describe('Tooltip', () => {
             expect(document.querySelector('.p-tooltip')).toBeTruthy();
         });
 
+        // the scroll handler listens on the scrollable ancestors of the host
+        const makeHostScrollable = () => {
+            const scroller: HTMLElement = fixture.nativeElement;
+            scroller.style.overflow = 'auto';
+            return scroller;
+        };
+
+        it('should show again on a mouse enter after a scroll closed the tooltip', () => {
+            const scroller = makeHostScrollable();
+            enter();
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+
+            // the page scrolls while the pointer stays on the host - see issue #1922
+            scroller.dispatchEvent(new Event('scroll'));
+            expect(document.querySelector('.p-tooltip')).toBeFalsy();
+            expect(tooltipDirective.pointerInside).toBe(false);
+
+            enter();
+
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should still ignore a re-entrant mouse enter when no scroll happened', () => {
+            const scroller = makeHostScrollable();
+            enter();
+            scroller.dispatchEvent(new Event('scroll'));
+            enter();
+
+            const activateSpy = vi.spyOn(tooltipDirective, 'activate');
+            enter();
+
+            expect(activateSpy).not.toHaveBeenCalled();
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
         it('should reset the pointer state when the events are unbound', () => {
             enter();
             expect(tooltipDirective.pointerInside).toBe(true);
