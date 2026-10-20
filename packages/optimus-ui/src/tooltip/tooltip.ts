@@ -387,7 +387,8 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
         this.pointerInside = true;
 
-        if (!this.container && !this.showTimeout) {
+        // a pending hideDelay keeps the container until it expires; entering again cancels that hide
+        if ((!this.container || this.hideTimeout) && !this.showTimeout) {
             this.activate();
         }
     }
