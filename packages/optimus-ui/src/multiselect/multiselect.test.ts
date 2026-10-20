@@ -1864,6 +1864,22 @@ describe('MultiSelect Virtual Scrolling', () => {
             expect(alignSpy).toHaveBeenCalled();
         });
 
+        it('should realign the overlay when the options are replaced while it is open', async () => {
+            await open();
+            const panel: HTMLElement = multiSelect.overlayViewChild!.overlayViewChild!.nativeElement;
+            const heightBefore = panel.offsetHeight;
+            const alignSpy = vi.spyOn(multiSelect.overlayViewChild!, 'alignOverlay');
+
+            // 2 options are shorter than scrollHeight, so the auto-sized scroller shrinks the panel
+            component.options = component.options.slice(0, 2);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            await wait(200);
+
+            expect(panel.offsetHeight).toBeLessThan(heightBefore);
+            expect(alignSpy).toHaveBeenCalled();
+        });
+
         it('should not realign the overlay when the panel height stays the same', async () => {
             await open();
             const panel: HTMLElement = multiSelect.overlayViewChild!.overlayViewChild!.nativeElement;
