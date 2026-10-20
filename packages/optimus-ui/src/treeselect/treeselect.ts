@@ -534,6 +534,9 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     @ViewChild('focusInput') focusInput: Nullable<ElementRef>;
 
+    /**
+     * @deprecated There is no #filter element in this template, so this is always undefined. The filter input belongs to the child tree, use treeViewChild.filterViewChild instead.
+     */
     @ViewChild('filter') filterViewChild: Nullable<ElementRef>;
 
     @ViewChild('tree') treeViewChild: Nullable<Tree>;
@@ -757,7 +760,8 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
     onOverlayBeforeEnter() {
         if (this.filter) {
             isNotEmpty(this.filterValue) && this.treeViewChild?._filter(<any>this.filterValue);
-            this.filterInputAutoFocus && this.filterViewChild?.nativeElement.focus();
+            // the filter input is rendered by the child p-tree, not by this template
+            this.filterInputAutoFocus && this.treeViewChild?.filterViewChild?.nativeElement.focus();
         } else {
             let focusableElements = <any>getFocusableElements(this.panelEl?.nativeElement!);
 
