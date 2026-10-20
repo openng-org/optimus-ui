@@ -2148,13 +2148,14 @@ describe('Menu popup positioning', () => {
         window.scrollTo(0, 0);
     });
 
-    async function openMenu(containerPosition: string, scrollY: number) {
+    async function openMenu(containerPosition: string, scrollY: (button: HTMLButtonElement) => number) {
         fixture.componentInstance.containerPosition = containerPosition;
         fixture.detectChanges();
         await fixture.whenStable();
-        window.scrollTo(0, scrollY);
 
         const button = fixture.nativeElement.querySelector('.toggle-button') as HTMLButtonElement;
+
+        window.scrollTo(0, scrollY(button));
 
         button.click();
         fixture.detectChanges();
@@ -2169,7 +2170,7 @@ describe('Menu popup positioning', () => {
     }
 
     it('should open below the trigger inside a fixed container after the page is scrolled', async () => {
-        const { buttonRect, overlayRect, overlay } = await openMenu('fixed', 500);
+        const { buttonRect, overlayRect, overlay } = await openMenu('fixed', () => 500);
         const gutter = parseFloat(getComputedStyle(overlay).marginTop) || 0;
 
         expect(Math.abs(overlayRect.top - gutter - buttonRect.bottom)).toBeLessThan(1);
@@ -2177,7 +2178,10 @@ describe('Menu popup positioning', () => {
     });
 
     it('should open below the trigger inside a relatively positioned container', async () => {
-        const { buttonRect, overlayRect, overlay } = await openMenu('relative', 3000);
+        // Scroll relative to the trigger rather than to a fixed offset: with isolate: false, fixtures leaked by other
+        // test files can sit above this one, and a fixed offset could leave the trigger near the bottom of the
+        // viewport, where the popup correctly flips above it.
+        const { buttonRect, overlayRect, overlay } = await openMenu('relative', (button) => button.getBoundingClientRect().top + window.scrollY - 100);
         const gutter = parseFloat(getComputedStyle(overlay).marginTop) || 0;
 
         expect(Math.abs(overlayRect.top - gutter - buttonRect.bottom)).toBeLessThan(1);
