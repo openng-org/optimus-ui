@@ -1207,6 +1207,8 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
     itemsWrapper: any;
 
+    virtualScrollResizeObserver: ResizeObserver | null = null;
+
     _displaySelectedLabel: boolean = true;
 
     _maxSelectedLabels: number | null | undefined = 3;
@@ -2071,10 +2073,43 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
             }
         }
 
+        this.bindVirtualScrollResizeObserver();
+
         this.onPanelShow.emit(event);
     }
 
+    /**
+     * The virtual scroller sizes itself after the overlay is aligned, and again when options or scrollHeight
+     * change while it is open. Realign the overlay whenever the panel height changes, so a panel opened above
+     * the trigger keeps its bottom edge on the trigger instead of growing over it.
+     */
+    bindVirtualScrollResizeObserver() {
+        this.unbindVirtualScrollResizeObserver();
+
+        const panelElement = this.overlayViewChild?.overlayViewChild?.nativeElement;
+
+        if (this.virtualScroll && panelElement && typeof ResizeObserver !== 'undefined') {
+            let lastHeight = panelElement.offsetHeight;
+
+            this.virtualScrollResizeObserver = new ResizeObserver(() => {
+                const newHeight = panelElement.offsetHeight;
+
+                if (newHeight !== lastHeight) {
+                    lastHeight = newHeight;
+                    this.overlayViewChild?.alignOverlay();
+                }
+            });
+            this.virtualScrollResizeObserver.observe(panelElement);
+        }
+    }
+
+    unbindVirtualScrollResizeObserver() {
+        this.virtualScrollResizeObserver?.disconnect();
+        this.virtualScrollResizeObserver = null;
+    }
+
     onOverlayAfterLeave(event: any) {
+        this.unbindVirtualScrollResizeObserver();
         this.itemsWrapper = null;
         this.onModelTouched();
         this.onPanelHide.emit(event);
@@ -2087,6 +2122,10 @@ export class MultiSelect extends BaseEditableHolder<MultiSelectPassThrough> {
 
         this._filterValue.set(null);
         this._filteredOptions = null;
+    }
+
+    onDestroy() {
+        this.unbindVirtualScrollResizeObserver();
     }
 
     onOverlayHide(event: any) {
