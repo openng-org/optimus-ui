@@ -21,7 +21,7 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { find, findIndexInList, isEmpty, setAttribute, uuid } from '@openng/optimus-ui-utils';
+import { find, findIndexInList, isEmpty, isFunction, resolveFieldData, setAttribute, uuid } from '@openng/optimus-ui-utils';
 import { FilterService, PrimeTemplate, ScrollerOptions, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
@@ -626,11 +626,17 @@ export class PickList extends BaseComponent {
 
     /**
      * Defines if data of source list is loaded and interacted with in a lazy manner.
+     * While enabled, the "move all to target" action is unavailable since the source may contain unloaded placeholder entries.
+     * Use sourceOptionDisabled to mark unloaded entries so they cannot be selected or moved, and keep the backing data source in sync with onMoveToTarget/onMoveToSource,
+     * as moved items are removed from the source array.
      * @group Props
      */
     @Input({ transform: booleanAttribute }) sourceLazy: boolean = false;
     /**
      * Defines if data of target list is loaded and interacted with in a lazy manner.
+     * While enabled, the "move all to source" action is unavailable since the target may contain unloaded placeholder entries.
+     * Use targetOptionDisabled to mark unloaded entries so they cannot be selected or moved, and keep the backing data source in sync with onMoveToTarget/onMoveToSource,
+     * as moved items are removed from the target array.
      * @group Props
      */
     @Input({ transform: booleanAttribute }) targetLazy: boolean = false;
@@ -1461,7 +1467,7 @@ export class PickList extends BaseComponent {
 
     moveRight() {
         if (this.selectedItemsSource && this.selectedItemsSource.length) {
-            let itemsToMove = [...this.selectedItemsSource];
+            let itemsToMove = this.selectedItemsSource.filter((item) => !this.isOptionDisabled(item, this.SOURCE_LIST));
             for (let i = 0; i < itemsToMove.length; i++) {
                 let selectedItem = itemsToMove[i];
                 if (findIndexInList(selectedItem, this.target() || []) == -1) {
@@ -1492,7 +1498,7 @@ export class PickList extends BaseComponent {
     }
 
     moveAllRight() {
-        if (this.source()) {
+        if (this.source() && !this.sourceLazy) {
             let movedItems: any = [];
 
             for (let i = 0; i < this.source().length; i++) {
@@ -1523,7 +1529,7 @@ export class PickList extends BaseComponent {
 
     moveLeft() {
         if (this.selectedItemsTarget && this.selectedItemsTarget.length) {
-            let itemsToMove = [...this.selectedItemsTarget];
+            let itemsToMove = this.selectedItemsTarget.filter((item) => !this.isOptionDisabled(item, this.TARGET_LIST));
             for (let i = 0; i < itemsToMove.length; i++) {
                 let selectedItem = itemsToMove[i];
                 if (findIndexInList(selectedItem, this.source() || []) == -1) {
@@ -1551,7 +1557,7 @@ export class PickList extends BaseComponent {
     }
 
     moveAllLeft() {
-        if (this.target()) {
+        if (this.target() && !this.targetLazy) {
             let movedItems: any = [];
 
             for (let i = 0; i < this.target().length; i++) {
@@ -1577,6 +1583,16 @@ export class PickList extends BaseComponent {
             this.visibleOptionsTarget = [];
             this.triggerChangeDetection();
         }
+    }
+
+    isOptionDisabled(item: any, listType: number) {
+        const optionDisabled = listType === this.SOURCE_LIST ? this.sourceOptionDisabled : this.targetOptionDisabled;
+
+        if (isFunction(optionDisabled)) {
+            return optionDisabled(item);
+        }
+
+        return optionDisabled ? resolveFieldData(item, optionDisabled) : false;
     }
 
     isSelected(item: any, selectedItems: any[]) {
@@ -1874,11 +1890,11 @@ export class PickList extends BaseComponent {
     }
 
     moveAllRightDisabled() {
-        return this.disabled || isEmpty(this.source());
+        return this.disabled || this.sourceLazy || isEmpty(this.source());
     }
 
     moveAllLeftDisabled() {
-        return this.disabled || isEmpty(this.target());
+        return this.disabled || this.targetLazy || isEmpty(this.target());
     }
 
     destroyStyle() {

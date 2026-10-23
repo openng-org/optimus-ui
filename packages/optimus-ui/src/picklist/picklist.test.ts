@@ -254,6 +254,100 @@ describe('PickList', () => {
 
             expect(component.targetLazyLoadEvent).toBe(event);
         });
+
+        it('should disable move all to target while sourceLazy is enabled', () => {
+            component.sourceLazy = true;
+            fixture.detectChanges();
+
+            expect(picklistComponent.moveAllRightDisabled()).toBe(true);
+            expect(picklistComponent.moveAllLeftDisabled()).toBe(false);
+        });
+
+        it('should disable move all to source while targetLazy is enabled', () => {
+            component.targetLazy = true;
+            fixture.detectChanges();
+
+            expect(picklistComponent.moveAllLeftDisabled()).toBe(true);
+            expect(picklistComponent.moveAllRightDisabled()).toBe(false);
+        });
+
+        it('should not transfer unloaded placeholder entries on moveAllRight when sourceLazy is enabled', () => {
+            const placeholders = Array.from({ length: 5 }, () => ({}));
+            component.source = placeholders;
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+
+            picklistComponent.moveAllRight();
+
+            expect(picklistComponent.source().length).toBe(5);
+            expect(picklistComponent.target().length).toBe(0);
+            expect(component.moveAllToTargetEvent).toBeNull();
+        });
+
+        it('should not transfer unloaded placeholder entries on moveAllLeft when targetLazy is enabled', () => {
+            const placeholders = Array.from({ length: 5 }, () => ({}));
+            component.source = [];
+            component.target = placeholders;
+            component.targetLazy = true;
+            fixture.detectChanges();
+
+            picklistComponent.moveAllLeft();
+
+            expect(picklistComponent.target().length).toBe(5);
+            expect(picklistComponent.source().length).toBe(0);
+            expect(component.moveAllToSourceEvent).toBeNull();
+        });
+
+        it('should only move loaded (non disabled) source entries on moveRight', () => {
+            const loaded = { id: 0, name: 'Product #0' };
+            const placeholder = {};
+            component.source = [loaded, placeholder, {}];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+
+            picklistComponent.selectedItemsSource = [loaded, placeholder];
+            picklistComponent.moveRight();
+
+            expect(picklistComponent.target()).toEqual([loaded]);
+            expect(picklistComponent.source().length).toBe(2);
+            expect(picklistComponent.source()).toContain(placeholder);
+            expect(component.moveToTargetEvent?.items).toEqual([loaded]);
+        });
+
+        it('should only move loaded (non disabled) target entries on moveLeft', () => {
+            const loaded = { id: 0, name: 'Product #0', loaded: true };
+            const placeholder = { loaded: false };
+            component.source = [];
+            component.target = [loaded, placeholder];
+            component.targetLazy = true;
+            fixture.detectChanges();
+            picklistComponent.targetOptionDisabled = (item: any) => !item.loaded;
+
+            picklistComponent.selectedItemsTarget = [loaded, placeholder];
+            picklistComponent.moveLeft();
+
+            expect(picklistComponent.source()).toEqual([loaded]);
+            expect(picklistComponent.target()).toEqual([placeholder]);
+            expect(component.moveToSourceEvent?.items).toEqual([loaded]);
+        });
+
+        it('should resolve sourceOptionDisabled given as a field name', () => {
+            const enabled = { name: 'A', unloaded: false };
+            const disabledItem = { name: 'B', unloaded: true };
+            component.source = [enabled, disabledItem];
+            component.target = [];
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = 'unloaded';
+
+            picklistComponent.selectedItemsSource = [enabled, disabledItem];
+            picklistComponent.moveRight();
+
+            expect(picklistComponent.target()).toEqual([enabled]);
+            expect(picklistComponent.source()).toEqual([disabledItem]);
+        });
     });
 
     describe('Drag & Drop Functionality', () => {
