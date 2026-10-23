@@ -1323,6 +1323,27 @@ describe('PasswordDirective', () => {
             expect(directive.testStrength('abcd')).toBe(2);
             expect(directive.testStrength('abcdefgh')).toBe(3);
         });
+
+        it('should use the bound mediumRegex and strongRegex for the keyup feedback label', async () => {
+            component.mediumRegex = '^(?=.{4,})';
+            component.strongRegex = '^(?=.{8,})';
+            component.feedback = true;
+            fixture.detectChanges();
+
+            const input = fixture.debugElement.query(By.css('input')).nativeElement as HTMLInputElement;
+
+            for (const [value, label] of [
+                ['abc', 'Weak'],
+                ['abcd', 'Medium'],
+                ['abcdefgh', 'Strong']
+            ] as const) {
+                input.value = value;
+                input.dispatchEvent(new KeyboardEvent('keyup', { bubbles: true }));
+                await fixture.whenStable();
+
+                expect(directive.info?.textContent).toBe(label);
+            }
+        });
     });
 
     describe('Panel Management', () => {
