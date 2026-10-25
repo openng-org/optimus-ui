@@ -1622,6 +1622,13 @@ export class PickList extends BaseComponent {
                     itemsToMove = [event.item.data];
                 }
 
+                // Skip disabled entries, e.g. unloaded placeholders of a lazy list
+                itemsToMove = itemsToMove.filter((item) => !this.isOptionDisabled(item, this.TARGET_LIST));
+
+                if (!itemsToMove.length) {
+                    return;
+                }
+
                 // Sort items by their index in target (to maintain order)
                 const sortedItems = this.sortByIndexInList(itemsToMove, this.target() || []);
 
@@ -1678,6 +1685,13 @@ export class PickList extends BaseComponent {
                 } else {
                     // Move only the dragged item
                     itemsToMove = [event.item.data];
+                }
+
+                // Skip disabled entries, e.g. unloaded placeholders of a lazy list
+                itemsToMove = itemsToMove.filter((item) => !this.isOptionDisabled(item, this.SOURCE_LIST));
+
+                if (!itemsToMove.length) {
+                    return;
                 }
 
                 // Sort items by their index in source (to maintain order)

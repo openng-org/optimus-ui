@@ -348,6 +348,67 @@ describe('PickList', () => {
             expect(picklistComponent.target()).toEqual([enabled]);
             expect(picklistComponent.source()).toEqual([disabledItem]);
         });
+
+        function transferDropEvent(item: any, previousIndex = 0, currentIndex = 0): CdkDragDrop<any[]> {
+            return {
+                previousContainer: { id: 'from-list' } as any,
+                container: { id: 'to-list' } as any,
+                previousIndex,
+                currentIndex,
+                item: { data: item } as any,
+                isPointerOverContainer: true,
+                distance: { x: 0, y: 0 },
+                dropPoint: { x: 0, y: 0 },
+                event: new MouseEvent('mouseup')
+            };
+        }
+
+        it('should not transfer a disabled source entry dropped on the target', () => {
+            const placeholder = {};
+            component.source = [placeholder, { id: 1, name: 'Product #1' }];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+
+            picklistComponent.onDrop(transferDropEvent(placeholder), picklistComponent.TARGET_LIST);
+
+            expect(picklistComponent.source().length).toBe(2);
+            expect(picklistComponent.target()).toEqual([]);
+            expect(component.moveToTargetEvent).toBeNull();
+        });
+
+        it('should only transfer the enabled selected source entries dropped on the target', () => {
+            const loaded = { id: 0, name: 'Product #0' };
+            const placeholder = {};
+            component.source = [loaded, placeholder];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+            picklistComponent.selectedItemsSource = [loaded, placeholder];
+
+            picklistComponent.onDrop(transferDropEvent(loaded), picklistComponent.TARGET_LIST);
+
+            expect(picklistComponent.target()).toEqual([loaded]);
+            expect(picklistComponent.source()).toEqual([placeholder]);
+            expect(component.moveToTargetEvent?.items).toEqual([loaded]);
+        });
+
+        it('should not transfer a disabled target entry dropped on the source', () => {
+            const placeholder = { loaded: false };
+            component.source = [];
+            component.target = [placeholder];
+            component.targetLazy = true;
+            fixture.detectChanges();
+            picklistComponent.targetOptionDisabled = (item: any) => !item.loaded;
+
+            picklistComponent.onDrop(transferDropEvent(placeholder), picklistComponent.SOURCE_LIST);
+
+            expect(picklistComponent.target()).toEqual([placeholder]);
+            expect(picklistComponent.source()).toEqual([]);
+            expect(component.moveToSourceEvent).toBeNull();
+        });
     });
 
     describe('Drag & Drop Functionality', () => {
