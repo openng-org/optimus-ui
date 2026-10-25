@@ -1,10 +1,88 @@
-import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { Overlay } from './overlay';
 
+const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+
 describe('Overlay', () => {
+    describe('Reopen while leaving', () => {
+        @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
+            standalone: true,
+            imports: [Overlay],
+            template: `<p-overlay [(visible)]="visible" [motionOptions]="{ duration: 0 }" (onLeave)="onLeave()" (onHide)="hideCount = hideCount + 1">
+                <div class="test-content">Test Content</div>
+            </p-overlay>`
+        })
+        class TestReopenOverlayComponent {
+            visible = signal(true);
+            hideCount = 0;
+            reopenOnLeave = false;
+
+            onLeave() {
+                // Reopen after the leave has started but before it completes, so the leave
+                // finishes before Motion gets the next frame to cancel it with enter().
+                if (this.reopenOnLeave) {
+                    this.reopenOnLeave = false;
+                    this.visible.set(true);
+                }
+            }
+        }
+
+        let fixture: ComponentFixture<TestReopenOverlayComponent>;
+
+        const settle = async () => {
+            for (let i = 0; i < 5; i++) {
+                fixture.detectChanges();
+                await fixture.whenStable();
+                await nextFrame();
+            }
+        };
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [TestReopenOverlayComponent],
+                providers: [provideZonelessChangeDetection()]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestReopenOverlayComponent);
+            await settle();
+        });
+
+        afterEach(() => {
+            fixture.destroy();
+        });
+
+        it('should stay open when reopened before the previous leave completes', async () => {
+            const overlay = fixture.debugElement.query(By.directive(Overlay)).componentInstance as Overlay;
+            expect(fixture.nativeElement.querySelector('.test-content')).toBeTruthy();
+
+            fixture.componentInstance.reopenOnLeave = true;
+            fixture.componentInstance.visible.set(false);
+            await settle();
+
+            expect(fixture.componentInstance.reopenOnLeave).toBe(false);
+            expect(fixture.componentInstance.visible()).toBe(true);
+            expect(fixture.componentInstance.hideCount).toBe(0);
+            expect(overlay.visible).toBe(true);
+            expect(overlay.modalVisible).toBe(true);
+            expect(fixture.nativeElement.querySelector('.test-content')).toBeTruthy();
+        });
+
+        it('should still tear down when the leave completes while hidden', async () => {
+            const overlay = fixture.debugElement.query(By.directive(Overlay)).componentInstance as Overlay;
+
+            fixture.componentInstance.visible.set(false);
+            await settle();
+
+            expect(overlay.visible).toBe(false);
+            expect(overlay.modalVisible).toBe(false);
+            expect(fixture.nativeElement.querySelector('.test-content')).toBeFalsy();
+        });
+    });
+
     describe('PassThrough API', () => {
         @Component({
             changeDetection: ChangeDetectionStrategy.Eager,
