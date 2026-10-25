@@ -76,6 +76,7 @@ catalogs:
 
 overrides:
   source-map-js: ^1.2.2
+  zod: ^4.6.6
   '@angular/compiler-cli>@jridgewell/sourcemap-codec': ^1.6.0
 
 importers:
@@ -7844,9 +7845,6 @@ packages:
   yuku-parser@0.8.0:
     resolution: {integrity: sha512-obrazyE8Cyh79xTQS9wv44khnhvkXG1CDSSy0bg+Pjjla+iXkKXK2b6+LTYXSN3qvVfQxc0MN5qhNKYr9sl3Zw==}
 
-  zod@4.4.3:
-    resolution: {integrity: sha512-ytENFjIJFl2UwYglde2jchW2Hwm4GJFLDiSXWdTrJQBIN9Fcyp7n4DhxJEiWNAJMV1/BqWfW/kkg71UDcHJyTQ==}
-
   zod@4.6.6:
     resolution: {integrity: sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==}
 
@@ -8399,7 +8397,7 @@ snapshots:
       '@standard-schema/spec': 1.1.0
       rxjs: 7.8.2
       tslib: 2.8.1
-      zod: 4.4.3
+      zod: 4.6.6
 
   '@angular/platform-browser-dynamic@22.2.3(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/compiler@22.2.3)(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2))(@angular/platform-browser@22.2.3(@angular/animations@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)))(@angular/common@22.2.3(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2))(rxjs@7.8.2))(@angular/core@22.2.3(@angular/compiler@22.2.3)(rxjs@7.8.2)))':
     dependencies:
@@ -10023,12 +10021,12 @@ snapshots:
 
   '@modelcontextprotocol/core@2.3.1':
     dependencies:
-      zod: 4.4.3
+      zod: 4.6.6
 
   '@modelcontextprotocol/server@2.3.1':
     dependencies:
       '@modelcontextprotocol/core': 2.3.1
-      zod: 4.4.3
+      zod: 4.6.6
 
   '@msgpackr-extract/msgpackr-extract-darwin-arm64@3.0.3':
     optional: true
@@ -15436,7 +15434,5 @@ snapshots:
       '@yuku-parser/binding-linux-x64-musl': 0.8.0
       '@yuku-parser/binding-win32-arm64': 0.8.0
       '@yuku-parser/binding-win32-x64': 0.8.0
-
-  zod@4.4.3: {}
 
   zod@4.6.6: {}

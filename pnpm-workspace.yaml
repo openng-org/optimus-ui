@@ -58,6 +58,8 @@ minimumReleaseAgeExclude:
 overrides:
   # GHSA-68fv-2mgg-jv7q (high): pulled in by postcss for the docs and playground apps.
   source-map-js: ^1.2.2
+  # GHSA-mrhx-c7xc-m3w5 (high): pulled in by @angular/forms, which declares zod ^4.0.10.
+  zod: ^4.6.6
   # @angular/compiler-cli 22.2 imports encodeRangeMappings (added in 1.6.0) but declares ^1.4.14.
   '@angular/compiler-cli>@jridgewell/sourcemap-codec': ^1.6.0
 
