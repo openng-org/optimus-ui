@@ -2,7 +2,7 @@ import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component, signal } from '@angular/core';
 import { ScrollerLazyLoadEvent } from '@openng/optimus-ui/scroller';
-import { PickListModule, PickListMoveToSourceEvent, PickListMoveToTargetEvent } from '@openng/optimus-ui/picklist';
+import { PickListModule, PickListMoveAllToSourceEvent, PickListMoveToSourceEvent, PickListMoveToTargetEvent } from '@openng/optimus-ui/picklist';
 
 @Component({
     selector: 'lazy-doc',
@@ -16,7 +16,8 @@ import { PickListModule, PickListMoveToSourceEvent, PickListMoveToTargetEvent } 
             </p>
             <p>
                 Entries that are not loaded yet should be disabled with <i>sourceOptionDisabled</i> so that they cannot be selected or moved. Since moved items are removed from the source array, keep the backing data source in sync via
-                <i>onMoveToTarget</i> and <i>onMoveToSource</i>. The move all to target action is not available while <i>sourceLazy</i> is enabled.
+                <i>onMoveToTarget</i>, <i>onMoveToSource</i> and <i>onMoveAllToSource</i>. The move all to target action is not available while <i>sourceLazy</i> is enabled, and the source reorder controls are hidden since reordering a partially
+                loaded list cannot be mirrored to the backing data source.
             </p>
         </app-docsectiontext>
         <div class="card">
@@ -31,9 +32,11 @@ import { PickListModule, PickListMoveToSourceEvent, PickListMoveToTargetEvent } 
                 [sourceStyle]="{ height: '20rem' }"
                 [targetStyle]="{ height: '20rem' }"
                 [sourceOptionDisabled]="isUnloaded"
+                [showSourceControls]="false"
                 (onSourceLazyLoad)="onSourceLazyLoad($event)"
                 (onMoveToTarget)="onMoveToTarget($event)"
                 (onMoveToSource)="onMoveToSource($event)"
+                (onMoveAllToSource)="onMoveToSource($event)"
             >
                 <ng-template let-item #item>
                     {{ item?.name }}
@@ -84,7 +87,7 @@ export class LazyDoc {
         this.remoteProducts = this.remoteProducts.filter((product) => !movedIds.has(product.id));
     }
 
-    onMoveToSource(event: PickListMoveToSourceEvent) {
+    onMoveToSource(event: PickListMoveToSourceEvent | PickListMoveAllToSourceEvent) {
         // the picklist appends moved items to the end of the source
         this.remoteProducts = [...this.remoteProducts, ...event.items];
     }
