@@ -170,7 +170,7 @@ export class SplitButton extends BaseComponent<SplitButtonPassThrough> {
      * Defines the style of the button.
      * @group Props
      */
-    @Input() severity: ButtonSeverity;
+    @Input() severity: ButtonSeverity | null | undefined;
     /**
      * Add a shadow to indicate elevation.
      * @group Props

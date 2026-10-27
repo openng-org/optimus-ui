@@ -110,7 +110,7 @@ export interface ButtonProps {
     rounded?: boolean;
     text?: boolean;
     plain?: boolean;
-    severity?: ButtonSeverity;
+    severity?: ButtonSeverity | null | undefined;
     outlined?: boolean;
     link?: boolean;
     tabindex?: number | undefined;
@@ -128,4 +128,4 @@ export interface ButtonProps {
  * Severity levels of the button.
  * @group Types
  */
-export type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast' | null | undefined;
+export type ButtonSeverity = 'success' | 'info' | 'warn' | 'danger' | 'help' | 'primary' | 'secondary' | 'contrast';
