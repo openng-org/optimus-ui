@@ -18,21 +18,21 @@ catalog:
 
 catalogs:
   angular22:
-    "@angular-devkit/build-angular": ^22.1.6
-    "@angular/animations": ^22.1.4
-    "@angular/build": ^22.1.6
-    "@angular/cdk": ^22.1.4
-    "@angular/cli": ^22.1.6
-    "@angular/common": ^22.1.4
-    "@angular/compiler": ^22.1.4
-    "@angular/compiler-cli": ^22.1.4
-    "@angular/core": ^22.1.4
-    "@angular/forms": ^22.1.4
-    "@angular/platform-browser": ^22.1.4
-    "@angular/platform-browser-dynamic": ^22.1.4
-    "@angular/platform-server": ^22.1.4
-    "@angular/router": ^22.1.4
-    "@angular/ssr": ^22.1.6
+    "@angular-devkit/build-angular": ^22.2.3
+    "@angular/animations": ^22.2.3
+    "@angular/build": ^22.2.3
+    "@angular/cdk": ^22.2.3
+    "@angular/cli": ^22.2.3
+    "@angular/common": ^22.2.3
+    "@angular/compiler": ^22.2.3
+    "@angular/compiler-cli": ^22.2.3
+    "@angular/core": ^22.2.3
+    "@angular/forms": ^22.2.3
+    "@angular/platform-browser": ^22.2.3
+    "@angular/platform-browser-dynamic": ^22.2.3
+    "@angular/platform-server": ^22.2.3
+    "@angular/router": ^22.2.3
+    "@angular/ssr": ^22.2.3
     "@angular-eslint/eslint-plugin": ^22.1.0
     "@angular-eslint/eslint-plugin-template": ^22.1.0
     "@angular-eslint/schematics": ^22.1.0
@@ -54,3 +54,24 @@ minimumReleaseAgeExclude:
   - '@angular/platform-browser@22.1.4'
   - '@angular/platform-server@22.1.4'
   - '@angular/router@22.1.4'
+
+overrides:
+  # GHSA-68fv-2mgg-jv7q (high): pulled in by postcss for the docs and playground apps.
+  source-map-js: ^1.2.2
+  # GHSA-mrhx-c7xc-m3w5 (high): pulled in by @angular/forms, which declares zod ^4.0.10.
+  zod: ^4.6.6
+  # @angular/compiler-cli 22.2 imports encodeRangeMappings (added in 1.6.0) but declares ^1.4.14.
+  '@angular/compiler-cli>@jridgewell/sourcemap-codec': ^1.6.0
+
+auditConfig:
+  ignoreGhsas:
+    # GHSA-vfj7-8cjw-p6xm (high, braces <=3.0.3): no patched release exists (3.0.3 is the latest).
+    # braces only expands glob patterns written in this repo, never user input. Its consumers:
+    # - tailwindcss v3 (via chokidar, fast-glob, micromatch): `content` globs of the docs app
+    #   (the only --prod path), the tailwindcss-v3 playground and the dev/peer dependency of
+    #   @openng/optimus-ui-tailwindcss. The published plugin has no braces dependency of its own.
+    # - karma (via chokidar), pulled in as an optional peer of @angular/build and
+    #   @angular-devkit/build-angular: file watching during local builds, unused since Vitest.
+    # - http-proxy-middleware / webpack-dev-server (via micromatch): local dev server proxy paths.
+    # Remove this entry once braces ships a fix or tailwindcss v3 is dropped.
+    - GHSA-vfj7-8cjw-p6xm
