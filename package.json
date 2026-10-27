@@ -25,7 +25,7 @@
         "build:themes": "pnpm --filter @openng/optimus-ui-themes build",
         "build:docs": "pnpm --filter docs build",
         "build:docs:content": "pnpm --filter docs build:docs",
-        "bootstrap": "pnpm run build:optimus-ui && pnpm --filter docs build:apidoc",
+        "bootstrap": "pnpm run build:optimus-ui && pnpm --filter docs build:apidoc && pnpm --filter docs build:democode",
         "dev": "pnpm --filter docs start",
         "dev:ssr": "pnpm --filter docs start:ssr",
         "security:check": "pnpm audit --prod --audit-level high",

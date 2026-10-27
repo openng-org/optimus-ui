@@ -24,7 +24,7 @@ This is a pnpm-based monorepo.
 
 ```bash
 pnpm install          # install deps + git hooks (via lefthook)
-pnpm run bootstrap    # build the optimus-ui-* packages and generate the docs API data
+pnpm run bootstrap    # build the optimus-ui-* packages and generate the docs API and demo data
 pnpm run dev          # run the docs app locally on http://localhost:4200
 ```
 
@@ -32,6 +32,7 @@ pnpm run dev          # run the docs app locally on http://localhost:4200
 
 - `@openng/optimus-ui` and the docs app import the other `optimus-ui-*` packages from their `dist` folders. Until they are built, your editor reports `Cannot find module '@openng/optimus-ui-utils'` and similar errors in the components.
 - The docs app imports the generated `apps/docs/doc/apidoc/index.json`. Without it, `pnpm run dev` fails with `TS2307: Cannot find module '@/doc/apidoc/index.json'`.
+- The docs app loads the generated `apps/docs/public/demos.json` for the source code shown next to each demo. Without it, the demo code views stay empty.
 
 Unit tests run with Vitest in headless Chromium through Playwright. Install the browser once:
 
