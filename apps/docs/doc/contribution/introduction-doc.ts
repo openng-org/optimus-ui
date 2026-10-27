@@ -13,8 +13,14 @@ import { Component } from '@angular/core';
             <h3>Development Setup</h3>
             <p>To begin with, clone the Optimus UI repository from GitHub:</p>
             <app-code [code]="code1" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
-            <p style="margin-top: 1rem;">Then run the documentation app in your local environment at <i>http://localhost:4200/</i>.</p>
+            <p style="margin-top: 1rem;">
+                Install the dependencies, build the <i>optimus-ui-*</i> packages and generate the API and demo data used by the documentation app, then run it in your local environment at <i>http://localhost:4200/</i>. Run
+                <i>pnpm run bootstrap</i> again after changing or pulling changes to a <i>packages/optimus-ui-*</i> package.
+            </p>
             <app-code [code]="code2" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
+            <h3>Running Tests</h3>
+            <p>Unit tests run with Vitest in headless Chromium through Playwright. Install the browser once, then run all unit tests or a single test file.</p>
+            <app-code [code]="code4" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
             <h3>Project Structure</h3>
             <p>Optimus UI's project structure is organized as follows:</p>
             <app-code [code]="code3" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
@@ -27,8 +33,9 @@ export class IntroductionDoc {
 cd optimus-ui`
     };
     code2: Code = {
-        typescript: `pnpm install
-pnpm run dev`
+        typescript: `pnpm install          # install dependencies and git hooks
+pnpm run bootstrap    # build the optimus-ui-* packages, generate API and demo data
+pnpm run dev          # run the documentation app`
     };
     code3: Code = {
         typescript: `- apps
@@ -43,5 +50,15 @@ pnpm run dev`
   - optimus-ui-locale          // i18n locales
   - optimus-ui-motion          // animation utilities
   - optimus-ui-utils           // shared helpers`
+    };
+    code4: Code = {
+        typescript: `# install the browser once
+pnpm --filter @openng/optimus-ui exec playwright install chromium
+
+# all unit tests
+pnpm run test:unit
+
+# a single test file
+pnpm --filter @openng/optimus-ui test:unit --include=src/select/select.test.ts`
     };
 }
