@@ -6,8 +6,8 @@ import {
     computed,
     ContentChild,
     ContentChildren,
-    EmbeddedViewRef,
     ElementRef,
+    EmbeddedViewRef,
     EventEmitter,
     forwardRef,
     HostListener,
@@ -1649,7 +1649,8 @@ export class AutoComplete<T = any> extends BaseInput<AutoCompletePassThrough> {
     }
 
     onOptionMouseEnter(event, index) {
-        if (this.focusOnHover) {
+        // mouseEnter might still fire after the dropdown has already been closed
+        if (this.focusOnHover && this.overlayVisible) {
             this.changeFocusedOptionIndex(event, index);
         }
     }

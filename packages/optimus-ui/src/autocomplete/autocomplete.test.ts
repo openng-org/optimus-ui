@@ -1625,6 +1625,15 @@ describe('AutoComplete', () => {
             expect(inputElement.nativeElement.value).toBe('' as any);
         });
 
+        it('should not change focuesedOptionIndex when onOptionMouseEnter fires while dropdown is closed', () => {
+            component.focusedOptionIndex.set(0);
+            component.overlayVisible = false;
+
+            component.onOptionMouseEnter({}, 1);
+
+            expect(component.focusedOptionIndex()).toBe(0);
+        });
+
         it('should handle autoHighlight feature', async () => {
             testComponent.autoHighlight = true;
             testComponent.suggestions = mockItems;
