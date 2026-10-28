@@ -1,12 +1,12 @@
-import { mergeKeys } from '@openng/optimus-ui-utils/object';
 import Theme from '../config/index';
+import { mergePresets as mergeThemePresets } from '../utils/index';
 
 export const $t = (theme: any = {}) => {
     let { preset: _preset, options: _options } = theme;
 
     return {
         preset(value: any) {
-            _preset = _preset ? mergeKeys(_preset, value) : value;
+            _preset = _preset ? mergeThemePresets([_preset, value], Theme.defaults.variable.excludedKeyRegex) : value;
 
             return this;
         },
@@ -47,7 +47,7 @@ export const $t = (theme: any = {}) => {
         },
         update({ mergePresets = true, mergeOptions = true } = {}) {
             const newTheme = {
-                preset: mergePresets ? mergeKeys(Theme.getPreset(), _preset) : _preset,
+                preset: mergePresets ? mergeThemePresets([Theme.getPreset(), _preset], Theme.defaults.variable.excludedKeyRegex) : _preset,
                 options: mergeOptions ? { ...Theme.getOptions(), ..._options } : _options
             };
 
