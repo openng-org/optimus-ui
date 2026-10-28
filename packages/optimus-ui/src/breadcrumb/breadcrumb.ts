@@ -110,7 +110,7 @@ const BREADCRUMB_INSTANCE = new InjectionToken<Breadcrumb>('BREADCRUMB_INSTANCE'
                         <ng-template *ngTemplateOutlet="separatorTemplate || _separatorTemplate"></ng-template>
                     </li>
                 }
-                @for (menuitem of model; track menuitem; let end = $last; let i = $index) {
+                @for (menuitem of model; track $index; let end = $last; let i = $index) {
                     @if (menuitem.visible !== false) {
                         <li
                             [class]="cn(cx('item', { menuitem }), menuitem.styleClass)"
