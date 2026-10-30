@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+    booleanAttribute,
     ChangeDetectionStrategy,
     Component,
     computed,
@@ -30,7 +31,6 @@ import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { MotionModule } from '@openng/optimus-ui/motion';
 import { StepItemPassThrough, StepListPassThrough, StepPanelPassThrough, StepPanelsPassThrough, StepPassThrough, StepperPassThrough, StepperSeparatorPassThrough } from '@openng/optimus-ui/types/stepper';
-import { transformToBoolean } from '@openng/optimus-ui/utils';
 import { StepItemStyle } from './style/stepitemstyle';
 import { StepListStyle } from './style/stepliststyle';
 import { StepPanelsStyle } from './style/steppanelsstyle';
@@ -263,9 +263,7 @@ export class Step extends BaseComponent<StepPassThrough> {
      * @defaultValue false
      * @group Props
      */
-    disabled: InputSignalWithTransform<any, boolean> = input(false, {
-        transform: (v: any | boolean) => transformToBoolean(v)
-    });
+    disabled: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
 
     active = computed(() => this.pcStepper.isStepActive(this.value()));
 
@@ -489,12 +487,9 @@ export class Stepper extends BaseComponent<StepperPassThrough> {
     /**
      * A boolean variable that captures user input.
      * @defaultValue false
-     * @type {InputSignalWithTransform<any, boolean >}
      * @group Props
      */
-    linear: InputSignalWithTransform<any, boolean> = input(false, {
-        transform: (v: any | boolean) => transformToBoolean(v)
-    });
+    linear: InputSignalWithTransform<boolean, unknown> = input(false, { transform: booleanAttribute });
     /**
      * Transition options of the animation.
      * @defaultValue 400ms cubic-bezier(0.86, 0, 0.07, 1)
