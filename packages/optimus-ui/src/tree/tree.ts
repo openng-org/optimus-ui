@@ -1433,7 +1433,13 @@ export class Tree extends BaseComponent<TreePassThrough> implements BlockableUI 
             }
 
             if (this.hasFilteredNodes()) {
-                node = this.getNodeWithKey(<string>node.key, <TreeNode<any>[]>this.filteredNodes) as TreeNode;
+                if (this.isCheckboxSelectionMode()) {
+                    // checkbox propagation must walk the full tree, not only the children left visible by the filter
+                    this.linkParentNodes(<TreeNode<any>[]>this.value, undefined);
+                    node = this.getNodeWithKey(<string>node.key, <TreeNode<any>[]>this.value) as TreeNode;
+                } else {
+                    node = this.getNodeWithKey(<string>node.key, <TreeNode<any>[]>this.filteredNodes) as TreeNode;
+                }
                 if (!node) {
                     return;
                 }
@@ -1616,6 +1622,15 @@ export class Tree extends BaseComponent<TreePassThrough> implements BlockableUI 
                 if (matchedNode) {
                     return matchedNode;
                 }
+            }
+        }
+    }
+
+    linkParentNodes(nodes: TreeNode<any>[] | undefined, parent: TreeNode<any> | undefined) {
+        if (nodes) {
+            for (let node of nodes) {
+                node.parent = parent;
+                this.linkParentNodes(node.children, node);
             }
         }
     }
