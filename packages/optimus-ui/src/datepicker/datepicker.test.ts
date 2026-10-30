@@ -975,11 +975,15 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
+            const nextButton = testFixture.nativeElement.querySelector('.p-datepicker-next-button');
+            expect(nextButton).toBeTruthy();
 
             const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navForward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            testFixture.detectChanges();
 
             if (currentMonth === 11) {
                 expect(datePickerComponent.currentMonth).toBe(0);
@@ -988,6 +992,10 @@ describe('DatePicker', () => {
                 expect(datePickerComponent.currentMonth).toBe(currentMonth + 1);
                 expect(datePickerComponent.currentYear).toBe(currentYear);
             }
+            const expectedAnnouncement = `${datePickerComponent.getMonthName(datePickerComponent.currentMonth)} ${datePickerComponent.currentYear}`;
+            expect(datePickerComponent.navigationAnnouncement).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('span[role="status"][aria-atomic="true"]').textContent).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('.p-datepicker-next-button')).toBe(nextButton);
         });
 
         it('should navigate to previous month', async () => {
@@ -998,11 +1006,15 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
+            const prevButton = testFixture.nativeElement.querySelector('.p-datepicker-prev-button');
+            expect(prevButton).toBeTruthy();
 
             const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navBackward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            testFixture.detectChanges();
 
             if (currentMonth === 0) {
                 expect(datePickerComponent.currentMonth).toBe(11);
@@ -1011,6 +1023,29 @@ describe('DatePicker', () => {
                 expect(datePickerComponent.currentMonth).toBe(currentMonth - 1);
                 expect(datePickerComponent.currentYear).toBe(currentYear);
             }
+            const expectedAnnouncement = `${datePickerComponent.getMonthName(datePickerComponent.currentMonth)} ${datePickerComponent.currentYear}`;
+            expect(datePickerComponent.navigationAnnouncement).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('span[role="status"][aria-atomic="true"]').textContent).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('.p-datepicker-prev-button')).toBe(prevButton);
+        });
+
+        it('should restore focus to the visible next button when multiple months are displayed', async () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
+            const calendarContainer = document.createElement('div');
+            const hiddenNextButton = document.createElement('button');
+            const visibleNextButton = document.createElement('button');
+            hiddenNextButton.className = 'p-datepicker-next-button';
+            hiddenNextButton.style.visibility = 'hidden';
+            visibleNextButton.className = 'p-datepicker-next-button';
+            calendarContainer.append(hiddenNextButton, visibleNextButton);
+            document.body.appendChild(calendarContainer);
+            datePickerComponent.contentViewChild = { nativeElement: calendarContainer };
+
+            datePickerComponent.navigationState = { backward: false, button: true };
+            datePickerComponent.updateFocus();
+
+            expect(document.activeElement).toBe(visibleNextButton);
+            calendarContainer.remove();
         });
 
         it('should select date when clicked', async () => {

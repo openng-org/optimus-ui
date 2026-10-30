@@ -39,6 +39,7 @@ import { Ripple } from '@openng/optimus-ui/ripple';
 import { Nullable, VoidListener } from '@openng/optimus-ui/ts-helpers';
 import {
     DatePickerButtonBarTemplateContext,
+    DatePickerDateMeta,
     DatePickerDateTemplateContext,
     DatePickerDecadeTemplateContext,
     DatePickerDisabledDateTemplateContext,
@@ -167,11 +168,12 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                 (click)="onOverlayClick($event)"
                 [pBind]="ptm('panel')"
             >
+                <span class="p-hidden-accessible" role="status" aria-live="polite" aria-atomic="true">{{ navigationAnnouncement }}</span>
                 <ng-content select="p-header"></ng-content>
                 <ng-container *ngTemplateOutlet="headerTemplate || _headerTemplate"></ng-container>
                 <ng-container *ngIf="!timeOnly">
                     <div [class]="cx('calendarContainer')" [pBind]="ptm('calendarContainer')">
-                        <div [class]="cx('calendar')" *ngFor="let month of months; let i = index" [pBind]="ptm('calendar')">
+                        <div [class]="cx('calendar')" *ngFor="let month of months; let i = index; trackBy: trackByMonthIndex" [pBind]="ptm('calendar')">
                             <div [class]="cx('header')" [pBind]="ptm('header')">
                                 <p-button
                                     rounded
@@ -247,9 +249,9 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                     </ng-template>
                                 </p-button>
                             </div>
-                            <table [class]="cx('dayView')" role="grid" *ngIf="currentView === 'date'" [pBind]="ptm('table')">
+                            <table [class]="cx('dayView')" role="presentation" *ngIf="currentView === 'date'" [pBind]="ptm('table')">
                                 <thead [pBind]="ptm('tableHeader')">
-                                    <tr [pBind]="ptm('tableHeaderRow')">
+                                    <tr [pBind]="ptm('tableHeaderRow')" role="row">
                                         <th *ngIf="showWeek" [class]="cx('weekHeader')" [pBind]="ptm('weekHeader')">
                                             <span [pBind]="ptm('weekHeaderLabel')">{{ getTranslation('weekHeader') }}</span>
                                         </th>
@@ -259,13 +261,13 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                     </tr>
                                 </thead>
                                 <tbody [pBind]="ptm('tableBody')">
-                                    <tr *ngFor="let week of month.dates; let j = index" [pBind]="ptm('tableBodyRow')">
+                                    <tr *ngFor="let week of month.dates; let j = index" [pBind]="ptm('tableBodyRow')" role="row">
                                         <td *ngIf="showWeek" [class]="cx('weekNumber')" [pBind]="ptm('weekNumber')">
-                                            <span [class]="cx('weekLabelContainer')" [pBind]="ptm('weekLabelContainer')">
+                                            <span [class]="cx('weekLabelContainer')" role="gridcell" [pBind]="ptm('weekLabelContainer')">
                                                 {{ month.weekNumbers[j] }}
                                             </span>
                                         </td>
-                                        <td *ngFor="let date of week" [attr.aria-label]="date.day" [class]="cx('dayCell', { date })" [pBind]="ptm('dayCell')">
+                                        <td *ngFor="let date of week" [class]="cx('dayCell', { date })" [pBind]="ptm('dayCell')">
                                             <ng-container *ngIf="date.otherMonth ? showOtherMonths : true">
                                                 <span
                                                     [ngClass]="dayClass(date)"
@@ -273,20 +275,17 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                                     draggable="false"
                                                     [attr.data-date]="formatDateKey(formatDateMetaToDate(date))"
                                                     (keydown)="onDateCellKeydown($event, date, i)"
+                                                    [attr.tabindex]="isDateFocusable(date) ? 0 : -1"
+                                                    [attr.aria-label]="getDateAriaLabel(date)"
+                                                    [attr.aria-selected]="date.selectable ? isSelected(date) : null"
+                                                    [attr.aria-disabled]="!date.selectable ? true : null"
+                                                    [attr.aria-current]="date.today ? 'date' : null"
+                                                    role="gridcell"
                                                     pRipple
                                                     [pBind]="ptm('day')"
                                                 >
-                                                    <ng-container *ngIf="!dateTemplate && !_dateTemplate && (date.selectable || (!disabledDateTemplate && !_disabledDateTemplate))">{{ date.day }}</ng-container>
-                                                    <ng-container *ngIf="date.selectable || (!disabledDateTemplate && !_disabledDateTemplate)">
-                                                        <ng-container *ngTemplateOutlet="dateTemplate || _dateTemplate; context: { $implicit: date }"></ng-container>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="!date.selectable">
-                                                        <ng-container *ngTemplateOutlet="disabledDateTemplate || _disabledDateTemplate; context: { $implicit: date }"></ng-container>
-                                                    </ng-container>
-                                                </span>
-                                                <div *ngIf="isSelected(date)" class="p-hidden-accessible" aria-live="polite">
                                                     {{ date.day }}
-                                                </div>
+                                                </span>
                                             </ng-container>
                                         </td>
                                     </tr>
@@ -1262,6 +1261,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
 
     currentView: Nullable<string>;
 
+    navigationAnnouncement: string = '';
+
     attributeSelector: Nullable<string>;
 
     panelId: Nullable<string>;
@@ -1277,6 +1278,8 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     _defaultDate!: Date;
 
     _focusKey: Nullable<string> = null;
+
+    focusedDate: Date | null = null;
 
     private window: Window;
 
@@ -1585,11 +1588,13 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             this.decrementYear();
             setTimeout(() => {
                 this.updateFocus();
+                this.updateNavigationAnnouncement();
             }, 1);
         } else if (this.currentView === 'year') {
             this.decrementDecade();
             setTimeout(() => {
                 this.updateFocus();
+                this.updateNavigationAnnouncement();
             }, 1);
         } else {
             if (this.currentMonth === 0) {
@@ -1601,6 +1606,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
 
             this.onMonthChange.emit({ month: this.currentMonth + 1, year: this.currentYear });
             this.createMonths(this.currentMonth, this.currentYear);
+            this.updateNavigationAnnouncement();
         }
     }
 
@@ -1616,11 +1622,13 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             this.incrementYear();
             setTimeout(() => {
                 this.updateFocus();
+                this.updateNavigationAnnouncement();
             }, 1);
         } else if (this.currentView === 'year') {
             this.incrementDecade();
             setTimeout(() => {
                 this.updateFocus();
+                this.updateNavigationAnnouncement();
             }, 1);
         } else {
             if (this.currentMonth === 11) {
@@ -1632,7 +1640,21 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
 
             this.onMonthChange.emit({ month: this.currentMonth + 1, year: this.currentYear });
             this.createMonths(this.currentMonth, this.currentYear);
+            this.updateNavigationAnnouncement();
         }
+    }
+
+    updateNavigationAnnouncement() {
+        setTimeout(() => {
+            if (this.currentView === 'year') {
+                const years = this.yearPickerValues();
+                this.navigationAnnouncement = `${years[0]} - ${years[years.length - 1]}`;
+            } else {
+                this.navigationAnnouncement = `${this.getMonthName(this.currentMonth)} ${this.currentYear}`;
+            }
+
+            this.cd.markForCheck();
+        });
     }
 
     decrementYear() {
@@ -2179,6 +2201,10 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         return this.config.getTranslation('monthNames')[index];
     }
 
+    trackByMonthIndex(index: number) {
+        return index;
+    }
+
     getYear(month: any) {
         return this.currentView === 'month' ? this.currentYear : month.year;
     }
@@ -2624,8 +2650,9 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             if (this.navigationState.button) {
                 this.initFocusableCell();
 
-                if (this.navigationState.backward) (findSingle(this.contentViewChild.nativeElement, '.p-datepicker-prev-button') as any).focus();
-                else (findSingle(this.contentViewChild.nativeElement, '.p-datepicker-next-button') as any).focus();
+                const navigationButtons = find(this.contentViewChild.nativeElement, this.navigationState.backward ? '.p-datepicker-prev-button' : '.p-datepicker-next-button');
+                const navigationButton = (this.navigationState.backward ? navigationButtons[0] : navigationButtons[navigationButtons.length - 1]) as HTMLElement | undefined;
+                navigationButton?.focus();
             } else {
                 if (this.navigationState.backward) {
                     let cells;
@@ -3821,6 +3848,24 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         this.updateInputfield();
         this.updateUI();
         this.cd.markForCheck();
+    }
+
+    getDateAriaLabel(date: DatePickerDateMeta): string {
+        const jsDate = this.formatDateMetaToDate(date);
+        const formatted = new Intl.DateTimeFormat(undefined, {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }).format(jsDate);
+
+        return date.selectable ? formatted : `${formatted}, unavailable`;
+    }
+
+    isDateFocusable(date: any): boolean {
+        if (this.focusedDate) return this.isDateEquals(this.focusedDate, date);
+        if (this.value) return !!this.isSelected(date);
+        return date.today || (date.day === 1 && !date.otherMonth);
     }
 
     onDestroy() {
