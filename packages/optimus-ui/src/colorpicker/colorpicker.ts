@@ -14,6 +14,7 @@ import type { ColorPickerChangeEvent } from '@openng/optimus-ui/types/colorpicke
 import { ColorPickerPassThrough } from '@openng/optimus-ui/types/colorpicker';
 import { ZIndexUtils } from '@openng/optimus-ui/utils';
 import { ColorPickerStyle } from './style/colorpickerstyle';
+import { isRTL } from '@openng/optimus-ui-utils';
 
 export const COLORPICKER_VALUE_ACCESSOR: any = {
     provide: NG_VALUE_ACCESSOR,
@@ -383,7 +384,12 @@ export class ColorPicker extends BaseEditableHolder<ColorPickerPassThrough> impl
 
     updateUI() {
         if (this.colorHandleViewChild && this.hueHandleViewChild?.nativeElement) {
-            this.colorHandleViewChild.nativeElement.style.left = Math.floor((150 * this.value.s) / 100) + 'px';
+            const position = Math.floor((150 * this.value.s) / 100);
+            if (isRTL(this.colorHandleViewChild.nativeElement)) {
+                this.colorHandleViewChild.nativeElement.style.right = `${150 - position}px`;
+            } else {
+                this.colorHandleViewChild.nativeElement.style.left = `${position}px`;
+            }
             this.colorHandleViewChild.nativeElement.style.top = Math.floor((150 * (100 - this.value.b)) / 100) + 'px';
             this.hueHandleViewChild.nativeElement.style.top = Math.floor(150 - (150 * this.value.h) / 360) + 'px';
         }
