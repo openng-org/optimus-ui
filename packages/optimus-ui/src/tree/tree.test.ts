@@ -1394,6 +1394,62 @@ describe('Tree', () => {
         });
     });
 
+    describe('Checkbox Selection with Filter', () => {
+        beforeEach(async () => {
+            component.selectionMode = 'checkbox';
+            component.filter = true;
+            component.nodes = [
+                {
+                    key: '0',
+                    label: 'Documents',
+                    children: [
+                        { key: '0-0', label: 'Work' },
+                        { key: '0-1', label: 'Home' },
+                        { key: '0-2', label: 'Workshop' }
+                    ]
+                }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+        });
+
+        const selectedKeys = () => ((tree.selection() as TreeNode[]) || []).map((node) => node.key).sort();
+
+        it('should not select the parent when only its visible children are selected', async () => {
+            tree._filter('home');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            tree.onNodeClick(new MouseEvent('click'), tree.getNodeWithKey('0-1', tree.filteredNodes as TreeNode[]) as TreeNode);
+
+            expect(selectedKeys()).toEqual(['0-1']);
+            expect(tree.getNodeWithKey('0', tree.value as TreeNode[])?.partialSelected).toBe(true);
+            expect(tree.getNodeWithKey('0', tree.filteredNodes as TreeNode[])?.partialSelected).toBe(true);
+        });
+
+        it('should select hidden children when the parent is selected', async () => {
+            tree._filter('work');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            tree.onNodeClick(new MouseEvent('click'), tree.getNodeWithKey('0', tree.filteredNodes as TreeNode[]) as TreeNode);
+
+            expect(selectedKeys()).toEqual(['0', '0-0', '0-1', '0-2']);
+        });
+
+        it('should unselect hidden children when the parent is unselected', async () => {
+            tree.onNodeClick(new MouseEvent('click'), tree.getNodeWithKey('0', tree.value as TreeNode[]) as TreeNode);
+            tree._filter('work');
+            fixture.detectChanges();
+            await fixture.whenStable();
+
+            tree.onNodeClick(new MouseEvent('click'), tree.getNodeWithKey('0', tree.filteredNodes as TreeNode[]) as TreeNode);
+
+            expect(selectedKeys()).toEqual([]);
+        });
+    });
+
     describe('Virtual Scroll', () => {
         beforeEach(async () => {
             component.nodes = [];
