@@ -494,6 +494,9 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     _index: number | any;
 
+    /** A formatting input changed: the next render re-formats the box even while it is focused. */
+    private formatChanged = false;
+
     private ngControl: NgControl | null = null;
 
     constructor(public readonly injector: Injector) {
@@ -504,6 +507,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
         const props = ['locale', 'localeMatcher', 'mode', 'currency', 'currencyDisplay', 'useGrouping', 'minFractionDigits', 'maxFractionDigits', 'prefix', 'suffix'];
         if (props.some((p) => !!simpleChange[p])) {
             this.updateConstructParser();
+            this.formatChanged = true;
         }
     }
 
@@ -1462,7 +1466,15 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
     formattedValue() {
         const val = !this.value && !this.allowEmpty ? 0 : this.value;
-        return this.formatValue(val);
+        // While the user types, the box can hold text that parses to the same number but reads
+        // differently ("58." or "58.80"). A change-detection pass between two fast keystrokes would
+        // otherwise write the re-formatted number back ("58") and drop the decimal sign just typed.
+        // A formatting input that changed (grouping, fraction digits, locale…) re-formats once, even
+        // while focused: "1,234" must become "1234" when grouping turns off, not wait for blur.
+        const typed = this.input?.nativeElement?.value;
+        const keepTyped = this.focused && !this.formatChanged && typed != null && this.parseValue(typed) === val;
+        this.formatChanged = false;
+        return keepTyped ? typed : this.formatValue(val);
     }
 
     updateModel(event: Event, value: any) {
