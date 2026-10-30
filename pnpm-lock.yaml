@@ -202,8 +202,8 @@ importers:
         specifier: workspace:*
         version: link:../../packages/optimus-ui-tailwindcss
       autoprefixer:
-        specifier: ^10.5.4
-        version: 10.5.4(postcss@8.5.26)
+        specifier: ^10.6.2
+        version: 10.6.2(postcss@8.5.26)
       postcss:
         specifier: ^8.5.26
         version: 8.5.26
@@ -269,8 +269,8 @@ importers:
         specifier: workspace:*
         version: link:../../../packages/optimus-ui-tailwindcss
       autoprefixer:
-        specifier: ^10.5.4
-        version: 10.5.4(postcss@8.5.26)
+        specifier: ^10.6.2
+        version: 10.6.2(postcss@8.5.26)
       postcss:
         specifier: ^8.5.26
         version: 8.5.26
@@ -3556,123 +3556,145 @@ packages:
     resolution: {integrity: sha512-7cSJH6PaKLRBdCfiB4pM6EukvgOk5xV4tyuLOIOEqrHsbnV7brtyff7CjhZbeGozdIHoOnKOi5R7rrmCWN3QSw==}
     cpu: [arm64]
     os: [darwin]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-darwin-x64@0.8.0':
     resolution: {integrity: sha512-mhooLL+L5ytMxgz4ueXCIirU796X2xj97d4KSQW1HxZGzX6h8wOk5bIAhGqcmOL2bqAmMZ+UkBTbPC9VpzKb/g==}
     cpu: [x64]
     os: [darwin]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-freebsd-x64@0.8.0':
     resolution: {integrity: sha512-MHLOAlgGhdOh0ZfnWWnno4ljlFB04/Lox/7MIGYIvISMKFvejfC9Atb1t9G7pTVBvy+l5uqxzHGBSJUsDOOkTA==}
     cpu: [x64]
     os: [freebsd]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-arm-gnu@0.8.0':
     resolution: {integrity: sha512-Ur3Awo45Sc5/Fglr8WN5XIf4IwAsq8wLd917Du8ow6mStxsBTHqFiH+tT7d5jV0FqcJnwy8EHVczmgde0zTo1A==}
     cpu: [arm]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-arm-musl@0.8.0':
     resolution: {integrity: sha512-FIy7Ttx8oeUCd/8Y6IjnOsu+lRc6En+V/H67BlVphOeCySZAo5LU8VWrb4tv0DvjaSOzdm3DmdmRzmzN7NCqWQ==}
     cpu: [arm]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-arm64-gnu@0.8.0':
     resolution: {integrity: sha512-s+25wl1TLvf+7LzasPEi1RR1sDfVAU0i1QH601mn3vj+HudFYBYNZtUBKFaZvl645QR6vcaDaGHnOaMZhBR3ig==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-arm64-musl@0.8.0':
     resolution: {integrity: sha512-pRha3Cjm4AnA5wEuhpg+8XXoGfwz5X61/9a/VNxeau47+kH6xjJspkEloIy/HbHgUnvVRqVHoEHczdGZT2J9NA==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-x64-gnu@0.8.0':
     resolution: {integrity: sha512-GySXmiw5Dw99Ba3GMV2ExQVckihuangnrIpSJagPx8RFUNtwfmzpr2ibf8k31eEAE4YUofV7mEfJN5tN6+POnQ==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-linux-x64-musl@0.8.0':
     resolution: {integrity: sha512-8YFfcPZz44v8YyekWVKkNz/cD4t6DW62/dr03OVtMfwUtHfmo/8wpby0JKMleAOXbgWItSGw81LtwqM4I9oS0A==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-win32-arm64@0.8.0':
     resolution: {integrity: sha512-YhENbgkuzjsil+zDNV35oU3PQMDg2RXh8BPt915WCNAbIIHcqgYupHJF3564206+DbPkZtcDvcoa34Wb5B8tbQ==}
     cpu: [arm64]
     os: [win32]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-codegen/binding-win32-x64@0.8.0':
     resolution: {integrity: sha512-qvzSRABXe6/ndubx+RNwgbFVbs7Pqroz/q/UR6vm++xsmfcpkMF43B23jgNl2xi2IUrEt8C/L1bBslXp+LtgnA==}
     cpu: [x64]
     os: [win32]
+    deprecated: yuku-codegen is pure JavaScript since 0.14
 
   '@yuku-parser/binding-darwin-arm64@0.8.0':
     resolution: {integrity: sha512-04AakSJhI4mPrqhZzXdFyaEDh0YkfeqbnyYY3aCrmxeWfR/Xr8+kFn5sh+wZYN/5HatPniELKHixJuUCUyfBvg==}
     cpu: [arm64]
     os: [darwin]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-darwin-x64@0.8.0':
     resolution: {integrity: sha512-BQJGI9bDeyb/X2rwhtXoBTQ9EtbkJtteX6C7cZ9jow0pqqmoOufgHPP2+m65GLk2eVNCBcfl3xlTGpJ7RFcviw==}
     cpu: [x64]
     os: [darwin]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-freebsd-x64@0.8.0':
     resolution: {integrity: sha512-04hmgnU152wya88raI+RQhxZPgwXcHbfdNZLu3x5ggKnJVHLD8xZZLcWIKSs59CiEXL6PKVX1/cx8GoTYlaCaQ==}
     cpu: [x64]
     os: [freebsd]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-arm-gnu@0.8.0':
     resolution: {integrity: sha512-+cuJWUK13lwce721XGRjz7izSr2Q1U0RlHkDzdkohWpRWlttTqRdxNnaW13nDc47GBDrNsXMHx+KLcebeOeeGg==}
     cpu: [arm]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-arm-musl@0.8.0':
     resolution: {integrity: sha512-rOVPRqt9cm1YP/wPV+yyZh0FYr6UR/wm/BXslvLuge0LDewVvDrm/AxcDrwWuPAu61Nzdg2rMVfcNnrplCbC1w==}
     cpu: [arm]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-arm64-gnu@0.8.0':
     resolution: {integrity: sha512-pAoIozKr6E+ptpaQz4CZv1O7cay2f4m7kbd+DSQug5MKdUBTZZ18GdWSPvq0fwQYraH9hZlyLqrMaeP5W/ncrA==}
     cpu: [arm64]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-arm64-musl@0.8.0':
     resolution: {integrity: sha512-JCAg50ahXuYlrsIi1jmymX9X/9B0JYBRroAHnYttN44tAvCo1PFqukHrw1up6HvEOoLA0OjlM0Zwh60u3Gc/Zg==}
     cpu: [arm64]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-x64-gnu@0.8.0':
     resolution: {integrity: sha512-tEeVQ14etp7lpUqXzq+X5AlQzFH+m3TVDiCKIq17zxnxJ117DOVvoveWSkSMt/lj68z48SvZUMHe7xLvqtO1lg==}
     cpu: [x64]
     os: [linux]
     libc: [glibc]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-linux-x64-musl@0.8.0':
     resolution: {integrity: sha512-+UGRYnF37nnbZNMsMjSGDXKUTIxYUmbbk3Lzib88sLK7kg2y80vjchYYoYsDUK9kAgqPWyA9hKGURHy/Kk9Few==}
     cpu: [x64]
     os: [linux]
     libc: [musl]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-win32-arm64@0.8.0':
     resolution: {integrity: sha512-l+7Va9/sX1ccRjzjJj6MR0arKsvHB5b419+pKbwzn+/18A/xfccWqmxXrn0C0NyVLlbEb3AV9Is+AbF72O85yA==}
     cpu: [arm64]
     os: [win32]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-parser/binding-win32-x64@0.8.0':
     resolution: {integrity: sha512-dolKDTJv2xrWowDBEkvSaDvCsVFZOA7DCUuD+7DatglS68WbuxS4LudU5bzSeAOL5vgPpyGm82469cMLnL+6vQ==}
     cpu: [x64]
     os: [win32]
+    deprecated: yuku-parser runs on yuku-core since 0.14
 
   '@yuku-toolchain/types@0.8.0':
     resolution: {integrity: sha512-hL/raFM5V9UT2lVE/lIWDTWvANqSB8TvMVp+PgICehBa96KhTl/UpGm370JXaacukR+QnaHM2Yv6O/UcrzAFGg==}
@@ -3846,6 +3868,13 @@ packages:
     peerDependencies:
       postcss: ^8.1.0
 
+  autoprefixer@10.6.2:
+    resolution: {integrity: sha512-VOw9/yGTGwPPgzFcODtcv6zhEPIeIWkRSe10L2ri2f5vZ7ID7lCt6jZzRF5/ubgOZ+szYydmEF5AYsA5jxX1tA==}
+    engines: {node: ^10 || ^12 || >=14}
+    hasBin: true
+    peerDependencies:
+      postcss: ^8.1.0
+
   available-typed-arrays@1.0.7:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
@@ -3886,6 +3915,11 @@ packages:
 
   baseline-browser-mapping@2.11.13:
     resolution: {integrity: sha512-k9HNuUVMlqVjQ9UHzfPjIqiDbWw7WqT1AoT7GL8VwvF3r0ZfArtgiSPAlmupyNquNgOJHTuH4CKYf8ttMTWBTQ==}
+    engines: {node: '>=6.0.0'}
+    hasBin: true
+
+  baseline-browser-mapping@2.11.33:
+    resolution: {integrity: sha512-yiVKDX+qCMRKBE084lXvq9EcwFUhKZ2nU8TK1EQQuOgPNR/lmbGxXOeDdlGUqC2Zz11Cs9rk1d/8NfgBmlkt0w==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -3933,6 +3967,11 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
 
+  browserslist@4.29.5:
+    resolution: {integrity: sha512-khTmKu5NGYTotqcYo8Bew2k4RAE9PuXRSFRXG2lQBrCEQHyeQ/vX6gKMxfokwywBsLiXZMnHsmWMG1pnO8J7uQ==}
+    engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
+    hasBin: true
+
   buffer-from@1.1.2:
     resolution: {integrity: sha512-E+XQCRwSbaaiChtv6k6Dwgc+bx+Bs6vuKJHHl5kox/BaKbhiXzqQOwK4cO22yElGp2OCmjwVhT3HmxgyPGnJfQ==}
 
@@ -3972,8 +4011,8 @@ packages:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
     engines: {node: '>= 6'}
 
-  caniuse-lite@1.0.30001809:
-    resolution: {integrity: sha512-xxWVywk6a6Arlk+hymeycyn/VgqEfLDxupvhH/xiY5SJ/18kmi9o6MiO320DCUzypORHLtvh0I4i04tUhCNHNQ==}
+  caniuse-lite@1.0.30001819:
+    resolution: {integrity: sha512-LFUqIIAwpzsIuevnKnsR9qnStBcgzPShTX61lBwN9uFkkf8o8zLiebEjbW8AYtZiF+1YKDWfdt/pWDtMuG8Xwg==}
 
   chai@6.2.2:
     resolution: {integrity: sha512-NUPRluOfOiTKBKvWPtSD4PhFvWCqOi0BGStNWs57X9js7XGTprSmFoz5F0tWhR4WPjNeR9jXqdC7/UpSJTnlRg==}
@@ -4347,6 +4386,9 @@ packages:
 
   electron-to-chromium@1.5.405:
     resolution: {integrity: sha512-bNglH7lPH5l+yHOes7Zr4VqxhOy4BQ9ZBUX4VdoFgxMpzJk7W1ZoO3Vgd9Pxa9PyjQ76sfm2aKH/nzEcCNRlew==}
+
+  electron-to-chromium@1.5.465:
+    resolution: {integrity: sha512-zg4iUpbeGw7YNZsswc2xKr2uiBex2d8dELAXo92Icw3but1ULbrvK8USe6wVLaWjgJnKBARv0pchx9Owktx6wQ==}
 
   emoji-regex@10.6.0:
     resolution: {integrity: sha512-toUI84YS5YmxW219erniWD0CIVOo46xGKColeNQRgOzDorgBi1v4D71/OFzgD9GO2UGKIv1C3Sp8DAn0+j5w7A==}
@@ -5913,6 +5955,10 @@ packages:
     resolution: {integrity: sha512-D9UOmYG3UH1V+ENW56t5QXBwJw1YEY18ruVeus89Rw+SyIgjPkCO84bRzO3uNIYosJbNwiabWVn48o3uJLjxFQ==}
     engines: {node: '>=18'}
 
+  node-releases@2.0.60:
+    resolution: {integrity: sha512-OmO8+GM1JUZqXET720VrJCwkjUCXmCMQm0Z3UDDRbfNLHS4NEAvY60j5jiFv0tkKw2PNNlqOLhahVmwJIOLDIQ==}
+    engines: {node: '>=18'}
+
   normalize-path@3.0.0:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
@@ -7079,6 +7125,12 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
+  update-browserslist-db@1.3.4:
+    resolution: {integrity: sha512-t8wonIOdQyOjtPd2VktlBu6QjTVTks6v8bSi7kd0r2Vll8TK1JYDZtRRdbmCHOAMphkZgrzK+L+vXK4pyZ8t4A==}
+    hasBin: true
+    peerDependencies:
+      browserslist: '>= 4.21.0'
+
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
 
@@ -8123,7 +8175,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 7.29.7
       '@babel/helper-validator-option': 7.29.7
-      browserslist: 4.28.8
+      browserslist: 4.29.5
       lru-cache: 5.1.1
       semver: 6.3.1
 
@@ -8131,7 +8183,7 @@ snapshots:
     dependencies:
       '@babel/compat-data': 8.0.0
       '@babel/helper-validator-option': 8.0.0
-      browserslist: 4.28.8
+      browserslist: 4.29.5
       lru-cache: 11.5.2
       semver: 7.8.5
 
@@ -10844,17 +10896,17 @@ snapshots:
 
   autoprefixer@10.5.4(postcss@8.5.25):
     dependencies:
-      browserslist: 4.28.8
-      caniuse-lite: 1.0.30001809
+      browserslist: 4.29.5
+      caniuse-lite: 1.0.30001819
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.25
       postcss-value-parser: 4.2.0
 
-  autoprefixer@10.5.4(postcss@8.5.26):
+  autoprefixer@10.6.2(postcss@8.5.26):
     dependencies:
-      browserslist: 4.28.8
-      caniuse-lite: 1.0.30001809
+      browserslist: 4.29.5
+      caniuse-lite: 1.0.30001819
       fraction.js: 5.3.4
       picocolors: 1.1.1
       postcss: 8.5.26
@@ -10887,6 +10939,8 @@ snapshots:
     optional: true
 
   baseline-browser-mapping@2.11.13: {}
+
+  baseline-browser-mapping@2.11.33: {}
 
   batch@0.6.1: {}
 
@@ -10960,10 +11014,18 @@ snapshots:
   browserslist@4.28.8:
     dependencies:
       baseline-browser-mapping: 2.11.13
-      caniuse-lite: 1.0.30001809
+      caniuse-lite: 1.0.30001819
       electron-to-chromium: 1.5.405
       node-releases: 2.0.53
       update-browserslist-db: 1.3.1(browserslist@4.28.8)
+
+  browserslist@4.29.5:
+    dependencies:
+      baseline-browser-mapping: 2.11.33
+      caniuse-lite: 1.0.30001819
+      electron-to-chromium: 1.5.465
+      node-releases: 2.0.60
+      update-browserslist-db: 1.3.4(browserslist@4.29.5)
 
   buffer-from@1.1.2: {}
 
@@ -10998,7 +11060,7 @@ snapshots:
 
   camelcase-css@2.0.1: {}
 
-  caniuse-lite@1.0.30001809: {}
+  caniuse-lite@1.0.30001819: {}
 
   chai@6.2.2: {}
 
@@ -11165,7 +11227,7 @@ snapshots:
 
   core-js-compat@3.49.0:
     dependencies:
-      browserslist: 4.28.8
+      browserslist: 4.29.5
 
   core-util-is@1.0.3: {}
 
@@ -11354,6 +11416,8 @@ snapshots:
   ee-first@1.1.1: {}
 
   electron-to-chromium@1.5.405: {}
+
+  electron-to-chromium@1.5.465: {}
 
   emoji-regex@10.6.0: {}
 
@@ -13072,6 +13136,8 @@ snapshots:
 
   node-releases@2.0.53: {}
 
+  node-releases@2.0.60: {}
+
   normalize-path@3.0.0: {}
 
   npm-package-arg@14.0.0:
@@ -14447,6 +14513,12 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.1
 
+  update-browserslist-db@1.3.4(browserslist@4.29.5):
+    dependencies:
+      browserslist: 4.29.5
+      escalade: 3.2.0
+      picocolors: 1.1.1
+
   uri-js@4.4.1:
     dependencies:
       punycode: 2.3.1
@@ -14625,7 +14697,7 @@ snapshots:
       '@webassemblyjs/wasm-edit': 1.14.1
       '@webassemblyjs/wasm-parser': 1.14.1
       acorn: 8.18.0
-      browserslist: 4.28.8
+      browserslist: 4.29.5
       chrome-trace-event: 1.0.4
       enhanced-resolve: 5.24.5
       es-module-lexer: 2.1.0
