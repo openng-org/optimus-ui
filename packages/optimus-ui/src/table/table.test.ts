@@ -377,6 +377,67 @@ describe('Table', () => {
         ];
     }
 
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products" [columns]="columns" [reorderableColumns]="true" [paginator]="paginator" [first]="first" [rows]="2" selectionMode="multiple" [(selection)]="selection">
+                <ng-template #header let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field" pReorderableColumn [pReorderableColumnDisabled]="col.disabled">
+                            {{ col.header }}
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-product let-rowIndex="rowIndex">
+                    <tr [pReorderableRow]="rowIndex" [pReorderableRowDisabled]="product.disabled" [pSelectableRow]="product" [pSelectableRowIndex]="rowIndex">
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.id }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestKeyboardReorderTableComponent {
+        products: { id: string; name: string; disabled?: boolean }[] = [
+            { id: '1001', name: 'First' },
+            { id: '1002', name: 'Second' },
+            { id: '1003', name: 'Third' },
+            { id: '1004', name: 'Fourth' }
+        ];
+        columns: { field: string; header: string; disabled?: boolean }[] = [
+            { field: 'first', header: 'First column' },
+            { field: 'second', header: 'Second column' },
+            { field: 'third', header: 'Third column' }
+        ];
+        paginator = false;
+        first = 0;
+        selection: any[] | null = null;
+    }
+
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products">
+                <ng-template #body let-product let-rowIndex="rowIndex">
+                    <tr [pReorderableRow]="rowIndex">
+                        <td>{{ product.name }}</td>
+                        <td>
+                            @if (hasControls) {
+                                <button type="button">Action</button>
+                            }
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestReorderOnlyTableComponent {
+        products = [{ name: 'First' }, { name: 'Second' }];
+        hasControls = false;
+    }
+
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [
@@ -391,7 +452,9 @@ describe('Table', () => {
                 TestScrollableNonVirtualTableComponent,
                 TestVirtualScrollFlexHeightTableComponent,
                 TestLazyLoadTableComponent,
-                TestTemplatesTableComponent
+                TestTemplatesTableComponent,
+                TestKeyboardReorderTableComponent,
+                TestReorderOnlyTableComponent
             ],
             imports: [CommonModule, FormsModule, TableModule, SharedModule, Select],
             providers: [TableService, provideZonelessChangeDetection()]
@@ -404,6 +467,264 @@ describe('Table', () => {
 
     it('should create', () => {
         expect(component).toBeTruthy();
+    });
+
+    describe('Keyboard reordering', () => {
+        let testComponent: TestKeyboardReorderTableComponent;
+        let testFixture: ComponentFixture<TestKeyboardReorderTableComponent>;
+        let table: Table;
+
+        const dispatchKey = (target: HTMLElement, key: string, modifiers: Partial<KeyboardEventInit> = {}) => {
+            const event = new KeyboardEvent('keydown', {
+                key,
+                code: key.startsWith('Arrow') ? key : key === 'a' ? 'KeyA' : `Key${key}`,
+                bubbles: true,
+                cancelable: true,
+                ...modifiers
+            });
+            target.dispatchEvent(event);
+            return event;
+        };
+
+        const settle = async () => {
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+        };
+
+        beforeEach(async () => {
+            testFixture = TestBed.createComponent(TestKeyboardReorderTableComponent);
+            testComponent = testFixture.componentInstance;
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+            table = testFixture.debugElement.query(By.css('p-table')).componentInstance;
+        });
+
+        it('moves columns with Ctrl and Cmd shortcuts, emits indexes, announces, and restores focus', async () => {
+            const reorderSpy = vi.spyOn(table.onColReorder, 'emit');
+            let headers = testFixture.nativeElement.querySelectorAll('thead th') as NodeListOf<HTMLElement>;
+
+            expect(headers[0].getAttribute('tabindex')).toBe('0');
+            expect(headers[0].getAttribute('aria-roledescription')).toBe('Reorderable column');
+            expect(headers[0].getAttribute('aria-describedby')).toContain(`${table.id}-reorder-hint`);
+            expect(testFixture.nativeElement.querySelector(`#${table.id}-reorder-hint`).textContent).toContain('Control or Command');
+
+            headers[1].focus();
+            const ctrlEvent = dispatchKey(headers[1], 'ArrowRight', { ctrlKey: true });
+            await settle();
+
+            expect(ctrlEvent.defaultPrevented).toBe(true);
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['first', 'third', 'second']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 1, dropIndex: 2, columns: testComponent.columns });
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Second column moved to position 3 of 3');
+            expect(document.activeElement).toBe(testFixture.nativeElement.querySelectorAll('thead th')[2]);
+
+            headers = testFixture.nativeElement.querySelectorAll('thead th');
+            const cmdEvent = dispatchKey(headers[0], 'ArrowRight', { metaKey: true });
+            await settle();
+            expect(cmdEvent.defaultPrevented).toBe(true);
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['third', 'first', 'second']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 0, dropIndex: 1, columns: testComponent.columns });
+
+            headers = testFixture.nativeElement.querySelectorAll('thead th');
+            dispatchKey(headers[1], 'ArrowLeft', { ctrlKey: true });
+            await settle();
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['first', 'third', 'second']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 1, dropIndex: 0, columns: testComponent.columns });
+        });
+
+        it('reverses column shortcut direction in RTL', async () => {
+            const headers = testFixture.nativeElement.querySelectorAll('thead th') as NodeListOf<HTMLElement>;
+            headers[1].style.direction = 'rtl';
+            headers[1].focus();
+            const reorderSpy = vi.spyOn(table.onColReorder, 'emit');
+
+            dispatchKey(headers[1], 'ArrowRight', { ctrlKey: true });
+            await settle();
+
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['second', 'first', 'third']);
+            expect(reorderSpy).toHaveBeenCalledWith({ dragIndex: 1, dropIndex: 0, columns: testComponent.columns });
+        });
+
+        it('moves rows with Ctrl and Cmd shortcuts using data indexes', async () => {
+            const reorderSpy = vi.spyOn(table.onRowReorder, 'emit');
+            let rows = testFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+
+            rows[0].focus();
+            const ctrlEvent = dispatchKey(rows[0], 'ArrowDown', { ctrlKey: true });
+            await settle();
+            expect(ctrlEvent.defaultPrevented).toBe(true);
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1002', '1001', '1003', '1004']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 0, dropIndex: 1 });
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Row moved to position 2 of 4');
+            expect(document.activeElement).toBe(testFixture.nativeElement.querySelector('tr[data-p-reorderable-row-index="1"]'));
+
+            rows = testFixture.nativeElement.querySelectorAll('tbody tr');
+            dispatchKey(rows[1], 'ArrowDown', { metaKey: true });
+            await settle();
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1002', '1003', '1001', '1004']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 1, dropIndex: 2 });
+
+            rows = testFixture.nativeElement.querySelectorAll('tbody tr');
+            dispatchKey(rows[2], 'ArrowUp', { ctrlKey: true });
+            await settle();
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1002', '1001', '1003', '1004']);
+            expect(reorderSpy).toHaveBeenLastCalledWith({ dragIndex: 2, dropIndex: 1 });
+        });
+
+        it('makes reorder-only rows tabbable and handles their keyboard shortcuts', async () => {
+            const reorderFixture = TestBed.createComponent(TestReorderOnlyTableComponent);
+            await reorderFixture.whenStable();
+            reorderFixture.detectChanges();
+
+            const reorderTable = reorderFixture.debugElement.query(By.css('p-table')).componentInstance as Table;
+            const reorderSpy = vi.spyOn(reorderTable.onRowReorder, 'emit');
+            const rows = reorderFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+            expect(rows[0].getAttribute('tabindex')).toBe('0');
+
+            rows[0].focus();
+            dispatchKey(rows[0], 'ArrowDown', { ctrlKey: true });
+            await reorderFixture.whenStable();
+            reorderFixture.detectChanges();
+            await reorderFixture.whenStable();
+            reorderFixture.detectChanges();
+
+            expect(reorderFixture.componentInstance.products.map((product) => product.name)).toEqual(['Second', 'First']);
+            expect(reorderSpy).toHaveBeenCalledWith({ dragIndex: 0, dropIndex: 1 });
+            expect(document.activeElement).toBe(reorderFixture.nativeElement.querySelector('tr[data-p-reorderable-row-index="1"]'));
+        });
+
+        it('does not add a row tab stop when it contains focusable controls', async () => {
+            const reorderFixture = TestBed.createComponent(TestReorderOnlyTableComponent);
+            reorderFixture.componentInstance.hasControls = true;
+            await reorderFixture.whenStable();
+            reorderFixture.detectChanges();
+
+            const row = reorderFixture.nativeElement.querySelector('tbody tr') as HTMLElement;
+            expect(row.hasAttribute('tabindex')).toBe(false);
+            expect(row.querySelector('button')?.tabIndex).toBe(0);
+        });
+
+        it('uses the underlying index when paginated', async () => {
+            testFixture.destroy();
+            testFixture = TestBed.createComponent(TestKeyboardReorderTableComponent);
+            testComponent = testFixture.componentInstance;
+            testComponent.paginator = true;
+            testComponent.first = 1;
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+            table = testFixture.debugElement.query(By.css('p-table')).componentInstance;
+
+            const rows = testFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+            expect(rows[0].getAttribute('data-p-reorderable-row-index')).toBe('1');
+            const reorderSpy = vi.spyOn(table.onRowReorder, 'emit');
+            dispatchKey(rows[0], 'ArrowDown', { ctrlKey: true });
+            await settle();
+
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1001', '1003', '1002', '1004']);
+            expect(reorderSpy).toHaveBeenCalledWith({ dragIndex: 1, dropIndex: 2 });
+        });
+
+        it('announces limits without moving the first or last row', async () => {
+            const reorderSpy = vi.spyOn(table.onRowReorder, 'emit');
+            let rows = testFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+            expect(rows[0].getAttribute('tabindex')).toBe('0');
+            expect(rows[0].getAttribute('aria-roledescription')).toBe('Reorderable row');
+            expect(rows[0].getAttribute('aria-describedby')).toContain(`${table.id}-reorder-hint`);
+
+            dispatchKey(rows[0], 'ArrowUp', { ctrlKey: true });
+            await settle();
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1001', '1002', '1003', '1004']);
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Already the first item');
+
+            rows = testFixture.nativeElement.querySelectorAll('tbody tr');
+            dispatchKey(rows[3], 'ArrowDown', { metaKey: true });
+            await settle();
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1001', '1002', '1003', '1004']);
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Already the last item');
+            expect(reorderSpy).not.toHaveBeenCalled();
+        });
+
+        it('announces column boundaries without reordering', async () => {
+            const reorderSpy = vi.spyOn(table.onColReorder, 'emit');
+            let headers = testFixture.nativeElement.querySelectorAll('thead th') as NodeListOf<HTMLElement>;
+            dispatchKey(headers[0], 'ArrowLeft', { ctrlKey: true });
+            await settle();
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['first', 'second', 'third']);
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Already the first item');
+
+            headers = testFixture.nativeElement.querySelectorAll('thead th');
+            dispatchKey(headers[2], 'ArrowRight', { metaKey: true });
+            await settle();
+            expect(testComponent.columns.map((column) => column.field)).toEqual(['first', 'second', 'third']);
+            expect(testFixture.nativeElement.querySelector('[role="status"]').textContent).toContain('Already the last item');
+            expect(reorderSpy).not.toHaveBeenCalled();
+        });
+
+        it('preserves plain and modified selection navigation and Ctrl/Cmd+A', async () => {
+            const reorderSpy = vi.spyOn(table.onRowReorder, 'emit');
+            let rows = testFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+            rows[0].focus();
+            dispatchKey(rows[0], 'ArrowDown');
+            expect(document.activeElement).toBe(rows[1]);
+
+            dispatchKey(rows[1], 'ArrowDown', { shiftKey: true });
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1001', '1002', '1003', '1004']);
+            expect(reorderSpy).not.toHaveBeenCalled();
+
+            dispatchKey(rows[1], 'a', { ctrlKey: true });
+            await settle();
+            expect(testComponent.selection?.length).toBe(testComponent.products.length);
+            expect(reorderSpy).not.toHaveBeenCalled();
+        });
+
+        it('ignores disabled reorder directives and leaves sorting/selection attributes intact', async () => {
+            testFixture.destroy();
+            testFixture = TestBed.createComponent(TestKeyboardReorderTableComponent);
+            testComponent = testFixture.componentInstance;
+            testComponent.columns[0].disabled = true;
+            testComponent.products[0].disabled = true;
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+            table = testFixture.debugElement.query(By.css('p-table')).componentInstance;
+
+            const headers = testFixture.nativeElement.querySelectorAll('thead th') as NodeListOf<HTMLElement>;
+            const rows = testFixture.nativeElement.querySelectorAll('tbody tr') as NodeListOf<HTMLElement>;
+            expect(headers[0].hasAttribute('aria-roledescription')).toBe(false);
+            expect(headers[0].hasAttribute('aria-describedby')).toBe(false);
+            expect(headers[0].hasAttribute('tabindex')).toBe(true);
+            expect(rows[0].hasAttribute('data-p-reorderable-row')).toBe(false);
+            expect(rows[0].hasAttribute('aria-roledescription')).toBe(false);
+            expect(rows[0].hasAttribute('aria-describedby')).toBe(false);
+
+            const columnSpy = vi.spyOn(table.onColReorder, 'emit');
+            const rowSpy = vi.spyOn(table.onRowReorder, 'emit');
+            dispatchKey(headers[0], 'ArrowRight', { ctrlKey: true });
+            dispatchKey(rows[0], 'ArrowDown', { ctrlKey: true });
+            await settle();
+
+            expect(columnSpy).not.toHaveBeenCalled();
+            expect(rowSpy).not.toHaveBeenCalled();
+            expect(testComponent.products.map((product) => product.id)).toEqual(['1001', '1002', '1003', '1004']);
+        });
+
+        it('saves the column order after a stateful keyboard move', async () => {
+            const storageKey = 'table-keyboard-reorder-state';
+            table.stateKey = storageKey;
+            table.stateStorage = 'local';
+            const headers = testFixture.nativeElement.querySelectorAll('thead th') as NodeListOf<HTMLElement>;
+            headers[0].focus();
+
+            dispatchKey(headers[0], 'ArrowRight', { ctrlKey: true });
+            await settle();
+            await new Promise((resolve) => setTimeout(resolve, 20));
+
+            const savedState = JSON.parse(window.localStorage.getItem(storageKey) || '{}');
+            expect(savedState.columnOrder).toEqual(['second', 'first', 'third']);
+            window.localStorage.removeItem(storageKey);
+        });
     });
 
     describe('Basic Table Functionality', () => {

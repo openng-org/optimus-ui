@@ -162,7 +162,14 @@ export class Optimus extends ThemeProvider {
             removeLabel: 'Remove',
             browseFiles: 'Browse Files',
             maximizeLabel: 'Maximize',
-            minimizeLabel: 'Minimize'
+            minimizeLabel: 'Minimize',
+            columnMoved: '{label} moved to position {position} of {total}',
+            rowMoved: '{label} moved to position {position} of {total}',
+            reorderLimit: 'Already the {limit} item',
+            reorderableColumn: 'Reorderable column',
+            reorderableRow: 'Reorderable row',
+            reorderHint: 'Press Control or Command plus the arrow keys to move this item.',
+            rowLabel: 'Row'
         }
     };
 
