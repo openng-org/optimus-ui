@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, computed, inject, input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind } from '@openng/optimus-ui/bind';
 import { SkeletonPassThrough } from '@openng/optimus-ui/types/skeleton';
 import { SkeletonStyle } from './style/skeletonstyle';
-
-const SKELETON_INSTANCE = new InjectionToken<Skeleton>('SKELETON_INSTANCE');
 
 /**
  * Skeleton is a placeholder to display instead of the actual content.
@@ -13,85 +11,78 @@ const SKELETON_INSTANCE = new InjectionToken<Skeleton>('SKELETON_INSTANCE');
  */
 @Component({
     selector: 'p-skeleton',
-    standalone: true,
     imports: [SharedModule],
     template: ``,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [SkeletonStyle, { provide: SKELETON_INSTANCE, useExisting: Skeleton }, { provide: PARENT_INSTANCE, useExisting: Skeleton }],
+    providers: [SkeletonStyle, { provide: PARENT_INSTANCE, useExisting: Skeleton }],
     host: {
         '[attr.aria-hidden]': 'true',
-        '[class]': "cn(cx('root'), styleClass)",
-        '[style]': 'containerStyle',
-        '[attr.data-p]': 'dataP'
+        '[class]': "cx('root')",
+        '[style]': 'containerStyle()',
+        '[attr.data-p]': 'dataP()'
     },
     hostDirectives: [Bind]
 })
 export class Skeleton extends BaseComponent<SkeletonPassThrough> {
     componentName = 'Skeleton';
-    $pcSkeleton: Skeleton | undefined = inject(SKELETON_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    constructor() {
+        super();
+        afterEveryRender(() => this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root'])));
     }
 
-    /**
-     * Class of the element.
-     * @deprecated since v20.0.0, use `class` instead.
-     * @group Props
-     */
-    @Input() styleClass: string | undefined;
     /**
      * Shape of the element.
      * @group Props
      */
-    @Input() shape: string = 'rectangle';
+    shape = input<string>('rectangle');
     /**
      * Type of the animation.
      * @gruop Props
      */
-    @Input() animation: string = 'wave';
+    animation = input<string>('wave');
     /**
      * Border radius of the element, defaults to value from theme.
      * @group Props
      */
-    @Input() borderRadius: string | undefined;
+    borderRadius = input<string | undefined>();
     /**
      * Size of the skeleton.
      * @group Props
      */
-    @Input() size: string | undefined;
+    size = input<string | undefined>();
     /**
      * Width of the element.
      * @group Props
      */
-    @Input() width: string = '100%';
+    width = input<string>('100%');
     /**
      * Height of the element.
      * @group Props
      */
-    @Input() height: string = '1rem';
+    height = input<string>('1rem');
 
     _componentStyle = inject(SkeletonStyle);
 
-    get containerStyle() {
+    containerStyle = computed(() => {
         const inlineStyles = this._componentStyle?.inlineStyles['root'];
         let style;
         if (!this.$unstyled()) {
-            if (this.size) style = { ...inlineStyles, width: this.size, height: this.size, borderRadius: this.borderRadius };
-            else style = { ...inlineStyles, width: this.width, height: this.height, borderRadius: this.borderRadius };
+            if (this.size()) style = { ...inlineStyles, width: this.size(), height: this.size(), borderRadius: this.borderRadius() };
+            else style = { ...inlineStyles, width: this.width(), height: this.height(), borderRadius: this.borderRadius() };
         }
 
         return style;
-    }
+    });
 
-    get dataP() {
+    dataP = computed(() => {
         return this.cn({
-            [this.shape]: this.shape
+            [this.shape()]: this.shape()
         });
-    }
+    });
 }
 
 @NgModule({
