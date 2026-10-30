@@ -41,7 +41,7 @@ export class Skeleton extends BaseComponent<SkeletonPassThrough> {
     shape = input<string>('rectangle');
     /**
      * Type of the animation.
-     * @gruop Props
+     * @group Props
      */
     animation = input<string>('wave');
     /**
