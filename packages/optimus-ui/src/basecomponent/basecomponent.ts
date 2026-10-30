@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformServer } from '@angular/common';
-import { ChangeDetectorRef, computed, Directive, effect, ElementRef, inject, InjectionToken, Injector, input, PLATFORM_ID, Renderer2, signal, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, computed, Directive, effect, ElementRef, inject, InjectionToken, Injector, input, PLATFORM_ID, Renderer2, signal, SimpleChanges, untracked } from '@angular/core';
 import { Theme, ThemeService } from '@openng/optimus-ui-styled';
 import { cn, getKeyValue, isArray, isFunction, isNotEmpty, isString, mergeProps, resolve, toFlatCase, uuid } from '@openng/optimus-ui-utils';
 import type { Lifecycle, PassThroughOptions } from '@openng/optimus-ui/api';
@@ -8,6 +8,15 @@ import { Optimus } from '@openng/optimus-ui/config';
 import { BaseComponentStyle } from './style/basecomponentstyle';
 
 export const PARENT_INSTANCE = new InjectionToken<BaseComponent>('PARENT_INSTANCE');
+
+/**
+ * What the style names tracked by `Base` (base, global and component CSS) were loaded for. That CSS resolves
+ * design tokens against the current theme, the global CSS comes from the pass-through config, and both are
+ * written into the current document, so a loaded name only stays valid while none of these change.
+ * The theme style names tracked by `Theme` are reset by `Theme` itself when the theme changes, but they are bound
+ * to the document as well.
+ */
+const loadedStyleNamesContext: { document?: Document; theme?: unknown; pt?: unknown } = {};
 
 @Directive({
     standalone: true,
@@ -43,6 +52,8 @@ export class BaseComponent<PT = any> implements Lifecycle {
     private _themeScopedListener: () => void;
 
     private themeChangeListenerMap: Map<string, any> = new Map();
+
+    private _styleCache: { hostStyle: any; componentStyle: any; style: any } | undefined;
 
     /******************** Inputs ********************/
 
@@ -108,7 +119,22 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     get $style() {
-        return { theme: undefined, css: undefined, classes: undefined, inlineStyles: undefined, ...(this._getHostInstance(this) || {}).$style, ...this['_componentStyle'] };
+        // `cx()` and `sx()` read this on every change detection, so the merged object is only rebuilt when one of
+        // its parts changes, e.g. `_componentStyle` is still undefined while the base constructor runs. Style instances
+        // are not modified after construction; a different style means a different `_componentStyle` instance.
+        const hostStyle = this._getHostInstance(this)?.$style;
+        const componentStyle = this['_componentStyle'];
+        const cache = this._styleCache;
+
+        if (!cache || cache.hostStyle !== hostStyle || cache.componentStyle !== componentStyle) {
+            const style = { theme: undefined, css: undefined, classes: undefined, inlineStyles: undefined, ...hostStyle, ...componentStyle };
+
+            this._styleCache = { hostStyle, componentStyle, style };
+
+            return style;
+        }
+
+        return cache.style;
     }
 
     get $styleOptions() {
@@ -305,7 +331,8 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private _hook(hookName: string, ...args: any[]) {
-        if (!this.$hostName) {
+        // Hooks can only come from the component or the global pass-through config; skip the lookups without either.
+        if (!this.$hostName && (this.$pt() || this.config?.pt())) {
             const selfHook = this._usePT(this._getPT(this.$pt(), this.$name), this._getOptionValue, `hooks.${hookName}`);
             const defaultHook = this._useDefaultPT(this._getOptionValue, `hooks.${hookName}`);
 
@@ -316,7 +343,25 @@ export class BaseComponent<PT = any> implements Lifecycle {
 
     /********** Load Styles **********/
 
+    private _syncLoadedStyleNames() {
+        const theme = Theme.getTheme();
+        const pt = untracked(() => this.config?.pt());
+        const context = loadedStyleNamesContext;
+        const documentChanged = context.document !== this.document;
+
+        if (documentChanged || context.theme !== theme || context.pt !== pt) {
+            Base.clearLoadedStyleNames();
+            if (documentChanged) Theme.clearLoadedStyleNames();
+
+            context.document = this.document;
+            context.theme = theme;
+            context.pt = pt;
+        }
+    }
+
     private _load() {
+        this._syncLoadedStyleNames();
+
         if (!Base.isStyleNameLoaded('base')) {
             this.baseStyle.loadBaseCSS(this.$styleOptions);
             this._loadGlobalStyles();
@@ -339,6 +384,8 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private _loadCoreStyles() {
+        this._syncLoadedStyleNames();
+
         if (!Base.isStyleNameLoaded(this.$style?.name) && this.$style?.name) {
             this.baseComponentStyle.loadCSS(this.$styleOptions);
             this.$style.loadCSS(this.$styleOptions);
@@ -393,8 +440,9 @@ export class BaseComponent<PT = any> implements Lifecycle {
     }
 
     private _themeChangeListener(id: string, callback = () => {}) {
+        // Registering a listener must not reset the loaded style names, or every new instance would regenerate the
+        // shared CSS again; `_syncLoadedStyleNames()` resets them once the theme actually changes.
         this._offThemeChangeListener(id);
-        Base.clearLoadedStyleNames();
         const hold = callback.bind(this);
         this.themeChangeListenerMap.set(id, hold);
         ThemeService.on('theme:change', hold);
