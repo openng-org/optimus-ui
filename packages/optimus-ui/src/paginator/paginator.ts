@@ -79,7 +79,7 @@ const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
         </button>
         @if (showPageLinks) {
             <span [pBind]="ptm('pages')" [class]="cx('pages')">
-                @for (pageLink of pageLinks; track pageLink) {
+                @for (pageLink of pageLinks; track $index) {
                     <button
                         [pBind]="ptm('page')"
                         type="button"
