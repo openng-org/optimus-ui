@@ -18,4 +18,8 @@ export const style = /*css*/ `
     .p-picklist .p-listbox {
         height: 100%;
     }
+
+    .p-picklist-controls.p-picklist-transfer-controls .p-button:dir(rtl) {
+        transform: rotate(-180deg);
+    }
 `;
