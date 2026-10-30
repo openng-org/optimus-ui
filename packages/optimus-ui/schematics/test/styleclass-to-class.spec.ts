@@ -222,6 +222,33 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-tag class="existing my-tag"></p-tag>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-skeleton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-skeleton width="10rem" styleClass="mb-2"></p-skeleton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-skeleton width="10rem" class="mb-2"></p-skeleton>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-skeleton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-skeleton [styleClass]="myClass"></p-skeleton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-skeleton [class]="myClass"></p-skeleton>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-skeleton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-skeleton class="existing" styleClass="mb-2"></p-skeleton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-skeleton class="existing mb-2"></p-skeleton>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
