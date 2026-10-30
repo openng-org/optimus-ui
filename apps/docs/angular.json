@@ -71,25 +71,13 @@
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": false,
-                            "namedChunks": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "./environments/environment.ts",
-                                    "with": "./environments/environment.development.ts"
-                                }
-                            ]
+                            "namedChunks": false
                         },
                         "development-ssr": {
                             "optimization": false,
                             "extractLicenses": false,
                             "sourceMap": false,
                             "namedChunks": false,
-                            "fileReplacements": [
-                                {
-                                    "replace": "./environments/environment.ts",
-                                    "with": "./environments/environment.development.ts"
-                                }
-                            ],
                             "server": "server/main.server.ts",
                             "prerender": {
                                 "discoverRoutes": false,

@@ -315,5 +315,7 @@ export class OpenngIcons {
 /**
  * @deprecated Use `OpenngIcons` instead. This alias is kept for backward compatibility
  * with PrimeIcons and will be removed in a future major version.
+ *
+ * @alias
  */
 export const PrimeIcons = OpenngIcons;

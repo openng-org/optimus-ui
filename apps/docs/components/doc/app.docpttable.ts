@@ -12,7 +12,7 @@ export interface PtOptionItem {
     options?: PtMethodOption[];
 }
 
-export interface PtMethodOption {
+interface PtMethodOption {
     name: string;
     type: string;
     description?: string;

@@ -20,7 +20,7 @@ const presets = {
     Nora
 };
 
-export type ColorPalette = Record<string, string>;
+type ColorPalette = Record<string, string>;
 
 export interface PrimaryColor {
     name: string;

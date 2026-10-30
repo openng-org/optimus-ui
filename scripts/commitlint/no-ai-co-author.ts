@@ -1,4 +1,4 @@
-export const AI_CO_AUTHOR_MARKERS: readonly string[] = [
+const AI_CO_AUTHOR_MARKERS: readonly string[] = [
     'claude', 'anthropic', 'chatgpt', 'openai', 'gpt-', 'copilot', 'gemini', 'bard', 'devin', 'codeium', 'cursor',
     'windsurf', 'tabnine', 'aider', 'cody', 'jules'
 ];
