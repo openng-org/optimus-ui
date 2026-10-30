@@ -176,6 +176,7 @@ const TREESELECT_INSTANCE = new InjectionToken<TreeSelect>('TREESELECT_INSTANCE'
                             [filterPlaceholder]="filterPlaceholder"
                             [filterLocale]="filterLocale"
                             [filteredNodes]="filteredNodes"
+                            (onFilter)="onFilterInput($event)"
                             [virtualScroll]="virtualScroll"
                             [virtualScrollItemSize]="virtualScrollItemSize"
                             [virtualScrollOptions]="virtualScrollOptions"
@@ -756,7 +757,13 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
 
     onOverlayBeforeEnter() {
         if (this.filter) {
-            isNotEmpty(this.filterValue) && this.treeViewChild?._filter(<any>this.filterValue);
+            if (isNotEmpty(this.filterValue)) {
+                const filterInput = this.treeViewChild?.filterViewChild?.nativeElement;
+                if (filterInput) {
+                    filterInput.value = this.filterValue;
+                }
+                this.treeViewChild?._filter(<any>this.filterValue);
+            }
             this.filterInputAutoFocus && this.filterViewChild?.nativeElement.focus();
         } else {
             let focusableElements = <any>getFocusableElements(this.panelEl?.nativeElement!);
@@ -852,13 +859,9 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
         }
     }
 
-    onFilterInput(event: Event) {
-        this.filterValue = (event.target as HTMLInputElement).value;
-        this.treeViewChild?._filter(this.filterValue);
-        this.onFilter.emit({
-            filter: this.filterValue,
-            filteredValue: this.treeViewChild?.filteredNodes
-        });
+    onFilterInput(event: TreeFilterEvent) {
+        this.filterValue = event.filter;
+        this.onFilter.emit(event);
         setTimeout(() => {
             this.overlayViewChild?.alignOverlay();
         });
