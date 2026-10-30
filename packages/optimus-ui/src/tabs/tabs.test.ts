@@ -1050,6 +1050,72 @@ describe('Tabs', () => {
         });
     });
 
+    describe('Ink Bar', () => {
+        let tabList: TabList;
+        let activeTab: HTMLElement;
+
+        const nextAnimationFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
+        // mutation observer callbacks are delivered in a microtask queued before this one
+        const deliverMutations = () => new Promise<void>((resolve) => queueMicrotask(resolve));
+
+        beforeEach(async () => {
+            // let the ink bar update of the initial value pass before watching for new ones
+            await new Promise((resolve) => setTimeout(resolve));
+            await fixture.whenStable();
+            await nextAnimationFrame();
+
+            tabList = fixture.debugElement.query(By.directive(TabList)).componentInstance;
+            activeTab = fixture.nativeElement.querySelector('p-tab[data-p-active="true"]');
+        });
+
+        it('should update the ink bar once per animation frame for any number of mutations of the active tab', async () => {
+            const scheduleSpy = vi.spyOn(tabList, 'scheduleInkBarUpdate');
+            const updateSpy = vi.spyOn(tabList, 'updateInkBar');
+            const inkbar = tabList.inkbar.nativeElement;
+            const widthBefore = inkbar.style.width;
+
+            const words = [' with', ' a', ' longer'].map((word) => document.createTextNode(word));
+            words.forEach((word) => activeTab.appendChild(word));
+            await deliverMutations();
+            words[2].appendData(' label');
+            await deliverMutations();
+
+            expect(scheduleSpy).toHaveBeenCalledTimes(2);
+            expect(updateSpy).not.toHaveBeenCalled();
+
+            await nextAnimationFrame();
+
+            expect(updateSpy).toHaveBeenCalledTimes(1);
+            expect(inkbar.style.width).not.toBe(widthBefore);
+            expect(inkbar.style.width).toBe(`${activeTab.offsetWidth}px`);
+            expect(parseFloat(inkbar.style.left)).toBeCloseTo(activeTab.getBoundingClientRect().left - tabList.tabs.nativeElement.getBoundingClientRect().left);
+        });
+
+        it('should not update the ink bar for mutations of an inactive tab', async () => {
+            const updateSpy = vi.spyOn(tabList, 'updateInkBar');
+            const inactiveTab: HTMLElement = fixture.nativeElement.querySelector('p-tab[data-p-active="false"]');
+
+            inactiveTab.appendChild(document.createTextNode(' changed'));
+            await deliverMutations();
+            await nextAnimationFrame();
+
+            expect(updateSpy).not.toHaveBeenCalled();
+        });
+
+        it('should cancel a pending ink bar update on destroy', async () => {
+            const scheduleSpy = vi.spyOn(tabList, 'scheduleInkBarUpdate');
+            const updateSpy = vi.spyOn(tabList, 'updateInkBar');
+
+            activeTab.appendChild(document.createTextNode(' changed'));
+            await deliverMutations();
+            fixture.destroy();
+            await nextAnimationFrame();
+
+            expect(scheduleSpy).toHaveBeenCalledTimes(1);
+            expect(updateSpy).not.toHaveBeenCalled();
+        });
+    });
+
     describe('Public Methods', () => {
         it('should update value programmatically', async () => {
             tabs.updateValue(3);
