@@ -39,7 +39,7 @@ interface Column {
                             }
                         </tr>
                     </ng-template>
-                    <ng-template #body let-rowData="rowData" let-columns="columns">
+                    <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
                         <tr [ttRow]="rowNode" style="height: 57px">
                             @for (col of columns; track col) {
                                 <td>
