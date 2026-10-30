@@ -16,7 +16,7 @@ class TestBasicDividerComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-divider [layout]="layout" [type]="type" [align]="align" [styleClass]="styleClass">
+        <p-divider [layout]="layout" [type]="type" [align]="align">
             <div class="custom-content">Custom Divider Content</div>
         </p-divider>
     `
@@ -25,7 +25,6 @@ class TestCustomDividerComponent {
     layout: 'horizontal' | 'vertical' | undefined = 'horizontal';
     type: 'solid' | 'dashed' | 'dotted' | undefined = 'solid';
     align: 'left' | 'center' | 'right' | 'top' | 'bottom' | undefined;
-    styleClass: string | undefined;
 }
 
 @Component({
@@ -98,6 +97,15 @@ class TestDynamicDividerComponent {
     align: 'left' | 'center' | 'right' | 'top' | 'bottom' | undefined = 'center';
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: ` <p-divider class="static-class" [class]="dynamicClass"></p-divider> `
+})
+class TestClassDividerComponent {
+    dynamicClass: string | undefined;
+}
+
 describe('Divider', () => {
     let fixture: ComponentFixture<TestBasicDividerComponent>;
     let component: TestBasicDividerComponent;
@@ -107,7 +115,7 @@ describe('Divider', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [DividerModule],
-            declarations: [TestBasicDividerComponent, TestCustomDividerComponent, TestHorizontalDividerComponent, TestVerticalDividerComponent, TestComplexContentDividerComponent, TestDynamicDividerComponent],
+            declarations: [TestBasicDividerComponent, TestCustomDividerComponent, TestHorizontalDividerComponent, TestVerticalDividerComponent, TestComplexContentDividerComponent, TestDynamicDividerComponent, TestClassDividerComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -126,10 +134,9 @@ describe('Divider', () => {
         });
 
         it('should have default values', () => {
-            expect(divider.layout).toBe('horizontal');
-            expect(divider.type).toBe('solid');
-            expect(divider.align).toBeUndefined();
-            expect(divider.styleClass).toBeUndefined();
+            expect(divider.layout()).toBe('horizontal');
+            expect(divider.type()).toBe('solid');
+            expect(divider.align()).toBeUndefined();
         });
 
         it('should have correct host attributes', () => {
@@ -396,47 +403,47 @@ describe('Divider', () => {
         });
     });
 
-    describe('Style Class Property', () => {
-        let customFixture: ComponentFixture<TestCustomDividerComponent>;
-        let customComponent: TestCustomDividerComponent;
+    describe('Class Attribute', () => {
+        let classFixture: ComponentFixture<TestClassDividerComponent>;
+        let classComponent: TestClassDividerComponent;
 
         beforeEach(() => {
-            customFixture = TestBed.createComponent(TestCustomDividerComponent);
-            customComponent = customFixture.componentInstance;
+            classFixture = TestBed.createComponent(TestClassDividerComponent);
+            classComponent = classFixture.componentInstance;
         });
 
-        it('should apply custom style class', async () => {
-            customComponent.styleClass = 'my-custom-class';
-            customFixture.changeDetectorRef.markForCheck();
-            await customFixture.whenStable();
+        it('should apply a static class alongside the root classes', async () => {
+            classFixture.changeDetectorRef.markForCheck();
+            await classFixture.whenStable();
 
-            const dividerElement = customFixture.debugElement.query(By.directive(Divider));
-            expect(dividerElement.nativeElement.className).toContain('my-custom-class');
+            const dividerElement = classFixture.debugElement.query(By.directive(Divider));
+            expect(dividerElement.nativeElement.classList.contains('static-class')).toBe(true);
+            expect(dividerElement.nativeElement.classList.contains('p-divider')).toBe(true);
         });
 
-        it('should apply multiple custom style classes', async () => {
-            customComponent.styleClass = 'class-one class-two';
-            customFixture.changeDetectorRef.markForCheck();
-            await customFixture.whenStable();
+        it('should apply multiple bound classes', async () => {
+            classComponent.dynamicClass = 'class-one class-two';
+            classFixture.changeDetectorRef.markForCheck();
+            await classFixture.whenStable();
 
-            const dividerElement = customFixture.debugElement.query(By.directive(Divider));
-            expect(dividerElement.nativeElement.className).toContain('class-one');
-            expect(dividerElement.nativeElement.className).toContain('class-two');
+            const dividerElement = classFixture.debugElement.query(By.directive(Divider));
+            expect(dividerElement.nativeElement.classList.contains('class-one')).toBe(true);
+            expect(dividerElement.nativeElement.classList.contains('class-two')).toBe(true);
+            expect(dividerElement.nativeElement.classList.contains('p-divider')).toBe(true);
         });
 
-        it('should update style class dynamically', async () => {
-            customFixture.changeDetectorRef.markForCheck();
-            await customFixture.whenStable();
-            let dividerElement = customFixture.debugElement.query(By.directive(Divider));
+        it('should update a bound class dynamically', async () => {
+            classFixture.changeDetectorRef.markForCheck();
+            await classFixture.whenStable();
+            const dividerElement = classFixture.debugElement.query(By.directive(Divider));
 
-            // Initially no custom class
             expect(dividerElement.nativeElement.className).not.toContain('dynamic-class');
 
-            // Add custom class
-            customComponent.styleClass = 'dynamic-class';
-            customFixture.changeDetectorRef.markForCheck();
-            await customFixture.whenStable();
+            classComponent.dynamicClass = 'dynamic-class';
+            classFixture.changeDetectorRef.markForCheck();
+            await classFixture.whenStable();
             expect(dividerElement.nativeElement.className).toContain('dynamic-class');
+            expect(dividerElement.nativeElement.classList.contains('p-divider')).toBe(true);
         });
     });
 
@@ -737,7 +744,6 @@ describe('Divider', () => {
             customComponent.layout = undefined as any;
             customComponent.type = undefined as any;
             customComponent.align = undefined as any;
-            customComponent.styleClass = undefined as any;
 
             expect(async () => {
                 customFixture.changeDetectorRef.markForCheck();
@@ -957,7 +963,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.layout === 'vertical' ? 'VERTICAL_LAYOUT' : ''
+                            class: instance.layout() === 'vertical' ? 'VERTICAL_LAYOUT' : ''
                         };
                     }
                 });
@@ -974,7 +980,7 @@ describe('Divider', () => {
                     content: ({ instance }) => {
                         return {
                             style: {
-                                'border-color': instance.type === 'dashed' ? 'yellow' : 'red'
+                                'border-color': instance.type() === 'dashed' ? 'yellow' : 'red'
                             }
                         };
                     }
@@ -992,7 +998,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.align === 'center' ? 'CENTERED' : ''
+                            class: instance.align() === 'center' ? 'CENTERED' : ''
                         };
                     }
                 });
@@ -1009,7 +1015,7 @@ describe('Divider', () => {
                 ptFixture.componentRef.setInput('pt', {
                     root: ({ instance }) => {
                         return {
-                            class: instance.layout === 'horizontal' && instance.type === 'dotted' ? 'HORIZONTAL_DOTTED' : ''
+                            class: instance.layout() === 'horizontal' && instance.type() === 'dotted' ? 'HORIZONTAL_DOTTED' : ''
                         };
                     }
                 });
@@ -1064,7 +1070,7 @@ describe('Divider', () => {
                     root: ({ instance }) => {
                         return {
                             onclick: () => {
-                                instanceLayout = instance.layout || '';
+                                instanceLayout = instance.layout() || '';
                             }
                         };
                     }
