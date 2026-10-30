@@ -240,32 +240,32 @@ export class MenuItemContent extends BaseComponent {
                                         }
                                     </li>
                                 }
-                            }
-                            @for (item of submenu.items; track item; let j = $index) {
-                                @if (item.separator && (item.visible !== false || submenu.visible !== false)) {
-                                    <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
-                                }
-                                @if (!item.separator && item.visible !== false && (item.visible !== undefined || submenu.visible !== false)) {
-                                    <li
-                                        [class]="cn(cx('item', { item, id: menuitemId(item, id, i, j) }), item?.styleClass)"
-                                        [pBind]="ptm('item')"
-                                        [pMenuItemContent]="item"
-                                        [itemTemplate]="itemTemplate ?? _itemTemplate"
-                                        [idx]="j"
-                                        [menuitemId]="menuitemId(item, id, i, j)"
-                                        [style]="item.style"
-                                        (onMenuItemClick)="itemClick($event, menuitemId(item, id, i, j))"
-                                        pTooltip
-                                        [tooltipOptions]="item.tooltipOptions"
-                                        [pTooltipUnstyled]="unstyled()"
-                                        [unstyled]="unstyled()"
-                                        role="menuitem"
-                                        [attr.aria-label]="label(item.label)"
-                                        [attr.data-p-focused]="isItemFocused(menuitemId(item, id, i, j))"
-                                        [attr.data-p-disabled]="disabled(item.disabled)"
-                                        [attr.aria-disabled]="disabled(item.disabled)"
-                                        [attr.id]="menuitemId(item, id, i, j)"
-                                    ></li>
+                                @for (item of submenu.items; track item; let j = $index) {
+                                    @if (item.separator && item.visible !== false) {
+                                        <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
+                                    }
+                                    @if (!item.separator && item.visible !== false) {
+                                        <li
+                                            [class]="cn(cx('item', { item, id: menuitemId(item, id, i, j) }), item?.styleClass)"
+                                            [pBind]="ptm('item')"
+                                            [pMenuItemContent]="item"
+                                            [itemTemplate]="itemTemplate ?? _itemTemplate"
+                                            [idx]="j"
+                                            [menuitemId]="menuitemId(item, id, i, j)"
+                                            [style]="item.style"
+                                            (onMenuItemClick)="itemClick($event, menuitemId(item, id, i, j))"
+                                            pTooltip
+                                            [tooltipOptions]="item.tooltipOptions"
+                                            [pTooltipUnstyled]="unstyled()"
+                                            [unstyled]="unstyled()"
+                                            role="menuitem"
+                                            [attr.aria-label]="label(item.label)"
+                                            [attr.data-p-focused]="isItemFocused(menuitemId(item, id, i, j))"
+                                            [attr.data-p-disabled]="disabled(item.disabled)"
+                                            [attr.aria-disabled]="disabled(item.disabled)"
+                                            [attr.id]="menuitemId(item, id, i, j)"
+                                        ></li>
+                                    }
                                 }
                             }
                         }
