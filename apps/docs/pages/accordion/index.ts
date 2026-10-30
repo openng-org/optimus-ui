@@ -6,6 +6,7 @@ import { DynamicDoc } from '@/doc/accordion/dynamic-doc';
 import { ImportDoc } from '@/doc/accordion/import-doc';
 import { MultipleDoc } from '@/doc/accordion/multiple-doc';
 import { TemplateDoc } from '@/doc/accordion/template-doc';
+import { DialogDoc } from '@/doc/accordion/dialog-doc';
 import { PTComponent } from '@/doc/accordion/pt/PTComponent';
 import { AppDoc } from '@/components/doc/app.doc';
 import { Component } from '@angular/core';
@@ -57,6 +58,11 @@ export class AccordionDemo {
             id: 'controlled',
             label: 'Controlled',
             component: ControlledDoc
+        },
+        {
+            id: 'dialog',
+            label: 'Dialog',
+            component: DialogDoc
         },
         {
             id: 'template',
