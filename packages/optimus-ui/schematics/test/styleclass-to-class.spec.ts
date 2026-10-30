@@ -222,6 +222,33 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-tag class="existing my-tag"></p-tag>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-divider', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-divider layout="vertical" styleClass="m-0"></p-divider>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-divider layout="vertical" class="m-0"></p-divider>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-divider', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-divider [styleClass]="myClass"></p-divider>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-divider [class]="myClass"></p-divider>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-divider', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-divider class="existing" styleClass="m-0"></p-divider>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-divider class="existing m-0"></p-divider>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
