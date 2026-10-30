@@ -437,6 +437,53 @@ class TestPTemplateTreeSelectComponent {
     }
 }
 
+const createCheckboxTreeNodes = (): TreeNode[] => [
+    {
+        key: '0',
+        label: 'Documents',
+        children: [
+            {
+                key: '0-0',
+                label: 'Work',
+                children: [
+                    { key: '0-0-0', label: 'Expenses.doc' },
+                    { key: '0-0-1', label: 'Resume.doc' }
+                ]
+            },
+            { key: '0-1', label: 'Home', children: [{ key: '0-1-0', label: 'Invoices.txt' }] }
+        ]
+    },
+    {
+        key: '1',
+        label: 'Events',
+        children: [
+            { key: '1-0', label: 'Meeting' },
+            { key: '1-1', label: 'Product Launch' }
+        ]
+    }
+];
+
+const findNode = (nodes: TreeNode[], key: string): TreeNode => {
+    for (const node of nodes) {
+        if (node.key === key) return node;
+        const found = node.children ? findNode(node.children, key) : undefined;
+        if (found) return found;
+    }
+    return undefined as unknown as TreeNode;
+};
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: ` <p-treeselect [(ngModel)]="selectedNodes" [options]="options" [selectionMode]="selectionMode" [propagateSelectionUp]="propagateSelectionUp"></p-treeselect> `
+})
+class TestCheckboxPreselectionTreeSelectComponent {
+    options: TreeNode[] = createCheckboxTreeNodes();
+    selectedNodes: TreeNode[] | TreeNode | null = null;
+    selectionMode: 'single' | 'multiple' | 'checkbox' = 'checkbox';
+    propagateSelectionUp = true;
+}
+
 describe('TreeSelect', () => {
     let component: TreeSelect;
     let fixture: ComponentFixture<TreeSelect>;
@@ -448,7 +495,7 @@ describe('TreeSelect', () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             imports: [TreeSelectModule, SharedModule, FormsModule, ReactiveFormsModule],
-            declarations: [TestTreeSelectComponent, TestPTemplateTreeSelectComponent],
+            declarations: [TestTreeSelectComponent, TestPTemplateTreeSelectComponent, TestCheckboxPreselectionTreeSelectComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -1251,6 +1298,93 @@ describe('TreeSelect', () => {
 
             expect(hiddenInput.nativeElement.getAttribute('readonly')).toBe('' as any);
             expect(hiddenInput.nativeElement.getAttribute('aria-expanded')).toBe('false');
+        });
+    });
+
+    describe('Preselected Checkbox Value', () => {
+        let preselectFixture: ComponentFixture<TestCheckboxPreselectionTreeSelectComponent>;
+        let host: TestCheckboxPreselectionTreeSelectComponent;
+
+        const render = async () => {
+            preselectFixture.changeDetectorRef.markForCheck();
+            preselectFixture.detectChanges();
+            await preselectFixture.whenStable();
+            preselectFixture.detectChanges();
+        };
+
+        beforeEach(() => {
+            preselectFixture = TestBed.createComponent(TestCheckboxPreselectionTreeSelectComponent);
+            host = preselectFixture.componentInstance;
+        });
+
+        it('should mark ancestors of a preselected node as partially selected', async () => {
+            host.selectedNodes = [findNode(host.options, '0-0-0')];
+            await render();
+
+            expect(findNode(host.options, '0-0').partialSelected).toBe(true);
+            expect(findNode(host.options, '0').partialSelected).toBe(true);
+            expect(findNode(host.options, '0-1').partialSelected).toBe(false);
+            expect(findNode(host.options, '1').partialSelected).toBe(false);
+        });
+
+        it('should match preselected nodes by key', async () => {
+            host.selectedNodes = [{ key: '0-1-0', label: 'Invoices.txt' }];
+            await render();
+
+            expect(findNode(host.options, '0-1').partialSelected).toBe(true);
+            expect(findNode(host.options, '0').partialSelected).toBe(true);
+            expect(findNode(host.options, '0-0').partialSelected).toBe(false);
+        });
+
+        it('should not mark a selected node as partially selected', async () => {
+            host.selectedNodes = [findNode(host.options, '1'), findNode(host.options, '1-0'), findNode(host.options, '1-1')];
+            await render();
+
+            expect(findNode(host.options, '1').partialSelected).toBe(false);
+            expect(findNode(host.options, '0').partialSelected).toBe(false);
+        });
+
+        it('should render the partial checkbox state for a preselected value', async () => {
+            host.selectedNodes = [findNode(host.options, '0-0-0')];
+            await render();
+
+            const treeSelectInstance = preselectFixture.debugElement.query(By.directive(TreeSelect)).componentInstance as TreeSelect;
+            treeSelectInstance.show();
+            treeSelectInstance.cd.markForCheck();
+            await render();
+
+            const partialCheckboxes = document.querySelectorAll('[data-p-partialchecked="true"]');
+            expect(partialCheckboxes.length).toBe(2);
+        });
+
+        it('should recompute partial state when the value changes', async () => {
+            host.selectedNodes = [findNode(host.options, '0-0-0')];
+            await render();
+
+            host.selectedNodes = [findNode(host.options, '1-0')];
+            await render();
+
+            expect(findNode(host.options, '0-0').partialSelected).toBe(false);
+            expect(findNode(host.options, '0').partialSelected).toBe(false);
+            expect(findNode(host.options, '1').partialSelected).toBe(true);
+        });
+
+        it('should not compute partial state when propagateSelectionUp is false', async () => {
+            host.propagateSelectionUp = false;
+            host.selectedNodes = [findNode(host.options, '0-0-0')];
+            await render();
+
+            expect(findNode(host.options, '0-0').partialSelected).toBe(false);
+            expect(findNode(host.options, '0').partialSelected).toBe(false);
+        });
+
+        it('should not compute partial state outside checkbox selection mode', async () => {
+            host.selectionMode = 'multiple';
+            host.selectedNodes = [findNode(host.options, '0-0-0')];
+            await render();
+
+            expect(findNode(host.options, '0-0').partialSelected).toBe(false);
+            expect(findNode(host.options, '0').partialSelected).toBe(false);
         });
     });
 
