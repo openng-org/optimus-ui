@@ -165,9 +165,7 @@ export class CascadeSelectSub extends BaseComponent {
 
     _componentStyle = inject(CascadeSelectStyle);
 
-    constructor(public cascadeselect: CascadeSelect) {
-        super();
-    }
+    cascadeselect: CascadeSelect = inject(forwardRef(() => CascadeSelect));
 
     getPTOptions(processedOption: any, index: number, key: string) {
         return this.ptm(key, {
