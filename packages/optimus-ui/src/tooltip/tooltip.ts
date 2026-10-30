@@ -387,7 +387,8 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
 
         this.pointerInside = true;
 
-        if (!this.container && !this.showTimeout) {
+        // a pending hideDelay keeps the container until it expires; entering again cancels that hide
+        if ((!this.container || this.hideTimeout) && !this.showTimeout) {
             this.activate();
         }
     }
@@ -767,7 +768,10 @@ export class Tooltip extends BaseComponent<TooltipPassThroughOptions> {
         if (!this.scrollHandler) {
             this.scrollHandler = new ConnectedOverlayScrollHandler(this.el.nativeElement, () => {
                 if (this.container) {
-                    this.hide();
+                    // A scroll ends the interaction: reset the pointer state too, otherwise the
+                    // re-entrant mouseenter guard discards every enter until a mouseleave happens.
+                    this.pointerInside = false;
+                    this.deactivate();
                 }
             });
         }
