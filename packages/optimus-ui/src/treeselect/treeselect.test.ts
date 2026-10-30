@@ -1370,6 +1370,53 @@ describe('TreeSelect', () => {
         });
     });
 
+    describe('Filter Input Auto Focus', () => {
+        // The filter input is rendered by the child p-tree, not by TreeSelect itself - see issue #1647
+        afterEach(() => {
+            testFixture.nativeElement.remove();
+        });
+
+        const openWithFilter = async (filterInputAutoFocus: boolean) => {
+            // focus() only works on elements attached to the document
+            document.body.appendChild(testFixture.nativeElement);
+            testComponent.filter = true;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const treeSelectInstance: TreeSelect = testFixture.debugElement.query(By.directive(TreeSelect)).componentInstance;
+            treeSelectInstance.filterInputAutoFocus = filterInputAutoFocus;
+            treeSelectInstance.show();
+            treeSelectInstance.cd.markForCheck();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+            await new Promise((resolve) => setTimeout(resolve, 100));
+            await testFixture.whenStable();
+
+            const filterInput: HTMLInputElement = treeSelectInstance.treeViewChild?.filterViewChild?.nativeElement;
+            expect(filterInput).toBeTruthy();
+
+            // start from a known focus state, independent of what happened while rendering
+            (document.activeElement as HTMLElement)?.blur();
+            treeSelectInstance.onOverlayBeforeEnter();
+
+            return filterInput;
+        };
+
+        it('should focus the filter input of the tree when the overlay opens', async () => {
+            const filterInput = await openWithFilter(true);
+
+            expect(document.activeElement).toBe(filterInput);
+        });
+
+        it('should not focus the filter input when filterInputAutoFocus is false', async () => {
+            const filterInput = await openWithFilter(false);
+
+            expect(document.activeElement).not.toBe(filterInput);
+        });
+    });
+
     describe('Performance and Optimization', () => {
         beforeEach(() => {
             testFixture.detectChanges();
