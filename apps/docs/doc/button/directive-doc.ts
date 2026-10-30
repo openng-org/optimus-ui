@@ -10,6 +10,7 @@ import { ButtonModule } from '@openng/optimus-ui/button';
     template: `
         <app-docsectiontext>
             <p>Button can also be used as directive using <i>pButton</i> along with <i>pButtonLabel</i> and <i>pButtonIcon</i> helper directives.</p>
+            <p>Apply <i>pButtonIcon</i> to custom icon elements so they follow the button's <i>iconPos</i> layout.</p>
         </app-docsectiontext>
         <div class="card flex justify-center">
             <button pButton>
