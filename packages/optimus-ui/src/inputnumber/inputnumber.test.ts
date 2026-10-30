@@ -545,6 +545,18 @@ describe('InputNumber', () => {
             expect(_decrementBtn.nativeElement.hasAttribute('disabled')).toBe(true);
         });
 
+        it('should apply disabled styling to buttons when component is disabled', async () => {
+            testComponent.disabled = true;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const incrementBtn = testFixture.debugElement.query(By.css('[data-pc-section="incrementbutton"]'));
+            const decrementBtn = testFixture.debugElement.query(By.css('[data-pc-section="decrementbutton"]'));
+
+            expect(incrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+            expect(decrementBtn.nativeElement.classList.contains('p-disabled')).toBe(true);
+        });
+
         it('should handle different button layouts', async () => {
             testComponent.buttonLayout = 'horizontal';
             testFixture.changeDetectorRef.markForCheck();
