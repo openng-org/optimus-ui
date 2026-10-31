@@ -6,24 +6,32 @@ import { ProgressSpinner } from './progressspinner';
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: `<p-progressspinner [strokeWidth]="strokeWidth" [fill]="fill" [animationDuration]="animationDuration" [ariaLabel]="ariaLabel" [styleClass]="styleClass"> </p-progressspinner>`
+    template: `<p-progressspinner [strokeWidth]="strokeWidth" [fill]="fill" [animationDuration]="animationDuration" [ariaLabel]="ariaLabel"> </p-progressspinner>`
 })
 class TestBasicProgressSpinnerComponent {
     strokeWidth: string = '2';
     fill: string = 'none';
     animationDuration: string = '2s';
     ariaLabel: string | undefined;
-    styleClass: string | undefined;
 }
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: `<p-progressspinner [style]="style" [styleClass]="styleClass"></p-progressspinner>`
+    template: `<p-progressspinner [style]="style"></p-progressspinner>`
 })
 class TestStyleProgressSpinnerComponent {
     style: { [key: string]: any } | undefined = { width: '50px', height: '50px' };
-    styleClass = 'custom-spinner-class';
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [ProgressSpinner],
+    template: `<p-progressspinner [class]="customClass"></p-progressspinner>`
+})
+class TestClassProgressSpinnerComponent {
+    customClass = 'custom-spinner-class';
 }
 
 @Component({
@@ -59,11 +67,10 @@ describe('ProgressSpinner', () => {
         });
 
         it('should have default values', () => {
-            expect(progressSpinnerInstance.strokeWidth).toBe('2');
-            expect(progressSpinnerInstance.fill).toBe('none');
-            expect(progressSpinnerInstance.animationDuration).toBe('2s');
-            expect(progressSpinnerInstance.ariaLabel).toBeUndefined();
-            expect(progressSpinnerInstance.styleClass).toBeUndefined();
+            expect(progressSpinnerInstance.strokeWidth()).toBe('2');
+            expect(progressSpinnerInstance.fill()).toBe('none');
+            expect(progressSpinnerInstance.animationDuration()).toBe('2s');
+            expect(progressSpinnerInstance.ariaLabel()).toBeUndefined();
         });
 
         it('should accept custom values', async () => {
@@ -71,15 +78,13 @@ describe('ProgressSpinner', () => {
             component.fill = 'blue';
             component.animationDuration = '1.5s';
             component.ariaLabel = 'Custom loading';
-            component.styleClass = 'custom-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(progressSpinnerInstance.strokeWidth).toBe('4');
-            expect(progressSpinnerInstance.fill).toBe('blue');
-            expect(progressSpinnerInstance.animationDuration).toBe('1.5s');
-            expect(progressSpinnerInstance.ariaLabel).toBe('Custom loading');
-            expect(progressSpinnerInstance.styleClass).toBe('custom-class');
+            expect(progressSpinnerInstance.strokeWidth()).toBe('4');
+            expect(progressSpinnerInstance.fill()).toBe('blue');
+            expect(progressSpinnerInstance.animationDuration()).toBe('1.5s');
+            expect(progressSpinnerInstance.ariaLabel()).toBe('Custom loading');
         });
     });
 
@@ -88,49 +93,42 @@ describe('ProgressSpinner', () => {
             component.strokeWidth = '3';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.strokeWidth).toBe('3');
+            expect(progressSpinnerInstance.strokeWidth()).toBe('3');
         });
 
         it('should update fill input', async () => {
             component.fill = 'transparent';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.fill).toBe('transparent');
+            expect(progressSpinnerInstance.fill()).toBe('transparent');
         });
 
         it('should update animationDuration input', async () => {
             component.animationDuration = '5s';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.animationDuration).toBe('5s');
+            expect(progressSpinnerInstance.animationDuration()).toBe('5s');
         });
 
         it('should update ariaLabel input', async () => {
             component.ariaLabel = 'Processing data';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.ariaLabel).toBe('Processing data');
-        });
-
-        it('should update styleClass input', async () => {
-            component.styleClass = 'test-spinner';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            expect(progressSpinnerInstance.styleClass).toBe('test-spinner');
+            expect(progressSpinnerInstance.ariaLabel()).toBe('Processing data');
         });
 
         it('should handle numeric strokeWidth values as strings', async () => {
             component.strokeWidth = '1.5';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.strokeWidth).toBe('1.5');
+            expect(progressSpinnerInstance.strokeWidth()).toBe('1.5');
         });
 
         it('should handle different time units for animationDuration', async () => {
             component.animationDuration = '500ms';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressSpinnerInstance.animationDuration).toBe('500ms');
+            expect(progressSpinnerInstance.animationDuration()).toBe('500ms');
         });
     });
 
@@ -190,13 +188,13 @@ describe('ProgressSpinner', () => {
     });
 
     describe('CSS Classes and Styling', () => {
-        it('should apply styleClass to root element', async () => {
-            component.styleClass = 'custom-spinner-class';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+        it('should apply custom class via native class binding', () => {
+            const classFixture = TestBed.createComponent(TestClassProgressSpinnerComponent);
+            classFixture.detectChanges();
 
-            const rootElement = fixture.debugElement.query(By.directive(ProgressSpinner));
+            const rootElement = classFixture.debugElement.query(By.directive(ProgressSpinner));
             expect(rootElement.nativeElement.classList.contains('custom-spinner-class')).toBe(true);
+            expect(rootElement.nativeElement.classList.contains('p-progressspinner')).toBe(true);
         });
 
         it('should apply custom styles', () => {
@@ -222,11 +220,15 @@ describe('ProgressSpinner', () => {
         });
 
         it('should combine multiple CSS classes correctly', async () => {
-            component.styleClass = 'class1 class2';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+            const classFixture = TestBed.createComponent(TestClassProgressSpinnerComponent);
+            classFixture.detectChanges();
+            classFixture.componentInstance.customClass = 'class1 class2';
+            classFixture.changeDetectorRef.markForCheck();
+            await classFixture.whenStable();
 
-            const rootElement = fixture.debugElement.query(By.directive(ProgressSpinner));
+            const rootElement = classFixture.debugElement.query(By.directive(ProgressSpinner));
+            expect(rootElement.nativeElement.classList.contains('custom-spinner-class')).toBe(false);
+            expect(rootElement.nativeElement.classList.contains('p-progressspinner')).toBe(true);
             expect(rootElement.nativeElement.classList.contains('class1')).toBe(true);
             expect(rootElement.nativeElement.classList.contains('class2')).toBe(true);
         });
@@ -294,13 +296,11 @@ describe('ProgressSpinner', () => {
     describe('Edge Cases', () => {
         it('should handle null/undefined values', async () => {
             component.ariaLabel = undefined as any;
-            component.styleClass = undefined as any;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            expect(progressSpinnerInstance.ariaLabel).toBeUndefined();
-            expect(progressSpinnerInstance.styleClass).toBeUndefined();
+            expect(progressSpinnerInstance.ariaLabel()).toBeUndefined();
         });
 
         it('should handle empty string values gracefully', async () => {
@@ -312,10 +312,10 @@ describe('ProgressSpinner', () => {
             await fixture.whenStable();
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            expect(progressSpinnerInstance.strokeWidth).toBe('' as any);
-            expect(progressSpinnerInstance.fill).toBe('' as any);
-            expect(progressSpinnerInstance.animationDuration).toBe('' as any);
-            expect(progressSpinnerInstance.ariaLabel).toBe('' as any);
+            expect(progressSpinnerInstance.strokeWidth()).toBe('' as any);
+            expect(progressSpinnerInstance.fill()).toBe('' as any);
+            expect(progressSpinnerInstance.animationDuration()).toBe('' as any);
+            expect(progressSpinnerInstance.ariaLabel()).toBe('' as any);
         });
 
         it('should handle zero strokeWidth', async () => {
@@ -441,10 +441,10 @@ describe('ProgressSpinner', () => {
             const svgElement = customFixture.debugElement.query(By.css('svg'));
             const rootElement = customFixture.debugElement.query(By.directive(ProgressSpinner));
 
-            expect(customSpinner.strokeWidth).toBe('4');
-            expect(customSpinner.fill).toBe('red');
-            expect(customSpinner.animationDuration).toBe('3s');
-            expect(customSpinner.ariaLabel).toBe('Loading content');
+            expect(customSpinner.strokeWidth()).toBe('4');
+            expect(customSpinner.fill()).toBe('red');
+            expect(customSpinner.animationDuration()).toBe('3s');
+            expect(customSpinner.ariaLabel()).toBe('Loading content');
 
             expect(circleElement.nativeElement.getAttribute('stroke-width')).toBe('4');
             expect(circleElement.nativeElement.getAttribute('fill')).toBe('red');
@@ -464,8 +464,8 @@ describe('ProgressSpinner', () => {
                 await testFixture.whenStable();
 
                 const spinnerInstance = testFixture.debugElement.query(By.directive(ProgressSpinner)).componentInstance;
-                expect(spinnerInstance.strokeWidth).toBe((index + 1).toString());
-                expect(spinnerInstance.animationDuration).toBe(`${index + 1}s`);
+                expect(spinnerInstance.strokeWidth()).toBe((index + 1).toString());
+                expect(spinnerInstance.animationDuration()).toBe(`${index + 1}s`);
             }
         });
 
@@ -478,7 +478,6 @@ describe('ProgressSpinner', () => {
             minimalComponent.fill = 'none'; // Keep default
             minimalComponent.animationDuration = '2s'; // Keep default
             minimalComponent.ariaLabel = undefined as any;
-            minimalComponent.styleClass = undefined as any;
 
             minimalFixture.changeDetectorRef.markForCheck();
             await minimalFixture.whenStable();
@@ -490,9 +489,9 @@ describe('ProgressSpinner', () => {
             expect(spinnerInstance).toBeTruthy();
             expect(svgElement).toBeTruthy();
             expect(circleElement).toBeTruthy();
-            expect(spinnerInstance.strokeWidth).toBe('2');
-            expect(spinnerInstance.fill).toBe('none');
-            expect(spinnerInstance.animationDuration).toBe('2s');
+            expect(spinnerInstance.strokeWidth()).toBe('2');
+            expect(spinnerInstance.fill()).toBe('none');
+            expect(spinnerInstance.animationDuration()).toBe('2s');
         });
     });
 
@@ -655,7 +654,7 @@ describe('ProgressSpinner', () => {
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.strokeWidth === '4' ? 'THICK_STROKE' : 'THIN_STROKE'
+                            class: instance?.strokeWidth() === '4' ? 'THICK_STROKE' : 'THIN_STROKE'
                         };
                     }
                 });
@@ -671,7 +670,7 @@ describe('ProgressSpinner', () => {
                 fixture.componentRef.setInput('pt', {
                     circle: ({ instance }: any) => {
                         return {
-                            'data-fill': instance?.fill
+                            'data-fill': instance?.fill()
                         };
                     }
                 });
@@ -689,7 +688,7 @@ describe('ProgressSpinner', () => {
                     spin: ({ instance }: any) => {
                         return {
                             style: {
-                                'animation-duration': instance?.animationDuration
+                                'animation-duration': instance?.animationDuration()
                             }
                         };
                     }
