@@ -222,6 +222,42 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-tag class="existing my-tag"></p-tag>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-radiobutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-radiobutton name="group" styleClass="my-radio"></p-radiobutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-radiobutton name="group" class="my-radio"></p-radiobutton>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-radiobutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-radiobutton [styleClass]="myClass"></p-radiobutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-radiobutton [class]="myClass"></p-radiobutton>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-radiobutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-radiobutton class="existing" styleClass="my-radio"></p-radiobutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-radiobutton class="existing my-radio"></p-radiobutton>\n`);
+    });
+
+    it('rewrites styleClass on the p-radioButton and p-radio-button aliases', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-radioButton styleClass="a"></p-radioButton>\n<p-radio-button [styleClass]="b"></p-radio-button>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-radioButton class="a"></p-radioButton>\n<p-radio-button [class]="b"></p-radio-button>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
