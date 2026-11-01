@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -21,7 +21,7 @@ import { provideOptimus } from '@openng/optimus-ui/config';
             [ariaLabelledBy]="ariaLabelledBy"
             [tabindex]="tabindex"
             [autofocus]="autofocus"
-            [styleClass]="styleClass"
+            [class]="customClass"
             (onClick)="onRadioClick($event)"
             (onFocus)="onRadioFocus($event)"
             (onBlur)="onRadioBlur($event)"
@@ -35,7 +35,7 @@ class TestBasicRadioComponent {
     ariaLabelledBy: string = 'test-label';
     tabindex: number = 0;
     autofocus: boolean = false;
-    styleClass: string = 'test-radio-class';
+    customClass: string = 'test-radio-class';
 
     clickEvents: any[] = [];
     focusEvents: any[] = [];
@@ -124,6 +124,22 @@ class TestBinaryRadioComponent {
     binaryValue: any = false;
 }
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [RadioButton, ReactiveFormsModule],
+    template: ` <p-radiobutton name="onpush" [formControl]="control" [value]="radioValue()" [inputId]="inputId()" [ariaLabel]="ariaLabel()" [ariaLabelledBy]="ariaLabelledBy()" [tabindex]="tabindex()" [binary]="binary()" [size]="size()" /> `
+})
+class TestOnPushRadioComponent {
+    control = new FormControl<any>(null);
+    radioValue = signal<any>('value1');
+    inputId = signal('radio-a');
+    ariaLabel = signal('Label A');
+    ariaLabelledBy = signal('label-a');
+    tabindex = signal(0);
+    binary = signal(false);
+    size = signal<'large' | 'small' | undefined>(undefined);
+}
+
 describe('RadioButton', () => {
     describe('Component Initialization', () => {
         let component: TestBasicRadioComponent;
@@ -150,11 +166,11 @@ describe('RadioButton', () => {
         });
 
         it('should initialize with default properties', () => {
-            expect(radioInstance.checked).toBeFalsy();
-            expect(radioInstance.focused).toBeFalsy();
-            expect(radioInstance.value).toBe('option1');
-            expect(radioInstance.binary).toBeFalsy();
-            expect(radioInstance.autofocus).toBeFalsy();
+            expect(radioInstance.checked()).toBeFalsy();
+            expect(radioInstance.focused()).toBeFalsy();
+            expect(radioInstance.value()).toBe('option1');
+            expect(radioInstance.binary()).toBeFalsy();
+            expect(radioInstance.autofocus()).toBeFalsy();
         });
 
         it('should render input element with correct attributes', () => {
@@ -180,6 +196,12 @@ describe('RadioButton', () => {
             const rootElement = radioElement.nativeElement;
             expect(rootElement.getAttribute('data-pc-name')).toBe('radiobutton');
             expect(rootElement.getAttribute('data-pc-section')).toBe('root');
+        });
+
+        it('should apply custom class via native class binding', () => {
+            const rootElement = radioElement.nativeElement;
+            expect(rootElement.classList.contains('test-radio-class')).toBe(true);
+            expect(rootElement.classList.contains('p-radiobutton')).toBe(true);
         });
     });
 
@@ -207,7 +229,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
             expect(component.selectedValue).toBe('option1');
         });
 
@@ -227,11 +249,11 @@ describe('RadioButton', () => {
             const inputElement = fixture.debugElement.query(By.css('input'));
 
             inputElement.nativeElement.dispatchEvent(new Event('focus'));
-            expect(radioInstance.focused).toBe(true);
+            expect(radioInstance.focused()).toBe(true);
             expect(component.focusEvents.length).toBe(1);
 
             inputElement.nativeElement.dispatchEvent(new Event('blur'));
-            expect(radioInstance.focused).toBe(false);
+            expect(radioInstance.focused()).toBe(false);
             expect(component.blurEvents.length).toBe(1);
         });
 
@@ -251,7 +273,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
 
             component.selectedValue = 'other';
             fixture.changeDetectorRef.markForCheck();
@@ -260,7 +282,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.checked()).toBe(false);
         });
 
         it('should handle change event', () => {
@@ -307,7 +329,7 @@ describe('RadioButton', () => {
             await fixture.whenStable();
 
             expect(component.selectedOption).toBe('option1');
-            expect(radioInstances[0].checked).toBe(true);
+            expect(radioInstances[0].checked()).toBe(true);
 
             // Select second radio button
             const secondInput = fixture.debugElement.queryAll(By.css('input'))[1];
@@ -317,7 +339,7 @@ describe('RadioButton', () => {
             await fixture.whenStable();
 
             expect(component.selectedOption).toBe('option2');
-            expect(radioInstances[1].checked).toBe(true);
+            expect(radioInstances[1].checked()).toBe(true);
         });
 
         it('should update group when model changes', async () => {
@@ -328,9 +350,9 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstances[0].checked).toBeFalsy();
-            expect(radioInstances[1].checked).toBeFalsy();
-            expect(radioInstances[2].checked).toBe(true);
+            expect(radioInstances[0].checked()).toBeFalsy();
+            expect(radioInstances[1].checked()).toBeFalsy();
+            expect(radioInstances[2].checked()).toBe(true);
         });
     });
 
@@ -358,7 +380,7 @@ describe('RadioButton', () => {
             await fixture.whenStable();
 
             expect(component.radioForm.get('selectedValue')?.value).toBe('value1');
-            expect(radioInstances[0].checked).toBe(true);
+            expect(radioInstances[0].checked()).toBe(true);
         });
 
         it('should validate form controls', () => {
@@ -389,6 +411,23 @@ describe('RadioButton', () => {
             });
         });
 
+        it('should uncheck the other radio buttons of the group through the registry', async () => {
+            const inputs = fixture.debugElement.queryAll(By.css('input'));
+
+            inputs[0].nativeElement.click();
+            await fixture.whenStable();
+            expect(radioInstances[0].checked()).toBe(true);
+
+            inputs[1].nativeElement.click();
+            await fixture.whenStable();
+
+            expect(radioInstances[0].checked()).toBe(false);
+            expect(radioInstances[1].checked()).toBe(true);
+            expect(radioInstances[2].checked()).toBe(false);
+            expect(inputs[0].nativeElement.getAttribute('aria-checked')).toBe('false');
+            expect(inputs[1].nativeElement.getAttribute('aria-checked')).toBe('true');
+        });
+
         it('should reset form correctly', async () => {
             const firstInput = fixture.debugElement.queryAll(By.css('input'))[0];
             firstInput.nativeElement.click();
@@ -404,7 +443,7 @@ describe('RadioButton', () => {
 
             expect(component.radioForm.get('selectedValue')?.value).toBe(null);
             radioInstances.forEach((instance) => {
-                expect(instance.checked).toBeFalsy();
+                expect(instance.checked()).toBeFalsy();
             });
         });
     });
@@ -435,7 +474,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBeFalsy();
+            expect(radioInstance.checked()).toBeFalsy();
             expect(component.clickEvents.length).toBe(0);
         });
 
@@ -470,7 +509,7 @@ describe('RadioButton', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(radioInstance.autofocus).toBe(true);
+            expect(radioInstance.autofocus()).toBe(true);
         });
 
         it('should handle disabled state properly', () => {
@@ -493,7 +532,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
         });
     });
 
@@ -515,8 +554,8 @@ describe('RadioButton', () => {
         });
 
         it('should work in binary mode', async () => {
-            expect(radioInstance.binary).toBe(true);
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.binary()).toBe(true);
+            expect(radioInstance.checked()).toBe(false);
 
             const inputElement = fixture.debugElement.query(By.css('input'));
             inputElement.nativeElement.click();
@@ -524,7 +563,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
             // In binary mode, the radio passes its value (not boolean) to the model
             expect(component.binaryValue).toBe('binary-value');
         });
@@ -537,7 +576,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
 
             component.binaryValue = false;
             fixture.changeDetectorRef.markForCheck();
@@ -546,7 +585,112 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.checked()).toBe(false);
+        });
+    });
+
+    describe('OnPush Rendering Tests', () => {
+        let component: TestOnPushRadioComponent;
+        let fixture: ComponentFixture<TestOnPushRadioComponent>;
+        let radioInstance: RadioButton;
+        let rootElement: HTMLElement;
+        let inputElement: HTMLInputElement;
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [TestOnPushRadioComponent],
+                providers: [provideZonelessChangeDetection()]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestOnPushRadioComponent);
+            component = fixture.componentInstance;
+            const radioElement = fixture.debugElement.query(By.directive(RadioButton));
+            radioInstance = radioElement.componentInstance;
+            rootElement = radioElement.nativeElement;
+            fixture.detectChanges();
+            inputElement = fixture.debugElement.query(By.css('input')).nativeElement;
+        });
+
+        it('should render the checked state when the control value changes', async () => {
+            expect(rootElement.classList.contains('p-radiobutton-checked')).toBe(false);
+
+            component.control.setValue('value1');
+            await fixture.whenStable();
+
+            expect(rootElement.classList.contains('p-radiobutton-checked')).toBe(true);
+            expect(rootElement.getAttribute('data-p-checked')).toBe('true');
+            expect(rootElement.getAttribute('data-p')).toContain('checked');
+            expect(inputElement.checked).toBe(true);
+            expect(inputElement.getAttribute('aria-checked')).toBe('true');
+
+            component.control.setValue('other');
+            await fixture.whenStable();
+
+            expect(rootElement.classList.contains('p-radiobutton-checked')).toBe(false);
+            expect(rootElement.getAttribute('data-p-checked')).toBe('false');
+            expect(rootElement.getAttribute('data-p')).not.toContain('checked');
+            expect(inputElement.checked).toBe(false);
+            expect(inputElement.getAttribute('aria-checked')).toBe('false');
+        });
+
+        it('should render inputId changes', async () => {
+            component.inputId.set('radio-b');
+            await fixture.whenStable();
+
+            expect(inputElement.id).toBe('radio-b');
+        });
+
+        it('should render ariaLabel changes', async () => {
+            component.ariaLabel.set('Label B');
+            await fixture.whenStable();
+
+            expect(inputElement.getAttribute('aria-label')).toBe('Label B');
+        });
+
+        it('should render ariaLabelledBy changes', async () => {
+            component.ariaLabelledBy.set('label-b');
+            await fixture.whenStable();
+
+            expect(inputElement.getAttribute('aria-labelledby')).toBe('label-b');
+        });
+
+        it('should render tabindex changes', async () => {
+            component.tabindex.set(-1);
+            await fixture.whenStable();
+
+            expect(inputElement.tabIndex).toBe(-1);
+        });
+
+        it('should render size changes in data-p', async () => {
+            component.size.set('large');
+            await fixture.whenStable();
+
+            expect(rootElement.getAttribute('data-p')).toContain('large');
+        });
+
+        it('should send the current value to the control on selection', async () => {
+            component.radioValue.set('value2');
+            await fixture.whenStable();
+
+            inputElement.click();
+            await fixture.whenStable();
+
+            expect(component.control.value).toBe('value2');
+            expect(radioInstance.checked()).toBe(true);
+        });
+
+        it('should compare the control value according to the binary input', async () => {
+            component.control.setValue(true);
+            await fixture.whenStable();
+            expect(radioInstance.checked()).toBe(false);
+
+            component.binary.set(true);
+            await fixture.whenStable();
+            component.control.setValue(true);
+            await fixture.whenStable();
+
+            expect(radioInstance.checked()).toBe(true);
+            expect(inputElement.checked).toBe(true);
         });
     });
 
@@ -629,7 +773,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.checked()).toBe(false);
 
             component.selectedValue = undefined as any;
             fixture.changeDetectorRef.markForCheck();
@@ -638,7 +782,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.checked()).toBe(false);
         });
 
         it('should handle empty string values', async () => {
@@ -650,7 +794,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
         });
 
         it('should handle number values', async () => {
@@ -662,7 +806,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
 
             component.selectedValue = 456;
             fixture.changeDetectorRef.markForCheck();
@@ -671,7 +815,7 @@ describe('RadioButton', () => {
             await new Promise((resolve) => setTimeout(resolve, 100));
             await fixture.whenStable();
 
-            expect(radioInstance.checked).toBe(false);
+            expect(radioInstance.checked()).toBe(false);
         });
 
         it('should prevent interaction when disabled', () => {
@@ -696,7 +840,7 @@ describe('RadioButton', () => {
 
             // Each change should trigger the onClick event
             expect(component.clickEvents.length).toBeGreaterThanOrEqual(1);
-            expect(radioInstance.checked).toBe(true);
+            expect(radioInstance.checked()).toBe(true);
         });
     });
 
@@ -872,13 +1016,13 @@ describe('RadioButton', () => {
                 pt = {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.checked ? 'CHECKED_CLASS' : 'UNCHECKED_CLASS'
+                            class: instance?.checked() ? 'CHECKED_CLASS' : 'UNCHECKED_CLASS'
                         };
                     },
                     box: ({ instance }: any) => {
                         return {
                             style: {
-                                opacity: instance?.checked ? '1' : '0.5'
+                                opacity: instance?.checked() ? '1' : '0.5'
                             }
                         };
                     }
