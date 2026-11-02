@@ -236,8 +236,8 @@ importers:
         specifier: ^10.5.4
         version: 10.5.4(postcss@8.5.26)
       chart.js:
-        specifier: 4.5.1
-        version: 4.5.1
+        specifier: 4.6.1
+        version: 4.6.1
       express:
         specifier: ^5.2.1
         version: 5.2.1
@@ -4014,6 +4014,10 @@ packages:
 
   chart.js@4.5.1:
     resolution: {integrity: sha512-GIjfiT9dbmHRiYi6Nl2yFCq7kkwdkp1W/lp2J99rX0yo9tgJGn3lKQATztIjb5tVtevcBtIdICNWqlq5+E8/Pw==}
+    engines: {pnpm: '>=8'}
+
+  chart.js@4.6.1:
+    resolution: {integrity: sha512-hJyniucsFmq//EvXYvJ6c6mahPoI3kaxdjVH8awTaJ/fDNWeSqqqArixMJWkWNN6fcYvPU3HneSANFNYtRi61g==}
     engines: {pnpm: '>=8'}
 
   chokidar@3.6.0:
@@ -11034,6 +11038,10 @@ snapshots:
   chardet@2.1.1: {}
 
   chart.js@4.5.1:
+    dependencies:
+      '@kurkle/color': 0.3.4
+
+  chart.js@4.6.1:
     dependencies:
       '@kurkle/color': 0.3.4
 

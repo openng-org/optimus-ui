@@ -33,7 +33,7 @@
         "@stackblitz/sdk": "1.11.1",
         "@types/express": "^5.0.6",
         "@types/node": "^26.2.0",
-        "chart.js": "4.5.1",
+        "chart.js": "4.6.1",
         "express": "^5.2.1",
         "@openng/icons": "catalog:",
         "@openng/optimus-ui": "workspace:*",
