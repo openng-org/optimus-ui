@@ -43,7 +43,7 @@
         "tslib": "^2.8.1",
         "typedoc": "0.28.20",
         "autoprefixer": "^10.5.4",
-        "postcss": "^8.5.26",
+        "postcss": "^8.5.32",
         "tailwindcss": "^3.4.10"
     },
     "dependencies": {
