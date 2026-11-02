@@ -77,7 +77,7 @@ class TestShapeAvatarComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-avatar',
-    template: `<p-avatar [label]="label" [styleClass]="styleClass"></p-avatar>`
+    template: `<p-avatar [label]="label" [class]="styleClass"></p-avatar>`
 })
 class TestStyleClassAvatarComponent {
     label = 'EF';
@@ -112,7 +112,7 @@ class TestContentAvatarComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-dynamic-avatar',
-    template: ` <p-avatar [label]="label" [icon]="icon" [image]="image" [size]="size" [shape]="shape" [styleClass]="styleClass" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" (onImageError)="onImageError($event)"> </p-avatar> `
+    template: ` <p-avatar [label]="label" [icon]="icon" [image]="image" [size]="size" [shape]="shape" [class]="styleClass" [ariaLabel]="ariaLabel" [ariaLabelledBy]="ariaLabelledBy" (onImageError)="onImageError($event)"> </p-avatar> `
 })
 class TestDynamicAvatarComponent {
     label: string | undefined;
@@ -185,14 +185,13 @@ describe('Avatar', () => {
         });
 
         it('should have default values', () => {
-            expect(component.label).toBeUndefined();
-            expect(component.icon).toBeUndefined();
-            expect(component.image).toBeUndefined();
-            expect(component.size).toBe('normal');
-            expect(component.shape).toBe('square');
-            expect(component.styleClass).toBeUndefined();
-            expect(component.ariaLabel).toBeUndefined();
-            expect(component.ariaLabelledBy).toBeUndefined();
+            expect(component.label()).toBeUndefined();
+            expect(component.icon()).toBeUndefined();
+            expect(component.image()).toBeUndefined();
+            expect(component.size()).toBe('normal');
+            expect(component.shape()).toBe('square');
+            expect(component.ariaLabel()).toBeUndefined();
+            expect(component.ariaLabelledBy()).toBeUndefined();
         });
 
         it('should apply base CSS classes', () => {
@@ -768,12 +767,93 @@ describe('Avatar', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(avatarComponent.label).toBeUndefined();
-            expect(avatarComponent.icon).toBeUndefined();
-            expect(avatarComponent.image).toBeUndefined();
-            expect(avatarComponent.size).toBeUndefined();
-            expect(avatarComponent.shape).toBeUndefined();
-            expect(avatarComponent.styleClass).toBeUndefined();
+            expect(avatarComponent.label()).toBeUndefined();
+            expect(avatarComponent.icon()).toBeUndefined();
+            expect(avatarComponent.image()).toBeUndefined();
+            expect(avatarComponent.size()).toBeUndefined();
+            expect(avatarComponent.shape()).toBeUndefined();
+        });
+    });
+
+    describe('OnPush Rendering', () => {
+        let fixture: ComponentFixture<Avatar>;
+        let element: HTMLElement;
+
+        beforeEach(() => {
+            fixture = TestBed.createComponent(Avatar);
+            element = fixture.nativeElement;
+            fixture.detectChanges();
+        });
+
+        it('should re-render when label changes', () => {
+            fixture.componentRef.setInput('label', 'AB');
+            fixture.detectChanges();
+            expect(element.querySelector('.p-avatar-label')?.textContent).toBe('AB');
+
+            fixture.componentRef.setInput('label', 'CD');
+            fixture.detectChanges();
+            expect(element.querySelector('.p-avatar-label')?.textContent).toBe('CD');
+        });
+
+        it('should re-render when icon changes', () => {
+            fixture.componentRef.setInput('icon', 'pi pi-user');
+            fixture.detectChanges();
+            expect(element.querySelector('.p-avatar-icon')?.classList.contains('pi-user')).toBe(true);
+
+            fixture.componentRef.setInput('icon', 'pi pi-star');
+            fixture.detectChanges();
+            expect(element.querySelector('.p-avatar-icon')?.classList.contains('pi-star')).toBe(true);
+        });
+
+        it('should re-render when image changes', () => {
+            fixture.componentRef.setInput('image', TEST_IMAGE);
+            fixture.detectChanges();
+            expect(element.querySelector('img')?.getAttribute('src')).toBe(TEST_IMAGE);
+
+            fixture.componentRef.setInput('image', TEST_IMAGE_2);
+            fixture.detectChanges();
+            expect(element.querySelector('img')?.getAttribute('src')).toBe(TEST_IMAGE_2);
+        });
+
+        it('should re-render when size changes', () => {
+            fixture.componentRef.setInput('size', 'large');
+            fixture.detectChanges();
+            expect(element.classList.contains('p-avatar-lg')).toBe(true);
+
+            fixture.componentRef.setInput('size', 'xlarge');
+            fixture.detectChanges();
+            expect(element.classList.contains('p-avatar-lg')).toBe(false);
+            expect(element.classList.contains('p-avatar-xl')).toBe(true);
+        });
+
+        it('should re-render when shape changes', () => {
+            fixture.componentRef.setInput('shape', 'circle');
+            fixture.detectChanges();
+            expect(element.classList.contains('p-avatar-circle')).toBe(true);
+
+            fixture.componentRef.setInput('shape', 'square');
+            fixture.detectChanges();
+            expect(element.classList.contains('p-avatar-circle')).toBe(false);
+        });
+
+        it('should re-render when ariaLabel changes', () => {
+            fixture.componentRef.setInput('ariaLabel', 'First');
+            fixture.detectChanges();
+            expect(element.getAttribute('aria-label')).toBe('First');
+
+            fixture.componentRef.setInput('ariaLabel', 'Second');
+            fixture.detectChanges();
+            expect(element.getAttribute('aria-label')).toBe('Second');
+        });
+
+        it('should re-render when ariaLabelledBy changes', () => {
+            fixture.componentRef.setInput('ariaLabelledBy', 'first-id');
+            fixture.detectChanges();
+            expect(element.getAttribute('aria-labelledby')).toBe('first-id');
+
+            fixture.componentRef.setInput('ariaLabelledBy', 'second-id');
+            fixture.detectChanges();
+            expect(element.getAttribute('aria-labelledby')).toBe('second-id');
         });
     });
 
@@ -1155,7 +1235,7 @@ describe('Avatar', () => {
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.size === 'large' ? 'LARGE_SIZE' : 'NORMAL_SIZE'
+                            class: instance?.size() === 'large' ? 'LARGE_SIZE' : 'NORMAL_SIZE'
                         };
                     }
                 });
@@ -1173,7 +1253,7 @@ describe('Avatar', () => {
                     label: ({ instance }: any) => {
                         return {
                             style: {
-                                'background-color': instance?.shape === 'circle' ? 'yellow' : 'red'
+                                'background-color': instance?.shape() === 'circle' ? 'yellow' : 'red'
                             }
                         };
                     }
@@ -1193,7 +1273,7 @@ describe('Avatar', () => {
                     icon: ({ instance }: any) => {
                         return {
                             class: {
-                                HAS_LABEL: !!instance?.label
+                                HAS_LABEL: !!instance?.label()
                             }
                         };
                     }
@@ -1219,7 +1299,7 @@ describe('Avatar', () => {
                 fixture.componentRef.setInput('pt', {
                     image: ({ instance }: any) => {
                         return {
-                            'data-has-aria': instance?.ariaLabel ? 'true' : 'false'
+                            'data-has-aria': instance?.ariaLabel() ? 'true' : 'false'
                         };
                     }
                 });

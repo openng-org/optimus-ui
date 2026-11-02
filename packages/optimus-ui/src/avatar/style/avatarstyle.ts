@@ -6,10 +6,10 @@ const classes = {
     root: ({ instance }) => [
         'p-avatar p-component',
         {
-            'p-avatar-image': instance.image != null,
-            'p-avatar-circle': instance.shape === 'circle',
-            'p-avatar-lg': instance.size === 'large',
-            'p-avatar-xl': instance.size === 'xlarge'
+            'p-avatar-image': instance.image() != null,
+            'p-avatar-circle': instance.shape() === 'circle',
+            'p-avatar-lg': instance.size() === 'large',
+            'p-avatar-xl': instance.size() === 'xlarge'
         }
     ],
     label: 'p-avatar-label',
