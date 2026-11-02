@@ -54,3 +54,7 @@ minimumReleaseAgeExclude:
   - '@angular/platform-browser@22.1.4'
   - '@angular/platform-server@22.1.4'
   - '@angular/router@22.1.4'
+
+overrides:
+  # GHSA-mrhx-c7xc-m3w5 (high): pulled in by @angular/forms, which declares zod ^4.0.10.
+  zod: ^4.6.6
