@@ -30,12 +30,34 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
             Editable cells use custom templating so you need to manage aria roles and attributes manually if required. The row editor controls are button elements with <i>aria.editRow</i>, <i>aria.cancelEdit</i> and <i>aria.saveEdit</i> used for the
             <i>aria-label</i>.
         </p>
+        <p>Reorderable columns and rows are keyboard accessible and announce their new positions through a polite live region.</p>
         <p>Paginator is a standalone component used inside the Table, refer to the <a href="/paginator" class="">paginator</a> for more information about the accessibility features.</p>
         <h3>Keyboard Support</h3>
         <p>
             Any button element inside the Table used for cases like filter, row expansion, edit are tabbable and can be used with
             <i>space</i> and <i>enter</i> keys.
         </p>
+        <h3>Reordering Keyboard Support</h3>
+        <div class="doc-tablewrapper">
+            <table class="doc-table">
+                <thead>
+                    <tr>
+                        <th>Key</th>
+                        <th>Function</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i>Ctrl/Cmd + Left/Right Arrow</i></td>
+                        <td>Moves the focused column left or right.</td>
+                    </tr>
+                    <tr>
+                        <td><i>Ctrl/Cmd + Up/Down Arrow</i></td>
+                        <td>Moves the focused row up or down.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
         <h3>Sortable Headers Keyboard Support</h3>
         <div class="doc-tablewrapper">
             <table class="doc-table">

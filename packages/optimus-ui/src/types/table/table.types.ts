@@ -192,6 +192,14 @@ export interface TablePassThroughOptions<I = unknown> {
      */
     rowReorderIndicatorDown?: PassThroughOption<HTMLSpanElement, I>;
     /**
+     * Used to pass attributes to the visually hidden reorder hint.
+     */
+    reorderHint?: PassThroughOption<HTMLSpanElement, I>;
+    /**
+     * Used to pass attributes to the reorder announcement live region.
+     */
+    reorderStatus?: PassThroughOption<HTMLSpanElement, I>;
+    /**
      * Used to pass attributes to the reorderable row element.
      */
     reorderableRow?: PassThroughOption<HTMLTableRowElement, I>;

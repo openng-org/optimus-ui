@@ -137,4 +137,11 @@ export interface Aria {
     browseFiles?: string;
     maximizeLabel?: string;
     minimizeLabel?: string;
+    columnMoved?: string;
+    rowMoved?: string;
+    reorderLimit?: string;
+    reorderableColumn?: string;
+    reorderableRow?: string;
+    reorderHint?: string;
+    rowLabel?: string;
 }

@@ -22,11 +22,13 @@ import {
     Optional,
     Output,
     QueryList,
+    Renderer2,
     signal,
     SimpleChanges,
     TemplateRef,
     ViewChild,
-    ViewEncapsulation
+    ViewEncapsulation,
+    afterNextRender
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
@@ -84,6 +86,81 @@ import {
 import { ObjectUtils, UniqueComponentId, ZIndexUtils } from '@openng/optimus-ui/utils';
 import { Subject, Subscription } from 'rxjs';
 import { TableStyle } from './style/tablestyle';
+
+interface ReorderAccessibilityState {
+    initialized: boolean;
+    tabIndex: string | null;
+    ariaLabel: string | null;
+    ariaDescription: string | null;
+    describedBy: string | null;
+    addedTabIndex: boolean;
+}
+
+function updateReorderAccessibility(
+    element: HTMLElement,
+    renderer: Renderer2,
+    state: ReorderAccessibilityState,
+    enabled: boolean,
+    roleDescription: string | undefined,
+    fallbackLabel: string | undefined,
+    hintId: string,
+    avoidFocusableChildren = false
+) {
+    if (!state.initialized) {
+        state.initialized = true;
+        state.tabIndex = element.getAttribute('tabindex');
+        state.ariaLabel = element.getAttribute('aria-label');
+        state.ariaDescription = element.getAttribute('aria-roledescription');
+        state.describedBy = element.getAttribute('aria-describedby');
+    }
+
+    if (!enabled) {
+        if (state.addedTabIndex) {
+            renderer.removeAttribute(element, 'tabindex');
+            state.addedTabIndex = false;
+        } else if (state.tabIndex !== null) {
+            renderer.setAttribute(element, 'tabindex', state.tabIndex);
+        }
+
+        for (const [name, value] of [
+            ['aria-label', state.ariaLabel],
+            ['aria-roledescription', state.ariaDescription],
+            ['aria-describedby', state.describedBy]
+        ] as const) {
+            value === null ? renderer.removeAttribute(element, name) : renderer.setAttribute(element, name, value);
+        }
+        return;
+    }
+
+    const hasFocusableChildren = avoidFocusableChildren && !!element.querySelector('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"]),[contenteditable="true"]');
+
+    if (state.addedTabIndex && (hasFocusableChildren || element.matches('a[href],button,input,select,textarea,[contenteditable="true"]'))) {
+        renderer.removeAttribute(element, 'tabindex');
+        state.addedTabIndex = false;
+    }
+
+    if (state.tabIndex === null && !state.addedTabIndex && !element.matches('a[href],button,input,select,textarea,[contenteditable="true"]') && !hasFocusableChildren) {
+        renderer.setAttribute(element, 'tabindex', '0');
+        state.addedTabIndex = true;
+    }
+
+    if (state.ariaLabel === null) {
+        renderer.setAttribute(element, 'aria-label', element.textContent?.trim() || fallbackLabel || '');
+    }
+    if (roleDescription && state.ariaDescription === null) {
+        renderer.setAttribute(element, 'aria-roledescription', roleDescription);
+    }
+
+    renderer.setAttribute(element, 'aria-describedby', [state.describedBy, hintId].filter(Boolean).join(' '));
+}
+
+function formatReorderMessage(template: string | undefined, values: Record<string, string | number>): string {
+    if (!template) {
+        return '';
+    }
+
+    return Object.entries(values).reduce((message, [key, value]) => message.replace(new RegExp(`\\{${key}\\}`, 'g'), String(value)), template);
+}
 
 const TABLE_INSTANCE = new InjectionToken<Table>('TABLE_INSTANCE');
 
@@ -373,6 +450,9 @@ export class TableService {
                 <ng-container *ngTemplateOutlet="summaryTemplate || _summaryTemplate"></ng-container>
             </div>
         }
+
+        <span [attr.id]="id + '-reorder-hint'" class="p-hidden-accessible" [pBind]="ptm('reorderHint')">{{ config.translation.aria?.reorderHint }}</span>
+        <span role="status" aria-live="polite" aria-atomic="true" class="p-hidden-accessible" [pBind]="ptm('reorderStatus')">{{ liveMessage }}</span>
 
         @if (resizableColumns) {
             <div #resizeHelper [ngClass]="cx('columnResizeIndicator')" [pBind]="ptm('columnResizeIndicator')" [style.display]="'none'"></div>
@@ -1166,6 +1246,8 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
     rowDragging: boolean | undefined | null;
 
     dropPosition: number | undefined | null;
+
+    liveMessage = '';
 
     editingCell: Element | undefined | null;
 
@@ -2832,6 +2914,67 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
         }
     }
 
+    /**
+     * Reorders a column by one position from the keyboard.
+     * @group Method
+     */
+    reorderColumnByKeyboard(dragIndex: number, step: -1 | 1) {
+        const columns = this.columns;
+        const dropIndex = dragIndex + step;
+
+        if (!columns || dragIndex < 0 || dragIndex >= columns.length) {
+            return;
+        }
+
+        if (dropIndex < 0 || dropIndex >= columns.length) {
+            this.announceReorderLimit(step);
+            return;
+        }
+
+        const activeHeader = (this.document.activeElement as HTMLElement | null)?.closest('th[preorderablecolumn]') as HTMLElement | null;
+        const headerRow = activeHeader?.parentElement;
+        const reorderableHeaders = headerRow ? (Array.from(headerRow.children).filter((header) => header.hasAttribute('preorderablecolumn')) as HTMLElement[]) : [];
+        const dropHeader = reorderableHeaders[dropIndex];
+
+        if (activeHeader?.hasAttribute('data-p-frozen-column') || dropHeader?.hasAttribute('data-p-frozen-column')) {
+            this.announceReorderLimit(step);
+            return;
+        }
+
+        ObjectUtils.reorderArray(columns, dragIndex, dropIndex);
+
+        this.onColReorder.emit({
+            dragIndex,
+            dropIndex,
+            columns: this.columns
+        });
+
+        if (this.isStateful()) {
+            this.zone.runOutsideAngular(() => {
+                setTimeout(() => this.saveState());
+            });
+        }
+
+        if (this.resizableColumns && this.resizeColumnElement) {
+            const width = this.columnResizeMode === 'expand' ? this._initialColWidths : this._totalTableWidth();
+            ObjectUtils.reorderArray(width, dragIndex + 1, dropIndex + 1);
+            this.updateStyleElement(width, dragIndex, 0, 0);
+        }
+
+        afterNextRender(
+            () => {
+                if (headerRow?.isConnected) {
+                    const updatedHeaders = Array.from(headerRow.children).filter((header) => header.hasAttribute('preorderablecolumn')) as HTMLElement[];
+                    updatedHeaders[dropIndex]?.focus();
+                }
+            },
+            { injector: this.injector }
+        );
+
+        const label = activeHeader?.getAttribute('aria-label') || activeHeader?.textContent?.trim() || this.config.translation.aria?.reorderableColumn || '';
+        this.announceReorder(formatReorderMessage(this.config.translation.aria?.columnMoved, { label, position: dropIndex + 1, total: columns.length }));
+    }
+
     resizeTableCells(newColumnWidth: number, nextColumnWidth: number | null) {
         let colIndex = DomHandler.index(this.resizeColumnElement);
         let width = this.columnResizeMode === 'expand' ? this._initialColWidths : this._totalTableWidth();
@@ -2920,6 +3063,97 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
         //cleanup
         this.onRowDragLeave(event, rowElement);
         this.onRowDragEnd(event);
+    }
+
+    /**
+     * Reorders a row by one position from the keyboard.
+     * @group Method
+     */
+    reorderRowByKeyboard(index: number, step: -1 | 1) {
+        const dropIndex = index + step;
+
+        if (index < 0 || index >= this.value.length) {
+            return;
+        }
+
+        if (dropIndex < 0 || dropIndex >= this.value.length) {
+            this.announceReorderLimit(step);
+            return;
+        }
+
+        ObjectUtils.reorderArray(this.value, index, dropIndex);
+
+        if (this.virtualScroll) {
+            this._value = [...this._value];
+        }
+
+        this.onRowReorder.emit({
+            dragIndex: index,
+            dropIndex
+        });
+
+        if (this.anchorRowIndex === index) {
+            this.anchorRowIndex = dropIndex;
+        } else if (this.anchorRowIndex === dropIndex) {
+            this.anchorRowIndex = index;
+        }
+
+        afterNextRender(
+            () => {
+                const movedRow = Array.from(this.el.nativeElement.querySelectorAll('tr[data-p-reorderable-row="true"]')).find((row: Element) => Number(row.getAttribute('data-p-reorderable-row-index')) === dropIndex) as HTMLElement | undefined;
+                movedRow?.focus();
+            },
+            { injector: this.injector }
+        );
+
+        const label = this.config.translation.aria?.rowLabel || '';
+        this.announceReorder(formatReorderMessage(this.config.translation.aria?.rowMoved, { label, position: dropIndex + 1, total: this.value.length }));
+    }
+
+    handleRowReorderKey(event: KeyboardEvent): boolean {
+        if (event.shiftKey || event.altKey || !(event.ctrlKey || event.metaKey)) {
+            return false;
+        }
+
+        const key = event.key || event.code;
+        const step = key === 'ArrowUp' ? -1 : key === 'ArrowDown' ? 1 : 0;
+        if (step === 0) {
+            return false;
+        }
+
+        const row = (event.target as HTMLElement).closest('tr[data-p-reorderable-row="true"]') as HTMLTableRowElement | null;
+        if (!row || row.closest('tbody[data-p-frozen-row-group="true"]')) {
+            return false;
+        }
+
+        if (event.defaultPrevented) {
+            return true;
+        }
+
+        const index = Number(row.getAttribute('data-p-reorderable-row-index'));
+        if (!Number.isInteger(index)) {
+            return false;
+        }
+
+        event.preventDefault();
+        this.reorderRowByKeyboard(index, step as -1 | 1);
+        return true;
+    }
+
+    private announceReorderLimit(step: -1 | 1) {
+        this.announceReorder(formatReorderMessage(this.config.translation.aria?.reorderLimit, { limit: step < 0 ? 'first' : 'last' }));
+    }
+
+    private announceReorder(message: string) {
+        this.liveMessage = '';
+        this.cd.markForCheck();
+        afterNextRender(
+            () => {
+                this.liveMessage = message;
+                this.cd.markForCheck();
+            },
+            { injector: this.injector }
+        );
     }
 
     isEmpty() {
@@ -3433,7 +3667,8 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
     changeDetection: ChangeDetectionStrategy.Eager,
     encapsulation: ViewEncapsulation.None,
     host: {
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP',
+        '[attr.data-p-frozen-row-group]': 'frozen ? "true" : null'
     }
 })
 export class TableBody extends BaseComponent {
@@ -3605,7 +3840,8 @@ export class RowGroupHeader extends BaseComponent {
     selector: '[pFrozenColumn]',
     standalone: false,
     host: {
-        '[class]': 'cx("frozenColumn")'
+        '[class]': 'cx("frozenColumn")',
+        '[attr.data-p-frozen-column]': 'frozen ? "true" : null'
     },
     providers: [TableStyle]
 })
@@ -3975,6 +4211,10 @@ export class SelectableRow extends BaseComponent {
 
     @HostListener('keydown', ['$event'])
     onKeyDown(event: KeyboardEvent) {
+        if (this.handleReorderKey(event)) {
+            return;
+        }
+
         switch (event.code) {
             case 'ArrowDown':
                 this.onArrowDownKey(event);
@@ -4010,6 +4250,10 @@ export class SelectableRow extends BaseComponent {
                 }
                 break;
         }
+    }
+
+    handleReorderKey(event: KeyboardEvent): boolean {
+        return this.dataTable.handleRowReorderKey(event);
     }
 
     onArrowDownKey(event: KeyboardEvent) {
@@ -4464,9 +4708,55 @@ export class ReorderableColumn extends BaseComponent {
     }
 
     onAfterViewInit() {
+        this.updateAccessibility();
         if (this.isEnabled()) {
             this.bindEvents();
         }
+    }
+
+    onChanges() {
+        this.updateAccessibility();
+    }
+
+    private accessibilityState: ReorderAccessibilityState = {
+        initialized: false,
+        tabIndex: null,
+        ariaLabel: null,
+        ariaDescription: null,
+        describedBy: null,
+        addedTabIndex: false
+    };
+
+    private updateAccessibility() {
+        updateReorderAccessibility(
+            this.el.nativeElement,
+            this.renderer,
+            this.accessibilityState,
+            this.isEnabled(),
+            this.config.translation.aria?.reorderableColumn,
+            this.config.translation.aria?.reorderableColumn,
+            `${this.dataTable.id}-reorder-hint`
+        );
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        if (!this.isEnabled() || event.shiftKey || event.altKey || !(event.ctrlKey || event.metaKey)) {
+            return;
+        }
+
+        const key = event.key || event.code;
+        if (key !== 'ArrowLeft' && key !== 'ArrowRight') {
+            return;
+        }
+
+        event.preventDefault();
+
+        const header = this.el.nativeElement as HTMLElement;
+        const dragIndex = DomHandler.indexWithinGroup(header, 'preorderablecolumn');
+        const isRTL = header.ownerDocument.defaultView?.getComputedStyle(header).direction === 'rtl';
+        const step = ((key === 'ArrowLeft' ? -1 : 1) * (isRTL ? -1 : 1)) as -1 | 1;
+        this.dataTable.reorderColumnByKeyboard(dragIndex, step);
     }
 
     bindEvents() {
@@ -5326,6 +5616,10 @@ export class ReorderableRowHandle extends BaseComponent {
 @Directive({
     selector: '[pReorderableRow]',
     standalone: false,
+    host: {
+        '[attr.data-p-reorderable-row]': 'isEnabled() ? "true" : null',
+        '[attr.data-p-reorderable-row-index]': 'isEnabled() ? index : null'
+    },
     hostDirectives: [Bind]
 })
 export class ReorderableRow extends BaseComponent {
@@ -5334,6 +5628,7 @@ export class ReorderableRow extends BaseComponent {
     bindDirectiveInstance = inject(Bind, { self: true });
 
     onAfterViewChecked(): void {
+        this.updateAccessibility();
         this.bindDirectiveInstance.setAttrs(this.ptm('reorderableRow'));
     }
 
@@ -5361,10 +5656,33 @@ export class ReorderableRow extends BaseComponent {
     }
 
     onAfterViewInit() {
+        this.updateAccessibility();
         if (this.isEnabled()) {
             this.el.nativeElement.droppable = true;
             this.bindEvents();
         }
+    }
+
+    onChanges() {
+        this.updateAccessibility();
+    }
+
+    private accessibilityState: ReorderAccessibilityState = {
+        initialized: false,
+        tabIndex: null,
+        ariaLabel: null,
+        ariaDescription: null,
+        describedBy: null,
+        addedTabIndex: false
+    };
+
+    private updateAccessibility() {
+        updateReorderAccessibility(this.el.nativeElement, this.renderer, this.accessibilityState, this.isEnabled(), this.config.translation.aria?.reorderableRow, this.config.translation.aria?.rowLabel, `${this.dataTable.id}-reorder-hint`, true);
+    }
+
+    @HostListener('keydown', ['$event'])
+    onKeyDown(event: KeyboardEvent) {
+        this.dataTable.handleRowReorderKey(event);
     }
 
     bindEvents() {
