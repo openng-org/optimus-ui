@@ -3744,10 +3744,10 @@ export class TTEditableColumn extends BaseComponent {
     standalone: false,
     template: `
         @if (tt.editingCell === editableColumn.el.nativeElement) {
-            <ng-container *ngTemplateOutlet="inputTemplate || _inputTemplate"></ng-container>
+            <ng-container *ngTemplateOutlet="inputTemplate || _inputTemplate()"></ng-container>
         }
         @if (!tt.editingCell || tt.editingCell !== editableColumn.el.nativeElement) {
-            <ng-container *ngTemplateOutlet="outputTemplate || _outputTemplate"></ng-container>
+            <ng-container *ngTemplateOutlet="outputTemplate || _outputTemplate()"></ng-container>
         }
     `,
     encapsulation: ViewEncapsulation.None,
@@ -3767,9 +3767,9 @@ export class TreeTableCellEditor extends BaseComponent {
 
     readonly templates = contentChildren(PrimeTemplate);
 
-    @ContentChild('input') _inputTemplate: Nullable<TemplateRef<any>>;
+    readonly _inputTemplate = contentChild<TemplateRef<any>>('input');
 
-    @ContentChild('output') _outputTemplate: Nullable<TemplateRef<any>>;
+    readonly _outputTemplate = contentChild<TemplateRef<any>>('output');
 
     inputTemplate: Nullable<TemplateRef<any>>;
 
