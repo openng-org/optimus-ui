@@ -644,6 +644,32 @@ describe('Skeleton', () => {
             expect(skeleton.borderRadius()).toBe('15px');
             expect(skeleton.containerStyle().borderRadius).toBe('15px');
         });
+
+        it('should reflect shape and animation as host classes', async () => {
+            expect(element.classList.contains('p-skeleton-circle')).toBe(false);
+            expect(element.classList.contains('p-skeleton-animation-none')).toBe(false);
+
+            component.dynamicShape = 'circle';
+            component.dynamicAnimation = 'none';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(element.classList.contains('p-skeleton-circle')).toBe(true);
+            expect(element.classList.contains('p-skeleton-animation-none')).toBe(true);
+        });
+
+        it('should reflect size and borderRadius on the host style', async () => {
+            component.dynamicSize = '120px';
+            component.dynamicBorderRadius = '15px';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(element.style.width).toBe('120px');
+            expect(element.style.height).toBe('120px');
+            expect(element.style.borderRadius).toBe('15px');
+        });
     });
 
     describe('Edge Cases', () => {
