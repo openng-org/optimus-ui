@@ -1,1298 +1,307 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import ComponentTokens from '@openng/optimus-ui-themes/tokens';
+import { generateAgentSkill } from './build-llm-skill.mjs';
+import { MANIFEST_PATH } from './build-manifest.mjs';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-const DOCS_DIR = path.resolve(__dirname, '../doc');
-const PAGES_DIR = path.resolve(__dirname, '../pages');
-const API_DOC_PATH = path.resolve(__dirname, '../doc/apidoc/index.json');
-const DEMOS_JSON_PATH = path.resolve(__dirname, '../public/demos.json');
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const OUTPUT_DIR = path.resolve(__dirname, '../public/llms');
 
-// Global demos data loaded from demos.json
-let demosData = null;
-
-// Mapping for components where route name doesn't match API component name
-const COMPONENT_NAME_MAP = {
-    datepicker: 'DatePicker',
-    datatable: 'DataTable',
-    dataview: 'DataView',
-    treetable: 'TreeTable',
-    treeselect: 'TreeSelect',
-    multiselect: 'MultiSelect',
-    selectbutton: 'SelectButton',
-    togglebutton: 'ToggleButton',
-    splitbutton: 'SplitButton',
-    speeddial: 'SpeedDial',
-    inputtext: 'InputText',
-    inputnumber: 'InputNumber',
-    inputmask: 'InputMask',
-    inputotp: 'InputOtp',
-    inputgroup: 'InputGroup',
-    iconfield: 'IconField',
-    floatlabel: 'FloatLabel',
-    iftalabel: 'IftaLabel',
-    colorpicker: 'ColorPicker',
-    listbox: 'Listbox',
-    orderlist: 'OrderList',
-    picklist: 'PickList',
-    contextmenu: 'ContextMenu',
-    tieredmenu: 'TieredMenu',
-    menubar: 'Menubar',
-    megamenu: 'MegaMenu',
-    panelmenu: 'PanelMenu',
-    tabmenu: 'TabMenu',
-    confirmdialog: 'ConfirmDialog',
-    confirmpopup: 'ConfirmPopup',
-    dynamicdialog: 'DynamicDialog',
-    fileupload: 'FileUpload',
-    progressbar: 'ProgressBar',
-    progressspinner: 'ProgressSpinner',
-    blockui: 'BlockUI',
-    scrollpanel: 'ScrollPanel',
-    scrolltop: 'ScrollTop',
-    virtualscroller: 'VirtualScroller',
-    animateonscroll: 'AnimateOnScroll',
-    autofocus: 'AutoFocus',
-    focustrap: 'FocusTrap',
-    styleclass: 'StyleClass'
-};
-
-// Components whose documentation directory name differs from their public route.
-// Keep in sync with router/app.routes.ts.
-const COMPONENT_ROUTE_MAP = {
-    scroller: 'virtualscroller',
-    Image: 'image'
-};
-
-// Guide/documentation pages configuration
-// Maps route paths to their doc directories and metadata
-const GUIDE_PAGES = [
-    {
-        route: 'installation',
-        docPath: 'installation',
-        title: 'Installation',
-        description: 'Setting up Optimus UI in an Angular CLI project.'
-    },
-    {
-        route: 'configuration',
-        docPath: 'configuration',
-        title: 'Configuration',
-        description: 'Application wide configuration for Optimus UI.'
-    },
-    {
-        route: 'theming/styled',
-        docPath: 'theming/styled',
-        title: 'Styled Mode',
-        description: 'Choose from a variety of pre-styled themes or develop your own.'
-    },
-    {
-        route: 'theming/unstyled',
-        docPath: 'theming/unstyled',
-        title: 'Unstyled Mode',
-        description: 'Theming Optimus UI with alternative styling approaches.'
-    },
-    {
-        route: 'icons',
-        docPath: 'icons',
-        title: 'Icons',
-        description: 'OpenNG Icons is the default icon library of Optimus UI with over 250 open source icons.'
-    },
-    {
-        route: 'customicons',
-        docPath: 'customicons',
-        title: 'Custom Icons',
-        description: 'Use custom icons with Optimus UI components.'
-    },
-    {
-        route: 'passthrough',
-        docPath: 'guides/passthrough',
-        title: 'Pass Through',
-        description: 'Pass Through Props allow direct access to the underlying elements for complete customization.'
-    },
-    {
-        route: 'tailwind',
-        docPath: 'tailwind',
-        title: 'Tailwind CSS',
-        description: 'Integration between Optimus UI and Tailwind CSS.'
-    },
-    {
-        route: 'llms',
-        docPath: 'llms',
-        title: 'LLMs.txt',
-        description: 'LLM-optimized documentation endpoints for Optimus UI components.'
-    },
-    {
-        route: 'guides/accessibility',
-        docPath: 'guides/accessibility',
-        title: 'Accessibility',
-        description: 'Optimus UI has WCAG 2.1 AA level compliance.'
-    },
-    {
-        route: 'guides/animations',
-        docPath: 'guides/animations',
-        title: 'Animations',
-        description: 'Built-in CSS animations for Optimus UI components.'
-    },
-    {
-        route: 'guides/rtl',
-        docPath: 'guides/rtl',
-        title: 'RTL',
-        description: 'Right-to-left support for Optimus UI components.'
-    },
-    {
-        route: 'guides/primeflex',
-        docPath: 'guides/primeflex',
-        title: 'PrimeFlex',
-        description: 'Moving from PrimeFlex to Tailwind CSS.'
-    },
-    {
-        route: 'philosophy',
-        docPath: 'philosophy',
-        title: 'Philosophy',
-        description: 'Why Optimus UI exists, what it commits to, and where it stops.'
-    },
-    {
-        route: 'faq',
-        docPath: 'faq',
-        title: 'FAQ',
-        description: 'Licensing, migration from PrimeNG, the ecosystem, and how support works.'
-    },
-    {
-        route: 'contribution',
-        docPath: 'contribution',
-        title: 'Contribution Guide',
-        description: 'How to contribute to Optimus UI.'
-    }
-];
-
 /**
- * Get the correct component name for API lookups
+ * Render the LLM documentation from `public/llms/manifest.json` (built by build-manifest.mjs):
+ *
+ * - llms.txt: index of guides and components
+ * - llms-full.txt: everything in one file
+ * - components/*.md and pages/*.md: one file per docs page
+ * - components.json: the docs and API per page, in the shape earlier releases published
+ * - optimus-ui-skill.zip and the skills discovery index (build-llm-skill.mjs)
  */
-function getApiComponentName(componentName) {
-    const lowerName = componentName.toLowerCase();
-    if (COMPONENT_NAME_MAP[lowerName]) {
-        return COMPONENT_NAME_MAP[lowerName];
+function main() {
+    console.log('🚀 Building Optimus UI LLM Documentation from the manifest...\n');
+
+    if (!fs.existsSync(MANIFEST_PATH)) {
+        throw new Error(`${MANIFEST_PATH} is missing. Run \`npm run build:manifest\` first.`);
     }
-    // Default: capitalize first letter
-    return componentName.charAt(0).toUpperCase() + componentName.slice(1);
+    const manifest = JSON.parse(fs.readFileSync(MANIFEST_PATH, 'utf-8'));
+    const index = indexManifest(manifest);
+
+    // Start from empty folders so pages removed from the docs don't linger
+    for (const dir of ['components', 'pages']) {
+        fs.rmSync(path.join(OUTPUT_DIR, dir), { recursive: true, force: true });
+        fs.mkdirSync(path.join(OUTPUT_DIR, dir), { recursive: true });
+    }
+
+    const componentMarkdown = new Map(manifest.components.map((page) => [page.name, renderComponent(page, index)]));
+    const guideMarkdown = new Map(manifest.guides.map((guide) => [guide.name, renderGuide(guide)]));
+
+    for (const [name, markdown] of componentMarkdown) fs.writeFileSync(path.join(OUTPUT_DIR, 'components', `${name}.md`), markdown, 'utf-8');
+    console.log(`✓ Generated ${componentMarkdown.size} component markdown files`);
+
+    for (const [name, markdown] of guideMarkdown) fs.writeFileSync(path.join(OUTPUT_DIR, 'pages', `${name}.md`), markdown, 'utf-8');
+    console.log(`✓ Generated ${guideMarkdown.size} guide markdown files`);
+
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'llms.txt'), renderLlmsTxt(manifest), 'utf-8');
+    console.log('✓ Generated llms.txt');
+
+    const full = ['# Optimus UI Documentation\n', `Generated from Optimus UI v${manifest.version}.\n`, '---\n', '# Guides\n', ...guideMarkdown.values(), '---\n', '# Components\n', ...[...componentMarkdown.values()].map((md) => md + '\n---\n')];
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'llms-full.txt'), full.join('\n'), 'utf-8');
+    console.log('✓ Generated llms-full.txt');
+
+    fs.writeFileSync(path.join(OUTPUT_DIR, 'components.json'), JSON.stringify(renderComponentsJson(manifest, index), null, 2), 'utf-8');
+    console.log('✓ Generated components.json');
+
+    generateAgentSkill({ outputDir: OUTPUT_DIR, wellKnownDir: path.resolve(__dirname, '../public/.well-known'), manifest });
+
+    console.log('\n✅ LLM documentation generation complete!');
 }
 
-// Ensure output directory exists
-if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+export function indexManifest(manifest) {
+    const entries = new Map(manifest.entryPoints.map((entry) => [entry.name, entry]));
+    const typesByName = new Map();
+    for (const entry of manifest.entryPoints) for (const t of [...(entry.classes ?? []), ...(entry.types ?? [])]) if (!typesByName.has(t.name)) typesByName.set(t.name, t);
+    return { entries, typesByName };
 }
 
 /**
- * Extract description text from Angular template
+ * The declarations a page documents: the ones its `[apiDocs]` names first, then the rest of its entry points.
  */
-function extractDescriptionFromTemplate(template) {
-    const descriptions = [];
+function pageApi(page, index) {
+    const entries = (page.entryPoints ?? []).map((name) => index.entries.get(name)).filter(Boolean);
+    const listed = page.api ?? [];
+    const rank = (name) => (listed.includes(name) ? listed.indexOf(name) : listed.length);
+    const declarations = entries.flatMap((entry) => (entry.declarations ?? []).map((d) => ({ ...d, entry })));
+    declarations.sort((a, b) => rank(a.className) - rank(b.className));
+    const extras = listed.map((name) => index.typesByName.get(name)).filter(Boolean);
+    return { entries, declarations, extras };
+}
 
-    // Extract content from app-docsectiontext
-    const docTextMatches = template.matchAll(/<app-docsectiontext[^>]*>([\s\S]*?)<\/app-docsectiontext>/gi);
-    for (const match of docTextMatches) {
-        const content = match[1]
-            .replace(/<[^>]+>/g, ' ')
-            .replace(/\s+/g, ' ')
-            .trim();
-        if (content) {
-            descriptions.push(content);
+export function renderComponent(page, index) {
+    const { entries, declarations, extras } = pageApi(page, index);
+    const out = [`# ${page.title}`, '', page.description, ''];
+
+    const imports = renderImports(entries, declarations, page.related);
+    if (imports) out.push('## Import', '', '```typescript', imports, '```', '');
+
+    for (const section of page.sections ?? []) {
+        if (section.id === 'import') continue;
+        out.push(...renderSection(section, '##'));
+    }
+
+    if (declarations.length > 0 || extras.length > 0) {
+        out.push('## API', '');
+        for (const declaration of declarations) out.push(...renderDeclaration(declaration));
+        for (const extra of extras) out.push(...renderType(extra));
+    }
+
+    const ptDeclarations = declarations.filter((d) => d.passThrough?.length);
+    if (ptDeclarations.length > 0) {
+        out.push('## Pass Through Options', '');
+        for (const d of ptDeclarations) {
+            if (ptDeclarations.length > 1) out.push(`### ${d.className}`, '');
+            out.push(
+                ...table(
+                    ['Name', 'Type', 'Description'],
+                    d.passThrough.map((pt) => [code(pt.name), code(pt.type), pt.description])
+                )
+            );
         }
     }
 
-    return descriptions.join(' ');
-}
-
-/**
- * Load demos.json data
- */
-function loadDemosJson() {
-    if (!fs.existsSync(DEMOS_JSON_PATH)) {
-        console.warn('demos.json not found. Run build:democode first.');
-        return null;
-    }
-
-    return JSON.parse(fs.readFileSync(DEMOS_JSON_PATH, 'utf-8'));
-}
-
-/**
- * Convert component name to hyphenated form (e.g., cascadeselect -> cascade-select)
- */
-function toHyphenatedName(name) {
-    // Common compound words that need hyphenation
-    const compounds = {
-        cascadeselect: 'cascade-select',
-        treeselect: 'tree-select',
-        treetable: 'tree-table',
-        multiselect: 'multi-select',
-        selectbutton: 'select-button',
-        togglebutton: 'toggle-button',
-        splitbutton: 'split-button',
-        speeddial: 'speed-dial',
-        inputtext: 'input-text',
-        inputnumber: 'input-number',
-        inputmask: 'input-mask',
-        inputotp: 'input-otp',
-        inputgroup: 'input-group',
-        iconfield: 'icon-field',
-        floatlabel: 'float-label',
-        iftalabel: 'ifta-label',
-        colorpicker: 'color-picker',
-        orderlist: 'order-list',
-        picklist: 'pick-list',
-        contextmenu: 'context-menu',
-        tieredmenu: 'tiered-menu',
-        megamenu: 'mega-menu',
-        panelmenu: 'panel-menu',
-        tabmenu: 'tab-menu',
-        confirmdialog: 'confirm-dialog',
-        confirmpopup: 'confirm-popup',
-        dynamicdialog: 'dynamic-dialog',
-        fileupload: 'file-upload',
-        progressbar: 'progress-bar',
-        progressspinner: 'progress-spinner',
-        blockui: 'block-ui',
-        scrollpanel: 'scroll-panel',
-        scrolltop: 'scroll-top',
-        virtualscroller: 'virtual-scroller',
-        datepicker: 'date-picker',
-        dataview: 'data-view',
-        toggleswitch: 'toggle-switch',
-        organizationchart: 'organization-chart',
-        overlaybadge: 'overlay-badge',
-        metergroup: 'meter-group',
-        imagecompare: 'image-compare'
-    };
-    return compounds[name.toLowerCase()] || name;
-}
-
-/**
- * Get code examples from demos.json for a specific component section
- */
-function getCodeExamplesFromDemos(componentName, sectionId) {
-    if (!demosData || !demosData.demos) return null;
-
-    // Try different selector patterns
-    const hyphenated = toHyphenatedName(componentName);
-    const selectors = [`${componentName}-${sectionId}-demo`, `${hyphenated}-${sectionId}-demo`];
-
-    for (const selector of selectors) {
-        const demo = demosData.demos[selector];
-        if (demo && demo.code) {
-            const examples = {};
-            if (demo.code.typescript) examples.typescript = demo.code.typescript;
-            if (demo.code.data) examples.data = demo.code.data;
-            if (demo.code.scss) examples.scss = demo.code.scss;
-
-            return Object.keys(examples).length > 0 ? examples : null;
+    const cssClasses = entries.flatMap((entry) => entry.cssClasses ?? []);
+    const tokens = page.tokens ?? [];
+    if (cssClasses.length > 0 || tokens.length > 0) {
+        out.push('## Theming', '');
+        if (cssClasses.length > 0)
+            out.push(
+                '### CSS Classes',
+                '',
+                ...table(
+                    ['Class', 'Description'],
+                    cssClasses.map((c) => [code(c.class), c.description])
+                )
+            );
+        if (tokens.length > 0) {
+            out.push('### Design Tokens', '');
+            out.push(
+                ...table(
+                    ['Token', 'CSS Variable', 'Description'],
+                    tokens.map((t) => [code(t.name), code(t.variable), t.description])
+                )
+            );
         }
     }
 
-    return null;
+    return out.join('\n');
 }
 
-/**
- * Extract code object from file content
- */
-function extractCodeFromFile(content) {
-    const examples = {};
-
-    // Look for code: Code = { ... } pattern
-    const codeMatch = content.match(/code:\s*Code\s*=\s*\{/);
-    if (codeMatch) {
-        const startIndex = codeMatch.index + codeMatch[0].length;
-        let braceDepth = 1;
-        let endIndex = startIndex;
-
-        for (let i = startIndex; i < content.length && braceDepth > 0; i++) {
-            if (content[i] === '{') braceDepth++;
-            else if (content[i] === '}') braceDepth--;
-            endIndex = i;
-        }
-
-        const codeContent = content.substring(startIndex, endIndex);
-
-        // Extract each code type
-        const extractBetweenBackticks = (text, prefix) => {
-            const regex = new RegExp(prefix + '\\s*`([\\s\\S]*?)`');
-            const match = text.match(regex);
-            return match ? match[1].trim() : null;
-        };
-
-        const typescript = extractBetweenBackticks(codeContent, 'typescript:');
-        const command = extractBetweenBackticks(codeContent, 'command:');
-        const scss = extractBetweenBackticks(codeContent, 'scss:');
-
-        if (typescript) examples.typescript = typescript;
-        if (command) examples.command = command;
-        if (scss) examples.scss = scss;
-    }
-
-    return Object.keys(examples).length > 0 ? examples : null;
-}
-
-/**
- * Parse a single TypeScript documentation file
- */
-function parseDocFile(filePath) {
-    const content = fs.readFileSync(filePath, 'utf-8');
-
-    // Extract template from @Component decorator
-    const templateMatch = content.match(/template:\s*`([\s\S]*?)`(?=\s*(?:,|\}))/);
-    const template = templateMatch ? templateMatch[1] : '';
-
-    const description = extractDescriptionFromTemplate(template);
-
-    // Extract app-code selector from template (for guide pages that reference other demos)
-    const appCodeMatch = template.match(/<app-code\s+selector="([^"]+)"/);
-    const appCodeSelector = appCodeMatch ? appCodeMatch[1] : null;
-
-    // Extract inline code object from file (for guide pages)
-    const inlineCode = extractCodeFromFile(content);
-
-    return {
-        description,
-        appCodeSelector,
-        inlineCode
-    };
-}
-
-/**
- * Get code examples by selector directly from demos.json
- */
-function getCodeExamplesBySelector(selector) {
-    if (!demosData || !demosData.demos || !selector) return null;
-
-    const demo = demosData.demos[selector];
-    if (demo && demo.code) {
-        const examples = {};
-        if (demo.code.typescript) examples.typescript = demo.code.typescript;
-        if (demo.code.data) examples.data = demo.code.data;
-        if (demo.code.scss) examples.scss = demo.code.scss;
-
-        return Object.keys(examples).length > 0 ? examples : null;
-    }
-
-    return null;
-}
-
-/**
- * Get component metadata from page file
- */
-function getComponentMetadata(componentName) {
-    const pagePath = path.join(PAGES_DIR, componentName, 'index.ts');
-
-    if (!fs.existsSync(pagePath)) {
-        return null;
-    }
-
-    const content = fs.readFileSync(pagePath, 'utf-8');
-
-    // Extract from app-doc template attributes
-    const docTitleMatch = content.match(/docTitle="([^"]+)"/);
-    // Page titles carry a ' - Optimus UI' suffix for the browser tab; the llms output
-    // is already headed '# Optimus UI', so drop it rather than repeat it on every line.
-    const docTitle = docTitleMatch ? docTitleMatch[1].replace(/\s+-\s+Optimus UI$/, '') : null;
-    const headerMatch = content.match(/header="([^"]+)"/);
-    const descriptionMatch = content.match(/description="([^"]+)"/);
-    const apiDocsMatch = content.match(/\[apiDocs\]="(\[[^\]]+\])"/);
-    const themeDocsMatch = content.match(/themeDocs="([^"]+)"/);
-
-    // Extract docs array for sections
-    const docsMatch = content.match(/docs\s*=\s*\[([\s\S]*?)\];/);
-    let sections = [];
-
-    if (docsMatch) {
-        const docsContent = docsMatch[1];
-        const sectionMatches = docsContent.matchAll(/{\s*id:\s*['"]([^'"]+)['"]\s*,\s*label:\s*['"]([^'"]+)['"]/g);
-
-        for (const match of sectionMatches) {
-            sections.push({
-                id: match[1],
-                label: match[2]
-            });
-        }
-    }
-
-    // Parse apiDocs array
-    let apiComponents = [];
-    if (apiDocsMatch) {
-        try {
-            apiComponents = JSON.parse(apiDocsMatch[1].replace(/'/g, '"'));
-        } catch (e) {
-            // Try extracting manually
-            const apiMatches = apiDocsMatch[1].matchAll(/['"]([^'"]+)['"]/g);
-            for (const m of apiMatches) {
-                apiComponents.push(m[1]);
-            }
-        }
-    }
-
-    return {
-        title: docTitle ?? componentName,
-        header: headerMatch ? headerMatch[1] : componentName,
-        description: descriptionMatch ? descriptionMatch[1] : '',
-        sections,
-        apiComponents,
-        themeDocs: themeDocsMatch ? themeDocsMatch[1] : componentName.toLowerCase()
-    };
-}
-
-/**
- * Process a component directory
- */
-function processComponent(componentName, componentDir) {
-    const metadata = getComponentMetadata(componentName);
-
-    if (!metadata) {
-        return null;
-    }
-
-    const component = {
-        name: componentName,
-        title: metadata.title,
-        description: metadata.description,
-        apiComponents: metadata.apiComponents,
-        themeDocs: metadata.themeDocs,
-        sections: []
-    };
-
-    const files = fs.readdirSync(componentDir);
-
-    for (const file of files) {
-        if (!file.endsWith('.ts') || file.endsWith('.spec.ts')) continue;
-
-        const filePath = path.join(componentDir, file);
-        const stat = fs.statSync(filePath);
-
-        if (stat.isDirectory()) continue;
-
-        // Extract section id from filename (e.g., "basic-doc.ts" -> "basic" or "basicdoc.ts" -> "basic")
-        const sectionId = file.replace(/-?doc\.ts$/i, '').toLowerCase();
-        const sectionInfo = metadata.sections.find((s) => s.id === sectionId);
-
-        const docData = parseDocFile(filePath);
-
-        // Sections that should use inline code from doc file instead of demos.json
-        const nonDemoSections = ['accessibility', 'style'];
-
-        // Get code examples: for non-demo sections use inline code from doc file,
-        // otherwise get from demos.json
-        let codeExamples;
-        if (nonDemoSections.includes(sectionId)) {
-            // For accessibility/style docs, only use code object defined in the doc file
-            codeExamples = docData.inlineCode;
-        } else {
-            // For regular demo sections, get code from demos.json
-            codeExamples = getCodeExamplesFromDemos(componentName, sectionId);
-        }
-
-        if (docData.description || codeExamples) {
-            component.sections.push({
-                id: sectionId,
-                label: sectionInfo ? sectionInfo.label : file.replace('.ts', ''),
-                description: docData.description,
-                examples: codeExamples
-            });
-        }
-    }
-
-    return component;
-}
-
-/**
- * Get all components from the docs directory
- */
-function getAllComponents() {
-    const entries = fs.readdirSync(DOCS_DIR);
-    const components = [];
-
-    // Directories to exclude (non-component documentation)
-    const excludeDirs = [
-        'apidoc',
-        'common',
-        'guides',
-        'theming',
-        'configuration',
-        'contribution',
-        'customicons',
-        'faq',
-        'philosophy',
-        'designer',
-        'icons',
-        'introduction',
-        'installation',
-        'setup',
-        'tailwind',
-        'colors',
-        'primeflex',
-        'domain',
-        'filterservice',
-        'classnames',
-        'bind',
-        'forms',
-        'passthrough',
-        'cdn',
-        'nuxt',
-        'accessibility',
-        'templates'
-    ];
-
+function renderImports(entries, declarations, related = []) {
+    const lines = [];
     for (const entry of entries) {
-        const componentDir = path.join(DOCS_DIR, entry);
-        const stat = fs.statSync(componentDir);
+        const standalone = declarations.filter((d) => d.entry === entry && d.standalone !== false).map((d) => d.className);
+        const symbols = [...(entry.modules ?? []), ...standalone, ...(entry.services ?? [])];
+        if (symbols.length > 0) lines.push(`import { ${symbols.join(', ')} } from '${entry.import}';`);
+    }
+    // Services and types the page uses from other entry points, typically @openng/optimus-ui/api
+    const byImport = Map.groupBy(related, (r) => r.import);
+    for (const [from, items] of byImport) lines.push(`import { ${items.map((r) => r.name).join(', ')} } from '${from}';`);
+    return lines.join('\n');
+}
 
-        if (!stat.isDirectory() || excludeDirs.includes(entry)) continue;
+function renderDeclaration(d) {
+    const host = d.selector
+        .split(',')[0]
+        .trim()
+        .replace(/^\[|\]$/g, '');
+    const out = [`### ${d.className}`, ''];
+    const facts = [`Selector: ${code(d.selector)}`, `${capitalize(d.kind)}${d.standalone !== false ? ', standalone' : ''}`];
+    if (d.exportAs) facts.push(`exportAs: ${code(d.exportAs.join(', '))}`);
+    if (d.forms) facts.push('works with `ngModel`, `formControl` and `formControlName`');
+    out.push(facts.join(' · '), '');
+    if (d.description) out.push(d.description, '');
+    if (d.deprecated) out.push(`**Deprecated:** ${d.deprecated === true ? '' : d.deprecated}`.trim(), '');
 
-        const component = processComponent(entry, componentDir);
-        if (component && component.sections.length > 0) {
-            components.push(component);
-        }
+    if (d.inputs?.length) {
+        out.push('#### Inputs', '');
+        out.push(
+            ...table(
+                ['Name', 'Type', 'Default', 'Description'],
+                d.inputs.map((input) => {
+                    const notes = [];
+                    if (input.required) notes.push('**Required.**');
+                    if (input.twoWay) notes.push(`Two-way: \`[(${input.name})]\`.`);
+                    if (input.deprecated) notes.push(`**Deprecated**${input.deprecated === true ? '.' : `: ${input.deprecated.replace(/\.?$/, '.')}`}`);
+                    const type = input.values ? input.values.map((v) => JSON.stringify(v)).join(' | ') : input.type;
+                    return [code(input.name), code(type), input.default ? code(input.default) : '-', [input.description, ...notes].filter(Boolean).join(' ')];
+                })
+            )
+        );
     }
 
-    return components;
-}
-
-/**
- * Load API documentation
- */
-function loadApiDocs() {
-    if (!fs.existsSync(API_DOC_PATH)) {
-        console.warn('API documentation not found. Run build:apidoc first.');
-        return {};
+    if (d.outputs?.length) {
+        out.push('#### Outputs', '');
+        out.push(
+            ...table(
+                ['Name', 'Payload', 'Description'],
+                d.outputs.map((o) => [code(o.name), code(o.payload), [o.description, o.deprecated ? '**Deprecated.**' : ''].filter(Boolean).join(' ')])
+            )
+        );
     }
 
-    return JSON.parse(fs.readFileSync(API_DOC_PATH, 'utf-8'));
-}
-
-/**
- * Get Props from API documentation
- */
-function getPropsFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return null;
-
-    // Get the main component (usually matches the componentName)
-    const mainComponent = apiDoc.components[componentName] || Object.values(apiDoc.components)[0];
-
-    if (!mainComponent || !mainComponent.props || !mainComponent.props.values) return null;
-
-    return mainComponent.props.values.map((prop) => ({
-        name: prop.name,
-        type: prop.type || '',
-        default: prop.default || '-',
-        description: prop.description || '',
-        deprecated: prop.deprecated || ''
-    }));
-}
-
-/**
- * Get Templates (Slots) from API documentation
- */
-function getTemplatesFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return null;
-
-    const mainComponent = apiDoc.components[componentName] || Object.values(apiDoc.components)[0];
-
-    if (!mainComponent || !mainComponent.templates || !mainComponent.templates.values) return null;
-
-    return mainComponent.templates.values.map((template) => ({
-        name: template.name,
-        type: template.type || '',
-        description: template.description || ''
-    }));
-}
-
-/**
- * Get Emits from API documentation
- */
-function getEmitsFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return null;
-
-    const mainComponent = apiDoc.components[componentName] || Object.values(apiDoc.components)[0];
-
-    if (!mainComponent || !mainComponent.emits || !mainComponent.emits.values) return null;
-
-    return mainComponent.emits.values.map((emit) => ({
-        name: emit.name,
-        parameters: emit.parameters || [],
-        description: emit.description || ''
-    }));
-}
-
-/**
- * Get Methods from API documentation
- */
-function getMethodsFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return null;
-
-    const mainComponent = apiDoc.components[componentName] || Object.values(apiDoc.components)[0];
-
-    if (!mainComponent || !mainComponent.methods || !mainComponent.methods.values) return null;
-
-    return mainComponent.methods.values.map((method) => ({
-        name: method.name,
-        parameters: method.parameters || [],
-        returnType: method.returnType || 'void',
-        description: method.description || ''
-    }));
-}
-
-/**
- * Get Pass Through Options from API types
- */
-function getPTOptionsFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.types || !apiDoc.types.interfaces || !apiDoc.types.interfaces.values) return null;
-
-    const ptInterface = apiDoc.types.interfaces.values.find((i) => i.name && i.name.includes('PassThrough') && i.name.includes('Options'));
-
-    if (!ptInterface || !ptInterface.props) return null;
-
-    return ptInterface.props.map((pt) => ({
-        name: pt.name,
-        type: pt.type || '',
-        description: pt.description || ''
-    }));
-}
-
-/**
- * Get CSS Classes from API style documentation
- */
-function getStyleClassesFromApi(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.style || !apiDoc.style.classes || !apiDoc.style.classes.values) return null;
-
-    return apiDoc.style.classes.values
-        .filter((cls) => cls.class && typeof cls.class === 'string')
-        .map((cls) => ({
-            class: cls.class,
-            description: cls.description || ''
-        }));
-}
-
-/**
- * Get Design Tokens from @openng/optimus-ui-themes
- */
-function getTokensFromApi(componentName) {
-    const tokens = [];
-    const tokenKey = componentName.toLowerCase();
-
-    if (ComponentTokens[tokenKey]) {
-        const componentTokens = ComponentTokens[tokenKey].tokens;
-
-        if (Array.isArray(componentTokens)) {
-            for (const tokenData of componentTokens) {
-                tokens.push({
-                    token: tokenData.token,
-                    variable: tokenData.variable,
-                    description: tokenData.description || ''
-                });
-            }
-        }
+    if (d.templates?.length) {
+        out.push('#### Templates', '', `Define with \`<ng-template #name let-context>\` inside the \`${host}\` element.`, '');
+        out.push(
+            ...table(
+                ['Name', 'Context', 'Description'],
+                d.templates.map((t) => [code(t.name), t.context ? code(t.context) : '-', t.description])
+            )
+        );
     }
 
-    return tokens.length > 0 ? tokens : null;
-}
-
-/**
- * Get all related components from API doc
- */
-function getRelatedComponents(apiDocs, componentName) {
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return [];
-
-    return Object.keys(apiDoc.components);
-}
-
-/**
- * Generate API section for markdown (with all sub-components)
- */
-function generateApiSection(apiDocs, componentName, includeRelated = true) {
-    let markdown = '';
-
-    const apiDoc = apiDocs[componentName.toLowerCase()];
-    if (!apiDoc || !apiDoc.components) return markdown;
-
-    const components = includeRelated ? Object.keys(apiDoc.components) : [componentName];
-
-    for (const compName of components) {
-        const comp = apiDoc.components[compName];
-        if (!comp) continue;
-
-        const displayName = compName.replace(/([A-Z])/g, ' $1').trim();
-        markdown += `## ${displayName}\n\n`;
-
-        if (comp.description) {
-            markdown += `${comp.description}\n\n`;
-        }
-
-        // Props
-        if (comp.props && comp.props.values && comp.props.values.length > 0) {
-            markdown += '### Props\n\n';
-            markdown += '| Name | Type | Default | Description |\n';
-            markdown += '|------|------|---------|-------------|\n';
-
-            for (const prop of comp.props.values) {
-                const name = prop.name || '';
-                const type = (prop.type || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-                const defaultValue = prop.default || '-';
-                const description = (prop.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-                const deprecated = prop.deprecated ? ' **(Deprecated)**' : '';
-
-                markdown += `| ${name} | ${type} | ${defaultValue} | ${description}${deprecated} |\n`;
-            }
-
-            markdown += '\n';
-        }
-
-        // Emits
-        if (comp.emits && comp.emits.values && comp.emits.values.length > 0) {
-            markdown += '### Emits\n\n';
-            markdown += '| Name | Parameters | Description |\n';
-            markdown += '|------|------------|-------------|\n';
-
-            for (const emit of comp.emits.values) {
-                const name = emit.name || '';
-                const params = emit.parameters
-                    ? emit.parameters
-                          .map((p) => `${p.name}: ${p.type}`)
-                          .join(', ')
-                          .replace(/\|/g, '\\|')
-                    : '';
-                const description = (emit.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-
-                markdown += `| ${name} | ${params} | ${description} |\n`;
-            }
-
-            markdown += '\n';
-        }
-
-        // Templates (Slots)
-        if (comp.templates && comp.templates.values && comp.templates.values.length > 0) {
-            markdown += '### Templates\n\n';
-            markdown += '| Name | Type | Description |\n';
-            markdown += '|------|------|-------------|\n';
-
-            for (const template of comp.templates.values) {
-                const name = template.name || '';
-                const type = (template.type || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-                const description = (template.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-
-                markdown += `| ${name} | ${type} | ${description} |\n`;
-            }
-
-            markdown += '\n';
-        }
-
-        // Methods
-        if (comp.methods && comp.methods.values && comp.methods.values.length > 0) {
-            markdown += '### Methods\n\n';
-            markdown += '| Name | Parameters | Return Type | Description |\n';
-            markdown += '|------|------------|-------------|-------------|\n';
-
-            for (const method of comp.methods.values) {
-                const name = method.name || '';
-                const params = method.parameters
-                    ? method.parameters
-                          .map((p) => `${p.name}: ${p.type}`)
-                          .join(', ')
-                          .replace(/\|/g, '\\|')
-                    : '';
-                const returnType = (method.returnType || 'void').replace(/\|/g, '\\|');
-                const description = (method.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-
-                markdown += `| ${name} | ${params} | ${returnType} | ${description} |\n`;
-            }
-
-            markdown += '\n';
-        }
+    if (d.methods?.length) {
+        out.push('#### Methods', '');
+        out.push(
+            ...table(
+                ['Name', 'Parameters', 'Returns', 'Description'],
+                d.methods.map((m) => [code(m.name), (m.parameters ?? []).map((p) => code(`${p.name}: ${p.type}`)).join(', ') || '-', code(m.returnType ?? 'void'), m.description])
+            )
+        );
     }
 
-    return markdown;
+    return out;
+}
+
+function renderType(t) {
+    const out = [`### ${t.name}`, ''];
+    if (t.description) out.push(t.description, '');
+    if (t.kind === 'type') {
+        out.push('```typescript', `type ${t.name} = ${t.definition ?? (t.values ?? []).map((v) => JSON.stringify(v)).join(' | ')};`, '```', '');
+    } else {
+        const members = t.properties ?? t.members ?? [];
+        out.push(
+            ...table(
+                ['Name', 'Type', 'Description'],
+                members.map((m) => [code(m.name + (m.optional ? '?' : '')), code(m.type), m.description])
+            )
+        );
+    }
+    return out;
+}
+
+function renderSection(section, heading) {
+    const out = [`${heading} ${section.label}`, ''];
+    if (section.description) out.push(section.description, '');
+    const examples = section.examples ?? {};
+    if (examples.typescript) out.push('```typescript', examples.typescript, '```', '');
+    if (examples.data) out.push('**Sample Data:**', '', '```json', examples.data, '```', '');
+    if (examples.scss) out.push('```scss', examples.scss, '```', '');
+    if (examples.command) out.push('```bash', examples.command, '```', '');
+    return out;
+}
+
+function renderGuide(guide) {
+    return [`# ${guide.title}`, '', guide.description, '', ...(guide.sections ?? []).flatMap((section) => renderSection(section, '##'))].join('\n');
+}
+
+function renderLlmsTxt(manifest) {
+    const lines = ['# Optimus UI', '', '> A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.', ''];
+    lines.push(`Machine-readable API: ${manifest.site}/llms/manifest.json`, '');
+    lines.push('## Guides', '', ...manifest.guides.map((g) => `- [${g.title}](${g.url}): ${g.description}`), '');
+    const components = [...manifest.components].sort((a, b) => a.title.localeCompare(b.title));
+    lines.push('## Components', '', ...components.map((c) => `- [${c.title}](${c.url}): ${c.description}`), '');
+    return lines.join('\n');
 }
 
 /**
- * Generate Pass Through section for markdown
+ * components.json keeps the shape earlier releases published at /llms/components.json, now derived from the manifest.
  */
-function generatePTSection(apiDocs, componentName) {
-    let markdown = '';
-
-    const ptOptions = getPTOptionsFromApi(apiDocs, componentName);
-    if (ptOptions && ptOptions.length > 0) {
-        markdown += '## Pass Through Options\n\n';
-        markdown += '| Name | Type | Description |\n';
-        markdown += '|------|------|-------------|\n';
-
-        for (const pt of ptOptions) {
-            const name = pt.name || '';
-            const type = (pt.type || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-            const description = (pt.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-
-            markdown += `| ${name} | ${type} | ${description} |\n`;
-        }
-
-        markdown += '\n';
-    }
-
-    return markdown;
-}
-
-/**
- * Generate Theming section for markdown
- */
-function generateThemingSection(apiDocs, componentName) {
-    let markdown = '';
-
-    // CSS Classes
-    const styleClasses = getStyleClassesFromApi(apiDocs, componentName);
-    if (styleClasses && styleClasses.length > 0) {
-        markdown += '## Theming\n\n';
-        markdown += '### CSS Classes\n\n';
-        markdown += '| Class | Description |\n';
-        markdown += '|-------|-------------|\n';
-
-        for (const style of styleClasses) {
-            const className = style.class || '';
-            const description = (style.description || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-
-            markdown += `| ${className} | ${description} |\n`;
-        }
-
-        markdown += '\n';
-    }
-
-    // Design Tokens
-    const tokens = getTokensFromApi(componentName);
-    if (tokens && tokens.length > 0) {
-        if (!markdown.includes('## Theming')) {
-            markdown += '## Theming\n\n';
-        }
-        markdown += '### Design Tokens\n\n';
-        markdown += '| Token | CSS Variable | Description |\n';
-        markdown += '|-------|--------------|-------------|\n';
-
-        for (const token of tokens) {
-            markdown += `| ${token.token} | ${token.variable} | ${token.description} |\n`;
-        }
-
-        markdown += '\n';
-    }
-
-    return markdown;
-}
-
-/**
- * Generate JSON output with full API data
- */
-function generateJsonOutput(components, apiDocs, guidePages = []) {
-    const output = {
+function renderComponentsJson(manifest, index) {
+    const toSection = (s) => ({ id: s.id, label: s.label, description: s.description ?? '', examples: s.examples ?? null });
+    return {
         version: '1.0.0',
-        generatedAt: new Date().toISOString().split('T')[0],
-        components: components.map((comp) => {
-            const mainComponentName = getApiComponentName(comp.name);
-
+        components: manifest.components.map((page) => {
+            const { declarations } = pageApi(page, index);
+            const main = declarations[0];
+            const tokens = page.tokens;
             return {
-                name: comp.name,
-                title: comp.title,
-                description: comp.description,
-                sections: comp.sections.map((section) => ({
-                    id: section.id,
-                    label: section.label,
-                    description: section.description,
-                    examples: section.examples
-                })),
+                name: page.name,
+                title: page.title,
+                description: page.description,
+                sections: (page.sections ?? []).map(toSection),
                 api: {
-                    props: getPropsFromApi(apiDocs, mainComponentName),
-                    templates: getTemplatesFromApi(apiDocs, mainComponentName),
-                    emits: getEmitsFromApi(apiDocs, mainComponentName),
-                    methods: getMethodsFromApi(apiDocs, mainComponentName),
-                    pt: getPTOptionsFromApi(apiDocs, mainComponentName),
-                    styles: getStyleClassesFromApi(apiDocs, mainComponentName),
-                    tokens: getTokensFromApi(mainComponentName)
+                    props: main?.inputs?.map((i) => ({ name: i.name, type: i.type ?? '', default: i.default ?? '-', description: i.description ?? '', deprecated: typeof i.deprecated === 'string' ? i.deprecated : '' })) ?? null,
+                    templates: main?.templates?.map((t) => ({ name: t.name, type: t.context ? `TemplateRef<${t.context}>` : 'TemplateRef<void>', description: t.description ?? '' })) ?? null,
+                    emits: main?.outputs?.map((o) => ({ name: o.name, parameters: [{ name: 'event', type: o.payload ?? 'any' }], description: o.description ?? '' })) ?? null,
+                    methods: main?.methods?.map((m) => ({ name: m.name, parameters: m.parameters ?? [], returnType: m.returnType ?? 'void', description: m.description ?? '' })) ?? null,
+                    pt: main?.passThrough?.map((pt) => ({ name: pt.name, type: pt.type ?? '', description: pt.description ?? '' })) ?? null,
+                    styles: main?.entry.cssClasses?.map((c) => ({ class: c.class, description: c.description ?? '' })) ?? null,
+                    tokens: tokens?.map((t) => ({ token: t.name, variable: t.variable, description: t.description ?? '' })) ?? null
                 }
             };
         }),
-        pages: guidePages.map((page) => ({
-            name: page.route.split('/').pop(),
-            path: page.route,
-            title: page.title,
-            description: page.description,
-            sections: page.sections.map((section) => ({
-                id: section.id,
-                label: section.label,
-                description: section.description,
-                examples: section.examples
-            }))
-        }))
+        pages: manifest.guides.map((guide) => ({ name: guide.name, path: new URL(guide.url).pathname.slice(1), title: guide.title, description: guide.description, sections: (guide.sections ?? []).map(toSection) }))
     };
-
-    const outputPath = path.join(OUTPUT_DIR, 'components.json');
-    fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
-    console.log(`✓ Generated JSON output: ${outputPath}`);
-
-    return output;
 }
 
-/**
- * Generate combined Markdown output for AI context
- */
-function generateMarkdownOutput(components, apiDocs, guidePages = []) {
-    let markdown = '# Optimus UI Documentation\n\n';
-    markdown += `Generated: ${new Date().toISOString().split('T')[0]}\n\n`;
-    markdown += '---\n\n';
-
-    // Guide Pages Section
-    if (guidePages.length > 0) {
-        markdown += '# Guide Pages\n\n';
-
-        for (const page of guidePages) {
-            markdown += `# ${page.title}\n\n`;
-
-            if (page.description) {
-                markdown += `${page.description}\n\n`;
-            }
-
-            for (const section of page.sections) {
-                markdown += `## ${section.label}\n\n`;
-
-                if (section.description) {
-                    markdown += `${section.description}\n\n`;
-                }
-
-                if (section.examples) {
-                    if (section.examples.typescript) {
-                        markdown += '```typescript\n';
-                        markdown += section.examples.typescript;
-                        markdown += '\n```\n\n';
-                    }
-                }
-            }
-
-            markdown += '---\n\n';
-        }
-    }
-
-    // Components Section
-    markdown += '# Components\n\n';
-
-    for (const comp of components) {
-        const mainComponentName = getApiComponentName(comp.name);
-
-        markdown += `# ${comp.title}\n\n`;
-        markdown += `${comp.description}\n\n`;
-
-        // Add sections with examples
-        for (const section of comp.sections) {
-            markdown += `## ${section.label}\n\n`;
-
-            if (section.description) {
-                markdown += `${section.description}\n\n`;
-            }
-
-            if (section.examples) {
-                if (section.examples.typescript) {
-                    markdown += '**Example:**\n\n';
-                    markdown += '```typescript\n';
-                    markdown += section.examples.typescript;
-                    markdown += '\n```\n\n';
-                }
-
-                if (section.examples.data) {
-                    markdown += '**Sample Data:**\n\n';
-                    markdown += '```json\n';
-                    markdown += section.examples.data;
-                    markdown += '\n```\n\n';
-                }
-            }
-        }
-
-        // Add API documentation
-        markdown += generateApiSection(apiDocs, mainComponentName);
-
-        // Add Pass Through Options
-        markdown += generatePTSection(apiDocs, mainComponentName);
-
-        // Add Theming
-        markdown += generateThemingSection(apiDocs, mainComponentName);
-
-        markdown += '---\n\n';
-    }
-
-    const outputPath = path.join(OUTPUT_DIR, 'llms-full.txt');
-    fs.writeFileSync(outputPath, markdown, 'utf-8');
-    console.log(`✓ Generated Markdown output: ${outputPath}`);
-
-    return markdown;
+function table(headers, rows) {
+    const cell = (value) =>
+        value === undefined || value === null || value === ''
+            ? '-'
+            : String(value)
+                  .replace(/\|/g, '\\|')
+                  .replace(/\s*\n\s*/g, ' ');
+    return [`| ${headers.join(' | ')} |`, `|${headers.map(() => '---').join('|')}|`, ...rows.map((row) => `| ${row.map(cell).join(' | ')} |`), ''];
 }
 
-/**
- * Generate llms.txt index file
- */
-function generateLlmsTxt(components, pages = []) {
-    let content = '# Optimus UI\n\n';
-    content += '> A community-maintained, MIT licensed suite of 80+ accessible Angular UI components.\n\n';
-
-    // Add Guides section
-    if (pages.length > 0) {
-        content += '## Guides\n\n';
-
-        for (const page of pages) {
-            content += `- [${page.title}](https://optimus.openng.org/${page.route}): ${page.description}\n`;
-        }
-
-        content += '\n';
-    }
-
-    // Add Components section
-    content += '## Components\n\n';
-
-    const sorted = [...components].sort((a, b) => a.title.localeCompare(b.title));
-
-    for (const comp of sorted) {
-        const route = COMPONENT_ROUTE_MAP[comp.name] ?? comp.name;
-        content += `- [${comp.title}](https://optimus.openng.org/${route}): ${comp.description}\n`;
-    }
-
-    const outputPath = path.join(OUTPUT_DIR, 'llms.txt');
-    fs.writeFileSync(outputPath, content, 'utf-8');
-    console.log(`✓ Generated llms.txt: ${outputPath}`);
+function code(value) {
+    if (value === undefined || value === null || value === '') return '-';
+    const text = String(value).replace(/\s*\n\s*/g, ' ');
+    return text.includes('`') ? `\`\` ${text} \`\`` : `\`${text}\``;
 }
 
-/**
- * Generate individual component markdown files
- */
-function generateIndividualMarkdownFiles(components, apiDocs) {
-    const componentsDir = path.join(OUTPUT_DIR, 'components');
-
-    if (!fs.existsSync(componentsDir)) {
-        fs.mkdirSync(componentsDir, { recursive: true });
-    }
-
-    for (const comp of components) {
-        const mainComponentName = getApiComponentName(comp.name);
-
-        let markdown = `# ${comp.title}\n\n`;
-        markdown += `${comp.description}\n\n`;
-
-        // Import section
-        const importSection = comp.sections.find((s) => s.id === 'import');
-        if (importSection && importSection.examples && importSection.examples.typescript) {
-            markdown += '## Import\n\n';
-            markdown += '```typescript\n';
-            markdown += importSection.examples.typescript;
-            markdown += '\n```\n\n';
-        }
-
-        // Other sections
-        for (const section of comp.sections) {
-            if (section.id === 'import') continue;
-
-            markdown += `## ${section.label}\n\n`;
-
-            if (section.description) {
-                markdown += `${section.description}\n\n`;
-            }
-
-            if (section.examples) {
-                if (section.examples.typescript) {
-                    markdown += '```typescript\n';
-                    markdown += section.examples.typescript;
-                    markdown += '\n```\n\n';
-                }
-            }
-        }
-
-        // Add API documentation (without related components for individual files)
-        markdown += generateApiSection(apiDocs, mainComponentName, false);
-
-        // Add Pass Through Options
-        markdown += generatePTSection(apiDocs, mainComponentName);
-
-        // Add Theming
-        markdown += generateThemingSection(apiDocs, mainComponentName);
-
-        const outputPath = path.join(componentsDir, `${comp.name}.md`);
-        fs.writeFileSync(outputPath, markdown, 'utf-8');
-    }
-
-    console.log(`✓ Generated ${components.length} individual markdown files`);
+function capitalize(text) {
+    return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
-/**
- * Process a guide/documentation page
- */
-function processGuidePage(pageConfig) {
-    const docDir = path.join(DOCS_DIR, pageConfig.docPath);
-
-    if (!fs.existsSync(docDir)) {
-        console.warn(`   Warning: Doc directory not found for ${pageConfig.route}`);
-        return null;
-    }
-
-    const page = {
-        route: pageConfig.route,
-        title: pageConfig.title,
-        description: pageConfig.description,
-        sections: []
-    };
-
-    // Process doc files recursively
-    function processDocDir(dir, prefix = '') {
-        const entries = fs.readdirSync(dir);
-
-        for (const entry of entries) {
-            const entryPath = path.join(dir, entry);
-            const stat = fs.statSync(entryPath);
-
-            if (stat.isDirectory()) {
-                // Recurse into subdirectories
-                processDocDir(entryPath, entry + '/');
-            } else if (entry.endsWith('.ts') && !entry.endsWith('.spec.ts') && entry.toLowerCase().includes('doc')) {
-                const sectionId = entry.replace(/doc\.ts$/i, '').toLowerCase();
-                const docData = parseDocFile(entryPath);
-
-                // Get code examples - priority: inline code > app-code selector > page/section naming
-                let codeExamples = docData.inlineCode;
-                if (!codeExamples && docData.appCodeSelector) {
-                    codeExamples = getCodeExamplesBySelector(docData.appCodeSelector);
-                }
-                if (!codeExamples) {
-                    const pageName = pageConfig.route.split('/').pop();
-                    codeExamples = getCodeExamplesFromDemos(pageName, sectionId);
-                }
-
-                if (docData.description || codeExamples) {
-                    // Extract label from filename - convert camelCase to title case
-                    const label = sectionId
-                        .replace(/([A-Z])/g, ' $1')
-                        .replace(/^./, (str) => str.toUpperCase())
-                        .trim();
-
-                    page.sections.push({
-                        id: prefix + sectionId,
-                        label: label.charAt(0).toUpperCase() + label.slice(1),
-                        description: docData.description,
-                        examples: codeExamples
-                    });
-                }
-            }
-        }
-    }
-
-    processDocDir(docDir);
-
-    return page;
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+    main();
 }
-
-/**
- * Get all guide pages
- */
-function getAllGuidePages() {
-    const pages = [];
-
-    for (const pageConfig of GUIDE_PAGES) {
-        const page = processGuidePage(pageConfig);
-        if (page) {
-            pages.push(page);
-        }
-    }
-
-    return pages;
-}
-
-/**
- * Generate individual page markdown files
- */
-function generatePageMarkdownFiles(pages) {
-    const pagesDir = path.join(OUTPUT_DIR, 'pages');
-
-    if (!fs.existsSync(pagesDir)) {
-        fs.mkdirSync(pagesDir, { recursive: true });
-    }
-
-    for (const page of pages) {
-        let markdown = `# ${page.title}\n\n`;
-        markdown += `${page.description}\n\n`;
-
-        for (const section of page.sections) {
-            markdown += `## ${section.label}\n\n`;
-
-            if (section.description) {
-                markdown += `${section.description}\n\n`;
-            }
-
-            if (section.examples) {
-                if (section.examples.typescript) {
-                    markdown += '```typescript\n';
-                    markdown += section.examples.typescript;
-                    markdown += '\n```\n\n';
-                }
-
-                if (section.examples.command) {
-                    markdown += '```bash\n';
-                    markdown += section.examples.command;
-                    markdown += '\n```\n\n';
-                }
-            }
-        }
-
-        // Use the last segment of the route as the filename
-        const filename = page.route.split('/').pop();
-        const outputPath = path.join(pagesDir, `${filename}.md`);
-        fs.writeFileSync(outputPath, markdown, 'utf-8');
-    }
-
-    console.log(`✓ Generated ${pages.length} page markdown files`);
-}
-
-/**
- * Main execution
- */
-function main() {
-    console.log('🚀 Building Optimus UI LLM Documentation...\n');
-
-    console.log('📦 Loading demos.json...');
-    demosData = loadDemosJson();
-    if (demosData) {
-        console.log(`   Loaded ${Object.keys(demosData.demos || {}).length} demos\n`);
-    } else {
-        console.log('   Warning: demos.json not available, code examples will be missing\n');
-    }
-
-    console.log('📁 Parsing component documentation...');
-    const components = getAllComponents();
-    console.log(`   Found ${components.length} components\n`);
-
-    console.log('📄 Parsing guide pages...');
-    const pages = getAllGuidePages();
-    console.log(`   Found ${pages.length} guide pages\n`);
-
-    console.log('📖 Loading API documentation...');
-    const apiDocs = loadApiDocs();
-    console.log(`   Loaded API docs for ${Object.keys(apiDocs).length} modules\n`);
-
-    console.log('✨ Generating outputs...\n');
-    generateJsonOutput(components, apiDocs, pages);
-    generateMarkdownOutput(components, apiDocs, pages);
-    generateLlmsTxt(components, pages);
-    generateIndividualMarkdownFiles(components, apiDocs);
-    generatePageMarkdownFiles(pages);
-
-    console.log('\n✅ LLM documentation generation complete!');
-    console.log(`\nOutput directory: ${OUTPUT_DIR}`);
-    console.log('   - components.json (full API data)');
-    console.log('   - llms-full.txt (full documentation with Props, Templates, Emits, PT, Theming)');
-    console.log('   - llms.txt (index file)');
-    console.log('   - components/*.md (individual component files with complete API)');
-    console.log('   - pages/*.md (guide/documentation page files)');
-}
-
-main();
