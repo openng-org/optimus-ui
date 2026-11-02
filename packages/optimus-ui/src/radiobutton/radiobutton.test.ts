@@ -127,7 +127,20 @@ class TestBinaryRadioComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [RadioButton, ReactiveFormsModule],
-    template: ` <p-radiobutton name="onpush" [formControl]="control" [value]="radioValue()" [inputId]="inputId()" [ariaLabel]="ariaLabel()" [ariaLabelledBy]="ariaLabelledBy()" [tabindex]="tabindex()" [binary]="binary()" [size]="size()" /> `
+    template: `
+        <p-radiobutton
+            name="onpush"
+            [formControl]="control"
+            [value]="radioValue()"
+            [inputId]="inputId()"
+            [ariaLabel]="ariaLabel()"
+            [ariaLabelledBy]="ariaLabelledBy()"
+            [tabindex]="tabindex()"
+            [autofocus]="autofocus()"
+            [binary]="binary()"
+            [size]="size()"
+        />
+    `
 })
 class TestOnPushRadioComponent {
     control = new FormControl<any>(null);
@@ -136,6 +149,7 @@ class TestOnPushRadioComponent {
     ariaLabel = signal('Label A');
     ariaLabelledBy = signal('label-a');
     tabindex = signal(0);
+    autofocus = signal(false);
     binary = signal(false);
     size = signal<'large' | 'small' | undefined>(undefined);
 }
@@ -659,6 +673,15 @@ describe('RadioButton', () => {
             await fixture.whenStable();
 
             expect(inputElement.tabIndex).toBe(-1);
+        });
+
+        it('should render autofocus changes', async () => {
+            expect(inputElement.hasAttribute('autofocus')).toBe(false);
+
+            component.autofocus.set(true);
+            await fixture.whenStable();
+
+            expect(inputElement.hasAttribute('autofocus')).toBe(true);
         });
 
         it('should render size changes in data-p', async () => {
