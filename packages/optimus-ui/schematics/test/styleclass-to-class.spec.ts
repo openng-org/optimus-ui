@@ -222,6 +222,42 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-tag class="existing my-tag"></p-tag>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-progressspinner', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressspinner strokeWidth="4" styleClass="my-spinner"></p-progressspinner>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressspinner strokeWidth="4" class="my-spinner"></p-progressspinner>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-progressspinner', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressspinner [styleClass]="myClass"></p-progressspinner>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressspinner [class]="myClass"></p-progressspinner>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-progressspinner', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressspinner class="existing" styleClass="my-spinner"></p-progressspinner>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressspinner class="existing my-spinner"></p-progressspinner>\n`);
+    });
+
+    it('rewrites styleClass on the p-progressSpinner and p-progress-spinner aliases', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressSpinner styleClass="a"></p-progressSpinner>\n<p-progress-spinner [styleClass]="b"></p-progress-spinner>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressSpinner class="a"></p-progressSpinner>\n<p-progress-spinner [class]="b"></p-progress-spinner>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
