@@ -15,7 +15,7 @@ import { Component } from '@angular/core';
             <app-code [code]="code1" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
             <p style="margin-top: 1rem;">
                 Install the dependencies, build the <i>optimus-ui-*</i> packages and generate the API and demo data used by the documentation app, then run it in your local environment at <i>http://localhost:4200/</i>. Run
-                <i>pnpm run bootstrap</i> again after changing or pulling changes to a <i>packages/optimus-ui-*</i> package.
+                <i>pnpm run bootstrap</i> again after changing or pulling changes to <i>packages/optimus-ui</i> or a <i>packages/optimus-ui-*</i> package.
             </p>
             <app-code [code]="code2" [hideToggleCode]="true" [hideStackBlitz]="true"></app-code>
             <h3>Running Tests</h3>
