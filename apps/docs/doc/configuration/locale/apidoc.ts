@@ -474,6 +474,10 @@ import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
                         <td>aria.rotateLeft</td>
                         <td>Rotate Left</td>
                     </tr>
+                    <tr>
+                        <td>aria.selectedItems</td>
+                        <td>Selected Items</td>
+                    </tr>
                 </tbody>
             </table>
         </div>

@@ -59,6 +59,7 @@ interface Country {
             [resetFilterOnHide]="resetFilterOnHide"
             [dropdownIcon]="dropdownIcon"
             [chipIcon]="chipIcon"
+            [chipRemoveIcon]="chipRemoveIcon"
             [filterPlaceHolder]="filterPlaceHolder"
             [emptyMessage]="emptyMessage"
             [emptyFilterMessage]="emptyFilterMessage"
@@ -121,6 +122,7 @@ class TestBasicMultiSelectComponent {
     resetFilterOnHide = false;
     dropdownIcon: string | undefined;
     chipIcon: string | undefined;
+    chipRemoveIcon: string | undefined;
     filterPlaceHolder: string | undefined;
     emptyMessage = '';
     emptyFilterMessage = '';
@@ -664,6 +666,30 @@ describe('MultiSelect', () => {
 
             expect(component.onRemove).toHaveBeenCalled();
             expect(multiSelect.modelValue()).toEqual([component.options[1]]);
+        });
+
+        it('should keep chips removable when the selection limit is reached', async () => {
+            component.display = 'chip';
+            component.selectionLimit = 2;
+            component.selectedCities = [component.options[0], component.options[1]];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(multiSelect.maxSelectionLimitReached()).toBe(true);
+
+            const removeIcons = fixture.debugElement.queryAll(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcons.length).toBe(2);
+            expect(removeIcons[0].nativeElement.getAttribute('tabindex')).toBe('0');
+
+            removeIcons[0].triggerEventHandler('click', new MouseEvent('click'));
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(multiSelect.modelValue()).toEqual([component.options[1]]);
+            expect(fixture.debugElement.queryAll(By.css('.p-chip-remove-icon')).length).toBe(1);
         });
     });
 
@@ -1274,6 +1300,49 @@ describe('MultiSelect', () => {
             // Chip might not be rendered or use different selector
             expect(chip || fixture.debugElement.query(By.css('.p-multiselect-chip')) || component.display === 'chip').toBeTruthy();
         });
+
+        it('should render chipRemoveIcon on the chip remove icon', async () => {
+            component.display = 'chip';
+            component.chipRemoveIcon = 'pi pi-times';
+            component.selectedCities = [component.options[0]];
+            fixture.detectChanges();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const removeIcon = fixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcon).toBeTruthy();
+            expect(removeIcon.nativeElement.getAttribute('class')).toContain('pi-times');
+        });
+
+        it('should keep honouring the deprecated chipIcon on the chip remove icon', async () => {
+            component.display = 'chip';
+            component.chipIcon = 'pi pi-map';
+            component.selectedCities = [component.options[0]];
+            fixture.detectChanges();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const removeIcon = fixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcon).toBeTruthy();
+            expect(removeIcon.nativeElement.getAttribute('class')).toContain('pi-map');
+        });
+
+        it('should let chipRemoveIcon win over the deprecated chipIcon', async () => {
+            component.display = 'chip';
+            component.chipIcon = 'pi pi-map';
+            component.chipRemoveIcon = 'pi pi-times';
+            component.selectedCities = [component.options[0]];
+            fixture.detectChanges();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const removeIcon = fixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcon.nativeElement.getAttribute('class')).toContain('pi-times');
+            expect(removeIcon.nativeElement.getAttribute('class')).not.toContain('pi-map');
+        });
     });
 
     describe('Edge Cases', () => {
@@ -1726,6 +1795,80 @@ describe('MultiSelect Content Child Templates', () => {
             expect(customEmptyFilter).toBeTruthy();
             expect(customEmptyFilter.nativeElement.textContent).toBe('No filter results');
         }
+    });
+});
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-multiselect [options]="options" [(ngModel)]="selectedCities" optionLabel="name" display="chip">
+            <ng-template #chipicon>
+                <span class="content-child-chip-icon"></span>
+            </ng-template>
+
+            <ng-template #chipremoveicon>
+                <span class="content-child-chip-remove-icon"></span>
+            </ng-template>
+        </p-multiselect>
+    `
+})
+class TestChipIconMultiSelectComponent {
+    options: City[] = [
+        { name: 'New York', code: 'NY' },
+        { name: 'Rome', code: 'RM' }
+    ];
+
+    selectedCities: City[] = [];
+}
+
+describe('MultiSelect Chip Icon Templates', () => {
+    let component: TestChipIconMultiSelectComponent;
+    let fixture: ComponentFixture<TestChipIconMultiSelectComponent>;
+    let multiSelect: MultiSelect;
+
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            declarations: [TestChipIconMultiSelectComponent],
+            imports: [CommonModule, FormsModule, MultiSelectModule],
+            providers: [provideNoopAnimations(), provideZonelessChangeDetection()]
+        }).compileComponents();
+
+        fixture = TestBed.createComponent(TestChipIconMultiSelectComponent);
+        component = fixture.componentInstance;
+        multiSelect = fixture.debugElement.query(By.directive(MultiSelect)).componentInstance;
+
+        component.selectedCities = [component.options[0]];
+        fixture.detectChanges();
+        await fixture.whenStable();
+        fixture.detectChanges();
+    });
+
+    it('should render the chipicon template as chip content, not as the remove icon', () => {
+        const chipIcon = fixture.debugElement.query(By.css('.content-child-chip-icon'));
+
+        expect(chipIcon).toBeTruthy();
+        expect(chipIcon.nativeElement.closest('.p-chip-remove-icon')).toBeNull();
+    });
+
+    it('should render the chipremoveicon template inside the chip remove icon', () => {
+        const removeIcon = fixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+        expect(removeIcon).toBeTruthy();
+        expect(removeIcon.query(By.css('.content-child-chip-remove-icon'))).toBeTruthy();
+        expect(removeIcon.query(By.css('.content-child-chip-icon'))).toBeNull();
+    });
+
+    it('should remove the option when the chip remove icon is clicked', async () => {
+        const removeIcon = fixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+        removeIcon.triggerEventHandler('click', new MouseEvent('click'));
+        fixture.changeDetectorRef.markForCheck();
+        await fixture.whenStable();
+        fixture.detectChanges();
+
+        expect(multiSelect.modelValue()).toEqual([]);
+        expect(fixture.debugElement.queryAll(By.css('p-chip')).length).toBe(0);
     });
 });
 

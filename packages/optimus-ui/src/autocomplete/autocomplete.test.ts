@@ -1472,6 +1472,22 @@ describe('AutoComplete', () => {
             expect(ariaRequired === null || ariaRequired === 'false').toBe(true);
             expect(inputElement.nativeElement.getAttribute('aria-label')).toBeTruthy();
         });
+
+        it('should give the chip container an accessible name in multiple mode', async () => {
+            testComponent.multiple = true;
+            testComponent.selectedValue = [{ name: 'Item 1' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const chipContainer = testFixture.debugElement.query(By.css('ul.p-autocomplete-input-multiple'));
+
+            expect(chipContainer).toBeTruthy();
+            expect(chipContainer.nativeElement.getAttribute('role')).toBe('listbox');
+            expect(chipContainer.nativeElement.getAttribute('aria-label')).toBe(autocompleteInstance.selectedItemsLabel);
+            expect(chipContainer.nativeElement.getAttribute('aria-label')).toBe('Selected Items');
+        });
     });
 
     describe('Complex Situations and Edge Cases', () => {
@@ -1599,6 +1615,45 @@ describe('AutoComplete', () => {
             await testFixture.whenStable();
 
             expect(inputElement.nativeElement.readOnly).toBe(true);
+        });
+
+        it('should not offer a chip remove icon in readonly mode', async () => {
+            testComponent.multiple = true;
+            testComponent.readonly = true;
+            testComponent.selectedValue = [{ name: 'Item 1' }, { name: 'Item 2' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const chips = testFixture.debugElement.queryAll(By.css('p-chip'));
+
+            expect(chips.length).toBe(2);
+            expect(testFixture.debugElement.queryAll(By.css('.p-chip-remove-icon')).length).toBe(0);
+            expect(chips.every((chip) => chip.nativeElement.style.display !== 'none')).toBe(true);
+            expect(autocompleteInstance.modelValue().length).toBe(2);
+        });
+
+        it('should still remove a chip when the remove icon is clicked outside readonly mode', async () => {
+            testComponent.multiple = true;
+            testComponent.readonly = false;
+            testComponent.selectedValue = [{ name: 'Item 1' }, { name: 'Item 2' }];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            const autocompleteInstance = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+            const removeIcon = testFixture.debugElement.query(By.css('.p-chip-remove-icon'));
+
+            expect(removeIcon).toBeTruthy();
+
+            removeIcon.triggerEventHandler('click', new MouseEvent('click'));
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            expect(autocompleteInstance.modelValue().length).toBe(1);
+            expect(testFixture.debugElement.queryAll(By.css('p-chip')).length).toBe(1);
         });
 
         it('should handle forceSelection mode', async () => {
@@ -2035,6 +2090,133 @@ describe('AutoComplete', () => {
                 await testFixture.whenStable();
 
                 expect(testComponent.selectedValue).toBeNull();
+            });
+
+            it('should consume the separator key when the value is already selected', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'Item1';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(keydownEvent.defaultPrevented).toBe(true);
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should consume the separator key when the input is empty', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = '';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(keydownEvent.defaultPrevented).toBe(true);
+                expect(testComponent.selectedValue).toEqual([]);
+            });
+
+            it('should split the input value on the separator instead of adding it verbatim', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = ',Item1,';
+                const keydownEvent = new KeyboardEvent('keydown', { key: ',', cancelable: true });
+                Object.defineProperty(keydownEvent, 'target', { value: inputElement.nativeElement, writable: false });
+                autocompleteComponent.onKeyDown(keydownEvent);
+                await testFixture.whenStable();
+
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+                expect(inputElement.nativeElement.value).toBe('');
+            });
+
+            it('should not leave pasted separators in the input when nothing new is added', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = '';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Item1,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should keep text the user already typed when a paste adds nothing', async () => {
+                testComponent.selectedValue = ['Item1'];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'half-typed';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Item1,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('half-typed');
+                expect(testComponent.selectedValue).toEqual(['Item1']);
+            });
+
+            it('should clear the input when a paste does add values', async () => {
+                testComponent.selectedValue = [];
+                testFixture.changeDetectorRef.markForCheck();
+                await testFixture.whenStable();
+
+                const autocompleteComponent = testFixture.debugElement.query(By.directive(AutoComplete)).componentInstance;
+                const inputElement = testFixture.debugElement.query(By.css('input[role="combobox"]'));
+
+                inputElement.nativeElement.value = 'half-typed';
+                const preventDefault = vi.fn();
+                const pasteEvent = {
+                    clipboardData: { getData: () => 'Alpha,Beta,' },
+                    target: inputElement.nativeElement,
+                    preventDefault
+                };
+
+                autocompleteComponent.onInputPaste(pasteEvent);
+                await testFixture.whenStable();
+
+                expect(preventDefault).toHaveBeenCalled();
+                expect(inputElement.nativeElement.value).toBe('');
+                expect(testComponent.selectedValue).toEqual(['Alpha', 'Beta']);
             });
         });
 
