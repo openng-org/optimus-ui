@@ -325,6 +325,107 @@ describe('TreeTable', () => {
             // The first might not reset immediately, test the behavior differently
             expect(treetable.resetPageOnSort).toBe(true);
         });
+
+        describe('Removable Sort', () => {
+            const rootNames = () => (treetable.value ?? []).map((node) => node.data.name);
+            const childNames = () => ((treetable.value ?? []).find((node) => node.data.name === 'Banana')?.children ?? []).map((node: TreeNode) => node.data.name);
+            const serializedNames = () => (treetable.serializedValue ?? []).map((row: any) => row.node.data.name);
+
+            const removableTreeData = (): TreeNode[] => [
+                {
+                    data: { name: 'Banana', size: '100KB' },
+                    expanded: true,
+                    children: [{ data: { name: 'Cherry', size: '50KB' } }, { data: { name: 'Apple', size: '30KB' } }]
+                },
+                { data: { name: 'Apple', size: '200KB' } },
+                { data: { name: 'Cherry', size: '10KB' } }
+            ];
+
+            const setup = async (removableSort = true, sortMode: 'single' | 'multiple' = 'single') => {
+                component.removableSort = removableSort;
+                component.sortMode = sortMode;
+                component.value = removableTreeData();
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
+                fixture.detectChanges();
+            };
+
+            const sortBy = async (field: string, metaKey = false) => {
+                treetable.sort({ originalEvent: { metaKey, ctrlKey: false } as unknown as Event, field });
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
+                fixture.detectChanges();
+            };
+
+            it('should cycle ascending, descending then back to the original root order', async () => {
+                await setup();
+
+                await sortBy('name');
+                expect(rootNames()).toEqual(['Apple', 'Banana', 'Cherry']);
+
+                await sortBy('name');
+                expect(rootNames()).toEqual(['Cherry', 'Banana', 'Apple']);
+
+                await sortBy('name');
+                expect(treetable.sortField).toBeNull();
+                expect(rootNames()).toEqual(['Banana', 'Apple', 'Cherry']);
+            });
+
+            it('should restore the original order of nested children', async () => {
+                await setup();
+
+                await sortBy('name');
+                expect(childNames()).toEqual(['Apple', 'Cherry']);
+
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(childNames()).toEqual(['Cherry', 'Apple']);
+            });
+
+            it('should refresh the serialized value when the sort is removed', async () => {
+                await setup();
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(serializedNames()).toEqual(['Banana', 'Cherry', 'Apple', 'Apple', 'Cherry']);
+            });
+
+            it('should emit an empty sort meta when the sort is removed', async () => {
+                await setup();
+                const sortSpy = vi.spyOn(treetable.onSort, 'emit');
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(sortSpy).toHaveBeenLastCalledWith({ field: null, order: null });
+            });
+
+            it('should keep the two state toggle when removableSort is disabled', async () => {
+                await setup(false);
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(treetable.sortField).toBe('name');
+                expect(rootNames()).toEqual(['Apple', 'Banana', 'Cherry']);
+            });
+
+            it('should empty the multi sort meta and restore the original order', async () => {
+                await setup(true, 'multiple');
+
+                await sortBy('name');
+                await sortBy('name');
+                await sortBy('name');
+
+                expect(treetable.multiSortMeta).toEqual([]);
+                expect(rootNames()).toEqual(['Banana', 'Apple', 'Cherry']);
+            });
+        });
     });
 
     describe('Selection', () => {
@@ -3003,6 +3104,7 @@ describe('TreeTable', () => {
             [paginatorLocale]="paginatorLocale"
             [sortField]="sortField"
             [sortOrder]="sortOrder"
+            [removableSort]="removableSort"
             [multiSortMeta]="multiSortMeta"
             [selectionKeys]="selectionKeys"
             [showGridlines]="showGridlines"
@@ -3063,6 +3165,7 @@ class TestBasicTreeTableComponent {
     defaultSortOrder: number = 1;
     sortMode: 'single' | 'multiple' = 'single';
     resetPageOnSort: boolean = true;
+    removableSort: boolean = false;
     customSort: boolean | undefined;
     selectionMode: string | undefined;
     selection: any;

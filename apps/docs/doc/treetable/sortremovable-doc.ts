@@ -1,11 +1,10 @@
-import { NodeService } from '@/service/nodeservice';
-import { ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
-import { SortEvent, TreeNode } from '@openng/optimus-ui/api';
-import { TreeTable, TreeTableModule } from '@openng/optimus-ui/treetable';
-import { CommonModule } from '@angular/common';
 import { DeferredDemo } from '@/components/demo/deferreddemo';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { NodeService } from '@/service/nodeservice';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { TreeNode } from '@openng/optimus-ui/api';
+import { TreeTableModule } from '@openng/optimus-ui/treetable';
 
 interface Column {
     field: string;
@@ -15,40 +14,40 @@ interface Column {
 @Component({
     selector: 'sortremovable-doc',
     standalone: true,
-    imports: [CommonModule, TreeTableModule, DeferredDemo, AppCode, AppDocSectionText],
+    imports: [TreeTableModule, DeferredDemo, AppCode, AppDocSectionText],
     template: `
         <app-docsectiontext>
-            <p>The removable sort can be implemented using the <i>customSort</i> property.</p>
+            <p>A third sort state that clears the sorting and restores the original data order is enabled by setting <i>removableSort</i> to true.</p>
         </app-docsectiontext>
         <div class="card">
             <p-deferred-demo (load)="loadDemoData()">
-                <p-treetable
-                    #tt
-                    [value]="files"
-                    (sortFunction)="customSort($event)"
-                    [customSort]="true"
-                    [columns]="cols"
-                    selectionMode="single"
-                    [metaKeySelection]="metaKeySelection"
-                    [(selection)]="selectedNode"
-                    dataKey="name"
-                    [scrollable]="true"
-                    [tableStyle]="{ 'min-width': '50rem' }"
-                >
-                    <ng-template pTemplate="header" let-columns>
+                <p-treetable [value]="files" [columns]="cols" [removableSort]="true" [scrollable]="true" [tableStyle]="{ 'min-width': '50rem' }">
+                    <ng-template #header let-columns>
                         <tr>
-                            <th *ngFor="let col of columns" [ttSortableColumn]="col.field">
-                                {{ col.header }}
-                                <p-treetableSortIcon [field]="col.field" />
-                            </th>
+                            @for (col of columns; track col) {
+                                <th [ttSortableColumn]="col.field">
+                                    <div class="flex items-center gap-2">
+                                        {{ col.header }}
+                                        <p-treetable-sort-icon [field]="col.field" />
+                                    </div>
+                                </th>
+                            }
                         </tr>
                     </ng-template>
-                    <ng-template pTemplate="body" let-rowNode let-rowData="rowData" let-columns="columns">
-                        <tr [ttRow]="rowNode" [ttSelectableRow]="rowNode">
-                            <td *ngFor="let col of columns; let i = index">
-                                <p-treeTableToggler [rowNode]="rowNode" *ngIf="i === 0" />
-                                {{ rowData[col.field] }}
-                            </td>
+                    <ng-template #body let-rowNode let-rowData="rowData" let-columns="columns">
+                        <tr [ttRow]="rowNode">
+                            @for (col of columns; let first = $first; track col) {
+                                <td>
+                                    @if (first) {
+                                        <div class="flex items-center gap-2">
+                                            <p-treetable-toggler [rowNode]="rowNode"></p-treetable-toggler>
+                                            <span>{{ rowData[col.field] }}</span>
+                                        </div>
+                                    } @else {
+                                        {{ rowData[col.field] }}
+                                    }
+                                </td>
+                            }
                         </tr>
                     </ng-template>
                 </p-treetable>
@@ -59,26 +58,15 @@ interface Column {
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SortRemovableDoc {
-    @ViewChild('tt') tt: TreeTable;
-
-    metaKeySelection: boolean = true;
-
     files!: TreeNode[];
 
-    initialValue: TreeNode[];
-
-    selectedNode!: TreeNode;
-
     cols!: Column[];
-
-    isSorted: boolean = null;
 
     constructor(private nodeService: NodeService) {}
 
     loadDemoData() {
         this.nodeService.getFilesystem().then((files) => {
             this.files = files;
-            this.initialValue = [...files];
         });
 
         this.cols = [
@@ -86,33 +74,5 @@ export class SortRemovableDoc {
             { field: 'size', header: 'Size' },
             { field: 'type', header: 'Type' }
         ];
-    }
-    customSort(event: SortEvent) {
-        if (this.isSorted == null || this.isSorted === undefined) {
-            this.isSorted = true;
-            this.sortTableData(event);
-        } else if (this.isSorted == true) {
-            this.isSorted = false;
-            this.sortTableData(event);
-        } else if (this.isSorted == false) {
-            this.isSorted = null;
-            this.files = [...this.initialValue];
-            this.tt.reset();
-        }
-    }
-
-    sortTableData(event) {
-        event.data.sort((data1, data2) => {
-            let value1 = data1.data[event.field];
-            let value2 = data2.data[event.field];
-            let result = null;
-            if (value1 == null && value2 != null) result = -1;
-            else if (value1 != null && value2 == null) result = 1;
-            else if (value1 == null && value2 == null) result = 0;
-            else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-            else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-            return event.order * result;
-        });
     }
 }

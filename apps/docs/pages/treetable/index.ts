@@ -26,7 +26,9 @@ import { SelectionEventsDoc } from '@/doc/treetable/selectioneventsc-doc';
 import { SelectionMultipleDoc } from '@/doc/treetable/selectionmultiple-doc';
 import { SelectionSingleDoc } from '@/doc/treetable/selectionsingle-doc';
 import { SizeDoc } from '@/doc/treetable/size-doc';
+import { SortCustomDoc } from '@/doc/treetable/sortcustom-doc';
 import { SortMultipleColumnsDoc } from '@/doc/treetable/sortmultiplecolumns-doc';
+import { SortRemovableDoc } from '@/doc/treetable/sortremovable-doc';
 import { SortSingleColumnDoc } from '@/doc/treetable/sortsinglecolumn-doc';
 import { TemplateDoc } from '@/doc/treetable/template-doc';
 import { LoadingMaskDoc } from '@/doc/treetable/loadingmask-doc';
@@ -131,12 +133,17 @@ export class TreeTableDemo {
                     id: 'sortmultiplecolumns',
                     label: 'Multiple Columns',
                     component: SortMultipleColumnsDoc
+                },
+                {
+                    id: 'sortremovable',
+                    label: 'Removable Sort',
+                    component: SortRemovableDoc
+                },
+                {
+                    id: 'sortcustom',
+                    label: 'Custom Sort',
+                    component: SortCustomDoc
                 }
-                // {
-                //     id: 'sortremovable',
-                //     label: 'Removable Sort',
-                //     component: SortRemovableDoc
-                // }
             ]
         },
         {
