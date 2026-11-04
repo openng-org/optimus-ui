@@ -430,6 +430,24 @@ describe('InputOtp', () => {
             firstInput.dispatchEvent(alphaEvent);
 
             expect(alphaEvent.preventDefault).toHaveBeenCalled();
+
+            const tabEvent = new KeyboardEvent('keydown', { code: 'KeyTab', key: 'Tab' });
+            vi.spyOn(tabEvent, 'preventDefault').mockImplementation(() => {});
+            firstInput.dispatchEvent(tabEvent);
+
+            expect(tabEvent.preventDefault).not.toHaveBeenCalled();
+
+            const chineseCharEvent = new KeyboardEvent('keydown', { code: '', key: '中' });
+            vi.spyOn(chineseCharEvent, 'preventDefault').mockImplementation(() => {});
+            firstInput.dispatchEvent(chineseCharEvent);
+
+            expect(chineseCharEvent.preventDefault).toHaveBeenCalled();
+
+            const emojiEvent = new KeyboardEvent('keydown', { code: '', key: '😊' });
+            vi.spyOn(emojiEvent, 'preventDefault').mockImplementation(() => {});
+            firstInput.dispatchEvent(emojiEvent);
+
+            expect(emojiEvent.preventDefault).toHaveBeenCalled();
         });
 
         it('should handle readonly state', () => {
