@@ -3162,7 +3162,13 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
     }
 
     hideOverlay() {
-        this.inputfieldViewChild()?.nativeElement.focus();
+        const activeElement = this.document.activeElement;
+        const isFocusInDatepicker = !activeElement || activeElement === this.document.body || this.el.nativeElement.contains(activeElement) || (this.overlay && this.overlay.contains(activeElement));
+
+        if (isFocusInDatepicker) {
+            this.inputfieldViewChild()?.nativeElement.focus();
+        }
+
         this.overlayVisible = false;
         this.clearTimePickerTimer();
 

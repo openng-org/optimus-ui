@@ -181,6 +181,12 @@ describe('SelectButton', () => {
             expect(component.value).toEqual(['opt2']);
         });
 
+        it('should remove disabled options from the tab order', () => {
+            const buttons = fixture.debugElement.queryAll(By.css('p-togglebutton'));
+
+            expect(buttons.map((button) => button.nativeElement.getAttribute('tabindex'))).toEqual(['0', '0', '-1']);
+        });
+
         it('should not select disabled options', () => {
             const mockEvent = new Event('click');
             component.onOptionSelect(mockEvent, component.options![2], 2);

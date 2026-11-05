@@ -636,6 +636,24 @@ describe('ToggleButton', () => {
             fixture.detectChanges();
 
             expect(toggleButtonInstance.checked).toBe(initialChecked); // Should not change when disabled
+            expect(toggleButtonElement.nativeElement.getAttribute('tabindex')).toBe('-1');
+        });
+
+        it('should be removed from the tab order when disabled even with an explicit tabindex', async () => {
+            component.tabindex = 5;
+            component.disabled = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(toggleButtonElement.nativeElement.getAttribute('tabindex')).toBe('-1');
+
+            component.disabled = false;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(toggleButtonElement.nativeElement.getAttribute('tabindex')).toBe('5');
         });
     });
 
