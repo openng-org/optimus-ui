@@ -306,6 +306,8 @@ describe('Tooltip', () => {
 
         afterEach(() => {
             tooltipDirective.deactivate();
+            // drop a delayed hide right away so it cannot fire during the next test
+            tooltipDirective.hide();
         });
 
         it('should activate on the first mouse enter', () => {
@@ -358,6 +360,67 @@ describe('Tooltip', () => {
 
             leave();
             enter();
+
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        // the scroll handler listens on the scrollable ancestors of the host
+        const makeHostScrollable = () => {
+            const scroller: HTMLElement = fixture.nativeElement;
+            scroller.style.overflow = 'auto';
+            return scroller;
+        };
+
+        it('should show again on a mouse enter after a scroll closed the tooltip', () => {
+            const scroller = makeHostScrollable();
+            enter();
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+
+            // the page scrolls while the pointer stays on the host - see issue #1922
+            scroller.dispatchEvent(new Event('scroll'));
+            expect(document.querySelector('.p-tooltip')).toBeFalsy();
+            expect(tooltipDirective.pointerInside).toBe(false);
+
+            enter();
+
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should still ignore a re-entrant mouse enter when no scroll happened', () => {
+            const scroller = makeHostScrollable();
+            enter();
+            scroller.dispatchEvent(new Event('scroll'));
+            enter();
+
+            const activateSpy = vi.spyOn(tooltipDirective, 'activate');
+            enter();
+
+            expect(activateSpy).not.toHaveBeenCalled();
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should stay open when the pointer comes back before the hide delay expires', async () => {
+            tooltipDirective.setOption({ hideDelay: 100 });
+
+            enter();
+            leave();
+            // the hide is pending, the container is still there
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+
+            enter();
+            await new Promise((resolve) => setTimeout(resolve, 150));
+
+            expect(document.querySelector('.p-tooltip')).toBeTruthy();
+        });
+
+        it('should stay open when the pointer enters again before the hide delay of a scroll expires', async () => {
+            tooltipDirective.setOption({ hideDelay: 100 });
+            const scroller = makeHostScrollable();
+
+            enter();
+            scroller.dispatchEvent(new Event('scroll'));
+            enter();
+            await new Promise((resolve) => setTimeout(resolve, 150));
 
             expect(document.querySelector('.p-tooltip')).toBeTruthy();
         });
