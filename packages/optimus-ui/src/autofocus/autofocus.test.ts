@@ -253,7 +253,7 @@ describe('AutoFocus', () => {
         it('should have default values', () => {
             // pAutoFocus without value defaults to empty string in template, which is truthy
             // But the component Input transforms it to false
-            expect(directive.focused).toBe(false);
+            expect(directive.focused()).toBe(false);
         });
 
         it('should inject platform ID and document', () => {
@@ -332,7 +332,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10)); // Wait for setTimeout
 
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
 
         it('should not focus when autofocus is disabled', async () => {
@@ -357,7 +357,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
 
         it('should focus div with tabindex when autofocus is enabled', async () => {
@@ -370,7 +370,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
     });
 
@@ -389,7 +389,7 @@ describe('AutoFocus', () => {
             expect(element.focus).not.toHaveBeenCalled();
 
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
-            expect(directive.focused).toBe(false);
+            expect(directive.focused()).toBe(false);
         });
     });
 
@@ -452,40 +452,26 @@ describe('AutoFocus', () => {
         beforeEach(async () => {
             fixture = TestBed.createComponent(TestAutofocusEnabledComponent);
             await fixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 10));
             directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
         });
 
-        it('should call autoFocus in ngAfterContentChecked', () => {
+        it('should call autoFocus after render when not focused', async () => {
+            directive.focused.set(false);
             vi.spyOn(directive, 'autoFocus').mockImplementation(() => {});
 
-            directive.ngAfterContentChecked();
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             expect(directive.autoFocus).toHaveBeenCalled();
         });
 
-        it('should call autoFocus in ngAfterViewChecked when not focused', () => {
-            directive.focused = false;
+        it('should not call autoFocus after render when already focused', async () => {
+            directive.focused.set(true);
             vi.spyOn(directive, 'autoFocus').mockImplementation(() => {});
 
-            directive.ngAfterViewChecked();
-
-            expect(directive.autoFocus).toHaveBeenCalled();
-        });
-
-        it('should not call autoFocus in ngAfterViewChecked when already focused', () => {
-            directive.focused = true;
-            vi.spyOn(directive, 'autoFocus').mockImplementation(() => {});
-
-            directive.ngAfterViewChecked();
-
-            expect(directive.autoFocus).not.toHaveBeenCalled();
-        });
-
-        it('should not call autoFocus in ngAfterContentChecked when already focused', () => {
-            directive.focused = true;
-            vi.spyOn(directive, 'autoFocus').mockImplementation(() => {});
-
-            directive.ngAfterContentChecked();
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             expect(directive.autoFocus).not.toHaveBeenCalled();
         });
@@ -507,14 +493,15 @@ describe('AutoFocus', () => {
             await fixture.whenStable();
 
             // Reset focused state to allow refocusing
-            directive.focused = false;
+            directive.focused.set(false);
 
             const input = fixture.debugElement.query(By.css('.dynamic-input'));
             if (input) {
                 vi.spyOn(input.nativeElement, 'focus').mockImplementation(() => {});
 
-                // Trigger ngAfterContentChecked
-                directive.ngAfterContentChecked();
+                // Trigger a render
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 10));
 
                 // The input should be focused
@@ -534,12 +521,13 @@ describe('AutoFocus', () => {
             component.showButton = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            directive.focused = false;
+            directive.focused.set(false);
 
             const button = fixture.debugElement.query(By.css('.dynamic-button'));
             if (button) {
                 vi.spyOn(button.nativeElement, 'focus').mockImplementation(() => {});
-                directive.ngAfterContentChecked();
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 10));
                 expect(button.nativeElement.focus).toHaveBeenCalled();
             }
@@ -548,12 +536,13 @@ describe('AutoFocus', () => {
             component.showInput = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            directive.focused = false;
+            directive.focused.set(false);
 
             const input = fixture.debugElement.query(By.css('.dynamic-input'));
             if (input) {
                 vi.spyOn(input.nativeElement, 'focus').mockImplementation(() => {});
-                directive.ngAfterContentChecked();
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
                 await new Promise((resolve) => setTimeout(resolve, 10));
                 expect(input.nativeElement.focus).toHaveBeenCalled();
             }
@@ -644,7 +633,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
 
         it('should handle autofocus when element is not in DOM', () => {
@@ -666,12 +655,12 @@ describe('AutoFocus', () => {
             const fixture = TestBed.createComponent(TestAutofocusEnabledComponent);
             const directive = fixture.debugElement.query(By.directive(AutoFocus)).injector.get(AutoFocus);
 
-            expect(directive.focused).toBe(false);
+            expect(directive.focused()).toBe(false);
 
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
 
         it('should not focus again when already focused', async () => {
@@ -682,7 +671,7 @@ describe('AutoFocus', () => {
             vi.spyOn(element, 'focus').mockImplementation(() => {});
 
             // Set focused flag manually to simulate already focused state
-            directive.focused = true;
+            directive.focused.set(true);
             await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
@@ -705,7 +694,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(element.focus).not.toHaveBeenCalled();
-            expect(directive.focused).toBe(false);
+            expect(directive.focused()).toBe(false);
 
             // Enable autofocus
             component.autofocusEnabled = true;
@@ -714,7 +703,7 @@ describe('AutoFocus', () => {
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(element.focus).toHaveBeenCalled();
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
     });
 
@@ -766,12 +755,13 @@ describe('AutoFocus', () => {
             vi.spyOn(dialogInput.nativeElement, 'focus').mockImplementation(() => {});
 
             // Simulate what happens when autofocus directive detects new content
-            dialogInputDirective.focused = false; // Reset focused state
-            dialogInputDirective.ngAfterContentChecked();
+            dialogInputDirective.focused.set(false); // Reset focused state
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(dialogInput.nativeElement.focus).toHaveBeenCalled();
-            expect(dialogInputDirective.focused).toBe(true);
+            expect(dialogInputDirective.focused()).toBe(true);
         });
 
         it('should focus select when drawer is dynamically rendered', async () => {
@@ -796,12 +786,13 @@ describe('AutoFocus', () => {
             vi.spyOn(drawerSelect.nativeElement, 'focus').mockImplementation(() => {});
 
             // Simulate what happens when autofocus directive detects new content
-            drawerSelectDirective.focused = false; // Reset focused state
-            drawerSelectDirective.ngAfterContentChecked();
+            drawerSelectDirective.focused.set(false); // Reset focused state
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(drawerSelect.nativeElement.focus).toHaveBeenCalled();
-            expect(drawerSelectDirective.focused).toBe(true);
+            expect(drawerSelectDirective.focused()).toBe(true);
         });
 
         it('should handle multiple dialog opens/closes correctly', async () => {
@@ -815,11 +806,12 @@ describe('AutoFocus', () => {
             let directive = dialogInput.injector.get(AutoFocus);
             vi.spyOn(dialogInput.nativeElement, 'focus').mockImplementation(() => {});
 
-            directive.focused = false; // Reset state
-            directive.ngAfterContentChecked();
+            directive.focused.set(false); // Reset state
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
             expect(dialogInput.nativeElement.focus).toHaveBeenCalled();
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
 
             // Close dialog
             component.closeDialog();
@@ -840,8 +832,9 @@ describe('AutoFocus', () => {
             directive = dialogInput.injector.get(AutoFocus);
             vi.spyOn(dialogInput.nativeElement, 'focus').mockImplementation(() => {});
 
-            directive.focused = false; // Reset state for new instance
-            directive.ngAfterContentChecked();
+            directive.focused.set(false); // Reset state for new instance
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
             expect(dialogInput.nativeElement.focus).toHaveBeenCalled();
         });
@@ -865,8 +858,9 @@ describe('AutoFocus', () => {
             vi.spyOn(dialogTextarea.nativeElement, 'focus').mockImplementation(() => {});
 
             // Initially input should be focused
-            inputDirective.focused = false; // Reset state to allow focusing
-            inputDirective.ngAfterContentChecked();
+            inputDirective.focused.set(false); // Reset state to allow focusing
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
             expect(dialogInput.nativeElement.focus).toHaveBeenCalled();
 
@@ -877,14 +871,15 @@ describe('AutoFocus', () => {
             await fixture.whenStable();
 
             // Reset focused states to allow refocusing
-            inputDirective.focused = false;
-            textareaDirective.focused = false;
+            inputDirective.focused.set(false);
+            textareaDirective.focused.set(false);
 
             // Input should not be called since shouldAutoFocus is now false
-            expect(inputDirective.autofocus).toBe(false);
-            expect(textareaDirective.autofocus).toBe(true);
+            expect(inputDirective.autofocus()).toBe(false);
+            expect(textareaDirective.autofocus()).toBe(true);
 
-            textareaDirective.ngAfterContentChecked();
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
             expect(dialogTextarea.nativeElement.focus).toHaveBeenCalled();
         });
@@ -911,12 +906,12 @@ describe('AutoFocus', () => {
             vi.spyOn(dialogInput.nativeElement, 'focus').mockImplementation(() => {});
             vi.spyOn(dialogTextarea.nativeElement, 'focus').mockImplementation(() => {});
 
-            // Manually trigger lifecycle hooks - should not focus anything
+            // Manually trigger a render - should not focus anything
             const inputDirective = dialogInput.injector.get(AutoFocus);
             const textareaDirective = dialogTextarea.injector.get(AutoFocus);
 
-            inputDirective.ngAfterContentChecked();
-            textareaDirective.ngAfterContentChecked();
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(dialogInput.nativeElement.focus).not.toHaveBeenCalled();
@@ -947,12 +942,13 @@ describe('AutoFocus', () => {
             vi.spyOn(dialogInput.nativeElement, 'focus').mockImplementation(() => {});
 
             // Reset focused state to allow focusing
-            directive.focused = false;
-            directive.ngAfterContentChecked();
+            directive.focused.set(false);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 10));
 
             expect(dialogInput.nativeElement.focus).toHaveBeenCalled();
-            expect(directive.focused).toBe(true);
+            expect(directive.focused()).toBe(true);
         });
     });
 });
