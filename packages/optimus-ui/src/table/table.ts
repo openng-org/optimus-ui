@@ -87,6 +87,15 @@ import { TableStyle } from './style/tablestyle';
 
 const TABLE_INSTANCE = new InjectionToken<Table>('TABLE_INSTANCE');
 
+// Negative match modes and their positive counterparts. The global filter checks several fields, and a
+// row passes a negative mode only when none of them matches the positive one.
+const NEGATED_GLOBAL_MATCH_MODES: Record<string, string> = {
+    [FilterMatchMode.NOT_CONTAINS]: FilterMatchMode.CONTAINS,
+    [FilterMatchMode.NOT_EQUALS]: FilterMatchMode.EQUALS,
+    [FilterMatchMode.IS_NOT]: FilterMatchMode.IS,
+    [FilterMatchMode.DATE_IS_NOT]: FilterMatchMode.DATE_IS
+};
+
 @Injectable()
 export class TableService {
     private sortSource = new Subject<SortMeta | SortMeta[] | null>();
@@ -2308,14 +2317,7 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
                     }
 
                     if (this.filters['global'] && !globalMatch && globalFilterFieldsArray) {
-                        for (let j = 0; j < globalFilterFieldsArray.length; j++) {
-                            let globalFilterField = globalFilterFieldsArray[j].field || globalFilterFieldsArray[j];
-                            globalMatch = (<any>this.filterService).filters[(<any>this.filters['global']).matchMode](ObjectUtils.resolveFieldData(this.value[i], globalFilterField), (<FilterMetadata>this.filters['global']).value, this.filterLocale);
-
-                            if (globalMatch) {
-                                break;
-                            }
-                        }
+                        globalMatch = this.executeGlobalFilter(globalFilterFieldsArray, this.value[i], <FilterMetadata>this.filters['global']);
                     }
 
                     let matches: boolean;
@@ -2360,6 +2362,16 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
         if (this.scrollable) {
             this.resetScrollTop();
         }
+    }
+
+    executeGlobalFilter(fields: any[], rowData: any, filterMeta: FilterMetadata): boolean {
+        const filterValue = filterMeta.value;
+        // A blank value is left to the negative constraint itself: negating its positive counterpart would drop every row.
+        const positiveMatchMode = this.isFilterBlank(filterValue) ? undefined : NEGATED_GLOBAL_MATCH_MODES[filterMeta.matchMode!];
+        const filterConstraint = (<any>this.filterService).filters[positiveMatchMode || filterMeta.matchMode!];
+        const anyFieldMatches = fields.some((field) => filterConstraint(ObjectUtils.resolveFieldData(rowData, field.field || field), filterValue, this.filterLocale));
+
+        return positiveMatchMode ? !anyFieldMatches : anyFieldMatches;
     }
 
     executeLocalFilter(field: string, rowData: any, filterMeta: FilterMetadata): boolean {
