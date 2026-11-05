@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DebugElement, provideZonelessChangeDetection, signal } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { form, FormField } from '@angular/forms/signals';
 import { By } from '@angular/platform-browser';
 
 import { provideOptimus } from '@openng/optimus-ui/config';
@@ -45,6 +46,18 @@ class TestAdvancedTextareaComponent {
 })
 class TestReactiveFormTextareaComponent {
     textControl = new FormControl('');
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true,
+    imports: [Textarea, FormField],
+    template: ` <textarea pTextarea [formField]="textForm.text" [autoResize]="autoResize"></textarea> `
+})
+class TestSignalFormTextareaComponent {
+    model = signal({ text: '' });
+    textForm = form(this.model);
+    autoResize: boolean = false;
 }
 
 @Component({
@@ -274,6 +287,64 @@ describe('Textarea', () => {
             await fixture.whenStable();
 
             expect(textareaEl.nativeElement.classList.contains('ng-invalid')).toBe(true);
+        });
+    });
+
+    describe('Signal Forms', () => {
+        let component: TestSignalFormTextareaComponent;
+        let fixture: ComponentFixture<TestSignalFormTextareaComponent>;
+        let textareaEl: DebugElement;
+
+        beforeEach(async () => {
+            await TestBed.configureTestingModule({
+                imports: [TestSignalFormTextareaComponent],
+                providers: [provideZonelessChangeDetection()]
+            }).compileComponents();
+
+            fixture = TestBed.createComponent(TestSignalFormTextareaComponent);
+            component = fixture.componentInstance;
+        });
+
+        it('should initialize without errors when bound with formField', () => {
+            expect(() => fixture.detectChanges()).not.toThrow();
+            textareaEl = fixture.debugElement.query(By.directive(Textarea));
+            expect(textareaEl).toBeTruthy();
+        });
+
+        it('should reflect model value in textarea', async () => {
+            fixture.detectChanges();
+            textareaEl = fixture.debugElement.query(By.directive(Textarea));
+
+            component.model.set({ text: 'signal form content' });
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(textareaEl.nativeElement.value).toBe('signal form content');
+        });
+
+        it('should update model when textarea changes', async () => {
+            fixture.detectChanges();
+            textareaEl = fixture.debugElement.query(By.directive(Textarea));
+
+            const textarea = textareaEl.nativeElement;
+            textarea.value = 'user input';
+            textarea.dispatchEvent(new Event('input'));
+            await fixture.whenStable();
+
+            expect(component.model().text).toBe('user input');
+        });
+
+        it('should auto resize when model value changes', async () => {
+            component.autoResize = true;
+            fixture.detectChanges();
+            textareaEl = fixture.debugElement.query(By.directive(Textarea));
+            const initialHeight = textareaEl.nativeElement.offsetHeight;
+
+            component.model.set({ text: 'line 1\nline 2\nline 3\nline 4\nline 5\nline 6' });
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            expect(textareaEl.nativeElement.offsetHeight).toBeGreaterThan(initialHeight);
         });
     });
 

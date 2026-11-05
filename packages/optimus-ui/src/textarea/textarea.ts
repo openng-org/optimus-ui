@@ -105,11 +105,10 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
     }
 
     onInit() {
-        if (this.ngControl) {
-            this.ngControlSubscription = (this.ngControl as any).valueChanges.subscribe(() => {
-                this.updateState();
-            });
-        }
+        // Signal forms ([formField]) provide an NgControl without valueChanges
+        this.ngControlSubscription = this.ngControl?.valueChanges?.subscribe(() => {
+            this.updateState();
+        });
     }
 
     onAfterViewInit() {
