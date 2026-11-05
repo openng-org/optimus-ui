@@ -1116,15 +1116,28 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
                 checked: !this.allSelected()
             });
         } else {
-            const value = this.allSelected()
-                ? []
-                : this.visibleOptions()
-                      .filter((option) => this.isValidOption(option))
-                      .map((option) => this.getOptionValue(option));
-
-            this.updateModel(value, event);
-            this.onChange.emit({ originalEvent: event, value: this.value });
+            this.updateModel(this.getToggleAllValue(!this.allSelected()), event);
         }
+    }
+
+    getToggleAllValue(checked: boolean) {
+        const options = this.group ? this.flatOptions(this._options()) : this._options() || [];
+        const visibleOptions = new Set(this.visibleOptions());
+        const modelValue = this.modelValue() || [];
+
+        return options.flatMap((option) => {
+            if (this.isOptionGroup(option)) {
+                return [];
+            }
+
+            // The user can't toggle a disabled option, so a selected one keeps its current model value.
+            if (this.isOptionDisabled(option)) {
+                const optionValue = this.getOptionValue(option);
+                return modelValue.filter((value) => this.isEquals(value, optionValue));
+            }
+
+            return checked && visibleOptions.has(option) ? [this.getOptionValue(option)] : [];
+        });
     }
 
     allSelected() {
@@ -1294,11 +1307,7 @@ export class Listbox extends BaseEditableHolder<ListBoxPassThrough> {
 
             default:
                 if (this.multiple && event.code === 'KeyA' && metaKey) {
-                    const value = this.visibleOptions()
-                        .filter((option) => this.isValidOption(option))
-                        .map((option) => this.getOptionValue(option));
-
-                    this.updateModel(value, event);
+                    this.updateModel(this.getToggleAllValue(true), event);
 
                     event.preventDefault();
                     break;
