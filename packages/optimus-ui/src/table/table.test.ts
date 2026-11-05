@@ -6,7 +6,8 @@ import { By } from '@angular/platform-browser';
 
 import { SharedModule, SortMeta } from '@openng/optimus-ui/api';
 import { Select } from '@openng/optimus-ui/select';
-import { Table, TableModule, TableService } from './table';
+import { ZIndexUtils } from '@openng/optimus-ui/utils';
+import { ColumnFilter, Table, TableModule, TableService } from './table';
 
 describe('Table', () => {
     let component: Table;
@@ -549,6 +550,39 @@ describe('Table', () => {
         it('should render column filters', () => {
             const columnFilters = testFixture.debugElement.queryAll(By.css('p-columnFilter'));
             expect(columnFilters.length).toBe(2);
+        });
+
+        it('should not leave stale ZIndexUtils entries after the filter overlay closes', () => {
+            const columnFilter: ColumnFilter = testFixture.debugElement.query(By.directive(ColumnFilter)).componentInstance;
+            const baseZIndex = columnFilter.config.zIndex.overlay;
+            const initialZIndex = ZIndexUtils.getCurrent();
+            const overlays = [document.createElement('div'), document.createElement('div')];
+
+            const openOverlay = (overlay: HTMLDivElement) => {
+                columnFilter.el.nativeElement.appendChild(overlay);
+                columnFilter.onOverlayBeforeEnter({ element: overlay });
+                return ZIndexUtils.get(overlay);
+            };
+
+            try {
+                const firstZIndex = openOverlay(overlays[0]);
+                columnFilter.onOverlayAnimationAfterLeave({ element: overlays[0] });
+                const secondZIndex = openOverlay(overlays[1]);
+                columnFilter.onOverlayAnimationAfterLeave({ element: overlays[1] });
+
+                expect(firstZIndex).toBeGreaterThan(baseZIndex);
+                expect(secondZIndex).toBe(firstZIndex);
+                expect(columnFilter.overlay).toBeNull();
+                expect(overlays[0].style.zIndex).toBe('');
+                expect(overlays[1].style.zIndex).toBe('');
+                expect(ZIndexUtils.getCurrent()).toBe(initialZIndex);
+            } finally {
+                // Keep the shared registry clean even when the regression returns.
+                for (const overlay of overlays) {
+                    ZIndexUtils.clear(overlay);
+                    overlay.remove();
+                }
+            }
         });
     });
 
