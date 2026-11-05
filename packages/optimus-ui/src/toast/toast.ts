@@ -537,7 +537,6 @@ export class Toast extends BaseComponent<ToastPassThrough> {
     }
 
     onAnimationStart() {
-        this.renderer.setAttribute(this.el?.nativeElement, this.id, '');
         if (this.autoZIndex && this.el?.nativeElement.style.zIndex === '') {
             ZIndexUtils.set('modal', this.el?.nativeElement, this.baseZIndex || this.config.zIndex.modal);
         }
@@ -551,6 +550,7 @@ export class Toast extends BaseComponent<ToastPassThrough> {
 
     createStyle() {
         if (!this.styleElement) {
+            this.renderer.setAttribute(this.el?.nativeElement, this.id, '');
             this.styleElement = this.renderer.createElement('style');
             this.styleElement.type = 'text/css';
             setAttribute(this.styleElement, 'nonce', this.config?.csp()?.nonce);
