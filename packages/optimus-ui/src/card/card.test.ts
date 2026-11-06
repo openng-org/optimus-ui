@@ -17,7 +17,7 @@ class TestBasicCardComponent {}
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-card [header]="header" [subheader]="subheader" [styleClass]="styleClass" [style]="style">
+        <p-card [header]="header" [subheader]="subheader" [class]="customClass" [style]="style">
             <div class="card-content">Custom Card Content</div>
         </p-card>
     `
@@ -25,7 +25,7 @@ class TestBasicCardComponent {}
 class TestCustomCardComponent {
     header: string | undefined;
     subheader: string | undefined;
-    styleClass: string | undefined;
+    customClass: string | undefined;
     style: { [key: string]: any } | undefined;
 }
 
@@ -53,6 +53,19 @@ class TestCustomCardComponent {
     `
 })
 class TestTemplateCardComponent {}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-card>
+            <ng-template pTemplate="item">
+                <div class="unknown-type-content">Unknown Type Content</div>
+            </ng-template>
+        </p-card>
+    `
+})
+class TestUnknownTypeTemplateCardComponent {}
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -209,6 +222,7 @@ describe('Card', () => {
                 TestBasicCardComponent,
                 TestCustomCardComponent,
                 TestTemplateCardComponent,
+                TestUnknownTypeTemplateCardComponent,
                 TestFacetCardComponent,
                 TestContentChildCardComponent,
                 TestSimpleTextCardComponent,
@@ -235,9 +249,9 @@ describe('Card', () => {
         });
 
         it('should have default values', () => {
-            expect(card.header).toBeUndefined();
-            expect(card.subheader).toBeUndefined();
-            expect(card.styleClass).toBeUndefined();
+            expect(card.header()).toBeUndefined();
+            expect(card.subheader()).toBeUndefined();
+            expect(card.style()).toBeNull();
         });
 
         it('should have correct host attributes', async () => {
@@ -377,23 +391,27 @@ describe('Card', () => {
             customComponent = customFixture.componentInstance;
         });
 
-        it('should apply custom style class', async () => {
-            customComponent.styleClass = 'my-custom-class';
+        it('should apply custom class via native class binding', async () => {
+            customComponent.customClass = 'my-custom-class';
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             const cardElement = customFixture.debugElement.query(By.directive(Card));
-            expect(cardElement.nativeElement.className).toContain('my-custom-class');
+            expect(cardElement.nativeElement.classList).toContain('my-custom-class');
+            expect(cardElement.nativeElement.classList).toContain('p-card');
+            expect(cardElement.nativeElement.classList).toContain('p-component');
         });
 
-        it('should apply multiple custom style classes', async () => {
-            customComponent.styleClass = 'class-one class-two';
+        it('should apply multiple custom classes via native class binding', async () => {
+            customComponent.customClass = 'class-one class-two';
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             const cardElement = customFixture.debugElement.query(By.directive(Card));
             expect(cardElement.nativeElement.className).toContain('class-one');
             expect(cardElement.nativeElement.className).toContain('class-two');
+            expect(cardElement.nativeElement.classList).toContain('p-card');
+            expect(cardElement.nativeElement.classList).toContain('p-component');
         });
 
         it('should apply inline styles', async () => {
@@ -831,25 +849,23 @@ describe('Card', () => {
 
             const cardInstance = templateFixture.debugElement.query(By.directive(Card)).componentInstance;
 
-            expect(cardInstance._headerTemplate).toBeTruthy();
-            expect(cardInstance._titleTemplate).toBeTruthy();
-            expect(cardInstance._subtitleTemplate).toBeTruthy();
-            expect(cardInstance._contentTemplate).toBeTruthy();
-            expect(cardInstance._footerTemplate).toBeTruthy();
+            expect(cardInstance._headerTemplate()).toBeTruthy();
+            expect(cardInstance._titleTemplate()).toBeTruthy();
+            expect(cardInstance._subtitleTemplate()).toBeTruthy();
+            expect(cardInstance._contentTemplate()).toBeTruthy();
+            expect(cardInstance._footerTemplate()).toBeTruthy();
         });
 
-        it('should handle templates with ngAfterContentInit lifecycle', async () => {
-            const templateFixture = TestBed.createComponent(TestTemplateCardComponent);
+        it('should render a pTemplate of an unknown type as the content template', async () => {
+            const templateFixture = TestBed.createComponent(TestUnknownTypeTemplateCardComponent);
             await templateFixture.whenStable();
 
-            const cardInstance = templateFixture.debugElement.query(By.directive(Card)).componentInstance;
+            const cardInstance: Card = templateFixture.debugElement.query(By.directive(Card)).componentInstance;
+            expect(cardInstance._contentTemplate()).toBeTruthy();
+            expect(cardInstance._headerTemplate()).toBeUndefined();
 
-            vi.spyOn(cardInstance, 'ngAfterContentInit');
-
-            // Trigger ngAfterContentInit manually
-            cardInstance.ngAfterContentInit();
-
-            expect(cardInstance.ngAfterContentInit).toHaveBeenCalled();
+            const contentElement = templateFixture.debugElement.query(By.css('.p-card-content'));
+            expect(contentElement.nativeElement.textContent).toContain('Unknown Type Content');
         });
     });
 
@@ -867,7 +883,7 @@ describe('Card', () => {
             expect(cardElement.nativeElement.getAttribute('data-pc-name')).toBe('card');
 
             customComponent.header = 'Changed Header';
-            customComponent.styleClass = 'changed-class';
+            customComponent.customClass = 'changed-class';
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -882,7 +898,7 @@ describe('Card', () => {
 
             customComponent.header = undefined as any;
             customComponent.subheader = undefined as any;
-            customComponent.styleClass = undefined as any;
+            customComponent.customClass = undefined as any;
             customComponent.style = undefined as any;
 
             await expect(async () => {
@@ -901,13 +917,13 @@ describe('Card', () => {
 
             customComponent.header = 'Header 1';
             customComponent.subheader = 'Subheader 1';
-            customComponent.styleClass = 'class-1';
+            customComponent.customClass = 'class-1';
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
             customComponent.header = 'Header 2';
             customComponent.subheader = 'Subheader 2';
-            customComponent.styleClass = 'class-2';
+            customComponent.customClass = 'class-2';
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
 
@@ -917,7 +933,10 @@ describe('Card', () => {
 
             expect(titleElement.nativeElement.textContent.trim()).toBe('Header 2');
             expect(subtitleElement.nativeElement.textContent.trim()).toBe('Subheader 2');
-            expect(cardElement.nativeElement.className).toContain('class-2');
+            expect(cardElement.nativeElement.classList).toContain('class-2');
+            expect(cardElement.nativeElement.classList).not.toContain('class-1');
+            expect(cardElement.nativeElement.classList).toContain('p-card');
+            expect(cardElement.nativeElement.classList).toContain('p-component');
         });
 
         it('should handle empty string values', async () => {
