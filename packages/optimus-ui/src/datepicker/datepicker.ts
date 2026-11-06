@@ -2658,7 +2658,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             if (this.navigationState.button) {
                 this.initFocusableCell();
 
-                const navigationButtons = find(this.contentViewChild.nativeElement, this.navigationState.backward ? '.p-datepicker-prev-button' : '.p-datepicker-next-button');
+                const navigationButtons = find(this.contentViewChild.nativeElement, this.navigationState.backward ? '.p-datepicker-prev-button' : '.p-datepicker-next-button').filter((button) => getComputedStyle(button).visibility !== 'hidden');
                 const navigationButton = (this.navigationState.backward ? navigationButtons[0] : navigationButtons[navigationButtons.length - 1]) as HTMLElement | undefined;
                 navigationButton?.focus();
             } else {

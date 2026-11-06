@@ -1073,22 +1073,38 @@ describe('DatePicker', () => {
             expect(testFixture.nativeElement.querySelector('.p-datepicker-prev-button')).toBe(prevButton);
         });
 
-        it('should restore focus to the visible next button when multiple months are displayed', async () => {
+        it('should restore focus to the last visible next button when multiple months are displayed', async () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const calendarContainer = document.createElement('div');
+            const firstVisibleNextButton = document.createElement('button');
+            const lastVisibleNextButton = document.createElement('button');
             const hiddenNextButton = document.createElement('button');
-            const visibleNextButton = document.createElement('button');
             hiddenNextButton.className = 'p-datepicker-next-button';
             hiddenNextButton.style.visibility = 'hidden';
-            visibleNextButton.className = 'p-datepicker-next-button';
-            calendarContainer.append(hiddenNextButton, visibleNextButton);
+            firstVisibleNextButton.className = 'p-datepicker-next-button';
+            lastVisibleNextButton.className = 'p-datepicker-next-button';
+            calendarContainer.append(firstVisibleNextButton, lastVisibleNextButton, hiddenNextButton);
             document.body.appendChild(calendarContainer);
             datePickerComponent.contentViewChild = { nativeElement: calendarContainer };
 
             datePickerComponent.navigationState = { backward: false, button: true };
             datePickerComponent.updateFocus();
 
-            expect(document.activeElement).toBe(visibleNextButton);
+            expect(document.activeElement).toBe(lastVisibleNextButton);
+
+            const hiddenPreviousButton = document.createElement('button');
+            const firstVisiblePreviousButton = document.createElement('button');
+            const lastVisiblePreviousButton = document.createElement('button');
+            hiddenPreviousButton.className = 'p-datepicker-prev-button';
+            hiddenPreviousButton.style.visibility = 'hidden';
+            firstVisiblePreviousButton.className = 'p-datepicker-prev-button';
+            lastVisiblePreviousButton.className = 'p-datepicker-prev-button';
+            calendarContainer.append(hiddenPreviousButton, firstVisiblePreviousButton, lastVisiblePreviousButton);
+
+            datePickerComponent.navigationState = { backward: true, button: true };
+            datePickerComponent.updateFocus();
+
+            expect(document.activeElement).toBe(firstVisiblePreviousButton);
             calendarContainer.remove();
         });
 
