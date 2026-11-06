@@ -1752,6 +1752,7 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             this.createMonths(this.currentMonth, this.currentYear);
             this.setCurrentView('date');
             this.onMonthChange.emit({ month: this.currentMonth + 1, year: this.currentYear });
+            this.updateNavigationAnnouncement();
         }
     }
 
@@ -2797,12 +2798,14 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         this.currentMonth = parseInt(m);
         this.onMonthChange.emit({ month: this.currentMonth + 1, year: this.currentYear });
         this.createMonths(this.currentMonth, this.currentYear);
+        this.updateNavigationAnnouncement();
     }
 
     onYearDropdownChange(y: string) {
         this.currentYear = parseInt(y);
         this.onYearChange.emit({ month: this.currentMonth + 1, year: this.currentYear });
         this.createMonths(this.currentMonth, this.currentYear);
+        this.updateNavigationAnnouncement();
     }
 
     convertTo24Hour(hours: number, pm: boolean) {

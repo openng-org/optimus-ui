@@ -747,6 +747,20 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             expect(datePickerComponent.numberOfMonths).toBe(3);
         });
+
+        it('should update the navigation announcement when dropdowns or month selection change the calendar', () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
+            const updateNavigationAnnouncementSpy = vi.spyOn(datePickerComponent, 'updateNavigationAnnouncement');
+
+            datePickerComponent.onMonthDropdownChange('5');
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(1);
+
+            datePickerComponent.onYearDropdownChange('2030');
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(2);
+
+            datePickerComponent.onMonthSelect(new Event('click'), 8);
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(3);
+        });
     });
 
     describe('Reactive Forms Integration', () => {
