@@ -9,6 +9,7 @@ import { InputNumber } from '@openng/optimus-ui/inputnumber';
 import { Ripple } from '@openng/optimus-ui/ripple';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { PaginatorState } from '@openng/optimus-ui/types/paginator';
+import { Optimus } from '@openng/optimus-ui/config';
 
 // Test component for basic paginator functionality
 @Component({
@@ -810,6 +811,14 @@ describe('Paginator', () => {
             await fixture.whenStable();
 
             expect(paginator.onPageLinkClick).toHaveBeenCalled();
+        });
+
+        it('should mark itself for check when the translation changes', () => {
+            const markSpy = vi.spyOn(paginator.cd, 'markForCheck');
+
+            TestBed.inject(Optimus).setTranslation({ aria: { firstPageLabel: 'Prima pagina' } });
+
+            expect(markSpy).toHaveBeenCalled();
         });
     });
 
