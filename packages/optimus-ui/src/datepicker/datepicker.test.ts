@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { By } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
+import { PrimeTemplate } from '@openng/optimus-ui/api';
 import type { DatePickerMonthChangeEvent, DatePickerYearChangeEvent } from '@openng/optimus-ui/types/datepicker';
 import { DatePicker } from './datepicker';
 @Component({
@@ -154,7 +155,7 @@ class TestReactiveFormDatePickerComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
+        <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI" [inline]="inline" [disabledDates]="disabledDates">
             <!-- Date template with context parameters -->
             <ng-template pTemplate="date" let-date="date">
                 <div class="custom-date" data-testid="date-template">
@@ -243,6 +244,8 @@ class TestPTemplatesDatePickerComponent {
     view: string = 'date';
     dateFormat: string = 'dd/mm/yy';
     touchUI: boolean = false;
+    inline: boolean = false;
+    disabledDates: Date[] = [];
 }
 
 // #template references only - Comprehensive template test component with all 12 ContentChild projections
@@ -373,7 +376,7 @@ describe('DatePicker', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
+            imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule, PrimeTemplate],
             declarations: [TestDatePickerComponent, TestReactiveFormDatePickerComponent, TestTemplatesDatePickerComponent, TestPTemplatesDatePickerComponent, TestRefTemplatesDatePickerComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -449,6 +452,15 @@ describe('DatePicker', () => {
             expect(disabledCell).toBeTruthy();
             expect(selectedCell.parentElement.getAttribute('role')).toBe('row');
             expect(disabledCell.parentElement.getAttribute('role')).toBe('row');
+        });
+
+        it('should fall back to rendering the day number when no date template is supplied', async () => {
+            testComponent.inline = true;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const dateCell = testFixture.nativeElement.querySelector('.p-datepicker-day-view [data-date]');
+            expect(dateCell.textContent.trim()).toMatch(/^\d+$/);
         });
 
         it('should render popup calendar cells only after the overlay is opened', async () => {
@@ -1310,6 +1322,32 @@ describe('DatePicker', () => {
             // Verify component can access template properties without errors
             expect(() => datePickerComponent.disabledDateTemplate).not.toThrow();
             expect(datePickerComponent).toBeTruthy();
+        });
+
+        it('should render the applicable date template and preserve date selection behavior', async () => {
+            const datePickerComponent = pTemplatesDatePickerElement.componentInstance;
+            pTemplatesFixture.componentInstance.inline = true;
+            pTemplatesFixture.componentInstance.disabledDates = [new Date(datePickerComponent.currentYear, datePickerComponent.currentMonth, 15)];
+            pTemplatesFixture.changeDetectorRef.markForCheck();
+            await pTemplatesFixture.whenStable();
+
+            const disabledDate = Array.from<HTMLElement>(pTemplatesFixture.nativeElement.querySelectorAll('.disabled-date')).find((date) => date.textContent?.trim() === '15');
+            const enabledDate = pTemplatesFixture.nativeElement.querySelector('.custom-date');
+
+            expect(disabledDate).toBeTruthy();
+            if (!disabledDate) {
+                throw new Error('Disabled date template was not rendered for day 15');
+            }
+            expect(disabledDate.textContent?.trim()).toBe('15');
+            expect(enabledDate).toBeTruthy();
+
+            disabledDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            await pTemplatesFixture.whenStable();
+            expect(pTemplatesFixture.componentInstance.selectedDate).toBeNull();
+
+            enabledDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            await pTemplatesFixture.whenStable();
+            expect(pTemplatesFixture.componentInstance.selectedDate).toBeInstanceOf(Date);
         });
     });
 

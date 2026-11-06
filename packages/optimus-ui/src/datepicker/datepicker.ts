@@ -288,7 +288,10 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                                     pRipple
                                                     [pBind]="ptm('day')"
                                                 >
-                                                    {{ date.day }}
+                                                    <ng-container *ngIf="date.selectable ? dateTemplate || _dateTemplate : disabledDateTemplate || _disabledDateTemplate as dateTemplateRef; else dateDay">
+                                                        <ng-container *ngTemplateOutlet="dateTemplateRef; context: { $implicit: date, date: date }"></ng-container>
+                                                    </ng-container>
+                                                    <ng-template #dateDay>{{ date.day }}</ng-template>
                                                 </span>
                                             </ng-container>
                                         </td>
