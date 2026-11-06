@@ -4,6 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { By } from '@angular/platform-browser';
 
 import { CommonModule } from '@angular/common';
+import { PrimeTemplate } from '@openng/optimus-ui/api';
 import type { DatePickerMonthChangeEvent, DatePickerYearChangeEvent } from '@openng/optimus-ui/types/datepicker';
 import { DatePicker } from './datepicker';
 @Component({
@@ -154,7 +155,7 @@ class TestReactiveFormDatePickerComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     template: `
-        <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI">
+        <p-datepicker [(ngModel)]="selectedDate" [showTime]="showTime" [showIcon]="showIcon" [showClear]="showClear" [view]="view" [dateFormat]="dateFormat" [touchUI]="touchUI" [inline]="inline" [disabledDates]="disabledDates">
             <!-- Date template with context parameters -->
             <ng-template pTemplate="date" let-date="date">
                 <div class="custom-date" data-testid="date-template">
@@ -243,6 +244,8 @@ class TestPTemplatesDatePickerComponent {
     view: string = 'date';
     dateFormat: string = 'dd/mm/yy';
     touchUI: boolean = false;
+    inline: boolean = false;
+    disabledDates: Date[] = [];
 }
 
 // #template references only - Comprehensive template test component with all 12 ContentChild projections
@@ -373,7 +376,7 @@ describe('DatePicker', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule],
+            imports: [DatePicker, FormsModule, ReactiveFormsModule, CommonModule, PrimeTemplate],
             declarations: [TestDatePickerComponent, TestReactiveFormDatePickerComponent, TestTemplatesDatePickerComponent, TestPTemplatesDatePickerComponent, TestRefTemplatesDatePickerComponent],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
@@ -431,6 +434,33 @@ describe('DatePicker', () => {
             const inputElement = testFixture.debugElement.query(By.css('input'));
             expect(inputElement).toBeTruthy();
             expect(inputElement.nativeElement.getAttribute('placeholder')).toBe('Select a date');
+        });
+
+        it('should expose date cells as grid cells with their selection states', async () => {
+            testComponent.inline = true;
+            testComponent.selectedDate = new Date(2023, 5, 15);
+            testComponent.disabledDates = [new Date(2023, 5, 16)];
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const table = testFixture.nativeElement.querySelector('.p-datepicker-day-view');
+            const selectedCell = table.querySelector('tbody tr td[role="gridcell"][aria-selected="true"]');
+            const disabledCell = table.querySelector('tbody tr td[role="gridcell"][aria-disabled="true"]');
+
+            expect(table.getAttribute('role')).toBe('grid');
+            expect(selectedCell).toBeTruthy();
+            expect(disabledCell).toBeTruthy();
+            expect(selectedCell.parentElement.getAttribute('role')).toBe('row');
+            expect(disabledCell.parentElement.getAttribute('role')).toBe('row');
+        });
+
+        it('should fall back to rendering the day number when no date template is supplied', async () => {
+            testComponent.inline = true;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            const dateCell = testFixture.nativeElement.querySelector('.p-datepicker-day-view [data-date]');
+            expect(dateCell.textContent.trim()).toMatch(/^\d+$/);
         });
 
         it('should render popup calendar cells only after the overlay is opened', async () => {
@@ -760,6 +790,20 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             expect(datePickerComponent.numberOfMonths).toBe(3);
         });
+
+        it('should update the navigation announcement when dropdowns or month selection change the calendar', () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
+            const updateNavigationAnnouncementSpy = vi.spyOn(datePickerComponent, 'updateNavigationAnnouncement');
+
+            datePickerComponent.onMonthDropdownChange('5');
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(1);
+
+            datePickerComponent.onYearDropdownChange('2030');
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(2);
+
+            datePickerComponent.onMonthSelect(new Event('click'), 8);
+            expect(updateNavigationAnnouncementSpy).toHaveBeenCalledTimes(3);
+        });
     });
 
     describe('Reactive Forms Integration', () => {
@@ -1018,11 +1062,15 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
+            const nextButton = testFixture.nativeElement.querySelector('.p-datepicker-next-button');
+            expect(nextButton).toBeTruthy();
 
             const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navForward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            testFixture.detectChanges();
 
             if (currentMonth === 11) {
                 expect(datePickerComponent.currentMonth).toBe(0);
@@ -1031,6 +1079,10 @@ describe('DatePicker', () => {
                 expect(datePickerComponent.currentMonth).toBe(currentMonth + 1);
                 expect(datePickerComponent.currentYear).toBe(currentYear);
             }
+            const expectedAnnouncement = `${datePickerComponent.getMonthName(datePickerComponent.currentMonth)} ${datePickerComponent.currentYear}`;
+            expect(datePickerComponent.navigationAnnouncement).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('span[role="status"][aria-atomic="true"]').textContent).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('.p-datepicker-next-button')).toBe(nextButton);
         });
 
         it('should navigate to previous month', async () => {
@@ -1041,11 +1093,15 @@ describe('DatePicker', () => {
             const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
             const currentMonth = datePickerComponent.currentMonth;
             const currentYear = datePickerComponent.currentYear;
+            const prevButton = testFixture.nativeElement.querySelector('.p-datepicker-prev-button');
+            expect(prevButton).toBeTruthy();
 
             const mockEvent = { preventDefault: vi.fn() };
             datePickerComponent.navBackward(mockEvent);
             testFixture.changeDetectorRef.markForCheck();
             await testFixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 5));
+            testFixture.detectChanges();
 
             if (currentMonth === 0) {
                 expect(datePickerComponent.currentMonth).toBe(11);
@@ -1054,6 +1110,45 @@ describe('DatePicker', () => {
                 expect(datePickerComponent.currentMonth).toBe(currentMonth - 1);
                 expect(datePickerComponent.currentYear).toBe(currentYear);
             }
+            const expectedAnnouncement = `${datePickerComponent.getMonthName(datePickerComponent.currentMonth)} ${datePickerComponent.currentYear}`;
+            expect(datePickerComponent.navigationAnnouncement).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('span[role="status"][aria-atomic="true"]').textContent).toBe(expectedAnnouncement);
+            expect(testFixture.nativeElement.querySelector('.p-datepicker-prev-button')).toBe(prevButton);
+        });
+
+        it('should restore focus to the last visible next button when multiple months are displayed', async () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance;
+            const calendarContainer = document.createElement('div');
+            const firstVisibleNextButton = document.createElement('button');
+            const lastVisibleNextButton = document.createElement('button');
+            const hiddenNextButton = document.createElement('button');
+            hiddenNextButton.className = 'p-datepicker-next-button';
+            hiddenNextButton.style.visibility = 'hidden';
+            firstVisibleNextButton.className = 'p-datepicker-next-button';
+            lastVisibleNextButton.className = 'p-datepicker-next-button';
+            calendarContainer.append(firstVisibleNextButton, lastVisibleNextButton, hiddenNextButton);
+            document.body.appendChild(calendarContainer);
+            datePickerComponent.contentViewChild = { nativeElement: calendarContainer };
+
+            datePickerComponent.navigationState = { backward: false, button: true };
+            datePickerComponent.updateFocus();
+
+            expect(document.activeElement).toBe(lastVisibleNextButton);
+
+            const hiddenPreviousButton = document.createElement('button');
+            const firstVisiblePreviousButton = document.createElement('button');
+            const lastVisiblePreviousButton = document.createElement('button');
+            hiddenPreviousButton.className = 'p-datepicker-prev-button';
+            hiddenPreviousButton.style.visibility = 'hidden';
+            firstVisiblePreviousButton.className = 'p-datepicker-prev-button';
+            lastVisiblePreviousButton.className = 'p-datepicker-prev-button';
+            calendarContainer.append(hiddenPreviousButton, firstVisiblePreviousButton, lastVisiblePreviousButton);
+
+            datePickerComponent.navigationState = { backward: true, button: true };
+            datePickerComponent.updateFocus();
+
+            expect(document.activeElement).toBe(firstVisiblePreviousButton);
+            calendarContainer.remove();
         });
 
         it('should select date when clicked', async () => {
@@ -1300,6 +1395,32 @@ describe('DatePicker', () => {
             // Verify component can access template properties without errors
             expect(() => datePickerComponent.disabledDateTemplate).not.toThrow();
             expect(datePickerComponent).toBeTruthy();
+        });
+
+        it('should render the applicable date template and preserve date selection behavior', async () => {
+            const datePickerComponent = pTemplatesDatePickerElement.componentInstance;
+            pTemplatesFixture.componentInstance.inline = true;
+            pTemplatesFixture.componentInstance.disabledDates = [new Date(datePickerComponent.currentYear, datePickerComponent.currentMonth, 15)];
+            pTemplatesFixture.changeDetectorRef.markForCheck();
+            await pTemplatesFixture.whenStable();
+
+            const disabledDate = Array.from<HTMLElement>(pTemplatesFixture.nativeElement.querySelectorAll('.disabled-date')).find((date) => date.textContent?.trim() === '15');
+            const enabledDate = pTemplatesFixture.nativeElement.querySelector('.custom-date');
+
+            expect(disabledDate).toBeTruthy();
+            if (!disabledDate) {
+                throw new Error('Disabled date template was not rendered for day 15');
+            }
+            expect(disabledDate.textContent?.trim()).toBe('15');
+            expect(enabledDate).toBeTruthy();
+
+            disabledDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            await pTemplatesFixture.whenStable();
+            expect(pTemplatesFixture.componentInstance.selectedDate).toBeNull();
+
+            enabledDate.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+            await pTemplatesFixture.whenStable();
+            expect(pTemplatesFixture.componentInstance.selectedDate).toBeInstanceOf(Date);
         });
     });
 
