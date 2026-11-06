@@ -436,6 +436,11 @@ describe('Card', () => {
             customFixture.changeDetectorRef.markForCheck();
             await customFixture.whenStable();
             expect(cardElement.nativeElement.style.backgroundColor).toBe('blue');
+
+            customComponent.style = {};
+            customFixture.changeDetectorRef.markForCheck();
+            await customFixture.whenStable();
+            expect(cardElement.nativeElement.style.backgroundColor).toBe('');
         });
     });
 
