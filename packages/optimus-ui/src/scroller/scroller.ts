@@ -930,9 +930,9 @@ export class Scroller extends BaseComponent<VirtualScrollerPassThrough> {
         if (this.contentEl) {
             const style = getComputedStyle(this.contentEl);
             const left = parseFloat(style.paddingLeft) + Math.max(parseFloat(style.left) || 0, 0);
-            const right = parseFloat(style.paddingRight) + Math.max(parseFloat(style.right) || 0, 0);
+            const right = parseFloat(style.paddingRight);
             const top = parseFloat(style.paddingTop) + Math.max(parseFloat(style.top) || 0, 0);
-            const bottom = parseFloat(style.paddingBottom) + Math.max(parseFloat(style.bottom) || 0, 0);
+            const bottom = parseFloat(style.paddingBottom);
 
             return { left, right, top, bottom, x: left + right, y: top + bottom };
         }
