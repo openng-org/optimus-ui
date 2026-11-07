@@ -72,6 +72,23 @@ class TestUnknownTypeTemplateCardComponent {}
     standalone: false,
     template: `
         <p-card>
+            @if (showContentTemplate) {
+                <ng-template pTemplate="content">
+                    <div class="late-content">Late Content Template</div>
+                </ng-template>
+            }
+        </p-card>
+    `
+})
+class TestLateTemplateCardComponent {
+    showContentTemplate = false;
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-card>
             <p-header>
                 <div class="facet-header">Header Facet Content</div>
             </p-header>
@@ -223,6 +240,7 @@ describe('Card', () => {
                 TestCustomCardComponent,
                 TestTemplateCardComponent,
                 TestUnknownTypeTemplateCardComponent,
+                TestLateTemplateCardComponent,
                 TestFacetCardComponent,
                 TestContentChildCardComponent,
                 TestSimpleTextCardComponent,
@@ -871,6 +889,21 @@ describe('Card', () => {
 
             const contentElement = templateFixture.debugElement.query(By.css('.p-card-content'));
             expect(contentElement.nativeElement.textContent).toContain('Unknown Type Content');
+        });
+
+        it('should render a content pTemplate added after the first render', async () => {
+            const lateFixture = TestBed.createComponent(TestLateTemplateCardComponent);
+            await lateFixture.whenStable();
+
+            const contentElement = lateFixture.debugElement.query(By.css('.p-card-content'));
+            expect(contentElement.query(By.css('.late-content'))).toBeNull();
+
+            lateFixture.componentInstance.showContentTemplate = true;
+            lateFixture.changeDetectorRef.markForCheck();
+            await lateFixture.whenStable();
+
+            expect(contentElement.query(By.css('.late-content'))).toBeTruthy();
+            expect(contentElement.nativeElement.textContent).toContain('Late Content Template');
         });
     });
 
