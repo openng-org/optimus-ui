@@ -1,6 +1,21 @@
 import { Injectable } from '@angular/core';
-import { style } from '@openng/optimus-ui-styles/button';
+import { style as button_style } from '@openng/optimus-ui-styles/button';
 import { BaseStyle } from '@openng/optimus-ui/base';
+
+const style = /*css*/ `
+${button_style}
+
+/* For Optimus: custom #icon templates that do not bind the class context cannot be ordered, so order the label around them instead. */
+.p-button-label-before-icon,
+.p-button-label-before-icon ~ .p-badge {
+    order: -1;
+}
+
+.p-button:not(.p-button-vertical) .p-button-label-before-icon:dir(rtl),
+.p-button:not(.p-button-vertical) .p-button-label-before-icon:dir(rtl) ~ .p-badge {
+    order: 0;
+}
+`;
 
 const classes = {
     root: ({ instance }) => [
@@ -39,7 +54,12 @@ const classes = {
             .filter(([, value]) => !!value)
             .reduce((acc, [key]) => acc + ` ${key}`, 'p-button-loading-icon');
     },
-    label: 'p-button-label'
+    label: ({ instance }) => [
+        'p-button-label',
+        {
+            'p-button-label-before-icon': ['right', 'bottom'].includes(instance.iconPos || instance.buttonProps?.iconPos)
+        }
+    ]
 };
 
 @Injectable()
