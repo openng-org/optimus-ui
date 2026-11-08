@@ -756,6 +756,17 @@ describe('Dialog', () => {
             expect(titleElement.nativeElement.getAttribute('id')).toBe(dialogInstance.headerId());
         });
 
+        it('should not set aria-labelledby when the header is hidden', async () => {
+            component.showHeader = false;
+            component.visible = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 0));
+
+            const dialogElement = fixture.debugElement.query(By.css('[role="dialog"]'));
+            expect(dialogElement.nativeElement.getAttribute('aria-labelledby')).toBeNull();
+        });
+
         it('should use ariaLabelledBy input over the generated header id', async () => {
             component.ariaLabelledBy = 'custom-label-id';
             fixture.changeDetectorRef.markForCheck();
@@ -1083,6 +1094,16 @@ describe('Dialog', () => {
                 await new Promise((resolve) => setTimeout(resolve, 0));
 
                 expect(headlessComponent.visible).toBe(false);
+            });
+
+            it('should not set aria-labelledby when the headless template is used', async () => {
+                headlessComponent.visible = true;
+                headlessFixture.changeDetectorRef.markForCheck();
+                await headlessFixture.whenStable();
+                await new Promise((resolve) => setTimeout(resolve, 0));
+
+                const dialogElement = headlessFixture.debugElement.query(By.css('[role="dialog"]'));
+                expect(dialogElement.nativeElement.getAttribute('aria-labelledby')).toBeNull();
             });
         });
 
