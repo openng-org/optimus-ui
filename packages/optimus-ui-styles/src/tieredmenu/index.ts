@@ -6,7 +6,6 @@ export const style = /*css*/ `
         border-radius: dt('tieredmenu.border.radius');
         min-width: 12.5rem;
     }
-    
 
     .p-tieredmenu-root-list,
     .p-tieredmenu-submenu {
@@ -84,6 +83,10 @@ export const style = /*css*/ `
 
     .p-tieredmenu-item.p-focus > .p-tieredmenu-item-content .p-tieredmenu-item-icon {
         color: dt('tieredmenu.item.icon.focus.color');
+    }
+
+     .p-tieredmenu-item > .p-tieredmenu-item-content .p-tieredmenu-submenu-icon:dir(rtl) {
+        transform: rotate(180deg);
     }
 
     .p-tieredmenu-item.p-focus > .p-tieredmenu-item-content .p-tieredmenu-submenu-icon {

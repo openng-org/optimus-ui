@@ -500,6 +500,10 @@ p-tree-table-toggler + p-tree-table-checkbox + span {
     vertical-align: middle;
 }
 
+.p-treetable-toggler [data-p-icon="chevron-right"]:dir(rtl){
+    transform: rotate(180deg);
+}
+
 p-treetable-sort-icon {
     display: inline-flex;
     align-items: center;

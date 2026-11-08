@@ -121,6 +121,10 @@ export const style = /*css*/ `
         padding: 0;
     }
 
+    .p-tree-node-toggle-button .p-tree-node-toggle-icon[data-p-icon="chevron-right"]:dir(rtl) {
+        transform: rotate(180deg);
+    }
+
     .p-tree-node-toggle-button:enabled:hover {
         background: dt('tree.node.toggle.button.hover.background');
         color: dt('tree.node.toggle.button.hover.color');

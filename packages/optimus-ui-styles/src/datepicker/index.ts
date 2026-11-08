@@ -114,10 +114,12 @@ export const style = /*css*/ `
 
     .p-datepicker-next-button:dir(rtl) {
         order: -1;
+        transform: rotate(180deg);
     }
 
     .p-datepicker-prev-button:dir(rtl) {
         order: 1;
+        transform: rotate(180deg);
     }
 
     .p-datepicker-title {
