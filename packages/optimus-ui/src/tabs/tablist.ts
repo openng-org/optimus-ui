@@ -125,6 +125,8 @@ export class TabList extends BaseComponent<TabListPassThrough> {
 
     _componentStyle = inject(TabListStyle);
 
+    private inkBarFrame: number | undefined;
+
     constructor() {
         super();
         effect(() => {
@@ -171,6 +173,11 @@ export class TabList extends BaseComponent<TabListPassThrough> {
 
     onDestroy() {
         this.unbindResizeObserver();
+
+        if (this.inkBarFrame !== undefined) {
+            cancelAnimationFrame(this.inkBarFrame);
+            this.inkBarFrame = undefined;
+        }
     }
 
     onScroll(event: Event) {
@@ -220,6 +227,23 @@ export class TabList extends BaseComponent<TabListPassThrough> {
             _inkbar.style.width = getOuterWidth(activeTab) + 'px';
             _inkbar.style.left = <any>getOffset(activeTab).left - <any>getOffset(_tabs).left + 'px';
         }
+    }
+
+    /**
+     * Updates the ink bar in the next animation frame and merges all further requests until then into that update.
+     * Measuring the active tab right away, e.g. from a MutationObserver callback while a view is still being created,
+     * forces a layout of the incomplete DOM for every request. In the frame callback, the measurement reuses the
+     * layout the browser has to do for rendering anyway.
+     */
+    scheduleInkBarUpdate() {
+        if (this.inkBarFrame !== undefined || !isPlatformBrowser(this.platformId)) {
+            return;
+        }
+
+        this.inkBarFrame = requestAnimationFrame(() => {
+            this.inkBarFrame = undefined;
+            this.updateInkBar();
+        });
     }
 
     getVisibleButtonWidths() {

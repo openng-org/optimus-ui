@@ -221,12 +221,10 @@ export class Tab extends BaseComponent<TabPassThrough> {
 
     bindMutationObserver() {
         if (isPlatformBrowser(this.platformId)) {
-            this.mutationObserver = new MutationObserver((mutations) => {
-                mutations.forEach(() => {
-                    if (this.active()) {
-                        this.pcTabList?.updateInkBar();
-                    }
-                });
+            this.mutationObserver = new MutationObserver(() => {
+                if (this.active()) {
+                    this.pcTabList?.scheduleInkBarUpdate();
+                }
             });
             this.mutationObserver.observe(this.el.nativeElement, { childList: true, characterData: true, subtree: true });
         }
