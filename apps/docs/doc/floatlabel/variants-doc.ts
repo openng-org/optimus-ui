@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { AppCode } from '@/components/doc/app.code';
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { FloatLabelModule } from '@openng/optimus-ui/floatlabel';
 import { InputTextModule } from '@openng/optimus-ui/inputtext';
 
@@ -11,7 +11,7 @@ import { InputTextModule } from '@openng/optimus-ui/inputtext';
     imports: [FormsModule, AppCode, AppDocSectionText, FloatLabelModule, InputTextModule],
     template: `
         <app-docsectiontext>
-            <p>The <i>variant</i> property defines the position of the label. Default value is <i>over</i>, whereas <i>in</i> and <i>on</i> are the alternatives.</p>
+            <p>The <i>variant</i> property defines the position of the label. Accepted values are <i>over</i>, <i>in</i> and <i>on</i>. Unless modified in the Optimus configuration, the default variant is <i>over</i>.</p>
         </app-docsectiontext>
         <div class="card flex flex-wrap justify-center items-end gap-4">
             <p-floatlabel variant="in">
