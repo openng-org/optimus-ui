@@ -1202,7 +1202,9 @@ export class Menubar extends BaseComponent<MenubarPassThrough> {
     onEnterKey(event: KeyboardEvent) {
         if (this.focusedItemInfo().index !== -1) {
             const element = <any>findSingle(this.rootmenu?.el.nativeElement, `li[id="${`${this.focusedItemId}`}"]`);
-            const anchorElement = element && (<any>findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button'));
+            // A custom item template may render no link; click the item content instead, which is where onItemClick
+            // (and the item command) is bound. A click on the li itself never reaches that handler.
+            const anchorElement = element && (<any>findSingle(element, '[data-pc-section="itemlink"]') || findSingle(element, 'a,button') || findSingle(element, '[data-pc-section="itemcontent"]'));
 
             anchorElement ? anchorElement.click() : element && element.click();
         }
