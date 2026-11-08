@@ -132,6 +132,7 @@ export interface Aria {
     rotateRight?: string;
     rotateLeft?: string;
     listLabel?: string;
+    selectedItems?: string;
     selectColor?: string;
     removeLabel?: string;
     browseFiles?: string;
