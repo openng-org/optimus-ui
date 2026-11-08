@@ -13,6 +13,7 @@ import {
     inject,
     Injectable,
     InjectionToken,
+    input,
     Input,
     NgModule,
     NgZone,
@@ -453,6 +454,12 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
      */
     @Input({ transform: booleanAttribute }) resetPageOnSort: boolean = true;
     /**
+     * When enabled, a third click on a sortable column removes the sorting and restores the original data order.
+     * @defaultValue false
+     * @group Props
+     */
+    removableSort = input(false, { transform: booleanAttribute });
+    /**
      * Whether to use the default sorting or a custom one using sortFunction.
      * @group Props
      */
@@ -840,6 +847,12 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
 
     _sortOrder: number = 1;
 
+    /** Original node order, captured when value changes and removableSort is enabled. */
+    _pristineNodes: TreeNode<any>[] | null = null;
+
+    /** Original children order of every node of the pristine tree. */
+    _pristineChildren: Map<TreeNode<any>, TreeNode<any>[]> | null = null;
+
     filteredNodes: Nullable<any[]>;
 
     filterTimeout: any;
@@ -1082,6 +1095,7 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
     onChanges(simpleChange: SimpleChanges) {
         if (simpleChange.value) {
             this._value = simpleChange.value.currentValue;
+            this.capturePristineNodes();
 
             if (!this.lazy) {
                 this.totalRecords = this._value ? this._value.length : 0;
@@ -1095,6 +1109,10 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
 
             this.updateSerializedValue();
             this.tableService.onUIUpdate(this.value);
+        }
+
+        if (simpleChange.removableSort && !simpleChange.value) {
+            this.capturePristineNodes();
         }
 
         if (simpleChange.sortField) {
@@ -1221,8 +1239,14 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
         let originalEvent = event.originalEvent;
 
         if (this.sortMode === 'single') {
-            this._sortOrder = this.sortField === event.field ? this.sortOrder * -1 : this.defaultSortOrder;
-            this._sortField = event.field;
+            if (this.removableSort() && this.sortField === event.field && this.sortOrder === this.defaultSortOrder * -1) {
+                this._sortField = null;
+                this._sortOrder = this.defaultSortOrder;
+            } else {
+                this._sortOrder = this.sortField === event.field ? this.sortOrder * -1 : this.defaultSortOrder;
+                this._sortField = event.field;
+            }
+
             this.sortSingle();
 
             if (this.resetPageOnSort && this.scrollable) {
@@ -1233,12 +1257,20 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
             let metaKey = (<KeyboardEvent>originalEvent).metaKey || (<KeyboardEvent>originalEvent).ctrlKey;
             let sortMeta = this.getSortMeta(<string>event.field);
 
+            const removeSort = this.removableSort() && sortMeta?.order === this.defaultSortOrder * -1;
+
             if (sortMeta) {
                 if (!metaKey) {
-                    this._multiSortMeta = [{ field: <string>event.field, order: sortMeta.order * -1 }];
+                    this._multiSortMeta = removeSort ? [] : [{ field: <string>event.field, order: sortMeta.order * -1 }];
 
                     if (this.resetPageOnSort && this.scrollable) {
                         this.resetScrollTop();
+                    }
+                } else if (removeSort) {
+                    this._multiSortMeta = (<SortMeta[]>this._multiSortMeta).filter((meta) => meta.field !== event.field);
+                    if (!this.lazy && this._pristineNodes && this._multiSortMeta.length) {
+                        this.restorePristineNodes(this._pristineNodes);
+                        this._value = [...this._pristineNodes];
                     }
                 } else {
                     sortMeta.order = sortMeta.order * -1;
@@ -1258,7 +1290,67 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
         }
     }
 
+    /**
+     * Captures the original order of the nodes and of every nested children array.
+     */
+    private capturePristineNodes() {
+        if (!this.removableSort() || this.lazy) {
+            this._pristineNodes = null;
+            this._pristineChildren = null;
+            return;
+        }
+
+        this._pristineNodes = [...(this._value ?? [])];
+        this._pristineChildren = new Map();
+        this.capturePristineChildren(this._pristineNodes);
+    }
+
+    private capturePristineChildren(nodes: TreeNode<any>[]) {
+        for (let node of nodes) {
+            if (node.children?.length) {
+                (<Map<TreeNode<any>, TreeNode<any>[]>>this._pristineChildren).set(node, [...node.children]);
+                this.capturePristineChildren(node.children);
+            }
+        }
+    }
+
+    private restorePristineNodes(nodes: TreeNode<any>[]) {
+        for (let node of nodes) {
+            const children = this._pristineChildren?.get(node);
+
+            if (children) {
+                node.children = [...children];
+                this.restorePristineNodes(children);
+            }
+        }
+    }
+
+    /**
+     * Restores the original data order when the sorting has been removed through removableSort.
+     */
+    private restoreSortOrder() {
+        if (this.lazy) {
+            this.onLazyLoad.emit(this.createLazyLoadMetadata());
+        } else if (this._pristineNodes) {
+            this.restorePristineNodes(this._pristineNodes);
+            this._value = [...this._pristineNodes];
+
+            if (this.hasFilter()) {
+                this._filter();
+            }
+        }
+
+        this.onSort.emit(this.sortMode === 'multiple' ? { multisortmeta: [] } : { field: null, order: null });
+        this.updateSerializedValue();
+        this.tableService.onSort(null);
+    }
+
     sortSingle() {
+        if (this.removableSort() && !this.sortField) {
+            this.restoreSortOrder();
+            return;
+        }
+
         if (this.sortField && this.sortOrder) {
             if (this.lazy) {
                 this.onLazyLoad.emit(this.createLazyLoadMetadata());
@@ -1315,6 +1407,11 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
     }
 
     sortMultiple() {
+        if (this.removableSort() && !this.multiSortMeta?.length) {
+            this.restoreSortOrder();
+            return;
+        }
+
         if (this.multiSortMeta) {
             if (this.lazy) {
                 this.onLazyLoad.emit(this.createLazyLoadMetadata());
@@ -2331,12 +2428,23 @@ export class TreeTable extends BaseComponent<TreeTablePassThrough> implements Bl
         this._sortField = null;
         this._sortOrder = 1;
         this._multiSortMeta = null;
+
+        const restoredPristine = this.removableSort() && !!this._pristineNodes;
+        if (restoredPristine) {
+            this.restorePristineNodes(this._pristineNodes!);
+            this._value = [...this._pristineNodes!];
+        }
+
         this.tableService.onSort(null);
 
         this.filteredNodes = null;
         this.filters = {};
 
         this.first = 0;
+
+        if (restoredPristine) {
+            this.updateSerializedValue();
+        }
 
         if (this.lazy) {
             this.onLazyLoad.emit(this.createLazyLoadMetadata());
