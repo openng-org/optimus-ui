@@ -25,6 +25,28 @@ interface Column {
                 Similarly, adding <i>reorderableRows</i> property enables draggable rows. For the drag handle a column needs to have <i>rowReorder</i> property and <i>onRowReorder</i> callback is required to control the state of the rows after
                 reorder completes.
             </p>
+            <h3>Keyboard Support</h3>
+            <p>Focus a reorderable header or row, then use the shortcuts below to move it one position.</p>
+            <div class="doc-tablewrapper">
+                <table class="doc-table">
+                    <thead>
+                        <tr>
+                            <th>Key</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><i>Ctrl/Cmd + Left/Right Arrow</i></td>
+                            <td>Moves the focused column left or right.</td>
+                        </tr>
+                        <tr>
+                            <td><i>Ctrl/Cmd + Up/Down Arrow</i></td>
+                            <td>Moves the focused row up or down.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </app-docsectiontext>
         <p-deferred-demo (load)="loadDemoData()">
             <div class="card">
