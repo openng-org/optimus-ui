@@ -3027,15 +3027,15 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         event.preventDefault();
     }
 
-    onUserInput(event: KeyboardEvent | any) {
+    onUserInput(event: InputEvent) {
         // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
 
-        if (!this.isKeydown) {
+        if (!this.isKeydown && event.inputType !== 'insertFromPaste') {
             return;
         }
         this.isKeydown = false;
 
-        let val = (<HTMLInputElement>event.target).value;
+        let val = (event.target as HTMLInputElement).value;
         try {
             let value = this.parseValueFromString(val);
             if (this.isValidSelection(value)) {
@@ -3049,7 +3049,6 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             let value = this.keepInvalid ? val : null;
             this.updateModel(value);
         }
-
         this.onInput.emit(event);
     }
 
