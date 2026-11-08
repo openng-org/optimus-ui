@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, sig
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { SharedModule } from '@openng/optimus-ui/api';
+import { SelectItem, SharedModule } from '@openng/optimus-ui/api';
 import { AutoCompleteCompleteEvent, AutoCompleteDropdownClickEvent, AutoCompleteSelectEvent, AutoCompleteUnselectEvent } from '@openng/optimus-ui/types/autocomplete';
 import { BehaviorSubject } from 'rxjs';
 import type { Mock } from 'vitest';
@@ -718,13 +718,108 @@ describe('AutoComplete', () => {
             expect(component.inputValue()).toBe('Two');
         });
 
-        it('should mark the option matching the written optionValue as selected', async () => {
+        it('should display the option label in the input and have value be object when optionLabel defined but optionValue undefined', async () => {
+            const suggestions = [
+                { value: 1, name: 'One' },
+                { value: 2, name: 'Two' }
+            ];
+            fixture.componentRef.setInput('suggestions', suggestions);
+            fixture.componentRef.setInput('optionLabel', 'name');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue(suggestions[1]);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(component.inputValue()).toBe('Two');
+            expect(component.modelValue()).toBe(suggestions[1]);
+            expect(typeof component.value === 'object').toBe(true);
+            expect(component.value).toBe(suggestions[1]);
+        });
+
+        it('should have correct label and value if suggestions is SelectItem[] and optionLabel and optionValue are both undefined', async () => {
+            const suggestions: SelectItem[] = [
+                { value: 1, label: 'One' },
+                { value: 2, label: 'Two' }
+            ];
+            fixture.componentRef.setInput('suggestions', suggestions);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue(2);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(component.inputValue()).toBe('Two');
+            expect(component.modelValue()).toBe(suggestions[1]);
+            expect(component.value).toBe(2);
+        });
+
+        it('should mark the option matching the written primitive value as selected when optionValue is defined', async () => {
             fixture.componentRef.setInput('optionLabel', 'name');
             fixture.componentRef.setInput('optionValue', 'code');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             component.writeValue('AL');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            fixture.componentRef.setInput('suggestions', mockCountries);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(mockCountries.map((country) => component.isSelected(country))).toEqual([false, true, false, false, false]);
+        });
+
+        it('should mark the option matching the written option value as selected when optionValue is defined', async () => {
+            fixture.componentRef.setInput('optionLabel', 'name');
+            fixture.componentRef.setInput('optionValue', 'code');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.writeValue({ ...mockCountries[1] });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            fixture.componentRef.setInput('suggestions', mockCountries);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(mockCountries.map((country) => component.isSelected(country))).toEqual([false, true, false, false, false]);
+        });
+
+        it('should mark the SelectItem option matching the written option value as selected when option is SelectItem and optionLabel and optionValue are both undefined', async () => {
+            const suggestions: SelectItem[] = mockCountries.map((country) => ({ label: country.name, value: country.code }));
+            component.writeValue({ ...suggestions[1] });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            fixture.componentRef.setInput('suggestions', suggestions);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(suggestions.map((country) => component.isSelected(country))).toEqual([false, true, false, false, false]);
+        });
+
+        it('should mark the SelectItem option matching the written primitive value as selected when option is SelectItem and optionLabel and optionValue are both undefined', async () => {
+            component.writeValue('AL');
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const suggestions: SelectItem[] = mockCountries.map((country) => ({ label: country.name, value: country.code }));
+            fixture.componentRef.setInput('suggestions', suggestions);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(suggestions.map((country) => component.isSelected(country))).toEqual([false, true, false, false, false]);
+        });
+
+        it('should mark the option matching the written option value as selected when optionLabel is defined but optionValue undefined', async () => {
+            const preselectedValue = { ...mockCountries[1] };
+            component.writeValue(preselectedValue);
+            fixture.componentRef.setInput('optionLabel', 'name');
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
