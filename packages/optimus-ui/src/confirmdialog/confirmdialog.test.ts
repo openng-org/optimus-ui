@@ -334,9 +334,10 @@ describe('ConfirmDialog', () => {
             expect(dialogElement).toBeTruthy();
         });
 
-        it('should have proper data attributes', () => {
+        it('should pass the alertdialog role to the dialog without repeating it on the host', () => {
             const dialogElement = fixture.debugElement.query(By.css('p-dialog'));
-            expect(dialogElement.nativeElement.getAttribute('role')).toBe('alertdialog');
+            expect(dialogElement.componentInstance.role).toBe('alertdialog');
+            expect(dialogElement.nativeElement.hasAttribute('role')).toBe(false);
         });
     });
 
@@ -935,8 +936,15 @@ describe('ConfirmDialog', () => {
             await accessibilityFixture.whenStable();
             await new Promise((resolve) => setTimeout(resolve, 0));
 
-            const dialog = accessibilityFixture.debugElement.query(By.css('p-dialog'));
-            expect(dialog.nativeElement.getAttribute('role')).toBe('alertdialog');
+            const alertDialogs = document.querySelectorAll('[role="alertdialog"]');
+            expect(alertDialogs.length).toBe(1);
+
+            const alertDialog = alertDialogs[0] as HTMLElement;
+            expect(alertDialog.tagName).not.toBe('P-DIALOG');
+
+            const labelledBy = alertDialog.getAttribute('aria-labelledby');
+            expect(labelledBy).toBeTruthy();
+            expect(document.getElementById(labelledBy!)?.textContent?.trim()).toBe('Accessibility Test');
         });
 
         it('should handle aria labels for buttons', async () => {
