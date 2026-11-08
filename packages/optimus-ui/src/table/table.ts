@@ -2253,6 +2253,12 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
     }
 
     _filter() {
+        // in case we got here directely i.e. by pressing enter and still have a pending timer, clean it
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+            this.filterTimeout = null;
+        }
+
         if (!this.restoringFilter) {
             this.first = 0;
             this.firstChange.emit(this.first);
@@ -3238,6 +3244,11 @@ export class Table<RowData = any> extends BaseComponent<TablePassThrough> implem
     }
 
     onDestroy() {
+        if (this.filterTimeout) {
+            clearTimeout(this.filterTimeout);
+            this.filterTimeout = null;
+        }
+
         this.unbindDocumentEditListener();
         this.editingCell = null;
         this.initialized = null;
@@ -6624,8 +6635,24 @@ export class ColumnFilterFormElement extends BaseComponent<ColumnFilterPassThrou
     onModelChange(value: any) {
         (<any>this.filterConstraint).value = value;
 
-        if (this.type === 'date' || this.type === 'boolean' || ((this.type === 'text' || this.type === 'numeric') && this.filterOn === 'input') || !value) {
+        if (this.type === 'date' || this.type === 'boolean' || !value) {
             this.dataTable._filter();
+            return;
+        }
+
+        if ((this.type === 'text' || this.type === 'numeric') && this.filterOn === 'input') {
+            if (!this.dataTable.filterDelay) {
+                this.dataTable._filter();
+                return;
+            }
+            // respect filterDelay as it used to be in older versions of primeng before we had p-columnFilter
+            if (this.dataTable.filterTimeout) {
+                clearTimeout(this.dataTable.filterTimeout);
+            }
+            this.dataTable.filterTimeout = setTimeout(() => {
+                this.dataTable._filter();
+                this.dataTable.filterTimeout = null;
+            }, this.dataTable.filterDelay);
         }
     }
 
