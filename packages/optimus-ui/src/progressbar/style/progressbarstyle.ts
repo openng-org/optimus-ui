@@ -6,8 +6,8 @@ const classes = {
     root: ({ instance }) => [
         'p-progressbar p-component',
         {
-            'p-progressbar-determinate': instance.mode == 'determinate',
-            'p-progressbar-indeterminate': instance.mode == 'indeterminate'
+            'p-progressbar-determinate': instance.mode() == 'determinate',
+            'p-progressbar-indeterminate': instance.mode() == 'indeterminate'
         }
     ],
     value: 'p-progressbar-value',

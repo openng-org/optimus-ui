@@ -58,7 +58,7 @@ import { OverlayBadgeModule } from '@openng/optimus-ui/overlaybadge';
                                 <p-progressbar
                                     [value]="item.watchedPercent"
                                     [showValue]="false"
-                                    styleClass="!h-1.5 !bg-surface-950 dark:!bg-surface-50 !rounded-full"
+                                    class="!h-1.5 !bg-surface-950 dark:!bg-surface-50 !rounded-full"
                                     valueStyleClass="p-progressbar-value !bg-surface-0 dark:!bg-surface-950 !rounded-full"
                                 />
                             </div>
