@@ -3,6 +3,7 @@ import * as path from 'path';
 import { dirname } from 'path';
 import * as TypeDoc from 'typedoc';
 import { fileURLToPath } from 'url';
+import { templateContextType, templateRefType } from './apidoc/template-type.mjs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -282,13 +283,9 @@ async function main() {
                                     };
 
                                     component_templates_group.children.forEach((template) => {
-                                        const templateType = template.type && template.type.toString();
-                                        let contextType = 'unknown';
+                                        const templateType = templateRefType(template.type && template.type.toString());
+                                        const contextType = templateContextType(templateType);
 
-                                        const match = templateType && templateType.match(/TemplateRef<(.+)>/);
-                                        if (match && match[1]) {
-                                            contextType = match[1];
-                                        }
                                         templates.values.push({
                                             name: template.name.replace(/Template$/, '').toLowerCase(),
                                             description: template.comment && template.comment.summary.map((s) => s.text || '').join(' '),
