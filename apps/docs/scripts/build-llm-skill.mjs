@@ -20,21 +20,23 @@ const SKILL_DESCRIPTION =
  * `/.well-known/agent-skills/index.json` lets `npx skills add https://optimus.openng.org` install the skill,
  * and its sha256 digest lets `npx skills update` detect new versions.
  */
-export function generateAgentSkill({ outputDir, wellKnownDir, components, pages, version }) {
+export function generateAgentSkill({ outputDir, wellKnownDir, manifest }) {
     const files = [];
+    const version = manifest.version;
+    const entries = new Map(manifest.entryPoints.map((entry) => [entry.name, entry]));
 
-    // Some guide pages (e.g. llms) are also picked up as components; keep them under guides only.
-    const pageNames = new Set(pages.map((page) => page.route.split('/').pop()));
-    const componentEntries = components
-        .filter((comp) => !pageNames.has(comp.name))
+    const componentEntries = [...manifest.components]
         .sort((a, b) => a.name.localeCompare(b.name))
-        .map((comp) => ({ file: `references/components/${comp.name}.md`, source: path.join(outputDir, 'components', `${comp.name}.md`), title: shortTitle(comp.title), description: comp.description }));
+        .map((comp) => ({
+            file: `references/components/${comp.name}.md`,
+            source: path.join(outputDir, 'components', `${comp.name}.md`),
+            title: comp.title,
+            description: comp.description,
+            selectors: (comp.entryPoints ?? []).flatMap((name) => (entries.get(name)?.declarations ?? []).map((d) => d.selector.split(',')[0].trim()))
+        }));
 
-    const pageEntries = [...pages]
-        .map((page) => {
-            const name = page.route.split('/').pop();
-            return { file: `references/guides/${name}.md`, source: path.join(outputDir, 'pages', `${name}.md`), title: page.title, description: page.description };
-        })
+    const pageEntries = [...manifest.guides]
+        .map((guide) => ({ file: `references/guides/${guide.name}.md`, source: path.join(outputDir, 'pages', `${guide.name}.md`), title: guide.title, description: guide.description }))
         .sort((a, b) => a.file.localeCompare(b.file));
 
     for (const entry of [...pageEntries, ...componentEntries]) {
@@ -69,16 +71,12 @@ export function generateAgentSkill({ outputDir, wellKnownDir, components, pages,
     console.log(`✓ Generated skills discovery index: ${indexPath}`);
 }
 
-function shortTitle(title) {
-    return title.replace(/^Angular /, '').replace(/ (Component|Directive)$/, '');
-}
-
 function oneLine(text) {
     return (text || '').replace(/\s+/g, ' ').trim() || '-';
 }
 
 function renderSkillMd({ version, pageEntries, componentEntries }) {
-    const indexLine = (e) => `- \`${e.file}\` — **${e.title}**: ${oneLine(e.description)}`;
+    const indexLine = (e) => `- \`${e.file}\` — **${e.title}**${e.selectors?.length ? ` (${e.selectors.map((sel) => `\`${sel}\``).join(', ')})` : ''}: ${oneLine(e.description)}`;
 
     return `---
 name: ${SKILL_NAME}
@@ -93,20 +91,21 @@ All paths below are relative to this skill's directory (the folder containing th
 
 ## How to use the docs
 
-1. Find the file in the index below. The file name is the component's docs slug (\`select\`, \`datepicker\`, \`inputotp\`, \`galleria\`, \`scroller\`, ...), which is not always the selector name.
+1. Find the file in the index below. The file name is the component's docs slug (\`select\`, \`datepicker\`, \`inputotp\`, \`galleria\`, \`scroller\`, ...); each line also lists the selectors the page documents, so search the index for a selector such as \`pTooltip\` or \`p-columnFilter\`.
 2. Read only the part you need. Component files are 10–60 KB, so list the headings first and then read the matching line range, for example \`grep -n '^##' references/components/table.md\`.
-3. When an exact API detail matters (input name, event payload, template context, token name), copy it from the docs instead of relying on memory of PrimeNG. Optimus UI is API-compatible with PrimeNG v21 in most places, but names, packages and defaults can differ.
+3. When an exact API detail matters (input name, allowed values, event payload, template context, token name), copy it from the docs instead of relying on memory of PrimeNG. Optimus UI is API-compatible with PrimeNG v21 in most places, but names, packages and defaults can differ.
 
 To search everything at once, grep the folder, for example \`grep -rn "appendTo" references/components/\`.
 
 ### Layout of a component file
 
-- \`# Angular <Name> Component\` followed by a one-line summary.
-- One \`##\` section per demo (Basic, Template, Sizes, Disabled, ...). Each has a short explanation and a full standalone Angular component in a \`typescript\` block showing the correct imports.
+- \`# <Name>\` followed by a one-line summary.
+- \`## Import\`: the exact import statements for the page's modules, standalone components and services.
+- One \`##\` section per demo (Basic, Template, Sizes, Disabled, ...). Each has a short explanation and a full standalone Angular component in a \`typescript\` block.
 - \`## Accessibility\`: screen-reader and keyboard support.
-- \`## <Name>\` with \`### Props\`, \`### Emits\`, \`### Templates\` (and sometimes \`### Methods\`): the API tables. This is the authoritative list of inputs and outputs.
+- \`## API\`: one \`### <ClassName>\` per component or directive with its selector, whether it works with \`ngModel\`/reactive forms, and \`#### Inputs\` (type or allowed values, default, two-way bindings), \`#### Outputs\` (payload type), \`#### Templates\` (context type) and \`#### Methods\`. This is generated from the compiled library and is the authoritative API.
 - \`## Pass Through Options\`: the \`pt\` keys for styling internal elements.
-- \`## Theming\`, with \`### CSS Classes\` and \`### Design Tokens\`.
+- \`## Theming\`, with \`### CSS Classes\` and \`### Design Tokens\` (token name and CSS variable).
 
 ## Conventions that hold across the library
 
@@ -119,7 +118,7 @@ Check the guides when in doubt; these are here so simple tasks don't need a look
 
 ## Keeping the docs up to date
 
-These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`npx skills update ${SKILL_NAME}\`, or \`npx skills add ${SITE_URL}\` (add \`-g\` for a user-level install) if it was installed another way. Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`.
+These docs are a snapshot of v${version}. If the project uses a newer Optimus UI release, or the docs contradict the installed package, offer to update it by running \`npx skills update ${SKILL_NAME}\`, or \`npx skills add ${SITE_URL}\` (add \`-g\` for a user-level install) if it was installed another way. Any single page can also be fetched live from \`${SITE_URL}/llms/components/<name>.md\` or \`${SITE_URL}/llms/pages/<name>.md\`, and the whole API as JSON from \`${SITE_URL}/llms/manifest.json\`.
 
 ## Index
 
