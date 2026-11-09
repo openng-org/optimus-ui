@@ -312,6 +312,33 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-radioButton class="a"></p-radioButton>\n<p-radio-button [class]="b"></p-radio-button>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-progressbar', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressbar [value]="50" styleClass="h-1"></p-progressbar>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressbar [value]="50" class="h-1"></p-progressbar>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-progressBar and p-progress-bar', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-progressBar [styleClass]="barClass"></p-progressBar>\n<p-progress-bar [styleClass]="otherClass" />\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-progressBar [class]="barClass"></p-progressBar>\n<p-progress-bar [class]="otherClass" />\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-progressbar in an inline template', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.ts': `@Component({ template: \`<p-progressbar class="w-full" styleClass="!h-1.5 !rounded-full" />\` })\nexport class App {}\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.ts')).toBe(`@Component({ template: \`<p-progressbar class="w-full !h-1.5 !rounded-full" />\` })\nexport class App {}\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];

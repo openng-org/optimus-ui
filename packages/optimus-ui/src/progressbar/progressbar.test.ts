@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, DebugElement, input, provideZonelessChangeDetection } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ProgressBar } from './progressbar';
+import { ProgressBar, ProgressBarModule } from './progressbar';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: `<p-progressbar [value]="value" [showValue]="showValue" [unit]="unit" [mode]="mode" [color]="color" [valueStyleClass]="valueStyleClass" [styleClass]="styleClass"> </p-progressbar>`
+    template: `<p-progressbar [value]="value" [showValue]="showValue" [unit]="unit" [mode]="mode" [color]="color" [valueStyleClass]="valueStyleClass" [class]="customClass"> </p-progressbar>`
 })
 class TestBasicProgressBarComponent {
     value: number | undefined = 50;
@@ -15,7 +15,7 @@ class TestBasicProgressBarComponent {
     mode: string = 'determinate';
     color: string | undefined;
     valueStyleClass: string | undefined;
-    styleClass: string | undefined;
+    customClass: string | undefined;
 }
 
 @Component({
@@ -60,12 +60,45 @@ class TestIndeterminateProgressBarComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
-    template: `<p-progressbar [value]="value" [style]="style" [styleClass]="styleClass"></p-progressbar>`
+    template: `<p-progressbar [value]="value" [style]="style" [class]="customClass"></p-progressbar>`
 })
 class TestStyleProgressBarComponent {
     value = 30;
     style: { [key: string]: any } | undefined = { border: '2px solid red', padding: '10px' };
-    styleClass = 'custom-progress-class';
+    customClass = 'custom-progress-class';
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-progressbar [value]="value">
+            <ng-template pTemplate="item" let-value>
+                <div class="unknown-type-content">Unknown: {{ value }}%</div>
+            </ng-template>
+        </p-progressbar>
+    `
+})
+class TestUnknownTypeTemplateProgressBarComponent {
+    value = 40;
+}
+
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-progressbar [value]="value">
+            @if (showContentTemplate) {
+                <ng-template pTemplate="content" let-value>
+                    <div class="late-content">Late: {{ value }}%</div>
+                </ng-template>
+            }
+        </p-progressbar>
+    `
+})
+class TestLateTemplateProgressBarComponent {
+    value = 20;
+    showContentTemplate = false;
 }
 
 describe('ProgressBar', () => {
@@ -76,8 +109,16 @@ describe('ProgressBar', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [TestBasicProgressBarComponent, TestPTemplateProgressBarComponent, TestContentTemplateProgressBarComponent, TestIndeterminateProgressBarComponent, TestStyleProgressBarComponent],
-            imports: [ProgressBar],
+            declarations: [
+                TestBasicProgressBarComponent,
+                TestPTemplateProgressBarComponent,
+                TestContentTemplateProgressBarComponent,
+                TestIndeterminateProgressBarComponent,
+                TestStyleProgressBarComponent,
+                TestUnknownTypeTemplateProgressBarComponent,
+                TestLateTemplateProgressBarComponent
+            ],
+            imports: [ProgressBarModule],
             providers: [provideZonelessChangeDetection()]
         }).compileComponents();
 
@@ -100,12 +141,11 @@ describe('ProgressBar', () => {
             freshFixture.detectChanges();
             const freshProgressBar = freshFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
 
-            expect(freshProgressBar.showValue).toBe(true);
-            expect(freshProgressBar.unit).toBe('%');
-            expect(freshProgressBar.mode).toBe('determinate');
-            expect(freshProgressBar.color).toBeUndefined();
-            expect(freshProgressBar.styleClass).toBeUndefined();
-            expect(freshProgressBar.valueStyleClass).toBeUndefined();
+            expect(freshProgressBar.showValue()).toBe(true);
+            expect(freshProgressBar.unit()).toBe('%');
+            expect(freshProgressBar.mode()).toBe('determinate');
+            expect(freshProgressBar.color()).toBeUndefined();
+            expect(freshProgressBar.valueStyleClass()).toBeUndefined();
         });
 
         it('should accept custom values', async () => {
@@ -114,18 +154,18 @@ describe('ProgressBar', () => {
             component.unit = ' points';
             component.mode = 'indeterminate';
             component.color = 'blue';
-            component.styleClass = 'custom-class';
+            component.customClass = 'custom-class';
             component.valueStyleClass = 'custom-value-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(progressBarInstance.value).toBe(75);
-            expect(progressBarInstance.showValue).toBe(false);
-            expect(progressBarInstance.unit).toBe(' points');
-            expect(progressBarInstance.mode).toBe('indeterminate');
-            expect(progressBarInstance.color).toBe('blue');
-            expect(progressBarInstance.styleClass).toBe('custom-class');
-            expect(progressBarInstance.valueStyleClass).toBe('custom-value-class');
+            expect(progressBarInstance.value()).toBe(75);
+            expect(progressBarInstance.showValue()).toBe(false);
+            expect(progressBarInstance.unit()).toBe(' points');
+            expect(progressBarInstance.mode()).toBe('indeterminate');
+            expect(progressBarInstance.color()).toBe('blue');
+            expect(progressBarElement.nativeElement.classList).toContain('custom-class');
+            expect(progressBarInstance.valueStyleClass()).toBe('custom-value-class');
         });
     });
 
@@ -134,57 +174,50 @@ describe('ProgressBar', () => {
             component.value = 80;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.value).toBe(80);
+            expect(progressBarInstance.value()).toBe(80);
         });
 
         it('should handle value as number through numberAttribute transform', async () => {
             component.value = 45;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.value).toBe(45);
-            expect(typeof progressBarInstance.value).toBe('number');
+            expect(progressBarInstance.value()).toBe(45);
+            expect(typeof progressBarInstance.value()).toBe('number');
         });
 
         it('should handle showValue through booleanAttribute transform', async () => {
             component.showValue = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.showValue).toBe(false);
+            expect(progressBarInstance.showValue()).toBe(false);
         });
 
         it('should update unit input', async () => {
             component.unit = ' MB';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.unit).toBe(' MB');
+            expect(progressBarInstance.unit()).toBe(' MB');
         });
 
         it('should update mode input', async () => {
             component.mode = 'indeterminate';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.mode).toBe('indeterminate');
+            expect(progressBarInstance.mode()).toBe('indeterminate');
         });
 
         it('should update color input', async () => {
             component.color = '#ff0000';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.color).toBe('#ff0000');
-        });
-
-        it('should update styleClass input', async () => {
-            component.styleClass = 'test-class';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            expect(progressBarInstance.styleClass).toBe('test-class');
+            expect(progressBarInstance.color()).toBe('#ff0000');
         });
 
         it('should update valueStyleClass input', async () => {
             component.valueStyleClass = 'value-test-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(progressBarInstance.valueStyleClass).toBe('value-test-class');
+            expect(progressBarInstance.valueStyleClass()).toBe('value-test-class');
         });
     });
 
@@ -275,7 +308,7 @@ describe('ProgressBar', () => {
             const progressBarEl = indeterminateFixture.debugElement.query(By.directive(ProgressBar));
             const valueElement = indeterminateFixture.debugElement.query(By.css('[data-pc-section="value"]'));
 
-            expect(progressBarEl.componentInstance.mode).toBe('indeterminate');
+            expect(progressBarEl.componentInstance.mode()).toBe('indeterminate');
             expect(valueElement).toBeTruthy();
             expect(valueElement.nativeElement.style.width).toBe('' as any);
         });
@@ -356,6 +389,35 @@ describe('ProgressBar', () => {
             }
         });
 
+        it('should render a pTemplate of an unknown type as the content template', async () => {
+            const templateFixture = TestBed.createComponent(TestUnknownTypeTemplateProgressBarComponent);
+            await templateFixture.whenStable();
+
+            const templateProgressBar: ProgressBar = templateFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
+            expect(templateProgressBar._contentTemplate()).toBeTruthy();
+
+            const customContent = templateFixture.debugElement.query(By.css('.unknown-type-content'));
+            expect(customContent.nativeElement.textContent.trim()).toBe('Unknown: 40%');
+            expect(templateFixture.debugElement.query(By.css('[data-pc-section="label"] > div:not(.unknown-type-content)'))).toBeFalsy();
+        });
+
+        it('should render a pTemplate added after the first render', async () => {
+            const templateFixture = TestBed.createComponent(TestLateTemplateProgressBarComponent);
+            await templateFixture.whenStable();
+
+            const labelElement = templateFixture.debugElement.query(By.css('[data-pc-section="label"]'));
+            expect(templateFixture.debugElement.query(By.css('.late-content'))).toBeFalsy();
+            expect(labelElement.nativeElement.textContent.trim()).toBe('20%');
+
+            templateFixture.componentInstance.showContentTemplate = true;
+            templateFixture.changeDetectorRef.markForCheck();
+            await templateFixture.whenStable();
+
+            const lateContent = templateFixture.debugElement.query(By.css('.late-content'));
+            expect(lateContent.nativeElement.textContent.trim()).toBe('Late: 20%');
+            expect(labelElement.nativeElement.textContent.trim()).toBe('Late: 20%');
+        });
+
         it('should pass correct template context variables', async () => {
             const templateFixture = TestBed.createComponent(TestPTemplateProgressBarComponent);
             const templateComponent = templateFixture.componentInstance;
@@ -392,13 +454,46 @@ describe('ProgressBar', () => {
     });
 
     describe('CSS Classes and Styling', () => {
-        it('should apply styleClass to root element', async () => {
-            component.styleClass = 'custom-progress-class';
+        it('should apply custom class to root element via native class binding', async () => {
+            component.customClass = 'custom-progress-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
-            expect(rootElement.nativeElement.classList.contains('custom-progress-class')).toBe(true);
+            expect(rootElement.nativeElement.classList).toContain('custom-progress-class');
+            expect(rootElement.nativeElement.classList).toContain('p-progressbar');
+            expect(rootElement.nativeElement.classList).toContain('p-component');
+        });
+
+        it('should replace custom class without dropping component classes', async () => {
+            component.customClass = 'class-1';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            component.customClass = 'class-2';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
+            expect(rootElement.nativeElement.classList).toContain('class-2');
+            expect(rootElement.nativeElement.classList).not.toContain('class-1');
+            expect(rootElement.nativeElement.classList).toContain('p-progressbar');
+            expect(rootElement.nativeElement.classList).toContain('p-progressbar-determinate');
+        });
+
+        it('should switch the mode class on the root element when mode changes', async () => {
+            const rootElement = fixture.debugElement.query(By.directive(ProgressBar)).nativeElement;
+            expect(rootElement.classList).toContain('p-progressbar-determinate');
+            expect(rootElement.classList).not.toContain('p-progressbar-indeterminate');
+            expect(rootElement.getAttribute('data-p')).toBe('determinate');
+
+            component.mode = 'indeterminate';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(rootElement.classList).toContain('p-progressbar-indeterminate');
+            expect(rootElement.classList).not.toContain('p-progressbar-determinate');
+            expect(rootElement.getAttribute('data-p')).toBe('indeterminate');
         });
 
         it('should apply custom styles', () => {
@@ -435,7 +530,7 @@ describe('ProgressBar', () => {
         });
 
         it('should combine multiple CSS classes correctly', async () => {
-            component.styleClass = 'class1 class2';
+            component.customClass = 'class1 class2';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -498,15 +593,15 @@ describe('ProgressBar', () => {
         it('should handle null/undefined values', async () => {
             component.value = undefined as any;
             component.color = undefined as any;
-            component.styleClass = undefined as any;
+            component.customClass = undefined as any;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            const actualValue = progressBarInstance.value;
+            const actualValue = progressBarInstance.value();
             expect(actualValue === undefined || isNaN(actualValue)).toBe(true);
-            expect(progressBarInstance.color).toBeUndefined();
-            expect(progressBarInstance.styleClass).toBeUndefined();
+            expect(progressBarInstance.color()).toBeUndefined();
+            expect(progressBarElement.nativeElement.classList).toContain('p-progressbar');
         });
 
         it('should handle zero value correctly', async () => {
@@ -537,8 +632,8 @@ describe('ProgressBar', () => {
             const progressBarInstance = negativeFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
 
             // Test that the component properly accepts negative values
-            expect(progressBarInstance.mode).toBe('determinate');
-            expect(progressBarInstance.value).toBe(-10);
+            expect(progressBarInstance.mode()).toBe('determinate');
+            expect(progressBarInstance.value()).toBe(-10);
 
             // Test that the value element is rendered in determinate mode
             const valueElement = negativeFixture.debugElement.query(By.css('[data-pc-section="value"]'));
@@ -546,7 +641,7 @@ describe('ProgressBar', () => {
 
             // In test environment, style binding might not work perfectly,
             // so we verify the component state instead
-            expect(progressBarInstance.value < 0).toBe(true);
+            expect(progressBarInstance.value() < 0).toBe(true);
         });
 
         it('should handle values over 100%', async () => {
@@ -569,7 +664,7 @@ describe('ProgressBar', () => {
             await fixture.whenStable();
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            expect(progressBarInstance.unit).toBe('' as any);
+            expect(progressBarInstance.unit()).toBe('' as any);
         });
 
         it('should handle mode changes correctly', async () => {
@@ -625,7 +720,7 @@ describe('ProgressBar', () => {
             const templateProgressBar = templateFixture.debugElement.query(By.directive(ProgressBar)).componentInstance;
 
             expect(templateProgressBar).toBeTruthy();
-            expect(templateProgressBar.templates !== undefined || templateProgressBar.contentTemplate !== undefined).toBe(true);
+            expect(templateProgressBar._contentTemplate()).toBeTruthy();
         });
     });
 
@@ -633,7 +728,7 @@ describe('ProgressBar', () => {
         @Component({
             changeDetection: ChangeDetectionStrategy.Eager,
             standalone: true,
-            imports: [ProgressBar],
+            imports: [ProgressBarModule],
             template: `<p-progressbar [value]="value()" [mode]="mode()" [showValue]="showValue()" [unit]="unit()" [color]="color()" [pt]="pt()"></p-progressbar>`
         })
         class TestPTProgressBarComponent {
@@ -793,7 +888,7 @@ describe('ProgressBar', () => {
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.value >= 50 ? 'HIGH_VALUE' : 'LOW_VALUE'
+                            class: instance?.value() >= 50 ? 'HIGH_VALUE' : 'LOW_VALUE'
                         };
                     }
                 });
@@ -809,7 +904,7 @@ describe('ProgressBar', () => {
                 fixture.componentRef.setInput('pt', {
                     value: ({ instance }: any) => {
                         return {
-                            'data-mode': instance?.mode
+                            'data-mode': instance?.mode()
                         };
                     }
                 });
@@ -827,7 +922,7 @@ describe('ProgressBar', () => {
                     label: ({ instance }: any) => {
                         return {
                             style: {
-                                display: instance?.showValue ? 'flex' : 'none'
+                                display: instance?.showValue() ? 'flex' : 'none'
                             }
                         };
                     }
