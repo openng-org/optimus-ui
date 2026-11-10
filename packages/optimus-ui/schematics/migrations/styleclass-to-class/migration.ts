@@ -6,7 +6,7 @@ import { rewriteStyleClassInHtml, rewriteStyleClassInTypeScript } from '../../ut
  * Selectors whose `styleClass`/`[styleClass]` input was dropped in favor of binding the native
  * `class`/`[class]` attribute directly. Extend this list as more components make the same switch.
  */
-export const MIGRATED_SELECTORS: readonly string[] = ['p-toast', 'p-message', 'p-tag', 'p-skeleton', 'p-card', 'p-radiobutton', 'p-radioButton', 'p-radio-button', 'p-progressBar', 'p-progressbar', 'p-progress-bar'];
+export const MIGRATED_SELECTORS: readonly string[] = ['p-toast', 'p-message', 'p-tag', 'p-skeleton', 'p-card', 'p-radiobutton', 'p-radioButton', 'p-radio-button', 'p-progressBar', 'p-progressbar', 'p-progress-bar', 'p-avatar'];
 
 /**
  * Rewrites `styleClass="x"` to `class="x"` (merging into an existing static `class` attribute) and

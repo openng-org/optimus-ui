@@ -9,7 +9,7 @@
         "styleclass-to-class": {
             "version": "3.0.0",
             "factory": "./migrations/styleclass-to-class/migration",
-            "description": "Rewrite styleClass/[styleClass] to class/[class] on selectors whose styleClass input was removed in this version in favor of the native class attribute: p-toast, p-message, p-tag, p-skeleton, p-card, p-radiobutton/p-radioButton/p-radio-button and p-progressbar/p-progressBar/p-progress-bar."
+            "description": "Rewrite styleClass/[styleClass] to class/[class] on selectors whose styleClass input was removed in this version in favor of the native class attribute: p-toast, p-message, p-tag, p-skeleton, p-card, p-radiobutton/p-radioButton/p-radio-button and p-progressbar/p-progressBar/p-progress-bar and p-avatar."
         },
         "remove-dead-inputs": {
             "version": "3.0.0",
