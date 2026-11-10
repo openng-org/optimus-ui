@@ -1285,6 +1285,41 @@ describe('Tag', () => {
                 iconElement?.click();
                 expect(clicked).toBe(true);
             });
+
+            it('should bind onclick event from a function-form root pt returning a new handler on every render', () => {
+                let value = '';
+                fixture.componentRef.setInput('value', 'x');
+                fixture.componentRef.setInput('pt', {
+                    root: ({ instance }: any) => ({
+                        onclick: () => (value = instance.value() || '')
+                    })
+                });
+                // NG0103 (infinite change detection) if a new handler reference counts as a change
+                fixture.detectChanges();
+
+                tagElement.nativeElement.click();
+                expect(value).toBe('x');
+            });
+
+            it('should call the latest handler of a function-form root pt', () => {
+                let captured = '';
+                fixture.componentRef.setInput('value', 'first');
+                fixture.componentRef.setInput('pt', {
+                    root: ({ instance }: any) => {
+                        // captured when the pt is evaluated, not when the event fires
+                        const current = instance.value();
+
+                        return { onclick: () => (captured = current) };
+                    }
+                });
+                fixture.detectChanges();
+
+                fixture.componentRef.setInput('value', 'second');
+                fixture.detectChanges();
+
+                tagElement.nativeElement.click();
+                expect(captured).toBe('second');
+            });
         });
 
         describe('Case 6: Test emitters', () => {

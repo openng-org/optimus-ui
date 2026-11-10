@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, provideZonelessChangeDetection, signal } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, provideZonelessChangeDetection, signal, viewChild } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { Bind } from './bind';
@@ -147,6 +147,23 @@ class TestBindDynamicComponent {
 })
 class TestSetAttrsComponent {}
 
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    selector: 'test-set-attrs-after-render',
+    template: `<div [pBind]="undefined"></div>`
+})
+class TestSetAttrsAfterRenderComponent {
+    readonly bind = viewChild.required(Bind);
+
+    clicks = 0;
+
+    constructor() {
+        // the PassThrough refresh of the Signals-migrated components: a function-form pt returns a new handler on every render
+        afterEveryRender(() => this.bind().setAttrs({ id: 'after-render-id', onclick: () => this.clicks++ }));
+    }
+}
+
 describe('Bind', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -161,7 +178,8 @@ describe('Bind', () => {
                 TestBindListenersComponent,
                 TestBindMixedComponent,
                 TestBindDynamicComponent,
-                TestSetAttrsComponent
+                TestSetAttrsComponent,
+                TestSetAttrsAfterRenderComponent
             ],
             providers: [provideZonelessChangeDetection()]
         });
@@ -290,32 +308,42 @@ describe('Bind', () => {
             expect(component.clickHandler).toHaveBeenCalled();
             expect(component.hoverHandler).toHaveBeenCalled();
         });
-        // TODO: Feature works, unit test will be refactored later
-        // it('should cleanup old listeners when attrs change', () => {
-        //     const fixture = TestBed.createComponent(TestBindDynamicComponent);
-        //     const component = fixture.componentInstance;
+        it('should cleanup old listeners when attrs change', async () => {
+            const fixture = TestBed.createComponent(TestBindDynamicComponent);
+            const component = fixture.componentInstance;
 
-        //     const firstHandler = jasmine.createSpy('first');
-        //     const secondHandler = jasmine.createSpy('second');
+            const firstHandler = vi.fn();
+            const secondHandler = vi.fn();
 
-        //     component.attrs = { onclick: firstHandler };
-        //     fixture.detectChanges();
+            component.attrs = { onclick: firstHandler };
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
-        //     const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
+            const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
 
-        //     // Test first handler
-        //     element.dispatchEvent(new Event('click'));
-        //     expect(firstHandler).toHaveBeenCalledTimes(1);
+            // Test first handler
+            element.dispatchEvent(new Event('click'));
+            expect(firstHandler).toHaveBeenCalledTimes(1);
 
-        //     // Update to second handler
-        //     component.attrs = { onclick: secondHandler };
-        //     fixture.detectChanges();
+            // Update to second handler
+            component.attrs = { onclick: secondHandler };
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
-        //     // Test that first handler is no longer called
-        //     element.dispatchEvent(new Event('click'));
-        //     expect(firstHandler).toHaveBeenCalledTimes(1); // Still 1, not called again
-        //     expect(secondHandler).toHaveBeenCalledTimes(1);
-        // });
+            // Test that first handler is no longer called
+            element.dispatchEvent(new Event('click'));
+            expect(firstHandler).toHaveBeenCalledTimes(1); // Still 1, not called again
+            expect(secondHandler).toHaveBeenCalledTimes(1);
+
+            // Remove the handler
+            component.attrs = {};
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            element.dispatchEvent(new Event('click'));
+            expect(firstHandler).toHaveBeenCalledTimes(1);
+            expect(secondHandler).toHaveBeenCalledTimes(1);
+        });
     });
 
     describe('Mixed Content', () => {
@@ -438,6 +466,79 @@ describe('Bind', () => {
 
             expect(element.getAttribute('id')).toBe('set-id');
             expect(element.className).toContain('set-class');
+        });
+
+        it('should not loop when setAttrs is called after every render with a new handler', () => {
+            const fixture = TestBed.createComponent(TestSetAttrsAfterRenderComponent);
+            const component = fixture.componentInstance;
+
+            // NG0103 (infinite change detection) if a new handler reference counts as a change
+            fixture.detectChanges();
+
+            const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
+
+            expect(element.getAttribute('id')).toBe('after-render-id');
+
+            element.dispatchEvent(new Event('click'));
+            expect(component.clicks).toBe(1);
+        });
+
+        it('should call the latest handler when setAttrs is called twice before the effect runs', async () => {
+            const fixture = TestBed.createComponent(TestSetAttrsComponent);
+            await fixture.whenStable();
+
+            const directive = fixture.debugElement.query(By.directive(Bind)).injector.get(Bind);
+            const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
+            const firstHandler = vi.fn();
+            const secondHandler = vi.fn();
+
+            directive.setAttrs({ onclick: firstHandler });
+            directive.setAttrs({ onclick: secondHandler });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            element.dispatchEvent(new Event('click'));
+            expect(firstHandler).not.toHaveBeenCalled();
+            expect(secondHandler).toHaveBeenCalledTimes(1);
+        });
+
+        it('should remove the listener of an event that leaves the attrs set through setAttrs', async () => {
+            const fixture = TestBed.createComponent(TestSetAttrsComponent);
+            await fixture.whenStable();
+
+            const directive = fixture.debugElement.query(By.directive(Bind)).injector.get(Bind);
+            const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
+            const handler = vi.fn();
+
+            directive.setAttrs({ onclick: handler });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            element.dispatchEvent(new Event('click'));
+            expect(handler).toHaveBeenCalledTimes(1);
+
+            directive.setAttrs({});
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            element.dispatchEvent(new Event('click'));
+            expect(handler).toHaveBeenCalledTimes(1);
+        });
+
+        it('should prevent the default action when a handler returns false', async () => {
+            const fixture = TestBed.createComponent(TestSetAttrsComponent);
+            await fixture.whenStable();
+
+            const directive = fixture.debugElement.query(By.directive(Bind)).injector.get(Bind);
+            const element = fixture.debugElement.query(By.directive(Bind)).nativeElement;
+
+            directive.setAttrs({ onclick: () => false });
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const event = new Event('click', { cancelable: true });
+            element.dispatchEvent(event);
+            expect(event.defaultPrevented).toBe(true);
         });
     });
 
