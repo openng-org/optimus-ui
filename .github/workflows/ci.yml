@@ -121,3 +121,8 @@ jobs:
                   NODE_ENV: production
               run: |
                   pnpm run build:packages
+
+            # The manifest tests read the library typings and API docs the build just generated
+            - name: Test manifest
+              run: |
+                  pnpm --filter docs test:manifest

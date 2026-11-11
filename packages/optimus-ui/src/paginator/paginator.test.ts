@@ -786,7 +786,7 @@ describe('Paginator', () => {
             expect(prevButton.nativeElement.disabled).toBe(true);
 
             const firstButton = fixture.debugElement.query(By.css('.p-paginator-first'));
-            expect(firstButton.nativeElement.disabled).toBe(false);
+            expect(firstButton.nativeElement.disabled).toBe(true);
 
             // Last page
             paginator.first = 90;

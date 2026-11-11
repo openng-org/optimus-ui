@@ -26,6 +26,8 @@ It is not affiliated with, endorsed by, or sponsored by PrimeTek. The [philosoph
 
 ## Quick start
 
+Check which Angular versions each Optimus UI release supports in the [Angular version compatibility table](https://optimus.openng.org/installation#compatibility), then run:
+
 ```bash
 ng add @openng/optimus-ui
 ```

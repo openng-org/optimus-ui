@@ -168,6 +168,17 @@ export function app(): express.Express {
         res.redirect(301, 'https://v1.optimus.openng.org/migration/primeng');
     });
 
+    // Agent skills discovery index for `npx skills add`. Mounted separately because express.static
+    // ignores dot-folders, and with a short cache so `npx skills update` sees new docs builds.
+    server.use(
+        '/.well-known',
+        express.static(join(browserDistFolder, '.well-known'), {
+            maxAge: '5m',
+            index: false,
+            redirect: false
+        })
+    );
+
     // Serve static files from /browser.
     // Registered as plain middleware (with a regex catch-all below) instead of the old
     // '*.*' / '*' string patterns, which throw "Missing parameter name" at startup under

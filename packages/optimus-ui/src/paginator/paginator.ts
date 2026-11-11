@@ -56,7 +56,7 @@ const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
             <span [pBind]="ptm('current')" [class]="cx('current')">{{ currentPageReport }}</span>
         }
         @if (showFirstLastIcon) {
-            <button [pBind]="ptm('first')" type="button" (click)="changePageToFirst($event)" pRipple [class]="cx('first')" [attr.aria-label]="getAriaLabel('firstPageLabel')">
+            <button [pBind]="ptm('first')" type="button" [disabled]="isFirstPage() || empty()" (click)="changePageToFirst($event)" pRipple [class]="cx('first')" [attr.aria-label]="getAriaLabel('firstPageLabel')">
                 @if (!firstPageLinkIconTemplate && !_firstPageLinkIconTemplate) {
                     <svg [pBind]="ptm('firstIcon')" data-p-icon="angle-double-left" [class]="cx('firstIcon')" />
                 }

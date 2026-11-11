@@ -607,6 +607,49 @@ describe('DatePicker', () => {
         });
     });
 
+    describe('hideOverlay', () => {
+        it('should focus the input when nothing else is focused', async () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance as DatePicker;
+            const inputElement = testFixture.debugElement.query(By.css('input')).nativeElement;
+
+            (document.activeElement as HTMLElement)?.blur();
+            datePickerComponent.hideOverlay();
+
+            expect(document.activeElement).toBe(inputElement);
+        });
+
+        it('should focus the input when focus is inside the datepicker overlay', async () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance as DatePicker;
+            const inputElement = testFixture.debugElement.query(By.css('input')).nativeElement;
+
+            const overlayButton = document.createElement('button');
+            datePickerComponent.overlay = document.createElement('div');
+            datePickerComponent.overlay.appendChild(overlayButton);
+            document.body.appendChild(datePickerComponent.overlay);
+            overlayButton.focus();
+
+            datePickerComponent.hideOverlay();
+
+            expect(document.activeElement).toBe(inputElement);
+
+            datePickerComponent.overlay.remove();
+        });
+
+        it('should not steal focus back when the user already moved focus outside the datepicker', async () => {
+            const datePickerComponent = testFixture.debugElement.query(By.css('p-datepicker')).componentInstance as DatePicker;
+
+            const otherInput = document.createElement('input');
+            document.body.appendChild(otherInput);
+            otherInput.focus();
+
+            datePickerComponent.hideOverlay();
+
+            expect(document.activeElement).toBe(otherInput);
+
+            otherInput.remove();
+        });
+    });
+
     describe('Date Selection Modes', () => {
         it('should handle single selection mode', async () => {
             testComponent.selectionMode = 'single';
