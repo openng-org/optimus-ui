@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, Directive, effect, HostListener, inject, InjectionToken, input, Input, NgModule } from '@angular/core';
+import { afterEveryRender, afterNextRender, booleanAttribute, computed, Directive, effect, HostListener, inject, input, NgModule } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { BaseModelHolder } from '@openng/optimus-ui/basemodelholder';
@@ -6,8 +6,6 @@ import { Bind } from '@openng/optimus-ui/bind';
 import { Fluid } from '@openng/optimus-ui/fluid';
 import { InputTextPassThrough } from '@openng/optimus-ui/types/inputtext';
 import { InputTextStyle } from './style/inputtextstyle';
-
-const INPUTTEXT_INSTANCE = new InjectionToken<InputText>('INPUTTEXT_INSTANCE');
 
 /**
  * InputText directive is an extension to standard input element with theming.
@@ -18,15 +16,15 @@ const INPUTTEXT_INSTANCE = new InjectionToken<InputText>('INPUTTEXT_INSTANCE');
     standalone: true,
     host: {
         '[class]': "cx('root')",
-        '[attr.data-p]': 'dataP'
+        '[attr.data-p]': 'dataP()'
     },
-    providers: [InputTextStyle, { provide: INPUTTEXT_INSTANCE, useExisting: InputText }, { provide: PARENT_INSTANCE, useExisting: InputText }],
+    providers: [InputTextStyle, { provide: PARENT_INSTANCE, useExisting: InputText }],
     hostDirectives: [Bind]
 })
 export class InputText extends BaseModelHolder<InputTextPassThrough> {
     componentName = 'InputText';
 
-    @Input() hostName: any = '';
+    readonly hostName = input<any>('');
 
     /**
      * Used to pass attributes to DOM elements inside the InputText component.
@@ -50,8 +48,6 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
 
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    $pcInputText: InputText | undefined = inject(INPUTTEXT_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     ngControl = inject(NgControl, { optional: true, self: true });
 
     pcFluid: Fluid | null = inject(Fluid, { optional: true, host: true, skipSelf: true });
@@ -60,7 +56,7 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
      * Defines the size of the component.
      * @group Props
      */
-    @Input('pSize') pSize: 'large' | 'small' | undefined;
+    readonly pSize = input<'large' | 'small'>();
     /**
      * Specifies the input variant of the component.
      * @defaultValue undefined
@@ -94,15 +90,19 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
         effect(() => {
             this.pInputTextUnstyled() && this.directiveUnstyled.set(this.pInputTextUnstyled());
         });
-    }
 
-    onAfterViewInit() {
-        this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
-        this.cd.detectChanges();
-    }
+        // Seed the model value from the rendered element (replaces the former ngAfterViewInit hook).
+        afterNextRender(() => {
+            this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
+            this.cd.detectChanges();
+        });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptm('root'));
+        // Re-apply the root pass-through section after each render (replaces the former
+        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
+        // so unchanged PT resolutions are no-ops.
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptm('root'));
+        });
     }
 
     onDoCheck() {
@@ -114,18 +114,16 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
         this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
     }
 
-    get hasFluid() {
-        return this.fluid() ?? !!this.pcFluid;
-    }
+    readonly hasFluid = computed(() => this.fluid() ?? !!this.pcFluid);
 
-    get dataP() {
-        return this.cn({
+    readonly dataP = computed(() =>
+        this.cn({
             invalid: this.invalid(),
-            fluid: this.hasFluid,
+            fluid: this.hasFluid(),
             filled: this.$variant() === 'filled',
-            [this.pSize as string]: this.pSize
-        });
-    }
+            [this.pSize() as string]: this.pSize()
+        })
+    );
 }
 
 @NgModule({
