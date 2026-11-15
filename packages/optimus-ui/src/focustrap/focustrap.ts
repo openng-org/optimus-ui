@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { booleanAttribute, Directive, inject, Input, NgModule, PLATFORM_ID, SimpleChanges } from '@angular/core';
+import { booleanAttribute, Directive, effect, inject, input, NgModule, PLATFORM_ID } from '@angular/core';
 import { createElement, focus, getFirstFocusableElement, getLastFocusableElement } from '@openng/optimus-ui-utils';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 
@@ -8,15 +8,14 @@ import { BaseComponent } from '@openng/optimus-ui/basecomponent';
  * @group Components
  */
 @Directive({
-    selector: '[pFocusTrap]',
-    standalone: true
+    selector: '[pFocusTrap]'
 })
 export class FocusTrap extends BaseComponent {
     /**
      * When set as true, focus wouldn't be managed.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) pFocusTrapDisabled: boolean = false;
+    readonly pFocusTrapDisabled = input(false, { transform: booleanAttribute });
 
     platformId = inject(PLATFORM_ID);
 
@@ -26,20 +25,19 @@ export class FocusTrap extends BaseComponent {
 
     lastHiddenFocusableElement!: HTMLElement;
 
-    onInit() {
-        if (isPlatformBrowser(this.platformId) && !this.pFocusTrapDisabled) {
-            !this.firstHiddenFocusableElement && !this.lastHiddenFocusableElement && this.createHiddenFocusableElements();
-        }
-    }
+    constructor() {
+        super();
+        effect(() => {
+            if (!isPlatformBrowser(this.platformId)) {
+                return;
+            }
 
-    onChanges(changes: SimpleChanges) {
-        if (changes.pFocusTrapDisabled && isPlatformBrowser(this.platformId)) {
-            if (changes.pFocusTrapDisabled.currentValue) {
+            if (this.pFocusTrapDisabled()) {
                 this.removeHiddenFocusableElements();
             } else {
                 this.createHiddenFocusableElements();
             }
-        }
+        });
     }
 
     removeHiddenFocusableElements() {
