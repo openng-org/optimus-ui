@@ -92,7 +92,7 @@ describe('FloatLabel', () => {
         });
 
         it('should have default variant "over"', () => {
-            expect(floatLabelInstance.variant).toBe('over');
+            expect(floatLabelInstance.variant()).toBe('over');
         });
 
         it('should apply variant "in"', async () => {
@@ -100,7 +100,7 @@ describe('FloatLabel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(floatLabelInstance.variant).toBe('in');
+            expect(floatLabelInstance.variant()).toBe('in');
         });
 
         it('should apply variant "on"', async () => {
@@ -108,7 +108,7 @@ describe('FloatLabel', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(floatLabelInstance.variant).toBe('on');
+            expect(floatLabelInstance.variant()).toBe('on');
         });
 
         it('should have correct variant classes', async () => {
@@ -291,10 +291,10 @@ describe('FloatLabel PassThrough Tests', () => {
 
     describe('PT Case 4: Use variables from instance', () => {
         it('should access instance variables in PT function', () => {
-            component.variant = 'in';
+            fixture.componentRef.setInput('variant', 'in');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.variant === 'in' ? 'VARIANT_IN' : ''
+                    class: instance?.variant() === 'in' ? 'VARIANT_IN' : ''
                 })
             });
             fixture.detectChanges();
@@ -303,11 +303,11 @@ describe('FloatLabel PassThrough Tests', () => {
         });
 
         it('should conditionally apply styles based on instance state', () => {
-            component.variant = 'over';
+            fixture.componentRef.setInput('variant', 'over');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
                     style: {
-                        'background-color': instance?.variant === 'over' ? 'yellow' : 'red'
+                        'background-color': instance?.variant() === 'over' ? 'yellow' : 'red'
                     }
                 })
             });
@@ -335,20 +335,6 @@ describe('FloatLabel PassThrough Tests', () => {
             });
 
             expect(clicked).toBe(true);
-        });
-
-        it('should modify instance through PT event', () => {
-            fixture.componentRef.setInput('pt', {
-                root: ({ instance }: any) => ({
-                    onclick: () => {
-                        instance.variant = 'on';
-                    }
-                })
-            });
-            fixture.detectChanges();
-
-            hostElement.click();
-            expect(component.variant).toBe('on');
         });
     });
 
