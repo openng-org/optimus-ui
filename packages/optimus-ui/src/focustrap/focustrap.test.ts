@@ -173,7 +173,7 @@ describe('FocusTrap', () => {
         });
 
         it('should have default values', () => {
-            expect(directive.pFocusTrapDisabled).toBe(false);
+            expect(directive.pFocusTrapDisabled()).toBe(false);
         });
 
         it('should inject platform ID and document', () => {
@@ -785,52 +785,43 @@ describe('FocusTrap', () => {
     });
 
     describe('Lifecycle Hooks', () => {
-        let fixture: ComponentFixture<TestBasicFocusTrapComponent>;
+        let fixture: ComponentFixture<TestDisabledFocusTrapComponent>;
+        let component: TestDisabledFocusTrapComponent;
         let directive: FocusTrap;
 
         beforeEach(() => {
-            fixture = TestBed.createComponent(TestBasicFocusTrapComponent);
+            fixture = TestBed.createComponent(TestDisabledFocusTrapComponent);
+            component = fixture.componentInstance;
+            fixture.detectChanges();
+
             directive = fixture.debugElement.query(By.directive(FocusTrap)).injector.get(FocusTrap);
         });
 
-        it('should call ngOnInit and create hidden elements', () => {
-            vi.spyOn(directive, 'createHiddenFocusableElements');
-
-            directive.ngOnInit();
-
-            expect(directive.createHiddenFocusableElements).toHaveBeenCalled();
+        it('should create hidden elements on init', () => {
+            expect(directive.firstHiddenFocusableElement).toBeDefined();
+            expect(directive.lastHiddenFocusableElement).toBeDefined();
         });
 
-        it('should handle ngOnChanges for pFocusTrapDisabled', () => {
-            const changes = {
-                pFocusTrapDisabled: {
-                    currentValue: true,
-                    previousValue: false,
-                    firstChange: false,
-                    isFirstChange: () => false
-                }
-            };
+        it('should call removeHiddenFocusableElements when pFocusTrapDisabled becomes true', async () => {
+            vi.spyOn(directive, 'removeHiddenFocusableElements');
 
-            vi.spyOn(directive, 'removeHiddenFocusableElements').mockImplementation(() => {});
-
-            directive.ngOnChanges(changes);
+            component.disabled = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             expect(directive.removeHiddenFocusableElements).toHaveBeenCalled();
         });
 
-        it('should handle ngOnChanges when enabling focus trap', () => {
-            const changes = {
-                pFocusTrapDisabled: {
-                    currentValue: false,
-                    previousValue: true,
-                    firstChange: false,
-                    isFirstChange: () => false
-                }
-            };
+        it('should call createHiddenFocusableElements when pFocusTrapDisabled becomes false', async () => {
+            component.disabled = true;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
-            vi.spyOn(directive, 'createHiddenFocusableElements').mockImplementation(() => {});
+            vi.spyOn(directive, 'createHiddenFocusableElements');
 
-            directive.ngOnChanges(changes);
+            component.disabled = false;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
 
             expect(directive.createHiddenFocusableElements).toHaveBeenCalled();
         });
