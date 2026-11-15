@@ -1,11 +1,9 @@
-import { AfterViewChecked, ChangeDetectionStrategy, Component, inject, InjectionToken, Input, NgModule, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, ChangeDetectionStrategy, Component, inject, input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { FloatLabelPassThrough } from '@openng/optimus-ui/types/floatlabel';
 import { FloatLabelStyle } from './style/floatlabelstyle';
-
-const FLOATLABEL_INSTANCE = new InjectionToken<FloatLabel>('FLOATLABEL_INSTANCE');
 
 /**
  * FloatLabel appears on top of the input field when focused.
@@ -13,35 +11,33 @@ const FLOATLABEL_INSTANCE = new InjectionToken<FloatLabel>('FLOATLABEL_INSTANCE'
  */
 @Component({
     selector: 'p-floatlabel, p-floatLabel, p-float-label',
-    standalone: true,
     imports: [SharedModule, BindModule],
     template: ` <ng-content></ng-content> `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
-    providers: [FloatLabelStyle, { provide: FLOATLABEL_INSTANCE, useExisting: FloatLabel }, { provide: PARENT_INSTANCE, useExisting: FloatLabel }],
+    providers: [FloatLabelStyle, { provide: PARENT_INSTANCE, useExisting: FloatLabel }],
     host: {
         '[class]': "cx('root')"
     },
     hostDirectives: [Bind]
 })
-export class FloatLabel extends BaseComponent<FloatLabelPassThrough> implements AfterViewChecked {
+export class FloatLabel extends BaseComponent<FloatLabelPassThrough> {
     componentName = 'FloatLabel';
 
     _componentStyle = inject(FloatLabelStyle);
 
-    $pcFloatLabel: FloatLabel | undefined = inject(FLOATLABEL_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
-
     bindDirectiveInstance = inject(Bind, { self: true });
 
-    onAfterViewChecked(): void {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
+    constructor() {
+        super();
+        afterEveryRender(() => this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root'])));
     }
 
     /**
      * Defines the positioning of the label relative to the input.
      * @group Props
      */
-    @Input() variant: 'in' | 'over' | 'on' = 'over';
+    readonly variant = input<'in' | 'over' | 'on'>('over');
 }
 
 @NgModule({
