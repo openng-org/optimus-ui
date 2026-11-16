@@ -26,7 +26,6 @@ class TestStyleProgressSpinnerComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [ProgressSpinner],
     template: `<p-progressspinner [class]="customClass"></p-progressspinner>`
 })
