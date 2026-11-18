@@ -64,7 +64,7 @@ export interface ChipProps {
     image?: string | undefined;
     alt?: string | undefined;
     style?: { [klass: string]: any } | null | undefined;
-    styleClass?: string | undefined;
+    class?: string | undefined;
     removable?: boolean | undefined;
     removeIcon?: string | undefined;
 }
