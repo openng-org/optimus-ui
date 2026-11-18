@@ -483,6 +483,32 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-chip class="existing my-chip"></p-chip>\n`);
     });
 
+    it('switches quotes when the merged class value contains the existing class quote character', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-chip class='a' styleClass="it's"></p-chip>\n<p-chip class=b styleClass='say-"hi"'></p-chip>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-chip class="a it's"></p-chip>\n<p-chip class='b say-"hi"'></p-chip>\n`);
+    });
+
+    it('leaves styleClass in place and reports a conflict when the merged class value contains both quote characters', async () => {
+        const runner = createMigrationRunner();
+        const content = `<p-chip label="x"\n    class='it"s' styleClass="it's"></p-chip>\n`;
+        const tree = createAppTree({ '/src/app/app.html': content });
+
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(content);
+        expect(warnings.join('\n')).toContain('/src/app/app.html:1');
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
