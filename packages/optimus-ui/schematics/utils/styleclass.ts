@@ -209,9 +209,12 @@ function rewriteTag(tag: string): { text: string; rewritten: number; conflict: b
             conflict = true;
         } else {
             const existingStaticClass = matchAttr(STATIC_CLASS, text);
+            const merged = existingStaticClass ? `${existingStaticClass.value} ${staticStyleClass.value}`.trim() : '';
+            const quote = existingStaticClass ? pickQuote(merged, existingStaticClass.quote ?? '"') : null;
+            if (existingStaticClass && quote === null) {
+                return { text, rewritten, conflict: true };
+            }
             if (existingStaticClass) {
-                const merged = `${existingStaticClass.value} ${staticStyleClass.value}`.trim();
-                const quote = existingStaticClass.quote ?? '"';
                 // Remove the styleClass attribute outright, then merge its value into the existing class attribute.
                 const withoutStyleClass = text.slice(0, staticStyleClass.index) + text.slice(staticStyleClass.index + staticStyleClass.length);
                 const reMatch = matchAttr(STATIC_CLASS, withoutStyleClass);
@@ -226,6 +229,18 @@ function rewriteTag(tag: string): { text: string; rewritten: number; conflict: b
     }
 
     return { text, rewritten, conflict };
+}
+
+/**
+ * Returns `preferred` if `value` doesn't contain it, otherwise the other HTML quote character if
+ * `value` doesn't contain that one, otherwise `null` — `value` can't be safely quoted either way.
+ */
+function pickQuote(value: string, preferred: string): string | null {
+    const alternative = preferred === '"' ? "'" : '"';
+    if (!value.includes(preferred)) {
+        return preferred;
+    }
+    return value.includes(alternative) ? null : alternative;
 }
 
 function lineOf(text: string, offset: number): number {
