@@ -456,6 +456,33 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-timeline class="existing customized-timeline"></p-timeline>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-chip', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-chip label="Action" styleClass="my-chip"></p-chip>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-chip label="Action" class="my-chip"></p-chip>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-chip', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-chip [styleClass]="myClass"></p-chip>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-chip [class]="myClass"></p-chip>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-chip', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-chip class="existing" styleClass="my-chip"></p-chip>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-chip class="existing my-chip"></p-chip>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
