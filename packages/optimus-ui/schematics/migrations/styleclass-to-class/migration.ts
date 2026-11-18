@@ -23,7 +23,8 @@ export const MIGRATED_SELECTORS: readonly string[] = [
     'p-progressSpinner',
     'p-progress-spinner',
     'p-toolbar',
-    'p-timeline'
+    'p-timeline',
+    'p-chip'
 ];
 
 /**
