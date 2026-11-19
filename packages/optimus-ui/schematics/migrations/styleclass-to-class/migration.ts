@@ -22,7 +22,8 @@ export const MIGRATED_SELECTORS: readonly string[] = [
     'p-progressspinner',
     'p-progressSpinner',
     'p-progress-spinner',
-    'p-toolbar'
+    'p-toolbar',
+    'p-timeline'
 ];
 
 /**

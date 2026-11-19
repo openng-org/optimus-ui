@@ -18,7 +18,7 @@ import { TimelineModule } from '@openng/optimus-ui/timeline';
             </div>
 
             <div class="card mt-8">
-                <p-timeline [value]="events" align="alternate" styleClass="customized-timeline">
+                <p-timeline [value]="events" align="alternate" class="customized-timeline">
                     <ng-template #content let-event>
                         <div class="p-4 mb-4 border rounded-xl shadow-sm bg-surface-0 dark:bg-surface-900 border-surface-200 dark:border-surface-800">
                             <div class="flex items-center gap-2 mb-2">

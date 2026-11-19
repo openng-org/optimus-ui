@@ -429,6 +429,33 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-toolbar class="existing my-toolbar"></p-toolbar>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-timeline', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-timeline [value]="events" align="alternate" styleClass="customized-timeline"></p-timeline>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-timeline [value]="events" align="alternate" class="customized-timeline"></p-timeline>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-timeline', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-timeline [value]="events" [styleClass]="myClass"></p-timeline>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-timeline [value]="events" [class]="myClass"></p-timeline>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-timeline', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-timeline class="existing" styleClass="customized-timeline"></p-timeline>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-timeline class="existing customized-timeline"></p-timeline>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
