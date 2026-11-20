@@ -509,6 +509,42 @@ describe('styleclass-to-class', () => {
         expect(warnings.join('\n')).toContain('/src/app/app.html:1');
     });
 
+    it('rewrites a static styleClass to class on p-inputgroup', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputgroup styleClass="my-group"></p-inputgroup>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputgroup class="my-group"></p-inputgroup>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-inputgroup', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputgroup [styleClass]="myClass"></p-inputgroup>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputgroup [class]="myClass"></p-inputgroup>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-inputgroup', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputgroup class="existing" styleClass="my-group"></p-inputgroup>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputgroup class="existing my-group"></p-inputgroup>\n`);
+    });
+
+    it('rewrites styleClass on the p-inputGroup and p-input-group aliases', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputGroup styleClass="a"></p-inputGroup>\n<p-input-group [styleClass]="b"></p-input-group>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputGroup class="a"></p-inputGroup>\n<p-input-group [class]="b"></p-input-group>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
