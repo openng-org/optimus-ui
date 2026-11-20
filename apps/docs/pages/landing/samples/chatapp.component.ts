@@ -53,7 +53,7 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
                             [ngClass]="{
                                 '!bg-primary-100 !text-primary-950': !chat.image
                             }"
-                            styleClass="text-base font-medium flex"
+                            class="text-base font-medium flex"
                             size="large"
                             shape="circle"
                         />
@@ -76,7 +76,7 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
         <div class="w-8/12 xl:w-6/12 border-x border-surface flex flex-col">
             <div class="flex items-center p-4 gap-7 border-b border-surface">
                 <div class="flex items-center">
-                    <p-avatar image="logo-icon.svg" styleClass="mr-2 av" size="large" shape="circle" />
+                    <p-avatar image="logo-icon.svg" class="mr-2 av" size="large" shape="circle" />
                     <div class="flex-1">
                         <div class="text-color leading-6 cursor-pointer hover:text-muted-color-emphasis transition-colors">OpenNG</div>
                         <div class="text-muted-color leading-5 line-clamp-1 mt-1">Cody Fisher, Esther Howard, Jerome Bell, Kristin Watson, Ronald Richards, Darrell Steward</div>
@@ -103,7 +103,7 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
                             [ngClass]="{
                                 'bg-primary-100 text-primary-950': !message.image
                             }"
-                            styleClass="w-10 h-10 text-sm font-medium"
+                            class="w-10 h-10 text-sm font-medium"
                             shape="circle"
                         />
                         <div>
@@ -144,7 +144,7 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
         </div>
         <div class="w-3/12 xl:block hidden min-w-40 py-6 px-3 overflow-auto">
             <div class="flex flex-col items-center justify-center">
-                <p-avatar image="logo-icon.svg" styleClass="w-32 h-32" size="xlarge" shape="circle" />
+                <p-avatar image="logo-icon.svg" class="w-32 h-32" size="xlarge" shape="circle" />
                 <div class="leading-6 font-medium text-color mt-4 w-full text-center">OpenNG</div>
                 <div class="leading-5 text-sm text-muted-color mt-1 w-full text-center">&#64;openng</div>
                 <div class="flex items-center justify-center flex-wrap gap-1 mt-4">
@@ -186,7 +186,7 @@ import { ToggleSwitchModule } from '@openng/optimus-ui/toggleswitch';
                             [ngClass]="{
                                 'bg-orange-100 text-orange-950': !member.image
                             }"
-                            styleClass="font-medium text-xs"
+                            class="font-medium text-xs"
                             shape="circle"
                         />
 
