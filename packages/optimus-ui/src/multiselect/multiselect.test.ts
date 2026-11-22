@@ -1831,6 +1831,88 @@ describe('MultiSelect Virtual Scrolling', () => {
         fixture.detectChanges();
     });
 
+    describe('overlay realignment when the panel resizes', () => {
+        // The virtual scroller sizes the panel after the overlay was aligned; options or scrollHeight changing
+        // while it is open resize it again. See issue #1841.
+        const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+        const open = async () => {
+            // ResizeObserver only reports elements that are attached and laid out
+            document.body.appendChild(fixture.nativeElement);
+            multiSelect.show();
+            multiSelect.cd.markForCheck();
+            await wait(100);
+            await fixture.whenStable();
+            fixture.detectChanges();
+            await wait(100);
+            await fixture.whenStable();
+        };
+
+        afterEach(() => {
+            fixture.nativeElement.remove();
+        });
+
+        it('should realign the overlay when the panel height changes while it is open', async () => {
+            await open();
+            const panel: HTMLElement = multiSelect.overlayViewChild!.overlayViewChild!.nativeElement;
+            expect(multiSelect.virtualScrollResizeObserver).toBeTruthy();
+
+            const alignSpy = vi.spyOn(multiSelect.overlayViewChild!, 'alignOverlay');
+            panel.style.height = `${panel.offsetHeight + 120}px`;
+            await wait(100);
+
+            expect(alignSpy).toHaveBeenCalled();
+        });
+
+        it('should realign the overlay when the options are replaced while it is open', async () => {
+            await open();
+            const panel: HTMLElement = multiSelect.overlayViewChild!.overlayViewChild!.nativeElement;
+            const heightBefore = panel.offsetHeight;
+            const alignSpy = vi.spyOn(multiSelect.overlayViewChild!, 'alignOverlay');
+
+            // 2 options are shorter than scrollHeight, so the auto-sized scroller shrinks the panel
+            component.options = component.options.slice(0, 2);
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            await wait(200);
+
+            expect(panel.offsetHeight).toBeLessThan(heightBefore);
+            expect(alignSpy).toHaveBeenCalled();
+        });
+
+        it('should not realign the overlay when the panel height stays the same', async () => {
+            await open();
+            const panel: HTMLElement = multiSelect.overlayViewChild!.overlayViewChild!.nativeElement;
+            await wait(100);
+
+            const alignSpy = vi.spyOn(multiSelect.overlayViewChild!, 'alignOverlay');
+            panel.style.width = `${panel.offsetWidth + 50}px`;
+            await wait(100);
+
+            expect(alignSpy).not.toHaveBeenCalled();
+        });
+
+        it('should stop observing the panel once the overlay has left', async () => {
+            await open();
+            const observer = multiSelect.virtualScrollResizeObserver!;
+            const disconnectSpy = vi.spyOn(observer, 'disconnect');
+
+            multiSelect.onOverlayAfterLeave({});
+
+            expect(disconnectSpy).toHaveBeenCalled();
+            expect(multiSelect.virtualScrollResizeObserver).toBeNull();
+        });
+
+        it('should stop observing the panel when the component is destroyed', async () => {
+            await open();
+            const disconnectSpy = vi.spyOn(multiSelect.virtualScrollResizeObserver!, 'disconnect');
+
+            fixture.destroy();
+
+            expect(disconnectSpy).toHaveBeenCalled();
+        });
+    });
+
     it('should initialize virtual scrolling', () => {
         expect(multiSelect.virtualScroll).toBe(true);
         expect(multiSelect.virtualScrollItemSize).toBe(40);
