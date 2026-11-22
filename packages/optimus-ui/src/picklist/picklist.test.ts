@@ -15,6 +15,7 @@ import {
     PickListTargetReorderEvent,
     PickListTargetSelectEvent
 } from '@openng/optimus-ui/types/picklist';
+import type { ScrollerLazyLoadEvent } from '@openng/optimus-ui/types/scroller';
 import { PickList } from './picklist';
 
 @Component({
@@ -37,6 +38,12 @@ import { PickList } from './picklist';
             [sourceStyle]="sourceStyle"
             [targetStyle]="targetStyle"
             [dataKey]="dataKey"
+            [sourceLazy]="sourceLazy"
+            [targetLazy]="targetLazy"
+            [sourceVirtualScroll]="sourceVirtualScroll"
+            [targetVirtualScroll]="targetVirtualScroll"
+            [sourceVirtualScrollItemSize]="sourceVirtualScrollItemSize"
+            [targetVirtualScrollItemSize]="targetVirtualScrollItemSize"
             (onMoveToTarget)="onMoveToTarget($event)"
             (onMoveToSource)="onMoveToSource($event)"
             (onMoveAllToTarget)="onMoveAllToTarget($event)"
@@ -45,6 +52,8 @@ import { PickList } from './picklist';
             (onTargetSelect)="onTargetSelect($event)"
             (onSourceReorder)="onSourceReorder($event)"
             (onTargetReorder)="onTargetReorder($event)"
+            (onSourceLazyLoad)="onSourceLazyLoad($event)"
+            (onTargetLazyLoad)="onTargetLazyLoad($event)"
         >
             <ng-template pTemplate="item" let-item>
                 <div class="item-template">{{ item.name }}</div>
@@ -84,6 +93,12 @@ class TestPickListComponent {
     sourceStyle: any = null as any;
     targetStyle: any = null as any;
     dataKey: string | undefined;
+    sourceLazy: boolean = false;
+    targetLazy: boolean = false;
+    sourceVirtualScroll: boolean = false;
+    targetVirtualScroll: boolean = false;
+    sourceVirtualScrollItemSize: number | undefined;
+    targetVirtualScrollItemSize: number | undefined;
 
     // Event handlers
     onMoveToTarget(event: PickListMoveToTargetEvent) {
@@ -118,6 +133,14 @@ class TestPickListComponent {
         this.targetReorderEvent = event;
     }
 
+    onSourceLazyLoad(event: ScrollerLazyLoadEvent) {
+        this.sourceLazyLoadEvent = event;
+    }
+
+    onTargetLazyLoad(event: ScrollerLazyLoadEvent) {
+        this.targetLazyLoadEvent = event;
+    }
+
     // Event tracking
     moveToTargetEvent: PickListMoveToTargetEvent | null = null as any;
     moveToSourceEvent: PickListMoveToSourceEvent | null = null as any;
@@ -127,6 +150,8 @@ class TestPickListComponent {
     targetSelectEvent: PickListTargetSelectEvent | null = null as any;
     sourceReorderEvent: PickListSourceReorderEvent | null = null as any;
     targetReorderEvent: PickListTargetReorderEvent | null = null as any;
+    sourceLazyLoadEvent: ScrollerLazyLoadEvent | null = null as any;
+    targetLazyLoadEvent: ScrollerLazyLoadEvent | null = null as any;
 }
 
 describe('PickList', () => {
@@ -165,6 +190,224 @@ describe('PickList', () => {
             // Check if headers are passed to the component
             expect(component.sourceHeader).toBe('Available Items');
             expect(component.targetHeader).toBe('Selected Items');
+        });
+    });
+
+    describe('Lazy Loading & VirtualScroll', () => {
+        it('should default lazy and virtualScroll to false for both lists', () => {
+            expect(picklistComponent.sourceLazy).toBe(false);
+            expect(picklistComponent.targetLazy).toBe(false);
+            expect(picklistComponent.sourceVirtualScroll).toBe(false);
+            expect(picklistComponent.targetVirtualScroll).toBe(false);
+        });
+
+        it('should forward sourceLazy and sourceVirtualScroll to the source listbox', () => {
+            component.sourceLazy = true;
+            component.sourceVirtualScroll = true;
+            component.sourceVirtualScrollItemSize = 32;
+            fixture.detectChanges();
+
+            const sourceListbox = fixture.debugElement.queryAll(By.css('p-listbox'))[0].componentInstance;
+            expect(sourceListbox.lazy).toBe(true);
+            expect(sourceListbox.virtualScroll).toBe(true);
+            expect(sourceListbox.virtualScrollItemSize).toBe(32);
+        });
+
+        it('should forward targetLazy and targetVirtualScroll to the target listbox', () => {
+            component.targetLazy = true;
+            component.targetVirtualScroll = true;
+            component.targetVirtualScrollItemSize = 48;
+            fixture.detectChanges();
+
+            const targetListbox = fixture.debugElement.queryAll(By.css('p-listbox'))[1].componentInstance;
+            expect(targetListbox.lazy).toBe(true);
+            expect(targetListbox.virtualScroll).toBe(true);
+            expect(targetListbox.virtualScrollItemSize).toBe(48);
+        });
+
+        it('should keep source and target lazy/virtualScroll configuration independent', () => {
+            component.sourceLazy = true;
+            component.sourceVirtualScroll = true;
+            component.targetLazy = false;
+            component.targetVirtualScroll = false;
+            fixture.detectChanges();
+
+            const listboxes = fixture.debugElement.queryAll(By.css('p-listbox'));
+            expect(listboxes[0].componentInstance.lazy).toBe(true);
+            expect(listboxes[0].componentInstance.virtualScroll).toBe(true);
+            expect(listboxes[1].componentInstance.lazy).toBe(false);
+            expect(listboxes[1].componentInstance.virtualScroll).toBe(false);
+        });
+
+        it('should emit onSourceLazyLoad when the source listbox emits onLazyLoad', () => {
+            const event: ScrollerLazyLoadEvent = { first: 0, last: 50 } as ScrollerLazyLoadEvent;
+
+            picklistComponent.onSourceLazyLoad.emit(event);
+
+            expect(component.sourceLazyLoadEvent).toBe(event);
+        });
+
+        it('should emit onTargetLazyLoad when the target listbox emits onLazyLoad', () => {
+            const event: ScrollerLazyLoadEvent = { first: 10, last: 60 } as ScrollerLazyLoadEvent;
+
+            picklistComponent.onTargetLazyLoad.emit(event);
+
+            expect(component.targetLazyLoadEvent).toBe(event);
+        });
+
+        it('should disable move all to target while sourceLazy is enabled', () => {
+            component.sourceLazy = true;
+            fixture.detectChanges();
+
+            expect(picklistComponent.moveAllRightDisabled()).toBe(true);
+            expect(picklistComponent.moveAllLeftDisabled()).toBe(false);
+        });
+
+        it('should disable move all to source while targetLazy is enabled', () => {
+            component.targetLazy = true;
+            fixture.detectChanges();
+
+            expect(picklistComponent.moveAllLeftDisabled()).toBe(true);
+            expect(picklistComponent.moveAllRightDisabled()).toBe(false);
+        });
+
+        it('should not transfer unloaded placeholder entries on moveAllRight when sourceLazy is enabled', () => {
+            const placeholders = Array.from({ length: 5 }, () => ({}));
+            component.source = placeholders;
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+
+            picklistComponent.moveAllRight();
+
+            expect(picklistComponent.source().length).toBe(5);
+            expect(picklistComponent.target().length).toBe(0);
+            expect(component.moveAllToTargetEvent).toBeNull();
+        });
+
+        it('should not transfer unloaded placeholder entries on moveAllLeft when targetLazy is enabled', () => {
+            const placeholders = Array.from({ length: 5 }, () => ({}));
+            component.source = [];
+            component.target = placeholders;
+            component.targetLazy = true;
+            fixture.detectChanges();
+
+            picklistComponent.moveAllLeft();
+
+            expect(picklistComponent.target().length).toBe(5);
+            expect(picklistComponent.source().length).toBe(0);
+            expect(component.moveAllToSourceEvent).toBeNull();
+        });
+
+        it('should only move loaded (non disabled) source entries on moveRight', () => {
+            const loaded = { id: 0, name: 'Product #0' };
+            const placeholder = {};
+            component.source = [loaded, placeholder, {}];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+
+            picklistComponent.selectedItemsSource = [loaded, placeholder];
+            picklistComponent.moveRight();
+
+            expect(picklistComponent.target()).toEqual([loaded]);
+            expect(picklistComponent.source().length).toBe(2);
+            expect(picklistComponent.source()).toContain(placeholder);
+            expect(component.moveToTargetEvent?.items).toEqual([loaded]);
+        });
+
+        it('should only move loaded (non disabled) target entries on moveLeft', () => {
+            const loaded = { id: 0, name: 'Product #0', loaded: true };
+            const placeholder = { loaded: false };
+            component.source = [];
+            component.target = [loaded, placeholder];
+            component.targetLazy = true;
+            fixture.detectChanges();
+            picklistComponent.targetOptionDisabled = (item: any) => !item.loaded;
+
+            picklistComponent.selectedItemsTarget = [loaded, placeholder];
+            picklistComponent.moveLeft();
+
+            expect(picklistComponent.source()).toEqual([loaded]);
+            expect(picklistComponent.target()).toEqual([placeholder]);
+            expect(component.moveToSourceEvent?.items).toEqual([loaded]);
+        });
+
+        it('should resolve sourceOptionDisabled given as a field name', () => {
+            const enabled = { name: 'A', unloaded: false };
+            const disabledItem = { name: 'B', unloaded: true };
+            component.source = [enabled, disabledItem];
+            component.target = [];
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = 'unloaded';
+
+            picklistComponent.selectedItemsSource = [enabled, disabledItem];
+            picklistComponent.moveRight();
+
+            expect(picklistComponent.target()).toEqual([enabled]);
+            expect(picklistComponent.source()).toEqual([disabledItem]);
+        });
+
+        function transferDropEvent(item: any, previousIndex = 0, currentIndex = 0): CdkDragDrop<any[]> {
+            return {
+                previousContainer: { id: 'from-list' } as any,
+                container: { id: 'to-list' } as any,
+                previousIndex,
+                currentIndex,
+                item: { data: item } as any,
+                isPointerOverContainer: true,
+                distance: { x: 0, y: 0 },
+                dropPoint: { x: 0, y: 0 },
+                event: new MouseEvent('mouseup')
+            };
+        }
+
+        it('should not transfer a disabled source entry dropped on the target', () => {
+            const placeholder = {};
+            component.source = [placeholder, { id: 1, name: 'Product #1' }];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+
+            picklistComponent.onDrop(transferDropEvent(placeholder), picklistComponent.TARGET_LIST);
+
+            expect(picklistComponent.source().length).toBe(2);
+            expect(picklistComponent.target()).toEqual([]);
+            expect(component.moveToTargetEvent).toBeNull();
+        });
+
+        it('should only transfer the enabled selected source entries dropped on the target', () => {
+            const loaded = { id: 0, name: 'Product #0' };
+            const placeholder = {};
+            component.source = [loaded, placeholder];
+            component.target = [];
+            component.sourceLazy = true;
+            fixture.detectChanges();
+            picklistComponent.sourceOptionDisabled = (item: any) => item?.id === undefined;
+            picklistComponent.selectedItemsSource = [loaded, placeholder];
+
+            picklistComponent.onDrop(transferDropEvent(loaded), picklistComponent.TARGET_LIST);
+
+            expect(picklistComponent.target()).toEqual([loaded]);
+            expect(picklistComponent.source()).toEqual([placeholder]);
+            expect(component.moveToTargetEvent?.items).toEqual([loaded]);
+        });
+
+        it('should not transfer a disabled target entry dropped on the source', () => {
+            const placeholder = { loaded: false };
+            component.source = [];
+            component.target = [placeholder];
+            component.targetLazy = true;
+            fixture.detectChanges();
+            picklistComponent.targetOptionDisabled = (item: any) => !item.loaded;
+
+            picklistComponent.onDrop(transferDropEvent(placeholder), picklistComponent.SOURCE_LIST);
+
+            expect(picklistComponent.target()).toEqual([placeholder]);
+            expect(picklistComponent.source()).toEqual([]);
+            expect(component.moveToSourceEvent).toBeNull();
         });
     });
 

@@ -21,14 +21,15 @@ import {
     ViewEncapsulation
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { find, findIndexInList, isEmpty, setAttribute, uuid } from '@openng/optimus-ui-utils';
-import { FilterService, PrimeTemplate, SharedModule } from '@openng/optimus-ui/api';
+import { find, findIndexInList, isEmpty, isFunction, resolveFieldData, setAttribute, uuid } from '@openng/optimus-ui-utils';
+import { FilterService, PrimeTemplate, ScrollerOptions, SharedModule } from '@openng/optimus-ui/api';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { Bind, BindModule } from '@openng/optimus-ui/bind';
 import { ButtonModule, ButtonProps } from '@openng/optimus-ui/button';
 import { AngleDoubleDownIcon, AngleDoubleLeftIcon, AngleDoubleRightIcon, AngleDoubleUpIcon, AngleDownIcon, AngleLeftIcon, AngleRightIcon, AngleUpIcon } from '@openng/optimus-ui/icons';
 import { Listbox, ListboxChangeEvent } from '@openng/optimus-ui/listbox';
 import { Ripple } from '@openng/optimus-ui/ripple';
+import { ScrollerLazyLoadEvent } from '@openng/optimus-ui/scroller';
 import { Nullable, VoidListener } from '@openng/optimus-ui/ts-helpers';
 import {
     PickListFilterOptions,
@@ -170,6 +171,11 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [filterPlaceHolder]="sourceFilterPlaceholder"
                     [dragdrop]="dragdrop"
                     [dropListData]="source()"
+                    [lazy]="sourceLazy"
+                    [virtualScroll]="sourceVirtualScroll"
+                    [virtualScrollItemSize]="sourceVirtualScrollItemSize"
+                    [virtualScrollOptions]="sourceVirtualScrollOptions"
+                    (onLazyLoad)="onSourceLazyLoad.emit($event)"
                     (onDrop)="onDrop($event, SOURCE_LIST)"
                     (onFilter)="onFilter($event.originalEvent, SOURCE_LIST)"
                     [pt]="ptm('pcListbox')"
@@ -314,6 +320,11 @@ const PICKLIST_INSTANCE = new InjectionToken<PickList>('PICKLIST_INSTANCE');
                     [filterPlaceHolder]="targetFilterPlaceholder"
                     [dragdrop]="dragdrop"
                     [dropListData]="target()"
+                    [lazy]="targetLazy"
+                    [virtualScroll]="targetVirtualScroll"
+                    [virtualScrollItemSize]="targetVirtualScrollItemSize"
+                    [virtualScrollOptions]="targetVirtualScrollOptions"
+                    (onLazyLoad)="onTargetLazyLoad.emit($event)"
                     (onDrop)="onDrop($event, TARGET_LIST)"
                     (onFilter)="onFilter($event.originalEvent, TARGET_LIST)"
                     [pt]="ptm('pcListbox')"
@@ -614,6 +625,53 @@ export class PickList extends BaseComponent {
     @Input({ transform: booleanAttribute }) disabled: boolean;
 
     /**
+     * Defines if data of source list is loaded and interacted with in a lazy manner.
+     * While enabled, the "move all to target" action is unavailable since the source may contain unloaded placeholder entries.
+     * Use sourceOptionDisabled to mark unloaded entries so they cannot be selected or moved, and keep the backing data source in sync with onMoveToTarget/onMoveToSource,
+     * as moved items are removed from the source array.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) sourceLazy: boolean = false;
+    /**
+     * Defines if data of target list is loaded and interacted with in a lazy manner.
+     * While enabled, the "move all to source" action is unavailable since the target may contain unloaded placeholder entries.
+     * Use targetOptionDisabled to mark unloaded entries so they cannot be selected or moved, and keep the backing data source in sync with onMoveToTarget/onMoveToSource,
+     * as moved items are removed from the target array.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) targetLazy: boolean = false;
+    /**
+     * Whether to use the virtual scroller feature for the source list to render the items lazily.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) sourceVirtualScroll: boolean | undefined;
+    /**
+     * Whether to use the virtual scroller feature for the target list to render the items lazily.
+     * @group Props
+     */
+    @Input({ transform: booleanAttribute }) targetVirtualScroll: boolean | undefined;
+    /**
+     * Height of an item in the source list for VirtualScrolling.
+     * @group Props
+     */
+    @Input({ transform: numberAttribute }) sourceVirtualScrollItemSize: number | undefined;
+    /**
+     * Height of an item in the target list for VirtualScrolling.
+     * @group Props
+     */
+    @Input({ transform: numberAttribute }) targetVirtualScrollItemSize: number | undefined;
+    /**
+     * Whether to use the scroller feature for the source list. The properties of scroller component can be used like an object in it.
+     * @group Props
+     */
+    @Input() sourceVirtualScrollOptions: ScrollerOptions | undefined;
+    /**
+     * Whether to use the scroller feature for the target list. The properties of scroller component can be used like an object in it.
+     * @group Props
+     */
+    @Input() targetVirtualScrollOptions: ScrollerOptions | undefined;
+
+    /**
      * Name of the disabled field of a target option or function to determine disabled state.
      * @group Props
      */
@@ -782,6 +840,20 @@ export class PickList extends BaseComponent {
      * @group Emits
      */
     @Output() onTargetFilter: EventEmitter<PickListTargetFilterEvent> = new EventEmitter<PickListTargetFilterEvent>();
+
+    /**
+     * Callback to invoke on lazy load of the source list, requires the virtualScroll to be enabled.
+     * @param {ScrollerLazyLoadEvent} event - Scroller lazy load event.
+     * @group Emits
+     */
+    @Output() onSourceLazyLoad: EventEmitter<ScrollerLazyLoadEvent> = new EventEmitter<ScrollerLazyLoadEvent>();
+
+    /**
+     * Callback to invoke on lazy load of the target list, requires the virtualScroll to be enabled.
+     * @param {ScrollerLazyLoadEvent} event - Scroller lazy load event.
+     * @group Emits
+     */
+    @Output() onTargetLazyLoad: EventEmitter<ScrollerLazyLoadEvent> = new EventEmitter<ScrollerLazyLoadEvent>();
 
     /**
      * Callback to invoke when the list is focused
@@ -1395,7 +1467,7 @@ export class PickList extends BaseComponent {
 
     moveRight() {
         if (this.selectedItemsSource && this.selectedItemsSource.length) {
-            let itemsToMove = [...this.selectedItemsSource];
+            let itemsToMove = this.selectedItemsSource.filter((item) => !this.isOptionDisabled(item, this.SOURCE_LIST));
             for (let i = 0; i < itemsToMove.length; i++) {
                 let selectedItem = itemsToMove[i];
                 if (findIndexInList(selectedItem, this.target() || []) == -1) {
@@ -1426,7 +1498,7 @@ export class PickList extends BaseComponent {
     }
 
     moveAllRight() {
-        if (this.source()) {
+        if (this.source() && !this.sourceLazy) {
             let movedItems: any = [];
 
             for (let i = 0; i < this.source().length; i++) {
@@ -1457,7 +1529,7 @@ export class PickList extends BaseComponent {
 
     moveLeft() {
         if (this.selectedItemsTarget && this.selectedItemsTarget.length) {
-            let itemsToMove = [...this.selectedItemsTarget];
+            let itemsToMove = this.selectedItemsTarget.filter((item) => !this.isOptionDisabled(item, this.TARGET_LIST));
             for (let i = 0; i < itemsToMove.length; i++) {
                 let selectedItem = itemsToMove[i];
                 if (findIndexInList(selectedItem, this.source() || []) == -1) {
@@ -1485,7 +1557,7 @@ export class PickList extends BaseComponent {
     }
 
     moveAllLeft() {
-        if (this.target()) {
+        if (this.target() && !this.targetLazy) {
             let movedItems: any = [];
 
             for (let i = 0; i < this.target().length; i++) {
@@ -1513,6 +1585,16 @@ export class PickList extends BaseComponent {
         }
     }
 
+    isOptionDisabled(item: any, listType: number) {
+        const optionDisabled = listType === this.SOURCE_LIST ? this.sourceOptionDisabled : this.targetOptionDisabled;
+
+        if (isFunction(optionDisabled)) {
+            return optionDisabled(item);
+        }
+
+        return optionDisabled ? resolveFieldData(item, optionDisabled) : false;
+    }
+
     isSelected(item: any, selectedItems: any[]) {
         return this.findIndexInList(item, selectedItems) != -1;
     }
@@ -1538,6 +1620,13 @@ export class PickList extends BaseComponent {
                 } else {
                     // Move only the dragged item
                     itemsToMove = [event.item.data];
+                }
+
+                // Skip disabled entries, e.g. unloaded placeholders of a lazy list
+                itemsToMove = itemsToMove.filter((item) => !this.isOptionDisabled(item, this.TARGET_LIST));
+
+                if (!itemsToMove.length) {
+                    return;
                 }
 
                 // Sort items by their index in target (to maintain order)
@@ -1596,6 +1685,13 @@ export class PickList extends BaseComponent {
                 } else {
                     // Move only the dragged item
                     itemsToMove = [event.item.data];
+                }
+
+                // Skip disabled entries, e.g. unloaded placeholders of a lazy list
+                itemsToMove = itemsToMove.filter((item) => !this.isOptionDisabled(item, this.SOURCE_LIST));
+
+                if (!itemsToMove.length) {
+                    return;
                 }
 
                 // Sort items by their index in source (to maintain order)
@@ -1808,11 +1904,11 @@ export class PickList extends BaseComponent {
     }
 
     moveAllRightDisabled() {
-        return this.disabled || isEmpty(this.source());
+        return this.disabled || this.sourceLazy || isEmpty(this.source());
     }
 
     moveAllLeftDisabled() {
-        return this.disabled || isEmpty(this.target());
+        return this.disabled || this.targetLazy || isEmpty(this.target());
     }
 
     destroyStyle() {
