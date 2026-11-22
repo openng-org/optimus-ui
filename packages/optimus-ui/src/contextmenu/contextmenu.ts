@@ -31,7 +31,6 @@ import { RouterModule } from '@angular/router';
 import { MotionEvent, MotionOptions } from '@openng/optimus-ui-motion';
 import {
     appendChild,
-    calculateScrollbarWidth,
     findLastIndex,
     findSingle,
     focus,
@@ -428,7 +427,7 @@ export class ContextMenuSub extends BaseComponent<ContextMenuPassThrough> implem
 
         sublist.style.top = '0px';
 
-        if (parseInt(containerOffset.left, 10) + itemOuterWidth + sublistWidth > viewport.width - calculateScrollbarWidth()) {
+        if (parseInt(containerOffset.left, 10) + itemOuterWidth + sublistWidth > viewport.width) {
             sublist.style.left = -1 * sublistWidth + 'px';
         } else {
             sublist.style.left = itemOuterWidth + 'px';

@@ -1,4 +1,4 @@
-import { absolutePosition, getViewport, relativePosition } from '@openng/optimus-ui-utils/dom';
+import { absolutePosition, getViewport, nestedPosition, relativePosition } from '@openng/optimus-ui-utils/dom';
 import { DomHandler } from './domhandler';
 
 // Classic (non-overlay) scrollbars take layout space: window.innerWidth includes the vertical scrollbar,
@@ -63,5 +63,51 @@ describe('Viewport and scrollbars', () => {
         absolutePosition(element, target, false);
 
         expect(element.getBoundingClientRect().right).toBeLessThanOrEqual(clientWidth);
+    });
+    describe('nestedPosition', () => {
+        // Note: headless Chromium has overlay scrollbars, so calculateScrollbarWidth() returns 0 here (and caches it).
+        // These tests pin the expected positions; with a classic 16px scrollbar, subtracting
+        // calculateScrollbarWidth() on top of getViewport() again would make the first and third tests fail.
+        let item: HTMLElement;
+
+        afterEach(() => item?.remove());
+
+        // <li fixed at left> <a width=itemWidth/> <ul width=sublistWidth/> </li>
+        const createItem = (left: number, itemWidth: number, sublistWidth: number) => {
+            item = document.createElement('li');
+            Object.assign(item.style, { position: 'fixed', top: '10px', left: `${left}px`, width: `${itemWidth}px`, height: '20px', listStyle: 'none' });
+            const link = document.createElement('a');
+            Object.assign(link.style, { display: 'block', width: `${itemWidth}px`, height: '20px' });
+            const sublist = document.createElement('ul');
+            Object.assign(sublist.style, { position: 'absolute', width: `${sublistWidth}px`, height: '50px', margin: '0', padding: '0' });
+            item.append(link, sublist);
+            document.body.appendChild(item);
+            return sublist;
+        };
+
+        it('should not flip a submenu that fits in the visible area', () => {
+            // the submenu ends 8px before clientWidth: it is fully visible, it must not be flipped
+            const sublist = createItem(clientWidth - 150 - 8, 50, 100);
+
+            nestedPosition(sublist, 1);
+
+            expect(sublist.style.insetInlineStart).toBe('100%');
+        });
+
+        it('should flip a submenu that would end under the vertical scrollbar', () => {
+            const sublist = createItem(clientWidth - 150 + 8, 50, 100);
+
+            nestedPosition(sublist, 1);
+
+            expect(sublist.style.insetInlineStart).toBe('-100%');
+        });
+
+        it('should align a too wide submenu with the visible right edge', () => {
+            const sublist = createItem(50, 100, clientWidth - 20);
+
+            nestedPosition(sublist, 2);
+
+            expect(sublist.style.insetInlineStart).toBe('20px');
+        });
     });
 });
