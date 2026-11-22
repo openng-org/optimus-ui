@@ -110,6 +110,16 @@ export class PasswordDirective extends BaseEditableHolder {
      */
     @Input() strongLabel: string = 'Strong';
     /**
+     * Regex value for medium regex.
+     * @group Props
+     */
+    @Input() mediumRegex: string = '^(((?=.*[a-z])(?=.*[A-Z]))|((?=.*[a-z])(?=.*[0-9]))|((?=.*[A-Z])(?=.*[0-9])))(?=.{6,})';
+    /**
+     * Regex value for strong regex.
+     * @group Props
+     */
+    @Input() strongRegex: string = '^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})';
+    /**
      * Whether to show the strength indicator or not.
      * @group Props
      */
@@ -272,15 +282,15 @@ export class PasswordDirective extends BaseEditableHolder {
                 label = this.promptLabel;
                 meterPos = '0px 0px';
             } else {
-                var score = this.testStrength(value);
+                var level = this.testStrength(value);
 
-                if (score < 30) {
+                if (level === 1) {
                     label = this.weakLabel;
                     meterPos = '0px -10px';
-                } else if (score >= 30 && score < 80) {
+                } else if (level === 2) {
                     label = this.mediumLabel;
                     meterPos = '0px -20px';
-                } else if (score >= 80) {
+                } else if (level === 3) {
                     label = this.strongLabel;
                     meterPos = '0px -30px';
                 }
@@ -324,31 +334,13 @@ export class PasswordDirective extends BaseEditableHolder {
     }
 
     testStrength(str: string) {
-        let grade: number = 0;
-        let val: Nullable<RegExpMatchArray>;
+        let level = 0;
 
-        val = str.match('[0-9]');
-        grade += this.normalize(val ? val.length : 1 / 4, 1) * 25;
+        if (new RegExp(this.strongRegex).test(str)) level = 3;
+        else if (new RegExp(this.mediumRegex).test(str)) level = 2;
+        else if (str.length) level = 1;
 
-        val = str.match('[a-zA-Z]');
-        grade += this.normalize(val ? val.length : 1 / 2, 3) * 10;
-
-        val = str.match('[!@#$%^&*?_~.,;=]');
-        grade += this.normalize(val ? val.length : 1 / 6, 1) * 35;
-
-        val = str.match('[A-Z]');
-        grade += this.normalize(val ? val.length : 1 / 6, 1) * 30;
-
-        grade *= str.length / 8;
-
-        return grade > 100 ? 100 : grade;
-    }
-
-    normalize(x: number, y: number) {
-        let diff = x - y;
-
-        if (diff <= 0) return x / y;
-        else return 1 + 0.5 * (x / (x + y / 4));
+        return level;
     }
 
     bindScrollListener() {
