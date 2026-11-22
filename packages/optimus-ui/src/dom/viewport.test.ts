@@ -107,7 +107,8 @@ describe('Viewport and scrollbars', () => {
 
             nestedPosition(sublist, 2);
 
-            expect(sublist.style.insetInlineStart).toBe('20px');
+            // inset-inline-start is relative to the parent item (the containing block), not to the viewport
+            expect(sublist.getBoundingClientRect().right).toBe(clientWidth);
         });
     });
 });

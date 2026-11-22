@@ -24,7 +24,7 @@ export default function nestedPosition(element: HTMLElement, level: number): voi
                 if (level % 2 === 1) {
                     left = (elementOffset.left as number) ? '-' + (elementOffset.left as number) + 'px' : '100%';
                 } else if (level % 2 === 0) {
-                    left = viewport.width - sublistWidth + 'px';
+                    left = viewport.width - sublistWidth - (elementOffset.left as number) + 'px';
                 }
             } else {
                 left = '-100%';
