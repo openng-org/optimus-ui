@@ -56,5 +56,6 @@ minimumReleaseAgeExclude:
   - '@angular/router@22.1.4'
 
 overrides:
+  express@5.2.1>body-parser: ^2.4.0
   # GHSA-mrhx-c7xc-m3w5 (high): pulled in by @angular/forms, which declares zod ^4.0.10.
   zod: ^4.6.6
