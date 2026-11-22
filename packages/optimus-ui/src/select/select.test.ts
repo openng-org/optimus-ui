@@ -101,6 +101,19 @@ class TestBasicSelectComponent {
     }
 }
 
+// Select with the autofocus input left unbound (default/undefined)
+@Component({
+    standalone: false,
+    template: ` <p-select [options]="options" [(ngModel)]="selectedValue" optionLabel="name" optionValue="code"></p-select> `
+})
+class TestUnsetAutofocusSelectComponent {
+    options = [
+        { name: 'Option 1', code: 'opt1' },
+        { name: 'Option 2', code: 'opt2' }
+    ];
+    selectedValue: any;
+}
+
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
@@ -821,6 +834,7 @@ describe('Select', () => {
             imports: [CommonModule, FormsModule, ReactiveFormsModule, Select],
             declarations: [
                 TestBasicSelectComponent,
+                TestUnsetAutofocusSelectComponent,
                 TestReactiveFormSelectComponent,
                 TestGroupedSelectComponent,
                 TestSelectPTemplateComponent,
@@ -845,6 +859,14 @@ describe('Select', () => {
         it('should create the component', () => {
             expect(component).toBeTruthy();
             expect(selectInstance).toBeTruthy();
+        });
+
+        it('should not set the autofocus attribute when autofocus is left unset', () => {
+            const unsetFixture = TestBed.createComponent(TestUnsetAutofocusSelectComponent);
+            unsetFixture.detectChanges();
+
+            const focusElement = unsetFixture.debugElement.query(By.css('[role="combobox"]'));
+            expect(focusElement.nativeElement.hasAttribute('autofocus')).toBe(false);
         });
 
         it('should have default values', () => {

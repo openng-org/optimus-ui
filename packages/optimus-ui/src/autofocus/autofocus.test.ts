@@ -41,6 +41,15 @@ class TestAutofocusDynamicComponent {
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
+    selector: 'test-autofocus-undefined',
+    template: `<input type="text" [pAutoFocus]="autofocusEnabled" />`
+})
+class TestAutofocusUndefinedComponent {
+    autofocusEnabled: boolean | undefined = undefined;
+}
+
+@Component({
+    standalone: false,
     selector: 'test-autofocus-button',
     template: `<button [pAutoFocus]="true">Focus Button</button>`
 })
@@ -219,6 +228,7 @@ describe('AutoFocus', () => {
                 TestAutofocusDisabledComponent,
                 TestAutofocusEnabledComponent,
                 TestAutofocusDynamicComponent,
+                TestAutofocusUndefinedComponent,
                 TestAutofocusButtonComponent,
                 TestAutofocusDivComponent,
                 TestAutofocusMultipleElementsComponent,
@@ -318,6 +328,15 @@ describe('AutoFocus', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.hasAttribute('autofocus')).toBe(false);
+        });
+
+        it('should remove autofocus attribute when autofocus is undefined', async () => {
+            const undefinedFixture = TestBed.createComponent(TestAutofocusUndefinedComponent);
+            await undefinedFixture.whenStable();
+
+            const undefinedElement = undefinedFixture.debugElement.query(By.css('input')).nativeElement;
+
+            expect(undefinedElement.hasAttribute('autofocus')).toBe(false);
         });
     });
 
