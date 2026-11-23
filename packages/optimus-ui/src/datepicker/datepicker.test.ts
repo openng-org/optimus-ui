@@ -491,6 +491,43 @@ describe('DatePicker', () => {
         });
     });
 
+    describe('isYearSelected', () => {
+        it('should return false for an empty date range', () => {
+            component.selectionMode = 'range';
+            component.value = [];
+
+            expect(component.isYearSelected(2026)).toBe(false);
+        });
+
+        it('should return false for a range without a start date', () => {
+            component.selectionMode = 'range';
+            component.value = [undefined, new Date(2026, 11, 31)];
+
+            expect(component.isYearSelected(2026)).toBe(false);
+        });
+
+        it('should return false for an invalid start date', () => {
+            component.selectionMode = 'range';
+            component.value = [new Date(NaN), new Date(2026, 11, 31)];
+
+            expect(component.isYearSelected(2026)).toBe(false);
+        });
+
+        it('should return true for a matching year', () => {
+            component.selectionMode = 'range';
+            component.value = [new Date(2026, 0, 1), new Date(2026, 11, 31)];
+
+            expect(component.isYearSelected(2026)).toBe(true);
+        });
+
+        it('should return false for a non-matching year', () => {
+            component.selectionMode = 'range';
+            component.value = [new Date(2025, 0, 1), new Date(2025, 11, 31)];
+
+            expect(component.isYearSelected(2026)).toBe(false);
+        });
+    });
+
     describe('Input Properties', () => {
         it('should apply dateFormat correctly', async () => {
             testComponent.dateFormat = 'dd/mm/yyyy';
