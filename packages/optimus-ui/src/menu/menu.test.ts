@@ -322,6 +322,96 @@ describe('Menu', () => {
         await fixture.whenStable();
     });
 
+    describe('Stable item identity', () => {
+        it('preserves grouped nodes across immutable updates, reordering and removal', async () => {
+            const previousCommand = vi.fn();
+            const nextCommand = vi.fn();
+            component.model = [
+                {
+                    id: 'files',
+                    label: 'Files',
+                    items: [
+                        { id: 'open', label: 'Open', command: previousCommand },
+                        { id: 'save', label: 'Save' }
+                    ]
+                },
+                { id: 'tools', label: 'Tools', items: [{ id: 'settings', label: 'Settings' }] }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const headers = Array.from(host.querySelectorAll('[data-pc-section="submenulabel"]'));
+            const open = host.querySelector<HTMLElement>('[role="menuitem"][aria-label="Open"]')!;
+            const save = host.querySelector('[role="menuitem"][aria-label="Save"]');
+            component.model = [
+                { id: 'tools', label: 'Tools', items: [{ id: 'settings', label: 'Settings' }] },
+                {
+                    id: 'files',
+                    label: 'Documents',
+                    items: [
+                        { id: 'save', label: 'Save changes', disabled: true },
+                        { id: 'open', label: 'Open document', command: nextCommand }
+                    ]
+                }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelectorAll('[data-pc-section="submenulabel"]')[1]).toBe(headers[0]);
+            expect(headers[0].textContent).toContain('Documents');
+            expect(host.querySelector('[aria-label="Open document"]')).toBe(open);
+            expect(host.querySelector('[aria-label="Save changes"]')).toBe(save);
+            expect(save?.getAttribute('aria-disabled')).toBe('true');
+            expect(open.textContent).toContain('Open document');
+            open.querySelector<HTMLAnchorElement>('a')!.click();
+            expect(nextCommand).toHaveBeenCalledTimes(1);
+            expect(previousCommand).not.toHaveBeenCalled();
+            component.model = [{ id: 'files', label: 'Documents', items: [{ id: 'open', label: 'Open' }] }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelectorAll('[role="menuitem"]')).toHaveLength(1);
+            expect(host.querySelector('[role="menuitem"]')).toBe(open);
+        });
+
+        it('preserves flat entries by ID and inserts new entries', async () => {
+            component.model = [
+                { id: 'open', label: 'Open' },
+                { id: 'save', label: 'Save' }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const open = host.querySelector('[aria-label="Open"]');
+            const save = host.querySelector('[aria-label="Save"]');
+            component.model = [
+                { id: 'save', label: 'Save changes' },
+                { id: 'new', label: 'New' },
+                { id: 'open', label: 'Open document' }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[aria-label="Open document"]')).toBe(open);
+            expect(host.querySelector('[aria-label="Save changes"]')).toBe(save);
+            expect(host.querySelectorAll('[role="menuitem"]')).toHaveLength(3);
+        });
+
+        it('retains object-identity tracking for entries without IDs', async () => {
+            const entry: MenuItem = { label: 'Open' };
+            component.model = [entry];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const original = host.querySelector('[role="menuitem"]');
+            component.model = [entry];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[role="menuitem"]')).toBe(original);
+            component.model = [{ label: 'Open' }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[role="menuitem"]')).not.toBe(original);
+        });
+    });
+
     describe('Component Initialization', () => {
         it('should create the component', () => {
             expect(menuInstance).toBeTruthy();
