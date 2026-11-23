@@ -2012,14 +2012,14 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             .every((v, month) => this.isMonthDisabled(month, year));
     }
 
-    isYearSelected(year: number) {
-        if (this.isComparable()) {
-            let value = this.isRangeSelection() ? this.value[0] : this.value;
-
-            return !this.isMultipleSelection() ? value.getFullYear() === year : false;
+    isYearSelected(year: number): boolean {
+        if (!this.isComparable() || this.isMultipleSelection()) {
+            return false;
         }
 
-        return false;
+        const value = this.isRangeSelection() ? this.value?.[0] : this.value;
+
+        return value instanceof Date && !Number.isNaN(value.getTime()) && value.getFullYear() === year;
     }
 
     isDateEquals(value: any, dateMeta: any) {
