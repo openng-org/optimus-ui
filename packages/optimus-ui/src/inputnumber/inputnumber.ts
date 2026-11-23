@@ -1371,11 +1371,18 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             if (operation === 'range-insert') {
                 const startValue = this.parseValue((inputValue || '').slice(0, selectionStart));
                 const startValueStr = startValue !== null ? startValue.toString() : '';
-                const startExpr = startValueStr.split('').join(`(${this.groupChar})?`);
+                const groupExpr = `(${this.escapeRegExp(this.groupChar)})?`;
+                const startExpr = startValueStr
+                    .split('')
+                    .map((char) => this.escapeRegExp(char))
+                    .join(groupExpr);
                 const sRegex = new RegExp(startExpr, 'g');
                 sRegex.test(newValue);
 
-                const tExpr = insertedValueStr.split('').join(`(${this.groupChar})?`);
+                const tExpr = insertedValueStr
+                    .split('')
+                    .map((char) => this.escapeRegExp(char))
+                    .join(groupExpr);
                 const tRegex = new RegExp(tExpr, 'g');
                 tRegex.test(newValue.slice(sRegex.lastIndex));
 
