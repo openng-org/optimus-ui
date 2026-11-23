@@ -212,7 +212,7 @@ export class MenuItemContent extends BaseComponent {
                     (keydown)="onListKeyDown($event)"
                 >
                     @if (hasSubMenu()) {
-                        @for (submenu of model; track submenu; let i = $index) {
+                        @for (submenu of model; track submenu.id ?? submenu; let i = $index) {
                             @if (submenu.visible !== false) {
                                 @if (submenu.separator) {
                                     <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
@@ -241,7 +241,7 @@ export class MenuItemContent extends BaseComponent {
                                     </li>
                                 }
                             }
-                            @for (item of submenu.items; track item; let j = $index) {
+                            @for (item of submenu.items; track item.id ?? item; let j = $index) {
                                 @if (item.separator && (item.visible !== false || submenu.visible !== false)) {
                                     <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
                                 }
@@ -271,7 +271,7 @@ export class MenuItemContent extends BaseComponent {
                         }
                     }
                     @if (!hasSubMenu()) {
-                        @for (item of model; track item; let i = $index) {
+                        @for (item of model; track item.id ?? item; let i = $index) {
                             @if (item.separator && item.visible !== false) {
                                 <li [class]="cx('separator')" [pBind]="ptm('separator')" role="separator" [attr.data-pc-section]="'separator'"></li>
                             }
