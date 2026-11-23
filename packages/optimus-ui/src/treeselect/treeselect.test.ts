@@ -1370,6 +1370,75 @@ describe('TreeSelect', () => {
         });
     });
 
+    describe('Filter State on Hide', () => {
+        let treeSelectInstance: TreeSelect;
+
+        beforeEach(async () => {
+            testComponent.filter = true;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            treeSelectInstance = testFixture.debugElement.query(By.directive(TreeSelect)).componentInstance;
+        });
+
+        async function toggleOverlay() {
+            const treeSelectElement = testFixture.debugElement.query(By.directive(TreeSelect));
+            treeSelectElement.nativeElement.dispatchEvent(new MouseEvent('mousedown'));
+            // Wait for the overlay animation to complete
+            await new Promise((resolve) => setTimeout(resolve, 400));
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+        }
+
+        function getFilterInput(): HTMLInputElement | undefined {
+            return testFixture.debugElement.query(By.css('.p-tree-filter-input'))?.nativeElement;
+        }
+
+        async function typeFilter(value: string) {
+            const filterInput = getFilterInput() as HTMLInputElement;
+            filterInput.value = value;
+            filterInput.dispatchEvent(new Event('input'));
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+        }
+
+        it('should restore the filter input value on reopen when resetFilterOnHide is false', async () => {
+            testComponent.resetFilterOnHide = false;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+            testFixture.detectChanges();
+
+            await toggleOverlay();
+            await typeFilter('Work');
+
+            expect(treeSelectInstance.filterValue).toBe('Work');
+            expect(testComponent.filterEvent?.filter).toBe('Work');
+
+            await toggleOverlay();
+            expect(getFilterInput()).toBeUndefined();
+
+            await toggleOverlay();
+            expect(getFilterInput()?.value).toBe('Work');
+            expect(treeSelectInstance.treeViewChild?.filteredNodes?.map((node) => node.label)).toEqual(['Documents']);
+        });
+
+        it('should clear the filter input on reopen when resetFilterOnHide is true', async () => {
+            await toggleOverlay();
+            await typeFilter('Work');
+
+            expect(treeSelectInstance.filterValue).toBe('Work');
+
+            await toggleOverlay();
+            expect(getFilterInput()).toBeUndefined();
+
+            await toggleOverlay();
+            expect(getFilterInput()?.value).toBe('');
+            expect(treeSelectInstance.filterValue).toBeNull();
+            expect(treeSelectInstance.treeViewChild?.filteredNodes).toBeFalsy();
+        });
+    });
+
     describe('Performance and Optimization', () => {
         beforeEach(() => {
             testFixture.detectChanges();
