@@ -387,6 +387,65 @@ describe('DatePicker', () => {
         await testFixture.whenStable();
     });
 
+    describe.each([false, true])('Theme state attributes (unstyled: %s)', (unstyled) => {
+        it('exposes today on the day cell', async () => {
+            fixture.componentRef.setInput('inline', true);
+            fixture.componentRef.setInput('unstyled', unstyled);
+            component.writeValue(new Date());
+            fixture.detectChanges();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const today = host.querySelectorAll('td[data-p-today="true"]');
+            expect(today).toHaveLength(1);
+            expect(today[0].getAttribute('aria-label')).toBe(String(new Date().getDate()));
+            expect(host.querySelectorAll('td[data-p-today="false"]').length).toBeGreaterThan(0);
+        });
+
+        it('updates selected and disabled month attributes', async () => {
+            fixture.componentRef.setInput('inline', true);
+            fixture.componentRef.setInput('unstyled', unstyled);
+            fixture.componentRef.setInput('view', 'month');
+            fixture.componentRef.setInput('minDate', new Date(2026, 5, 1));
+            fixture.componentRef.setInput('maxDate', new Date(2026, 8, 30));
+            component.writeValue(new Date(2026, 6, 15));
+            fixture.detectChanges();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const months = host.querySelectorAll('[data-pc-section="month"]');
+            expect(months).toHaveLength(12);
+            expect(months[6].getAttribute('data-p-selected')).toBe('true');
+            expect(months[0].getAttribute('data-p-disabled')).toBe('true');
+            expect(months[7].getAttribute('data-p-disabled')).toBe('false');
+            component.writeValue(new Date(2026, 7, 15));
+            fixture.detectChanges();
+            await fixture.whenStable();
+            expect(months[6].getAttribute('data-p-selected')).toBe('false');
+            expect(months[7].getAttribute('data-p-selected')).toBe('true');
+        });
+
+        it('updates selected and disabled year attributes', async () => {
+            fixture.componentRef.setInput('inline', true);
+            fixture.componentRef.setInput('unstyled', unstyled);
+            fixture.componentRef.setInput('view', 'year');
+            fixture.componentRef.setInput('minDate', new Date(2024, 0, 1));
+            fixture.componentRef.setInput('maxDate', new Date(2028, 11, 31));
+            component.writeValue(new Date(2026, 6, 15));
+            fixture.detectChanges();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const years = Array.from(host.querySelectorAll('[data-pc-section="year"]'));
+            const year = (value: number) => years.find((element) => element.textContent?.trim().startsWith(String(value)))!;
+            expect(year(2026).getAttribute('data-p-selected')).toBe('true');
+            expect(year(2020).getAttribute('data-p-disabled')).toBe('true');
+            expect(year(2027).getAttribute('data-p-disabled')).toBe('false');
+            component.writeValue(new Date(2027, 6, 15));
+            fixture.detectChanges();
+            await fixture.whenStable();
+            expect(year(2026).getAttribute('data-p-selected')).toBe('false');
+            expect(year(2027).getAttribute('data-p-selected')).toBe('true');
+        });
+    });
+
     describe('Component Initialization', () => {
         it('should create', () => {
             expect(component).toBeTruthy();

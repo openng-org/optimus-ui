@@ -265,7 +265,7 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                                                 {{ month.weekNumbers[j] }}
                                             </span>
                                         </td>
-                                        <td *ngFor="let date of week" [attr.aria-label]="date.day" [class]="cx('dayCell', { date })" [pBind]="ptm('dayCell')">
+                                        <td *ngFor="let date of week" [attr.aria-label]="date.day" [attr.data-p-today]="date.today" [class]="cx('dayCell', { date })" [pBind]="ptm('dayCell')">
                                             <ng-container *ngIf="date.otherMonth ? showOtherMonths : true">
                                                 <span
                                                     [ngClass]="dayClass(date)"
@@ -295,7 +295,16 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                         </div>
                     </div>
                     <div [class]="cx('monthView')" *ngIf="currentView === 'month'" [pBind]="ptm('monthView')">
-                        <span *ngFor="let m of monthPickerValues(); let i = index" (click)="onMonthSelect($event, i)" (keydown)="onMonthCellKeydown($event, i)" [class]="cx('month', { month: m, index: i })" pRipple [pBind]="ptm('month')">
+                        <span
+                            *ngFor="let m of monthPickerValues(); let i = index"
+                            (click)="onMonthSelect($event, i)"
+                            (keydown)="onMonthCellKeydown($event, i)"
+                            [class]="cx('month', { month: m, index: i })"
+                            [attr.data-p-selected]="isMonthSelected(i)"
+                            [attr.data-p-disabled]="isMonthDisabled(i)"
+                            pRipple
+                            [pBind]="ptm('month')"
+                        >
                             {{ m }}
                             <div *ngIf="isMonthSelected(i)" class="p-hidden-accessible" aria-live="polite">
                                 {{ m }}
@@ -303,7 +312,16 @@ const DATEPICKER_INSTANCE = new InjectionToken<DatePicker>('DATEPICKER_INSTANCE'
                         </span>
                     </div>
                     <div [class]="cx('yearView')" *ngIf="currentView === 'year'" [pBind]="ptm('yearView')">
-                        <span *ngFor="let y of yearPickerValues()" (click)="onYearSelect($event, y)" (keydown)="onYearCellKeydown($event, y)" [class]="cx('year', { year: y })" pRipple [pBind]="ptm('year')">
+                        <span
+                            *ngFor="let y of yearPickerValues()"
+                            (click)="onYearSelect($event, y)"
+                            (keydown)="onYearCellKeydown($event, y)"
+                            [class]="cx('year', { year: y })"
+                            [attr.data-p-selected]="isYearSelected(y)"
+                            [attr.data-p-disabled]="isYearDisabled(y)"
+                            pRipple
+                            [pBind]="ptm('year')"
+                        >
                             {{ y }}
                             <div *ngIf="isYearSelected(y)" class="p-hidden-accessible" aria-live="polite">
                                 {{ y }}
