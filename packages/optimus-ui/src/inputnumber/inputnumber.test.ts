@@ -207,10 +207,16 @@ describe('InputNumber', () => {
             { locale: 'fr-FR', useGrouping: false, previous: '12,311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12,311', cursor: 6 },
             { locale: 'de-DE', useGrouping: true, previous: '1.212,311', next: 1212.311, inserted: '1', start: 8, end: 9, expected: '1.212,311', cursor: 9 },
             { locale: 'de-DE', useGrouping: false, previous: '-12,311', next: -12.311, inserted: '1', start: 6, end: 7, expected: '-12,311', cursor: 7 },
-            { locale: 'en-US', useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 }
-        ])('keeps the cursor after the inserted text: $locale / $previous / $start', ({ locale, useGrouping, previous, next, inserted, start, end, expected, cursor }) => {
+            { locale: 'en-US', useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'fr-FR', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'fr-FR', format: false, useGrouping: false, previous: '-12.311', next: -12.311, inserted: '1', start: 6, end: 7, expected: '-12.311', cursor: 7 },
+            { locale: 'de-DE', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'de-DE', format: false, useGrouping: true, previous: '1212.311', next: 1212.311, inserted: '1', start: 7, end: 8, expected: '1212.311', cursor: 8 },
+            { locale: 'en-US', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 }
+        ])('keeps the cursor after the inserted text: $locale / $previous / $start / format=$format', ({ locale, format = true, useGrouping, previous, next, inserted, start, end, expected, cursor }) => {
             fixture.componentRef.setInput('locale', locale);
             fixture.componentRef.setInput('useGrouping', useGrouping);
+            fixture.componentRef.setInput('format', format);
             fixture.detectChanges();
             const input = component.input.nativeElement;
             input.value = previous;

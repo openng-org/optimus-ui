@@ -1369,8 +1369,10 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             let newLength = newValue.length;
 
             if (operation === 'range-insert') {
-                const startValue = this.parseValue((inputValue || '').slice(0, selectionStart));
-                const startValueStr = startValue !== null ? startValue.toString().replace('.', this._decimalChar) : '';
+                const inputPrefix = (inputValue || '').slice(0, selectionStart);
+                // Unformatted output is raw numeric text, not locale-formatted input.
+                const startValue = this.format ? this.parseValue(inputPrefix) : inputPrefix;
+                const startValueStr = startValue !== null ? startValue.toString().replace('.', this.format ? this._decimalChar : '.') : '';
                 const groupExpr = `(${this.escapeRegExp(this.groupChar)})?`;
                 const startExpr = startValueStr
                     .split('')
