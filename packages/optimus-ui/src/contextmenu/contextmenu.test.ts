@@ -879,6 +879,67 @@ describe('ContextMenu', () => {
         });
     });
 
+    describe('ArrowLeft without a focused item', () => {
+        const pressKey = (code: string) => {
+            const keyEvent = new KeyboardEvent('keydown', { code });
+            vi.spyOn(keyEvent, 'preventDefault');
+            contextMenuInstance.onKeyDown(keyEvent);
+            return keyEvent;
+        };
+
+        it('should not throw on the root level when nothing is focused', async () => {
+            contextMenuInstance.visible.set(true);
+            await fixture.whenStable();
+
+            let keyEvent!: KeyboardEvent;
+            expect(() => (keyEvent = pressKey('ArrowLeft'))).not.toThrow();
+            expect(keyEvent.preventDefault).toHaveBeenCalled();
+            expect(contextMenuInstance.focusedItemInfo().index).toBe(-1);
+            expect(contextMenuInstance.activeItemPath()).toEqual([]);
+        });
+
+        it('should return to the parent level from a submenu whose items are all disabled', async () => {
+            component.model = [
+                { label: 'File' },
+                {
+                    label: 'Edit',
+                    items: [{ label: 'Cut', disabled: true }, { separator: true }, { label: 'Paste', disabled: true }]
+                }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            contextMenuInstance.visible.set(true);
+            await fixture.whenStable();
+
+            contextMenuInstance.focusedItemInfo.set({ index: 1, level: 0, parentKey: '', item: component.model[1] });
+            pressKey('ArrowRight');
+            expect(contextMenuInstance.focusedItemInfo()).toEqual(expect.objectContaining({ index: -1, parentKey: '1' }));
+            expect(contextMenuInstance.activeItemPath().map((p) => p.key)).toEqual(['1']);
+
+            let keyEvent!: KeyboardEvent;
+            expect(() => (keyEvent = pressKey('ArrowLeft'))).not.toThrow();
+            expect(keyEvent.preventDefault).toHaveBeenCalled();
+            expect(contextMenuInstance.activeItemPath()).toEqual([]);
+            expect(contextMenuInstance.focusedItemInfo()).toEqual(expect.objectContaining({ index: 1, parentKey: '' }));
+        });
+
+        it('should keep returning to the parent level from a focused submenu item', async () => {
+            component.model = [{ label: 'File' }, { label: 'Edit', items: [{ label: 'Cut' }, { label: 'Paste' }] }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            contextMenuInstance.visible.set(true);
+            await fixture.whenStable();
+
+            contextMenuInstance.focusedItemInfo.set({ index: 1, level: 0, parentKey: '', item: component.model[1] });
+            pressKey('ArrowRight');
+            expect(contextMenuInstance.focusedItemInfo()).toEqual(expect.objectContaining({ index: 0, parentKey: '1' }));
+
+            pressKey('ArrowLeft');
+            expect(contextMenuInstance.activeItemPath()).toEqual([]);
+            expect(contextMenuInstance.focusedItemInfo()).toEqual(expect.objectContaining({ index: 1, parentKey: '' }));
+        });
+    });
+
     describe('Accessibility Tests', () => {
         it('should have proper ARIA attributes', async () => {
             component.ariaLabel = 'Context menu';
