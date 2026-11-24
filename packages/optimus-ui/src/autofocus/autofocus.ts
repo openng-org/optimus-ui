@@ -1,5 +1,5 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { Directive, ElementRef, inject, Input, NgModule, PLATFORM_ID } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, Input, NgModule, PLATFORM_ID } from '@angular/core';
 import { BaseComponent } from '@openng/optimus-ui/basecomponent';
 import { DomHandler } from '@openng/optimus-ui/dom';
 
@@ -16,7 +16,7 @@ export class AutoFocus extends BaseComponent {
      * When present, it specifies that the component should automatically get focus on load.
      * @group Props
      */
-    @Input('pAutoFocus') autofocus: boolean = false;
+    @Input({ alias: 'pAutoFocus', transform: booleanAttribute }) autofocus: boolean = false;
 
     focused: boolean = false;
 
@@ -28,10 +28,12 @@ export class AutoFocus extends BaseComponent {
 
     onAfterContentChecked() {
         // This sets the `attr.autofocus` which is different than the Input `autofocus` attribute.
-        if (this.autofocus === false) {
-            this.host.nativeElement.removeAttribute('autofocus');
-        } else {
+        // Components bind `undefined` when their `autofocus` input is not set, so only a truthy value may add it:
+        // a native `autofocus` attribute makes the browser focus (and scroll to) the element when it is inserted.
+        if (this.autofocus) {
             this.host.nativeElement.setAttribute('autofocus', true);
+        } else {
+            this.host.nativeElement.removeAttribute('autofocus');
         }
 
         if (!this.focused) {

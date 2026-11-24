@@ -38,6 +38,17 @@ class TestAutofocusDynamicComponent {
     autofocusEnabled = false;
 }
 
+// Components forward their own `autofocus` input, which is `undefined` when it is not set
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    selector: 'test-autofocus-unset',
+    template: `<input type="text" [pAutoFocus]="autofocus" />`
+})
+class TestAutofocusUnsetComponent {
+    autofocus: boolean | undefined = undefined;
+}
+
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
@@ -219,6 +230,7 @@ describe('AutoFocus', () => {
                 TestAutofocusDisabledComponent,
                 TestAutofocusEnabledComponent,
                 TestAutofocusDynamicComponent,
+                TestAutofocusUnsetComponent,
                 TestAutofocusButtonComponent,
                 TestAutofocusDivComponent,
                 TestAutofocusMultipleElementsComponent,
@@ -251,8 +263,8 @@ describe('AutoFocus', () => {
         });
 
         it('should have default values', () => {
-            // pAutoFocus without value defaults to empty string in template, which is truthy
-            // But the component Input transforms it to false
+            // pAutoFocus without a value binds an empty string, which booleanAttribute transforms to true.
+            // The focus itself happens in a setTimeout, so it has not run yet.
             expect(directive.focused).toBe(false);
         });
 
@@ -319,6 +331,24 @@ describe('AutoFocus', () => {
             await fixture.whenStable();
             expect(element.hasAttribute('autofocus')).toBe(false);
         });
+
+        it('should not set autofocus attribute when the bound value is undefined', async () => {
+            const unsetFixture = TestBed.createComponent(TestAutofocusUnsetComponent);
+            await unsetFixture.whenStable();
+
+            const unsetDebugElement = unsetFixture.debugElement.query(By.directive(AutoFocus));
+            expect(unsetDebugElement.injector.get(AutoFocus).autofocus).toBe(false);
+            expect(unsetDebugElement.nativeElement.hasAttribute('autofocus')).toBe(false);
+        });
+
+        it('should set autofocus attribute when pAutoFocus is present without a value', async () => {
+            const basicFixture = TestBed.createComponent(TestBasicAutofocusComponent);
+            await basicFixture.whenStable();
+
+            const basicDebugElement = basicFixture.debugElement.query(By.directive(AutoFocus));
+            expect(basicDebugElement.injector.get(AutoFocus).autofocus).toBe(true);
+            expect(basicDebugElement.nativeElement.getAttribute('autofocus')).toBe('true');
+        });
     });
 
     describe('Focus Behavior - Browser Platform', () => {
@@ -337,6 +367,18 @@ describe('AutoFocus', () => {
 
         it('should not focus when autofocus is disabled', async () => {
             const fixture = TestBed.createComponent(TestAutofocusDisabledComponent);
+            const element = fixture.debugElement.query(By.css('input')).nativeElement;
+
+            vi.spyOn(element, 'focus').mockImplementation(() => {});
+
+            await fixture.whenStable();
+            await new Promise((resolve) => setTimeout(resolve, 10));
+
+            expect(element.focus).not.toHaveBeenCalled();
+        });
+
+        it('should not focus when the bound value is undefined', async () => {
+            const fixture = TestBed.createComponent(TestAutofocusUnsetComponent);
             const element = fixture.debugElement.query(By.css('input')).nativeElement;
 
             vi.spyOn(element, 'focus').mockImplementation(() => {});
