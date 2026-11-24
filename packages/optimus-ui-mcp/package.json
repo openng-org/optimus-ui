@@ -1,6 +1,6 @@
 {
     "name": "@openng/optimus-ui-mcp",
-    "version": "2.0.2",
+    "version": "2.1.0",
     "author": "OpenNG",
     "description": "MCP server that gives coding agents the Optimus UI component API, examples, guides and design tokens.",
     "keywords": [
