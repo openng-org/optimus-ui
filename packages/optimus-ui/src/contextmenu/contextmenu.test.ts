@@ -791,6 +791,34 @@ describe('ContextMenu', () => {
         });
     });
 
+    describe('Keyboard Navigation without focusable items', () => {
+        beforeEach(async () => {
+            component.model = [{ label: 'Edit', disabled: true }, { separator: true }, { label: 'Delete', disabled: true }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            contextMenuInstance.visible.set(true);
+        });
+
+        it('should close on Escape without throwing when every item is disabled or a separator', () => {
+            const keyEvent = new KeyboardEvent('keydown', { code: 'Escape' });
+            vi.spyOn(keyEvent, 'preventDefault');
+
+            expect(() => contextMenuInstance.onKeyDown(keyEvent)).not.toThrow();
+            expect(contextMenuInstance.visible()).toBe(false);
+            expect(contextMenuInstance.focusedItemInfo()).toEqual({ index: -1, level: 0, parentKey: '', item: null });
+            expect(keyEvent.preventDefault).toHaveBeenCalled();
+        });
+
+        it('should not throw when changing focus to an index with no visible item', () => {
+            contextMenuInstance.focusedItemInfo.set({ index: 0, level: 0, parentKey: '', item: null });
+            vi.spyOn(contextMenuInstance, 'scrollInView').mockImplementation(() => {});
+
+            expect(() => contextMenuInstance.changeFocusedItemIndex(new KeyboardEvent('keydown'), -1)).not.toThrow();
+            expect(contextMenuInstance.focusedItemInfo().index).toBe(-1);
+            expect(contextMenuInstance.focusedItemInfo().item).toBeUndefined();
+        });
+    });
+
     describe('CSS Classes and Styling', () => {
         it('should apply styleClass when visible', async () => {
             component.styleClass = 'custom-contextmenu-class';

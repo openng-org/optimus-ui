@@ -1028,9 +1028,12 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     onEscapeKey(event: KeyboardEvent) {
         this.hide();
-        const processedItem = this.findVisibleItem(this.findFirstFocusedItemIndex());
-        const focusedItemInfo = this.focusedItemInfo();
-        this.focusedItemInfo.set({ ...focusedItemInfo, index: this.findFirstFocusedItemIndex(), item: processedItem.item });
+        const index = this.findFirstFocusedItemIndex();
+
+        if (index !== -1) {
+            const processedItem = this.findVisibleItem(index);
+            this.focusedItemInfo.set({ ...this.focusedItemInfo(), index, item: processedItem.item });
+        }
 
         event.preventDefault();
     }
@@ -1309,7 +1312,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         const processedItem = this.findVisibleItem(index);
         const focusedItemInfo = this.focusedItemInfo();
         if (focusedItemInfo.index !== index) {
-            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem.item });
+            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem?.item });
             this.scrollInView();
         }
     }
