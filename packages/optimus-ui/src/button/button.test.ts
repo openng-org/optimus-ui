@@ -268,6 +268,17 @@ class TestIconButtonComponent {
     iconPos: 'left' | 'right' | 'top' | 'bottom' = 'left';
 }
 
+// Autofocus Test
+@Component({
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false,
+    template: `
+        <p-button label="Unset" class="autofocus-unset"></p-button>
+        <p-button label="Enabled" class="autofocus-enabled" [autofocus]="true"></p-button>
+    `
+})
+class TestAutofocusButtonComponent {}
+
 describe('Button', () => {
     let component: TestBasicButtonComponent;
     let fixture: ComponentFixture<TestBasicButtonComponent>;
@@ -286,7 +297,8 @@ describe('Button', () => {
                 TestSeverityButtonComponent,
                 TestButtonVariantsComponent,
                 TestBadgeButtonComponent,
-                TestIconButtonComponent
+                TestIconButtonComponent,
+                TestAutofocusButtonComponent
             ],
             imports: [Button, ButtonDirective, ButtonIcon, ButtonLabel],
             providers: [provideZonelessChangeDetection()]
@@ -974,6 +986,22 @@ describe('Button', () => {
             fixture.detectChanges();
 
             expect(buttonElement.disabled).toBe(true);
+        });
+
+        it('should not set the native autofocus attribute when autofocus is not set', async () => {
+            const autofocusFixture = TestBed.createComponent(TestAutofocusButtonComponent);
+            await autofocusFixture.whenStable();
+
+            const unsetButton: HTMLButtonElement = autofocusFixture.debugElement.query(By.css('.autofocus-unset button')).nativeElement;
+            expect(unsetButton.hasAttribute('autofocus')).toBe(false);
+        });
+
+        it('should set the native autofocus attribute when autofocus is true', async () => {
+            const autofocusFixture = TestBed.createComponent(TestAutofocusButtonComponent);
+            await autofocusFixture.whenStable();
+
+            const enabledButton: HTMLButtonElement = autofocusFixture.debugElement.query(By.css('.autofocus-enabled button')).nativeElement;
+            expect(enabledButton.getAttribute('autofocus')).toBe('true');
         });
     });
 
