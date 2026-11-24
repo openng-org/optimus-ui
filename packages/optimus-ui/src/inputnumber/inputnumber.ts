@@ -1150,7 +1150,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
             } else if (decimalCharIndex > selectionStart && decimalCharIndex < selectionEnd) {
                 newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
                 this.updateValue(event, newValueStr, text, 'insert');
-            } else if (decimalCharIndex === -1 && this.maxFractionDigits) {
+            } else if (decimalCharIndex === -1 && this.numberFormat.resolvedOptions().maximumFractionDigits) {
                 newValueStr = this.insertText(inputValue, text, selectionStart, selectionEnd);
                 this.updateValue(event, newValueStr, text, 'insert');
             }
