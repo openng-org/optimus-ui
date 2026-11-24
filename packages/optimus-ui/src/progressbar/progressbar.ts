@@ -7,6 +7,15 @@ import { ProgressBarContentTemplateContext, ProgressBarPassThrough } from '@open
 import { ProgressBarStyle } from './style/progressbarstyle';
 
 /**
+ * Like `numberAttribute`, but maps `null`, `undefined` and non-numeric values to `undefined`
+ * instead of `NaN`, so no `NaN` ever reaches the DOM (aria-valuenow, label, width).
+ */
+function optionalNumberAttribute(value: unknown): number | undefined {
+    const parsed = numberAttribute(value);
+    return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+/**
  * ProgressBar is a process status indicator.
  * @group Components
  */
@@ -15,7 +24,7 @@ import { ProgressBarStyle } from './style/progressbarstyle';
     imports: [CommonModule, SharedModule, Bind],
     template: `
         @if (mode() === 'determinate') {
-            <div [class]="cn(cx('value'), valueStyleClass())" [pBind]="ptm('value')" [style.width]="value() + '%'" [style.display]="'flex'" [style.background]="color()" [attr.data-p]="dataP()">
+            <div [class]="cn(cx('value'), valueStyleClass())" [pBind]="ptm('value')" [style.width.%]="value()" [style.display]="'flex'" [style.background]="color()" [attr.data-p]="dataP()">
                 <div [class]="cx('label')" [pBind]="ptm('label')" [attr.data-p]="dataP()">
                     @if (showValue() && !contentTemplate() && !_contentTemplate()) {
                         <div [style.display]="value() != null && value() !== 0 ? 'flex' : 'none'">{{ value() }}{{ unit() }}</div>
@@ -34,9 +43,9 @@ import { ProgressBarStyle } from './style/progressbarstyle';
     host: {
         role: 'progressbar',
         '[attr.aria-valuemin]': '0',
-        '[attr.aria-valuenow]': 'value()',
+        '[attr.aria-valuenow]': 'ariaValueNow()',
         '[attr.aria-valuemax]': '100',
-        '[attr.aria-level]': 'value() + unit()',
+        '[attr.aria-valuetext]': 'valueText()',
         '[class]': "cx('root')",
         '[attr.data-p]': 'dataP()'
     },
@@ -51,7 +60,7 @@ export class ProgressBar extends BaseComponent<ProgressBarPassThrough> {
      * Current value of the progress.
      * @group Props
      */
-    readonly value = input<number | undefined, unknown>(undefined, { transform: numberAttribute });
+    readonly value = input<number | undefined, unknown>(undefined, { transform: optionalNumberAttribute });
     /**
      * Whether to display the progress bar value.
      * @group Props
@@ -96,6 +105,21 @@ export class ProgressBar extends BaseComponent<ProgressBarPassThrough> {
     readonly templates = contentChildren(PrimeTemplate);
 
     readonly _contentTemplate = computed<TemplateRef<ProgressBarContentTemplateContext> | undefined>(() => this.templates().at(-1)?.template);
+
+    /**
+     * Value exposed through aria-valuenow. Omitted in indeterminate mode, as WAI-ARIA requires,
+     * and when no value is set.
+     */
+    readonly ariaValueNow = computed(() => (this.mode() === 'determinate' ? this.value() : undefined));
+
+    /**
+     * Human-readable value exposed through aria-valuetext, e.g. "50%" or "5 MB".
+     * Omitted whenever aria-valuenow is, so assistive technologies don't announce a bogus value.
+     */
+    readonly valueText = computed(() => {
+        const value = this.ariaValueNow();
+        return value != null ? `${value}${this.unit()}` : undefined;
+    });
 
     readonly dataP = computed(() =>
         this.cn({

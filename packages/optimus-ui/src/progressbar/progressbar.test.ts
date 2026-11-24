@@ -568,24 +568,78 @@ describe('ProgressBar', () => {
             expect(rootElement.nativeElement.getAttribute('aria-valuenow')).toBe('80');
         });
 
-        it('should set aria-level with value and unit', async () => {
+        it('should not set aria-level (invalid on role=progressbar)', async () => {
+            component.value = 45;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
+            expect(rootElement.nativeElement.hasAttribute('aria-level')).toBe(false);
+        });
+
+        it('should set aria-valuetext with value and unit', async () => {
             component.value = 45;
             component.unit = ' MB';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
-            expect(rootElement.nativeElement.getAttribute('aria-level')).toBe('45 MB');
+            expect(rootElement.nativeElement.getAttribute('aria-valuetext')).toBe('45 MB');
         });
 
-        it('should handle undefined value in ARIA attributes', async () => {
-            component.value = undefined as any;
+        it('should default aria-valuetext to a percentage', async () => {
+            component.value = 50;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             const rootElement = fixture.debugElement.query(By.directive(ProgressBar));
-            const ariaValueNow = rootElement.nativeElement.getAttribute('aria-valuenow');
-            expect(ariaValueNow === 'null' || ariaValueNow === 'NaN').toBe(true);
+            expect(rootElement.nativeElement.getAttribute('aria-valuetext')).toBe('50%');
+        });
+
+        for (const [label, emptyValue] of [
+            ['undefined', undefined],
+            ['null', null],
+            ['a non-numeric string', 'abc']
+        ] as const) {
+            it(`should omit aria-valuenow and aria-valuetext when value is ${label}`, async () => {
+                component.value = emptyValue as any;
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
+
+                const host: HTMLElement = fixture.debugElement.query(By.directive(ProgressBar)).nativeElement;
+                expect(host.hasAttribute('aria-valuenow')).toBe(false);
+                expect(host.hasAttribute('aria-valuetext')).toBe(false);
+                expect(host.hasAttribute('aria-level')).toBe(false);
+                expect(host.outerHTML).not.toContain('NaN');
+            });
+        }
+
+        it('should omit aria-valuenow and aria-valuetext in indeterminate mode', async () => {
+            component.value = 40;
+            component.mode = 'indeterminate';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const host: HTMLElement = fixture.debugElement.query(By.directive(ProgressBar)).nativeElement;
+            expect(host.getAttribute('role')).toBe('progressbar');
+            expect(host.hasAttribute('aria-valuenow')).toBe(false);
+            expect(host.hasAttribute('aria-valuetext')).toBe(false);
+
+            component.mode = 'determinate';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.getAttribute('aria-valuenow')).toBe('40');
+            expect(host.getAttribute('aria-valuetext')).toBe('40%');
+        });
+
+        it('should keep aria-valuenow for a zero value', async () => {
+            component.value = 0;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            const host: HTMLElement = fixture.debugElement.query(By.directive(ProgressBar)).nativeElement;
+            expect(host.getAttribute('aria-valuenow')).toBe('0');
+            expect(host.getAttribute('aria-valuetext')).toBe('0%');
         });
     });
 
@@ -598,10 +652,38 @@ describe('ProgressBar', () => {
             await fixture.whenStable();
 
             expect(() => fixture.detectChanges()).not.toThrow();
-            const actualValue = progressBarInstance.value();
-            expect(actualValue === undefined || isNaN(actualValue)).toBe(true);
+            expect(progressBarInstance.value()).toBeUndefined();
             expect(progressBarInstance.color()).toBeUndefined();
             expect(progressBarElement.nativeElement.classList).toContain('p-progressbar');
+        });
+
+        for (const [label, emptyValue] of [
+            ['undefined', undefined],
+            ['null', null]
+        ] as const) {
+            it(`should not render NaN in label or width when value is ${label}`, async () => {
+                component.value = emptyValue as any;
+                component.showValue = true;
+                fixture.changeDetectorRef.markForCheck();
+                await fixture.whenStable();
+
+                expect(progressBarInstance.value()).toBeUndefined();
+                const valueElement: HTMLElement = fixture.debugElement.query(By.css('[data-pc-section="value"]')).nativeElement;
+                expect(valueElement.style.width).toBe('');
+                const labelElement: HTMLElement = fixture.debugElement.query(By.css('[data-pc-section="label"] > div')).nativeElement;
+                expect(labelElement.style.display).toBe('none');
+                expect(labelElement.textContent).not.toContain('NaN');
+                expect(progressBarElement.nativeElement.outerHTML).not.toContain('NaN');
+            });
+        }
+
+        it('should coerce numeric strings', async () => {
+            component.value = '42' as any;
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+
+            expect(progressBarInstance.value()).toBe(42);
+            expect(progressBarElement.nativeElement.getAttribute('aria-valuenow')).toBe('42');
         });
 
         it('should handle zero value correctly', async () => {
