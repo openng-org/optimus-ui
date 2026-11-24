@@ -1370,7 +1370,7 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
 
             if (operation === 'range-insert') {
                 const startValue = this.parseValue((inputValue || '').slice(0, selectionStart));
-                const startValueStr = startValue !== null ? startValue.toString() : '';
+                const startValueStr = startValue !== null ? startValue.toString().replace('.', this._decimalChar) : '';
                 const groupExpr = `(${this.escapeRegExp(this.groupChar)})?`;
                 const startExpr = startValueStr
                     .split('')

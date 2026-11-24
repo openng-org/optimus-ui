@@ -202,7 +202,12 @@ describe('InputNumber', () => {
             { locale: 'de-DE', useGrouping: false, previous: '1111', next: 1111, inserted: '1', start: 2, end: 3, expected: '1111', cursor: 3 },
             { locale: 'de-DE', useGrouping: true, previous: '1.111', next: 1111, inserted: '11', start: 0, end: 3, expected: '1.111', cursor: 3 },
             { locale: 'en-US', useGrouping: true, previous: '1,111', next: 1111, inserted: '11', start: 0, end: 3, expected: '1,111', cursor: 3 },
-            { locale: 'en-US', useGrouping: false, previous: '-12.34', next: -12.94, inserted: '9', start: 4, end: 5, expected: '-12.94', cursor: 5 }
+            { locale: 'en-US', useGrouping: false, previous: '-12.34', next: -12.94, inserted: '9', start: 4, end: 5, expected: '-12.94', cursor: 5 },
+            { locale: 'de-DE', useGrouping: false, previous: '12,311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12,311', cursor: 6 },
+            { locale: 'fr-FR', useGrouping: false, previous: '12,311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12,311', cursor: 6 },
+            { locale: 'de-DE', useGrouping: true, previous: '1.212,311', next: 1212.311, inserted: '1', start: 8, end: 9, expected: '1.212,311', cursor: 9 },
+            { locale: 'de-DE', useGrouping: false, previous: '-12,311', next: -12.311, inserted: '1', start: 6, end: 7, expected: '-12,311', cursor: 7 },
+            { locale: 'en-US', useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 }
         ])('keeps the cursor after the inserted text: $locale / $previous / $start', ({ locale, useGrouping, previous, next, inserted, start, end, expected, cursor }) => {
             fixture.componentRef.setInput('locale', locale);
             fixture.componentRef.setInput('useGrouping', useGrouping);
