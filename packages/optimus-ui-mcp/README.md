@@ -25,7 +25,7 @@ Cursor, VS Code, Windsurf and other clients:
 }
 ```
 
-Pin the version to the Optimus UI release your project uses, e.g. `@openng/optimus-ui-mcp@2.0.2`.
+Pin the version to the Optimus UI release your project uses, e.g. `@openng/optimus-ui-mcp@2.1.0`.
 
 ## Tools
 
