@@ -421,6 +421,24 @@ describe('SelectButton', () => {
             expect(component.styleClass).toBe('custom-class');
         });
 
+        it('should apply styleClass to every child toggle button', async () => {
+            component.options = [
+                { label: 'Option 1', value: 'opt1' },
+                { label: 'Option 2', value: 'opt2' }
+            ];
+            component.styleClass = 'custom-class';
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            fixture.detectChanges();
+
+            const buttons = fixture.debugElement.queryAll(By.css('p-togglebutton'));
+            expect(buttons.length).toBe(2);
+            buttons.forEach((button) => {
+                expect(button.nativeElement.classList.contains('custom-class')).toBe(true);
+                expect(button.nativeElement.classList.contains('p-togglebutton')).toBe(true);
+            });
+        });
+
         it('should handle ariaLabelledBy input', () => {
             component.ariaLabelledBy = 'test-label';
             expect(component.ariaLabelledBy).toBe('test-label');
