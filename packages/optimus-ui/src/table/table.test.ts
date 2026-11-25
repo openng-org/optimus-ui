@@ -5,8 +5,9 @@ import { FormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { SharedModule, SortMeta } from '@openng/optimus-ui/api';
+import { InputNumber } from '@openng/optimus-ui/inputnumber';
 import { Select } from '@openng/optimus-ui/select';
-import { CellEditor, ColumnFilter, EditableColumn, Table, TableModule, TableRadioButton, TableService } from './table';
+import { CellEditor, ColumnFilter, ColumnFilterFormElement, EditableColumn, Table, TableModule, TableRadioButton, TableService } from './table';
 
 describe('Table', () => {
     let component: Table;
@@ -187,6 +188,33 @@ describe('Table', () => {
             { label: 'Electronics', value: 'Electronics' },
             { label: 'Accessories', value: 'Accessories' }
         ];
+    }
+
+    @Component({
+        changeDetection: ChangeDetectionStrategy.Eager,
+        standalone: false,
+        template: `
+            <p-table [value]="products">
+                <ng-template #header>
+                    <tr>
+                        <th>
+                            Price
+                            <p-columnFilter field="price" type="numeric" display="menu" [minFractionDigits]="minFractionDigits" [maxFractionDigits]="maxFractionDigits"></p-columnFilter>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template #body let-product>
+                    <tr>
+                        <td>{{ product.price }}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        `
+    })
+    class TestNumericColumnFilterTableComponent {
+        products = [{ id: '1001', price: 29.99 }];
+        minFractionDigits: number | undefined = undefined;
+        maxFractionDigits: number | undefined = undefined;
     }
 
     @Component({
@@ -386,6 +414,7 @@ describe('Table', () => {
                 TestSortingTableComponent,
                 TestGroupedSortingTableComponent,
                 TestFilteringTableComponent,
+                TestNumericColumnFilterTableComponent,
                 TestVirtualScrollTableComponent,
                 TestVirtualScrollPercentHeightTableComponent,
                 TestScrollableNonVirtualTableComponent,
@@ -1262,6 +1291,47 @@ describe('Table', () => {
 
                 columnFilter.onOverlayAnimationAfterLeave({} as any);
                 expect(columnFilter.onHide.emit).toHaveBeenCalled();
+            });
+        });
+
+        describe('ColumnFilter minFractionDigits/maxFractionDigits (numeric type)', () => {
+            let numericFixture: ComponentFixture<TestNumericColumnFilterTableComponent>;
+
+            beforeEach(async () => {
+                numericFixture = TestBed.createComponent(TestNumericColumnFilterTableComponent);
+                await numericFixture.whenStable();
+                numericFixture.detectChanges();
+
+                const columnFilter = numericFixture.debugElement.query(By.directive(ColumnFilter)).componentInstance;
+                columnFilter.toggleMenu({ stopPropagation: () => {} } as unknown as Event);
+                numericFixture.detectChanges();
+            });
+
+            it('resolves unbound minFractionDigits/maxFractionDigits to undefined, not NaN, on ColumnFilter', () => {
+                const columnFilter = numericFixture.debugElement.query(By.directive(ColumnFilter)).componentInstance;
+
+                expect(columnFilter.minFractionDigits).toBeUndefined();
+                expect(columnFilter.maxFractionDigits).toBeUndefined();
+            });
+
+            it('resolves unbound minFractionDigits/maxFractionDigits to undefined, not NaN, on ColumnFilterFormElement (what is forwarded to the inner p-inputNumber)', () => {
+                // InputNumber applies its own (separately tracked, see issue #2116) transform to
+                // whatever it receives, so we assert on what ColumnFilterFormElement forwards
+                // rather than InputNumber's own post-transform property.
+                const formElement = numericFixture.debugElement.query(By.directive(ColumnFilterFormElement)).componentInstance;
+                const inputNumber = numericFixture.debugElement.query(By.directive(InputNumber)).componentInstance;
+
+                expect(formElement.minFractionDigits).toBeUndefined();
+                expect(formElement.maxFractionDigits).toBeUndefined();
+                expect(inputNumber).toBeTruthy();
+            });
+
+            it('coerces a bound numeric string to a number', () => {
+                numericFixture.componentInstance.minFractionDigits = '2' as unknown as number;
+                numericFixture.detectChanges();
+
+                const columnFilter = numericFixture.debugElement.query(By.directive(ColumnFilter)).componentInstance;
+                expect(columnFilter.minFractionDigits).toBe(2);
             });
         });
     });
@@ -2207,7 +2277,6 @@ describe('Table', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [TableModule, SharedModule],
     template: `
         <p-table [value]="rows" [paginator]="true" [rows]="2" [resizableColumns]="true" [reorderableColumns]="true">
@@ -2355,7 +2424,6 @@ describe('Table Signal Query API', () => {
 });
 
 @Component({
-    standalone: true,
     imports: [TableModule, SharedModule, FormsModule],
     template: `
         <p-table [value]="rows" dataKey="name" [(selection)]="selection">
