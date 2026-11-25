@@ -1,4 +1,4 @@
-import { booleanAttribute, computed, Directive, effect, HostListener, inject, InjectionToken, input, Input, NgModule, output } from '@angular/core';
+import { afterEveryRender, booleanAttribute, computed, Directive, effect, HostListener, inject, input, NgModule, output } from '@angular/core';
 import { NgControl } from '@angular/forms';
 import { PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
 import { BaseModelHolder } from '@openng/optimus-ui/basemodelholder';
@@ -8,27 +8,22 @@ import { TextareaPassThrough } from '@openng/optimus-ui/types/textarea';
 import { Subscription } from 'rxjs';
 import { TextareaStyle } from './style/textareastyle';
 
-const TEXTAREA_INSTANCE = new InjectionToken<Textarea>('TEXTAREA_INSTANCE');
-
 /**
  * Textarea adds styling and autoResize functionality to standard textarea element.
  * @group Components
  */
 @Directive({
     selector: '[pTextarea], [pInputTextarea]',
-    standalone: true,
     host: {
         '[class]': "cx('root')"
     },
-    providers: [TextareaStyle, { provide: TEXTAREA_INSTANCE, useExisting: Textarea }, { provide: PARENT_INSTANCE, useExisting: Textarea }],
+    providers: [TextareaStyle, { provide: PARENT_INSTANCE, useExisting: Textarea }],
     hostDirectives: [Bind]
 })
 export class Textarea extends BaseModelHolder<TextareaPassThrough> {
     componentName = 'Textarea';
 
     bindDirectiveInstance = inject(Bind, { self: true });
-
-    $pcTextarea: Textarea | undefined = inject(TEXTAREA_INSTANCE, { optional: true, skipSelf: true }) ?? undefined;
 
     /**
      * Used to pass attributes to DOM elements inside the Textarea component.
@@ -47,12 +42,12 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
      * When present, textarea size changes as being typed.
      * @group Props
      */
-    @Input({ transform: booleanAttribute }) autoResize: boolean | undefined;
+    readonly autoResize = input(undefined, { transform: booleanAttribute });
     /**
      * Defines the size of the component.
      * @group Props
      */
-    @Input() pSize: 'large' | 'small';
+    readonly pSize = input<'large' | 'small'>();
     /**
      * Specifies the input variant of the component.
      * @defaultValue undefined
@@ -88,9 +83,7 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
 
     pcFluid: Fluid | null = inject(Fluid, { optional: true, host: true, skipSelf: true });
 
-    get hasFluid() {
-        return this.fluid() ?? !!this.pcFluid;
-    }
+    readonly hasFluid = computed(() => this.fluid() ?? !!this.pcFluid);
 
     constructor() {
         super();
@@ -101,6 +94,10 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
 
         effect(() => {
             this.pTextareaUnstyled() && this.directiveUnstyled.set(this.pTextareaUnstyled());
+        });
+
+        afterEveryRender(() => {
+            this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
         });
     }
 
@@ -113,14 +110,13 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
     }
 
     onAfterViewInit() {
-        if (this.autoResize) this.resize();
+        if (this.autoResize()) this.resize();
 
         this.cd.detectChanges();
     }
 
     onAfterViewChecked() {
-        this.bindDirectiveInstance.setAttrs(this.ptms(['host', 'root']));
-        if (this.autoResize) {
+        if (this.autoResize()) {
             this.resize();
         }
         this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
@@ -147,7 +143,7 @@ export class Textarea extends BaseModelHolder<TextareaPassThrough> {
     }
 
     updateState() {
-        if (this.autoResize) {
+        if (this.autoResize()) {
             this.resize();
         }
     }
