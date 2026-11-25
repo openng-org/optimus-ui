@@ -13,7 +13,6 @@ import { InputTextStyle } from './style/inputtextstyle';
  */
 @Directive({
     selector: '[pInputText]',
-    standalone: true,
     host: {
         '[class]': "cx('root')",
         '[attr.data-p]': 'dataP()'
@@ -91,15 +90,11 @@ export class InputText extends BaseModelHolder<InputTextPassThrough> {
             this.pInputTextUnstyled() && this.directiveUnstyled.set(this.pInputTextUnstyled());
         });
 
-        // Seed the model value from the rendered element (replaces the former ngAfterViewInit hook).
         afterNextRender(() => {
             this.writeModelValue(this.ngControl?.value ?? this.el.nativeElement.value);
             this.cd.detectChanges();
         });
 
-        // Re-apply the root pass-through section after each render (replaces the former
-        // ngAfterViewChecked hook). Bind.setAttrs writes into a signal behind an equality check,
-        // so unchanged PT resolutions are no-ops.
         afterEveryRender(() => {
             this.bindDirectiveInstance.setAttrs(this.ptm('root'));
         });
