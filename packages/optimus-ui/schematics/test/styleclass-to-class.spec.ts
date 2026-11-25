@@ -587,4 +587,21 @@ describe('styleclass-to-class', () => {
         expect(infos.join('\n')).toContain('No usages of styleClass on the migrated selectors were found to rewrite.');
         expect(warnings.join('\n')).toBe('');
     });
+
+    it('does not rewrite tag-like text inside an unrelated quoted attribute value', async () => {
+        const runner = createMigrationRunner();
+        const content = `<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n`;
+        const tree = createAppTree({ '/src/app/app.html': content });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(content);
+    });
+
+    it('still rewrites a real tag that follows one embedded in an unrelated quoted attribute value', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n<p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n<p-toast class="real"></p-toast>\n`);
+    });
 });

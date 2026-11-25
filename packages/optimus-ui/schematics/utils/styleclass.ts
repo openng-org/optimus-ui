@@ -19,15 +19,65 @@ export interface StyleClassResult {
 }
 
 /**
+ * Returns a copy of `html` the same length as the input, with the interior of every quoted
+ * attribute value — in *any* tag, not just the one being searched for — replaced by a space.
+ * Quote state only toggles while inside a tag (between an unquoted `<` and its closing unquoted
+ * `>`); a quote character appearing in plain text content between tags is left alone. Used only to
+ * find safe match offsets for `findOpeningTags`'s selector regex, so a selector's tag name that
+ * merely appears as literal text inside a *different* tag's quoted attribute value (e.g.
+ * `[innerHTML]="'<p-toast styleClass=foo></p-toast>'"`) can never be mistaken for a real opening
+ * tag.
+ */
+function maskQuotedAttributeValuesGlobally(html: string): string {
+    const MASK = ' ';
+    const out = html.split('');
+    let inTag = false;
+    let quote: string | null = null;
+    let i = 0;
+    while (i < out.length) {
+        const ch = out[i];
+        if (quote) {
+            if (ch === '\\' && i + 1 < out.length) {
+                out[i] = MASK;
+                out[i + 1] = MASK;
+                i += 2;
+                continue;
+            }
+            if (ch === quote) {
+                quote = null;
+            } else {
+                out[i] = MASK;
+            }
+            i++;
+            continue;
+        }
+        if (inTag) {
+            if (ch === '"' || ch === "'") {
+                quote = ch;
+            } else if (ch === '>') {
+                inTag = false;
+            }
+        } else if (ch === '<') {
+            inTag = true;
+        }
+        i++;
+    }
+    return out.join('');
+}
+
+/**
  * Finds the character ranges of every opening tag (`<selector ...>` or `<selector .../>`) for the
  * given tag name in an HTML fragment. Tracks quote state so a `>` inside a quoted attribute value
- * doesn't prematurely end a tag.
+ * doesn't prematurely end a tag, and matches the selector only against positions outside any tag's
+ * quoted attribute values (see `maskQuotedAttributeValuesGlobally`) so the selector's own tags are
+ * found correctly even when its name also appears as literal text inside an unrelated attribute.
  */
 function findOpeningTags(html: string, selector: string): Array<{ start: number; end: number }> {
     const tags: Array<{ start: number; end: number }> = [];
     const openRegex = new RegExp(`<${escapeRegExp(selector)}(?=[\\s/>])`, 'g');
+    const maskedHtml = maskQuotedAttributeValuesGlobally(html);
     let match: RegExpExecArray | null;
-    while ((match = openRegex.exec(html))) {
+    while ((match = openRegex.exec(maskedHtml))) {
         const start = match.index;
         let i = start;
         let quote: string | null = null;
