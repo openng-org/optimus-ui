@@ -26,6 +26,7 @@ import { UpdatePresetDoc } from '@/doc/theming/styled/updatepreset-doc';
 import { UpdatePrimaryPaletteDoc } from '@/doc/theming/styled/updateprimarypalette-doc';
 import { UpdateSurfacePaletteDoc } from '@/doc/theming/styled/updatesurfacepalette-doc';
 import { UsePresetDoc } from '@/doc/theming/styled/usepreset-doc';
+import { VisualToolingDoc } from '@/doc/theming/styled/visualtooling-doc';
 import { Component } from '@angular/core';
 
 @Component({
@@ -84,6 +85,11 @@ export class ThemingStyledDemo {
                     id: 'definepreset',
                     label: 'definePreset',
                     component: DefinePresetDoc
+                },
+                {
+                    id: 'visualtooling',
+                    label: 'Visual Tooling',
+                    component: VisualToolingDoc
                 },
                 {
                     id: 'colorscheme',

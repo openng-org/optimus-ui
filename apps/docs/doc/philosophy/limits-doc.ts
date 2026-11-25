@@ -1,10 +1,11 @@
 import { AppDocSectionText } from '@/components/doc/app.docsectiontext';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
     selector: 'philosophy-limits-doc',
     standalone: true,
-    imports: [AppDocSectionText],
+    imports: [AppDocSectionText, RouterModule],
     template: `
         <app-docsectiontext>
             <p>Naming the limits is what makes the commitments above worth anything. Here is what Optimus UI is not.</p>
@@ -16,7 +17,8 @@ import { Component } from '@angular/core';
             <h3>There are no premium templates, blocks or design tooling</h3>
             <p>
                 PrimeTek's application templates, block library and visual theme designer are their commercial products. They are not part of what was MIT licensed, so they are not part of this fork and will not be reimplemented. Theming here means
-                editing preset objects in code, which is documented in full.
+                editing preset objects in code, which is documented in full. Community projects can fill some of that space — a community-built visual theme designer already exists — and are listed under
+                <a [routerLink]="'/ecosystem'" class="doc-link">Community Projects</a>, without being part of what this project maintains.
             </p>
             <h3>We are not chasing feature parity with PrimeNG v22 and beyond</h3>
             <p>
