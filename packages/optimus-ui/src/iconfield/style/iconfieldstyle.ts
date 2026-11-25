@@ -6,8 +6,8 @@ const classes = {
     root: ({ instance }) => [
         'p-iconfield',
         {
-            'p-iconfield-left': instance.iconPosition == 'left',
-            'p-iconfield-right': instance.iconPosition == 'right'
+            'p-iconfield-left': instance.iconPosition() == 'left',
+            'p-iconfield-right': instance.iconPosition() == 'right'
         }
     ]
 };

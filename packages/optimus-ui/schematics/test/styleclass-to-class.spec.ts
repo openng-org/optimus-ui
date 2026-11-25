@@ -554,6 +554,60 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-splitter class="mb-8 my-splitter"></p-splitter>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-iconfield', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-iconfield styleClass="my-iconfield"><input pInputText /></p-iconfield>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-iconfield class="my-iconfield"><input pInputText /></p-iconfield>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-iconfield', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-iconfield [styleClass]="myClass"><input pInputText /></p-iconfield>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-iconfield [class]="myClass"><input pInputText /></p-iconfield>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-iconfield', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-iconfield class="mb-8" styleClass="my-iconfield"><input pInputText /></p-iconfield>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-iconfield class="mb-8 my-iconfield"><input pInputText /></p-iconfield>\n`);
+    });
+
+    it('rewrites a static styleClass to class on p-inputicon', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputicon styleClass="my-inputicon" class="pi pi-user"></p-inputicon>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputicon class="pi pi-user my-inputicon"></p-inputicon>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-inputicon', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputicon [styleClass]="myClass"></p-inputicon>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputicon [class]="myClass"></p-inputicon>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-inputicon', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-inputicon class="pi pi-user" styleClass="my-inputicon"></p-inputicon>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-inputicon class="pi pi-user my-inputicon"></p-inputicon>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
