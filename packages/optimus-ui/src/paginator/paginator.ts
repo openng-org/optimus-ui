@@ -35,6 +35,7 @@ import { Ripple } from '@openng/optimus-ui/ripple';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import { PaginatorDropdownItemTemplateContext, PaginatorPassThrough, PaginatorState, PaginatorTemplateContext } from '@openng/optimus-ui/types/paginator';
 import { PaginatorStyle } from './style/paginatorstyle';
+import { Subscription } from 'rxjs';
 
 const PAGINATOR_INSTANCE = new InjectionToken<Paginator>('PAGINATOR_INSTANCE');
 
@@ -384,6 +385,8 @@ export class Paginator extends BaseComponent<PaginatorPassThrough> {
 
     paginatorState: any;
 
+    translationSubscription: Nullable<Subscription>;
+
     _first: number = 0;
 
     _page: number = 0;
@@ -402,6 +405,13 @@ export class Paginator extends BaseComponent<PaginatorPassThrough> {
 
     onInit() {
         this.updatePaginatorState();
+        this.translationSubscription = this.config.translationObserver.subscribe(() => {
+            this.cd.markForCheck();
+        });
+    }
+
+    onDestroy() {
+        this.translationSubscription?.unsubscribe();
     }
 
     onAfterContentInit(): void {
