@@ -46,6 +46,7 @@ import {
     FileUploadPassThrough,
     RemoveUploadedFileEvent
 } from '@openng/optimus-ui/types/fileupload';
+import { optionalNumberAttribute } from '@openng/optimus-ui/utils';
 import { Subscription } from 'rxjs';
 import { FileUploadStyle } from './style/fileuploadstyle';
 
@@ -490,7 +491,7 @@ export class FileUpload extends BaseComponent<FileUploadPassThrough> implements 
      * Maximum number of files that can be uploaded.
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) }) fileLimit: number | undefined;
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) }) fileLimit: number | undefined;
     /**
      * Style class of the upload button.
      * @group Props

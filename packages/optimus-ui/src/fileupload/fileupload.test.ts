@@ -232,6 +232,42 @@ describe('FileUpload', () => {
         });
     });
 
+    describe('fileLimit NaN handling', () => {
+        @Component({
+            changeDetection: ChangeDetectionStrategy.Eager,
+            imports: [FileUpload],
+            template: `<p-fileupload [fileLimit]="fileLimit"></p-fileupload>`
+        })
+        class TestFileLimitHostComponent {
+            fileLimit: number | undefined = undefined;
+        }
+
+        beforeEach(async () => {
+            TestBed.resetTestingModule();
+            await TestBed.configureTestingModule({
+                imports: [TestFileLimitHostComponent, HttpClientTestingModule],
+                providers: [MessageService, provideZonelessChangeDetection()]
+            }).compileComponents();
+        });
+
+        it('resolves an unbound fileLimit to undefined, not NaN', () => {
+            const hostFixture = TestBed.createComponent(TestFileLimitHostComponent);
+            hostFixture.detectChanges();
+
+            const fileUpload = hostFixture.debugElement.query(By.directive(FileUpload)).componentInstance;
+            expect(fileUpload.fileLimit).toBeUndefined();
+        });
+
+        it('coerces a bound numeric string fileLimit to a number', () => {
+            const hostFixture = TestBed.createComponent(TestFileLimitHostComponent);
+            hostFixture.componentInstance.fileLimit = '3' as unknown as number;
+            hostFixture.detectChanges();
+
+            const fileUpload = hostFixture.debugElement.query(By.directive(FileUpload)).componentInstance;
+            expect(fileUpload.fileLimit).toBe(3);
+        });
+    });
+
     describe('File Selection Events', () => {
         it('should emit onSelect event when files are selected', async () => {
             vi.spyOn(component.onSelect, 'emit').mockImplementation(() => {});
@@ -3192,7 +3228,6 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [FileUpload, PrimeTemplate],
     template: `
         <p-fileupload name="demo" url="/upload">
