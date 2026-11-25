@@ -9,7 +9,6 @@ import { Textarea } from './textarea';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [Textarea, FormsModule],
     template: ` <textarea pTextarea [(ngModel)]="value" placeholder="Enter text"></textarea> `
 })
@@ -19,7 +18,6 @@ class TestBasicTextareaComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [Textarea, FormsModule],
     template: ` <textarea pTextarea [(ngModel)]="content" [autoResize]="enableAutoResize" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" (onResize)="onResizeHandler($event)" rows="3" cols="30"> </textarea> `
 })
@@ -39,7 +37,6 @@ class TestAdvancedTextareaComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [Textarea, ReactiveFormsModule],
     template: ` <textarea pTextarea [formControl]="textControl"></textarea> `
 })
@@ -49,7 +46,6 @@ class TestReactiveFormTextareaComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [Textarea, FormsModule],
     template: ` <textarea pTextarea [(ngModel)]="value" [pt]="pt" [autoResize]="autoResize" [invalid]="invalid"></textarea> `
 })
@@ -145,7 +141,7 @@ describe('Textarea', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.autoResize).toBe(true);
+            expect(textareaDirective.autoResize()).toBe(true);
 
             // Simulate text input that would require resize
             component.content = 'Line 1\nLine 2\nLine 3\nLine 4\nLine 5';
@@ -164,14 +160,14 @@ describe('Textarea', () => {
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.pSize).toBe('large');
+            expect(textareaDirective.pSize()).toBe('large');
 
             component.size = 'small';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             fixture.detectChanges();
 
-            expect(textareaDirective.pSize).toBe('small');
+            expect(textareaDirective.pSize()).toBe('small');
         });
 
         it('should apply variant styles', async () => {
@@ -470,12 +466,12 @@ describe('Textarea', () => {
                 let instanceAccessed = false;
                 component.pt = {
                     root: ({ instance }) => {
-                        if ((instance as any)?.autoResize) {
+                        if ((instance as any)?.autoResize()) {
                             instanceAccessed = true;
                         }
                         return {
                             class: {
-                                AUTO_RESIZE_ENABLED: (instance as any)?.autoResize
+                                AUTO_RESIZE_ENABLED: (instance as any)?.autoResize()
                             }
                         };
                     }
