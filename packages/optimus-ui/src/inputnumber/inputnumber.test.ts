@@ -287,6 +287,43 @@ describe('InputNumber', () => {
             expect(formatted).toContain('123'); // Should contain the number
         });
 
+        it('should resolve unbound minFractionDigits/maxFractionDigits to undefined, not NaN', () => {
+            const testFixture = TestBed.createComponent(TestBasicInputNumberComponent);
+            testFixture.detectChanges();
+
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
+
+            expect(inputNumberInstance.minFractionDigits).toBeUndefined();
+            expect(inputNumberInstance.maxFractionDigits).toBeUndefined();
+        });
+
+        it('should coerce a bound numeric string minFractionDigits/maxFractionDigits to a number', () => {
+            const testFixture = TestBed.createComponent(TestBasicInputNumberComponent);
+            const testComponent = testFixture.componentInstance;
+            testComponent.minFractionDigits = '2' as unknown as number;
+            testComponent.maxFractionDigits = '4' as unknown as number;
+            testFixture.detectChanges();
+
+            const inputNumberInstance = testFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
+
+            expect(inputNumberInstance.minFractionDigits).toBe(2);
+            expect(inputNumberInstance.maxFractionDigits).toBe(4);
+        });
+
+        it('should format with and without fraction digits unchanged', () => {
+            const unsetFixture = TestBed.createComponent(TestBasicInputNumberComponent);
+            unsetFixture.detectChanges();
+            const unsetInstance = unsetFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
+            expect(unsetInstance.formatValue(123.456)).toContain('123');
+
+            const setFixture = TestBed.createComponent(TestBasicInputNumberComponent);
+            setFixture.componentInstance.minFractionDigits = 2;
+            setFixture.componentInstance.maxFractionDigits = 2;
+            setFixture.detectChanges();
+            const setInstance = setFixture.debugElement.query(By.css('p-inputNumber')).componentInstance;
+            expect(setInstance.formatValue(123.456)).toContain('123.46');
+        });
+
         // TODO: Feature works, test will be debugged.
         // it('should handle grouping separators', () => {
         //     component.useGrouping = true;
@@ -1523,7 +1560,6 @@ describe('InputNumber', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [InputNumber, SharedModule],
     template: `
         <p-inputnumber>

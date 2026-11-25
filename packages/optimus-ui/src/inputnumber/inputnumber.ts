@@ -30,6 +30,7 @@ import { AngleDownIcon, AngleUpIcon, TimesIcon } from '@openng/optimus-ui/icons'
 import { InputText } from '@openng/optimus-ui/inputtext';
 import { Nullable } from '@openng/optimus-ui/ts-helpers';
 import type { InputNumberInputEvent, InputNumberPassThrough } from '@openng/optimus-ui/types/inputnumber';
+import { optionalNumberAttribute } from '@openng/optimus-ui/utils';
 import { InputNumberStyle } from './style/inputnumberstyle';
 
 const INPUTNUMBER_INSTANCE = new InjectionToken<InputNumber>('INPUTNUMBER_INSTANCE');
@@ -363,12 +364,12 @@ export class InputNumber extends BaseInput<InputNumberPassThrough> {
      * The minimum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number and percent formatting is 0; the default for currency formatting is the number of minor unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information).
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) }) minFractionDigits: number | undefined;
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) }) minFractionDigits: number | undefined;
     /**
      * The maximum number of fraction digits to use. Possible values are from 0 to 20; the default for plain number formatting is the larger of minimumFractionDigits and 3; the default for currency formatting is the larger of minimumFractionDigits and the number of minor unit digits provided by the ISO 4217 currency code list (2 if the list doesn't provide that information).
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) }) maxFractionDigits: number | undefined;
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) }) maxFractionDigits: number | undefined;
     /**
      * Text to display before the value.
      * @group Props
