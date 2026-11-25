@@ -3228,7 +3228,6 @@ describe('FileUpload Input Properties - Observable/Async Values', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [FileUpload, PrimeTemplate],
     template: `
         <p-fileupload name="demo" url="/upload">
