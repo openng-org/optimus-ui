@@ -27,7 +27,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { MotionOptions } from '@openng/optimus-ui-motion';
-import { calculateScrollbarWidth, equals, findLastIndex, findSingle, focus, getHiddenElementOuterWidth, getOffset, getOuterWidth, getViewport, isEmpty, isNotEmpty, isPrintableCharacter, resolveFieldData, uuid } from '@openng/optimus-ui-utils';
+import { equals, findLastIndex, findSingle, focus, getHiddenElementOuterWidth, getOffset, getOuterWidth, getViewport, isEmpty, isNotEmpty, isPrintableCharacter, resolveFieldData, uuid } from '@openng/optimus-ui-utils';
 import { OverlayOptions, OverlayService, PrimeTemplate, SharedModule, TranslationKeys } from '@openng/optimus-ui/api';
 import { AutoFocus } from '@openng/optimus-ui/autofocus';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -255,7 +255,7 @@ export class CascadeSelectSub extends BaseComponent {
         const viewport = <any>getViewport();
         const sublistWidth = this.el.nativeElement.childNodes[0].offsetParent ? this.el.nativeElement.children[0].offsetWidth : getHiddenElementOuterWidth(this.el.nativeElement.children[0]);
         const itemOuterWidth = <any>getOuterWidth(parentItem.children[0]);
-        if (parseInt(containerOffset.left, 10) + itemOuterWidth + sublistWidth > viewport.width - calculateScrollbarWidth()) {
+        if (parseInt(containerOffset.left, 10) + itemOuterWidth + sublistWidth > viewport.width) {
             this.el.nativeElement.children[0].style.left = '-200%';
         }
     }
