@@ -6,7 +6,6 @@ import { InputText } from './inputtext';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [(ngModel)]="value" placeholder="Enter text" /> `
 })
@@ -16,7 +15,6 @@ class TestBasicInputTextComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [(ngModel)]="content" [pSize]="size" [variant]="variant" [fluid]="fluid" [invalid]="invalid" placeholder="Advanced input" /> `
 })
@@ -30,7 +28,6 @@ class TestAdvancedInputTextComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [InputText, ReactiveFormsModule],
     template: ` <input type="email" pInputText [formControl]="emailControl" /> `
 })
@@ -40,7 +37,6 @@ class TestReactiveFormInputTextComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="password" pInputText [(ngModel)]="password" /> `
 })
@@ -50,7 +46,6 @@ class TestPasswordInputComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [InputText, FormsModule],
     template: ` <input type="text" pInputText [pt]="pt" [invalid]="invalid" [fluid]="fluid" [variant]="variant" [(ngModel)]="value" /> `
 })
@@ -141,13 +136,13 @@ describe('InputText', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(inputDirective.pSize).toBe('large');
+            expect(inputDirective.pSize()).toBe('large');
 
             component.size = 'small';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(inputDirective.pSize).toBe('small');
+            expect(inputDirective.pSize()).toBe('small');
         });
 
         it('should apply variant styles', async () => {
@@ -170,14 +165,14 @@ describe('InputText', () => {
             await fixture.whenStable();
 
             expect(inputDirective.fluid()).toBe(true);
-            expect(inputDirective.hasFluid).toBe(true);
+            expect(inputDirective.hasFluid()).toBe(true);
 
             component.fluid = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(inputDirective.fluid()).toBe(false);
-            expect(inputDirective.hasFluid).toBe(false);
+            expect(inputDirective.hasFluid()).toBe(false);
         });
 
         it('should apply invalid state', async () => {
@@ -457,7 +452,7 @@ describe('InputText', () => {
                 component.pt = {
                     root: ({ instance }) => ({
                         style: {
-                            width: instance?.hasFluid ? '100%' : 'auto'
+                            width: instance?.hasFluid() ? '100%' : 'auto'
                         }
                     })
                 };
@@ -558,7 +553,7 @@ describe('InputText', () => {
                         style: {
                             border: '1px solid green'
                         },
-                        'data-fluid': instance?.hasFluid
+                        'data-fluid': instance?.hasFluid()
                     })
                 };
                 fixture.changeDetectorRef.markForCheck();
