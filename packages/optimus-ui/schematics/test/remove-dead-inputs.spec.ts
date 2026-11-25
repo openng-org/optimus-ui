@@ -45,6 +45,28 @@ describe('remove-dead-inputs', () => {
         expect(html).toBe(`<p-overlay [(visible)]="visible"></p-overlay>\n`);
     });
 
+    it('removes transitionOptions from p-fieldset, but not from other selectors', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-fieldset legend="L" transitionOptions="300ms"></p-fieldset>\n<p-fieldset [transitionOptions]="t" [toggleable]="true"></p-fieldset>\n<p-dialog transitionOptions="150ms"></p-dialog>\n`
+        });
+        const result = await runner.runSchematic('remove-dead-inputs', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-fieldset legend="L"></p-fieldset>\n<p-fieldset [toggleable]="true"></p-fieldset>\n<p-dialog transitionOptions="150ms"></p-dialog>\n`);
+    });
+
+    it('does not report transitionOptions as a leftover, since it is still live on other components', async () => {
+        const runner = createMigrationRunner();
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+        const tree = createAppTree({ '/src/app/app.component.ts': `this.dialog.transitionOptions = '150ms';\n` });
+        await runner.runSchematic('remove-dead-inputs', {}, tree);
+        expect(warnings).toEqual([]);
+    });
+
     it('does not remove a similarly-named attribute on an unrelated selector', async () => {
         const runner = createMigrationRunner();
         const content = `<p-other showTransformOptions="x"></p-other>\n`;

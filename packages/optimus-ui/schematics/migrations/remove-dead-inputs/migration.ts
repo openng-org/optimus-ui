@@ -11,24 +11,33 @@ import { removeDeadInputsInHtml, removeDeadInputsInTypeScript, SelectorInputRemo
  * `showTransitionOptions`/`hideTransitionOptions` on Message were dead for the same reason: the
  * show/hide animation is driven by `motionOptions`, which has no transition-options equivalent.
  * `showTransitionOptions`/`hideTransitionOptions` on Overlay were stored but never read: its
- * show/hide animation is driven by `motionOptions` too.
+ * show/hide animation is driven by `motionOptions` too. `transitionOptions` on Fieldset was dead for
+ * the same reason.
  */
 const REMOVED_INPUT_GROUPS: readonly SelectorInputRemoval[] = [
     { selector: 'p-toast', names: ['showTransformOptions', 'hideTransformOptions', 'showTransitionOptions', 'hideTransitionOptions'] },
     { selector: 'p-toastItem', names: ['showTransformOptions', 'hideTransformOptions', 'showTransitionOptions', 'hideTransitionOptions'] },
     { selector: 'p-message', names: ['showTransitionOptions', 'hideTransitionOptions'] },
-    { selector: 'p-overlay', names: ['showTransitionOptions', 'hideTransitionOptions'] }
+    { selector: 'p-overlay', names: ['showTransitionOptions', 'hideTransitionOptions'] },
+    { selector: 'p-fieldset', names: ['transitionOptions'] }
 ];
+
+/**
+ * Removed names that are still live on other components (e.g. `transitionOptions` on Dialog): a
+ * programmatic access cannot be told apart from theirs, so it is not reported as a leftover.
+ */
+const NAMES_LIVE_ELSEWHERE: readonly string[] = ['transitionOptions'];
 
 /**
  * Removes usages of inputs that stopped doing anything before being deleted from
  * @openng/optimus-ui in this version: Toast/ToastItem's showTransformOptions, hideTransformOptions,
  * showTransitionOptions and hideTransitionOptions, dead since the show/hide animation moved to the
  * shared Motion directive (which has no equivalent transform/transition-options input); and
- * Message's showTransitionOptions/hideTransitionOptions, dead for the same reason; and Overlay's
- * showTransitionOptions/hideTransitionOptions, stored but never read.
+ * Message's showTransitionOptions/hideTransitionOptions, dead for the same reason; Overlay's
+ * showTransitionOptions/hideTransitionOptions, stored but never read; and Fieldset's
+ * transitionOptions.
  *
- * `name="..."`/`[name]="..."` template bindings on `p-toast`/`p-toastItem`/`p-message`/`p-overlay` are removed
+ * `name="..."`/`[name]="..."` template bindings on `p-toast`/`p-toastItem`/`p-message`/`p-overlay`/`p-fieldset` are removed
  * automatically — safe to delete outright, since the values they passed were already unused.
  * Programmatic reads/writes of the same property name elsewhere (e.g. on a `@ViewChild`-queried
  * instance) are reported for manual review instead of being rewritten automatically.
@@ -69,7 +78,7 @@ export default function (): Rule {
                     attrsRemoved += result.removed.length;
                     context.logger.info(`${path}: removed ${result.removed.join(', ')} binding(s) from inline template`);
                 }
-                const allNames = Array.from(new Set(REMOVED_INPUT_GROUPS.flatMap((group) => group.names)));
+                const allNames = Array.from(new Set(REMOVED_INPUT_GROUPS.flatMap((group) => group.names))).filter((name) => !NAMES_LIVE_ELSEWHERE.includes(name));
                 const lines = findLeftoversInTypeScript(path, text, allNames);
                 for (const line of lines) {
                     leftovers.push(`${path}:${line}`);
