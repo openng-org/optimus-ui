@@ -9,7 +9,6 @@ import { provideOptimus } from '@openng/optimus-ui/config';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
     template: `
         <p-iconfield>
@@ -24,18 +23,17 @@ class TestBasicInputIconComponent {
 
 @Component({
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true,
     imports: [IconField, InputIcon, InputText, FormsModule],
     template: `
         <p-iconfield>
-            <p-inputicon [styleClass]="customClass" class="pi pi-user" />
+            <p-inputicon [class]="customClass" />
             <input type="text" pInputText [(ngModel)]="username" />
         </p-iconfield>
     `
 })
 class TestStyledInputIconComponent {
     username: string = '';
-    customClass: string = 'custom-icon';
+    customClass: string = 'pi pi-user custom-icon';
 }
 
 describe('InputIcon', () => {
@@ -70,10 +68,9 @@ describe('InputIcon', () => {
         });
     });
 
-    describe('Style Class Tests', () => {
+    describe('Native Class Tests', () => {
         let component: TestStyledInputIconComponent;
         let fixture: ComponentFixture<TestStyledInputIconComponent>;
-        let inputIconInstance: InputIcon;
 
         beforeEach(async () => {
             await TestBed.configureTestingModule({
@@ -83,23 +80,20 @@ describe('InputIcon', () => {
 
             fixture = TestBed.createComponent(TestStyledInputIconComponent);
             component = fixture.componentInstance;
-            inputIconInstance = fixture.debugElement.query(By.directive(InputIcon)).componentInstance;
             fixture.detectChanges();
         });
 
-        it('should apply custom styleClass', () => {
-            expect(inputIconInstance.styleClass).toBe('custom-icon');
-
+        it('should apply custom class via native class binding', () => {
             const iconElement = fixture.debugElement.query(By.directive(InputIcon));
             expect(iconElement.nativeElement.classList.contains('custom-icon')).toBe(true);
+            expect(iconElement.nativeElement.classList.contains('pi-user')).toBe(true);
+            expect(iconElement.nativeElement.classList.contains('p-inputicon')).toBe(true);
         });
 
-        it('should update styleClass dynamically', async () => {
-            component.customClass = 'new-icon-class';
+        it('should update the native class binding dynamically', async () => {
+            component.customClass = 'pi pi-user new-icon-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-
-            expect(inputIconInstance.styleClass).toBe('new-icon-class');
 
             const iconElement = fixture.debugElement.query(By.directive(InputIcon));
             expect(iconElement.nativeElement.classList.contains('new-icon-class')).toBe(true);
@@ -158,15 +152,15 @@ describe('InputIcon PassThrough Tests', () => {
 
     describe('PT Case 3: Instance variables', () => {
         it('should access instance variables in PT function', () => {
-            component.styleClass = 'custom-icon';
+            fixture.componentRef.setInput('hostName', 'custom-host');
             fixture.componentRef.setInput('pt', {
                 root: ({ instance }: any) => ({
-                    class: instance?.styleClass ? 'HAS_STYLE' : ''
+                    class: instance?.hostName() ? 'HAS_HOST_NAME' : ''
                 })
             });
             fixture.detectChanges();
 
-            expect(hostElement.classList.contains('HAS_STYLE')).toBe(true);
+            expect(hostElement.classList.contains('HAS_HOST_NAME')).toBe(true);
         });
     });
 
