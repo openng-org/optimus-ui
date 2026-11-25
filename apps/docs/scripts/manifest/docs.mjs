@@ -494,7 +494,8 @@ function getAllComponents() {
         'cdn',
         'nuxt',
         'accessibility',
-        'templates'
+        'templates',
+        'ecosystem'
     ];
 
     for (const entry of entries) {

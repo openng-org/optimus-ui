@@ -19,6 +19,10 @@ import { RouterModule } from '@angular/router';
                 Those are PrimeTek's commercial products. They were never MIT licensed, so they are not part of this fork and we will not be reimplementing them. Theming in Optimus UI means editing preset objects in code, which is documented in full
                 under <a [routerLink]="'/theming/styled'" class="doc-link">styled mode</a>.
             </p>
+            <p>
+                If you want a visual editor anyway, the community has built one: the Optimus UI Design Marketplace lets you design, fork and share themes. It is not maintained by OpenNG — see
+                <a [routerLink]="'/ecosystem'" class="doc-link">Community Projects</a>.
+            </p>
 
             <h3>What replaced PrimeIcons?</h3>
             <p>

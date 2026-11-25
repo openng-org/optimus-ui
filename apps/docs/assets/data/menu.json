@@ -33,6 +33,16 @@
             ]
         },
         {
+            "name": "Ecosystem",
+            "icon": "pi pi-users",
+            "children": [
+                {
+                    "name": "Community Projects",
+                    "routerLink": "/ecosystem"
+                }
+            ]
+        },
+        {
             "name": "Theming",
             "icon": "pi pi-palette",
             "children": [
