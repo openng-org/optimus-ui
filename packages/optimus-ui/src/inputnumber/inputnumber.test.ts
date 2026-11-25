@@ -1560,7 +1560,6 @@ describe('InputNumber', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [InputNumber, SharedModule],
     template: `
         <p-inputnumber>
