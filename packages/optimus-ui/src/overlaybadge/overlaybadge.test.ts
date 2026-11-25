@@ -7,7 +7,7 @@ import { OverlayBadge, OverlayBadgeModule } from './overlaybadge';
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [OverlayBadge],
     template: `
-        <p-overlay-badge [styleClass]="styleClass()" [style]="style()" [badgeSize]="badgeSize()" [severity]="severity()" [value]="value()" [badgeDisabled]="badgeDisabled()" [size]="size()">
+        <p-overlay-badge [styleClass]="styleClass()" [style]="style()" [badgeSize]="badgeSize()" [severity]="severity()" [value]="value()" [badgeDisabled]="badgeDisabled()">
             <span class="target">Target</span>
         </p-overlay-badge>
     `
@@ -19,7 +19,6 @@ class TestOverlayBadgeComponent {
     severity = signal<'success' | 'info' | 'warn' | 'danger' | null | undefined>(undefined);
     value = signal<string | number | null | undefined>(undefined);
     badgeDisabled = signal<boolean | undefined>(false);
-    size = signal<'large' | 'xlarge' | 'small' | undefined | null>(undefined);
 }
 
 @Component({
@@ -61,7 +60,6 @@ describe('OverlayBadge', () => {
         severity?: 'success' | 'info' | 'warn' | 'danger' | null;
         value?: string | number | null;
         badgeDisabled?: boolean;
-        size?: 'large' | 'xlarge' | 'small' | null;
     }) {
         if ('styleClass' in changes) host.styleClass.set(changes.styleClass);
         if ('style' in changes) host.style.set(changes.style);
@@ -69,7 +67,6 @@ describe('OverlayBadge', () => {
         if ('severity' in changes) host.severity.set(changes.severity);
         if ('value' in changes) host.value.set(changes.value);
         if ('badgeDisabled' in changes) host.badgeDisabled.set(changes.badgeDisabled);
-        if ('size' in changes) host.size.set(changes.size);
         fixture.detectChanges();
         await fixture.whenStable();
     }
@@ -85,7 +82,6 @@ describe('OverlayBadge', () => {
         expect(overlayBadge.severity()).toBeUndefined();
         expect(overlayBadge.value()).toBeUndefined();
         expect(overlayBadge.badgeDisabled()).toBe(false);
-        expect(overlayBadge.size()).toBeUndefined();
     });
 
     it('should render the root class on the inner wrapper', () => {
@@ -129,20 +125,11 @@ describe('OverlayBadge', () => {
         expect(badge.style.display).toBe('none');
     });
 
-    it('should log a deprecation warning when size is used without badgeSize', async () => {
-        const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    it('should forward style to the inner badge', async () => {
+        await update({ style: { color: 'red' } });
 
-        await update({ size: 'large' });
-
-        expect(logSpy).toHaveBeenCalledWith('size property is deprecated and will removed in v18, use badgeSize instead.');
-    });
-
-    it('should not log a deprecation warning when badgeSize is set', async () => {
-        const logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
-        await update({ size: 'large', badgeSize: 'large' });
-
-        expect(logSpy).not.toHaveBeenCalled();
+        const badge = element.querySelector('p-badge') as HTMLElement;
+        expect(badge.style.color).toBe('red');
     });
 
     it('should render through every selector alias', async () => {

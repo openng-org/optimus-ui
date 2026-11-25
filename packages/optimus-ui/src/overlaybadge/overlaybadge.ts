@@ -1,4 +1,4 @@
-import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, effect, inject, input, NgModule, ViewEncapsulation } from '@angular/core';
+import { afterEveryRender, booleanAttribute, ChangeDetectionStrategy, Component, inject, input, NgModule, ViewEncapsulation } from '@angular/core';
 import { SharedModule } from '@openng/optimus-ui/api';
 import { BadgeModule } from '@openng/optimus-ui/badge';
 import { BaseComponent, PARENT_INSTANCE } from '@openng/optimus-ui/basecomponent';
@@ -60,21 +60,10 @@ export class OverlayBadge extends BaseComponent<OverlayBadgePassThrough> {
      * @group Props
      */
     readonly badgeDisabled = input(false, { transform: booleanAttribute });
-    /**
-     * Size of the badge, valid options are "large" and "xlarge".
-     * @group Props
-     * @deprecated use badgeSize instead.
-     */
-    readonly size = input<'large' | 'xlarge' | 'small' | undefined | null>();
 
     constructor() {
         super();
         afterEveryRender(() => this.bindDirectiveInstance.setAttrs(this.ptm('host')));
-        effect(() => {
-            if (!this.badgeSize() && this.size()) {
-                console.log('size property is deprecated and will removed in v18, use badgeSize instead.');
-            }
-        });
     }
 
     _componentStyle = inject(OverlayBadgeStyle);
