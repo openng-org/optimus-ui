@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, input, provideZonelessChangeDetection, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, ErrorHandler, input, provideZonelessChangeDetection, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -41,11 +41,11 @@ class TestAutoZIndexBlockUIComponent {
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false,
     selector: 'test-style-class-blockui',
-    template: `<p-blockui [blocked]="blocked" [styleClass]="styleClass"></p-blockui>`
+    template: `<p-blockui [blocked]="blocked" [class]="customClass"></p-blockui>`
 })
 class TestStyleClassBlockUIComponent {
     blocked = false;
-    styleClass = 'custom-blockui';
+    customClass = 'custom-blockui';
 }
 
 @Component({
@@ -144,7 +144,7 @@ class TestInvalidTargetBlockUIComponent {
     standalone: false,
     selector: 'test-dynamic-blockui',
     template: `
-        <p-blockui [blocked]="blocked" [autoZIndex]="autoZIndex" [baseZIndex]="baseZIndex" [styleClass]="styleClass">
+        <p-blockui [blocked]="blocked" [autoZIndex]="autoZIndex" [baseZIndex]="baseZIndex" [class]="customClass">
             <div class="dynamic-content">{{ content }}</div>
         </p-blockui>
     `
@@ -153,7 +153,7 @@ class TestDynamicBlockUIComponent {
     blocked = false;
     autoZIndex = true;
     baseZIndex = 0;
-    styleClass = '';
+    customClass = '';
     content = 'Dynamic content';
 }
 
@@ -197,25 +197,24 @@ describe('BlockUI', () => {
         });
 
         it('should have default values', () => {
-            expect(component.blocked).toBe(false);
-            expect(component.autoZIndex).toBe(true);
-            expect(component.baseZIndex).toBe(0);
-            expect(component.target).toBeUndefined();
-            expect(component.styleClass).toBeUndefined();
+            expect(component.blocked()).toBe(false);
+            expect(component.autoZIndex()).toBe(true);
+            expect(component.baseZIndex()).toBe(0);
+            expect(component.target()).toBeUndefined();
         });
 
         it('should apply base CSS classes', async () => {
             // Block to apply overlay classes
-            component.blocked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
-            fixture.detectChanges();
-            await fixture.whenStable();
+            const blockedFixture = TestBed.createComponent(TestBlockedBlockUIComponent);
+            blockedFixture.componentInstance.blocked = true;
+            blockedFixture.changeDetectorRef.markForCheck();
+            await blockedFixture.whenStable();
 
-            expect(element.classList.contains('p-blockui')).toBe(true);
-            expect(element.classList.contains('p-blockui-mask')).toBe(true);
-            expect(element.classList.contains('p-overlay-mask')).toBe(true);
-            expect(element.classList.contains('p-blockui-mask-document')).toBe(true);
+            const blockedElement = blockedFixture.debugElement.query(By.directive(BlockUI)).nativeElement;
+            expect(blockedElement.classList.contains('p-blockui')).toBe(true);
+            expect(blockedElement.classList.contains('p-blockui-mask')).toBe(true);
+            expect(blockedElement.classList.contains('p-overlay-mask')).toBe(true);
+            expect(blockedElement.classList.contains('p-blockui-mask-document')).toBe(true);
         });
 
         it('should have correct data attributes', () => {
@@ -249,7 +248,7 @@ describe('BlockUI', () => {
         });
 
         it('should not be blocked initially', () => {
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
             expect(element.getAttribute('aria-busy')).toBe('false');
             expect(element.style.display).not.toBe('flex');
         });
@@ -259,7 +258,7 @@ describe('BlockUI', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
             expect(element.getAttribute('aria-busy')).toBe('true');
             expect(element.style.display).toBe('flex');
         });
@@ -268,32 +267,32 @@ describe('BlockUI', () => {
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
 
             component.blocked = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
             expect(element.getAttribute('aria-busy')).toBe('false');
         });
 
         it('should toggle blocked state dynamically', async () => {
             // Initially not blocked
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
 
             // Block
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
             expect(element.style.display).toBe('flex');
 
             // Unblock
             component.blocked = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
         });
     });
 
@@ -314,7 +313,7 @@ describe('BlockUI', () => {
         });
 
         it('should have autoZIndex enabled by default', () => {
-            expect(blockUIComponent.autoZIndex).toBe(true);
+            expect(blockUIComponent.autoZIndex()).toBe(true);
         });
 
         it('should respect baseZIndex value', async () => {
@@ -322,7 +321,7 @@ describe('BlockUI', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.baseZIndex).toBe(1000);
+            expect(blockUIComponent.baseZIndex()).toBe(1000);
         });
 
         it('should disable auto z-index when set to false', async () => {
@@ -330,7 +329,7 @@ describe('BlockUI', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.autoZIndex).toBe(false);
+            expect(blockUIComponent.autoZIndex()).toBe(false);
         });
 
         it('should apply z-index when blocked and autoZIndex is true', async () => {
@@ -349,11 +348,11 @@ describe('BlockUI', () => {
             await fixture.whenStable();
 
             // Z-index might still be set by ZIndexUtils, but autoZIndex flag controls the behavior
-            expect(blockUIComponent.autoZIndex).toBe(false);
+            expect(blockUIComponent.autoZIndex()).toBe(false);
         });
     });
 
-    describe('Style Class', () => {
+    describe('Native Class', () => {
         let fixture: ComponentFixture<TestStyleClassBlockUIComponent>;
         let component: TestStyleClassBlockUIComponent;
         let element: HTMLElement;
@@ -366,27 +365,27 @@ describe('BlockUI', () => {
             element = fixture.debugElement.query(By.directive(BlockUI)).nativeElement;
         });
 
-        it('should apply custom style class', () => {
+        it('should apply custom class via native class binding', () => {
             expect(element.classList.contains('custom-blockui')).toBe(true);
         });
 
-        it('should update style class dynamically', async () => {
-            component.styleClass = 'new-custom-class';
+        it('should update the native class binding dynamically', async () => {
+            component.customClass = 'new-custom-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(element.classList.contains('new-custom-class')).toBe(true);
         });
 
-        it('should handle undefined style class', async () => {
-            component.styleClass = undefined as any;
+        it('should handle an undefined custom class', async () => {
+            component.customClass = undefined as any;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
             expect(element.classList.contains('custom-blockui')).toBe(false);
         });
 
-        it('should maintain base classes with custom style class', () => {
+        it('should maintain base classes with the custom class', () => {
             expect(element.classList.contains('p-blockui')).toBe(true);
             expect(element.classList.contains('custom-blockui')).toBe(true);
         });
@@ -468,7 +467,7 @@ describe('BlockUI', () => {
 
         it('should have blockable target reference', () => {
             expect(component.blockableTarget()).toBeTruthy();
-            expect(blockUIComponent.target).toBe(component.blockableTarget());
+            expect(blockUIComponent.target()).toBe(component.blockableTarget());
         });
 
         it('should block target component', async () => {
@@ -476,28 +475,48 @@ describe('BlockUI', () => {
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
         });
 
         it('should unblock target component', async () => {
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
 
             component.blocked = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
         });
     });
 
     describe('Error Handling', () => {
-        it('should throw error for invalid target', () => {
-            expect(() => {
-                const fixture = TestBed.createComponent(TestInvalidTargetBlockUIComponent);
-                fixture.detectChanges(); // This triggers ngAfterViewInit which throws
-            }).toThrow('Target of BlockUI must implement BlockableUI interface');
+        it('should throw error for invalid target', async () => {
+            let caughtError: unknown;
+
+            TestBed.resetTestingModule();
+            TestBed.configureTestingModule({
+                imports: [BlockUIModule, SharedModule],
+                declarations: [TestInvalidTargetBlockUIComponent],
+                providers: [
+                    provideZonelessChangeDetection(),
+                    {
+                        provide: ErrorHandler,
+                        useValue: {
+                            handleError: (error: unknown) => {
+                                caughtError = error;
+                            }
+                        }
+                    }
+                ]
+            });
+
+            const fixture = TestBed.createComponent(TestInvalidTargetBlockUIComponent);
+            fixture.detectChanges(); // This triggers the afterNextRender target check
+            await fixture.whenStable();
+
+            expect(String(caughtError)).toContain('Target of BlockUI must implement BlockableUI interface');
         });
     });
 
@@ -521,13 +540,13 @@ describe('BlockUI', () => {
             component.blocked = true;
             component.autoZIndex = false;
             component.baseZIndex = 2000;
-            component.styleClass = 'dynamic-class';
+            component.customClass = 'dynamic-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
-            expect(blockUIComponent.blocked).toBe(true);
-            expect(blockUIComponent.autoZIndex).toBe(false);
-            expect(blockUIComponent.baseZIndex).toBe(2000);
+            expect(blockUIComponent.blocked()).toBe(true);
+            expect(blockUIComponent.autoZIndex()).toBe(false);
+            expect(blockUIComponent.baseZIndex()).toBe(2000);
             expect(element.classList.contains('dynamic-class')).toBe(true);
         });
 
@@ -542,25 +561,25 @@ describe('BlockUI', () => {
 
         it('should handle state transitions', async () => {
             // Start unblocked
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
 
             // Block
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
             expect(element.style.display).toBe('flex');
 
             // Unblock
             component.blocked = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
         });
 
         it('should handle z-index transitions', async () => {
             // Start with autoZIndex enabled
-            expect(blockUIComponent.autoZIndex).toBe(true);
+            expect(blockUIComponent.autoZIndex()).toBe(true);
 
             // Block and check z-index is applied
             component.blocked = true;
@@ -576,22 +595,22 @@ describe('BlockUI', () => {
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.autoZIndex).toBe(false);
+            expect(blockUIComponent.autoZIndex()).toBe(false);
         });
 
-        it('should handle style class transitions', async () => {
-            component.styleClass = 'class1';
+        it('should handle custom class transitions', async () => {
+            component.customClass = 'class1';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.classList.contains('class1')).toBe(true);
 
-            component.styleClass = 'class2';
+            component.customClass = 'class2';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.classList.contains('class1')).toBe(false);
             expect(element.classList.contains('class2')).toBe(true);
 
-            component.styleClass = '';
+            component.customClass = '';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.classList.contains('class2')).toBe(false);
@@ -613,7 +632,7 @@ describe('BlockUI', () => {
             await fixture.whenStable(); // This calls ngAfterViewInit
 
             blockUIComponent = fixture.debugElement.query(By.directive(BlockUI)).componentInstance;
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
         });
 
         it('should unblock on destroy', async () => {
@@ -625,13 +644,13 @@ describe('BlockUI', () => {
             await fixture.whenStable();
             fixture.detectChanges();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
 
             // Verify cleanup happens on destroy
             fixture.destroy();
 
             // After destroy, the component should have cleaned up (blocked should be false)
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent._blocked()).toBe(false);
         });
     });
 
@@ -652,22 +671,21 @@ describe('BlockUI', () => {
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
 
             component.blocked = false;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(false);
+            expect(blockUIComponent.blocked()).toBe(false);
 
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
-            expect(blockUIComponent.blocked).toBe(true);
+            expect(blockUIComponent.blocked()).toBe(true);
         });
 
-        it('should handle null/undefined values gracefully', async () => {
-            blockUIComponent.target = null as any;
-            blockUIComponent.styleClass = undefined as any;
+        it('should handle an unset target gracefully', async () => {
+            expect(blockUIComponent.target()).toBeUndefined();
 
             expect(async () => {
                 component.blocked = true;
@@ -677,27 +695,30 @@ describe('BlockUI', () => {
         });
 
         it('should handle negative z-index values', async () => {
-            blockUIComponent.baseZIndex = -100;
-            component.blocked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+            const zIndexFixture = TestBed.createComponent(TestAutoZIndexBlockUIComponent);
+            zIndexFixture.componentInstance.baseZIndex = -100;
+            zIndexFixture.componentInstance.blocked = true;
+            zIndexFixture.changeDetectorRef.markForCheck();
+            await zIndexFixture.whenStable();
 
-            expect(blockUIComponent.baseZIndex).toBe(-100);
-            expect(blockUIComponent.blocked).toBe(true);
+            const zIndexBlockUIComponent = zIndexFixture.debugElement.query(By.directive(BlockUI)).componentInstance;
+            expect(zIndexBlockUIComponent.baseZIndex()).toBe(-100);
+            expect(zIndexBlockUIComponent.blocked()).toBe(true);
         });
 
         it('should maintain state during multiple property changes', async () => {
-            component.blocked = true;
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+            const combinedFixture = TestBed.createComponent(TestAutoZIndexBlockUIComponent);
+            combinedFixture.componentInstance.blocked = true;
+            combinedFixture.changeDetectorRef.markForCheck();
+            await combinedFixture.whenStable();
 
-            blockUIComponent.autoZIndex = false;
-            blockUIComponent.baseZIndex = 500;
-            blockUIComponent.styleClass = 'test-class';
-            fixture.changeDetectorRef.markForCheck();
-            await fixture.whenStable();
+            combinedFixture.componentInstance.autoZIndex = false;
+            combinedFixture.componentInstance.baseZIndex = 500;
+            combinedFixture.changeDetectorRef.markForCheck();
+            await combinedFixture.whenStable();
 
-            expect(blockUIComponent.blocked).toBe(true);
+            const combinedBlockUIComponent = combinedFixture.debugElement.query(By.directive(BlockUI)).componentInstance;
+            expect(combinedBlockUIComponent.blocked()).toBe(true);
         });
     });
 
@@ -715,7 +736,7 @@ describe('BlockUI', () => {
         });
 
         it('should maintain base classes alongside custom classes', async () => {
-            component.styleClass = 'custom-overlay';
+            component.customClass = 'custom-overlay';
             component.blocked = true;
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
@@ -732,7 +753,7 @@ describe('BlockUI', () => {
         });
 
         it('should handle multiple custom classes', async () => {
-            component.styleClass = 'class1 class2 class3';
+            component.customClass = 'class1 class2 class3';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
 
@@ -742,12 +763,12 @@ describe('BlockUI', () => {
         });
 
         it('should handle class transitions correctly', async () => {
-            component.styleClass = 'initial-class';
+            component.customClass = 'initial-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.classList.contains('initial-class')).toBe(true);
 
-            component.styleClass = 'updated-class';
+            component.customClass = 'updated-class';
             fixture.changeDetectorRef.markForCheck();
             await fixture.whenStable();
             expect(element.classList.contains('initial-class')).toBe(false);
@@ -758,7 +779,6 @@ describe('BlockUI', () => {
     describe('PassThrough API', () => {
         @Component({
             changeDetection: ChangeDetectionStrategy.Eager,
-            standalone: true,
             imports: [BlockUI],
             template: `<p-blockui [blocked]="blocked()" [autoZIndex]="autoZIndex()" [baseZIndex]="baseZIndex()" [pt]="pt()"></p-blockui>`
         })
@@ -886,7 +906,7 @@ describe('BlockUI', () => {
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
                         return {
-                            class: instance?.blocked ? 'BLOCKED_STATE' : 'UNBLOCKED_STATE'
+                            class: instance?.blocked() ? 'BLOCKED_STATE' : 'UNBLOCKED_STATE'
                         };
                     }
                 });
@@ -904,7 +924,7 @@ describe('BlockUI', () => {
                 fixture.componentRef.setInput('pt', {
                     host: ({ instance }: any) => {
                         return {
-                            'data-auto-zindex': instance?.autoZIndex ? 'true' : 'false'
+                            'data-auto-zindex': instance?.autoZIndex() ? 'true' : 'false'
                         };
                     }
                 });
@@ -922,7 +942,7 @@ describe('BlockUI', () => {
                 fixture.componentRef.setInput('pt', {
                     root: ({ instance }: any) => {
                         return {
-                            'data-base-zindex': String(instance?.baseZIndex)
+                            'data-base-zindex': String(instance?.baseZIndex())
                         };
                     }
                 });
@@ -1073,7 +1093,6 @@ describe('BlockUI', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [BlockUI, PrimeTemplate],
     template: `
         <p-blockui>
