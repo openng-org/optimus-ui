@@ -65,6 +65,24 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-toast [class]="myClass"></p-toast>\n`);
     });
 
+    it('preserves a slash in an unquoted static styleClass value', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toast styleClass=w-1/2></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toast class="w-1/2"></p-toast>\n`);
+    });
+
+    it("stops an unquoted static styleClass value before a self-closing tag's slash", async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toast styleClass=my-toast/>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toast class="my-toast"/>\n`);
+    });
+
     it('leaves [styleClass] in place and reports a conflict when [class] is already bound', async () => {
         const runner = createMigrationRunner();
         const content = `<p-toast [class]="otherClass" [styleClass]="myClass"></p-toast>\n`;
@@ -568,5 +586,40 @@ describe('styleclass-to-class', () => {
         await runner.runSchematic('styleclass-to-class', {}, createAppTree());
         expect(infos.join('\n')).toContain('No usages of styleClass on the migrated selectors were found to rewrite.');
         expect(warnings.join('\n')).toBe('');
+    });
+
+    it('does not rewrite tag-like text inside an unrelated quoted attribute value', async () => {
+        const runner = createMigrationRunner();
+        const content = `<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n`;
+        const tree = createAppTree({ '/src/app/app.html': content });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(content);
+    });
+
+    it('still rewrites a real tag that follows one embedded in an unrelated quoted attribute value', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n<p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n<p-toast class="real"></p-toast>\n`);
+    });
+
+    it('does not let a trailing backslash in an unrelated attribute value swallow a later real tag', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<div title="ends with backslash\\"></div>\n<p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<div title="ends with backslash\\"></div>\n<p-toast class="real"></p-toast>\n`);
+    });
+
+    it('does not let an apostrophe inside an HTML comment swallow a later real tag', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<!-- don't touch this --><p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<!-- don't touch this --><p-toast class="real"></p-toast>\n`);
     });
 });

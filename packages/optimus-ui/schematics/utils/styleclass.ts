@@ -19,15 +19,74 @@ export interface StyleClassResult {
 }
 
 /**
+ * Returns a copy of `html` the same length as the input, with the interior of every quoted
+ * attribute value — in *any* tag, not just the one being searched for — and every HTML comment
+ * (`<!-- ... -->`) replaced by a space. Quote state only toggles while inside a tag (between an
+ * unquoted `<` and its closing unquoted `>`); a quote character appearing in plain text content
+ * between tags, or inside a comment, is left alone. A backslash is not an escape character in
+ * HTML attribute values, so it never extends a quoted value past its real closing quote. Used
+ * only to find safe match offsets for `findOpeningTags`'s selector regex, so a selector's tag name
+ * that merely appears as literal text inside a *different* tag's quoted attribute value (e.g.
+ * `[innerHTML]="'<p-toast styleClass=foo></p-toast>'"`) or inside a comment can never be mistaken
+ * for a real opening tag, and an apostrophe inside a comment (e.g. `<!-- don't -->`) can never be
+ * mistaken for the start of a quoted attribute value that swallows a real tag further on.
+ */
+function maskQuotedAttributeValuesGlobally(html: string): string {
+    const MASK = ' ';
+    const out = html.split('');
+    let inTag = false;
+    let quote: string | null = null;
+    let i = 0;
+    while (i < out.length) {
+        const ch = out[i];
+        if (quote) {
+            if (ch === quote) {
+                quote = null;
+            } else {
+                out[i] = MASK;
+            }
+            i++;
+            continue;
+        }
+        if (inTag) {
+            if (ch === '"' || ch === "'") {
+                quote = ch;
+            } else if (ch === '>') {
+                inTag = false;
+            }
+            i++;
+            continue;
+        }
+        if (html.startsWith('<!--', i)) {
+            const closeIndex = html.indexOf('-->', i + 4);
+            const commentEnd = closeIndex === -1 ? out.length : closeIndex + 3;
+            for (let j = i; j < commentEnd; j++) {
+                out[j] = MASK;
+            }
+            i = commentEnd;
+            continue;
+        }
+        if (ch === '<') {
+            inTag = true;
+        }
+        i++;
+    }
+    return out.join('');
+}
+
+/**
  * Finds the character ranges of every opening tag (`<selector ...>` or `<selector .../>`) for the
  * given tag name in an HTML fragment. Tracks quote state so a `>` inside a quoted attribute value
- * doesn't prematurely end a tag.
+ * doesn't prematurely end a tag, and matches the selector only against positions outside any tag's
+ * quoted attribute values (see `maskQuotedAttributeValuesGlobally`) so the selector's own tags are
+ * found correctly even when its name also appears as literal text inside an unrelated attribute.
  */
 function findOpeningTags(html: string, selector: string): Array<{ start: number; end: number }> {
     const tags: Array<{ start: number; end: number }> = [];
     const openRegex = new RegExp(`<${escapeRegExp(selector)}(?=[\\s/>])`, 'g');
+    const maskedHtml = maskQuotedAttributeValuesGlobally(html);
     let match: RegExpExecArray | null;
-    while ((match = openRegex.exec(html))) {
+    while ((match = openRegex.exec(maskedHtml))) {
         const start = match.index;
         let i = start;
         let quote: string | null = null;
@@ -63,9 +122,13 @@ function findOpeningTags(html: string, selector: string): Array<{ start: number;
  * e.g. `styleClass` or `\[styleClass\]`): either a quoted value (`name="..."`/`name='...'`,
  * capturing the quote character in group 2 and its content in group 3) or an unquoted bare value
  * (`name=x`, captured in group 4) — so `class=existing` is recognized just like `class="existing"`.
+ *
+ * The unquoted branch allows `/` inside the value (e.g. `styleClass=w-1/2`) but stops right before
+ * a `/` that opens a self-closing `/>`, so `styleClass=foo/>` still ends the value at `foo` rather
+ * than swallowing the tag's own closing slash.
  */
 function makeAttrRegex(namePattern: string): RegExp {
-    return new RegExp(`(\\s${namePattern}\\s*=\\s*)(?:(["'])((?:\\\\.|(?!\\2)[^\\\\])*)\\2|([^\\s/>"']+))`);
+    return new RegExp(`(\\s${namePattern}\\s*=\\s*)(?:(["'])((?:\\\\.|(?!\\2)[^\\\\])*)\\2|((?:[^\\s/>"']|/(?!>))+))`);
 }
 
 const STATIC_STYLE_CLASS = makeAttrRegex('styleClass');
