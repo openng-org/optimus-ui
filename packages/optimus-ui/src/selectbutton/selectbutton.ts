@@ -46,8 +46,7 @@ export const SELECTBUTTON_VALUE_ACCESSOR: any = {
     template: `
         @for (option of options; track getOptionLabel(option); let i = $index) {
             <p-togglebutton
-                [autofocus]="autofocus"
-                [styleClass]="styleClass"
+                [class]="styleClass"
                 [ngModel]="isSelected(option)"
                 [ngModelOptions]="{ standalone: true }"
                 [onLabel]="this.getOptionLabel(option)"

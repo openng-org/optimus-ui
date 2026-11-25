@@ -45,6 +45,51 @@ describe('remove-dead-inputs', () => {
         expect(html).toBe(`<p-overlay [(visible)]="visible"></p-overlay>\n`);
     });
 
+    it('removes autofocus/inputId from p-togglebutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-togglebutton autofocus inputId="toggle" [(ngModel)]="checked"></p-togglebutton>\n<p-togglebutton [autofocus]="focus" [inputId]="id" onLabel="On"></p-togglebutton>\n`
+        });
+        const result = await runner.runSchematic('remove-dead-inputs', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-togglebutton [(ngModel)]="checked"></p-togglebutton>\n<p-togglebutton onLabel="On"></p-togglebutton>\n`);
+    });
+
+    it('removes autofocus/inputId from the p-toggleButton and p-toggle-button aliases', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toggleButton [autofocus]="true"></p-toggleButton>\n<p-toggle-button inputId="toggle"></p-toggle-button>\n`
+        });
+        const result = await runner.runSchematic('remove-dead-inputs', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toggleButton></p-toggleButton>\n<p-toggle-button></p-toggle-button>\n`);
+    });
+
+    it('keeps autofocus/inputId on other selectors and does not report their programmatic usages', async () => {
+        const runner = createMigrationRunner();
+        const html = `<p-checkbox autofocus inputId="check"></p-checkbox>\n`;
+        const ts = `import { Component } from '@angular/core';
+
+@Component({ selector: 'app-x', template: '' })
+export class XComponent {
+    focus(el: HTMLInputElement) {
+        return el.autofocus;
+    }
+}
+`;
+        const tree = createAppTree({ '/src/app/app.html': html, '/src/app/x.component.ts': ts });
+
+        const warnings: string[] = [];
+        runner.logger.subscribe((entry) => {
+            if (entry.level === 'warn') {
+                warnings.push(entry.message);
+            }
+        });
+
+        const result = await runner.runSchematic('remove-dead-inputs', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(html);
+        expect(result.readContent('/src/app/x.component.ts')).toBe(ts);
+        expect(warnings.join('\n')).toBe('');
+    });
+
     it('does not remove a similarly-named attribute on an unrelated selector', async () => {
         const runner = createMigrationRunner();
         const content = `<p-other showTransformOptions="x"></p-other>\n`;

@@ -9,12 +9,12 @@
         "styleclass-to-class": {
             "version": "3.0.0",
             "factory": "./migrations/styleclass-to-class/migration",
-            "description": "Rewrite styleClass/[styleClass] to class/[class] on selectors whose styleClass input was removed in this version in favor of the native class attribute: p-toast, p-message, p-tag, p-skeleton, p-card, p-radiobutton/p-radioButton/p-radio-button, p-progressbar/p-progressBar/p-progress-bar, p-divider, p-progressspinner/p-progressSpinner/p-progress-spinner, p-toolbar, p-timeline, p-chip, p-avatar and p-splitter."
+            "description": "Rewrite styleClass/[styleClass] to class/[class] on selectors whose styleClass input was removed in this version in favor of the native class attribute: p-toast, p-message, p-tag, p-skeleton, p-card, p-radiobutton/p-radioButton/p-radio-button, p-progressbar/p-progressBar/p-progress-bar, p-divider, p-progressspinner/p-progressSpinner/p-progress-spinner, p-toolbar, p-timeline, p-chip, p-avatar, p-splitter and p-togglebutton/p-toggleButton/p-toggle-button."
         },
         "remove-dead-inputs": {
             "version": "3.0.0",
             "factory": "./migrations/remove-dead-inputs/migration",
-            "description": "Remove usages of inputs removed in this version that had already stopped doing anything: p-toast/p-toastItem's showTransformOptions, hideTransformOptions, showTransitionOptions and hideTransitionOptions; p-message's showTransitionOptions and hideTransitionOptions; and p-overlay's showTransitionOptions and hideTransitionOptions."
+            "description": "Remove usages of inputs removed in this version that had already stopped doing anything: p-toast/p-toastItem's showTransformOptions, hideTransformOptions, showTransitionOptions and hideTransitionOptions; p-message's showTransitionOptions and hideTransitionOptions; p-overlay's showTransitionOptions and hideTransitionOptions; and p-togglebutton/p-toggleButton/p-toggle-button's autofocus and inputId."
         },
         "config-overlay-options-signal": {
             "version": "3.0.0",

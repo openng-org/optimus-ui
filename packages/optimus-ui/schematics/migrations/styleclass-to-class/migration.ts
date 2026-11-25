@@ -26,7 +26,10 @@ export const MIGRATED_SELECTORS: readonly string[] = [
     'p-timeline',
     'p-chip',
     'p-avatar',
-    'p-splitter'
+    'p-splitter',
+    'p-togglebutton',
+    'p-toggleButton',
+    'p-toggle-button'
 ];
 
 /**

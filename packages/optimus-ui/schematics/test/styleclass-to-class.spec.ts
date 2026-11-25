@@ -554,6 +554,42 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-splitter class="mb-8 my-splitter"></p-splitter>\n`);
     });
 
+    it('rewrites a static styleClass to class on p-togglebutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-togglebutton onLabel="On" styleClass="my-toggle"></p-togglebutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-togglebutton onLabel="On" class="my-toggle"></p-togglebutton>\n`);
+    });
+
+    it('rewrites a bound [styleClass] to [class] on p-togglebutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-togglebutton [styleClass]="myClass"></p-togglebutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-togglebutton [class]="myClass"></p-togglebutton>\n`);
+    });
+
+    it('merges styleClass into an existing static class on p-togglebutton', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-togglebutton class="existing" styleClass="my-toggle"></p-togglebutton>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-togglebutton class="existing my-toggle"></p-togglebutton>\n`);
+    });
+
+    it('rewrites styleClass on the p-toggleButton and p-toggle-button aliases', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toggleButton styleClass="a"></p-toggleButton>\n<p-toggle-button [styleClass]="b"></p-toggle-button>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toggleButton class="a"></p-toggleButton>\n<p-toggle-button [class]="b"></p-toggle-button>\n`);
+    });
+
     it('reports nothing on a workspace with no usage of styleClass on the migrated selectors', async () => {
         const runner = createMigrationRunner();
         const infos: string[] = [];
