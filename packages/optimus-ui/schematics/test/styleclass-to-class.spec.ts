@@ -604,4 +604,22 @@ describe('styleclass-to-class', () => {
         const result = await runner.runSchematic('styleclass-to-class', {}, tree);
         expect(result.readContent('/src/app/app.html')).toBe(`<div [innerHTML]="'<p-toast styleClass=foo></p-toast>'"></div>\n<p-toast class="real"></p-toast>\n`);
     });
+
+    it('does not let a trailing backslash in an unrelated attribute value swallow a later real tag', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<div title="ends with backslash\\"></div>\n<p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<div title="ends with backslash\\"></div>\n<p-toast class="real"></p-toast>\n`);
+    });
+
+    it('does not let an apostrophe inside an HTML comment swallow a later real tag', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<!-- don't touch this --><p-toast styleClass="real"></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<!-- don't touch this --><p-toast class="real"></p-toast>\n`);
+    });
 });

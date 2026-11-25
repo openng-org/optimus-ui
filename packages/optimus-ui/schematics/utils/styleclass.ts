@@ -20,13 +20,16 @@ export interface StyleClassResult {
 
 /**
  * Returns a copy of `html` the same length as the input, with the interior of every quoted
- * attribute value — in *any* tag, not just the one being searched for — replaced by a space.
- * Quote state only toggles while inside a tag (between an unquoted `<` and its closing unquoted
- * `>`); a quote character appearing in plain text content between tags is left alone. Used only to
- * find safe match offsets for `findOpeningTags`'s selector regex, so a selector's tag name that
- * merely appears as literal text inside a *different* tag's quoted attribute value (e.g.
- * `[innerHTML]="'<p-toast styleClass=foo></p-toast>'"`) can never be mistaken for a real opening
- * tag.
+ * attribute value — in *any* tag, not just the one being searched for — and every HTML comment
+ * (`<!-- ... -->`) replaced by a space. Quote state only toggles while inside a tag (between an
+ * unquoted `<` and its closing unquoted `>`); a quote character appearing in plain text content
+ * between tags, or inside a comment, is left alone. A backslash is not an escape character in
+ * HTML attribute values, so it never extends a quoted value past its real closing quote. Used
+ * only to find safe match offsets for `findOpeningTags`'s selector regex, so a selector's tag name
+ * that merely appears as literal text inside a *different* tag's quoted attribute value (e.g.
+ * `[innerHTML]="'<p-toast styleClass=foo></p-toast>'"`) or inside a comment can never be mistaken
+ * for a real opening tag, and an apostrophe inside a comment (e.g. `<!-- don't -->`) can never be
+ * mistaken for the start of a quoted attribute value that swallows a real tag further on.
  */
 function maskQuotedAttributeValuesGlobally(html: string): string {
     const MASK = ' ';
@@ -37,12 +40,6 @@ function maskQuotedAttributeValuesGlobally(html: string): string {
     while (i < out.length) {
         const ch = out[i];
         if (quote) {
-            if (ch === '\\' && i + 1 < out.length) {
-                out[i] = MASK;
-                out[i + 1] = MASK;
-                i += 2;
-                continue;
-            }
             if (ch === quote) {
                 quote = null;
             } else {
@@ -57,7 +54,19 @@ function maskQuotedAttributeValuesGlobally(html: string): string {
             } else if (ch === '>') {
                 inTag = false;
             }
-        } else if (ch === '<') {
+            i++;
+            continue;
+        }
+        if (html.startsWith('<!--', i)) {
+            const closeIndex = html.indexOf('-->', i + 4);
+            const commentEnd = closeIndex === -1 ? out.length : closeIndex + 3;
+            for (let j = i; j < commentEnd; j++) {
+                out[j] = MASK;
+            }
+            i = commentEnd;
+            continue;
+        }
+        if (ch === '<') {
             inTag = true;
         }
         i++;
