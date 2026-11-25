@@ -70,8 +70,10 @@ function makeAttrRegex(namePattern: string): RegExp {
 
 const STATIC_STYLE_CLASS = makeAttrRegex('styleClass');
 const BOUND_STYLE_CLASS = makeAttrRegex('\\[styleClass\\]');
+const BIND_STYLE_CLASS = makeAttrRegex('bind-styleClass');
 const STATIC_CLASS = makeAttrRegex('class');
 const BOUND_CLASS = makeAttrRegex('\\[class\\]');
+const BIND_CLASS = makeAttrRegex('bind-class');
 
 interface AttrMatch {
     index: number;
@@ -165,21 +167,26 @@ function execUnmasked(regex: RegExp, text: string): RegExpExecArray | null {
 }
 
 /**
- * Rewrites `styleClass`/`[styleClass]` on a single opening tag into `class`/`[class]`:
+ * Rewrites `styleClass`/`[styleClass]`/`bind-styleClass` on a single opening tag into
+ * `class`/`[class]`/`bind-class`:
  *
  * - `styleClass="x"` with no existing `class` attribute becomes `class="x"`; with an existing
  *   static `class="y"` the two are merged into `class="y x"`.
- * - `[styleClass]="expr"` with no existing `[class]` binding becomes `[class]="expr"`.
- * - `[styleClass]="expr"` alongside an existing `[class]="other"` binding is left in place and
- *   reported as a conflict — merging two arbitrary expressions isn't safe to do automatically.
- * - A static `styleClass="x"` alongside an existing `[class]` binding (or vice versa) is also left
- *   as a conflict, since a static/bound pair can't be merged into either single attribute either.
+ * - `[styleClass]="expr"` with no existing `[class]` binding becomes `[class]="expr"`, and
+ *   `bind-styleClass="expr"` (the canonical-form equivalent of `[styleClass]`) becomes
+ *   `bind-class="expr"` the same way.
+ * - `[styleClass]="expr"` (or `bind-styleClass`) alongside an existing `[class]`/`bind-class`
+ *   binding is left in place and reported as a conflict — merging two arbitrary expressions isn't
+ *   safe to do automatically.
+ * - A static `styleClass="x"` alongside an existing `[class]`/`bind-class` binding (or vice versa)
+ *   is also left as a conflict, since a static/bound pair can't be merged into either single
+ *   attribute either.
  *
- * All four attributes may be quoted (`name="x"`/`name='x'`) or unquoted (`name=x`) — `matchAttr`
- * normalizes either shape, so e.g. an existing unquoted `class=existing` is recognized and merged
- * into just as a quoted one would be, rather than being left behind as a duplicate `class`
- * attribute. Any rewritten or merged output is always written back quoted, since a merged value
- * generally contains a space and can't safely stay unquoted.
+ * All of these attributes may be quoted (`name="x"`/`name='x'`) or unquoted (`name=x`) —
+ * `matchAttr` normalizes either shape, so e.g. an existing unquoted `class=existing` is recognized
+ * and merged into just as a quoted one would be, rather than being left behind as a duplicate
+ * `class` attribute. Any rewritten or merged output is always written back quoted, since a merged
+ * value generally contains a space and can't safely stay unquoted.
  *
  * All matching is done against a quote-masked copy of the tag (see `maskQuotedValues`), so
  * `styleClass`/`class` text that merely appears inside a different attribute's quoted value is
@@ -192,7 +199,7 @@ function rewriteTag(tag: string): { text: string; rewritten: number; conflict: b
 
     const boundStyleClass = matchAttr(BOUND_STYLE_CLASS, text);
     if (boundStyleClass) {
-        const hasExistingClass = testAttr(BOUND_CLASS, text) || testAttr(STATIC_CLASS, text);
+        const hasExistingClass = testAttr(BOUND_CLASS, text) || testAttr(STATIC_CLASS, text) || testAttr(BIND_CLASS, text);
         if (hasExistingClass) {
             conflict = true;
         } else {
@@ -203,9 +210,22 @@ function rewriteTag(tag: string): { text: string; rewritten: number; conflict: b
         }
     }
 
+    const bindStyleClass = matchAttr(BIND_STYLE_CLASS, text);
+    if (bindStyleClass) {
+        const hasExistingClass = testAttr(BOUND_CLASS, text) || testAttr(STATIC_CLASS, text) || testAttr(BIND_CLASS, text);
+        if (hasExistingClass) {
+            conflict = true;
+        } else {
+            const quote = bindStyleClass.quote ?? '"';
+            const replacement = `${bindStyleClass.prefix.replace('bind-styleClass', 'bind-class')}${quote}${bindStyleClass.value}${quote}`;
+            text = text.slice(0, bindStyleClass.index) + replacement + text.slice(bindStyleClass.index + bindStyleClass.length);
+            rewritten++;
+        }
+    }
+
     const staticStyleClass = matchAttr(STATIC_STYLE_CLASS, text);
     if (staticStyleClass) {
-        if (testAttr(BOUND_CLASS, text)) {
+        if (testAttr(BOUND_CLASS, text) || testAttr(BIND_CLASS, text)) {
             conflict = true;
         } else {
             const existingStaticClass = matchAttr(STATIC_CLASS, text);
