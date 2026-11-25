@@ -12,7 +12,7 @@
   <p-overlay-badge badgeSize="large"></p-overlay-badge>
   ```
 
-  This is a 1:1 attribute rename and is a good candidate for an automated codemod, since it's a straight rename with no merge/conflict cases to handle (unlike the `styleClass`-to-`class` migrations elsewhere in this library).
+  This is a 1:1 attribute rename and is a good candidate for an automated codemod, but it does have one conflict case to handle: an element can already bind both `size` and `badgeSize` (e.g. `size="large" badgeSize="small"`). Blindly renaming `size` to `badgeSize` there would produce two `badgeSize` attributes and silently drop the existing one. A codemod should remove `size` and keep the existing `badgeSize` whenever both are present, and only rename `size` to `badgeSize` when `badgeSize` is absent — similar to the conflict detection the `styleClass`-to-`class` migrations elsewhere in this library already do.
 
 - **Removed**: `$pcOverlayBadge` property (dead — nothing in the library read it; it only exposed a parent `OverlayBadge` injected through the private `OVERLAYBADGE_INSTANCE` token, which was removed with it).
 
