@@ -196,6 +196,38 @@ describe('InputNumber', () => {
         fixture.detectChanges();
     });
 
+    describe('Selection replacement cursor', () => {
+        it.each([
+            { locale: 'de-DE', useGrouping: false, previous: '1111', next: 1111, inserted: '11', start: 0, end: 2, expected: '1111', cursor: 2 },
+            { locale: 'de-DE', useGrouping: false, previous: '1111', next: 1111, inserted: '1', start: 2, end: 3, expected: '1111', cursor: 3 },
+            { locale: 'de-DE', useGrouping: true, previous: '1.111', next: 1111, inserted: '11', start: 0, end: 3, expected: '1.111', cursor: 3 },
+            { locale: 'en-US', useGrouping: true, previous: '1,111', next: 1111, inserted: '11', start: 0, end: 3, expected: '1,111', cursor: 3 },
+            { locale: 'en-US', useGrouping: false, previous: '-12.34', next: -12.94, inserted: '9', start: 4, end: 5, expected: '-12.94', cursor: 5 },
+            { locale: 'de-DE', useGrouping: false, previous: '12,311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12,311', cursor: 6 },
+            { locale: 'fr-FR', useGrouping: false, previous: '12,311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12,311', cursor: 6 },
+            { locale: 'de-DE', useGrouping: true, previous: '1.212,311', next: 1212.311, inserted: '1', start: 8, end: 9, expected: '1.212,311', cursor: 9 },
+            { locale: 'de-DE', useGrouping: false, previous: '-12,311', next: -12.311, inserted: '1', start: 6, end: 7, expected: '-12,311', cursor: 7 },
+            { locale: 'en-US', useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'fr-FR', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'fr-FR', format: false, useGrouping: false, previous: '-12.311', next: -12.311, inserted: '1', start: 6, end: 7, expected: '-12.311', cursor: 7 },
+            { locale: 'de-DE', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 },
+            { locale: 'de-DE', format: false, useGrouping: true, previous: '1212.311', next: 1212.311, inserted: '1', start: 7, end: 8, expected: '1212.311', cursor: 8 },
+            { locale: 'en-US', format: false, useGrouping: false, previous: '12.311', next: 12.311, inserted: '1', start: 5, end: 6, expected: '12.311', cursor: 6 }
+        ])('keeps the cursor after the inserted text: $locale / $previous / $start / format=$format', ({ locale, format = true, useGrouping, previous, next, inserted, start, end, expected, cursor }) => {
+            fixture.componentRef.setInput('locale', locale);
+            fixture.componentRef.setInput('useGrouping', useGrouping);
+            fixture.componentRef.setInput('format', format);
+            fixture.detectChanges();
+            const input = component.input.nativeElement;
+            input.value = previous;
+            input.setSelectionRange(start, end);
+            component.updateInput(next, inserted, 'range-insert', component.formatValue(next));
+            expect(input.value).toBe(expected);
+            expect(input.selectionStart).toBe(cursor);
+            expect(input.selectionEnd).toBe(cursor);
+        });
+    });
+
     describe('Component Initialization', () => {
         it('should create the component', () => {
             expect(component).toBeTruthy();
