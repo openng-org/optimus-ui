@@ -2277,7 +2277,6 @@ describe('Table', () => {
 // ---------------------------------------------------------------------------
 
 @Component({
-    standalone: true,
     imports: [TableModule, SharedModule],
     template: `
         <p-table [value]="rows" [paginator]="true" [rows]="2" [resizableColumns]="true" [reorderableColumns]="true">
@@ -2425,7 +2424,6 @@ describe('Table Signal Query API', () => {
 });
 
 @Component({
-    standalone: true,
     imports: [TableModule, SharedModule, FormsModule],
     template: `
         <p-table [value]="rows" dataKey="name" [(selection)]="selection">
