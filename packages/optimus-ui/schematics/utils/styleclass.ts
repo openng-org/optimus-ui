@@ -63,9 +63,13 @@ function findOpeningTags(html: string, selector: string): Array<{ start: number;
  * e.g. `styleClass` or `\[styleClass\]`): either a quoted value (`name="..."`/`name='...'`,
  * capturing the quote character in group 2 and its content in group 3) or an unquoted bare value
  * (`name=x`, captured in group 4) — so `class=existing` is recognized just like `class="existing"`.
+ *
+ * The unquoted branch allows `/` inside the value (e.g. `styleClass=w-1/2`) but stops right before
+ * a `/` that opens a self-closing `/>`, so `styleClass=foo/>` still ends the value at `foo` rather
+ * than swallowing the tag's own closing slash.
  */
 function makeAttrRegex(namePattern: string): RegExp {
-    return new RegExp(`(\\s${namePattern}\\s*=\\s*)(?:(["'])((?:\\\\.|(?!\\2)[^\\\\])*)\\2|([^\\s/>"']+))`);
+    return new RegExp(`(\\s${namePattern}\\s*=\\s*)(?:(["'])((?:\\\\.|(?!\\2)[^\\\\])*)\\2|((?:[^\\s/>"']|/(?!>))+))`);
 }
 
 const STATIC_STYLE_CLASS = makeAttrRegex('styleClass');

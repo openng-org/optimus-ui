@@ -65,6 +65,24 @@ describe('styleclass-to-class', () => {
         expect(result.readContent('/src/app/app.html')).toBe(`<p-toast [class]="myClass"></p-toast>\n`);
     });
 
+    it('preserves a slash in an unquoted static styleClass value', async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toast styleClass=w-1/2></p-toast>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toast class="w-1/2"></p-toast>\n`);
+    });
+
+    it("stops an unquoted static styleClass value before a self-closing tag's slash", async () => {
+        const runner = createMigrationRunner();
+        const tree = createAppTree({
+            '/src/app/app.html': `<p-toast styleClass=my-toast/>\n`
+        });
+        const result = await runner.runSchematic('styleclass-to-class', {}, tree);
+        expect(result.readContent('/src/app/app.html')).toBe(`<p-toast class="my-toast"/>\n`);
+    });
+
     it('leaves [styleClass] in place and reports a conflict when [class] is already bound', async () => {
         const runner = createMigrationRunner();
         const content = `<p-toast [class]="otherClass" [styleClass]="myClass"></p-toast>\n`;
