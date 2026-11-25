@@ -394,9 +394,9 @@ describe('Tabs', () => {
             await fixture.whenStable();
 
             const tooltip = tab3.injector.get(Tooltip);
-            expect(tooltip.container).toBeTruthy();
-            expect(tooltip.container.textContent).toContain('Unavailable tab');
-            expect(tooltip.container.style.display).toBe('inline-block');
+            expect(tooltip.container()).toBeTruthy();
+            expect(tooltip.container().textContent).toContain('Unavailable tab');
+            expect(tooltip.container().style.display).toBe('inline-block');
         });
 
         it('should cancel mousedown on disabled tabs', async () => {

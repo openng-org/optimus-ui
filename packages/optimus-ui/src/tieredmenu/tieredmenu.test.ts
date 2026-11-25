@@ -934,23 +934,23 @@ describe('TieredMenu', () => {
             const tooltipDirectives = tooltipDebugElements.map((el) => el.injector.get(Tooltip));
 
             // Find the directive bound via the `tooltip` property on the MenuItem:
-            // `content` is the @Input('pTooltip') property set directly by Angular
-            const directiveViaTooltipProp = tooltipDirectives.find((d) => d.content === 'Save the file');
+            // `content` is the 'pTooltip' input signal set directly by Angular
+            const directiveViaTooltipProp = tooltipDirectives.find((d) => d.content() === 'Save the file');
             expect(directiveViaTooltipProp, 'Tooltip directive not found for item with tooltip property').toBeTruthy();
 
             // Find the directive bound via `tooltipOptions.tooltipLabel`:
-            // `tooltipOptions` is the @Input() property set directly by Angular
-            const directiveViaTooltipOptions = tooltipDirectives.find((d) => (d.tooltipOptions as any)?.tooltipLabel === 'Delete the file');
+            // `tooltipOptions` is the input signal set directly by Angular
+            const directiveViaTooltipOptions = tooltipDirectives.find((d) => d.tooltipOptions()?.tooltipLabel === 'Delete the file');
             expect(directiveViaTooltipOptions, 'Tooltip directive not found for item with tooltipOptions.tooltipLabel').toBeTruthy();
 
             // Activate each directive and verify the tooltip container (DOM element) is spawned
             directiveViaTooltipProp!.activate();
             await fixture.whenStable();
-            expect(directiveViaTooltipProp!.container, 'Tooltip container was not created for item with tooltip property').toBeTruthy();
+            expect(directiveViaTooltipProp!.container(), 'Tooltip container was not created for item with tooltip property').toBeTruthy();
 
             directiveViaTooltipOptions!.activate();
             await fixture.whenStable();
-            expect(directiveViaTooltipOptions!.container, 'Tooltip container was not created for item with tooltipOptions.tooltipLabel').toBeTruthy();
+            expect(directiveViaTooltipOptions!.container(), 'Tooltip container was not created for item with tooltipOptions.tooltipLabel').toBeTruthy();
         });
     });
 
