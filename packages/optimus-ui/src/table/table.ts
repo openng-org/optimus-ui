@@ -78,7 +78,7 @@ import {
     TableRowUnSelectEvent,
     TableSelectAllChangeEvent
 } from '@openng/optimus-ui/types/table';
-import { ObjectUtils, UniqueComponentId, ZIndexUtils } from '@openng/optimus-ui/utils';
+import { ObjectUtils, optionalNumberAttribute, UniqueComponentId, ZIndexUtils } from '@openng/optimus-ui/utils';
 import { Subject, Subscription } from 'rxjs';
 import { TableStyle } from './style/tablestyle';
 
@@ -5711,13 +5711,13 @@ export class ColumnFilter extends BaseComponent {
      * Defines minimum fraction of digits.
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) })
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) })
     minFractionDigits: number | undefined;
     /**
      * Defines maximum fraction of digits.
      * @group Props
      */
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) })
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) })
     maxFractionDigits: number | undefined;
     /**
      * Defines prefix of the filter.
@@ -6522,10 +6522,10 @@ export class ColumnFilterFormElement extends BaseComponent<ColumnFilterPassThrou
 
     @Input() placeholder: string | undefined;
 
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) })
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) })
     minFractionDigits: number | undefined;
 
-    @Input({ transform: (value: unknown) => numberAttribute(value, undefined) })
+    @Input({ transform: (value: unknown) => optionalNumberAttribute(value) })
     maxFractionDigits: number | undefined;
 
     @Input() prefix: string | undefined;
