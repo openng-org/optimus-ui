@@ -945,6 +945,10 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
             this.resetPartialSelected();
             if (selectedNodes && this.options) {
                 this.updateTreeBranchState(null, null, selectedNodes);
+
+                if (this.selectionMode === 'checkbox' && this.propagateSelectionUp) {
+                    this.updatePartialSelected();
+                }
             }
         }
     }
@@ -1012,6 +1016,32 @@ export class TreeSelect extends BaseEditableHolder<TreeSelectPassThrough> {
                 this.resetPartialSelected(node.children);
             }
         }
+    }
+
+    /**
+     * Marks every unselected node that has a selected descendant as partially selected,
+     * so a value set programmatically shows the same state as one picked in the tree.
+     * Returns whether any node in the given branch is selected.
+     */
+    updatePartialSelected(nodes = this.options): boolean {
+        let hasSelection = false;
+
+        if (!nodes) {
+            return hasSelection;
+        }
+
+        for (let node of nodes) {
+            const hasSelectedDescendant = node.children && node.children.length > 0 ? this.updatePartialSelected(node.children) : false;
+            const selected = this.isSelected(node);
+
+            node.partialSelected = !selected && hasSelectedDescendant;
+
+            if (selected || hasSelectedDescendant) {
+                hasSelection = true;
+            }
+        }
+
+        return hasSelection;
     }
 
     findSelectedNodes(node: TreeNode, keys: any[], selectedNodes: TreeNode[]) {
