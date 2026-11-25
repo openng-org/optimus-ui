@@ -50,7 +50,7 @@ const CONFIRMDIALOG_INSTANCE = new InjectionToken<ConfirmDialog>('CONFIRMDIALOG_
             #dialog
             [visible]="visible"
             (visibleChange)="onVisibleChange($event)"
-            role="alertdialog"
+            [role]="'alertdialog'"
             [closable]="option('closable')"
             [styleClass]="cn(cx('root'), styleClass)"
             [modal]="option('modal')"
