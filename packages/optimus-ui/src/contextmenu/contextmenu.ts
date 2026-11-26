@@ -996,12 +996,15 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
     }
 
     onArrowLeftKey(event: KeyboardEvent) {
-        const processedItem = this.visibleItems[this.focusedItemInfo().index];
-        const parentItem = this.activeItemPath().find((p) => p.key === processedItem.parentKey);
-        const root = isEmpty(processedItem.parent);
+        const focusedItemInfo = this.focusedItemInfo();
+        const processedItem = this.visibleItems[focusedItemInfo.index];
+        // Nothing focused (e.g. a submenu whose items are all disabled): the current level is focusedItemInfo.parentKey.
+        const parentKey = processedItem ? processedItem.parentKey : focusedItemInfo.parentKey;
+        const parentItem = this.activeItemPath().find((p) => p.key === parentKey);
+        const root = processedItem ? isEmpty(processedItem.parent) : isEmpty(parentKey);
 
         if (!root) {
-            this.focusedItemInfo.set({ index: -1, parentKey: parentItem ? parentItem.parentKey : '', item: processedItem.item });
+            this.focusedItemInfo.set({ index: -1, parentKey: parentItem ? parentItem.parentKey : '', item: processedItem ? processedItem.item : focusedItemInfo.item });
             this.searchValue = '';
             this.onArrowDownKey(event);
         }
@@ -1028,9 +1031,12 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
 
     onEscapeKey(event: KeyboardEvent) {
         this.hide();
-        const processedItem = this.findVisibleItem(this.findFirstFocusedItemIndex());
-        const focusedItemInfo = this.focusedItemInfo();
-        this.focusedItemInfo.set({ ...focusedItemInfo, index: this.findFirstFocusedItemIndex(), item: processedItem.item });
+        const index = this.findFirstFocusedItemIndex();
+
+        if (index !== -1) {
+            const processedItem = this.findVisibleItem(index);
+            this.focusedItemInfo.set({ ...this.focusedItemInfo(), index, item: processedItem.item });
+        }
 
         event.preventDefault();
     }
@@ -1309,7 +1315,7 @@ export class ContextMenu extends BaseComponent<ContextMenuPassThrough> {
         const processedItem = this.findVisibleItem(index);
         const focusedItemInfo = this.focusedItemInfo();
         if (focusedItemInfo.index !== index) {
-            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem.item });
+            this.focusedItemInfo.set({ ...focusedItemInfo, index, item: processedItem?.item });
             this.scrollInView();
         }
     }

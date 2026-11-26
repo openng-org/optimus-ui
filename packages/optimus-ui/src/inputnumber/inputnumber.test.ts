@@ -382,6 +382,82 @@ describe('InputNumber', () => {
         });
     });
 
+    describe('Decimal Key Entry', () => {
+        let testComponent: TestBasicInputNumberComponent;
+        let testFixture: ComponentFixture<TestBasicInputNumberComponent>;
+        let inputNumber: InputNumber;
+        let inputElement: HTMLInputElement;
+
+        const setup = async (minFractionDigits?: number, maxFractionDigits?: number) => {
+            testFixture = TestBed.createComponent(TestBasicInputNumberComponent);
+            testComponent = testFixture.componentInstance;
+            testComponent.locale = 'en-US';
+            testComponent.minFractionDigits = minFractionDigits;
+            testComponent.maxFractionDigits = maxFractionDigits;
+            testFixture.detectChanges();
+            await testFixture.whenStable();
+            inputNumber = testFixture.debugElement.query(By.directive(InputNumber)).componentInstance;
+            inputElement = testFixture.debugElement.query(By.css('input')).nativeElement;
+        };
+
+        const type = (text: string) => {
+            for (const char of text) {
+                const end = inputElement.value.length;
+                inputElement.setSelectionRange(end, end);
+                inputNumber.onInputKeyPress({ which: char.charCodeAt(0), code: '', preventDefault: () => {} } as unknown as KeyboardEvent);
+            }
+        };
+
+        it('should accept the decimal key when no fraction digits are configured (#492)', async () => {
+            await setup();
+
+            type('45.2');
+
+            expect(inputElement.value).toBe('45.2');
+            expect(testComponent.value).toBe(45.2);
+        });
+
+        it('should cap typed fraction digits at the Intl default maximum when none is configured', async () => {
+            await setup();
+
+            type('1.23456');
+
+            expect(inputElement.value).toBe('1.234');
+            expect(testComponent.value).toBe(1.234);
+        });
+
+        it('should only display fraction digits that were typed with minFractionDigits=0 (#891)', async () => {
+            await setup(0, 2);
+
+            type('45');
+            expect(inputElement.value).toBe('45');
+            expect(testComponent.value).toBe(45);
+
+            type('.2');
+            expect(inputElement.value).toBe('45.2');
+            expect(testComponent.value).toBe(45.2);
+        });
+
+        it('should pad to minFractionDigits when set', async () => {
+            await setup(2, 2);
+
+            testComponent.value = 45;
+            testFixture.changeDetectorRef.markForCheck();
+            await testFixture.whenStable();
+
+            expect(inputElement.value).toBe('45.00');
+        });
+
+        it('should ignore the decimal key when maxFractionDigits is 0', async () => {
+            await setup(undefined, 0);
+
+            type('45.2');
+
+            expect(inputElement.value).toBe('452');
+            expect(testComponent.value).toBe(452);
+        });
+    });
+
     describe('Keyboard Navigation', () => {
         let testComponent: TestBasicInputNumberComponent;
         let testFixture: ComponentFixture<TestBasicInputNumberComponent>;

@@ -37,9 +37,8 @@ export function app(): express.Express {
         res.json(data);
     });
 
-    // Pages that have their own markdown files (not components)
-    // These are defined in GUIDE_PAGES in build-llm-docs.mjs
-    const pageNames = new Set(['installation', 'configuration', 'styled', 'unstyled', 'icons', 'customicons', 'passthrough', 'tailwind', 'llms', 'accessibility', 'animations', 'rtl', 'primeflex', 'philosophy', 'faq', 'contribution']);
+    // Guide pages have their own markdown files under llms/pages (GUIDE_PAGES in scripts/manifest/docs.mjs)
+    const isGuidePage = (name: string) => existsSync(join(llmsFolder, 'pages', `${name}.md`));
 
     // Serve markdown files - handles both components and pages
     server.get('/:name.md', (req, res, next) => {
@@ -53,7 +52,7 @@ export function app(): express.Express {
         let filePath: string;
 
         // Check if it's a known page
-        if (pageNames.has(name)) {
+        if (isGuidePage(name)) {
             filePath = join(llmsFolder, 'pages', `${name}.md`);
         } else {
             // Try components folder first
@@ -81,7 +80,7 @@ export function app(): express.Express {
         }
 
         // Check if it's a known page
-        if (!pageNames.has(page)) {
+        if (!isGuidePage(page)) {
             return next();
         }
 

@@ -79,3 +79,5 @@ apps/docs/public/sitemap.xml
 apps/docs/public/llms
 apps/docs/public/.well-known
 apps/docs/public/demos.json
+# copied from apps/docs/public/llms/manifest.json when the MCP server is built
+packages/optimus-ui-mcp/data

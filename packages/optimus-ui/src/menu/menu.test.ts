@@ -322,6 +322,96 @@ describe('Menu', () => {
         await fixture.whenStable();
     });
 
+    describe('Stable item identity', () => {
+        it('preserves grouped nodes across immutable updates, reordering and removal', async () => {
+            const previousCommand = vi.fn();
+            const nextCommand = vi.fn();
+            component.model = [
+                {
+                    id: 'files',
+                    label: 'Files',
+                    items: [
+                        { id: 'open', label: 'Open', command: previousCommand },
+                        { id: 'save', label: 'Save' }
+                    ]
+                },
+                { id: 'tools', label: 'Tools', items: [{ id: 'settings', label: 'Settings' }] }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const headers = Array.from(host.querySelectorAll('[data-pc-section="submenulabel"]'));
+            const open = host.querySelector<HTMLElement>('[role="menuitem"][aria-label="Open"]')!;
+            const save = host.querySelector('[role="menuitem"][aria-label="Save"]');
+            component.model = [
+                { id: 'tools', label: 'Tools', items: [{ id: 'settings', label: 'Settings' }] },
+                {
+                    id: 'files',
+                    label: 'Documents',
+                    items: [
+                        { id: 'save', label: 'Save changes', disabled: true },
+                        { id: 'open', label: 'Open document', command: nextCommand }
+                    ]
+                }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelectorAll('[data-pc-section="submenulabel"]')[1]).toBe(headers[0]);
+            expect(headers[0].textContent).toContain('Documents');
+            expect(host.querySelector('[aria-label="Open document"]')).toBe(open);
+            expect(host.querySelector('[aria-label="Save changes"]')).toBe(save);
+            expect(save?.getAttribute('aria-disabled')).toBe('true');
+            expect(open.textContent).toContain('Open document');
+            open.querySelector<HTMLAnchorElement>('a')!.click();
+            expect(nextCommand).toHaveBeenCalledTimes(1);
+            expect(previousCommand).not.toHaveBeenCalled();
+            component.model = [{ id: 'files', label: 'Documents', items: [{ id: 'open', label: 'Open' }] }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelectorAll('[role="menuitem"]')).toHaveLength(1);
+            expect(host.querySelector('[role="menuitem"]')).toBe(open);
+        });
+
+        it('preserves flat entries by ID and inserts new entries', async () => {
+            component.model = [
+                { id: 'open', label: 'Open' },
+                { id: 'save', label: 'Save' }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const open = host.querySelector('[aria-label="Open"]');
+            const save = host.querySelector('[aria-label="Save"]');
+            component.model = [
+                { id: 'save', label: 'Save changes' },
+                { id: 'new', label: 'New' },
+                { id: 'open', label: 'Open document' }
+            ];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[aria-label="Open document"]')).toBe(open);
+            expect(host.querySelector('[aria-label="Save changes"]')).toBe(save);
+            expect(host.querySelectorAll('[role="menuitem"]')).toHaveLength(3);
+        });
+
+        it('retains object-identity tracking for entries without IDs', async () => {
+            const entry: MenuItem = { label: 'Open' };
+            component.model = [entry];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            const host: HTMLElement = fixture.nativeElement;
+            const original = host.querySelector('[role="menuitem"]');
+            component.model = [entry];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[role="menuitem"]')).toBe(original);
+            component.model = [{ label: 'Open' }];
+            fixture.changeDetectorRef.markForCheck();
+            await fixture.whenStable();
+            expect(host.querySelector('[role="menuitem"]')).not.toBe(original);
+        });
+    });
+
     describe('Component Initialization', () => {
         it('should create the component', () => {
             expect(menuInstance).toBeTruthy();
@@ -587,6 +677,70 @@ describe('Menu', () => {
 
             const separators = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="separator"]'));
             expect(separators.length).toBe(0);
+        });
+
+        it('should not render items of a hidden submenu even when item.visible is true', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Hidden Group',
+                    visible: false,
+                    items: [{ label: 'Forced Visible Item', visible: true }, { label: 'Normally Hidden Item' }]
+                },
+                {
+                    label: 'Visible Group',
+                    items: [{ label: 'Shown Item' }]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const items = submenuFixture.debugElement.queryAll(By.css('li[role="menuitem"]'));
+            expect(items.length).toBe(1);
+            expect(items[0].nativeElement.getAttribute('aria-label')).toBe('Shown Item');
+
+            const submenuHeaders = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="submenulabel"]'));
+            expect(submenuHeaders.length).toBe(1);
+            expect(submenuHeaders[0].nativeElement.textContent.trim()).toBe('Visible Group');
+        });
+
+        it('should not render separators of a hidden submenu', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Hidden Group',
+                    visible: false,
+                    items: [{ label: 'First' }, { separator: true }, { label: 'Second' }]
+                },
+                {
+                    label: 'Visible Group',
+                    items: [{ label: 'Shown Item' }]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const separators = submenuFixture.debugElement.queryAll(By.css('li[data-pc-section="separator"]'));
+            expect(separators.length).toBe(0);
+        });
+
+        it('should render a force-shown item when its submenu is visible', async () => {
+            const submenuFixture = TestBed.createComponent(TestSubmenuMenuComponent);
+            submenuFixture.componentInstance.submenuModel = [
+                {
+                    label: 'Visible Group',
+                    items: [
+                        { label: 'Explicitly Visible Item', visible: true },
+                        { label: 'Hidden Item', visible: false }
+                    ]
+                }
+            ];
+            submenuFixture.detectChanges();
+            await submenuFixture.whenStable();
+
+            const items = submenuFixture.debugElement.queryAll(By.css('li[role="menuitem"]'));
+            expect(items.length).toBe(1);
+            expect(items[0].nativeElement.getAttribute('aria-label')).toBe('Explicitly Visible Item');
         });
     });
 

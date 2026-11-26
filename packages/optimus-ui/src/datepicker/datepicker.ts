@@ -2012,14 +2012,14 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             .every((v, month) => this.isMonthDisabled(month, year));
     }
 
-    isYearSelected(year: number) {
-        if (this.isComparable()) {
-            let value = this.isRangeSelection() ? this.value[0] : this.value;
-
-            return !this.isMultipleSelection() ? value.getFullYear() === year : false;
+    isYearSelected(year: number): boolean {
+        if (!this.isComparable() || this.isMultipleSelection()) {
+            return false;
         }
 
-        return false;
+        const value = this.isRangeSelection() ? this.value?.[0] : this.value;
+
+        return value instanceof Date && !Number.isNaN(value.getTime()) && value.getFullYear() === year;
     }
 
     isDateEquals(value: any, dateMeta: any) {
@@ -3027,15 +3027,15 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
         event.preventDefault();
     }
 
-    onUserInput(event: KeyboardEvent | any) {
+    onUserInput(event: InputEvent) {
         // IE 11 Workaround for input placeholder : https://github.com/primefaces/primeng/issues/2026
 
-        if (!this.isKeydown) {
+        if (!this.isKeydown && event.inputType !== 'insertFromPaste') {
             return;
         }
         this.isKeydown = false;
 
-        let val = (<HTMLInputElement>event.target).value;
+        let val = (event.target as HTMLInputElement).value;
         try {
             let value = this.parseValueFromString(val);
             if (this.isValidSelection(value)) {
@@ -3049,7 +3049,6 @@ export class DatePicker extends BaseInput<DatePickerPassThrough> {
             let value = this.keepInvalid ? val : null;
             this.updateModel(value);
         }
-
         this.onInput.emit(event);
     }
 

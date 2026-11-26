@@ -126,3 +126,8 @@ jobs:
             - name: Test manifest
               run: |
                   pnpm --filter docs test:manifest
+
+            # The MCP server tests read the manifest the build just generated
+            - name: Test MCP server
+              run: |
+                  pnpm run test:mcp

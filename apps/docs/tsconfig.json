@@ -24,7 +24,7 @@
         }
     },
     "include": ["../../packages/optimus-ui/src/**/*.d.ts"],
-    "exclude": ["node_modules", "**/node_modules", "**/dist", "**/*.spec.ts", "**/*.test.ts"],
+    "exclude": ["node_modules", "**/node_modules", "**/dist", "**/*.spec.ts", "**/*.test.ts", "../../packages/optimus-ui/src/vitest-globals.d.ts"],
     "files": ["app/main.ts", "server/main.server.ts", "server/server.ts", "app/polyfills.ts"],
     "angularCompilerOptions": {
         "enableI18nLegacyMessageIdFormat": false,
