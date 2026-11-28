@@ -114,4 +114,9 @@ export interface Confirmation {
      * @defaultValue true
      */
     modal?: boolean;
+    /**
+     * Specifies whether the dialog can be dragged.
+     * @defaultValue true
+     */
+    draggable?: boolean;
 }
