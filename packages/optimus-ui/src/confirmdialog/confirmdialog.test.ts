@@ -846,6 +846,17 @@ describe('ConfirmDialog', () => {
             expect(confirmDialogInstance.option('closable')).toBe(true);
         });
 
+        it('should apply draggable from the confirmation and restore the input default afterwards', async () => {
+            await showConfirmation({ message: 'First', draggable: false });
+
+            expect(confirmDialogInstance.option('draggable')).toBe(false);
+
+            await closeConfirmation();
+            await showConfirmation({ message: 'Second' });
+
+            expect(confirmDialogInstance.option('draggable')).toBe(true);
+        });
+
         it('should restore the position input default after a confirmation that changed it', async () => {
             await showConfirmation({ message: 'First', position: 'top' });
 
